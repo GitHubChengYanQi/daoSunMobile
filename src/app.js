@@ -1,3 +1,5 @@
+import 'antd/dist/antd.css';
+
 export const dva = {
   config: {
     onError(err) {
