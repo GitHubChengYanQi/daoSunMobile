@@ -113,38 +113,79 @@ export default function() {
           <PreviewItem >
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>新建跟进记录</div><div style={{fontSize: 15}} >25</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>新建跟进记录</div><div style={{fontSize: 15}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
             </Flex>
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<SolutionOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>合同订单个数</div><div style={{fontSize: 15}} >38</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 1167%</div><div style={{fontSize: 15}} >3</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>合同订单个数</div><div style={{fontSize: 15}} >38</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 1167%</div><div style={{fontSize: 15}} >3</div></FlexItem>
             </Flex>
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<SolutionOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>合同订单收款额</div><div style={{fontSize: 15}} >25</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 -100%</div><div style={{fontSize: 15}} >0.00</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>合同订单收款额</div><div style={{fontSize: 15}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 -100%</div><div style={{fontSize: 15}} >0.00</div></FlexItem>
             </Flex>
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<UploadOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>新建跟进记录</div><div style={{fontSize: 15}} >25</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>出库单金额</div><div style={{fontSize: 15}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
             </Flex>
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<FileTextOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>新建跟进记录</div><div style={{fontSize: 15}} >25</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>销售发票金额</div><div style={{fontSize: 15}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
             </Flex>
             <Flex type="flex" justify="space-between">
               <FlexItem span={4}>{<DownloadOutlined />}</FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>新建跟进记录</div><div style={{fontSize: 15}} >25</div></FlexItem>
-              <FlexItem span={6}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>收款单金额</div><div style={{fontSize: 15}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14}}>上月 100%</div><div style={{fontSize: 15}} >0</div></FlexItem>
             </Flex>
           </PreviewItem>
         </Preview>
-
-
+        <Preview subTitle="合同简报"
+        >
+          <PreviewItem >
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >25个</div><div style={{fontSize: 14}}>新增客户数</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >0个</div><div style={{fontSize: 14}}>新增联系人数</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >25个</div><div style={{fontSize: 14}}>签约数量</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >0个</div><div style={{fontSize: 14}}>签约金额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >25个</div><div style={{fontSize: 14}}>已收入总额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >0个</div><div style={{fontSize: 14}}>应收余额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >25个</div><div style={{fontSize: 14}}>已开票金额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >0个</div><div style={{fontSize: 14}}>未开票金额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={4}>{<PlusCircleOutlined />}</FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >25个</div><div style={{fontSize: 14}}>已发货金额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 15}} >0个</div><div style={{fontSize: 14}}>未发货金额</div></FlexItem>
+            </Flex>
+          </PreviewItem>
+        </Preview>
+        <Preview
+                 footer={[
+                   <PreviewButton key="1"><span style={{fontSize: 50}}>15</span><span style={{fontSize: 20}} >待执行</span></PreviewButton>,
+                   <PreviewButton key="2"><span style={{fontSize: 50}}>15</span><span style={{fontSize: 20}}>进行中</span>
+                   </PreviewButton>,
+                   <PreviewButton key="3"><span style={{fontSize: 50}}>15</span><span style={{fontSize: 20}}>已完成</span>
+                   </PreviewButton>,
+                   <PreviewButton key="4"><span style={{fontSize: 50}}>15</span><span style={{fontSize: 20}}>已超时</span>
+                   </PreviewButton>,
+                 ]}
+        >
+          <PreviewItem title="售后简报"><Switch defaultChecked={true} size="small" /></PreviewItem>
+        </Preview>
       </SafeArea>
 
       </div>
