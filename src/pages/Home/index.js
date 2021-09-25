@@ -17,6 +17,7 @@ import {SearchOutlined, ScanOutlined, CloseOutlined, PlusCircleOutlined, Solutio
   TransactionOutlined, RightOutlined} from '@ant-design/icons';
 import { Affix, Badge, Calendar, Card, Col, Divider, Row, Switch } from 'antd';
 import F2 from '@antv/f2';
+import { router } from 'umi';
 // import Canvas from '@antv/f2-canvas';
 // import Avatar from 'antd/es/avatar/avatar';
 // import ReactEcharts from 'echarts-for-react';
@@ -70,35 +71,13 @@ const Home = () =>{
   }
 
 useEffect(()=>{
-//   const data = [
-//     { genre: 'Sports', sold: 275 },
-//     { genre: 'Strategy', sold: 115 },
-//     { genre: 'Action', sold: 120 },
-//     { genre: 'Shooter', sold: 350 },
-//     { genre: 'Other', sold: 150 },
-//   ];
-//
-// // Step 1: 创建 Chart 对象
-//   const chart = new F2.Chart({
-//     id: 'myChart',
-//     pixelRatio: window.devicePixelRatio // 指定分辨率
-//   });
-//
-// // Step 2: 载入数据源
-//   chart.source(data);
-//
-// // Step 3：创建图形语法，绘制柱状图，由 genre 和 sold 两个属性决定图形位置，genre 映射至 x 轴，sold 映射至 y 轴
-//   chart.interval().position('genre*sold').color('genre');
-//
-// // Step 4: 渲染图表
-//   chart.render();
   const data = [{
     name: '目标金额',
     percent: 83.59,
     a: '1'
   }, {
     name: '完成金额',
-    percent: 2.17,
+    percent: 32.17,
     a: '1'
   }];
 
@@ -144,7 +123,6 @@ useEffect(()=>{
   return (
     <>
       <WingBlank size="sm" >
-      <SafeArea style={{ margin: '-0.16rem', backgroundColor: '#f4f4f4', padding: '5px 0 10px' }}>
         <Affix offsetTop={0}>
           <Search
             style={{paddingRight: '30%',float: 'left'}}
@@ -155,11 +133,10 @@ useEffect(()=>{
           >
           </Search>
         </Affix>
-      </SafeArea>
         <Calendar onPanelChange={onPanelChange} />
         <List >
           <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 全公司</div></ListItem>
-          <ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >工作代办</div></ListItem>
+          <ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >工作待办</div></ListItem>
           <Divider style={{margin: 15}}/>
           <div >
             <Row>
@@ -188,8 +165,8 @@ useEffect(()=>{
         </List>
         <List >
           <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 自己</div></ListItem>
-          <ListItem style={{padding: 10}} extra={<div style={{fontSize: 16}} >详情 {<RightOutlined />}</div>} ><div style={{fontSize: 20}} >业绩目标</div></ListItem>
-          <canvas id="myChart" width="400" height="260"></canvas>
+          <ListItem style={{padding: 10}} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} ><div style={{fontSize: 20}} >业绩目标</div></ListItem>
+          <canvas id="myChart" style={{width: '100%', height: 260}}></canvas>
         </List>
         <Preview subTitle="销售简报"
         >
