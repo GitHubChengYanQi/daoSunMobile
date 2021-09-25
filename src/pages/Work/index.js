@@ -65,7 +65,8 @@ const Work = () => {
                       icon={<Badge count={0}><WechatOutlined style={{ color: '#06ad56' }} /></Badge>}>
               <div className={styles.size}>微信</div>
             </GridItem>
-            <GridItem  icon={<Badge overflowCount={99} count={110}><WechatOutlined
+            <GridItem  icon={<Badge overflowCount={99} count={110}>
+              <WechatOutlined
               style={{ color: '#06ad56' }} /></Badge>}>
               <div className={styles.size}>微信</div>
             </GridItem>

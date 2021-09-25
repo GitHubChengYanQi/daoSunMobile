@@ -1,7 +1,7 @@
 import React from 'react';
-import { Avatar, Card, Progress, Switch, Table, Tabs } from 'antd';
+import { Avatar, Card, Progress, Table, Tabs } from 'antd';
 import styles from '../../index.css';
-import { Grid, GridItem, List, ListItem } from 'weui-react-v2';
+import { Grid, GridItem, List, ListItem, Switch } from 'weui-react-v2';
 import { UserOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
@@ -16,12 +16,14 @@ const ReportTabs = () => {
         tabBarExtraContent={
           <>
             <Switch
-              checkedChildren='已隐藏无数据人员'
-              unCheckedChildren='隐藏无数据人员'
+              style={{marginLeft:16}}
+              size={'small'}
+              checkedNode='已隐藏无数据人员'
+              unCheckedNode='隐藏无数据人员'
             />
           </>
         }>
-        <TabPane tab='工单' key='1'>
+        <TabPane tab={<div style={{fontSize:16}}>工单</div>} key='1'>
           <Card style={{ backgroundColor: '#6be4c3',color:'#fff'}}>
               <div style={{textAlign:'center'}}>完成排行榜</div>
                 <div style={{textAlign:'center',display:'inline-block',width:'33.33%',paddingTop:16}}><Avatar size={32}>2</Avatar><div>张苗苗</div></div>
@@ -58,7 +60,7 @@ const ReportTabs = () => {
             <Column title={<div>完成</div>} dataIndex='yes' />
           </Table>
         </TabPane>
-        <TabPane tab='营收' key='2'>
+        <TabPane tab={<div style={{fontSize:16}}>营收</div>} key='2'>
           <Card style={{ backgroundColor: '#6be4c3',color:'#fff'}} bodyStyle={{padding:8}}>
             <div style={{textAlign:'center'}}>创收排行榜</div>
             <div style={{textAlign:'center',display:'inline-block',width:'33.33%',paddingTop:16}}><Avatar size={32}>2</Avatar><div>张苗苗</div></div>
@@ -87,7 +89,7 @@ const ReportTabs = () => {
             <Column dataIndex='money' align='right' />
           </Table>
         </TabPane>
-        <TabPane tab='效率' key='3'>
+        <TabPane tab={<div style={{fontSize:16}}>效率</div>} key='3'>
           <Card style={{ backgroundColor: '#6be4c3',color:'#fff'}} bodyStyle={{padding:8}}>
             <div style={{textAlign:'center'}}>效率排行榜</div>
             <div style={{textAlign:'center',display:'inline-block',width:'33.33%',paddingTop:16}}><Avatar size={32}>2</Avatar><div>张苗苗</div></div>
@@ -116,7 +118,7 @@ const ReportTabs = () => {
             <Column title={<div>平均工单用时(小时)</div>} dataIndex='time' align='right' />
           </Table>
         </TabPane>
-        <TabPane tab='满意度' key='4'>
+        <TabPane tab={<div style={{fontSize:16}}>满意度</div>} key='4'>
           <Card style={{ backgroundColor: '#6be4c3',color:'#fff'}} bodyStyle={{padding:8}}>
             <div style={{textAlign:'center'}}>创收排行榜</div>
             <div style={{textAlign:'center',display:'inline-block',width:'33.33%',paddingTop:16}}><Avatar size={32}>2</Avatar><div>张苗苗</div></div>
