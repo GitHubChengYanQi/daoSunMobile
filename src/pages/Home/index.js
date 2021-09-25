@@ -15,11 +15,13 @@ import {
   GithubOutlined,
   WechatOutlined,
   RightOutlined,
+  MessageOutlined, HeartOutlined, AimOutlined
 } from '@ant-design/icons';
-import { Badge, Button, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
+import { Affix, Badge, Button, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
-
+import { NavBar, Icon } from 'antd-mobile';
+import CompleteTtem from '@/pages/Home/component/CompleteTtem';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -34,15 +36,15 @@ const Home = () =>{
     <>
       <WingBlank size="sm" >
         <Tabs >
-          <TabPane key="a" tab={<span className="tab_point">今日日程</span>}>
-            {/*<Calendar onPanelChange={onPanelChange} />*/}
+          <TabPane key="a" tab={<span style={{margin: 35, fontSize: 20}}>今日日程</span>}>
+            <Calendar />
             <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={
               <Select defaultValue="1" style={{ backgroundColor: '#E6E6E6'}} onChange={handleChange}>
                 <Option value="1">本日</Option>
                 <Option value="2">本月</Option>
                 <Option value="3">本年</Option>
               </Select>
-            } ><div style={{fontSize: 16}} >工作事项</div></ListItem>
+            } >工作事项</ListItem>
 
             <Divider style={{margin: 15}}/>
             <div >
@@ -71,79 +73,79 @@ const Home = () =>{
             </div>
             <ListItem style={{marginTop: 8, padding: 3, backgroundColor: '#E6E6E6'}} extra={
               state ? <UpOutlined onClick={()=>{setState(!state)}}/> :
-              <DownOutlined onClick={()=>{setState(!state)}}/>
-            } ><div style={{fontSize: 16}} >今日待办(10)</div></ListItem>
+                <DownOutlined onClick={()=>{setState(!state)}}/>
+            } >今日待办(10)</ListItem>
             {state ?
-            <div >
-              <Panel className={styles.panel}>
-                <PanelItem
-                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline', color: 'red'}}><ExclamationCircleOutlined style={{color: 'red'}} />  已超时</div></div>}
-                  text={true}
-                  info={
-                    <>
-                      <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
-                      <Brief >2021-09-09 01:17 </Brief>
-                      <Brief style={{color: 'red'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '28%'}}><Button shape="round" >工作任务</Button></Brief>
-                    </>
-                  }
-                >
-                  <div className={styles.comment} >跟张总去税务局取发票</div>
-                </PanelItem>
-              </Panel >
-              <Panel className={styles.panel}>
-                <PanelItem
-                  title={<div ><div className={styles.panelTitle}>战全胜</div><div style={{marginLeft: '70%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  进行中</div></div>}
-                  text={true}
-                  info={
-                    <>
-                      <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
-                      <Brief >2021-09-09 01:17 </Brief>
-                      <Brief style={{color: 'green'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >客户跟进</Button></Brief>
-                    </>
-                  }
-                >
-                  <div className={styles.comment} >跟张总去税务局取发票</div>
-                </PanelItem>
-              </Panel>
-              <Panel className={styles.panel}>
-                <PanelItem
-                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined/>  待执行</div></div>}
-                  text={true}
-                  info={
-                    <>
-                      <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
-                      <Brief >2021-09-09 01:17 </Brief>
-                      <Brief >5小时</Brief>
-                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >回款计划</Button></Brief>
-                    </>
-                  }
-                >
-                  <div className={styles.comment} >与客户沟通报价事宜</div>
-                </PanelItem>
-              </Panel>
-              <Panel className={styles.panel}>
-                <PanelItem
-                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined />  已取消</div></div>}
-                  text={true}
-                  info={
-                    <>
-                      <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
-                      <Brief >2021-09-09 01:17 </Brief>
-                      <Brief style={{color: 'blue'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >工作任务</Button></Brief>
-                    </>
-                  }
-                >
-                  <div className={styles.comment} >计划回款金额</div>
-                </PanelItem>
-              </Panel>
-          </div> : null}
+              <div >
+                <Panel className={styles.panel}>
+                  <PanelItem
+                    title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline', color: 'red'}}><ExclamationCircleOutlined style={{color: 'red'}} />  已超时</div></div>}
+                    text={true}
+                    info={
+                      <>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief style={{color: 'red'}}>5小时</Brief>
+                        <Brief style={{marginLeft: '27%'}}><Button shape="round" >工作任务</Button></Brief>
+                      </>
+                    }
+                  >
+                    <div className={styles.comment} >跟张总去税务局取发票</div>
+                  </PanelItem>
+                </Panel >
+                <Panel className={styles.panel}>
+                  <PanelItem
+                    title={<div ><div className={styles.panelTitle}>战全胜</div><div style={{marginLeft: '70%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  进行中</div></div>}
+                    text={true}
+                    info={
+                      <>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief style={{color: 'green'}}>5小时</Brief>
+                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >客户跟进</Button></Brief>
+                      </>
+                    }
+                  >
+                    <div className={styles.comment} >跟张总去税务局取发票</div>
+                  </PanelItem>
+                </Panel>
+                <Panel className={styles.panel}>
+                  <PanelItem
+                    title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined/>  待执行</div></div>}
+                    text={true}
+                    info={
+                      <>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief >5小时</Brief>
+                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >回款计划</Button></Brief>
+                      </>
+                    }
+                  >
+                    <div className={styles.comment} >与客户沟通报价事宜</div>
+                  </PanelItem>
+                </Panel>
+                <Panel className={styles.panel}>
+                  <PanelItem
+                    title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined />  已取消</div></div>}
+                    text={true}
+                    info={
+                      <>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief style={{color: 'blue'}}>5小时</Brief>
+                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >工作任务</Button></Brief>
+                      </>
+                    }
+                  >
+                    <div className={styles.comment} >计划回款金额</div>
+                  </PanelItem>
+                </Panel>
+              </div> : null}
             <ListItem style={{marginTop: 8, padding: 3, backgroundColor: '#E6E6E6'}} extra={
               state1 ? <UpOutlined onClick={()=>{setState1(!state1)}}/> :
                 <DownOutlined onClick={()=>{setState1(!state1)}}/>
-            } ><div style={{fontSize: 16}} >今日完成(10)</div></ListItem>
+            } >今日完成(10)</ListItem>
             {state1 ?
               <div >
                 <Panel className={styles.panel}>
@@ -180,55 +182,171 @@ const Home = () =>{
                 </Panel>
               </div> : null}
           </TabPane>
-          <TabPane key="b" tab={<span className="tab_point">数据看板</span>}>
+          <TabPane key="b" tab={<span style={{margin: 35, fontSize: 20}}>数据看板</span>}>
             <div>
               <DataBoard />
             </div>
           </TabPane>
-          <TabPane key="c" tab={<span className="tab_point">待办事项</span>}>
+          <TabPane key="c" tab={<span style={{margin: 35, fontSize: 20}}>待办事项</span>}>
             <div >
               <List title="2021-03-01">
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待跟进任务
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待回款计划
                 </ListItem>
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待处理工单
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待处理日程
                 </ListItem>
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待处理任务
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待审批订单
                 </ListItem>
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待审批回款
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
                   待审批报销
                 </ListItem>
               </List>
             </div>
           </TabPane>
-          <TabPane key="d" tab={<span className="tab_point">工作动态</span>}>
-            <div
-              className="fimg"
-              style={{
-                height: '350px',
-                // backgroundImage: `url(${require('../swiper/pexels-photo-296878.jpeg')})`,
-              }}
-            />
-          </TabPane>
-          <TabPane key="e" tab={<span className="tab_point"><Button style={{backgroundColor: 'white', padding: 0}} icon={<SearchOutlined />} /></span>}>
-          </TabPane>
-          <TabPane key="f" tab={<span className="tab_point"><Button style={{backgroundColor: 'white', padding: 0}} icon={<ScanOutlined />} /></span>}>
-          </TabPane>
+          <TabPane key="d" tab={<span style={{margin: 35, fontSize: 20}}>工作动态</span>}>
+            <div>
+              <Panel >
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 为了更好地明天,大家一起努力.</div>
 
+                </PanelItem>
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>总经理</div></div>}
+                  thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 成交订单:DD202121232266</div>
+
+                </PanelItem>
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>董事长</div></div>}
+                  thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 创建客户  xxx</div>
+
+                </PanelItem>
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>营销组长</div></div>}
+                  thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 创建线索 xxx</div>
+                </PanelItem>
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 创建商机 xxx</div>
+                </PanelItem>
+                <PanelItem
+                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
+                  // text={true}
+                  info={
+                    <>
+                      <div style={{marginLeft: 5}}><AimOutlined />
+                        <span style={{fontSize: 15, color:'#3982af'}}>上海市静安区中西路777弄55号</span>
+                      </div>
+                      <div style={{marginTop: 10}}>
+                        <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
+                        <Brief >2021-09-09 01:17 </Brief>
+                        <Brief ><HeartOutlined style={{paddingLeft: 10}}/><MessageOutlined style={{paddingLeft: 20}}/><RightOutlined style={{paddingLeft: 20}}/></Brief>
+                      </div>
+                    </>
+                  }
+                >
+                  <div style={{fontSize: 20, marginTop: 10}} > 创建联系人 xxx</div>
+
+                </PanelItem>
+              </Panel>
+            </div>
+          </TabPane>
+          <TabPane key="e" disabled tab={
+            <div>
+              <Button style={{backgroundColor: 'transparent', border: 'none'}} icon={<SearchOutlined />} />
+              <Button style={{backgroundColor: 'transparent', border: 'none'}} icon={<ScanOutlined />} />
+            </div>}
+          />
         </Tabs>
 
         {/*<Affix offsetTop={0}>*/}
