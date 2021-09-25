@@ -36,7 +36,7 @@ const Home = () =>{
     <>
       <WingBlank size="sm" >
         <Tabs >
-          <TabPane key="a" tab={<span style={{margin: 35, fontSize: 20}}>今日日程</span>}>
+          <TabPane key="a" tab={<span style={{fontSize: 14}}>今日日程</span>}>
             <Calendar />
             <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={
               <Select defaultValue="1" style={{ backgroundColor: '#E6E6E6'}} onChange={handleChange}>
@@ -86,7 +86,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'red'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '27%'}}><Button shape="round" >工作任务</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round" size='small'>工作任务</Button></Brief>
                       </>
                     }
                   >
@@ -102,7 +102,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'green'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >客户跟进</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>客户跟进</Button></Brief>
                       </>
                     }
                   >
@@ -118,7 +118,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief >5小时</Brief>
-                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >回款计划</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>回款计划</Button></Brief>
                       </>
                     }
                   >
@@ -134,7 +134,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'blue'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '28%'}}><Button shape="round"  >工作任务</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>工作任务</Button></Brief>
                       </>
                     }
                   >
@@ -157,7 +157,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'blue'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '28%'}}><Button shape="round" >合同回款</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round" size='small'>合同回款</Button></Brief>
                       </>
                     }
                   >
@@ -173,7 +173,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'green'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '28%'}}><Button shape="round" >需求商机</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round" size='small'>需求商机</Button></Brief>
                       </>
                     }
                   >
@@ -182,12 +182,12 @@ const Home = () =>{
                 </Panel>
               </div> : null}
           </TabPane>
-          <TabPane key="b" tab={<span style={{margin: 35, fontSize: 20}}>数据看板</span>}>
+          <TabPane key="b" tab={<span style={{fontSize: 14}}>数据看板</span>}>
             <div>
               <DataBoard />
             </div>
           </TabPane>
-          <TabPane key="c" tab={<span style={{margin: 35, fontSize: 20}}>待办事项</span>}>
+          <TabPane key="c" tab={<span style={{fontSize: 14}}>待办事项</span>}>
             <div >
               <List title="2021-03-01">
                 <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
@@ -217,7 +217,7 @@ const Home = () =>{
               </List>
             </div>
           </TabPane>
-          <TabPane key="d" tab={<span style={{margin: 35, fontSize: 20}}>工作动态</span>}>
+          <TabPane key="d" tab={<span style={{ fontSize: 14}}>工作动态</span>}>
             <div>
               <Panel >
                 <PanelItem
@@ -237,7 +237,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 为了更好地明天,大家一起努力.</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 为了更好地明天,大家一起努力.</div>
 
                 </PanelItem>
                 <PanelItem
@@ -257,7 +257,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 成交订单:DD202121232266</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 成交订单:DD202121232266</div>
 
                 </PanelItem>
                 <PanelItem
@@ -277,7 +277,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 创建客户  xxx</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 创建客户  xxx</div>
 
                 </PanelItem>
                 <PanelItem
@@ -297,7 +297,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 创建线索 xxx</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 创建线索 xxx</div>
                 </PanelItem>
                 <PanelItem
                   title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
@@ -316,7 +316,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 创建商机 xxx</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 创建商机 xxx</div>
                 </PanelItem>
                 <PanelItem
                   title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
@@ -335,7 +335,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 20, marginTop: 10}} > 创建联系人 xxx</div>
+                  <div style={{fontSize: 14, marginTop: 10}} > 创建联系人 xxx</div>
 
                 </PanelItem>
               </Panel>
@@ -343,8 +343,8 @@ const Home = () =>{
           </TabPane>
           <TabPane key="e" disabled tab={
             <div>
-              <Button type='link' icon={<SearchOutlined />} />
-              <Button type='link' icon={<ScanOutlined />} />
+              <Button type='link' size='large' style={{padding: 0}} icon={<SearchOutlined />} />
+              <Button type='link' size='large' style={{marginLeft: 10, padding: 0}} icon={<ScanOutlined />} />
             </div>}
           />
         </Tabs>

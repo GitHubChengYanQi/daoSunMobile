@@ -74,7 +74,7 @@ const DealRank =() =>{
   return(
     <>
       <div>
-        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >成交排行</ListItem>
+        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >成交排行</ListItem>
         <canvas id="myChart1" style={{width: '100%', height: 260}} ></canvas>
       </div>
     </>

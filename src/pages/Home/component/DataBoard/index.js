@@ -220,7 +220,7 @@ const DataBoard = () => {
       {/*  </Row>*/}
       {/*</div>*/}
       {/*<ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 自己</div></ListItem>*/}
-      <ListItem style={{padding: 10}} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
+      <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
       <canvas id="myChart" style={{width: '100%', height: 260}}></canvas>
 
       <Preview subTitle="销售简报"
@@ -291,7 +291,7 @@ const DataBoard = () => {
       <DealRank />
       <SaleFunnel />
       <div>
-        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售预测</ListItem>
+        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售预测</ListItem>
         <Table columns={columns} dataSource={data} />
       </div>
 
