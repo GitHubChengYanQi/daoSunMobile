@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { useRequest } from '../util/Request';
 import { Flex, FlexItem, GridItem, SafeArea } from 'weui-react-v2';
-import { WechatOutlined } from '@ant-design/icons';
-import { Affix, Menu } from 'antd';
+import {
+  AppstoreOutlined,
+  BarChartOutlined,
+  CommentOutlined, FieldStringOutlined,
+  ShakeOutlined,
+  UserOutlined,
+  WechatOutlined,
+} from '@ant-design/icons';
+import { Affix, Avatar, Image, Menu } from 'antd';
 import { router } from 'umi';
+import Logo from '../assets/img.png'
 
 function BasicLayout(props) {
 
@@ -58,35 +66,35 @@ function BasicLayout(props) {
             <div onClick={()=>{
               router.push('/Home');
             }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<WechatOutlined/>}>首页</GridItem>
+              <GridItem style={{width:'100%'}} icon={<FieldStringOutlined />} >首页</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
             <div onClick={()=>{
               router.push('/Notice');
             }} style={{ textAlign: 'center' }}>
-              <GridItem style={{width:'100%'}} icon={<WechatOutlined/>}>通知</GridItem>
+              <GridItem style={{width:'100%'}} icon={<CommentOutlined />}>通知</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
             <div onClick={()=>{
               router.push('/Work');
             }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<WechatOutlined/>}>工作</GridItem>
+              <GridItem style={{width:'100%'}} icon={<AppstoreOutlined />}>工作</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
             <div onClick={()=>{
               router.push('/Report');
             }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<WechatOutlined/>}>报表</GridItem>
+              <GridItem style={{width:'100%'}} icon={<BarChartOutlined />}>报表</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
             <div onClick={()=>{
               router.push('/User');
             }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<WechatOutlined/>}>我的</GridItem>
+              <GridItem style={{width:'100%'}} icon={<UserOutlined />}>我的</GridItem>
             </div>
           </FlexItem>
         </Flex>

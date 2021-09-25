@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Chart } from '@antv/f2';
-import { Panel, PanelItem } from 'weui-react-v2';
+import { List, Panel, PanelItem } from 'weui-react-v2';
 import styles from '../../index.css';
 import { Select } from 'antd';
 import Trend from '../Trend';
@@ -56,7 +56,7 @@ const Revenue = () => {
 
   return (
     <>
-      <Panel className={styles.title} title={
+      <List title={
         <div>
           <Select
             bordered={false}
@@ -75,8 +75,8 @@ const Revenue = () => {
         <PanelItem title={<div>工单趋势</div>}>
           <Trend />
         </PanelItem>
-      </Panel>
-      <Panel className={styles.title} title={
+      </List>
+      <List title={
         <div>
           <Select
             bordered={false}
@@ -90,7 +90,7 @@ const Revenue = () => {
         </div>
       }>
         <ReportTabs />
-      </Panel>
+      </List>
     </>
   );
 };
