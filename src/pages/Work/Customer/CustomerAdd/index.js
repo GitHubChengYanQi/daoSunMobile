@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import {
+  Button,
   DatePicker, DialogPop,
   Form,
   FormItem,
@@ -210,8 +211,11 @@ const CustomerAdd = () => {
           </FormItem>
         </List>
         <div style={{textAlign:'center',margin:8}}>
-          <SubmitButton style={{width:'50%'}}>保存并完善更多信息</SubmitButton>
-          <SubmitButton style={{width:'50%'}}>保存</SubmitButton>
+          <SubmitButton style={{width:'20%',marginRight:'5%'}}>保存</SubmitButton>
+          <Button type='default' style={{width:'20%',marginRight:'5%'}} onClick={()=>{
+            router.goBack();
+          }} >返回</Button>
+          <SubmitButton type='link' style={{width:'50%'}}>保存并完善更多信息</SubmitButton>
         </div>
       </Form>
     </>
