@@ -114,7 +114,7 @@ const SaleFunnel =() =>{
   return(
     <>
       <div>
-        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} ><div style={{fontSize: 20}} >销售漏斗</div></ListItem>
+        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售漏斗</ListItem>
         <div id="container" style={{width: '100%', height: 500}} ></div>
       </div>
     </>
