@@ -1,4 +1,5 @@
 import styles from './index.css';
+import Home from './Home/index'
 
 export default function() {
   return (

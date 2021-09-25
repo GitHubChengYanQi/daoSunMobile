@@ -13,6 +13,6 @@ div {
 :global .weui-grid:before {
   border: none;
 }
-svg {
+.title svg {
   font-size: 54px;
 }
