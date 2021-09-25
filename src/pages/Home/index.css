@@ -18,3 +18,28 @@
 :global .weui-preview__hd {
   padding: 0!important;
 }
+
+:global .weui-panel__hd {
+  padding: 5px!important;
+  position: fixed!important;
+}
+.title {
+  display: inline;
+  font-size: 14px;
+  margin-left: 5px;
+  margin-top: 10px;
+}
+
+:global .weui-panel-item {
+  padding: 15px 5px!important;
+  font-size: 14px;
+  border-left: outset;
+  border-left-color: blue;
+}
+
+:global .weui-panel-item_info {
+  margin: 0!important;
+}
+/*svg {*/
+/*  font-size: 30px;*/
+/*}*/
