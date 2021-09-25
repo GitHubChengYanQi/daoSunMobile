@@ -1,11 +1,11 @@
 import styles from './index.css';
 import React, { useEffect, useState } from 'react';
 import {
-  Brief,
+  Brief, List,
   ListItem, Panel, PanelItem,
   WingBlank,
 } from 'weui-react-v2';
-import {SearchOutlined, ScanOutlined, DownOutlined, UpOutlined, ClockCircleOutlined, ExclamationCircleOutlined} from '@ant-design/icons';
+import {SearchOutlined, ScanOutlined, DownOutlined, UpOutlined, ClockCircleOutlined, ExclamationCircleOutlined, GithubOutlined, WechatOutlined} from '@ant-design/icons';
 import { Badge, Button, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import DealRank from '@/pages/Home/component/DealRank';
@@ -66,7 +66,7 @@ const Home = () =>{
             } ><div style={{fontSize: 16}} >今日待办(10)</div></ListItem>
             {state ?
             <div >
-              <Panel >
+              <Panel className={styles.panel}>
                 <PanelItem
                   title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline', color: 'red'}}><ExclamationCircleOutlined style={{color: 'red'}} />  已超时</div></div>}
                   text={true}
@@ -81,8 +81,8 @@ const Home = () =>{
                 >
                   <div style={{marginLeft: 5, color: 'black'}}>跟张总去税务局取发票</div>
                 </PanelItem>
-              </Panel>
-              <Panel >
+              </Panel >
+              <Panel className={styles.panel}>
                 <PanelItem
                   title={<div ><div className={styles.title}>战全胜</div><div style={{marginLeft: '60%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  进行中</div></div>}
                   text={true}
@@ -98,7 +98,7 @@ const Home = () =>{
                   <div style={{marginLeft: 5, color: 'black'}}>跟张总去税务局取发票</div>
                 </PanelItem>
               </Panel>
-              <Panel >
+              <Panel className={styles.panel}>
                 <PanelItem
                   title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline'}}><ExclamationCircleOutlined/>  待执行</div></div>}
                   text={true}
@@ -114,7 +114,7 @@ const Home = () =>{
                   <div style={{marginLeft: 5, color: 'black'}}>与客户沟通报价事宜</div>
                 </PanelItem>
               </Panel>
-              <Panel >
+              <Panel className={styles.panel}>
                 <PanelItem
                   title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline'}}><ExclamationCircleOutlined />  已取消</div></div>}
                   text={true}
@@ -137,7 +137,7 @@ const Home = () =>{
             } ><div style={{fontSize: 16}} >今日完成(10)</div></ListItem>
             {state1 ?
               <div >
-                <Panel >
+                <Panel className={styles.panel}>
                   <PanelItem
                     title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline', color: 'blue'}}><ExclamationCircleOutlined style={{color: 'blue'}} />  已完成</div></div>}
                     text={true}
@@ -153,7 +153,7 @@ const Home = () =>{
                     <div style={{marginLeft: 5, color: 'black'}}>Z3050*16/1，1台，VMC850E，1台</div>
                   </PanelItem>
                 </Panel>
-                <Panel >
+                <Panel className={styles.panel}>
                   <PanelItem
                     title={<div ><div className={styles.title}>战全胜</div><div style={{marginLeft: '60%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  未完成</div></div>}
                     text={true}
@@ -175,17 +175,42 @@ const Home = () =>{
             <div>
               <DataBoard />
             </div>
-
-
           </TabPane>
           <TabPane key="c" tab={<span className="tab_point">待办事项</span>}>
-            <div
-              className="fimg"
-              style={{
-                height: '350px',
-                // backgroundImage: `url(${require('../swiper/pexels-photo-296878.jpeg')})`,
-              }}
-            />
+            <div >
+              <List title="带图标，说明的列表">
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+              </List>
+              <List title="带图标，说明的列表">
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+              </List>
+              <List title="带图标，说明的列表">
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+              </List>
+              <List title="带图标，说明的列表">
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
+                  标题文字
+                </ListItem>
+              </List>
+            </div>
           </TabPane>
           <TabPane key="d" tab={<span className="tab_point">工作动态</span>}>
             <div
