@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRequest } from '../util/Request';
-import { Flex, FlexItem } from 'weui-react-v2';
+import { Flex, FlexItem, SafeArea } from 'weui-react-v2';
 import { WechatOutlined } from '@ant-design/icons';
-import { Affix } from 'antd';
+import { Affix, Menu } from 'antd';
 import { router } from 'umi';
 
 function BasicLayout(props) {
@@ -49,7 +49,9 @@ function BasicLayout(props) {
 
   return (
     <div>
+      <SafeArea style={{minHeight: '100vh', backgroundColor: '#f4f4f4'}}>
       {props.children}
+      </SafeArea>
       <Affix offsetBottom={0}>
         <Flex type='flex' style={{backgroundColor:'#fff',cursor:'pointer'}} justify='space-around'>
           <FlexItem>
@@ -62,7 +64,9 @@ function BasicLayout(props) {
           <FlexItem>
             <div onClick={()=>{
               router.push('/Notice');
-            }} style={{ textAlign: 'center', padding: 16 }}><WechatOutlined />
+            }} style={{ textAlign: 'center', padding: 16 }}>
+              {/*<GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>微信</GridItem>*/}
+              <WechatOutlined />
               <div>通知</div>
             </div>
           </FlexItem>
@@ -81,7 +85,9 @@ function BasicLayout(props) {
             </div>
           </FlexItem>
           <FlexItem>
-            <div style={{ textAlign: 'center', padding: 16 }}><WechatOutlined />
+            <div onClick={()=>{
+              router.push('/User');
+            }} style={{ textAlign: 'center', padding: 16 }}><WechatOutlined />
               <div>我的</div>
             </div>
           </FlexItem>

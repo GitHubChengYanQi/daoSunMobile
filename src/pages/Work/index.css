@@ -1,14 +1,4 @@
-div {
-  font-size: 16px;
-}
 
-.title  :global .weui-panel__hd {
-  padding: 8px;
-}
-
-:global .weui-grid-label {
-  font-size: 16px;
-}
 
 :global .weui-grid:before {
   border: none;

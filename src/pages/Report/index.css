@@ -1,16 +1,19 @@
-* {
-  font-size: 16px;
-}
 
-.title :global .weui-list-title {
-  margin: 0;
-  padding: 8px;
-}
 
 .title :global .weui-list-inner {
   margin: 0 !important;
 }
 
-.title :global .weui-panel__hd {
-  padding: 8px;
+
+.tab :global .weui-segmented-item.selected {
+  color: #1890ff;
+  border-color: #1890ff;
+  border-bottom: solid 1px;
+  background: #fff;
+  padding: 16px;
+}
+.tab :global .weui-segmented-item {
+  color: #000;
+  border: none;
+  padding: 16px;
 }

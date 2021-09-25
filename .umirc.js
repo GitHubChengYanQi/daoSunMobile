@@ -1,7 +1,25 @@
 
+const pxtoviewport = require('postcss-px-to-viewport');
 // ref: https://umijs.org/config/
 export default {
   treeShaking: true,
+
+  theme: {
+    // '@primary-color': '#CDDC39',
+  },
+
+  extraPostCSSPlugins: [
+    pxtoviewport({
+      viewportWidth: 750,
+      viewportHeight: 4925,
+      unitPrecision: 5,
+      viewportUnit: 'vw',
+      selectorBlackList: [],
+      minPixelValue: 1,
+      mediaQuery: false,
+      exclude: [/dumi/],
+    }),
+  ],
   // routes: [
     // {
     //   path: '/',
@@ -19,6 +37,7 @@ export default {
       dynamicImport: false,
       title: 'daoSunMobile',
       dll: false,
+
 
       routes: {
         exclude: [
