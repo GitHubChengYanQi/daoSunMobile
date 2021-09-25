@@ -8,27 +8,27 @@ import { router } from 'umi';
 const Work = () => {
 
   return (
-    <WingBlank>
-      <Affix offsetTop={0}>
-        <List>
-          <ListItem extra={<div>开发部</div>}>
-            <div>下午好，程彦祺</div>
-          </ListItem>
+      <WingBlank>
+        <Affix offsetTop={0}>
+          <List>
+            <ListItem extra={<div>开发部</div>}>
+              <div>下午好，程彦祺</div>
+            </ListItem>
+          </List>
+        </Affix>
+        <List title={<div>常用工具</div>}>
+          <Grid>
+            <GridItem icon={<AppstoreOutlined />} onClick={()=>{router.push('/Repair');}}>
+              <div className={styles.size}>工单列表</div>
+            </GridItem>
+            <GridItem icon={<AppstoreOutlined />}>
+              <div className={styles.size}>工具</div>
+            </GridItem>
+            <GridItem icon={<AppstoreOutlined />}>
+              <div className={styles.size}>工具</div>
+            </GridItem>
+          </Grid>
         </List>
-      </Affix>
-      <List title={<div>常用工具</div>}>
-        <Grid>
-          <GridItem icon={<AppstoreOutlined />}>
-            <div className={styles.size}>工具</div>
-          </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
-            <div className={styles.size}>工具</div>
-          </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
-            <div className={styles.size}>工具</div>
-          </GridItem>
-        </Grid>
-      </List>
 
       <List title={<div>项目管理</div>}>
         <Grid>
