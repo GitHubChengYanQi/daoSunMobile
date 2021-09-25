@@ -5,11 +5,20 @@ import {
   ListItem, Panel, PanelItem,
   WingBlank,
 } from 'weui-react-v2';
-import {SearchOutlined, ScanOutlined, DownOutlined, UpOutlined, ClockCircleOutlined, ExclamationCircleOutlined, GithubOutlined, WechatOutlined} from '@ant-design/icons';
+import {
+  SearchOutlined,
+  ScanOutlined,
+  DownOutlined,
+  UpOutlined,
+  ClockCircleOutlined,
+  ExclamationCircleOutlined,
+  GithubOutlined,
+  WechatOutlined,
+  RightOutlined,
+} from '@ant-design/icons';
 import { Badge, Button, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
-import DealRank from '@/pages/Home/component/DealRank';
-import SaleFunnel from '@/pages/Home/component/SaleFunnel';
+import { router } from 'umi';
 
 const { TabPane } = Tabs;
 const { Option } = Select;
@@ -68,66 +77,66 @@ const Home = () =>{
             <div >
               <Panel className={styles.panel}>
                 <PanelItem
-                  title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline', color: 'red'}}><ExclamationCircleOutlined style={{color: 'red'}} />  已超时</div></div>}
+                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline', color: 'red'}}><ExclamationCircleOutlined style={{color: 'red'}} />  已超时</div></div>}
                   text={true}
                   info={
                     <>
                       <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                       <Brief >2021-09-09 01:17 </Brief>
                       <Brief style={{color: 'red'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>工作任务</Button></Brief>
+                      <Brief style={{marginLeft: '28%'}}><Button shape="round" >工作任务</Button></Brief>
                     </>
                   }
                 >
-                  <div style={{marginLeft: 5, color: 'black'}}>跟张总去税务局取发票</div>
+                  <div className={styles.comment} >跟张总去税务局取发票</div>
                 </PanelItem>
               </Panel >
               <Panel className={styles.panel}>
                 <PanelItem
-                  title={<div ><div className={styles.title}>战全胜</div><div style={{marginLeft: '60%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  进行中</div></div>}
+                  title={<div ><div className={styles.panelTitle}>战全胜</div><div style={{marginLeft: '70%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  进行中</div></div>}
                   text={true}
                   info={
                     <>
                       <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                       <Brief >2021-09-09 01:17 </Brief>
                       <Brief style={{color: 'green'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>客户跟进</Button></Brief>
+                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >客户跟进</Button></Brief>
                     </>
                   }
                 >
-                  <div style={{marginLeft: 5, color: 'black'}}>跟张总去税务局取发票</div>
+                  <div className={styles.comment} >跟张总去税务局取发票</div>
                 </PanelItem>
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
-                  title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline'}}><ExclamationCircleOutlined/>  待执行</div></div>}
+                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined/>  待执行</div></div>}
                   text={true}
                   info={
                     <>
                       <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                       <Brief >2021-09-09 01:17 </Brief>
                       <Brief >5小时</Brief>
-                      <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>回款计划</Button></Brief>
+                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >回款计划</Button></Brief>
                     </>
                   }
                 >
-                  <div style={{marginLeft: 5, color: 'black'}}>与客户沟通报价事宜</div>
+                  <div className={styles.comment} >与客户沟通报价事宜</div>
                 </PanelItem>
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
-                  title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline'}}><ExclamationCircleOutlined />  已取消</div></div>}
+                  title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline'}}><ExclamationCircleOutlined />  已取消</div></div>}
                   text={true}
                   info={
                     <>
                       <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                       <Brief >2021-09-09 01:17 </Brief>
                       <Brief style={{color: 'blue'}}>5小时</Brief>
-                      <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>工作任务</Button></Brief>
+                      <Brief style={{marginLeft: '28%'}}><Button shape="round"  >工作任务</Button></Brief>
                     </>
                   }
                 >
-                  <div style={{marginLeft: 5, color: 'black'}}>计划回款金额</div>
+                  <div className={styles.comment} >计划回款金额</div>
                 </PanelItem>
               </Panel>
           </div> : null}
@@ -139,34 +148,34 @@ const Home = () =>{
               <div >
                 <Panel className={styles.panel}>
                   <PanelItem
-                    title={<div ><div className={styles.title}>李连杰</div><div style={{marginLeft: '60%',display: 'inline', color: 'blue'}}><ExclamationCircleOutlined style={{color: 'blue'}} />  已完成</div></div>}
+                    title={<div ><div className={styles.panelTitle}>李连杰</div><div style={{marginLeft: '70%',display: 'inline', color: 'blue'}}><ExclamationCircleOutlined style={{color: 'blue'}} />  已完成</div></div>}
                     text={true}
                     info={
                       <>
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'blue'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>合同回款</Button></Brief>
+                        <Brief style={{marginLeft: '28%'}}><Button shape="round" >合同回款</Button></Brief>
                       </>
                     }
                   >
-                    <div style={{marginLeft: 5, color: 'black'}}>Z3050*16/1，1台，VMC850E，1台</div>
+                    <div className={styles.comment} >Z3050*16/1，1台，VMC850E，1台</div>
                   </PanelItem>
                 </Panel>
                 <Panel className={styles.panel}>
                   <PanelItem
-                    title={<div ><div className={styles.title}>战全胜</div><div style={{marginLeft: '60%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  未完成</div></div>}
+                    title={<div ><div className={styles.panelTitle}>战全胜</div><div style={{marginLeft: '70%',display: 'inline', color: 'green'}}><ExclamationCircleOutlined style={{color: 'green'}} />  未完成</div></div>}
                     text={true}
                     info={
                       <>
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'green'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '23%'}}><Button shape="round"  size='small'>需求商机</Button></Brief>
+                        <Brief style={{marginLeft: '28%'}}><Button shape="round" >需求商机</Button></Brief>
                       </>
                     }
                   >
-                    <div style={{marginLeft: 5, color: 'black'}}>回款金额：¥25000.00</div>
+                    <div className={styles.comment} >回款金额：¥25000.00</div>
                   </PanelItem>
                 </Panel>
               </div> : null}
@@ -178,36 +187,30 @@ const Home = () =>{
           </TabPane>
           <TabPane key="c" tab={<span className="tab_point">待办事项</span>}>
             <div >
-              <List title="带图标，说明的列表">
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+              <List title="2021-03-01">
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待跟进任务
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待回款计划
                 </ListItem>
-              </List>
-              <List title="带图标，说明的列表">
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待处理工单
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待处理日程
                 </ListItem>
-              </List>
-              <List title="带图标，说明的列表">
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待处理任务
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待审批订单
                 </ListItem>
-              </List>
-              <List title="带图标，说明的列表">
-                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待审批回款
                 </ListItem>
-                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra="说明文字">
-                  标题文字
+                <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />} extra={<div style={{fontSize: 16}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
+                  待审批报销
                 </ListItem>
               </List>
             </div>
