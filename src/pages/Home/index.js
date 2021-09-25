@@ -1,7 +1,7 @@
 import styles from './index.css';
 import React, { useEffect, useState } from 'react';
 import {
-  Brief, List,
+  Brief, Button, List,
   ListItem, Panel, PanelItem,
   WingBlank,
 } from 'weui-react-v2';
@@ -17,7 +17,7 @@ import {
   RightOutlined,
   MessageOutlined, HeartOutlined, AimOutlined
 } from '@ant-design/icons';
-import { Affix, Badge, Button, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
+import { Affix, Badge, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
 import { NavBar, Icon } from 'antd-mobile';
@@ -343,8 +343,8 @@ const Home = () =>{
           </TabPane>
           <TabPane key="e" disabled tab={
             <div>
-              <Button style={{backgroundColor: 'transparent', border: 'none'}} icon={<SearchOutlined />} />
-              <Button style={{backgroundColor: 'transparent', border: 'none'}} icon={<ScanOutlined />} />
+              <Button type='link' icon={<SearchOutlined />} />
+              <Button type='link' icon={<ScanOutlined />} />
             </div>}
           />
         </Tabs>
