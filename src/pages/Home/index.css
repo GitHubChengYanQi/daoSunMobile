@@ -11,14 +11,10 @@
   background-size: 512px 512px;
 }
 
-.list {
-  font-size: 1.2em;
-  margin: 1.8em 0 0;
-  list-style: none;
-  line-height: 1.5em;
-}
-
 .list code {
   background: #f7f7f7;
 }
 
+:global .weui-preview__hd {
+  padding: 0!important;
+}

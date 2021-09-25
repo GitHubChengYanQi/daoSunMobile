@@ -17,6 +17,7 @@
     "react-dom": "^16.8.6"
   },
   "devDependencies": {
+    "@antv/f2-canvas": "^1.0.5",
     "babel-eslint": "^9.0.0",
     "echarts-for-react": "^3.0.1",
     "eslint": "^5.4.0",
