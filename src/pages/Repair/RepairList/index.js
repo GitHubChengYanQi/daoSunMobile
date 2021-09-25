@@ -20,7 +20,10 @@ const items = [
 
 const RepairList = () =>{
 
-  const params =  window.location.href.split('?')[1];
+  let params =  window.location.href.split('?')[1];
+  if(params === '5'){
+    params = '4'
+  }
   const [state, setState] = useState(params);
 
   const onChange = current => {
