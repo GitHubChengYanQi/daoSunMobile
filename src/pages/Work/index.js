@@ -18,8 +18,8 @@ const Work = () => {
         </Affix>
         <List title={<div>常用工具</div>}>
           <Grid>
-            <GridItem icon={<AppstoreOutlined />}>
-              <div className={styles.size}>工具</div>
+            <GridItem icon={<AppstoreOutlined />} onClick={()=>{router.push('/Repair');}}>
+              <div className={styles.size}>工单列表</div>
             </GridItem>
             <GridItem icon={<AppstoreOutlined />}>
               <div className={styles.size}>工具</div>
