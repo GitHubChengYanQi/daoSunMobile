@@ -1,17 +1,18 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from '../util/Request';
 import { Flex, FlexItem, GridItem, SafeArea } from 'weui-react-v2';
-import {
+import Icon, {
   AppstoreOutlined,
   BarChartOutlined,
-  CommentOutlined, FieldStringOutlined,
+  CommentOutlined, FieldStringOutlined, LeftOutlined,
   ShakeOutlined,
   UserOutlined,
   WechatOutlined,
 } from '@ant-design/icons';
 import { Affix, Avatar, Image, Menu } from 'antd';
 import { router } from 'umi';
-import Logo from '../assets/img.png'
+import Logo from '../assets/img.png';
+import { NavBar } from 'antd-mobile';
 
 function BasicLayout(props) {
 
@@ -57,44 +58,44 @@ function BasicLayout(props) {
 
   return (
     <div>
-      <SafeArea style={{minHeight: '100vh', backgroundColor: '#f4f4f4'}}>
-      {props.children}
+      <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
+        {props.children}
       </SafeArea>
       <Affix offsetBottom={0}>
-        <Flex type='flex' style={{backgroundColor:'#fff',cursor:'pointer'}} justify='space-around'>
+        <Flex type='flex' style={{ backgroundColor: '#fff', cursor: 'pointer' }} justify='space-around'>
           <FlexItem>
-            <div onClick={()=>{
+            <div onClick={() => {
               router.push('/Home');
-            }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<FieldStringOutlined />} >首页</GridItem>
+            }} style={{ textAlign: 'center' }}>
+              <GridItem style={{ width: '100%' }} icon={<FieldStringOutlined />}>首页</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
-            <div onClick={()=>{
+            <div onClick={() => {
               router.push('/Notice');
             }} style={{ textAlign: 'center' }}>
-              <GridItem style={{width:'100%'}} icon={<CommentOutlined />}>通知</GridItem>
+              <GridItem style={{ width: '100%' }} icon={<CommentOutlined />}>通知</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
-            <div onClick={()=>{
+            <div onClick={() => {
               router.push('/Work');
-            }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<AppstoreOutlined />}>工作</GridItem>
+            }} style={{ textAlign: 'center' }}>
+              <GridItem style={{ width: '100%' }} icon={<AppstoreOutlined />}>工作</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
-            <div onClick={()=>{
+            <div onClick={() => {
               router.push('/Report');
-            }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<BarChartOutlined />}>报表</GridItem>
+            }} style={{ textAlign: 'center' }}>
+              <GridItem style={{ width: '100%' }} icon={<BarChartOutlined />}>报表</GridItem>
             </div>
           </FlexItem>
           <FlexItem>
-            <div onClick={()=>{
+            <div onClick={() => {
               router.push('/User');
-            }} style={{ textAlign: 'center'}}>
-              <GridItem style={{width:'100%'}} icon={<UserOutlined />}>我的</GridItem>
+            }} style={{ textAlign: 'center' }}>
+              <GridItem style={{ width: '100%' }} icon={<UserOutlined />}>我的</GridItem>
             </div>
           </FlexItem>
         </Flex>

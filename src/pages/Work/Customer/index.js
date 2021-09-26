@@ -11,13 +11,14 @@ import {
   Spin,
   WingBlank,
 } from 'weui-react-v2';
-import { FilterOutlined, HourglassOutlined, UserAddOutlined } from '@ant-design/icons';
+import Icon, { FilterOutlined, HourglassOutlined, LeftOutlined, UserAddOutlined } from '@ant-design/icons';
 import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
 import { router } from 'umi';
 import './index.scss';
 import { Affix, Col, Row, Select } from 'antd';
-import { SearchBar } from 'antd-mobile';
+import {SearchBar } from 'antd-mobile';
+import NavBar from '../../components/NavBar';
 
 const Customer = () => {
 
@@ -54,6 +55,7 @@ const Customer = () => {
 
   return (
     <>
+      <NavBar title='客户列表'/>
       <WingBlank>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>

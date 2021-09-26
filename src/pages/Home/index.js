@@ -15,7 +15,7 @@ import {
   GithubOutlined,
   WechatOutlined,
   RightOutlined,
-  MessageOutlined, HeartOutlined, AimOutlined
+  MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined,
 } from '@ant-design/icons';
 import { Affix, Badge, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
@@ -34,6 +34,11 @@ const Home = () =>{
   }
   return (
     <>
+      <Affix offsetTop={0}>
+        <NavBar
+          mode='light'
+        >首页</NavBar>
+      </Affix>
       <WingBlank size="sm" >
         <Tabs >
           <TabPane key="a" tab="今日日程">

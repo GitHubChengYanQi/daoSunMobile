@@ -10,4 +10,8 @@ body {
   margin: 0;
 }
 
+:global .am-badge-text {
+  z-index: auto;
+}
+
 

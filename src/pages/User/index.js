@@ -1,13 +1,20 @@
 import React from 'react';
 import { Button, Preview, PreviewItem } from 'weui-react-v2';
-import { Avatar, Col, Row } from 'antd';
-import { Card } from 'antd-mobile';
+import { Affix, Avatar, Col, Row } from 'antd';
+import { Card, NavBar } from 'antd-mobile';
+import { LeftOutlined } from '@ant-design/icons';
+import { router } from 'umi';
 
 
 const User = () => {
 
   return (
     <>
+      <Affix offsetTop={0}>
+        <NavBar
+          mode='light'
+        >我的</NavBar>
+      </Affix>
       <Row gutter={24} style={{ backgroundColor: '#fff' }}>
         <Col span={18}>
           <Preview style={{ padding: 16 }} align='left' subTitle='个人信息'>

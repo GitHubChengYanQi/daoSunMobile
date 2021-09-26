@@ -5,8 +5,11 @@ import { Chart } from '@antv/f2';
 import { Affix, Table } from 'antd';
 import Revenue from './components/Revenue';
 import Stock from './components/Stock';
+import { NavBar } from 'antd-mobile';
+import { LeftOutlined } from '@ant-design/icons';
+import { router } from 'umi';
 
-const {Column} = Table;
+const { Column } = Table;
 
 const Report = () => {
 
@@ -35,23 +38,25 @@ const Report = () => {
             {
               key: '1',
               title: '服务工单',
-              value: <div style={{fontWeight: 900, color: '#416e91' }}>1158</div>,
-              extra:<><div>昨日服务客户</div>
-                <di>1158</di></>
+              value: <div style={{ fontWeight: 900, color: '#416e91' }}>1158</div>,
+              extra: <>
+                <div>昨日服务客户</div>
+                <di>1158</di>
+              </>,
             },
             {
               key: '2',
               title: '未完成工单',
-              value: <div style={{fontWeight: 900, color: '#416e91' }}>58</div>,
-              extra:  <>
+              value: <div style={{ fontWeight: 900, color: '#416e91' }}>58</div>,
+              extra: <>
                 <div>进行中的工单</div>
-                <div >90</div>
+                <div>90</div>
               </>,
             },
             {
               key: '3',
               title: '今日完成工单',
-              value:<div style={{fontWeight: 900, color: '#416e91' }}> 11</div>,
+              value: <div style={{ fontWeight: 900, color: '#416e91' }}> 11</div>,
               extra: <>
                 <div>昨日完成工单</div>
                 <div>65</div>
@@ -60,7 +65,7 @@ const Report = () => {
             {
               key: '4',
               title: '今日赢收',
-              value: <div style={{fontWeight: 900, color: '#416e91' }}>￥49999</div>,
+              value: <div style={{ fontWeight: 900, color: '#416e91' }}>￥49999</div>,
               extra: <>
                 <div>昨日赢收</div>
                 <div>￥59999</div>
@@ -69,7 +74,7 @@ const Report = () => {
             {
               key: '5',
               title: '近30天好评率',
-              value: <div style={{fontWeight: 900, color: '#416e91' }}>99.99%</div>,
+              value: <div style={{ fontWeight: 900, color: '#416e91' }}>99.99%</div>,
               extra: <>
                 <div>近30天差评率</div>
                 <div>0.01%</div>
@@ -93,8 +98,14 @@ const Report = () => {
   };
 
 
-
   return (
+
+    <>
+      <Affix offsetTop={0}>
+        <NavBar
+          mode='light'
+        >报表</NavBar>
+      </Affix>
 
       <WingBlank size='sm'>
         <Affix offsetTop={0}>
@@ -107,6 +118,7 @@ const Report = () => {
         </Affix>
         {report()}
       </WingBlank>
+    </>
   );
 };
 
