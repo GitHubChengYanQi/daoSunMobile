@@ -5,7 +5,7 @@ import styles from './index.css';
 
 const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
   const itemClick = ()=>{
-    router.push(`/Repair/RepairList?${id}`);
+    router.push(`/Repair/RepairList?${progress}`);
   }
   let progressName;
   if(progress == 0) {
