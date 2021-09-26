@@ -252,7 +252,7 @@ const DataBoard = () => {
             <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
           </Flex>
           <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'left'}}><DownloadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DownloadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>收款单金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥3888.00</div></FlexItem>
           </Flex>
