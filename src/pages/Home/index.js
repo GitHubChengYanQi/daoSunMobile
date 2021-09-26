@@ -17,11 +17,10 @@ import {
   RightOutlined,
   MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined,
 } from '@ant-design/icons';
-import { Affix, Badge, Calendar, Card, Col, Divider, Menu, Row, Select, Switch, Tabs } from 'antd';
+import { Affix, Badge, Col, Divider, Row, Select, Tabs } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
-import { NavBar, Icon } from 'antd-mobile';
-import CompleteTtem from '@/pages/Home/component/CompleteTtem';
+import { Calendar, NavBar } from 'antd-mobile';
 const { TabPane } = Tabs;
 const { Option } = Select;
 
@@ -71,7 +70,7 @@ const Home = () =>{
         <Tabs >
           <TabPane key="a" tab="今日日程">
             <ListItem style={{padding: 3, backgroundColor: '#096DD9'}} extra={
-              <Button style={{backgroundColor: '#096DD9', borderColor: 'white', color: 'white'}} onClick={()=>{router.push();}}>更多</Button>
+              <Button style={{backgroundColor: '#096DD9', borderColor: 'white', color: 'white'}} onClick={()=>{router.push('/Schedule');}}>更多</Button>
             } >
               <div>
                 <div style={{display: 'inline', fontSize: 28, color: 'white'}}>{time}</div>
@@ -79,7 +78,6 @@ const Home = () =>{
               </div>
             </ListItem>
 
-            {/*<Calendar />*/}
             <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={
               <Select defaultValue="1" style={{ backgroundColor: '#E6E6E6'}} onChange={handleChange}>
                 <Option value="1">本日</Option>
