@@ -39,7 +39,7 @@ const CustomerAdd = () => {
       >
         <List title='基础数据'>
           <FormItem prop='customerName' label='客户名称'>
-            <Input placeholder='请输入客户名称' autoFocus={true} />
+            <Input placeholder='请输入客户名称' />
           </FormItem>
           <FormItem prop='customerName' label='客户状态'>
             <Picker title='请选择' placeholder='请选择' data={[
@@ -102,7 +102,7 @@ const CustomerAdd = () => {
         }} />}>
           <div style={{display:!detail && 'none'}}>
             <FormItem prop='customerName' label='法定代表人'>
-              <Input placeholder='请输入法定代表人' autoFocus={true} />
+              <Input placeholder='请输入法定代表人' />
             </FormItem>
             <FormItem prop='customerName' label='公司类型'>
               <Picker title='请选择' placeholder='请选择' data={[{value: '有限责任公司（自然人独资）', label: '有限责任公司（自然人独资）'}, {value: '股份有限公司', label: '股份有限公司'}, {
@@ -121,7 +121,7 @@ const CustomerAdd = () => {
               </DatePicker>
             </FormItem>
             <FormItem prop='customerName' label='社会信用代码'>
-              <Input placeholder='请输入社会信用代码' autoFocus={true} />
+              <Input placeholder='请输入社会信用代码'  />
             </FormItem>
             <FormItem prop='customerName' label='营业期限'>
               <DatePicker placeholder="请选择" defaultValue={null} useDefaultFormat={false} separator="">
@@ -129,7 +129,7 @@ const CustomerAdd = () => {
               </DatePicker>
             </FormItem>
             <FormItem prop='customerName' label='注册地址'>
-              <Input placeholder='请输入注册地址' autoFocus={true} />
+              <Input placeholder='请输入注册地址' />
             </FormItem>
             <FormItem prop='customerName' label='客户来源'>
               <Picker title='请选择' placeholder='请选择' data={[
@@ -145,10 +145,10 @@ const CustomerAdd = () => {
               </Picker>
             </FormItem>
             <FormItem prop='customerName' label='邮箱'>
-              <Input placeholder='请输入邮箱' autoFocus={true} />
+              <Input placeholder='请输入邮箱'  />
             </FormItem>
             <FormItem prop='customerName' label='网址'>
-              <Input placeholder='请输入网址' autoFocus={true} />
+              <Input placeholder='请输入网址' />
             </FormItem>
             <FormItem prop='customerName' label='行业'>
               <Picker title='请选择' placeholder='请选择' data={[
@@ -173,7 +173,7 @@ const CustomerAdd = () => {
         </List>
         <List title='联系人信息'>
           <FormItem prop='contacts' label='联系人姓名'>
-            <Input placeholder='请输入联系人姓名' autoFocus={true} />
+            <Input placeholder='请输入联系人姓名' />
           </FormItem>
           <FormItem prop='customerName' label='职务'>
             <Picker title='请选择' placeholder='请选择' data={[
@@ -189,7 +189,7 @@ const CustomerAdd = () => {
             </Picker>
           </FormItem>
           <FormItem prop='customerName' label='联系电话'>
-            <Input placeholder='请输入联系电话' type='phone' autoFocus={true} />
+            <Input placeholder='请输入联系电话' type='phone'  />
           </FormItem>
         </List>
         <List title='地址信息'>
@@ -207,7 +207,7 @@ const CustomerAdd = () => {
             </Picker>
           </FormItem>
           <FormItem prop='customerName' label='详细地址'>
-            <Input placeholder='请输入详细地址' autoFocus={true} />
+            <Input placeholder='请输入详细地址' />
           </FormItem>
         </List>
         <div style={{textAlign:'center',margin:8}}>

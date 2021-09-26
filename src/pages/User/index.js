@@ -9,7 +9,7 @@ const User = () => {
     <>
       <Row gutter={24} style={{backgroundColor:'#fff'}}>
         <Col span={18}>
-          <Preview style={{padding:16}} subTitle={<strong>程彦祺</strong>} title={<Button style={{ padding: 0 }} type='link'>设置工作状态</Button>} align='left'>
+          <Preview style={{padding:16}} subTitle={<h3>程彦祺</h3>} title={<Button style={{ padding: 0 }} size={'small'} type='link'>设置工作状态</Button>} align='left'>
             <PreviewItem title='部门'>
               <div>666</div>
             </PreviewItem>

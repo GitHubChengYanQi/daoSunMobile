@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   Button,
-  DatePicker, DialogPop,
+  DialogPop,
   Form,
   FormItem,
   Input,
@@ -14,6 +14,7 @@ import { router } from 'umi';
 import { Card } from 'antd';
 import './index.css';
 import { Steps } from 'antd-mobile';
+import 'antd-mobile/lib/steps/style/css';
 
 const Step = Steps.Step;
 
@@ -25,10 +26,9 @@ const BusinessAdd = () => {
 
   useEffect(() => {
     DialogPop({
-      title: '对话框标题',
+      title: '选择项目流程',
       children:
         <PickerPanel
-          title='请选择'
           data={[{ label: '项目流程1', value: 1 }, { label: '项目流程2', value: 2 }]}
           onChange={(value) => {
             setValue(value[0]);
@@ -78,7 +78,7 @@ const BusinessAdd = () => {
         >
           <List title='添加项目'>
             <FormItem prop='customerName' label='项目名称'>
-              <Input placeholder='请输入项目名称' autoFocus={true} />
+              <Input placeholder='请输入项目名称' />
             </FormItem>
             <FormItem prop='customerName' label='客户名称'>
               <Picker title='请选择' placeholder='请选择' data={[

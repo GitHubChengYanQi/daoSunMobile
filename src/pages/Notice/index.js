@@ -15,7 +15,7 @@ const Notice = () => {
               extra={
                 <>
                   <div>2121-9-24 11:00</div>
-                  <Badge count={25} />
+                  <Badge count={25} size={'small'} />
                 </>
               }>
               <div style={{ fontWeight: 900, }}>客户分配通知</div>

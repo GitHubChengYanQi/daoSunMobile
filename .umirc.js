@@ -17,7 +17,7 @@ export default {
       selectorBlackList: [],
       minPixelValue: 1,
       mediaQuery: false,
-      exclude: [/dumi/],
+      exclude: [/dumi/,/ant/],
     }),
   ],
   // routes: [
