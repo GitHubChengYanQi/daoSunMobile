@@ -32,6 +32,34 @@ const Home = () =>{
   function handleChange(value) {
     console.log(`selected ${value}`);
   }
+  const data = new Date();
+
+  const time = data.getFullYear()+ "年" + (data.getMonth() + 1) + "月" + data.getDate();
+
+  let xq = "";
+  switch (data.getDay()) {
+    case 0 :
+      xq = "星期日";
+      break;
+    case 1:
+      xq = "星期一";
+      break;
+    case 2:
+      xq = "星期二";
+      break;
+    case 3:
+      xq = "星期三";
+      break;
+    case 4:
+      xq = "星期四";
+      break;
+    case 5:
+      xq = "星期五";
+      break;
+    case 6:
+      xq = "星期六";
+      break;
+  }
   return (
     <>
       <Affix offsetTop={0}>
@@ -43,15 +71,15 @@ const Home = () =>{
         <Tabs >
           <TabPane key="a" tab="今日日程">
             <ListItem style={{padding: 3, backgroundColor: '#096DD9'}} extra={
-              <Button style={{backgroundColor: '#096DD9', borderColor: 'white', color: 'white'}}>更多</Button>
+              <Button style={{backgroundColor: '#096DD9', borderColor: 'white', color: 'white'}} onClick={()=>{router.push();}}>更多</Button>
             } >
               <div>
-                <div style={{display: 'inline', fontSize: 28, color: 'white'}}>2020年11月15日</div>
-                <div style={{display: 'inline', color: 'white'}}>星期三</div>
+                <div style={{display: 'inline', fontSize: 28, color: 'white'}}>{time}</div>
+                <div style={{display: 'inline', color: 'white'}}>{xq}</div>
               </div>
             </ListItem>
 
-            <Calendar />
+            {/*<Calendar />*/}
             <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={
               <Select defaultValue="1" style={{ backgroundColor: '#E6E6E6'}} onChange={handleChange}>
                 <Option value="1">本日</Option>
@@ -132,7 +160,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief >5小时</Brief>
-                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>回款计划</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>工作任务</Button></Brief>
                       </>
                     }
                   >
@@ -148,7 +176,7 @@ const Home = () =>{
                         <Brief style={{marginLeft: 5}}><ClockCircleOutlined /></Brief>
                         <Brief >2021-09-09 01:17 </Brief>
                         <Brief style={{color: 'blue'}}>5小时</Brief>
-                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>工作任务</Button></Brief>
+                        <Brief style={{marginLeft: '12%'}}><Button shape="round"  size='small'>回款计划</Button></Brief>
                       </>
                     }
                   >

@@ -45,3 +45,12 @@
 :global .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
  height: 0!important;
 }
+:global .ant-tabs-nav{
+  position: fixed!important;
+  z-index: 99!important;
+  background-color: white!important;
+}
+
+:global .ant-tabs-content {
+  margin-top: 12%!important;
+}
