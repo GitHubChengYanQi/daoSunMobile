@@ -56,7 +56,7 @@ const Customer = () => {
   return (
     <>
       <NavBar title='客户列表'/>
-      <WingBlank>
+      <>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>
             <Col span={4}>
@@ -92,7 +92,7 @@ const Customer = () => {
             ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
           {content()}
         </List>
-      </WingBlank>
+      </>
     </>
   );
 };

@@ -61,7 +61,7 @@ const CustomerList = () => {
 
   return (
     <>
-      <WingBlank>
+      <>
         <List>
           <ListItem style={{ padding: 8 }} onClick={() => {
             router.push('/Work/Customer/CustomerDetail');
@@ -220,7 +220,7 @@ const CustomerList = () => {
             </Flex>
           </ListItem>
         </List>
-      </WingBlank>
+      </>
     </>
   );
 };

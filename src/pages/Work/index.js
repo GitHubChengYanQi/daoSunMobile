@@ -1,5 +1,17 @@
 import React from 'react';
-import { Flex, FlexItem, Grid, GridItem, List, ListItem, Panel, SafeArea, WhiteSpace, WingBlank } from 'weui-react-v2';
+import {
+  Flex,
+  FlexItem,
+  Grid,
+  GridItem,
+  List,
+  ListItem,
+  Panel,
+  SafeArea,
+  Toast,
+  WhiteSpace,
+  WingBlank,
+} from 'weui-react-v2';
 import {
   AlertOutlined,
   AppstoreOutlined,
@@ -25,6 +37,10 @@ import { Badge, NavBar } from 'antd-mobile';
 
 const Work = () => {
 
+  const toast = () => {
+    Toast.text('暂未开通');
+  };
+
   return (
     <>
       <Affix offsetTop={0}>
@@ -37,22 +53,34 @@ const Work = () => {
       </Affix>
       <List title={<div>常用工具</div>}>
         <Grid>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>全局查找</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>扫一扫</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>拜访签到</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>日程管理</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>话术</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />}>
+          <GridItem icon={<AppstoreOutlined />} onClick={() => {
+            toast();
+          }}>
             <div className={styles.size}>产品资料</div>
           </GridItem>
         </Grid>
@@ -68,13 +96,13 @@ const Work = () => {
           </GridItem>
           <GridItem icon={<SoundOutlined />}
                     onClick={() => {
-                      // router.push('/Work/Business');
+                      toast();
                     }}>
             <div className={styles.size}>项目来源</div>
           </GridItem>
           <GridItem icon={<BranchesOutlined />}
                     onClick={() => {
-                      // router.push('/Work/Business');
+                      toast();
                     }}>
             <div className={styles.size}>项目流程</div>
           </GridItem>
@@ -86,7 +114,7 @@ const Work = () => {
           </GridItem>
           <GridItem icon={<PropertySafetyOutlined />}
                     onClick={() => {
-                      // router.push('/Work/Business');
+                      toast();
                     }}>
             <div className={styles.size}>对手报价</div>
           </GridItem>
@@ -105,6 +133,9 @@ const Work = () => {
             <div className={styles.size}>客户列表</div>
           </GridItem>
           <GridItem
+            onClick={() => {
+              router.push('/Work/Customer');
+            }}
             icon={<Badge text={5}><AlertOutlined style={{ marginBottom: 8 }} /></Badge>}
           >
             <div className={styles.size}>公海获客</div>
@@ -116,18 +147,26 @@ const Work = () => {
             }}>
             <div className={styles.size}>联系人</div>
           </GridItem>
-          <GridItem icon={<Badge text={110} size='small' overflowCount={99}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<Badge text={110} size='small' overflowCount={99}>
             <ShakeOutlined style={{ marginBottom: 8 }} />
           </Badge>}>
             <div className={styles.size}>附近客户</div>
           </GridItem>
-          <GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
             <div className={styles.size}>客户级别</div>
           </GridItem>
-          <GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
             <div className={styles.size}>角色管理</div>
           </GridItem>
-          <GridItem icon={<ToolOutlined />}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<ToolOutlined />}>
             <div className={styles.size}>自助服务门户</div>
           </GridItem>
         </Grid>
@@ -135,19 +174,23 @@ const Work = () => {
 
       <List className={styles.title} title={<div>合同管理</div>}>
         <Grid>
-          <GridItem icon={<FileDoneOutlined />} onClick={()=>{
+          <GridItem icon={<FileDoneOutlined />} onClick={() => {
             router.push('/Work/Contract');
-          }} >
+          }}>
             <div className={styles.size}>合同列表</div>
           </GridItem>
-          <GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
             <div className={styles.size}>合同模板</div>
           </GridItem>
         </Grid>
       </List>
       <List className={styles.title} title={<div>发货申请管理</div>}>
         <Grid>
-          <GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
+          <GridItem onClick={() => {
+            toast();
+          }} icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
             <div className={styles.size}>发货申请列表</div>
           </GridItem>
         </Grid>

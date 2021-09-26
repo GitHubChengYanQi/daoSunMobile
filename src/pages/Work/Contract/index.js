@@ -37,7 +37,7 @@ const Contract = () => {
           ]}
         >合同列表</NavBar>
       </Affix>
-      <WingBlank>
+      <>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{padding:8}}>
             <Col span={4}>
@@ -97,7 +97,7 @@ const Contract = () => {
             </ListItem>
           </List>
         </List>
-      </WingBlank>
+      </>
     </>
   );
 };

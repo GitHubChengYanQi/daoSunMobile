@@ -43,7 +43,7 @@ const Business = () => {
   return (
     <>
       <NavBar title='项目列表'/>
-      <WingBlank>
+      <>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{padding:8}}>
             <Col span={4}>
@@ -102,7 +102,7 @@ const Business = () => {
             </ListItem>
           </List>
         </List>
-      </WingBlank>
+      </>
     </>
   );
 };
