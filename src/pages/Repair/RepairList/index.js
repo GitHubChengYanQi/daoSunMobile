@@ -22,9 +22,9 @@ const RepairList = () =>{
 
   let params =  window.location.href.split('?')[1];
   if(params === '5'){
-    params = '4'
+    params = 4
   }
-  const [state, setState] = useState(params);
+  const [state, setState] = useState(parseInt(params));
 
   const onChange = current => {
     setState(current );
