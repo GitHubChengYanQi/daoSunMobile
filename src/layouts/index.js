@@ -112,18 +112,18 @@ function BasicLayout(props) {
               </div>,
               value: '/Report',
             },
-            {
-              label: <div style={{ textAlign: 'center' }}>
-                <Button
-                  type='text'
-                  style={{ padding: 0 }}
-                  icon={<UserOutlined />}
-                />
-                <br />
-                我的
-              </div>,
-              value: '/User',
-            },
+            // {
+            //   label: <div style={{ textAlign: 'center' }}>
+            //     <Button
+            //       type='text'
+            //       style={{ padding: 0 }}
+            //       icon={<UserOutlined />}
+            //     />
+            //     <br />
+            //     我的
+            //   </div>,
+            //   value: '/User',
+            // },
           ]
 
         } defaultValue={window.sessionStorage.getItem('nav') || '/Home'} onChange={(value) => {

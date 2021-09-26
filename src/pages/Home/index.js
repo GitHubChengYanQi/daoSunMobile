@@ -61,12 +61,6 @@ const Home = () => {
   }
   return (
     <>
-      <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-        >首页</NavBar>
-      </Affix>
-      <WingBlank size="sm" >
         <Tabs >
           <TabPane key="a" tab="今日日程">
             <ListItem style={{padding: 3, backgroundColor: '#096DD9'}} extra={
@@ -485,7 +479,6 @@ const Home = () => {
         {/*  >*/}
         {/*  </Search>*/}
         {/*</Affix>*/}
-      </WingBlank>
     </>
   );
 };

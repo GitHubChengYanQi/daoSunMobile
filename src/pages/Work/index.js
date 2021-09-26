@@ -26,7 +26,7 @@ import { Badge, NavBar } from 'antd-mobile';
 const Work = () => {
 
   return (
-    <WingBlank>
+    <>
       <Affix offsetTop={0}>
         <NavBar
           mode='light'
@@ -166,7 +166,7 @@ const Work = () => {
           </GridItem>
         </Grid>
       </List>
-    </WingBlank>
+    </>
   );
 };
 

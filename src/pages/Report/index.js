@@ -101,13 +101,6 @@ const Report = () => {
   return (
 
     <>
-      <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-        >报表</NavBar>
-      </Affix>
-
-      <WingBlank size='sm'>
         <Affix offsetTop={0}>
           <SegmentedControl
             className={styles.tab}
@@ -117,7 +110,6 @@ const Report = () => {
             onChange={(val) => setPage(val)} />
         </Affix>
         {report()}
-      </WingBlank>
     </>
   );
 };
