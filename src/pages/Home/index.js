@@ -2,7 +2,7 @@ import styles from './index.css';
 import React, { useEffect, useState } from 'react';
 import {
   Brief, Button, List,
-  ListItem, Panel, PanelItem,
+  ListItem, Panel, PanelItem, Search,
   WingBlank,
 } from 'weui-react-v2';
 import {
@@ -36,7 +36,16 @@ const Home = () =>{
     <>
       <WingBlank size="sm" >
         <Tabs >
-          <TabPane key="a" tab={<span style={{fontSize: 14}}>今日日程</span>}>
+          <TabPane key="a" tab="今日日程">
+            <ListItem style={{padding: 3, backgroundColor: '#096DD9'}} extra={
+              <Button style={{backgroundColor: '#096DD9', borderColor: 'white', color: 'white'}}>更多</Button>
+            } >
+              <div>
+                <div style={{display: 'inline', fontSize: 28, color: 'white'}}>2020年11月15日</div>
+                <div style={{display: 'inline', color: 'white'}}>星期三</div>
+              </div>
+            </ListItem>
+
             <Calendar />
             <ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={
               <Select defaultValue="1" style={{ backgroundColor: '#E6E6E6'}} onChange={handleChange}>
@@ -182,12 +191,10 @@ const Home = () =>{
                 </Panel>
               </div> : null}
           </TabPane>
-          <TabPane key="b" tab={<span style={{fontSize: 14}}>数据看板</span>}>
-            <div>
-              <DataBoard />
-            </div>
+          <TabPane key="b" tab="数据看板">
+            <DataBoard />
           </TabPane>
-          <TabPane key="c" tab={<span style={{fontSize: 14}}>待办事项</span>}>
+          <TabPane key="c" tab="待办事项">
             <div >
               <List title="2021-03-01">
                 <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>10 {<RightOutlined />}</div>}>
@@ -217,11 +224,11 @@ const Home = () =>{
               </List>
             </div>
           </TabPane>
-          <TabPane key="d" tab={<span style={{ fontSize: 14}}>工作动态</span>}>
+          <TabPane key="d" tab="工作动态">
             <div>
               <Panel >
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>销售经理</div></div>}
                   thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
                   // text={true}
                   info={
@@ -241,7 +248,7 @@ const Home = () =>{
 
                 </PanelItem>
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>总经理</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>总经理</div></div>}
                   thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
                   // text={true}
                   info={
@@ -257,11 +264,11 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 14, marginTop: 10}} > 成交订单:DD202121232266</div>
+                  <div style={{ marginTop: 10}} > 成交订单:DD202121232266</div>
 
                 </PanelItem>
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>董事长</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>董事长</div></div>}
                   thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
                   // text={true}
                   info={
@@ -277,11 +284,11 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 14, marginTop: 10}} > 创建客户  xxx</div>
+                  <div style={{ marginTop: 10}} > 创建客户  xxx</div>
 
                 </PanelItem>
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>营销组长</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>营销组长</div></div>}
                   thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
                   // text={true}
                   info={
@@ -297,10 +304,10 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 14, marginTop: 10}} > 创建线索 xxx</div>
+                  <div style={{ marginTop: 10}} > 创建线索 xxx</div>
                 </PanelItem>
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>销售经理</div></div>}
                   thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
                   // text={true}
                   info={
@@ -316,10 +323,10 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 14, marginTop: 10}} > 创建商机 xxx</div>
+                  <div style={{ marginTop: 10}} > 创建商机 xxx</div>
                 </PanelItem>
                 <PanelItem
-                  title={<div><div style={{display: 'inline'}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5, fontSize: 14}}>销售经理</div></div>}
+                  title={<div><div style={{display: 'inline', fontSize: 16}}>狄仁杰</div><div style={{display: 'inline', marginLeft: 5}}>销售经理</div></div>}
                   thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }}/>}
                   // text={true}
                   info={
@@ -335,7 +342,7 @@ const Home = () =>{
                     </>
                   }
                 >
-                  <div style={{fontSize: 14, marginTop: 10}} > 创建联系人 xxx</div>
+                  <div style={{ marginTop: 10}} > 创建联系人 xxx</div>
 
                 </PanelItem>
               </Panel>
@@ -343,8 +350,8 @@ const Home = () =>{
           </TabPane>
           <TabPane key="e" disabled tab={
             <div>
-              <Button type='link' size='large' style={{padding: 0}} icon={<SearchOutlined />} />
-              <Button type='link' size='large' style={{marginLeft: 10, padding: 0}} icon={<ScanOutlined />} />
+              <Button type='link' size='large' style={{padding: 0}} onClick={()=>{router.push('/SearchButton');}} icon={<SearchOutlined />} />
+              <Button type='link' size='large' style={{padding: 0}} icon={<ScanOutlined />} />
             </div>}
           />
         </Tabs>

@@ -29,10 +29,6 @@ const DealRank =() =>{
       brand: '01 周杰伦',
       sales: 182023,
       const: 100
-    }, {
-      brand: 'Joe Boxer',
-      sales: 263523,
-      const: 100
     }];
     const chart = new F2.Chart({
       id: 'myChart1',

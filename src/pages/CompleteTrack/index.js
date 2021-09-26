@@ -152,7 +152,7 @@ const CompleteTrack = () => {
   });
   return(
     <>
-      <canvas id="myChart" style={{width: '100%', height: 'auto'}} ></canvas>
+      <canvas id="myChart" style={{width: '100%'}} ></canvas>
     </>
   );
 
