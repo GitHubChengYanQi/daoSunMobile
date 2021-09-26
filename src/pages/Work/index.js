@@ -85,14 +85,6 @@ const Work = () => {
         </Grid>
       </List>
 
-        <List title={<div>售后服务</div>}>
-          <Grid>
-            <GridItem icon={<UnorderedListOutlined />} onClick={()=>{router.push('/Repair');}}>
-              <div className={styles.size}>工单列表</div>
-            </GridItem>
-          </Grid>
-        </List>
-
       <List className={styles.title} title={<div>销售管理</div>}>
         <Grid>
           <GridItem icon={<WechatOutlined style={{ color: '#06ad56' }} />}>
@@ -115,6 +107,17 @@ const Work = () => {
           </GridItem>
         </Grid>
       </List>
+        <List className={styles.title} title={<div>售后管理</div>}>
+          <Grid>
+            <GridItem icon={<FileSearchOutlined  style={{ color: '#06ad56' }} onClick={()=>{router.push('/Repair');}} />}>
+              <div className={styles.size}>工单管理</div>
+            </GridItem>
+            <GridItem icon={<RobotOutlined  style={{ color: '#06ad56' }} onClick={()=>{router.push('/CreateRepair');}}  />}>
+              <div className={styles.size}>创建报修</div>
+            </GridItem>
+
+          </Grid>
+        </List>
     </WingBlank>
   );
 };

@@ -2,6 +2,7 @@ import { Card } from 'antd';
 import Text from 'antd/es/typography/Text';
 import { router } from 'umi';
 import styles from './index.css';
+import { Icon, NavBar } from 'antd-mobile';
 
 const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
   const itemClick = ()=>{

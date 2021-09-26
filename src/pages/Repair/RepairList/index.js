@@ -8,6 +8,8 @@ import Engineer from '@/pages/Repair/Engineer';
 import EngineerImp from '@/pages/Repair/EngineerImp';
 import CompletePage from '@/pages/Repair/CompletePage';
 import EvaluationPage from '@/pages/Repair/EvaluationPage';
+import { Icon, NavBar } from 'antd-mobile';
+import { router } from 'umi';
 const { Step } = Steps;
 
 const items = [

@@ -1,11 +1,22 @@
 import { Skeleton } from 'weui-react-v2';
 import { useState } from 'react';
 import RepairItem from '@/pages/Repair/RepairItem';
+import { Icon, NavBar } from 'antd-mobile';
+import { router } from 'umi';
 
 const Repair = () => {
 
   return(
     <>
+      <NavBar
+        mode="light"
+        icon={<Icon type="left" />}
+        onLeftClick={() => {router.goBack();}}
+        // rightContent={[
+        //   <Icon key="0" type="search" style={{ marginRight: '16px' }} />,
+        //   <Icon key="1" type="ellipsis" />,
+        // ]}
+      >工单列表</NavBar>
       <RepairItem
         compnay='aaaaa'
         items='bbbbb'
