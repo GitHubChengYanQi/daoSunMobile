@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Flex, List, SafeArea, Search, SegmentedControl, Skeleton, Spin, WingBlank } from 'weui-react-v2';
+import {
+  Button,
+  Flex,
+  FlexItem,
+  List,
+  SafeArea,
+  Search,
+  SegmentedControl,
+  Skeleton,
+  Spin,
+  WingBlank,
+} from 'weui-react-v2';
 import { FilterOutlined, HourglassOutlined, UserAddOutlined } from '@ant-design/icons';
 import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
 import { router } from 'umi';
 import './index.scss';
-import { Col, Row } from 'antd';
+import { Affix, Col, Row, Select } from 'antd';
+import { SearchBar } from 'antd-mobile';
 
 const Customer = () => {
 
   const params = window.location.href.split('?')[1];
-
-
 
 
   const [value, setValue] = useState(params || 'customer');
@@ -26,9 +36,9 @@ const Customer = () => {
 
   if (loading) {
     return (
-      <Flex justify='center' style={{ marginTop: 64 }}>
+      <Affix offsetTop={50} style={{ textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
-      </Flex>
+      </Affix>
     );
   }
 
@@ -43,57 +53,45 @@ const Customer = () => {
   };
 
   return (
-    <WingBlank>
-      <div style={{ backgroundColor: '#fff' }}>
-        <Row gutter={24}>
-          <Col span={4}>
-            <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
-              router.push('/Work/Customer/CustomerAdd');
-            }} />
-          </Col>
-          <Col span={16}>
-            <SafeArea>
-              <Search
-                style={{
-                  backgroundColor: '#fff',
-                  border: 'solid 1px #eee',
-                  fontSize: 24,
-                  padding: '0 8px',
-                  borderRadius: 100,
-                  margin: '8px 0',
-                }}
-                placeholder='请输入公司名称、人员名称、手机号'
-                // onConfirm={(val) => console.log('确认输入: ', val)}
-                // onSearch={(val) => console.log('search: ', val)}
-                // onCancel={() => console.log('取消搜索')}
-              />
-            </SafeArea>
-          </Col>
-          <Col span={4}>
-            <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
-              router.push('/Work/Customer/Screening');
-            }} />
-          </Col>
-        </Row>
+    <>
+      <WingBlank>
+        <div style={{ backgroundColor: '#fff' }}>
+          <Row gutter={24} style={{ padding: 8 }}>
+            <Col span={4}>
+              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+                router.push('/Work/Customer/CustomerAdd');
+              }} />
+            </Col>
+            <Col span={16}>
+              <SearchBar style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
+                         placeholder='搜索客户' maxLength={8} />
+            </Col>
+            <Col span={4}>
+              <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
+                router.push('/Work/Customer/Screening');
+              }} />
+            </Col>
+          </Row>
 
 
-      </div>
-      <List style={{ margin: 0 }} title={<>客户数量 <span style={{ color: 'red' }}>500</span>家</>}>
-        <SegmentedControl
-          style={{ border: 'none' }}
-          data={[
-            {
-              label: '客户',
-              value: 'customer',
-            },
-            {
-              label: '联系人',
-              value: 'contacts',
-            },
-          ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
-        {content()}
-      </List>
-    </WingBlank>
+        </div>
+        <List style={{ margin: 0 }} title={<>客户数量 <span style={{ color: 'red' }}>500</span>家</>}>
+          <SegmentedControl
+            style={{ border: 'none' }}
+            data={[
+              {
+                label: '客户',
+                value: 'customer',
+              },
+              {
+                label: '联系人',
+                value: 'contacts',
+              },
+            ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
+          {content()}
+        </List>
+      </WingBlank>
+    </>
   );
 };
 

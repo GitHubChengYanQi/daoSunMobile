@@ -1,9 +1,17 @@
 import React from 'react';
 import { Flex, FlexItem, Grid, GridItem, List, ListItem, Panel, SafeArea, WhiteSpace, WingBlank } from 'weui-react-v2';
-import { AppstoreOutlined, WechatOutlined } from '@ant-design/icons';
-import { Affix, Badge, Button } from 'antd';
+import {
+  AlertOutlined,
+  AppstoreOutlined, LaptopOutlined,
+  PhoneOutlined,
+  ShakeOutlined,
+  TeamOutlined, ToolOutlined, UnorderedListOutlined,
+  WechatOutlined, WhatsAppOutlined,
+} from '@ant-design/icons';
+import { Affix, Button } from 'antd';
 import styles from './index.css';
 import { router } from 'umi';
+import { Badge } from 'antd-mobile';
 
 const Work = () => {
 
@@ -18,21 +26,24 @@ const Work = () => {
         </Affix>
         <List title={<div>常用工具</div>}>
           <Grid>
-            <GridItem icon={<AppstoreOutlined />} onClick={()=>{router.push('/Repair');}}>
-              <div className={styles.size}>工单列表</div>
+            <GridItem icon={<AppstoreOutlined />}>
+              <div className={styles.size}>全局查找</div>
             </GridItem>
             <GridItem icon={<AppstoreOutlined />}>
-              <div className={styles.size}>工具</div>
+              <div className={styles.size}>扫一扫</div>
             </GridItem>
             <GridItem icon={<AppstoreOutlined />}>
-              <div className={styles.size}>工具</div>
+              <div className={styles.size}>拜访签到</div>
+            </GridItem>
+            <GridItem icon={<AppstoreOutlined />}>
+              <div className={styles.size}>日程管理</div>
             </GridItem>
           </Grid>
         </List>
 
       <List title={<div>项目管理</div>}>
         <Grid>
-          <GridItem icon={<AppstoreOutlined />}
+          <GridItem icon={<LaptopOutlined />}
           onClick={()=>{
             router.push('/Work/Business');
           }}>
@@ -44,44 +55,43 @@ const Work = () => {
       <List className={styles.title} title={<div>客户管理</div>}>
         <Grid>
           <GridItem
-            icon={<Badge count={3}><WechatOutlined style={{ color: '#06ad56', fontSize: 28 }} /> </Badge>}
+            icon={<Badge text={77} size={'small'} overflowCount={55}><TeamOutlined style={{marginBottom:8}} /> </Badge>}
             onClick={() => {
               router.push('/Work/Customer');
             }}
           >
-            <div className={styles.size}>终端用户</div>
+            <div className={styles.size}>客户列表</div>
           </GridItem>
           <GridItem
-            icon={<Badge count={5}><WechatOutlined style={{ color: '#06ad56', fontSize: 28 }} /></Badge>}
-            onClick={() => {
-              router.push('/Work/Customer');
-            }}>
-            <div className={styles.size}
-            >渠道客户
-            </div>
-          </GridItem>
-          <GridItem
-            icon={<Badge count={5}><WechatOutlined style={{ color: '#06ad56', fontSize: 28 }} /></Badge>}
+            icon={<Badge text={5}><AlertOutlined style={{marginBottom:8}} /></Badge>}
           >
             <div className={styles.size}>公海获客</div>
           </GridItem>
           <GridItem
-            icon={<Badge count={0}><WechatOutlined style={{ color: '#06ad56', fontSize: 28 }} /></Badge>}
+            icon={<Badge text={0}><PhoneOutlined style={{marginBottom:8}} /></Badge>}
             onClick={() => {
               router.push('/Work/Customer?contacts');
             }}>
             <div className={styles.size}>联系人</div>
           </GridItem>
-          <GridItem icon={<Badge overflowCount={99} count={110}>
-            <WechatOutlined
-              style={{ color: '#06ad56', fontSize: 28 }} /></Badge>}>
+          <GridItem icon={<Badge text={110} size='small' overflowCount={99}>
+            <ShakeOutlined style={{marginBottom:8}} />
+          </Badge>}>
             <div className={styles.size}>附近客户</div>
           </GridItem>
-          <GridItem icon={<WechatOutlined style={{ color: '#06ad56', fontSize: 28 }} />}>
+          <GridItem icon={<ToolOutlined />}>
             <div className={styles.size}>自助服务门户</div>
           </GridItem>
         </Grid>
       </List>
+
+        <List title={<div>售后服务</div>}>
+          <Grid>
+            <GridItem icon={<UnorderedListOutlined />} onClick={()=>{router.push('/Repair');}}>
+              <div className={styles.size}>工单列表</div>
+            </GridItem>
+          </Grid>
+        </List>
 
       <List className={styles.title} title={<div>销售管理</div>}>
         <Grid>

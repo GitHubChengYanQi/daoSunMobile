@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, ListItem, SafeArea, WingBlank } from 'weui-react-v2';
-import { Avatar, Badge } from 'antd';
+import { Avatar } from 'antd';
+import { Badge } from 'antd-mobile';
 
 
 const Notice = () => {
@@ -15,7 +16,7 @@ const Notice = () => {
               extra={
                 <>
                   <div>2121-9-24 11:00</div>
-                  <Badge count={25} size={'small'} />
+                  <Badge text={25} />
                 </>
               }>
               <div style={{ fontWeight: 900, }}>客户分配通知</div>
@@ -27,7 +28,7 @@ const Notice = () => {
               extra={
                 <>
                   <div>2121-9-24 11:00</div>
-                  <Badge count={18} />
+                  <Badge text={18} />
                 </>
               }>
               <div style={{ fontWeight: 900 }}>客户动态通知</div>
@@ -39,7 +40,7 @@ const Notice = () => {
               extra={
                 <>
                   <div>2121-9-24 11:00</div>
-                  <Badge count={3} />
+                  <Badge text={3} />
                 </>
               }>
               <div style={{ fontWeight: 900 }}>维保服务通知</div>

@@ -17,7 +17,8 @@ import {
   UserAddOutlined, WhatsAppOutlined,
 } from '@ant-design/icons';
 import { router } from 'umi';
-import { Col, Row } from 'antd';
+import { Affix, Col, Row } from 'antd';
+import { SearchBar } from 'antd-mobile';
 
 
 const Business = () => {
@@ -32,9 +33,9 @@ const Business = () => {
 
   if (loading) {
     return (
-      <Flex justify='center' style={{ marginTop: 64 }}>
+      <Affix offsetTop={50} style={{textAlign:'center'}}>
         <Spin spinning={true} size='large' />
-      </Flex>
+      </Affix>
     );
   }
 
@@ -42,29 +43,14 @@ const Business = () => {
     <>
       <WingBlank>
         <div style={{ backgroundColor: '#fff' }}>
-          <Row gutter={24}>
+          <Row gutter={24} style={{padding:8}}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
                 router.push('/Work/Business/BusinessAdd');
               }} />
             </Col>
             <Col span={16}>
-              <SafeArea>
-                <Search
-                  style={{
-                    backgroundColor: '#fff',
-                    border: 'solid 1px #eee',
-                    fontSize: 24,
-                    padding: '0 8px',
-                    borderRadius: 100,
-                    margin: '8px 0',
-                  }}
-                  placeholder='请输入项目名称'
-                  // onConfirm={(val) => console.log('确认输入: ', val)}
-                  // onSearch={(val) => console.log('search: ', val)}
-                  // onCancel={() => console.log('取消搜索')}
-                />
-              </SafeArea>
+              <SearchBar style={{backgroundColor:'#fff',border:'solid 1px #eee',borderRadius:100}} placeholder="搜索项目" maxLength={8} />
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} />
