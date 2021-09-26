@@ -115,7 +115,6 @@ const Work = () => {
             <GridItem icon={<RobotOutlined  style={{ color: '#06ad56' }} onClick={()=>{router.push('/CreateRepair');}}  />}>
               <div className={styles.size}>创建报修</div>
             </GridItem>
-
           </Grid>
         </List>
     </WingBlank>
