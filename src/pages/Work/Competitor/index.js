@@ -41,7 +41,7 @@ const Competitor = () => {
             <Icon key='0' type='search' style={{ marginRight: '16px' }} />,
             <Icon key='1' type='ellipsis' />,
           ]}
-        >合同列表</NavBar>
+        >竞争对手列表</NavBar>
       </Affix>
       <WingBlank>
         <div style={{ backgroundColor: '#fff' }}>

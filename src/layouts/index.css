@@ -13,3 +13,20 @@
   color: white;
   margin: 0;
 }
+
+.tab :global .weui-segmented-item.selected {
+  color: #1890ff;
+  border-color: #1890ff;
+  border-bottom: solid 1px;
+  background: #fff;
+  padding: 16px;
+}
+.tab :global .weui-segmented-item {
+  color: #000;
+  border: none;
+  padding: 16px;
+}
+.tab :global .selected span {
+  color: #1890ff;
+}
+

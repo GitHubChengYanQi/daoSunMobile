@@ -164,7 +164,6 @@ const Work = () => {
           }} />}>
             <div className={styles.size}>创建报修</div>
           </GridItem>
-
         </Grid>
       </List>
     </WingBlank>

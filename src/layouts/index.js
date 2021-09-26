@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRequest } from '../util/Request';
-import { Flex, FlexItem, GridItem, SafeArea } from 'weui-react-v2';
+import { Button, Flex, FlexItem, GridItem, SafeArea, SegmentedControl } from 'weui-react-v2';
 import Icon, {
   AppstoreOutlined,
   BarChartOutlined,
@@ -11,8 +11,8 @@ import Icon, {
 } from '@ant-design/icons';
 import { Affix, Avatar, Image, Menu } from 'antd';
 import { router } from 'umi';
-import Logo from '../assets/img.png';
-import { NavBar } from 'antd-mobile';
+import { Grid } from 'antd-mobile';
+import styles from './index.css';
 
 function BasicLayout(props) {
 
@@ -62,43 +62,74 @@ function BasicLayout(props) {
         {props.children}
       </SafeArea>
       <Affix offsetBottom={0}>
-        <Flex type='flex' style={{ backgroundColor: '#fff', cursor: 'pointer' }} justify='space-around'>
-          <FlexItem>
-            <div onClick={() => {
-              router.push('/Home');
-            }} style={{ textAlign: 'center' }}>
-              <GridItem style={{ width: '100%' }} icon={<FieldStringOutlined />}>首页</GridItem>
-            </div>
-          </FlexItem>
-          <FlexItem>
-            <div onClick={() => {
-              router.push('/Notice');
-            }} style={{ textAlign: 'center' }}>
-              <GridItem style={{ width: '100%' }} icon={<CommentOutlined />}>通知</GridItem>
-            </div>
-          </FlexItem>
-          <FlexItem>
-            <div onClick={() => {
-              router.push('/Work');
-            }} style={{ textAlign: 'center' }}>
-              <GridItem style={{ width: '100%' }} icon={<AppstoreOutlined />}>工作</GridItem>
-            </div>
-          </FlexItem>
-          <FlexItem>
-            <div onClick={() => {
-              router.push('/Report');
-            }} style={{ textAlign: 'center' }}>
-              <GridItem style={{ width: '100%' }} icon={<BarChartOutlined />}>报表</GridItem>
-            </div>
-          </FlexItem>
-          <FlexItem>
-            <div onClick={() => {
-              router.push('/User');
-            }} style={{ textAlign: 'center' }}>
-              <GridItem style={{ width: '100%' }} icon={<UserOutlined />}>我的</GridItem>
-            </div>
-          </FlexItem>
-        </Flex>
+        <SegmentedControl className={styles.tab} style={{ backgroundColor: '#fff' }} data={
+          [
+            {
+              label: <div style={{ textAlign: 'center', padding: '4px 0' }}>
+                <Button
+                  type='text'
+                  style={{ padding: 0 }}
+                  icon={<FieldStringOutlined />}
+                />
+                <br />
+                首页
+              </div>,
+              value: '/Home',
+            },
+            {
+              label: <div style={{ textAlign: 'center' }}>
+                <Button
+                  type='text'
+                  style={{ padding: 0 }}
+                  icon={<CommentOutlined />}
+                />
+                <br />
+                通知
+              </div>,
+              value: '/Notice',
+            },
+            {
+              label: <div style={{ textAlign: 'center' }}>
+                <Button
+                  type='text'
+                  style={{ padding: 0 }}
+                  icon={<AppstoreOutlined />}
+                />
+                <br />
+                工作
+              </div>,
+              value: '/Work',
+            },
+            {
+              label: <div style={{ textAlign: 'center' }}>
+                <Button
+                  type='text'
+                  style={{ padding: 0 }}
+                  icon={<BarChartOutlined />}
+                />
+                <br />
+                报表
+              </div>,
+              value: '/Report',
+            },
+            {
+              label: <div style={{ textAlign: 'center' }}>
+                <Button
+                  type='text'
+                  style={{ padding: 0 }}
+                  icon={<UserOutlined />}
+                />
+                <br />
+                我的
+              </div>,
+              value: '/User',
+            },
+          ]
+
+        } defaultValue={window.sessionStorage.getItem('nav') || '/Home'} onChange={(value) => {
+          window.sessionStorage.setItem('nav', value);
+          router.push(value);
+        }} />
       </Affix>
     </div>
   );

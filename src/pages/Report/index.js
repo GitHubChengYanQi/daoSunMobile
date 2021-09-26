@@ -41,7 +41,7 @@ const Report = () => {
               value: <div style={{ fontWeight: 900, color: '#416e91' }}>1158</div>,
               extra: <>
                 <div>昨日服务客户</div>
-                <di>1158</di>
+                <div>1158</div>
               </>,
             },
             {
