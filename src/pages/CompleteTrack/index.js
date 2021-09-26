@@ -1,7 +1,131 @@
 import React, { useEffect } from 'react';
 import F2 from '@antv/f2';
+import { Table } from 'antd';
 
 const CompleteTrack = () => {
+
+
+  const columns = [
+    {
+      title: '时间',
+      dataIndex: 'time',
+      key: 'time',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '目标金额',
+      dataIndex: 'quantity',
+      key: 'quantity',
+    },
+    {
+      title: '成交金额',
+      dataIndex: 'salePrice',
+      key: 'salePrice',
+    },
+    // {
+    //   title: 'Tags',
+    //   key: 'tags',
+    //   dataIndex: 'tags',
+    //   render: tags => (
+    //     <>
+    //       {tags.map(tag => {
+    //         let color = tag.length > 5 ? 'geekblue' : 'green';
+    //         if (tag === 'loser') {
+    //           color = 'volcano';
+    //         }
+    //         return (
+    //           <Tag color={color} key={tag}>
+    //             {tag.toUpperCase()}
+    //           </Tag>
+    //         );
+    //       })}
+    //     </>
+    //   ),
+    // },
+    // {
+    //   title: 'Action',
+    //   key: 'action',
+    //   render: (text, record) => (
+    //     <Space size="middle">
+    //       <a>Invite {record.name}</a>
+    //       <a>Delete</a>
+    //     </Space>
+    //   ),
+    // },
+  ];
+
+  const data = [
+    {
+      key: '1',
+      time: '2021-01',
+      quantity:'￥10，000.00',
+      salePrice: '￥1,000,000.00',
+      // tags: ['nice', 'developer'],
+    },
+    {
+      key: '2',
+      time: '2021-02',
+      quantity: '￥10，000.00',
+      salePrice: '￥1,000,000.00',
+      // tags: ['loser'],
+    },
+    {
+      key: '3',
+      time: '2021-03',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '4',
+      time: '2021-04',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '5',
+      time: '2021-05',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '6',
+      time: '2021-06',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '7',
+      time: '2021-07',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '8',
+      time: '2021-08',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '9',
+      time: '2021-09',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+    {
+      key: '10',
+      time: '2021-10',
+      quantity: '￥10，000.00',
+      salePrice:'￥1,000,000.00',
+      // tags: ['cool', 'teacher'],
+    },
+  ];
 
   useEffect(()=> {
     const data = [{
@@ -152,7 +276,8 @@ const CompleteTrack = () => {
   });
   return(
     <>
-      <canvas id="myChart" style={{width: '100%'}} ></canvas>
+      <canvas id="myChart" style={{width: '100%', height: 500}} ></canvas>
+      <Table columns={columns} dataSource={data} pagination={false}/>
     </>
   );
 

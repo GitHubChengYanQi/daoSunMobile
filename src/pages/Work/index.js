@@ -50,9 +50,7 @@ const Work = () => {
       </Affix>
       <List title={<div>常用工具</div>}>
         <Grid>
-          <GridItem icon={<AppstoreOutlined />} onClick={() => {
-            toast();
-          }}>
+          <GridItem icon={<AppstoreOutlined />} onClick={()=>{router.push('/SearchButton');}}>
             <div className={styles.size}>全局查找</div>
           </GridItem>
           <GridItem icon={<AppstoreOutlined />} onClick={() => {
@@ -65,9 +63,7 @@ const Work = () => {
           }}>
             <div className={styles.size}>拜访签到</div>
           </GridItem>
-          <GridItem icon={<AppstoreOutlined />} onClick={() => {
-            toast();
-          }}>
+          <GridItem icon={<AppstoreOutlined />} onClick={()=>{router.push('/Schedule');}}>
             <div className={styles.size}>日程管理</div>
           </GridItem>
           <GridItem icon={<AppstoreOutlined />} onClick={() => {
