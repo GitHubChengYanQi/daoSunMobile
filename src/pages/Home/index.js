@@ -5,6 +5,7 @@ import {
   ListItem, Panel, PanelItem, Search,
   WingBlank,
 } from 'weui-react-v2';
+import { StickyContainer, Sticky } from 'react-sticky';
 import {
   SearchOutlined,
   ScanOutlined,
@@ -20,7 +21,7 @@ import {
 import { Affix, Badge, Col, Divider, Row, Select } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
-import { Calendar, NavBar, Tabs } from 'antd-mobile';
+import { Calendar, ListView, NavBar, Tabs } from 'antd-mobile';
 const { Option } = Select;
 
 const Home = () => {
@@ -269,7 +270,7 @@ const Home = () => {
         </div>
 
         <div>
-          <List title='2021-03-01'>
+          <List title={time}>
             <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
@@ -348,7 +349,7 @@ const Home = () => {
             </PanelItem>
             <PanelItem
               title={<div>
-                <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
+                <div style={{ display: 'inline', fontSize: 16 }}>武则天</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>总经理</div>
               </div>}
               thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
@@ -372,7 +373,7 @@ const Home = () => {
             </PanelItem>
             <PanelItem
               title={<div>
-                <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
+                <div style={{ display: 'inline', fontSize: 16 }}>李连贵</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>董事长</div>
               </div>}
               thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
@@ -396,7 +397,7 @@ const Home = () => {
             </PanelItem>
             <PanelItem
               title={<div>
-                <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
+                <div style={{ display: 'inline', fontSize: 16 }}>孙二娘</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>营销组长</div>
               </div>}
               thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
@@ -419,7 +420,7 @@ const Home = () => {
             </PanelItem>
             <PanelItem
               title={<div>
-                <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
+                <div style={{ display: 'inline', fontSize: 16 }}>王麻子</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>销售经理</div>
               </div>}
               thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
@@ -442,7 +443,7 @@ const Home = () => {
             </PanelItem>
             <PanelItem
               title={<div>
-                <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
+                <div style={{ display: 'inline', fontSize: 16 }}>李二狗</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>销售经理</div>
               </div>}
               thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}

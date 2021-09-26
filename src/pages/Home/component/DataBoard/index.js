@@ -14,7 +14,7 @@ import React, { useEffect } from 'react';
 import F2 from '@antv/f2';
 import DealRank from '@/pages/Home/component/DealRank';
 import SaleFunnel from '@/pages/Home/component/SaleFunnel';
-import { Card } from 'antd-mobile';
+import { Card, WhiteSpace } from 'antd-mobile';
 
 const DataBoard = () => {
 
@@ -223,7 +223,8 @@ const DataBoard = () => {
       {/*<ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 自己</div></ListItem>*/}
       <ListItem extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
       <canvas id="myChart" style={{width: '100%', height: 260}}></canvas>
-      <Card >
+
+      <Card style={{marginTop: 30}}>
         <Card.Header
           title="销售简报"
         />
@@ -263,7 +264,7 @@ const DataBoard = () => {
         </Card.Body>
         {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
       </Card>
-
+      <WhiteSpace size="xs" />
       <Card>
         <Card.Header
           title="合同简报"
@@ -299,12 +300,44 @@ const DataBoard = () => {
         </Card.Body>
         {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
       </Card>
-      <DealRank />
-      <SaleFunnel />
-      <div>
-        <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售预测</ListItem>
-        <Table columns={columns} dataSource={data} pagination={false}/>
-      </div>
+      <WhiteSpace size="xs" />
+
+      <Card>
+        <Card.Header
+          title="成交排行"
+          extra={<div onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>}
+        />
+        <Card.Body>
+          <div>
+            <DealRank />
+          </div>
+        </Card.Body>
+        {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
+      </Card>
+      <WhiteSpace size="xs" />
+      <Card>
+        <Card.Header
+          title="销售漏斗"
+          extra={<div onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>}
+        />
+        <Card.Body>
+          <div>
+            <SaleFunnel />
+          </div>
+        </Card.Body>
+      </Card>
+      <WhiteSpace size="xs" />
+      <Card>
+        <Card.Header
+          title="销售预测"
+          extra={<div onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>}
+        />
+        <Card.Body>
+          <div>
+            <Table columns={columns} dataSource={data} pagination={false}/>
+          </div>
+        </Card.Body>
+      </Card>
 
       {/*<ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >售后简报</div></ListItem>*/}
       {/*<Divider style={{margin: 15}}/>*/}
