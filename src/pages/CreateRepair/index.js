@@ -179,7 +179,7 @@ const CreateRepair = () => {
         </List>
         <Button type="primary" style={{width: '50%'}} onClick={()=>{setState(true);}}>工单负责任</Button>
         <Button style={{width: '50%'}} onClick={()=>{setState(false);}}>自动派单</Button>
-        {state ? <div>
+        {state ? <div >
           <List title="负责人">
             <PlusCircleOutlined style={{margin: 20 ,fontSize: '10vw'}}/>
           </List>
@@ -212,8 +212,11 @@ const CreateRepair = () => {
             </List>
           </div>
         }
-        <Button style={{marginLeft: '40%',width: '30%', height: 40}}>仅提交报修</Button>
-        <Button type="primary"  style={{width: '30%', height: 40}}>保存并派单</Button>
+        <div style={{backgroundColor: 'white'}}>
+          <Button style={{marginLeft: '35%',width: '30%', height: 40}}>仅提交报修</Button>
+          <Button type="primary"  style={{marginLeft: 5, width: '30%', height: 40}}>保存并派单</Button>
+        </div>
+
       </Form>
 
 
