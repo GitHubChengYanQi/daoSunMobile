@@ -262,27 +262,27 @@ const DataBoard = () => {
       >
         <PreviewItem >
           <Flex type="flex" justify="space-between">
-            <FlexItem span={1}><div style={{marginTop: 20,textAlign: 'center'}}><TeamOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TeamOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增客户数</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >26个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增联系人数</div></FlexItem>
           </Flex>
           <Flex type="flex" justify="space-between">
-            <FlexItem span={1}><div style={{marginTop: 20,textAlign: 'center'}}><FileProtectOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><FileProtectOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>签约数量</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>签约金额</div></FlexItem>
           </Flex>
           <Flex type="flex" justify="space-between">
-            <FlexItem span={1}><div style={{marginTop: 20,textAlign: 'center'}}><TransactionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TransactionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}}>￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已收入总额</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>应收余额</div></FlexItem>
           </Flex>
           <Flex type="flex" justify="space-between">
-            <FlexItem span={1}><div style={{marginTop: 20,textAlign: 'center'}}><DollarCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已开票金额</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未开票金额</div></FlexItem>
           </Flex>
           <Flex type="flex" justify="space-between">
-            <FlexItem span={1}><div style={{marginTop: 20,textAlign: 'center'}}><DollarOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已发货金额</div></FlexItem>
             <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未发货金额</div></FlexItem>
           </Flex>
