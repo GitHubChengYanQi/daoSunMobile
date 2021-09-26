@@ -5,8 +5,8 @@ import {
   AppstoreOutlined, LaptopOutlined,
   PhoneOutlined,
   ShakeOutlined,
-  TeamOutlined, ToolOutlined, UnorderedListOutlined,
-  WechatOutlined, WhatsAppOutlined,
+  TeamOutlined, ToolOutlined, FileSearchOutlined,
+  WechatOutlined, RobotOutlined,
 } from '@ant-design/icons';
 import { Affix, Button } from 'antd';
 import styles from './index.css';
