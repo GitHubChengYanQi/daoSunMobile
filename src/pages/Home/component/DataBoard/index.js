@@ -14,6 +14,7 @@ import React, { useEffect } from 'react';
 import F2 from '@antv/f2';
 import DealRank from '@/pages/Home/component/DealRank';
 import SaleFunnel from '@/pages/Home/component/SaleFunnel';
+import { Card } from 'antd-mobile';
 
 const DataBoard = () => {
 
@@ -220,79 +221,89 @@ const DataBoard = () => {
       {/*  </Row>*/}
       {/*</div>*/}
       {/*<ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 自己</div></ListItem>*/}
-      <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
+      <ListItem extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
       <canvas id="myChart" style={{width: '100%', height: 260}}></canvas>
+      <Card >
+        <Card.Header
+          title="销售简报"
+        />
+        <Card.Body>
+          <div>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><PlusCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>新建跟进记录</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >25</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >0</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><SolutionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>合同订单个数</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >38</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 1167%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >3</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><SolutionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>合同订单收款额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 -100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><UploadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>出库单金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><FileTextOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>销售发票金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DownloadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>收款单金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥3888.00</div></FlexItem>
+            </Flex>
+          </div>
+        </Card.Body>
+        {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
+      </Card>
 
-      <Preview subTitle={<div style={{fontSize: 14}}>销售简报</div>}
-      >
-        <PreviewItem >
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><PlusCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>新建跟进记录</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >25</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >0</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><SolutionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>合同订单个数</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >38</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 1167%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >3</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><SolutionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>合同订单收款额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 -100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><UploadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>出库单金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><FileTextOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>销售发票金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥00.00</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DownloadOutlined style={{fontSize: '6vw'}} /></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>收款单金额</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥25.00</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 14, textAlign: 'left'}}>上月 100%</div><div style={{fontSize: 20,color: 'deepskyblue', textAlign: 'left'}} >￥3888.00</div></FlexItem>
-          </Flex>
-        </PreviewItem>
-      </Preview>
-      <Preview subTitle={<div style={{fontSize: 14}}>合同简报</div>}
-      >
-        <PreviewItem >
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TeamOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增客户数</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >26个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增联系人数</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><FileProtectOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>签约数量</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>签约金额</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TransactionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}}>￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已收入总额</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>应收余额</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已开票金额</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未开票金额</div></FlexItem>
-          </Flex>
-          <Flex type="flex" justify="space-between">
-            <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已发货金额</div></FlexItem>
-            <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未发货金额</div></FlexItem>
-          </Flex>
-        </PreviewItem>
-      </Preview>
+      <Card>
+        <Card.Header
+          title="合同简报"
+        />
+        <Card.Body>
+          <div>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TeamOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增客户数</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >26个</div><div style={{fontSize: 14, textAlign: 'left'}}>新增联系人数</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><FileProtectOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >25个</div><div style={{fontSize: 14, textAlign: 'left'}}>签约数量</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>签约金额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><TransactionOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}}>￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已收入总额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>应收余额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarCircleOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已开票金额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未开票金额</div></FlexItem>
+            </Flex>
+            <Flex type="flex" justify="space-between">
+              <FlexItem span={3}><div style={{marginTop: 20,textAlign: 'center'}}><DollarOutlined style={{fontSize: '6vw'}}/></div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>已发货金额</div></FlexItem>
+              <FlexItem span={8}><div style={{fontSize: 20, textAlign: 'left',color: 'deepskyblue'}} >￥00.00</div><div style={{fontSize: 14, textAlign: 'left'}}>未发货金额</div></FlexItem>
+            </Flex>
+          </div>
+        </Card.Body>
+        {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
+      </Card>
       <DealRank />
       <SaleFunnel />
       <div>
         <ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售预测</ListItem>
-        <Table columns={columns} dataSource={data} />
+        <Table columns={columns} dataSource={data} pagination={false}/>
       </div>
 
       {/*<ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >售后简报</div></ListItem>*/}

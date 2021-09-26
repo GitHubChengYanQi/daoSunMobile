@@ -1,11 +1,24 @@
 import { Brief, Button, Panel, PanelItem } from 'weui-react-v2';
 import React, { useState } from 'react';
-import { Badge, Calendar } from 'antd';
+import { Badge, Calendar, Steps } from 'antd';
 import styles from '@/pages/Home/index.css';
 import { ClockCircleOutlined, ExclamationCircleOutlined, QqOutlined } from '@ant-design/icons';
+import EngineerRepair from '@/pages/Repair/EngineerRepair';
+import Engineer from '@/pages/Repair/Engineer';
+import EngineerImp from '@/pages/Repair/EngineerImp';
+import CompletePage from '@/pages/Repair/CompletePage';
+import EvaluationPage from '@/pages/Repair/EvaluationPage';
+import { Tabs } from 'antd-mobile';
+
+const { Step } = Steps;
+
+
 
 const Schedule = () =>{
   const [state, setState] =useState(true);
+
+
+
   function getListData(value) {
     let listData;
     switch (value.date()) {
@@ -66,128 +79,133 @@ const Schedule = () =>{
     ) : null;
   }
 
+  const tabs = [
+    { title: '我的日程'},
+    { title: '下属日程'}
+  ];
+
   return(
     <>
-    <div style={{marginTop: 10, borderColor: '#3c6aac'}}>
-      <Button style={{backgroundColor: '#3c6aac', color: 'white', marginLeft: '20%',width: '30%', height: 30}} onClick={()=>{setState(true)}}>仅提交报修</Button>
-      <Button style={{backgroundColor: 'white', width: '30%',  color: '#3c6aac', height: 30}} onClick={()=>{setState(false)}}>保存并派单</Button>
-    </div>
-    <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />,
-    { state ?
-    <div >
-      <Panel className={styles.panel}>
-        <PanelItem
-          text={true}
-          info={
-            <>
-              <Brief >与客户沟通报价事宜</Brief>
-              <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-            </>
-          }
-        >
-          <div className={styles.comment} >11：00~12：00</div>
-        </PanelItem>
-      </Panel>
-      <Panel className={styles.panel}>
-        <PanelItem
-          text={true}
-          info={
-            <>
-              <Brief >与客户沟通报价事宜</Brief>
-              <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-            </>
-          }
-        >
-          <div className={styles.comment} >11：00~12：00</div>
-        </PanelItem>
-      </Panel>
-      <Panel className={styles.panel}>
-        <PanelItem
-          text={true}
-          info={
-            <>
-              <Brief >与客户沟通报价事宜</Brief>
-              <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-            </>
-          }
-        >
-          <div className={styles.comment} >11：00~12：00</div>
-        </PanelItem>
-      </Panel>
-      <Panel className={styles.panel}>
-        <PanelItem
-          text={true}
-          info={
-            <>
-              <Brief >与客户沟通报价事宜</Brief>
-              <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-            </>
-          }
-        >
-          <div className={styles.comment} >11：00~12：00</div>
-        </PanelItem>
-      </Panel>
-    </div> :
-
-      <div >
-        <Panel className={styles.panel}>
-          <PanelItem
-            text={true}
-            info={
-              <>
-                <Brief >与客户沟通报价事宜</Brief>
-                <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
-                <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-              </>
-            }
-          >
-            <div className={styles.comment} >11：00~12：00</div>
-          </PanelItem>
-        </Panel>
-        <Panel className={styles.panel}>
-          <PanelItem
-            text={true}
-            info={
-              <>
-                <Brief >与客户沟通报价事宜</Brief>
-                <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
-                <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-              </>
-            }
-          >
-            <div className={styles.comment} >11：00~12：00</div>
-          </PanelItem>
-        </Panel>
-        <Panel className={styles.panel}>
-          <PanelItem
-            text={true}
-            info={
-              <>
-                <Brief >与客户沟通报价事宜</Brief>
-                <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
-                <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-              </>
-            }
-          >
-            <div className={styles.comment} >11：00~12：00</div>
-          </PanelItem>
-        </Panel>
-        <Panel className={styles.panel}>
-          <PanelItem
-            text={true}
-            info={
-              <>
-                <Brief >与客户沟通报价事宜</Brief>
-                <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
-                <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
-              </>
-            }
-          >
-            <div className={styles.comment} >11：00~12：00</div>
-          </PanelItem>
-        </Panel>
-      </div>
-    }
+      <Tabs tabs={tabs}
+            initialPage={0}
+            onChange={(tab, index) => { console.log('onChange', index, tab); }}
+            onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
+      >
+        <div >
+          <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '45%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+        </div>
+        <div >
+          <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
+                  <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
+                  <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
+                  <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+          <Panel className={styles.panel}>
+            <PanelItem
+              text={true}
+              info={
+                <>
+                  <Brief >与客户沟通报价事宜</Brief>
+                  <Brief style={{marginLeft: '10%', fontSize: 18}}><QqOutlined /> 李明</Brief>
+                  <Brief style={{marginLeft: '10%'}}><ExclamationCircleOutlined style={{color: 'green'}} /> 未完成</Brief>
+                </>
+              }
+            >
+              <div className={styles.comment} >11：00~12：00</div>
+            </PanelItem>
+          </Panel>
+        </div>
+      </Tabs>
 
   </>);
 };
