@@ -42,4 +42,6 @@
   margin: 5px;
   color: black;
 }
-
+:global .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date-content {
+ height: 0!important;
+}

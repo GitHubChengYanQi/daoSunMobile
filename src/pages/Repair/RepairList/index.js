@@ -31,10 +31,10 @@ const RepairList = () =>{
   };
   return(
     <>
-      <Steps style={{padding: 20}} current={state} onChange={onChange}
+      <Steps size="small" labelPlacement="vertical" style={{padding: 10, overflow: 'auto'}} current={state} onChange={onChange}
       >
         {items.map(item => (
-          <Step key={item.title} title={item.title} />
+          <Step key={item.title} subTitle={item.title} disabled/>
         ))}
 
       </Steps>
