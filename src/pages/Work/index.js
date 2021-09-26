@@ -44,9 +44,6 @@ const Work = () => {
   return (
     <>
       <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-        >工作</NavBar>
         <ListItem extra={<div>开发部</div>}>
           <div>下午好，程彦祺</div>
         </ListItem>

@@ -9,11 +9,6 @@ const Notice = () => {
 
   return (
     <div>
-      <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-        >通知</NavBar>
-      </Affix>
       <>
         <List>
           <ListItem
