@@ -16,7 +16,7 @@ import {
   GithubOutlined,
   WechatOutlined,
   RightOutlined,
-  MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined,
+  MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined, PlusCircleOutlined,
 } from '@ant-design/icons';
 import { Affix, Badge, Col, Divider, Row, Select } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
@@ -65,12 +65,12 @@ const Home = () => {
     { title: '待办事项'},
     { title: '工作动态'},
   ];
-
+  const [bottom, setBottom] = useState(0);
   return (
     <>
       <Tabs tabs={tabs}
             initialPage={0}
-            onChange={(tab, index) => { console.log('onChange', index, tab); }}
+            onChange={(tab, index) => { setBottom(index); }}
             onTabClick={(tab, index) => { console.log('onTabClick', index, tab); }}
       >
         <div>
@@ -129,9 +129,10 @@ const Home = () => {
               }} />
           }>今日待办(10)</ListItem>
           {state ?
-            <div>
+            <div style={ {}} >
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>李连杰</div>
                     <div style={{ marginLeft: '70%', display: 'inline', color: 'red' }}><ExclamationCircleOutlined
@@ -153,6 +154,7 @@ const Home = () => {
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>战全胜</div>
                     <div style={{ marginLeft: '70%', display: 'inline', color: 'green' }}><ExclamationCircleOutlined
@@ -174,6 +176,7 @@ const Home = () => {
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>李连杰</div>
                     <div style={{ marginLeft: '70%', display: 'inline' }}><ExclamationCircleOutlined /> 待执行</div>
@@ -193,6 +196,7 @@ const Home = () => {
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>李连杰</div>
                     <div style={{ marginLeft: '70%', display: 'inline' }}><ExclamationCircleOutlined /> 已取消</div>
@@ -223,6 +227,7 @@ const Home = () => {
             <div>
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>李连杰</div>
                     <div style={{ marginLeft: '70%', display: 'inline', color: 'blue' }}><ExclamationCircleOutlined
@@ -244,6 +249,7 @@ const Home = () => {
               </Panel>
               <Panel className={styles.panel}>
                 <PanelItem
+                  style={{borderLeftColor: '#' + (~~(Math.random() * (1 << 24))).toString(16)}}
                   title={<div>
                     <div className={styles.panelTitle}>战全胜</div>
                     <div style={{ marginLeft: '70%', display: 'inline', color: 'green' }}><ExclamationCircleOutlined
@@ -468,6 +474,9 @@ const Home = () => {
           </Panel>
         </div>
       </Tabs>
+      {bottom === 2 ? <Affix offsetBottom={100} >
+        <PlusCircleOutlined style={{marginLeft:"80%", color: 'green',fontSize: '10vw'}} onClick={()=>{router.push('/Home/component/CreateWork');}} />
+      </Affix> : null}
     </>
   );
 };

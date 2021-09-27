@@ -31,7 +31,6 @@
 .panel :global .weui-panel-item {
   padding: 15px 5px!important;
   border-left: outset;
-  border-left-color: blue;
 }
 
 .panel :global .weui-panel-item_info {
@@ -54,4 +53,9 @@
 
 :global .am-tabs-content-wrap {
   margin-top: 12%!important;
+}
+.global .aaa{
+  margin: 20px!important;
+  color: green!important;
+  fontSize: '10vw' !important
 }
