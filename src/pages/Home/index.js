@@ -6,6 +6,8 @@ import {
   WingBlank,
 } from 'weui-react-v2';
 import { StickyContainer, Sticky } from 'react-sticky';
+import Icon from '../components/Icon/index';
+import Link from 'umi/link';
 import {
   SearchOutlined,
   ScanOutlined,
@@ -19,9 +21,9 @@ import {
   MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined, PlusCircleOutlined,
 } from '@ant-design/icons';
 import { Affix, Badge, Col, Divider, Row, Select } from 'antd';
-import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
-import { Calendar, Icon, ListView, NavBar, Tabs } from 'antd-mobile';
+import { Calendar, ListView, NavBar, Tabs } from 'antd-mobile';
+import DataBoard from './component/DataBoard/index';
 const { Option } = Select;
 
 const Home = () => {
@@ -272,53 +274,54 @@ const Home = () => {
             </div> : null}
         </div>
         <div>
+          {/*<Link to="/Home/componment/DataBoard" />*/}
           <DataBoard />
         </div>
         <div>
           <List title={time}>
-            <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-xuyue" style={{ color: '#9e3131', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待跟进任务
             </ListItem>
-            <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-jiesuandanliebiao" style={{ color: '#18a05a', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待回款计划
             </ListItem>
-            <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-dingdan" style={{ color: '#1d5da1', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待处理工单
             </ListItem>
-            <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-rili" style={{ color: '#b49413', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待处理日程
             </ListItem>
-            <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-wenjuan" style={{ color: '#281b9e', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待处理任务
             </ListItem>
-            <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-dingdan1" style={{ color: '#06ad56', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待审批订单
             </ListItem>
-            <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-dakuanmingxi"  style={{ color: '#24292e', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
               待审批回款
             </ListItem>
-            <ListItem thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+            <ListItem thumb={<Icon type="icon-dingdan" style={{ color: '#62227d', fontSize: '8vw' }} />}
                       extra={<div style={{ fontSize: 20 }} onClick={() => {
                         router.push('/CompleteTrack');
                       }}>10 {<RightOutlined />}</div>}>
@@ -333,8 +336,9 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>狄仁杰</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>销售经理</div>
               </div>}
-              thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
+
               info={
                 <>
                   <div style={{ marginLeft: 5 }}><AimOutlined />
@@ -357,7 +361,7 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>武则天</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>总经理</div>
               </div>}
-              thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
               info={
                 <>
@@ -381,7 +385,7 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>李连贵</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>董事长</div>
               </div>}
-              thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
               info={
                 <>
@@ -405,7 +409,7 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>孙二娘</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>营销组长</div>
               </div>}
-              thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
               info={
                 <>
@@ -428,7 +432,7 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>王麻子</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>销售经理</div>
               </div>}
-              thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
               info={
                 <>
@@ -451,7 +455,7 @@ const Home = () => {
                 <div style={{ display: 'inline', fontSize: 16 }}>李二狗</div>
                 <div style={{ display: 'inline', marginLeft: 5 }}>销售经理</div>
               </div>}
-              thumb={<WechatOutlined style={{ color: '#06ad56', fontSize: '8vw' }} />}
+              thumb={<Icon type="icon-jiaoseguanli" style={{ color: '#06ad56', fontSize: '8vw' }} />}
               // text={true}
               info={
                 <>
@@ -473,9 +477,9 @@ const Home = () => {
           </Panel>
         </div>
       </Tabs>
-      {bottom === 2 ? <Affix offsetBottom={100} >
-        <PlusCircleOutlined style={{marginLeft:"80%", color: 'green',fontSize: '10vw'}} onClick={()=>{router.push('/Home/component/CreateWork');}} />
-      </Affix> : null}
+      {/*{bottom === 2 ? <Affix offsetBottom={100} >*/}
+      {/*  <PlusCircleOutlined style={{marginLeft:"80%", color: 'green',fontSize: '10vw'}} onClick={()=>{router.push('/Home/component/CreateWork');}} />*/}
+      {/*</Affix> : null}*/}
     </>
   );
 };
