@@ -21,7 +21,7 @@ import {
 import { Affix, Badge, Col, Divider, Row, Select } from 'antd';
 import DataBoard from '@/pages/Home/component/DataBoard';
 import { router } from 'umi';
-import { Calendar, ListView, NavBar, Tabs } from 'antd-mobile';
+import { Calendar, Icon, ListView, NavBar, Tabs } from 'antd-mobile';
 const { Option } = Select;
 
 const Home = () => {

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRequest } from '../util/Request';
 import { Button, Flex, FlexItem, GridItem, SafeArea, SegmentedControl } from 'weui-react-v2';
-import Icon, {
+import  {
   AppstoreOutlined,
   BarChartOutlined,
   CommentOutlined, FieldStringOutlined, LeftOutlined,
@@ -13,6 +13,7 @@ import { Affix, Avatar, Image, Menu } from 'antd';
 import { router } from 'umi';
 import { Grid } from 'antd-mobile';
 import styles from './index.css';
+import Icon from '../pages/components/Icon';
 
 function BasicLayout(props) {
 
@@ -69,7 +70,7 @@ function BasicLayout(props) {
                 <Button
                   type='text'
                   style={{ padding: 0 }}
-                  icon={<FieldStringOutlined />}
+                  icon={<Icon type='icon-shouye' />}
                 />
                 <br />
                 首页
@@ -81,7 +82,7 @@ function BasicLayout(props) {
                 <Button
                   type='text'
                   style={{ padding: 0 }}
-                  icon={<CommentOutlined />}
+                  icon={<Icon type='icon-xiaoxi' />}
                 />
                 <br />
                 通知
@@ -93,7 +94,7 @@ function BasicLayout(props) {
                 <Button
                   type='text'
                   style={{ padding: 0 }}
-                  icon={<AppstoreOutlined />}
+                  icon={<Icon type='icon-fenlei' />}
                 />
                 <br />
                 工作
@@ -105,7 +106,7 @@ function BasicLayout(props) {
                 <Button
                   type='text'
                   style={{ padding: 0 }}
-                  icon={<BarChartOutlined />}
+                  icon={<Icon type='icon-shuju' />}
                 />
                 <br />
                 报表

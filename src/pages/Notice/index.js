@@ -3,6 +3,7 @@ import { List, ListItem, Toast } from 'weui-react-v2';
 import { Affix, Avatar } from 'antd';
 import { Badge, NavBar } from 'antd-mobile';
 import { router } from 'umi';
+import Icon from '../components/Icon';
 
 
 const Notice = () => {
@@ -16,7 +17,7 @@ const Notice = () => {
               router.push('/Notice/Distribution')
             }}
             access
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
@@ -31,7 +32,7 @@ const Notice = () => {
               router.push('/Notice/Dynamic')
             }}
             access
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
@@ -46,7 +47,7 @@ const Notice = () => {
               router.push('/Notice/RepairOrder')
             }}
             access
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
@@ -61,7 +62,7 @@ const Notice = () => {
               router.push('/Notice/Spare')
             }}
             access
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
@@ -76,7 +77,7 @@ const Notice = () => {
               Toast.text('暂无通知')
             }}
             access
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
@@ -91,7 +92,7 @@ const Notice = () => {
             onClick={()=>{
               Toast.text('暂无通知')
             }}
-            thumb={<Avatar size={40}>LOGO</Avatar>}
+            thumb={<Avatar size={40} style={{backgroundColor:'#fff'}} icon={<Icon type='icon-icon-test' />} />}
             extra={
               <>
                 <div>2121-9-24 11:00</div>
