@@ -274,7 +274,6 @@ const Home = () => {
         <div>
           <DataBoard />
         </div>
-
         <div>
           <List title={time}>
             <ListItem thumb={<GithubOutlined style={{ color: '#24292e', fontSize: '8vw' }} />}

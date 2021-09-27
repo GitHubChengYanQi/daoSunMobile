@@ -35,37 +35,7 @@ const DataBoard = () => {
       title: '预计销售金额',
       dataIndex: 'salePrice',
       key: 'salePrice',
-    },
-    // {
-    //   title: 'Tags',
-    //   key: 'tags',
-    //   dataIndex: 'tags',
-    //   render: tags => (
-    //     <>
-    //       {tags.map(tag => {
-    //         let color = tag.length > 5 ? 'geekblue' : 'green';
-    //         if (tag === 'loser') {
-    //           color = 'volcano';
-    //         }
-    //         return (
-    //           <Tag color={color} key={tag}>
-    //             {tag.toUpperCase()}
-    //           </Tag>
-    //         );
-    //       })}
-    //     </>
-    //   ),
-    // },
-    // {
-    //   title: 'Action',
-    //   key: 'action',
-    //   render: (text, record) => (
-    //     <Space size="middle">
-    //       <a>Invite {record.name}</a>
-    //       <a>Delete</a>
-    //     </Space>
-    //   ),
-    // },
+    }
   ];
 
   const data = [
@@ -142,7 +112,7 @@ const DataBoard = () => {
   ];
 
   useEffect(()=>{
-    const data = [{
+    const data1 = [{
       name: '目标金额',
       percent: 83.59,
       a: '1'
@@ -153,7 +123,7 @@ const DataBoard = () => {
     }];
 
     const map = {};
-    data.map(function(obj) {
+    data1.map(function(obj) {
       map[obj.name] = obj.percent + '%';
     });
 
@@ -162,7 +132,7 @@ const DataBoard = () => {
       pixelRatio: window.devicePixelRatio,
       padding: [20, 'auto']
     });
-    chart.source(data, {
+    chart.source(data1, {
       percent: {
         formatter: function formatter(val) {
           return val + '%';
@@ -193,34 +163,6 @@ const DataBoard = () => {
 
   return(
     <>
-      {/*<ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 全公司</div></ListItem>*/}
-      {/*<ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >工作待办</div></ListItem>*/}
-      {/*<Divider style={{margin: 15}}/>*/}
-      {/*<div >*/}
-      {/*  <Row>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}} >待执行</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>进行中</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>已完成</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>已超时</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*  </Row>*/}
-      {/*</div>*/}
-      {/*<ListItem style={{padding: 3, backgroundColor: '#E6E6E6'}} extra={<div style={{fontSize: 16}} >本月</div>} ><div style={{fontSize: 16}} >查看范围： 自己</div></ListItem>*/}
       <ListItem extra={<div style={{fontSize: 14}} onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >业绩目标</ListItem>
       <canvas id="myChart" style={{width: '100%', height: 260}}></canvas>
 
@@ -301,7 +243,6 @@ const DataBoard = () => {
         {/*<Card.Footer content="footer content" extra={<div>extra footer content</div>} />*/}
       </Card>
       <WhiteSpace size="xs" />
-
       <Card>
         <Card.Header
           title="成交排行"
@@ -338,34 +279,6 @@ const DataBoard = () => {
           </div>
         </Card.Body>
       </Card>
-
-      {/*<ListItem style={{padding: 5}} extra={<Switch defaultChecked={true}  />}><div style={{fontSize: 16}} >售后简报</div></ListItem>*/}
-      {/*<Divider style={{margin: 15}}/>*/}
-      {/*<div style={{marginTop: 5}}>*/}
-      {/*  <Row>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}} >待执行</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>进行中</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>已完成</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*    <Col span={6} style={{textAlign: 'center'}}>*/}
-      {/*      <Badge count={99} overflowCount={10}>*/}
-      {/*        <div style={{fontSize: 40}}>15</div><div style={{fontSize: 15}}>已超时</div>*/}
-      {/*      </Badge>*/}
-      {/*    </Col>*/}
-      {/*  </Row>*/}
-      {/*</div>*/}
-
     </>
   );
 

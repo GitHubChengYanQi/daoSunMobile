@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react';
 import { Chart } from '@antv/g2';
-import { ListItem } from 'weui-react-v2';
+import DataSet from '@antv/data-set';
 import { router } from 'umi';
 import { RightOutlined } from '@ant-design/icons';
-import DataSet from '@antv/data-set';
+import { ListItem } from 'weui-react-v2';
 
 const SaleFunnel =() =>{
   const { DataView } = DataSet;
 
   useEffect(()=>{
+
     const dv = new DataView().source([
       { action: '初步洽谈', pv: 50000 },
       { action: '深入沟通', pv: 35000 },
@@ -30,6 +31,7 @@ const SaleFunnel =() =>{
       height: 500,
       padding: [20, 120, 95],
     });
+    chart.clear();
     chart.data(data);
     chart.axis(false);
     chart.tooltip({
@@ -108,14 +110,13 @@ const SaleFunnel =() =>{
         });
       });
     });
-
     chart.render();
   });
   return(
     <>
       <div>
         {/*<ListItem style={{padding: 10}} extra={<div style={{fontSize: 14}}  onClick={()=>{router.push('/CompleteTrack');}}>详情 {<RightOutlined />}</div>} >销售漏斗</ListItem>*/}
-        <div id="container" style={{width: '100%', height: 500}} ></div>
+        <div id='container' style={{ width: '100%', height: 500 }} />
       </div>
     </>
   );
