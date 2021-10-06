@@ -14,7 +14,6 @@ import { router } from 'umi';
 import { Card } from 'antd';
 import './index.css';
 import { Steps } from 'antd-mobile';
-import 'antd-mobile/lib/steps/style/css';
 
 const Step = Steps.Step;
 

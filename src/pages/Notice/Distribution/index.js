@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchBar, Tag } from 'antd-mobile';
+import { Search, Tag } from 'antd-mobile';
 import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Preview, PreviewButton } from 'weui-react-v2';
 import { PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
@@ -31,7 +31,7 @@ const Distribution = () => {
   return (
     <>
       <div style={{ backgroundColor: '#fff', padding: 8 }}>
-        <SearchBar style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
+        <Search style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
                    placeholder='搜索项目'
                    maxLength={8} />
         <div style={{ marginTop: 8 }} className={styles.sea}>

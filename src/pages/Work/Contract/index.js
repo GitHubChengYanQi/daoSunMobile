@@ -3,7 +3,7 @@ import { Affix, Badge, Col, Row } from 'antd';
 import { Button, Flex, FlexItem, List, ListItem, Spin, WingBlank } from 'weui-react-v2';
 import Icon, { EllipsisOutlined, FilterOutlined, LeftOutlined, UserAddOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { router } from 'umi';
-import { Card, NavBar, SearchBar } from 'antd-mobile';
+import { Card, NavBar, Search } from 'antd-mobile';
 
 
 const Contract = () => {
@@ -46,7 +46,7 @@ const Contract = () => {
               }} />
             </Col>
             <Col span={16}>
-              <SearchBar style={{backgroundColor:'#fff',border:'solid 1px #eee',borderRadius:100}} placeholder="搜索合同" maxLength={8} />
+              <Search style={{backgroundColor:'#fff',border:'solid 1px #eee',borderRadius:100}} placeholder="搜索合同" maxLength={8} />
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={()=>{

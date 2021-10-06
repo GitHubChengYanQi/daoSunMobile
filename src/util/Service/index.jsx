@@ -2,8 +2,10 @@ import React from 'react';
 import cookie from 'js-cookie';
 import axios from 'axios';
 import {message, Modal} from 'antd';
+import { Dialog } from 'antd-mobile';
+import { router } from 'umi';
 
-const baseURI =  '';
+const baseURI =  'http://192.168.1.228';
 
 
 const ajaxService = axios.create({
@@ -15,8 +17,8 @@ const ajaxService = axios.create({
 });
 
 ajaxService.interceptors.request.use((config) => {
-  const token = cookie.get('tianpeng-token');
-  config.headers.common.Authorization = token || '';
+  const token = cookie.get('cheng-token');
+  config.headers.common.Authorization = token || '';;
   return config;
 }, (error) => {
   return error;
@@ -38,6 +40,7 @@ ajaxService.interceptors.response.use((response) => {
           Modal.destroyAll();
           try {
             // GotoLogin();
+            router.push('/')
           } catch (e) {
             console.log('不能使用hook跳转');
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
@@ -45,6 +48,10 @@ ajaxService.interceptors.response.use((response) => {
         }
       });
       throw new Error(response.message);
+    }else if (response.errCode !== 200){
+      Dialog.alert({
+        content: response.message
+      })
     }
     throw new Error(response.message);
   }

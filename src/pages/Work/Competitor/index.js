@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Affix, Badge, Col, Row } from 'antd';
 import { Button, Flex, FlexItem, List, ListItem, Spin, WingBlank } from 'weui-react-v2';
-import { Card, NavBar, SearchBar } from 'antd-mobile';
+import { Card, NavBar, Search } from 'antd-mobile';
 import Icon, {
   EllipsisOutlined,
   FilterOutlined,
@@ -52,7 +52,7 @@ const Competitor = () => {
               }} />
             </Col>
             <Col span={16}>
-              <SearchBar style={{backgroundColor:'#fff',border:'solid 1px #eee',borderRadius:100}} placeholder="搜索竞争对手" maxLength={8} />
+              <Search style={{backgroundColor:'#fff',border:'solid 1px #eee',borderRadius:100}} placeholder="搜索竞争对手" maxLength={8} />
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={()=>{

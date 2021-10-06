@@ -1,7 +1,7 @@
 import { Skeleton } from 'weui-react-v2';
 import { useState } from 'react';
 import RepairItem from '@/pages/Repair/RepairItem';
-import { Icon, NavBar } from 'antd-mobile';
+import { NavBar } from 'antd-mobile';
 import { router } from 'umi';
 
 const Repair = () => {
@@ -10,7 +10,6 @@ const Repair = () => {
     <>
       <NavBar
         mode="light"
-        icon={<Icon type="left" />}
         onLeftClick={() => {router.goBack();}}
         // rightContent={[
         //   <Icon key="0" type="search" style={{ marginRight: '16px' }} />,

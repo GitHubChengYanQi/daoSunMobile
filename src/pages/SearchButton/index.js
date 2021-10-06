@@ -1,10 +1,10 @@
 import { Affix, Card } from 'antd';
 import {
   Brief, Button, List,
-  ListItem, Panel, PanelItem, Search,
+  ListItem, Panel, PanelItem,  WhiteSpace,
   WingBlank,
 } from 'weui-react-v2';
-import { Grid, SearchBar, WhiteSpace } from 'antd-mobile';
+import { Grid, Search } from 'antd-mobile';
 import { ClockCircleOutlined, GithubOutlined, RightOutlined, WechatOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 import React from 'react';
@@ -18,8 +18,7 @@ const SearchButton = () =>{
   return(
     <>
       <Affix >
-
-        <SearchBar placeholder="全局搜索关键字" maxLength={8} />
+        <Search placeholder="全局搜索关键字" maxLength={8} />
       </Affix>
       <WhiteSpace size="lg" />
       <div>

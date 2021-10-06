@@ -1,24 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, {useState } from 'react';
 import {
   Button,
-  Flex,
-  FlexItem,
   List,
-  SafeArea,
-  Search,
   SegmentedControl,
-  Skeleton,
-  Spin,
-  WingBlank,
+  Search,
 } from 'weui-react-v2';
-import Icon, { FilterOutlined, HourglassOutlined, LeftOutlined, UserAddOutlined } from '@ant-design/icons';
+import  { FilterOutlined,UserAddOutlined } from '@ant-design/icons';
 import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
 import { router } from 'umi';
 import './index.scss';
-import { Affix, Col, Row, Select } from 'antd';
-import {SearchBar } from 'antd-mobile';
-import NavBar from '../../components/NavBar';
+import {Col, Row } from 'antd';
 
 const Customer = () => {
 
@@ -27,21 +19,8 @@ const Customer = () => {
 
   const [value, setValue] = useState(params || 'customer');
 
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
-  }, []);
 
-  if (loading) {
-    return (
-      <Affix offsetTop={50} style={{ textAlign: 'center' }}>
-        <Spin spinning={true} size='large' />
-      </Affix>
-    );
-  }
 
 
   const content = () => {
@@ -55,7 +34,6 @@ const Customer = () => {
 
   return (
     <>
-      <NavBar title='客户列表'/>
       <>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>
@@ -65,8 +43,8 @@ const Customer = () => {
               }} />
             </Col>
             <Col span={16}>
-              <SearchBar style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
-                         placeholder='搜索客户' maxLength={8} />
+              <Search style={{backgroundColor: '#fff', border: 'solid 1px #eee',padding:'0 8px',margin:8, borderRadius: 100 }}
+                      placeholder='搜索项目' maxLength={8} />
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
@@ -77,7 +55,7 @@ const Customer = () => {
 
 
         </div>
-        <List style={{ margin: 0 }} title={<>客户数量 <span style={{ color: 'red' }}>500</span>家</>}>
+        <List style={{ margin: 0 }}>
           <SegmentedControl
             style={{ border: 'none' }}
             data={[

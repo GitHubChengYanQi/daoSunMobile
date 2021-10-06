@@ -1,35 +1,15 @@
 import React from 'react';
 import {
-  Flex,
-  FlexItem,
+
   Grid,
   GridItem,
   List,
   ListItem,
-  Panel,
-  SafeArea,
+
   Toast,
-  WhiteSpace,
-  WingBlank,
+
 } from 'weui-react-v2';
-import {
-  AlertOutlined,
-  AppstoreOutlined,
-  LaptopOutlined,
-  PhoneOutlined,
-  ShakeOutlined,
-  TeamOutlined,
-  ToolOutlined,
-  FileSearchOutlined,
-  WechatOutlined,
-  RobotOutlined,
-  SoundOutlined,
-  BranchesOutlined,
-  MehOutlined,
-  PropertySafetyOutlined,
-  LeftOutlined,
-  FileDoneOutlined,
-} from '@ant-design/icons';
+
 import { Affix, Button } from 'antd';
 import styles from './index.css';
 import { router } from 'umi';
@@ -90,7 +70,7 @@ const Work = () => {
       <List className={styles.title} title={<div>客户管理</div>}>
         <Grid>
           <GridItem
-            icon={<Badge text={77} size={'small'} overflowCount={55}><Icon type='icon-shuju'  style={{ marginBottom: 8 }} />
+            icon={<Badge content={77} size={'small'} overflowCount={55}><Icon type='icon-shuju' style={{ fontSize: 32 }} />
             </Badge>}
             onClick={() => {
               router.push('/Work/Customer');
@@ -102,12 +82,12 @@ const Work = () => {
             onClick={() => {
               router.push('/Work/Customer');
             }}
-            icon={<Badge text={5}><Icon type='icon-shequ' style={{ marginBottom: 8 }} /></Badge>}
+            icon={<Badge content={5}><Icon type='icon-shequ' style={{ fontSize: 32 }} /></Badge>}
           >
             <div className={styles.size}>公海获客</div>
           </GridItem>
           <GridItem
-            icon={<Badge text={0}><Icon type='icon-yuangongliebiao' style={{ marginBottom: 8 }} /></Badge>}
+            icon={<Badge content={0}><Icon type='icon-yuangongliebiao' style={{ fontSize: 32 }} /></Badge>}
             onClick={() => {
               router.push('/Work/Customer?contacts');
             }}>

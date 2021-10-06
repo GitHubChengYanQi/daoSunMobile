@@ -14,6 +14,7 @@ import { router } from 'umi';
 import { Grid } from 'antd-mobile';
 import styles from './index.css';
 import Icon from '../pages/components/Icon';
+import cookie from 'js-cookie';
 
 function BasicLayout(props) {
 
@@ -62,7 +63,7 @@ function BasicLayout(props) {
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
         {props.children}
       </SafeArea>
-      <Affix offsetBottom={0}>
+      {cookie.get('cheng-token') && <Affix offsetBottom={0}>
         <SegmentedControl className={styles.tab} style={{ backgroundColor: '#fff' }} data={
           [
             {
@@ -131,7 +132,7 @@ function BasicLayout(props) {
           window.sessionStorage.setItem('nav', value);
           router.push(value);
         }} />
-      </Affix>
+      </Affix>}
     </div>
   );
 }

@@ -1,0 +1,78 @@
+import { useRequest } from '../../util/Request';
+import cookie from 'js-cookie';
+import { router } from 'umi';
+import { Button, Form } from 'antd-mobile';
+import { Input } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import React from 'react';
+
+const Login = () => {
+
+  cookie.remove('cheng-token');
+
+  const { loading, run } = useRequest(
+    {
+      url: '/rest/login', method: 'POST'
+    }, {
+      manual: true,
+      onSuccess:(res)=>{
+        if (res){
+          cookie.set('cheng-token',res);
+          window.sessionStorage.setItem('nav', '/Home');
+          router.push('/Home');
+        }
+      }
+    }
+  );
+
+  const [form] = Form.useForm();
+
+  return (
+    <div>
+      <Form
+        form={form}
+        onFinish={(values) => {
+          run(
+            {
+              data: { ...values },
+            },
+          );
+        }}
+        layout='horizontal'
+        footer={
+          <Button block type='submit' color='primary'>
+            提交
+          </Button>
+        }
+      >
+        <Form.Item name='username' rules={[{ required: true, message: '请填写：手机号/邮箱/账号' }]}>
+          <Input
+            prefix={<UserOutlined />}
+            name='account'
+            placeholder='手机号/邮箱/账号'
+            autoComplete='off'
+          />
+        </Form.Item>
+        <Form.Item name='password' rules={[
+          { required: true, message: '请填写密码' },
+          () => ({
+            validator(rule, value) {
+              if (!value || value.length >= 6) {
+                return Promise.resolve();
+              }
+              return Promise.reject(new Error('密码长度不应低于6位!'));
+            },
+          }),
+        ]}>
+          <Input
+            prefix={<LockOutlined />}
+            type='password'
+            placeholder='请填写最低长度为6位的密码'
+          />
+        </Form.Item>
+      </Form>
+    </div>
+  );
+};
+
+export default Login;
