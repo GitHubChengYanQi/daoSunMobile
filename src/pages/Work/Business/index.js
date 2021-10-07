@@ -17,7 +17,6 @@ import {
 } from '@ant-design/icons';
 import { router } from 'umi';
 import { Affix, Col, Row } from 'antd';
-import NavBar from '../../components/NavBar';
 import { Search } from 'antd-mobile';
 
 
@@ -41,7 +40,6 @@ const Business = () => {
 
   return (
     <>
-      <NavBar title='项目列表' />
       <>
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>

@@ -58,6 +58,8 @@ function BasicLayout(props) {
     },
   });
 
+  console.log(window.sessionStorage.getItem('nav'));
+
   return (
     <div>
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>

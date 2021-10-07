@@ -1,36 +1,35 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { router } from 'umi';
-import { Button, Form } from 'antd-mobile';
-import { Input } from 'antd';
+import { Button, Form, ImageViewer } from 'antd-mobile';
+import { Affix, Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
+import logo from '../../assets/img.png';
 
 const Login = () => {
 
   cookie.remove('cheng-token');
+  window.sessionStorage.setItem('nav', '/Home');
 
   const { loading, run } = useRequest(
     {
-      url: '/rest/login', method: 'POST'
+      url: '/rest/login', method: 'POST',
     }, {
       manual: true,
-      onSuccess:(res)=>{
-        if (res){
-          cookie.set('cheng-token',res);
-          window.sessionStorage.setItem('nav', '/Home');
+      onSuccess: (res) => {
+        if (res) {
+          cookie.set('cheng-token', res);
           router.push('/Home');
         }
-      }
-    }
+      },
+    },
   );
 
-  const [form] = Form.useForm();
-
   return (
-    <div>
+    <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
+      <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
       <Form
-        form={form}
         onFinish={(values) => {
           run(
             {

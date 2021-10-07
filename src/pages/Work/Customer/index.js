@@ -29,6 +29,8 @@ const Customer = () => {
         return (<CustomerList />);
       case 'contacts':
         return (<ContactsList />);
+      default:
+        break;
     }
   };
 
@@ -44,7 +46,7 @@ const Customer = () => {
             </Col>
             <Col span={16}>
               <Search style={{backgroundColor: '#fff', border: 'solid 1px #eee',padding:'0 8px',margin:8, borderRadius: 100 }}
-                      placeholder='搜索项目' maxLength={8} />
+                      placeholder='搜索客户' maxLength={8} />
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {

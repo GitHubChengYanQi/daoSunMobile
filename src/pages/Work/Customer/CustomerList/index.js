@@ -112,20 +112,17 @@ const CustomerList = () => {
               </Row>
               <WhiteSpace size='md' />
               <Row gutter={24}>
-                <Col span={4}>
-                  商机:5
+                <Col span={6}>
+                  商机:{items.businessCount}
                 </Col>
-                <Col span={5}>
-                  跟进:42
+                <Col span={6}>
+                  跟进:{items.dynamicCount}
                 </Col>
-                <Col span={5}>
-                  合同:5
+                <Col span={6}>
+                  合同:{items.contracrCount}
                 </Col>
-                <Col span={5}>
-                  维保:2
-                </Col>
-                <Col span={5}>
-                  人员:66
+                <Col span={6}>
+                  人员:{items.contactsCount}
                 </Col>
               </Row>
             </ListItem>

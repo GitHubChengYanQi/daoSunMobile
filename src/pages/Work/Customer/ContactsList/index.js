@@ -6,9 +6,11 @@ import { router } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { Tag } from 'antd-mobile';
 
-const ContactsList = () => {
+const ContactsList = (props) => {
 
-  const { loading, data } = useRequest({ url: '/contacts/list', method: 'POST' });
+  const {customerId} = props;
+
+  const { loading, data } = useRequest({ url: '/contacts/list', method: 'POST',data:{customerId:customerId || null} });
 
   if (loading) {
     return (
@@ -29,7 +31,6 @@ const ContactsList = () => {
         );
       }) : [],
       onClick: (index) => {
-        console.log(index);
         return new Promise((resolve, reject) => {
           resolve(true);
         });
@@ -39,13 +40,13 @@ const ContactsList = () => {
 
   return (
     <>
-      <div style={{margin:8}}>联系人数量 <span style={{ color: 'red' }}>{data && data.length}</span>位</div>
+      {!customerId && <div style={{ margin: 8 }}>联系人数量 <span style={{ color: 'red' }}>{data && data.length}</span>位</div>}
       {data && data.map((items, index) => {
         return (
           <List key={index}>
             <Row gutter={24}>
               <Col span={4}>
-                <Avatar style={{margin:16}} size={56}>{items.contactsName && items.contactsName.substring(0, 1)}</Avatar>
+                <Avatar style={{margin:14}} size={54}>{items.contactsName && items.contactsName.substring(0, 1)}</Avatar>
               </Col>
               <Col span={20}>
                 <ListItem>
@@ -53,11 +54,12 @@ const ContactsList = () => {
                     Phones(items.contactsName, items.companyRoleResult && items.companyRoleResult.position, items.customerResults && items.customerResults.length > 0 && items.customerResults[0].customerName, items.phoneParams && items.phoneParams.length > 0 && items.phoneParams);
                   }} type='link' style={{ padding: 0 }} icon={<PhoneOutlined />}>拨打电话</Button>}>
                     <h3>{items.contactsName}</h3></ListItem>
-                  <div>
+                  <em>
                     {
                       items.customerResults && items.customerResults.length > 0 && items.customerResults[0].customerName
                     }
-                  </div>
+                    &nbsp;&nbsp;/&nbsp;&nbsp;职务：{items.companyRoleResult && items.companyRoleResult.position}
+                  </em>
                   <div>手机号：{
                     items.phoneParams && items.phoneParams.length > 0 ? items.phoneParams.map((value, index) => {
                       return (
@@ -71,9 +73,6 @@ const ContactsList = () => {
                       );
                     }) : null
                   }</div>
-                  <div>
-                    职务：{items.companyRoleResult && items.companyRoleResult.position}
-                  </div>
                 </ListItem>
               </Col>
             </Row>
