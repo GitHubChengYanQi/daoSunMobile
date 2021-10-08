@@ -180,10 +180,9 @@ const CustomerDetail = () => {
 
             </TabPanel>
           </Tabs>
-        </Card>;
+        </Card>
       </>
     )
-      ;
   } else {
     return null;
   }

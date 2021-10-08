@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Spin, WhiteSpace, WingBlank } from 'weui-react-v2';
 import { Affix, Col, Row, Select } from 'antd';
 import { EllipsisOutlined, OrderedListOutlined, PhoneOutlined, WhatsAppOutlined } from '@ant-design/icons';
@@ -6,10 +6,17 @@ import { router } from 'umi';
 import { Card } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 
-const CustomerList = () => {
+const CustomerList = ({ select }) => {
 
+  const { loading, data, run } = useRequest({ url: '/customer/list', method: 'POST' });
 
-  const { loading, data } = useRequest({ url: '/customer/list', method: 'POST' });
+  useEffect(() => {
+    run({
+      data:{
+        ...select
+      }
+    });
+  }, [run, select]);
 
   if (loading) {
     return (
@@ -73,7 +80,7 @@ const CustomerList = () => {
 
   return (
     <>
-      <div style={{margin:8}}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
+      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
       {data && data.map((items, index) => {
         return (
           <List key={index}>
@@ -130,7 +137,7 @@ const CustomerList = () => {
               <Flex type='flex' justify='space-around'>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                    router.push('/Work/Customer/Track?0');
+                    router.push(`/Work/Customer/Track?classify=0&customerId=${items.customerId}`);
                   }}> 跟进</Button>
                 </FlexItem>
                 <FlexItem span={4}>

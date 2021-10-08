@@ -10,17 +10,20 @@ import logo from '../../assets/img.png';
 const Login = () => {
 
   cookie.remove('cheng-token');
+  cookie.remove('cheng-user');
   window.sessionStorage.setItem('nav', '/Home');
+
+
 
   const { loading, run } = useRequest(
     {
       url: '/rest/login', method: 'POST',
     }, {
       manual: true,
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         if (res) {
-          cookie.set('cheng-token', res);
-          router.push('/Home');
+          await cookie.set('cheng-token', res);
+          await router.push('/Home');
         }
       },
     },
