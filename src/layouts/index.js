@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRequest } from '../util/Request';
 import { Button, Flex, FlexItem, GridItem, SafeArea, SegmentedControl } from 'weui-react-v2';
 import  {
@@ -19,6 +19,10 @@ import cookie from 'js-cookie';
 function BasicLayout(props) {
 
   let [isNotLogin, setIsNotLogin] = useState(true);
+
+  useEffect(()=>{
+      window.scrollTo(0, 0);
+  },[props.location.pathname])
 
   const { run: refreshToken } = useRequest({
     url: '/login/refreshToken',

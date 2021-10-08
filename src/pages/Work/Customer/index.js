@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   List,
@@ -10,7 +10,7 @@ import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
 import { router } from 'umi';
 import './index.scss';
-import { Col, Row } from 'antd';
+import { Affix, Col, Row } from 'antd';
 import Screening from './Screening';
 import { Popup } from 'antd-mobile';
 
@@ -22,6 +22,7 @@ const Customer = () => {
   const [value, setValue] = useState(params || 'customer');
 
   const [screening, setScreening] = useState();
+
 
 
   const [select, setSelect] = useState();
@@ -40,9 +41,8 @@ const Customer = () => {
 
   return (
     <>
-      <>
-        <div style={{ backgroundColor: '#fff' }}>
-          <Row gutter={24} style={{ padding: 8 }}>
+        <Affix offsetTop={0}>
+          <Row gutter={24} style={{ padding: 8,backgroundColor:'#fff' }}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
                 router.push('/Work/Customer/CustomerAdd');
@@ -82,12 +82,8 @@ const Customer = () => {
               </Popup>
             </Col>
           </Row>
-
-
-        </div>
-        <List style={{ margin: 0 }}>
           <SegmentedControl
-            style={{ border: 'none' }}
+            style={{ border: 'none',backgroundColor:'#fff' }}
             data={[
               {
                 label: '客户',
@@ -98,9 +94,10 @@ const Customer = () => {
                 value: 'contacts',
               },
             ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
+        </Affix>
+        <List style={{ margin: 0 }}>
           {content()}
         </List>
-      </>
     </>
   );
 };

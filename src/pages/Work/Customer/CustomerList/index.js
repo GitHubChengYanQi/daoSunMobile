@@ -1,24 +1,59 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Spin, WhiteSpace, WingBlank } from 'weui-react-v2';
 import { Affix, Col, Row, Select } from 'antd';
 import { EllipsisOutlined, OrderedListOutlined, PhoneOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { router } from 'umi';
-import { Card } from 'antd-mobile';
+import { Card, InfiniteScroll } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
+import { useScroll } from 'ahooks';
+import { useLockScroll } from 'antd-mobile/es/utils/use-lock-scroll';
+
+let page = 1;
+let limit = 10;
+let contents = [];
 
 const CustomerList = ({ select }) => {
 
-  const { loading, data, run } = useRequest({ url: '/customer/list', method: 'POST' });
+  const [datas, setDatas] = useState();
+
+  const [hasMore, setHasMore] = useState(true);
+
+  const { loading, run } = useRequest({ url: '/customer/list', method: 'POST' }, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: (res) => {
+      if (res && res.length > 0) {
+        res.map((items, index) => {
+          contents.push(items);
+        });
+        ++page;
+        setDatas(contents);
+      } else {
+        setHasMore(false);
+      }
+    },
+  });
+
+
+  const refresh = async (page) => {
+    await run({
+      data: {
+        ...select,
+      },
+      params: {
+        limit: limit,
+        page: page,
+      },
+    });
+  };
 
   useEffect(() => {
-    run({
-      data:{
-        ...select
-      }
-    });
-  }, [run, select]);
+    page = 1;
+    contents = [];
+    refresh(page);
+  }, [select]);
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -80,8 +115,8 @@ const CustomerList = ({ select }) => {
 
   return (
     <>
-      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
-      {data && data.map((items, index) => {
+      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{datas && datas.length}</span>家</div>
+      {datas && datas.map((items, index) => {
         return (
           <List key={index}>
             <ListItem style={{ padding: 8 }} onClick={() => {
@@ -157,6 +192,9 @@ const CustomerList = ({ select }) => {
           </List>
         );
       })}
+      <InfiniteScroll loadMore={() => {
+        refresh(page);
+      }} hasMore={hasMore} />
     </>
   );
 };
