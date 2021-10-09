@@ -1,66 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useRequest } from '../util/Request';
-import { Button, Flex, FlexItem, GridItem, SafeArea, SegmentedControl } from 'weui-react-v2';
-import  {
-  AppstoreOutlined,
-  BarChartOutlined,
-  CommentOutlined, FieldStringOutlined, LeftOutlined,
-  ShakeOutlined,
-  UserOutlined,
-  WechatOutlined,
-} from '@ant-design/icons';
-import { Affix, Avatar, Image, Menu } from 'antd';
+import React from 'react';
+import { Button, SafeArea, SegmentedControl } from 'weui-react-v2';
+import { Affix } from 'antd';
 import { router } from 'umi';
-import { Grid } from 'antd-mobile';
 import styles from './index.css';
 import Icon from '../pages/components/Icon';
 import cookie from 'js-cookie';
 
 function BasicLayout(props) {
-
-  let [isNotLogin, setIsNotLogin] = useState(true);
-
-  useEffect(()=>{
-      window.scrollTo(0, 0);
-  },[props.location.pathname])
-
-  const { run: refreshToken } = useRequest({
-    url: '/login/refreshToken',
-    method: 'POST',
-  }, {
-    manual: true,
-  }, false);
-
-  const { error, run } = useRequest({
-    url: '/login/miniprogram/code2session',
-    method: 'POST',
-  }, {
-    onError() {
-      /**
-       * TODO 判断error 存在就显示登录失败的提示
-       */
-      console.log('登录失败');
-      // Taro.hideLoading();
-    },
-    manual: true,
-  });
-
-  const { error: codeError, run: codeRun } = useRequest({
-    url: '/login/oauth/wxMp',
-    method: 'GET',
-  }, {
-    manual: true,
-  });
-
-  const { error: tokenError, run: tokenRun } = useRequest({
-    url: '/login/mp/loginByCode',
-    method: 'GET',
-  }, {
-    manual: true,
-    onError: () => {
-      // wxLogin();
-    },
-  });
 
   return (
     <div>

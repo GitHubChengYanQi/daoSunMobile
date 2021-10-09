@@ -1,24 +1,21 @@
-import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
-import { router } from 'umi';
-import { Card, InfiniteScroll } from 'antd-mobile';
-import { Col, Row } from 'antd';
-import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
+import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
+import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
+import { router } from 'umi';
+import { Card, InfiniteScroll } from 'antd-mobile';
 
 let page = 1;
 let limit = 10;
 let contents = [];
 
-const BusinessList = ({select}) => {
+const CompetitorList = ({ select }) => {
 
   const [data, setData] = useState();
 
-
-
   const [hasMore, setHasMore] = useState(true);
 
-  const { loading, run } = useRequest({ url: '/crmBusiness/list', method: 'POST' }, {
+  const { loading, run } = useRequest({ url: '/competitor/list', method: 'POST' }, {
     manual: true,
     debounceInterval: 500,
     onSuccess: (res) => {
@@ -33,7 +30,7 @@ const BusinessList = ({select}) => {
         }
       } else {
         setHasMore(false);
-        if (page === 1){
+        if (page === 1) {
           setData([]);
         }
       }
@@ -44,7 +41,7 @@ const BusinessList = ({select}) => {
   const refresh = async (page) => {
     await run({
       data: {
-        ...select
+        ...select,
       },
       params: {
         limit: limit,
@@ -69,45 +66,33 @@ const BusinessList = ({select}) => {
 
   return (
     <>
-      <List style={{ margin: 0 }} title={<>项目数量 <span style={{ color: 'red' }}>{data && data.length}</span></>} />
-      {data && data.map((items,index)=>{
+      {data && data.map((items, index) => {
         return (
           <List key={index}>
             <ListItem onClick={() => {
-              router.push(`/Work/Business/BusinessDetail?${items.businessId}`);
+              // router.push('/Work/Business/BusinessDetail');
             }}>
-              <Card style={{ padding: 0 }} extra={items.customer ? items.customer.customerName : null} title={items.businessName}>
-                <Row gutter={24}>
-                  <Col span={8}>
-                    负责人:{items.user ? items.user.name : '未填写'}
-                  </Col>
-                  <Col span={8}>
-                    机会来源:{items.origin ? items.origin.originName : null}
-                  </Col>
-                  <Col span={8}>
-                    立项日期：{items.time}
-                  </Col>
-                </Row>
-                <Row gutter={24}>
-                  <Col span={8}>
-                    盈率：{items.process && `${items.process.percentage}` || items.sales && items.sales.process.length > 0 && items.sales.process[0].percentage}
-                  </Col>
-                  <Col span={8}>
-                    项目金额：{items.opportunityAmount}
-                  </Col>
-                </Row>
+              <Card extra={<div>竞争项目: <a>{items.crmBusinessList.length > 0 && items.crmBusinessList[0].businessName}</a></div>} title={items.name}>
+                <div>级别：{items.level}</div>
+                <div>电话：{items.phone}</div>
+                <div>邮箱：{items.email}</div>
+                <div>地址：{
+                  items.regionResult ? `${items.regionResult.countries
+                  }-${items.regionResult.province
+                  }-${items.regionResult.city
+                  }-${items.regionResult.area}` : '---'}</div>
               </Card>
             </ListItem>
             <ListItem>
               <Flex type='flex' justify='space-around'>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/Track?classify=1&customerId=${data.customerId}&businessId=${data.businessId}`);
-                  }}> 跟进</Button>
+                    // router.push('/Work/Customer/Track?2');
+                  }}> 报价信息</Button>
                 </FlexItem>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                    router.push('/Work/Business/BusinessDetail');
+                    // router.push('/Work/Business/BusinessDetail');
                   }}> 更多</Button></FlexItem>
               </Flex>
             </ListItem>
@@ -119,6 +104,7 @@ const BusinessList = ({select}) => {
       }} hasMore={hasMore} />}
     </>
   );
+
 };
 
-export default BusinessList;
+export default CompetitorList;

@@ -118,7 +118,7 @@ const CustomerList = ({ select }) => {
 
   return (
     <>
-      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
+      <div style={{ margin: 8,backgroundColor:'#fff' }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
       {data && data.map((items, index) => {
         return (
           <List key={index}>

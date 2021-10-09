@@ -8,6 +8,7 @@ import { useRequest } from '../../../../util/Request';
 import StepList from '../StepList';
 import Dynamic from '../../Customer/Dynamic';
 import TrackList from '../../Customer/TrackList';
+import CompetitorList from '../../Competitor/CompetitorList';
 
 const { Item } = List;
 
@@ -102,7 +103,7 @@ const BusinessDetail = () => {
               <TrackList classifyId={data.businessId} classify={1} />
             </TabPanel>
             <TabPanel tabKey='4' tab={<span className='tab_point'>竞争对手</span>}>
-              无敌是多么寂寞~！
+              <CompetitorList select={{businessId:data.businessId}} />
             </TabPanel>
             <TabPanel tabKey='5' tab={<span className='tab_point'>报价</span>}>
               贫穷~

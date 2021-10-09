@@ -15,6 +15,7 @@ import styles from './index.css';
 import { router } from 'umi';
 import { Badge, NavBar } from 'antd-mobile';
 import Icon from '../components/Icon';
+import { UserDeleteOutlined } from '@ant-design/icons';
 
 const Work = () => {
 
@@ -31,7 +32,9 @@ const Work = () => {
       </Affix>
       <List title={<div>常用工具</div>}>
         <Grid>
-          <GridItem icon={<Icon type='icon-sousuo' />} onClick={()=>{router.push('/SearchButton');}}>
+          <GridItem icon={<Icon type='icon-sousuo' />} onClick={() => {
+            router.push('/SearchButton');
+          }}>
             <div className={styles.size}>全局查找</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-saoyisao1' />} onClick={() => {
@@ -44,7 +47,9 @@ const Work = () => {
           }}>
             <div className={styles.size}>拜访签到</div>
           </GridItem>
-          <GridItem icon={<Icon type='icon-rili' />} onClick={()=>{router.push('/Schedule');}}>
+          <GridItem icon={<Icon type='icon-rili' />} onClick={() => {
+            router.push('/Schedule');
+          }}>
             <div className={styles.size}>日程管理</div>
           </GridItem>
         </Grid>
@@ -52,17 +57,27 @@ const Work = () => {
 
       <List title={<div>项目管理</div>}>
         <Grid>
-          <GridItem icon={<Icon type='icon-dingdan1' />}
-                    onClick={() => {
-                      router.push('/Work/Business');
-                    }}>
+          <GridItem
+            icon={<Icon type='icon-dingdan1' />}
+            onClick={() => {
+              router.push('/Work/Business');
+            }}>
             <div className={styles.size}>项目列表</div>
           </GridItem>
-          <GridItem icon={<Icon type='icon-xiaojuchang' />}
-                    onClick={() => {
-                      toast();
-                    }}>
+          <GridItem
+            icon={<Icon type='icon-xiaojuchang' />}
+            onClick={() => {
+              toast();
+            }}>
             <div className={styles.size}>项目流程</div>
+          </GridItem>
+          <GridItem
+            icon={<UserDeleteOutlined />}
+            onClick={() => {
+              router.push('/Work/Competitor');
+            }}
+          >
+            <div className={styles.size}>竞争对手</div>
           </GridItem>
         </Grid>
       </List>
@@ -70,7 +85,10 @@ const Work = () => {
       <List className={styles.title} title={<div>客户管理</div>}>
         <Grid>
           <GridItem
-            icon={<Badge content={77} size={'small'} overflowCount={55}><Icon type='icon-shuju' style={{ fontSize: 32 }} />
+            icon={<Badge content={77} size={'small'} overflowCount={55}>
+              <Icon
+                type='icon-shuju'
+                style={{ fontSize: 32 }} />
             </Badge>}
             onClick={() => {
               router.push('/Work/Customer');

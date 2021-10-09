@@ -11,6 +11,7 @@ import Adress from '../Adress';
 import TrackList from '../TrackList';
 import CustomerUpload from '../Upload';
 import Contract from '../../Contract';
+import ContractList from '../../Contract/ContractList';
 
 const { Item } = List;
 
@@ -179,7 +180,7 @@ const CustomerDetail = () => {
               <CustomerUpload customerId={data.customerId} />
             </TabPanel>
             <TabPanel tabKey='6' tab={<span className='tab_point'>合同</span>}>
-              <Contract customerId={data.customerId} />
+              <ContractList customerId={data.customerId} />
             </TabPanel>
             <TabPanel tabKey='7' tab={<span className='tab_point'>订单</span>}>
 

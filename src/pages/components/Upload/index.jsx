@@ -79,7 +79,6 @@ const UpLoadImg = (props) => {
         if (file.status === 'done') {
           setImageUrl(`${oss.host}/${oss.key}`);
           setLoading(false);
-          console.log(`${oss.host}/${oss.key}`);
           typeof onChange === 'function' && onChange(`${oss.host}/${oss.key}`);
         }
       }

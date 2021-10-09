@@ -18,7 +18,6 @@ const Customer = () => {
 
   const params = window.location.href.split('?')[1];
 
-
   const [value, setValue] = useState(params || 'customer');
 
   const [screening, setScreening] = useState();
@@ -40,7 +39,7 @@ const Customer = () => {
   return (
     <>
       <Affix offsetTop={0}>
-        <>
+        <div>
           <Row gutter={24} style={{ padding: 8, backgroundColor: '#fff' }}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
@@ -93,7 +92,7 @@ const Customer = () => {
                 value: 'contacts',
               },
             ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
-        </>
+        </div>
       </Affix>
       <List style={{ margin: 0 }}>
         {content()}

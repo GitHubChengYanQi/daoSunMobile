@@ -28,6 +28,9 @@ const ContactsList = (props) => {
         });
         ++page;
         setData(contents);
+        if (res.length < limit){
+          setHasMore(false);
+        }
       } else {
         setHasMore(false);
       }
