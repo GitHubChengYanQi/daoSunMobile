@@ -10,7 +10,7 @@ const RepairOrder = () => {
   return (
     <>
       <Affix offsetTop={0}>
-        <Card.Header style={{backgroundColor: '#fff' , padding: 0 }} title={
+        <Card style={{backgroundColor: '#fff' , padding: 0 }} title={
           <Select
             defaultValue='0'
             bordered={false}
@@ -25,52 +25,43 @@ const RepairOrder = () => {
         } />
       </Affix>
       <WhiteSpace />
-      <Card>
-        <Card.Header
+      <Card
           title={
             <div>备件申领办理通知</div>}
           extra={
             <>
               2021-12-01 15:00：99
             </>
-          } />
-        <Card.Body>
+          } >
           <PreviewItem title="申请人"><div>张某某</div></PreviewItem>
           <PreviewItem title="备件名称"><div>xxxxx</div></PreviewItem>
           <PreviewItem title="备件去向"><div>未知</div></PreviewItem>
-        </Card.Body>
       </Card>
       <WhiteSpace />
-      <Card>
-        <Card.Header
+      <Card
           title={
             <div>备件申领办理通知</div>}
           extra={
             <>
               2021-12-01 15:00：99
             </>
-          } />
-        <Card.Body>
+          } >
           <PreviewItem title="申请人"><div>张某某</div></PreviewItem>
           <PreviewItem title="备件名称"><div>xxxxx</div></PreviewItem>
           <PreviewItem title="备件去向"><div>未知</div></PreviewItem>
-        </Card.Body>
       </Card>
       <WhiteSpace />
-      <Card>
-        <Card.Header
+      <Card
           title={
             <div>备件申领办理通知</div>}
           extra={
             <>
               2021-12-01 15:00：99
             </>
-          } />
-        <Card.Body>
+          } >
           <PreviewItem title="申请人"><div>张某某</div></PreviewItem>
           <PreviewItem title="备件名称"><div>xxxxx</div></PreviewItem>
           <PreviewItem title="备件去向"><div>未知</div></PreviewItem>
-        </Card.Body>
       </Card>
     </>
   );

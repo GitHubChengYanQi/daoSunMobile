@@ -9,28 +9,62 @@ import Icon, {
   WhatsAppOutlined,
 } from '@ant-design/icons';
 import { router } from 'umi';
-import { Card } from 'antd-mobile';
+import { Card, InfiniteScroll } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import Service from '../../../util/Service';
 
+let page = 1;
+let limit = 10;
+let contents = [];
 
 const Contract = ({ customerId }) => {
 
   const [data, setData] = useState();
 
+  const [hasMore, setHasMore] = useState(true);
+
+  const { loading, run } = useRequest({ url: '/contract/list', method: 'POST' }, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: (res) => {
+      if (res && res.length > 0) {
+        res.map((items, index) => {
+          contents.push(items);
+        });
+        ++page;
+        setData(contents);
+      } else {
+        setHasMore(false);
+      }
+    },
+  });
+
+
+  const refresh = async (page) => {
+    await run({
+      data: {
+        partyA: customerId || null
+      },
+      params: {
+        limit: limit,
+        page: page,
+      },
+    });
+  };
 
   useEffect(() => {
-    Service().ajaxService(
-      { url: '/contract/list', method: 'POST', data: { partyA: customerId || null } },
-    ).then((res) => {
-      setData(res);
-    });
-  }, [customerId]);
+    page = 1;
+    contents = [];
+    refresh(page);
+  }, []);
 
-
-  if (!data) {
-    return <Skeleton loading />;
+  if (loading && page === 1) {
+    return (
+      <div style={{ margin: 50, textAlign: 'center' }}>
+        <Spin spinning={true} size='large' />
+      </div>
+    );
   }
+
 
   if (data) {
     return (
@@ -62,10 +96,10 @@ const Contract = ({ customerId }) => {
               </Col>
             </Row>
           </div>
-          <List style={{ margin: 0 }} title={<>合同数量 <span style={{ color: 'red' }}>{data.count}</span></>} />
+          <List style={{ margin: 0 }} title={<>合同数量 <span style={{ color: 'red' }}>{data.length}</span></>} />
         </>}
         {
-          data.data && data.data.map((items, index) => {
+          data && data.map((items, index) => {
             return (
               <List key={index}>
                 <ListItem onClick={() => {
@@ -110,6 +144,9 @@ const Contract = ({ customerId }) => {
             );
           })
         }
+        <InfiniteScroll loadMore={() => {
+          refresh(page);
+        }} hasMore={hasMore} />
       </>
     );
   } else {

@@ -10,7 +10,7 @@ const RepairOrder = () => {
   return (
     <>
       <Affix offsetTop={0}>
-        <Card.Header style={{backgroundColor: '#fff' , padding: 0 }} title={
+        <Card style={{ backgroundColor: '#fff', padding: 0 }} title={
           <Select
             defaultValue='0'
             bordered={false}
@@ -25,27 +25,29 @@ const RepairOrder = () => {
         } />
       </Affix>
       <WhiteSpace />
-      <Card>
-        <Card.Header
-          title={
-            <div>
-              <div><Badge color='red' text='新的报修单' /></div>
-              <div>您有一个新的保修单，请尽快处理！</div>
-            </div>}
-          extra={
-            <>
-              2021-12-01
-            </>
-          } />
-        <Card.Body>
-          <PreviewItem title="创建人"><div>张某某/17777777777</div></PreviewItem>
-          <PreviewItem title="工单来源"><div>渠道公司</div></PreviewItem>
-          <PreviewItem title="工单类型"><div>保外</div></PreviewItem>
-        </Card.Body>
+      <Card
+        title={
+          <div>
+            <div><Badge color='red' text='新的报修单' /></div>
+            <div>您有一个新的保修单，请尽快处理！</div>
+          </div>}
+        extra={
+          <>
+            2021-12-01
+          </>
+        }>
+        <PreviewItem title='创建人'>
+          <div>张某某/17777777777</div>
+        </PreviewItem>
+        <PreviewItem title='工单来源'>
+          <div>渠道公司</div>
+        </PreviewItem>
+        <PreviewItem title='工单类型'>
+          <div>保外</div>
+        </PreviewItem>
       </Card>
       <WhiteSpace />
-      <Card>
-        <Card.Header
+      <Card
           title={
             <div>
               <div><Badge color='red' text='新的报修单' /></div>
@@ -55,16 +57,19 @@ const RepairOrder = () => {
             <>
               2021-12-01
             </>
-          } />
-        <Card.Body>
-          <PreviewItem title="创建人"><div>张某某/17777777777</div></PreviewItem>
-          <PreviewItem title="工单来源"><div>渠道公司</div></PreviewItem>
-          <PreviewItem title="工单类型"><div>保外</div></PreviewItem>
-        </Card.Body>
+          } >
+          <PreviewItem title='创建人'>
+            <div>张某某/17777777777</div>
+          </PreviewItem>
+          <PreviewItem title='工单来源'>
+            <div>渠道公司</div>
+          </PreviewItem>
+          <PreviewItem title='工单类型'>
+            <div>保外</div>
+          </PreviewItem>
       </Card>
       <WhiteSpace />
-      <Card>
-        <Card.Header
+      <Card
           title={
             <div>
               <div><Badge color='red' text='新的报修单' /></div>
@@ -74,12 +79,16 @@ const RepairOrder = () => {
             <>
               2021-12-01
             </>
-          } />
-        <Card.Body>
-          <PreviewItem title="创建人"><div>张某某/17777777777</div></PreviewItem>
-          <PreviewItem title="工单来源"><div>渠道公司</div></PreviewItem>
-          <PreviewItem title="工单类型"><div>保外</div></PreviewItem>
-        </Card.Body>
+          } >
+          <PreviewItem title='创建人'>
+            <div>张某某/17777777777</div>
+          </PreviewItem>
+          <PreviewItem title='工单来源'>
+            <div>渠道公司</div>
+          </PreviewItem>
+          <PreviewItem title='工单类型'>
+            <div>保外</div>
+          </PreviewItem>
       </Card>
     </>
   );

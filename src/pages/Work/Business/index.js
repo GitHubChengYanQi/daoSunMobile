@@ -5,85 +5,117 @@ import {
   FlexItem,
   List,
   ListItem,
-  SafeArea,
-  SegmentedControl,
   Spin,
-  WingBlank,
 } from 'weui-react-v2';
 import {
   EllipsisOutlined,
-  FilterOutlined, OrderedListOutlined, PhoneOutlined,
+  FilterOutlined,
   UserAddOutlined, WhatsAppOutlined,
 } from '@ant-design/icons';
 import { router } from 'umi';
 import { Affix, Col, Row } from 'antd';
-import { Search } from 'antd-mobile';
+import { Card, InfiniteScroll, Search } from 'antd-mobile';
+import { useRequest } from '../../../util/Request';
 
+let page = 1;
+let limit = 10;
+let contents = [];
 
 const Business = () => {
 
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState();
+
+  const [hasMore, setHasMore] = useState(true);
+
+  const { loading, run } = useRequest({ url: '/crmBusiness/list', method: 'POST' }, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: (res) => {
+      if (res && res.length > 0) {
+        res.map((items, index) => {
+          return contents.push(items);
+        });
+        ++page;
+        setData(contents);
+      } else {
+        setHasMore(false);
+      }
+    },
+  });
+
+
+  const refresh = async (page) => {
+    await run({
+      data: {},
+      params: {
+        limit: limit,
+        page: page,
+      },
+    });
+  };
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 500);
+    page = 1;
+    contents = [];
+    refresh(page);
   }, []);
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
-      <Affix offsetTop={50} style={{ textAlign: 'center' }}>
+      <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
-      </Affix>
+      </div>
     );
   }
 
   return (
     <>
-      <>
-        <div style={{ backgroundColor: '#fff' }}>
-          <Row gutter={24} style={{ padding: 8 }}>
-            <Col span={4}>
-              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
-                router.push('/Work/Business/BusinessAdd');
-              }} />
-            </Col>
-            <Col span={16}>
-              <Search style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
-                      placeholder='搜索项目' maxLength={8} />
-            </Col>
-            <Col span={4}>
-              <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
-                router.push('/Work/Business/Screening');
-              }} />
-            </Col>
-          </Row>
-        </div>
-        <List style={{ margin: 0 }} title={<>项目数量 <span style={{ color: 'red' }}>666</span></>}>
-          <List>
+      <div style={{ backgroundColor: '#fff' }}>
+        <Row gutter={24} style={{ padding: 8 }}>
+          <Col span={4}>
+            <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+              router.push('/Work/Business/BusinessAdd');
+            }} />
+          </Col>
+          <Col span={16}>
+            <Search style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
+                    placeholder='搜索项目' maxLength={8} />
+          </Col>
+          <Col span={4}>
+            <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
+              router.push('/Work/Business/Screening');
+            }} />
+          </Col>
+        </Row>
+      </div>
+      <List style={{ margin: 0 }} title={<>项目数量 <span style={{ color: 'red' }}>{data && data.length}</span></>} />
+      {data && data.map((items,index)=>{
+        return (
+          <List key={index}>
             <ListItem onClick={() => {
-              router.push('/Work/Business/BusinessDetail');
+              router.push(`/Work/Business/BusinessDetail?${items.businessId}`);
             }}>
-              <ListItem style={{ padding: 0 }} extra='客户：无限乱斗'><h3>英雄联盟</h3></ListItem>
-              <Row gutter={24}>
-                <Col span={8}>
-                  负责人:业务员
-                </Col>
-                <Col span={8}>
-                  机会来源:其他
-                </Col>
-                <Col span={8}>
-                  2021-9-25
-                </Col>
-              </Row>
-              <Row gutter={24}>
-                <Col span={8}>
-                  盈率：60%
-                </Col>
-                <Col span={8}>
-                  阶段：谈判审核
-                </Col>
-              </Row>
+              <Card style={{ padding: 0 }} extra={items.customer ? items.customer.customerName : null} title={items.businessName}>
+                <Row gutter={24}>
+                  <Col span={8}>
+                    负责人:{items.user ? items.user.name : '未填写'}
+                  </Col>
+                  <Col span={8}>
+                    机会来源:{items.origin ? items.origin.originName : null}
+                  </Col>
+                  <Col span={8}>
+                    立项日期：{items.time}
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col span={8}>
+                    盈率：{items.process && `${items.process.percentage}` || items.sales && items.sales.process.length > 0 && items.sales.process[0].percentage}
+                  </Col>
+                  <Col span={8}>
+                    项目金额：{items.opportunityAmount}
+                  </Col>
+                </Row>
+              </Card>
             </ListItem>
             <ListItem>
               <Flex type='flex' justify='space-around'>
@@ -99,8 +131,11 @@ const Business = () => {
               </Flex>
             </ListItem>
           </List>
-        </List>
-      </>
+        );
+      })}
+      {data && <InfiniteScroll loadMore={() => {
+        refresh(page);
+      }} hasMore={hasMore} />}
     </>
   );
 };

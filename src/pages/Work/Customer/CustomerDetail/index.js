@@ -4,7 +4,7 @@ import { Button, Flex, FlexItem, ListItem, MultiUpload, Skeleton, TabPanel, Tabs
 import Icon, { LeftOutlined, UploadOutlined, UserOutlined, ZoomInOutlined } from '@ant-design/icons';
 import ContactsList from '../ContactsList';
 import { router } from 'umi';
-import { Card, Collapse, List, Tag } from 'antd-mobile';
+import { Card, Collapse, List, Space, Tag } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import Dynamic from '../Dynamic';
 import Adress from '../Adress';
@@ -38,44 +38,49 @@ const CustomerDetail = () => {
   if (data) {
     return (
       <>
-        <Card>
-          <Row gutter={24}>
-            <Col span={16}>
-              <Card
-                style={{ padding: 0 }}
-                title={<strong style={{ fontSize: 16 }}>
-                  {data.customerName}
-                </strong>} />
-              <WhiteSpace size='sm' />
-              <em>公司地址：{data.signIn || '--'}&nbsp;&nbsp;/&nbsp;&nbsp;行业：{data.crmIndustryResult && data.crmIndustryResult.industryName || '--'}</em>
-              <WhiteSpace size='sm' />
-              法定代表人：{data.legal || '--'}&nbsp;&nbsp;/&nbsp;&nbsp;负责人：{data.userResult && data.userResult.name}
-            </Col>
-            <Col span={8} style={{ textAlign: 'center' }}>
-              <Avatar shape='square' size={40}
-                      src={data.avatar}>{data.customerName && data.customerName.substring(0, 1)}</Avatar>
-              <div>
-                <Select size='small' placeholder='设置' style={{ marginTop: 8,width:80 }} bordered={false}  options={[
-                  { label:
-                      <Button
-                        size='small'
-                        type='link'
-                        style={{ padding: 0 }}
-                        onClick={() => {
-                          router.push('/Work/Customer/Track?0');
-                        }}>添加跟进</Button>
-                      , value: '0' },
-                  { label: <Button
-                      style={{ padding: 0 }}
-                      size='small'
-                      type='link'
-                      onClick={() => {
-                        router.goBack();
-                      }}>返回</Button>, value: '1' },
-                ]} />
-              </div>
-            </Col>
-          </Row>
+        <Card
+          title={
+            <Space direction='horizontal' justify='center' align='center'>
+              <Avatar
+                shape='square'
+                size={40}
+                src={data.avatar}>{data.customerName && data.customerName.substring(0, 1)}</Avatar>
+              <span>
+                {data.customerName}
+                <em style={{
+                  display: 'block',
+                  fontWeight: 400,
+                }}>法定代表人：{data.legal || '--'}&nbsp;&nbsp;/&nbsp;&nbsp;负责人：{data.userResult && data.userResult.name} </em>
+              </span>
+            </Space>
+          }
+          extra={
+            <Select size='small' placeholder='设置' style={{ width: 80 }} bordered={false} options={[
+              {
+                label:
+                  <Button
+                    size='small'
+                    type='link'
+                    style={{ padding: 0 }}
+                    onClick={() => {
+                      router.push(`/Work/Customer/Track?classify=0&customerId=${data.customerId}`);
+                    }}>添加跟进</Button>
+                , value: '0',
+              },
+              {
+                label: <Button
+                  style={{ padding: 0 }}
+                  size='small'
+                  type='link'
+                  onClick={() => {
+                    router.goBack();
+                  }}>返回</Button>, value: '1',
+              },
+            ]} />
+          }
+        >
+          <WhiteSpace size='sm' />
+          <em>公司地址：{data.signIn || '--'}&nbsp;&nbsp;/&nbsp;&nbsp;行业：{data.crmIndustryResult && data.crmIndustryResult.industryName || '--'}</em>
           <WhiteSpace size='md' />
           <div>
             <Row gutter={24}>
@@ -182,7 +187,7 @@ const CustomerDetail = () => {
           </Tabs>
         </Card>
       </>
-    )
+    );
   } else {
     return null;
   }

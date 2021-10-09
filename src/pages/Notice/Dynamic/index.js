@@ -24,7 +24,7 @@ const Dynamic = () => {
       case '0':
         return (
           <div style={{padding:16}}>
-            <Steps size="small" current={2}>
+            <Steps size="small" current={2} direction='vertical'>
               <Steps.Step title="User 2021-05-06" description="操作" />
               <Steps.Step title="User 2021-05-06" description="操作" />
               <Steps.Step title="User 2021-05-06" description="操作" />

@@ -1,18 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
 import { Affix, Avatar, Col, Row, Select } from 'antd';
 import { PhoneOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 import { useRequest } from '../../../../util/Request';
-import { Tag } from 'antd-mobile';
+import { InfiniteScroll, Tag } from 'antd-mobile';
+
+let page = 1;
+let limit = 10;
+let contents = [];
 
 const ContactsList = (props) => {
 
   const {customerId} = props;
 
-  const { loading, data } = useRequest({ url: '/contacts/list', method: 'POST',data:{customerId:customerId || null} });
+  const [data, setData] = useState();
 
-  if (loading) {
+  const [hasMore, setHasMore] = useState(true);
+
+  const { loading, run } = useRequest({ url: '/contacts/list', method: 'POST' }, {
+    manual: true,
+    debounceInterval: 500,
+    onSuccess: (res) => {
+      if (res && res.length > 0) {
+        res.map((items, index) => {
+          contents.push(items);
+        });
+        ++page;
+        setData(contents);
+      } else {
+        setHasMore(false);
+      }
+    },
+  });
+
+
+  const refresh = async (page) => {
+    await run({
+      data: {
+        customerId:customerId || null
+      },
+      params: {
+        limit: limit,
+        page: page,
+      },
+    });
+  };
+
+  useEffect(() => {
+    page = 1;
+    contents = [];
+    refresh(page);
+  }, []);
+
+  if (loading && page === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -79,6 +120,9 @@ const ContactsList = (props) => {
           </List>
         );
       })}
+      <InfiniteScroll loadMore={() => {
+        refresh(page);
+      }} hasMore={hasMore} />
     </>
   );
 };

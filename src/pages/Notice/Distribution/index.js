@@ -1,6 +1,6 @@
 import React from 'react';
-import { Search, Tag } from 'antd-mobile';
-import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Preview, PreviewButton } from 'weui-react-v2';
+import { Button, Search, Tag } from 'antd-mobile';
+import { ActionSheet, Flex, FlexItem, List, ListItem, Preview, PreviewButton } from 'weui-react-v2';
 import { PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import styles from './index.css';
@@ -35,21 +35,16 @@ const Distribution = () => {
                    placeholder='搜索项目'
                    maxLength={8} />
         <div style={{ marginTop: 8 }} className={styles.sea}>
-          <Preview
-            footer={[
-              <PreviewButton key='a' >排序</PreviewButton>,
-              <PreviewButton key='b'>
-                筛选
-              </PreviewButton>,
-            ]}
-          />
+          <Button key='a' style={{width:'50%',borderRight:'none'}} size='small'>排序</Button>
+          <Button key='b' style={{width:'50%'}} size='small'>
+            筛选
+          </Button>
         </div>
       </div>
       <List>
-        <ListItem thumb={<Avatar icon={<UserOutlined />} />} extra={<Button type='text' icon={<Avatar
-          style={{ backgroundColor: 'green' }} icon={<PhoneOutlined onClick={() => {
+        <ListItem thumb={<Avatar icon={<UserOutlined />} />} extra={<PhoneOutlined onClick={() => {
           Phones();
-        }} />} />} />}>
+        }} />}>
           <div style={{ display: 'inline-block' }}>
             content
             <br />
@@ -66,10 +61,9 @@ const Distribution = () => {
             来自：系统
           </div>
         </ListItem>
-        <ListItem thumb={<Avatar icon={<UserOutlined />} />} extra={<Button type='text' icon={<Avatar
-          style={{ backgroundColor: 'green' }} icon={<PhoneOutlined onClick={() => {
+        <ListItem thumb={<Avatar icon={<UserOutlined />} />} extra={<PhoneOutlined onClick={() => {
           Phones();
-        }} />} />} />}>
+        }} />}>
           <div style={{ display: 'inline-block' }}>
             content
             <br />
@@ -86,8 +80,11 @@ const Distribution = () => {
             来自：系统
           </div>
         </ListItem>
-        <ListItem thumb={<Avatar icon={<UserOutlined />} />}
-                  extra={<Button type='text' icon={<Avatar icon={<PhoneOutlined />} />} />}>
+        <ListItem
+          thumb={<Avatar icon={<UserOutlined />} />}
+                  extra={<PhoneOutlined onClick={() => {
+                    Phones();
+                  }} />}>
           <div style={{ display: 'inline-block' }}>
             content
             <br />

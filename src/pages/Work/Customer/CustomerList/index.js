@@ -14,7 +14,7 @@ let contents = [];
 
 const CustomerList = ({ select }) => {
 
-  const [datas, setDatas] = useState();
+  const [data, setData] = useState();
 
   const [hasMore, setHasMore] = useState(true);
 
@@ -24,10 +24,10 @@ const CustomerList = ({ select }) => {
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items, index) => {
-          contents.push(items);
+          return contents.push(items);
         });
         ++page;
-        setDatas(contents);
+        setData(contents);
       } else {
         setHasMore(false);
       }
@@ -115,8 +115,8 @@ const CustomerList = ({ select }) => {
 
   return (
     <>
-      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{datas && datas.length}</span>家</div>
-      {datas && datas.map((items, index) => {
+      <div style={{ margin: 8 }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
+      {data && data.map((items, index) => {
         return (
           <List key={index}>
             <ListItem style={{ padding: 8 }} onClick={() => {
@@ -177,7 +177,7 @@ const CustomerList = ({ select }) => {
                 </FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<OrderedListOutlined />} onClick={() => {
-                    router.push('/Work/Customer/CustomerDetail');
+                    router.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
                   }}>任务</Button></FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<PhoneOutlined />} onClick={() => {
@@ -185,16 +185,16 @@ const CustomerList = ({ select }) => {
                   }}> 电话</Button></FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                    router.push('/Work/Customer/CustomerDetail');
+                    router.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
                   }}> 更多</Button></FlexItem>
               </Flex>
             </ListItem>
           </List>
         );
       })}
-      <InfiniteScroll loadMore={() => {
+      {data && <InfiniteScroll loadMore={() => {
         refresh(page);
-      }} hasMore={hasMore} />
+      }} hasMore={hasMore} />}
     </>
   );
 };

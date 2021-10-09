@@ -1,121 +1,134 @@
 import React, { useState } from 'react';
-import { Card, List, NavBar, Tag } from 'antd-mobile';
+import { Card, Collapse, List, NavBar, Result, Space, Tag } from 'antd-mobile';
 import Icon, { LeftOutlined, UploadOutlined, UserOutlined, ZoomInOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 import { Affix, Avatar, Col, Row, Select, Steps, Upload } from 'antd';
-import { Button, Flex, FlexItem, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
-import ContactsList from '../../Customer/ContactsList';
+import { Button, Flex, FlexItem, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
+import { useRequest } from '../../../../util/Request';
+import StepList from '../StepList';
+
+const { Item } = List;
 
 const BusinessDetail = () => {
 
-  const [current, setCurrent] = useState(0);
+  const params = window.location.href.split('?')[1];
 
-  return (
-    <>
-      <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-          icon={<LeftOutlined />}
-          onLeftClick={() => router.goBack()}
-          rightContent={[
-            <Icon key='0' type='search' style={{ marginRight: '16px' }} />,
-            <Icon key='1' type='ellipsis' />,
-          ]}
-        >项目详情</NavBar>
-      </Affix>
-      <Card>
-        <Card.Body>
+  const { loading, data,refresh } = useRequest(
+    {
+      url: '/crmBusiness/detail',
+      method: 'POST',
+    }, {
+      defaultParams: {
+        data: {
+          businessId: params,
+        },
+      },
+    },
+  );
+
+  if (loading) {
+    return <Skeleton loading={loading} />;
+  }
+
+  if (data) {
+    return (
+      <>
+        <Card
+          title={
+            <Space direction='horizontal' justify='center' align='center'>
+              <Avatar
+                shape='square'
+                size={40}
+                src={data.avatar}>{data.businessName && data.businessName.substring(0, 1)}</Avatar>
+              <span>
+                {data.businessName}
+                <em style={{ display: 'block', fontWeight: 400 }}>客户：{data.customer && data.customer.customerName} / 负责人：{data.user && data.user.name}</em>
+              </span>
+            </Space>
+          }
+          extra={
+            <Select size='small' placeholder='设置' style={{ width: 80 }} bordered={false} options={[
+              {
+                label:
+                  <Button
+                    size='small'
+                    type='link'
+                    style={{ padding: 0 }}
+                    onClick={() => {
+                      router.push(`/Work/Customer/Track?classify=1&customerId=${data.customerId}&businessId=${data.businessId}`);
+                    }}>添加跟进</Button>
+                , value: '0',
+              },
+              {
+                label: <Button
+                  style={{ padding: 0 }}
+                  size='small'
+                  type='link'
+                  onClick={() => {
+                    router.goBack();
+                  }}>返回</Button>, value: '1',
+              },
+            ]} />
+          }
+        >
+          <WhiteSpace size='md' />
           <Row gutter={24}>
-            <Col span={16}>
-              <Card.Header style={{ padding: 0 }}
-                           title={<strong style={{ fontSize: 16 }}>英雄联盟<Button size='small' type='link' onClick={() => {
-                             router.push('/Work/Customer/Track?1');
-                           }}>添加跟进</Button></strong>} />
-              <WhiteSpace size='md' />
-              <div>客户：无线乱斗 / 负责人：程彦祺</div>
-              <WhiteSpace size='md' />
-              <div>立项日期：2021-10-1</div>
+            <Col span={12}>
+              <div>立项日期：{data.time}</div>
             </Col>
-            <Col span={8} style={{ textAlign: 'center' }}>
-              <Avatar shape='square' size={40}>英</Avatar>
-              <div>
-                <Select size='small' style={{ marginTop: 8 }} defaultValue={['0']} options={[
-                  { label: '设置', value: '0' },
-                ]} />
-              </div>
+            <Col span={12}>
+              <div>合同名称：{data.contractResult ? data.contractResult.name : '暂无合同'}</div>
+            </Col>
+            <Col span={12}>
+              <div>来源：{data.origin && data.origin.originName}</div>
             </Col>
           </Row>
-        </Card.Body>
-      </Card>
-      <Card.Body style={{ backgroundColor: '#fff', marginTop: 8 }}>
-        <Steps
-          direction='vertical'
-          type='navigation'
-          size='small'
-          current={current}
-          onChange={(value) => {
-            setCurrent(value);
-          }}
-          className='site-navigation-steps'
-        >
-          <Steps.Step title='验证客户' description='盈率：10%' />
-          <Steps.Step title='需求确定' description='盈率：30%' />
-          <Steps.Step title='方案/报价' description='盈率：60%' />
-          <Steps.Step title='谈判审核' description='盈率：80%' />
-          <Steps.Step title='完成' />
-        </Steps>
-      </Card.Body>
-      <Card.Body style={{ backgroundColor: '#fff', marginTop: 8 }}>
-        <Tabs className='swiper-demo2' lazy={true}>
-          <TabPanel tabKey='1' tab={<span className='tab_point'>动态</span>}>
-            <List>
-              <List.Item extra='2021-10-1 10:30' wrap align='top' thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>操作</List.Item.Brief>
-              </List.Item>
-              <List.Item extra='2021-10-1 10:30' wrap align='top' thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>操作</List.Item.Brief>
-              </List.Item>
-              <List.Item extra='2021-10-1 10:30' wrap align='top' thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>操作</List.Item.Brief>
-              </List.Item>
-            </List>
-          </TabPanel>
-          <TabPanel tabKey='2' tab={<span className='tab_point'>跟进</span>}>
-            <List>
-              <List.Item extra='2021-10-1 10:30' align='top' wrap thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>内容</List.Item.Brief>
-              </List.Item>
-              <List.Item extra='2021-10-1 10:30' align='top' wrap thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>内容</List.Item.Brief>
-              </List.Item>
-              <List.Item extra='2021-10-1 10:30' align='top' wrap thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>内容</List.Item.Brief>
-              </List.Item>
-              <List.Item extra='2021-10-1 10:30' align='top' wrap thumb={<Avatar icon={<UserOutlined size={64} />} />}
-                         multipleLine>
-                User <List.Item.Brief>内容</List.Item.Brief>
-              </List.Item>
-            </List>
-          </TabPanel>
-          <TabPanel tabKey='4' tab={<span className='tab_point'>竞争对手</span>}>
-            无敌是多么寂寞~！
-          </TabPanel>
-          <TabPanel tabKey='5' tab={<span className='tab_point'>报价</span>}>
-            贫穷~
-          </TabPanel>
-          <TabPanel tabKey='3' tab={<span className='tab_point'>产品明细</span>}>
-            666
-          </TabPanel>
-        </Tabs>
-      </Card.Body>
-    </>
-  );
+        </Card>
+
+
+        <StepList onChange={() => {
+          refresh();
+        }} value={data} />
+
+
+        <Card style={{ backgroundColor: '#fff', marginTop: 8 }}>
+          <Tabs className='swiper-demo2' lazy={true}>
+            <TabPanel tabKey='1' tab={<span className='tab_point'>动态</span>}>
+              <List>
+                <Item extra='2021-10-1 10:30' title='User' wrap align='top'
+                      prefix={<Avatar icon={<UserOutlined size={64} />} />}>
+                  操作
+                </Item>
+              </List>
+            </TabPanel>
+            <TabPanel tabKey='2' tab={<span className='tab_point'>跟进</span>}>
+              <List>
+                <Item extra='2021-10-1 10:30' title='User' wrap align='top'
+                      prefix={<Avatar icon={<UserOutlined size={64} />} />}>
+                  操作
+                </Item>
+              </List>
+            </TabPanel>
+            <TabPanel tabKey='4' tab={<span className='tab_point'>竞争对手</span>}>
+              无敌是多么寂寞~！
+            </TabPanel>
+            <TabPanel tabKey='5' tab={<span className='tab_point'>报价</span>}>
+              贫穷~
+            </TabPanel>
+            <TabPanel tabKey='3' tab={<span className='tab_point'>产品明细</span>}>
+              666
+            </TabPanel>
+          </Tabs>
+        </Card>
+      </>
+    );
+  } else {
+    return <Result
+      status='error'
+      title='无法完成操作'
+      description='内容详情可折行，建议不超过两行建议不超过两行建议不超过两行'
+    />;
+  }
 
 };
 
