@@ -164,7 +164,7 @@ const CustomerDetail = () => {
         <Card style={{ backgroundColor: '#fff', marginTop: 8 }}>
           <Tabs className='swiper-demo2' lazy={true}>
             <TabPanel tabKey='1' tab={<span className='tab_point'>动态</span>}>
-              <Dynamic customerId={data.customerId} />
+              <Dynamic api={{url:'/customerDynamic/list',method:'POST',data:{customerId:data.customerId || ''}}} />
             </TabPanel>
             <TabPanel tabKey='4' tab={<span className='tab_point'>联系人</span>}>
               <ContactsList customerId={data.customerId} />

@@ -1,49 +1,59 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  Button,
+  DatePicker,
   DialogPop,
-  Form,
-  FormItem,
   Input,
   List,
-  ListItem,
+  ListItem, NumberInput,
   Picker, PickerPanel,
   SubmitButton,
 } from 'weui-react-v2';
 import { router } from 'umi';
 import { Card } from 'antd';
 import './index.css';
-import { Steps } from 'antd-mobile';
+import { Button, Dialog, Form, Stepper, Steps } from 'antd-mobile';
+import { useRequest } from '../../../../util/Request';
+import { crmBusinessAdd, crmBusinessSalesList, CustomerNameListSelect, OrgNameListSelect } from '../BusinessUrl';
+import StepDetail from '../StepDetail';
+import MyPicker from '../../../components/MyPicker';
+import { UserIdSelect } from '../../Customer/CustomerUrl';
 
-const Step = Steps.Step;
+const { Item: FormItem } = Form;
 
 const BusinessAdd = () => {
 
   const [visiable, setVisiable] = useState();
-  const [value, setValue] = useState();
 
+  const formRef = useRef();
+
+  const { data: user } = useRequest({ url: '/rest/system/currentUserInfo', method: 'POST' });
+
+  const { run } = useRequest(crmBusinessSalesList, { manual: true });
+  const { run: businessAdd } = useRequest(crmBusinessAdd, { manual: true });
+
+  const Sales = async () => {
+
+    const sales = await run({});
+
+    const data = await sales ? sales.map((items, index) => {
+      return {
+        text: items.name,
+        key: items,
+      };
+    }) : [];
+
+    Dialog.show({
+      content: '人在天边月上明，风初紧，吹入画帘旌',
+      closeOnAction: true,
+      onAction: (action, index) => {
+        setVisiable(action);
+      },
+      actions: data,
+    });
+  };
 
   useEffect(() => {
-    DialogPop({
-      title: '选择项目流程',
-      children:
-        <PickerPanel
-          data={[{ label: '项目流程1', value: 1 }, { label: '项目流程2', value: 2 }]}
-          onChange={(value) => {
-            setValue(value[0]);
-          }}>
-          <ListItem arrow={true} style={{ padding: 0 }} />
-        </PickerPanel>,
-      onConfirm: () => {
-        return new Promise((resolve) => {
-          setVisiable(true);
-          resolve(true);
-        });
-      },
-      onCancel: () => {
-        router.goBack();
-      },
-    });
+    Sales();
   }, []);
 
 
@@ -52,82 +62,62 @@ const BusinessAdd = () => {
       {visiable &&
       <>
         <Card title='项目流程'>
-          <Steps size='64' current={2}>
-            <Step title='第一步' />
-            <Step title='第二步' />
-            <Step title='第三步' />
-          </Steps>
+          <StepDetail value={visiable && visiable.key} />
         </Card>
         <Form
-          labelWidth='22vw'
-          onSubmit={(value) => {
-            DialogPop({
-              title: '提示：如有异议请联系创建人或领导协调',
-              children: '您输入的商机已经被创建 创建人：张三',
-              onConfirm: () => {
-                return new Promise((resolve) => {
-                  setTimeout(() => {
-                    router.goBack();
-                    resolve(true);
-                  }, 2000);
-                });
-              },
+          ref={formRef}
+          footer={
+            <div style={{ textAlign: 'center' }}>
+              <Button color='primary' type='submit' style={{ margin: 8 }}>保存</Button>
+              <Button style={{ margin: 8 }} onClick={() => {
+                router.goBack();
+              }}>返回</Button>
+            </div>
+          }
+          onFinish={async (values) => {
+
+            values = {
+              ...values,
+              salesId: visiable && visiable.key && visiable.key.salesId,
+            };
+
+            businessAdd({
+              data: { ...values },
+            }).then(() => {
+              DialogPop({
+                title: '提示：如有异议请联系创建人或领导协调',
+                children: `您输入的客户已经被创建 创建人：${user && user.name}`,
+                onConfirm: () => {
+                  router.goBack();
+                },
+              });
             });
           }}
         >
           <List title='添加项目'>
-            <FormItem prop='customerName' label='项目名称'>
+            <FormItem name='businessName' label='项目名称' rules={[{ required: true, message: '该字段是必填字段！' }]}>
               <Input placeholder='请输入项目名称' />
             </FormItem>
-            <FormItem prop='customerName' label='客户名称'>
-              <Picker title='请选择' placeholder='请选择' data={[
-                {
-                  label: '客户1',
-                  value: 0,
-                }, {
-                  label: '客户2',
-                  value: 1,
-                },
-              ]}>
-                <ListItem arrow={true} style={{ padding: 0 }} />
-              </Picker>
+            <FormItem name='customerId' label='客户名称' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+              <MyPicker api={CustomerNameListSelect} />
             </FormItem>
-            <FormItem prop='customerName' label='负责人'>
-              <Picker title='请选择' placeholder='请选择' data={[
-                {
-                  label: '100',
-                  value: 0,
-                }, {
-                  label: '101',
-                  value: 1,
-                },
-              ]}>
-                <ListItem arrow={true} style={{ padding: 0 }} />
-              </Picker>
+            <FormItem name='userId' label='负责人' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+              <MyPicker api={UserIdSelect} />
             </FormItem>
-            <FormItem prop='customerName' label='机会来源'>
-              <Picker title='请选择' placeholder='请选择' data={[
-                {
-                  label: '1',
-                  value: 0,
-                }, {
-                  label: '2',
-                  value: 1,
-                }, {
-                  label: '3',
-                  value: 2,
-                },
-              ]}>
-                <ListItem arrow={true} style={{ padding: 0 }} />
-              </Picker>
+            <FormItem name='originId' label='机会来源' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+              <MyPicker api={OrgNameListSelect} />
             </FormItem>
+            <FormItem name='opportunityAmount' label='项目金额' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+              <NumberInput placeholder='项目金额' />
+            </FormItem>
+            <FormItem name='time' label='立项日期' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+              <DatePicker placeholder='请选择' defaultValue={null} useDefaultFormat={false} separator=''>
+                <ListItem style={{ padding: 0 }} arrow={true} />
+              </DatePicker>
+            </FormItem>
+
+            <FormItem name='salesId' />
           </List>
-          <div style={{ textAlign: 'center', margin: 8 }}>
-            <SubmitButton style={{ margin: 8 }}>保存</SubmitButton>
-            <Button type='default' style={{ margin: 8 }} onClick={() => {
-              router.goBack();
-            }}>返回</Button>
-          </div>
         </Form>
       </>
       }

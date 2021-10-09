@@ -6,6 +6,8 @@ import { Affix, Avatar, Col, Row, Select, Steps, Upload } from 'antd';
 import { Button, Flex, FlexItem, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
 import StepList from '../StepList';
+import Dynamic from '../../Customer/Dynamic';
+import TrackList from '../../Customer/TrackList';
 
 const { Item } = List;
 
@@ -94,20 +96,10 @@ const BusinessDetail = () => {
         <Card style={{ backgroundColor: '#fff', marginTop: 8 }}>
           <Tabs className='swiper-demo2' lazy={true}>
             <TabPanel tabKey='1' tab={<span className='tab_point'>动态</span>}>
-              <List>
-                <Item extra='2021-10-1 10:30' title='User' wrap align='top'
-                      prefix={<Avatar icon={<UserOutlined size={64} />} />}>
-                  操作
-                </Item>
-              </List>
+              <Dynamic api={{url:'/businessDynamic/list',method:'POST',data:{businessId:data.businessId || ''}}} />
             </TabPanel>
             <TabPanel tabKey='2' tab={<span className='tab_point'>跟进</span>}>
-              <List>
-                <Item extra='2021-10-1 10:30' title='User' wrap align='top'
-                      prefix={<Avatar icon={<UserOutlined size={64} />} />}>
-                  操作
-                </Item>
-              </List>
+              <TrackList classifyId={data.businessId} classify={1} />
             </TabPanel>
             <TabPanel tabKey='4' tab={<span className='tab_point'>竞争对手</span>}>
               无敌是多么寂寞~！

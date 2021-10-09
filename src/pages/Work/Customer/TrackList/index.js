@@ -4,7 +4,7 @@ import { Skeleton, WhiteSpace } from 'weui-react-v2';
 import { Image, ImageViewer, List } from 'antd-mobile';
 import { Avatar } from 'antd';
 
-const TrackList = ({ customerId }) => {
+const TrackList = ({ customerId,classifyId,classify }) => {
 
   const { loading } = useRequest({ url: '/trackMessage/list', method: 'POST', data: { customerId: customerId } }, {
     onSuccess: async (res) => {
@@ -16,6 +16,8 @@ const TrackList = ({ customerId }) => {
           {
             data: {
               trackMessageIds: trackMessageIds,
+              classifyId:classifyId,
+              classify:classify
             },
           },
         );
@@ -36,7 +38,7 @@ const TrackList = ({ customerId }) => {
 
   if (data && data.length > 0) {
     return (
-      <List>
+      <List style={{maxHeight:500,overflow:'auto'}}>
         {data.map((items, index) => {
           return (
             <List.Item

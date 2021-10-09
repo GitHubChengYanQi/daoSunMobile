@@ -30,6 +30,9 @@ const CustomerList = ({ select }) => {
         setData(contents);
       } else {
         setHasMore(false);
+        if (page === 1){
+          setData([]);
+        }
       }
     },
   });

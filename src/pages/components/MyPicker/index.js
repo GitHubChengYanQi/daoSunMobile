@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRequest } from '../../../util/Request';
 import { ListItem, Picker, Stripe } from 'weui-react-v2';
 
 
 const MyPicker = ({ api,value,onChange,option,disabled }) => {
 
+  useEffect(()=>{
+    !option && run({});
+  },[api])
 
-  const { loading,data } = useRequest(api,{manual:option});
+
+  const { loading,data,run } = useRequest(api,{manual:option});
 
   if (option || data){
     return (

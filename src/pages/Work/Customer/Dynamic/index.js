@@ -6,11 +6,9 @@ import { Skeleton } from 'weui-react-v2';
 
 const {Item} = List;
 
-const Dynamic = (props) => {
+const Dynamic = ({api}) => {
 
-  const {customerId} = props;
-
-  const {loading,data} = useRequest({url:'/customerDynamic/list',method:'POST',data:{customerId:customerId || ''}});
+  const {loading,data} = useRequest(api);
 
   if (loading){
     return <Skeleton loading={loading} />;
@@ -19,7 +17,7 @@ const Dynamic = (props) => {
   if (data && data.length > 0){
     return (
       <>
-        <List>
+        <List style={{maxHeight:500,overflow:'auto'}}>
           {data.map((data,index)=>{
             return (
               <Item key={index} extra={data.createTime} title={data.userResult ? data.userResult.name : '--'} wrap align='top'

@@ -23,7 +23,6 @@ const Customer = () => {
 
   const [screening, setScreening] = useState();
 
-
   const [select, setSelect] = useState();
 
 
@@ -41,58 +40,60 @@ const Customer = () => {
   return (
     <>
       <Affix offsetTop={0}>
-        <Row gutter={24} style={{ padding: 8, backgroundColor: '#fff' }}>
-          <Col span={4}>
-            <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
-              router.push('/Work/Customer/CustomerAdd');
-            }} />
-          </Col>
-          <Col span={16}>
-            <Search
-              style={{
-                backgroundColor: '#fff',
-                border: 'solid 1px #eee',
-                padding: '0 8px',
-                margin: 8,
-                borderRadius: 100,
-              }}
-              placeholder='搜索客户'
-              maxLength={8}
-              onSearch={(value) => {
-                setSelect({ customerName: value });
+        <>
+          <Row gutter={24} style={{ padding: 8, backgroundColor: '#fff' }}>
+            <Col span={4}>
+              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+                router.push('/Work/Customer/CustomerAdd');
               }} />
-          </Col>
-          <Col span={4}>
-            <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
-              setScreening(true);
-            }} />
-            <Popup
-              visible={screening}
-              onMaskClick={() => {
-                setScreening(false);
-              }}
-              position='right'
-              bodyStyle={{ minWidth: '70vw' }}
-            >
-              <Screening select={(value) => {
-                setScreening(false);
-                setSelect(value);
+            </Col>
+            <Col span={16}>
+              <Search
+                style={{
+                  backgroundColor: '#fff',
+                  border: 'solid 1px #eee',
+                  padding: '0 8px',
+                  margin: 8,
+                  borderRadius: 100,
+                }}
+                placeholder='搜索客户'
+                maxLength={8}
+                onConfirm={(value) => {
+                  setSelect({ customerName: value });
+                }} />
+            </Col>
+            <Col span={4}>
+              <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
+                setScreening(true);
               }} />
-            </Popup>
-          </Col>
-        </Row>
-        <SegmentedControl
-          style={{ border: 'none', backgroundColor: '#fff' }}
-          data={[
-            {
-              label: '客户',
-              value: 'customer',
-            },
-            {
-              label: '联系人',
-              value: 'contacts',
-            },
-          ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
+              <Popup
+                visible={screening}
+                onMaskClick={() => {
+                  setScreening(false);
+                }}
+                position='right'
+                bodyStyle={{ minWidth: '70vw' }}
+              >
+                <Screening select={(value) => {
+                  setScreening(false);
+                  setSelect(value);
+                }} />
+              </Popup>
+            </Col>
+          </Row>
+          <SegmentedControl
+            style={{ border: 'none', backgroundColor: '#fff' }}
+            data={[
+              {
+                label: '客户',
+                value: 'customer',
+              },
+              {
+                label: '联系人',
+                value: 'contacts',
+              },
+            ]} defaultValue={params || 'customer'} onChange={(value) => setValue(value)} />
+        </>
       </Affix>
       <List style={{ margin: 0 }}>
         {content()}
