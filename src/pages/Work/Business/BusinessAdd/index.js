@@ -1,22 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   DatePicker,
   DialogPop,
   Input,
   List,
   ListItem, NumberInput,
-  Picker, PickerPanel,
-  SubmitButton,
 } from 'weui-react-v2';
 import { router } from 'umi';
 import { Card } from 'antd';
 import './index.css';
-import { Button, Dialog, Form, Stepper, Steps } from 'antd-mobile';
+import { Button, Dialog, Form } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import { crmBusinessAdd, crmBusinessSalesList, CustomerNameListSelect, OrgNameListSelect } from '../BusinessUrl';
 import StepDetail from '../StepDetail';
 import MyPicker from '../../../components/MyPicker';
 import { UserIdSelect } from '../../Customer/CustomerUrl';
+import { useDebounceEffect } from 'ahooks';
 
 const { Item: FormItem } = Form;
 
@@ -52,9 +51,17 @@ const BusinessAdd = () => {
     });
   };
 
-  useEffect(() => {
-    Sales();
-  }, []);
+  useDebounceEffect(
+    () => {
+      Sales();
+    },
+    [],
+    {
+      wait:0
+    }
+  );
+
+
 
 
   return (

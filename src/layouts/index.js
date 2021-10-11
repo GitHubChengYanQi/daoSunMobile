@@ -8,6 +8,8 @@ import cookie from 'js-cookie';
 
 function BasicLayout(props) {
 
+  window.scrollTo(0, 0);
+
   return (
     <div>
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>

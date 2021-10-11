@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRequest } from '../../../util/Request';
 import { ListItem, Picker, Stripe } from 'weui-react-v2';
+import { useDebounceEffect } from 'ahooks';
 
 
 const MyPicker = ({ api,value,onChange,option,disabled }) => {
 
-  useEffect(()=>{
+  useDebounceEffect(()=>{
     !option && run({});
-  },[api])
+  },[api, option],{
+    wait:0
+  })
 
 
-  const { loading,data,run } = useRequest(api,{manual:option});
+  const { data,run } = useRequest(api,{manual:option});
 
   if (option || data){
     return (

@@ -1,4 +1,4 @@
-import { DatePicker, Form, FormItem, Input, List, Picker, Rate, SingleUpload, TextArea } from 'weui-react-v2';
+import { Form, FormItem, Input, List, Rate, TextArea } from 'weui-react-v2';
 
 const EvaluationPage = () => {
   return(

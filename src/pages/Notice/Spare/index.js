@@ -1,5 +1,5 @@
 import React from 'react';
-import { Affix, Badge, Select } from 'antd';
+import { Affix, Select } from 'antd';
 import { Card } from 'antd-mobile';
 import { Button, PreviewItem, WhiteSpace } from 'weui-react-v2';
 import { FilterOutlined, SearchOutlined } from '@ant-design/icons';

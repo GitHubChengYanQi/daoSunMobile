@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button, Search, Tag } from 'antd-mobile';
-import { ActionSheet, Flex, FlexItem, List, ListItem, Preview, PreviewButton } from 'weui-react-v2';
+import { Button, Search } from 'antd-mobile';
+import { ActionSheet, Flex, FlexItem, List, ListItem } from 'weui-react-v2';
 import { PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
 import styles from './index.css';

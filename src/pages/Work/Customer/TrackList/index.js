@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { useRequest } from '../../../../util/Request';
 import { Skeleton, WhiteSpace } from 'weui-react-v2';
-import { Image, ImageViewer, List } from 'antd-mobile';
+import { Image, List } from 'antd-mobile';
 import { Avatar } from 'antd';
 
 const TrackList = ({ customerId,classifyId,classify }) => {

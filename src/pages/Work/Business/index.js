@@ -1,17 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button,
-  Flex,
-  FlexItem,
-  List,
-  ListItem,
-  Spin,
   Search,
 } from 'weui-react-v2';
 import {
-  EllipsisOutlined,
   FilterOutlined,
-  UserAddOutlined, WhatsAppOutlined,
+  UserAddOutlined,
 } from '@ant-design/icons';
 import { router } from 'umi';
 import { Affix, Col, Row } from 'antd';
@@ -45,7 +39,7 @@ const Business = () => {
                   margin: 8,
                   borderRadius: 100,
                 }}
-                placeholder='搜索客户'
+                placeholder='搜索项目'
                 maxLength={8}
                 onConfirm={(value) => {
                   setSelect({ businessName: value });

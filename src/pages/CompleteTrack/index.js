@@ -10,7 +10,7 @@ const CompleteTrack = () => {
       title: '时间',
       dataIndex: 'time',
       key: 'time',
-      render: text => <a>{text}</a>,
+      render: text => <a href>{text}</a>,
     },
     {
       title: '目标金额',
@@ -234,14 +234,16 @@ const CompleteTrack = () => {
         const tooltipItems = obj.items;
         const legendItems = legend.items;
         const map = {};
-        legendItems.map(function(item) {
-          map[item.name] = item;
+        legendItems.map((item) => {
+          return map[item.name] = item;
         });
-        tooltipItems.map(function(item) {
+        tooltipItems.map((item) => {
           const name = item.name;
           const value = item.value;
           if (map[name]) {
-            map[name].value = value;
+            return map[name].value = value;
+          }else {
+            return null;
           }
         });
         legend.setItems(map);

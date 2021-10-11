@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Chart } from '@antv/f2';
-import { List, Panel, PanelItem } from 'weui-react-v2';
-import styles from '../../index.css';
+import { List, PanelItem } from 'weui-react-v2';
 import { Select } from 'antd';
 import Trend from '../Trend';
 import ReportTabs from '../ReportTabs';
@@ -20,8 +19,8 @@ const Revenue = () => {
     }];
 
     let sum = 0;
-    data.map(function(obj) {
-      sum += obj.cost;
+    data.map((obj) => {
+      return sum += obj.cost;
     });
     const chart = new Chart({
       id: 'myChart',

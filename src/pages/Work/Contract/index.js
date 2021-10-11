@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Affix, Badge, Col, Row } from 'antd';
-import { Button, Flex, FlexItem, List, ListItem, Search, Skeleton, Spin, WingBlank } from 'weui-react-v2';
-import Icon, {
-  EllipsisOutlined,
+import React from 'react';
+import { Affix, Col, Row } from 'antd';
+import { Button,  Search, } from 'weui-react-v2';
+import  {
   FilterOutlined,
-  LeftOutlined,
   UserAddOutlined,
-  WhatsAppOutlined,
 } from '@ant-design/icons';
-import { router } from 'umi';
-import { Card, InfiniteScroll } from 'antd-mobile';
-import { useRequest } from '../../../util/Request';
 import ContractList from './ContractList';
 
 

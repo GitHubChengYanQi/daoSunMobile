@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, Preview, PreviewItem } from 'weui-react-v2';
 import { Affix, Avatar, Col, Row } from 'antd';
 import { Card, NavBar } from 'antd-mobile';
-import { LeftOutlined } from '@ant-design/icons';
-import { router } from 'umi';
 
 
 const User = () => {

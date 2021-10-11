@@ -3,7 +3,7 @@ import { Button } from 'weui-react-v2';
 import { UploadOutlined } from '@ant-design/icons';
 import { Space, Upload } from 'antd';
 import { useRequest } from '../../../../util/Request';
-import { Dialog, Toast } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 
 const CustomerUpload = ({customerId}) => {
 
@@ -40,7 +40,7 @@ const CustomerUpload = ({customerId}) => {
     url: '/customerFile/delete',
     method: 'POST'
   }, {manual: true});
-  const {data, run: runListFile, refresh} = useRequest({
+  const {run: runListFile, refresh} = useRequest({
     url: '/customerFile/list?',
     method: 'POST',
     data: {customerId:customerId}

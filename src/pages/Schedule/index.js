@@ -1,23 +1,12 @@
-import { Brief, Button, Panel, PanelItem } from 'weui-react-v2';
-import React, { useState } from 'react';
-import { Badge, Calendar, Steps } from 'antd';
+import { Brief, Panel, PanelItem } from 'weui-react-v2';
+import React from 'react';
+import { Badge, Calendar } from 'antd';
 import styles from '@/pages/Home/index.css';
-import { ClockCircleOutlined, ExclamationCircleOutlined, QqOutlined } from '@ant-design/icons';
-import EngineerRepair from '@/pages/Repair/EngineerRepair';
-import Engineer from '@/pages/Repair/Engineer';
-import EngineerImp from '@/pages/Repair/EngineerImp';
-import CompletePage from '@/pages/Repair/CompletePage';
-import EvaluationPage from '@/pages/Repair/EvaluationPage';
+import { ExclamationCircleOutlined, QqOutlined } from '@ant-design/icons';
 import { Tabs } from 'antd-mobile';
-
-const { Step } = Steps;
-
 
 
 const Schedule = () =>{
-  const [state, setState] =useState(true);
-
-
 
   function getListData(value) {
     let listData;

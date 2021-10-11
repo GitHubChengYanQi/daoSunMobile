@@ -1,8 +1,8 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { router } from 'umi';
-import { Button, Form, ImageViewer } from 'antd-mobile';
-import { Affix, Input } from 'antd';
+import { Button, Form } from 'antd-mobile';
+import { Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import logo from '../../assets/img.png';
@@ -14,8 +14,7 @@ const Login = () => {
   window.sessionStorage.setItem('nav', '/Home');
 
 
-
-  const { loading, run } = useRequest(
+  const { run } = useRequest(
     {
       url: '/rest/login', method: 'POST',
     }, {
@@ -30,8 +29,10 @@ const Login = () => {
   );
 
   return (
-    <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-      <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
+    <div style={{ backgroundColor: '#fff' }}>
+      <div style={{ textAlign: 'center' }}>
+        <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
+      </div>
       <Form
         onFinish={(values) => {
           run(

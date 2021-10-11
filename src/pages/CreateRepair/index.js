@@ -11,23 +11,18 @@ import {
   SingleUpload,
   TextArea,
 } from 'weui-react-v2';
-import { NoticeBar, PickerView } from 'antd-mobile';
+import { NoticeBar } from 'antd-mobile';
 import {
-  AimOutlined,
-  ClockCircleOutlined,
-  GithubOutlined,
-  HeartOutlined, MessageOutlined,
   PlusCircleOutlined, LoadingOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
 import React, { useState } from 'react';
-import arrayTreeFilter from 'array-tree-filter';
 
-import { district, provinceLite } from 'antd-mobile-demo-data';
+import { district } from 'antd-mobile-demo-data';
 
 const CreateRepair = () => {
   const [state, setState] = useState(true);
-  const [value, setValue] = useState({
+  const [setValue] = useState({
     data: [],
     cols: 1,
     pickerValue: [],
@@ -36,17 +31,17 @@ const CreateRepair = () => {
     colorValue: ['#00FF00'],
   });
 
-  const getSel = () => {
-    const value1 = value.pickerValue;
-    if (!value1) {
-      return '';
-    }
-    const treeChildren = arrayTreeFilter(district, (c, level) => c.value === value1[level]);
-    return treeChildren.map(v => v.label).join(',');
-  }
+  // const getSel = () => {
+  //   const value1 = value.pickerValue;
+  //   if (!value1) {
+  //     return '';
+  //   }
+  //   const treeChildren = arrayTreeFilter(district, (c, level) => c.value === value1[level]);
+  //   return treeChildren.map(v => v.label).join(',');
+  // }
   return(
     <>
-      <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }}>
+      <NoticeBar marqueeProps={{ loop: true, style: { padding: '0 7.5px' } }} content=''>
         欢迎使用道昕智造一键报修系统
       </NoticeBar>
       <Form labelWidth="30vw"

@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   DatePicker,
-  List,
   ListItem, NumberInput,
-  SingleUpload,
   Switch,
-  TextArea, WhiteSpace, WingBlank,
+  TextArea, WhiteSpace,
 } from 'weui-react-v2';
 import { router } from 'umi';
-import { Button, Card, Form, Input, Space } from 'antd-mobile';
+import { Button, Card, Form } from 'antd-mobile';
 import MyPicker from '../../../components/MyPicker';
 import UpLoadImg from '../../../components/Upload';
 import { BusinessNameListSelect, contractIdSelect, customerIdSelect, trackMessageAdd } from '../CustomerUrl';
@@ -36,7 +34,7 @@ const Track = (props) => {
 
   useEffect(() => {
     formRef.current.setFieldsValue({ classify: params.classify || 0, customerId: params.customerId });
-  }, []);
+  }, [params.classify, params.customerId]);
 
   useEffect(()=>{
 

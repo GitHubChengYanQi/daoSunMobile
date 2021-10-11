@@ -1,6 +1,5 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {ExclamationCircleOutlined} from '@ant-design/icons';
-import {Button,Modal as AntModal, notification, Popover, Steps} from 'antd';
+import React from 'react';
+import {Button,notification, Steps} from 'antd';
 import {useRequest} from '@/util/Request';
 import { Card, Dialog } from 'antd-mobile';
 
@@ -9,8 +8,6 @@ const {Step} = Steps;
 const StepList = (props) => {
 
   const {value, onChange: pOnChange} = props;
-
-  const ref = useRef(null);
 
   const contract = () => {
 

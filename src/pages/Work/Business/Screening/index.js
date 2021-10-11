@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Flex, FlexItem, List, ListItem } from 'weui-react-v2';
+import { Button, List, ListItem } from 'weui-react-v2';
 import { Card } from 'antd';
-import { router } from 'umi';
-import { Radio, Selector, Space } from 'antd-mobile';
+import { Selector } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import { crmBusinessSalesList, OrgNameListSelect } from '../BusinessUrl';
 

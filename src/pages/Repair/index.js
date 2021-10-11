@@ -1,5 +1,3 @@
-import { Skeleton } from 'weui-react-v2';
-import { useState } from 'react';
 import RepairItem from '@/pages/Repair/RepairItem';
 import { NavBar } from 'antd-mobile';
 import { router } from 'umi';

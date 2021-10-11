@@ -1,14 +1,22 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { ActionSheet, Button, Flex, FlexItem, List, ListItem, Spin, WhiteSpace, WingBlank } from 'weui-react-v2';
-import { Affix, Col, Row, Select } from 'antd';
+import React, { useEffect, useState } from 'react';
+import {
+  ActionSheet,
+  Button,
+  Flex,
+  FlexItem,
+  List,
+  ListItem,
+  Spin,
+  WhiteSpace,
+} from 'weui-react-v2';
+import { Col, Row } from 'antd';
 import { EllipsisOutlined, OrderedListOutlined, PhoneOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 import { Card, InfiniteScroll } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
-import { useScroll } from 'ahooks';
-import { useLockScroll } from 'antd-mobile/es/utils/use-lock-scroll';
 
-let page = 1;
+
+let pages = 1;
 let limit = 10;
 let contents = [];
 
@@ -16,21 +24,31 @@ const CustomerList = ({ select }) => {
 
   const [data, setData] = useState();
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(true)
 
-  const { loading, run } = useRequest({ url: '/customer/list', method: 'POST' }, {
-    manual: true,
+  const { loading,run } = useRequest({
+    url: '/customer/list',
+    method: 'POST',
+    data: {
+      ...select,
+    },
+    params: {
+      limit: limit,
+      page: pages,
+    },
+  }, {
     debounceInterval: 500,
+    refreshDeps: [select],
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items, index) => {
           return contents.push(items);
         });
-        ++page;
         setData(contents);
+        ++pages;
       } else {
         setHasMore(false);
-        if (page === 1){
+        if (pages === 1) {
           setData([]);
         }
       }
@@ -38,25 +56,12 @@ const CustomerList = ({ select }) => {
   });
 
 
-  const refresh = async (page) => {
-    await run({
-      data: {
-        ...select,
-      },
-      params: {
-        limit: limit,
-        page: page,
-      },
-    });
-  };
-
   useEffect(() => {
-    page = 1;
+    pages = 1;
     contents = [];
-    refresh(page);
   }, [select]);
 
-  if (loading && page === 1) {
+  if (loading && pages === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -118,7 +123,10 @@ const CustomerList = ({ select }) => {
 
   return (
     <>
-      <div style={{ margin: 8,backgroundColor:'#fff' }}>客户数量 <span style={{ color: 'red' }}>{data && data.length}</span>家</div>
+      <div style={{ margin: 8, backgroundColor: '#fff' }}>客户数量 <span
+        style={{ color: 'red' }}>{data && data.length}</span>家
+      </div>
+
       {data && data.map((items, index) => {
         return (
           <List key={index}>
@@ -195,8 +203,9 @@ const CustomerList = ({ select }) => {
           </List>
         );
       })}
+
       {data && <InfiniteScroll loadMore={() => {
-        refresh(page);
+        return run({});
       }} hasMore={hasMore} />}
     </>
   );

@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
 import F2 from '@antv/f2';
-import { ListItem } from 'weui-react-v2';
-import { router } from 'umi';
-import { RightOutlined } from '@ant-design/icons';
 
 const DealRank =() =>{
   function numberToMoney(n) {
@@ -45,7 +42,7 @@ const DealRank =() =>{
     chart.interval().position('brand*sales').size(10);
 
     // 绘制文本
-    data.map(function(obj) {
+    data.map((obj) => {
       chart.guide().text({
         position: [obj.brand, 'min'],
         content: obj.brand,
@@ -64,9 +61,10 @@ const DealRank =() =>{
         },
         offsetY: -8
       });
+      return null;
     });
     chart.render();
-  });
+  },[]);
   return(
     <>
       <div>

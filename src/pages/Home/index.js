@@ -1,8 +1,8 @@
 import styles from './index.css';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Brief, Button, List,
-  ListItem, Panel, PanelItem, TabPanel,
+  ListItem, Panel, PanelItem,
 } from 'weui-react-v2';
 import Icon from '../components/Icon/index';
 import {
@@ -11,9 +11,9 @@ import {
   ClockCircleOutlined,
   ExclamationCircleOutlined,
   RightOutlined,
-  MessageOutlined, HeartOutlined, AimOutlined, LeftOutlined, PlusCircleOutlined,
+  MessageOutlined, HeartOutlined, AimOutlined,
 } from '@ant-design/icons';
-import { Affix, Badge, Col, Divider, Row, Select } from 'antd';
+import { Badge, Col, Divider, Row, Select } from 'antd';
 import { router } from 'umi';
 import DataBoard from './component/DataBoard/index';
 import { Tabs } from 'antd-mobile';
@@ -57,14 +57,9 @@ const Home = () => {
     case 6:
       xq = '星期六';
       break;
+    default:
+      break;
   }
-  const tabs = [
-    { key: '0', title: '今日日程' },
-    { key: '1', title: '数据看板' },
-    { key: '2', title: '待办事项' },
-    { key: '3', title: '工作动态' },
-  ];
-  const [bottom, setBottom] = useState(0);
 
   return (
     <>

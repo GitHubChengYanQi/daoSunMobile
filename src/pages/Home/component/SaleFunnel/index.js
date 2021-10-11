@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import { Chart } from '@antv/g2';
 import DataSet from '@antv/data-set';
-import { router } from 'umi';
-import { RightOutlined } from '@ant-design/icons';
-import { ListItem } from 'weui-react-v2';
 
 const SaleFunnel =() =>{
   const { DataView } = DataSet;
@@ -111,7 +108,7 @@ const SaleFunnel =() =>{
       });
     });
     chart.render();
-  });
+  },[DataView]);
   return(
     <>
       <div>

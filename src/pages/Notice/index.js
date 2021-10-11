@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, ListItem, Toast } from 'weui-react-v2';
-import { Affix, Avatar } from 'antd';
-import { Badge, NavBar } from 'antd-mobile';
+import { Avatar } from 'antd';
+import { Badge } from 'antd-mobile';
 import { router } from 'umi';
 import Icon from '../components/Icon';
 

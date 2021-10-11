@@ -2,10 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
 import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import { router } from 'umi';
 import { Card, InfiniteScroll } from 'antd-mobile';
 
-let page = 1;
+let pages = 1;
 let limit = 10;
 let contents = [];
 
@@ -13,24 +12,31 @@ const CompetitorList = ({ select }) => {
 
   const [data, setData] = useState();
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(true)
 
-  const { loading, run } = useRequest({ url: '/competitor/list', method: 'POST' }, {
-    manual: true,
+  const { loading,run } = useRequest({
+    url: '/competitorlist/list',
+    method: 'POST',
+    data: {
+      ...select,
+    },
+    params: {
+      limit: limit,
+      page: pages,
+    },
+  }, {
     debounceInterval: 500,
+    refreshDeps: [select],
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items, index) => {
           return contents.push(items);
         });
-        ++page;
         setData(contents);
-        if (res.length < limit){
-          setHasMore(false);
-        }
+        ++pages;
       } else {
         setHasMore(false);
-        if (page === 1) {
+        if (pages === 1) {
           setData([]);
         }
       }
@@ -38,25 +44,12 @@ const CompetitorList = ({ select }) => {
   });
 
 
-  const refresh = async (page) => {
-    await run({
-      data: {
-        ...select,
-      },
-      params: {
-        limit: limit,
-        page: page,
-      },
-    });
-  };
-
   useEffect(() => {
-    page = 1;
+    pages = 1;
     contents = [];
-    refresh(page);
   }, [select]);
 
-  if (loading && page === 1) {
+  if (loading && pages === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -72,7 +65,7 @@ const CompetitorList = ({ select }) => {
             <ListItem onClick={() => {
               // router.push('/Work/Business/BusinessDetail');
             }}>
-              <Card extra={<div>竞争项目: <a>{items.crmBusinessList.length > 0 && items.crmBusinessList[0].businessName}</a></div>} title={items.name}>
+              <Card extra={<div>竞争项目: <a href>{items.crmBusinessList.length > 0 && items.crmBusinessList[0].businessName}</a></div>} title={items.name}>
                 <div>级别：{items.level}</div>
                 <div>电话：{items.phone}</div>
                 <div>邮箱：{items.email}</div>
@@ -100,7 +93,7 @@ const CompetitorList = ({ select }) => {
         );
       })}
       {data && <InfiniteScroll loadMore={() => {
-        refresh(page);
+        return run({});
       }} hasMore={hasMore} />}
     </>
   );

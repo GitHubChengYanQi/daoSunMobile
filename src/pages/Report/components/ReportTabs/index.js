@@ -1,8 +1,6 @@
 import React from 'react';
 import { Avatar, Card, Progress, Table, Tabs } from 'antd';
-import styles from '../../index.css';
-import { Grid, GridItem, List, ListItem, Switch } from 'weui-react-v2';
-import { UserOutlined } from '@ant-design/icons';
+import { Switch } from 'weui-react-v2';
 
 const { TabPane } = Tabs;
 const { Column } = Table;

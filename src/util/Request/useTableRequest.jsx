@@ -1,4 +1,3 @@
-import React from 'react';
 import {config as baseConfig} from 'ice';
 import {useAntdTable, useFusionTable} from 'ahooks';
 import Service from '@/util/Service';

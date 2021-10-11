@@ -1,16 +1,14 @@
 import {
-  DatePicker,
   Form,
   FormItem,
   Input,
   List,
-  Picker,
   SingleUpload,
   TextArea,
 } from 'weui-react-v2';
 
 const EngineerRepair = () =>{
-  let serviceTypes = [{value:1,label: '设备安装'}, {value: 2, label: '设备维修'}, {value: 3, label: '配件更换'}];
+  // let serviceTypes = [{value:1,label: '设备安装'}, {value: 2, label: '设备维修'}, {value: 3, label: '配件更换'}];
   return(
     <>
       <Form labelWidth="30vw"

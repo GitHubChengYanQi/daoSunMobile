@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { List, ListItem, Panel, PanelItem, SafeArea, SegmentedControl, WingBlank } from 'weui-react-v2';
+import React, { useState } from 'react';
+import { SegmentedControl } from 'weui-react-v2';
 import styles from './index.css';
-import { Chart } from '@antv/f2';
 import { Affix, Table } from 'antd';
 import Revenue from './components/Revenue';
 import Stock from './components/Stock';
-import { NavBar } from 'antd-mobile';
-import { LeftOutlined } from '@ant-design/icons';
-import { router } from 'umi';
 
 const { Column } = Table;
 
@@ -94,6 +90,8 @@ const Report = () => {
         return (
           <Stock />
         );
+      default:
+        break;
     }
   };
 

@@ -1,9 +1,8 @@
 import React, { useEffect } from 'react';
 import { Card, Radio, Col, Row } from 'antd';
-import { Button, List, ListItem, Panel, PanelItem } from 'weui-react-v2';
+import { List, ListItem, PanelItem } from 'weui-react-v2';
 import { Chart } from '@antv/f2/lib/index-all';
 import Trend from '../Trend';
-import Revenue from '../Revenue';
 import Top from '../Top';
 
 const Stock = () => {

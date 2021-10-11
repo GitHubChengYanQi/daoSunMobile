@@ -10,10 +10,10 @@ import {
 
 } from 'weui-react-v2';
 
-import { Affix, Button } from 'antd';
+import { Affix } from 'antd';
 import styles from './index.css';
 import { router } from 'umi';
-import { Badge, NavBar } from 'antd-mobile';
+import { Badge } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { UserDeleteOutlined } from '@ant-design/icons';
 

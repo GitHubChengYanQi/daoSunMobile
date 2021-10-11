@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import { Card, Collapse, List, NavBar, Result, Space, Tag } from 'antd-mobile';
-import Icon, { LeftOutlined, UploadOutlined, UserOutlined, ZoomInOutlined } from '@ant-design/icons';
+import React from 'react';
+import { Card, Result, Space } from 'antd-mobile';
 import { router } from 'umi';
-import { Affix, Avatar, Col, Row, Select, Steps, Upload } from 'antd';
-import { Button, Flex, FlexItem, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
+import { Avatar, Col, Row, Select } from 'antd';
+import { Button, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
 import StepList from '../StepList';
 import Dynamic from '../../Customer/Dynamic';
 import TrackList from '../../Customer/TrackList';
 import CompetitorList from '../../Competitor/CompetitorList';
-
-const { Item } = List;
 
 const BusinessDetail = () => {
 

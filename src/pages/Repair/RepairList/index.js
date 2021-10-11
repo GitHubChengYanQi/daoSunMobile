@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { getPaginationParam } from 'antd/es/table/hooks/usePagination';
 import { Steps } from 'antd';
-import { useParams } from 'react-router-dom';
-import { LoadingOutlined, SmileOutlined, SolutionOutlined, UserOutlined } from '@ant-design/icons';
 import EngineerRepair from '@/pages/Repair/EngineerRepair';
 import Engineer from '@/pages/Repair/Engineer';
 import EngineerImp from '@/pages/Repair/EngineerImp';

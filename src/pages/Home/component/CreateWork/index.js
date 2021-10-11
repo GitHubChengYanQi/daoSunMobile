@@ -1,8 +1,6 @@
 import React from 'react';
-import { Flex, Grid } from 'antd-mobile';
-import { ShakeOutlined, CarryOutOutlined, CloudOutlined } from '@ant-design/icons';
-import { Button, ListItem } from 'weui-react-v2';
-import { router } from 'umi';
+import { Grid } from 'antd-mobile';
+import { CarryOutOutlined, CloudOutlined } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 
 
@@ -52,6 +50,8 @@ const CreateWork = () => {
       break;
     case 6:
       xq = "星期六";
+      break;
+    default:
       break;
   }
   return(

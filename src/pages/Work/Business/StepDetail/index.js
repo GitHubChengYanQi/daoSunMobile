@@ -1,6 +1,5 @@
 import { Steps } from 'antd-mobile';
 import React from 'react';
-import { useRequest } from '../../../../util/Request';
 
 const {Step} = Steps;
 

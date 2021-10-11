@@ -1,7 +1,6 @@
-import React from 'react';
 import cookie from 'js-cookie';
 import axios from 'axios';
-import {message, Modal} from 'antd';
+import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
 import { router } from 'umi';
 
@@ -18,7 +17,7 @@ const ajaxService = axios.create({
 
 ajaxService.interceptors.request.use((config) => {
   const token = cookie.get('cheng-token');
-  config.headers.common.Authorization = token || '';;
+  config.headers.common.Authorization = token || '';
   return config;
 }, (error) => {
   return error;

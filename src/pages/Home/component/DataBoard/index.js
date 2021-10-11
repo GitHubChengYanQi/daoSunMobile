@@ -1,5 +1,5 @@
-import { Flex, FlexItem, ListItem, Preview, PreviewItem, WhiteSpace } from 'weui-react-v2';
-import { Badge, Col, Divider, Row, Space, Switch, Table, Tag } from 'antd';
+import { Flex, FlexItem, ListItem,  WhiteSpace } from 'weui-react-v2';
+import { Table } from 'antd';
 import { router } from 'umi';
 import {
   DollarCircleOutlined, DollarOutlined,
@@ -24,7 +24,7 @@ const DataBoard = () => {
       title: '时间',
       dataIndex: 'time',
       key: 'time',
-      render: text => <a>{text}</a>,
+      render: text => <a href>{text}</a>,
     },
     {
       title: '商机数量',
@@ -123,8 +123,8 @@ const DataBoard = () => {
     }];
 
     const map = {};
-    data1.map(function(obj) {
-      map[obj.name] = obj.percent + '%';
+    data1.map((obj) => {
+      return map[obj.name] = obj.percent + '%';
     });
 
     const chart = new Chart({
@@ -156,7 +156,7 @@ const DataBoard = () => {
 
     chart.guide().html({
       position: ['50%', '45%'],
-      html: '<div style="width: 250px;height: 40px;text-align: center;">' + '<div style="font-size: 16px">完成度</div>' + '<div style="font-size: 24px">133.08 亿</div>' + '</div>',
+      html: '<div style="width: 250px;height: 40px;text-align: center;"><div style="font-size: 16px">完成度</div><div style="font-size: 24px">133.08 亿</div></div>',
     });
     chart.render();
   });

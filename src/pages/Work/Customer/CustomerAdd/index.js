@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   DatePicker, DialogPop,
   Input,
-  ListItem, Picker,
+  ListItem,
   Switch,
   TextArea,
 } from 'weui-react-v2';
@@ -18,9 +18,7 @@ import {
   UserIdSelect,
 } from '../CustomerUrl';
 import MyPicker from '../../../components/MyPicker';
-import FormList from 'antd/lib/form/FormList';
 import MyTreeSelect from '../../../components/MyTreeSelect';
-import cookie from 'js-cookie';
 
 const { Item: FormItem } = Form;
 
@@ -40,7 +38,7 @@ const CustomerAdd = () => {
     formRef.current.setFieldsValue({ status: '0', classification: '0' });
   }, []);
 
-  const { loading, run } = useRequest(
+  const { run } = useRequest(
     {
       url: '/customer/add', method: 'POST',
     }, {

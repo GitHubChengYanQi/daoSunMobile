@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
-import { Affix, Avatar, Col, Row, Select } from 'antd';
-import { Button, Flex, FlexItem, ListItem, MultiUpload, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
-import Icon, { LeftOutlined, UploadOutlined, UserOutlined, ZoomInOutlined } from '@ant-design/icons';
+import React  from 'react';
+import { Avatar, Col, Row, Select } from 'antd';
+import { Button, Flex, FlexItem,  Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
 import ContactsList from '../ContactsList';
 import { router } from 'umi';
-import { Card, Collapse, List, Space, Tag } from 'antd-mobile';
+import { Card, Collapse,  Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import Dynamic from '../Dynamic';
 import Adress from '../Adress';
 import TrackList from '../TrackList';
 import CustomerUpload from '../Upload';
-import Contract from '../../Contract';
 import ContractList from '../../Contract/ContractList';
 
-const { Item } = List;
 
 const CustomerDetail = () => {
 

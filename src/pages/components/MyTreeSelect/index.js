@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { ListItem, Picker } from 'weui-react-v2';
+import { ListItem } from 'weui-react-v2';
 
 const MyTreeSelect = ({ api, value, onChange, title }) => {
 

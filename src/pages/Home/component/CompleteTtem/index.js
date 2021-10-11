@@ -1,18 +1,9 @@
 import {
   Button,
-  DatePicker,
-  Form,
-  FormItem,
-  Input,
-  List,
-  ListItem,
-  NumberInput, Picker,
   Preview,
-  PreviewButton,
   PreviewItem,
-  SingleUpload, TextArea,
 } from 'weui-react-v2';
-import { DownOutlined, RightOutlined, UpOutlined } from '@ant-design/icons';
+import { RightOutlined } from '@ant-design/icons';
 import React from 'react';
 import { router } from 'umi';
 import { Select } from 'antd';

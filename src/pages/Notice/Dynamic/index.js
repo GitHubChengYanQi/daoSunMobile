@@ -1,19 +1,8 @@
 import React, { useState } from 'react';
-import { SearchBar, Steps, Tag } from 'antd-mobile';
+import { Steps } from 'antd-mobile';
 import {
-  ActionSheet,
-  Button,
-  Flex,
-  FlexItem,
-  List,
-  ListItem,
-  Preview,
-  PreviewButton,
   SegmentedControl,
 } from 'weui-react-v2';
-import { PhoneOutlined, UserOutlined } from '@ant-design/icons';
-import { Avatar } from 'antd';
-import styles from './index.css';
 
 const Dynamic = () => {
 

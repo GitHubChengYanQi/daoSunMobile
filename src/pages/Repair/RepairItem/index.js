@@ -2,22 +2,21 @@ import { Card } from 'antd';
 import Text from 'antd/es/typography/Text';
 import { router } from 'umi';
 import styles from './index.css';
-import { Icon, NavBar } from 'antd-mobile';
 
 const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
   const itemClick = ()=>{
     router.push(`/Repair/RepairList?${progress}`);
   }
   let progressName;
-  if(progress == 0) {
+  if(progress === 0) {
     progressName =  "报修中···";
-  } else if(progress == 1){
+  } else if(progress === 1){
     progressName =  "派单中···";
-  } else if(progress == 2){
+  } else if(progress === 2){
     progressName =  "实施中···";
-  } else if(progress == 3){
+  } else if(progress === 3){
     progressName =   "待完成···";
-  } else if(progress == 4){
+  } else if(progress === 4){
     progressName =   "待评价···";
   }else{
     progressName =   "已完成报修";

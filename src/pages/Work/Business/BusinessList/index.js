@@ -6,7 +6,7 @@ import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 
-let page = 1;
+let pages = 1;
 let limit = 10;
 let contents = [];
 
@@ -14,26 +14,31 @@ const BusinessList = ({select}) => {
 
   const [data, setData] = useState();
 
+  const [hasMore, setHasMore] = useState(true)
 
-
-  const [hasMore, setHasMore] = useState(true);
-
-  const { loading, run } = useRequest({ url: '/crmBusiness/list', method: 'POST' }, {
-    manual: true,
+  const { loading,run } = useRequest({
+    url: '/crmBusiness/list',
+    method: 'POST',
+    data: {
+      ...select,
+    },
+    params: {
+      limit: limit,
+      page: pages,
+    },
+  }, {
     debounceInterval: 500,
+    refreshDeps: [select],
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items, index) => {
           return contents.push(items);
         });
-        ++page;
         setData(contents);
-        if (res.length < limit){
-          setHasMore(false);
-        }
+        ++pages;
       } else {
         setHasMore(false);
-        if (page === 1){
+        if (pages === 1) {
           setData([]);
         }
       }
@@ -41,25 +46,12 @@ const BusinessList = ({select}) => {
   });
 
 
-  const refresh = async (page) => {
-    await run({
-      data: {
-        ...select
-      },
-      params: {
-        limit: limit,
-        page: page,
-      },
-    });
-  };
-
   useEffect(() => {
-    page = 1;
+    pages = 1;
     contents = [];
-    refresh(page);
   }, [select]);
 
-  if (loading && page === 1) {
+  if (loading && pages === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -115,7 +107,7 @@ const BusinessList = ({select}) => {
         );
       })}
       {data && <InfiniteScroll loadMore={() => {
-        refresh(page);
+        return run({});
       }} hasMore={hasMore} />}
     </>
   );

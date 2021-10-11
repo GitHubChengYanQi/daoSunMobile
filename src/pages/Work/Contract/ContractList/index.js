@@ -6,52 +6,53 @@ import { Affix, Badge, Col, Row } from 'antd';
 import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 
-let page = 1;
+let pages = 1;
 let limit = 10;
 let contents = [];
 
-const ContractList = ({customerId}) => {
+const ContractList = ({select,customerId}) => {
 
   const [data, setData] = useState();
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(true)
 
-  const { loading, run } = useRequest({ url: '/contract/list', method: 'POST' }, {
-    manual: true,
+  const { loading,run } = useRequest({
+    url: '/contract/list',
+    method: 'POST',
+    data: {
+      ...select,
+      partyA:customerId
+    },
+    params: {
+      limit: limit,
+      page: pages,
+    },
+  }, {
     debounceInterval: 500,
+    refreshDeps: [select],
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items, index) => {
-          contents.push(items);
+          return contents.push(items);
         });
-        ++page;
         setData(contents);
+        ++pages;
       } else {
         setHasMore(false);
+        if (pages === 1) {
+          setData([]);
+        }
       }
     },
   });
 
 
-  const refresh = async (page) => {
-    await run({
-      data: {
-        partyA: customerId || null
-      },
-      params: {
-        limit: limit,
-        page: page,
-      },
-    });
-  };
-
   useEffect(() => {
-    page = 1;
+    pages = 1;
     contents = [];
-    refresh(page);
-  }, []);
+  }, [select]);
 
-  if (loading && page === 1) {
+  if (loading && pages === 1) {
     return (
       <div style={{ margin: 50, textAlign: 'center' }}>
         <Spin spinning={true} size='large' />
@@ -109,9 +110,9 @@ const ContractList = ({customerId}) => {
           );
         })
       }
-      <InfiniteScroll loadMore={() => {
-        refresh(page);
-      }} hasMore={hasMore} />
+      {data && <InfiniteScroll loadMore={() => {
+        return run({});
+      }} hasMore={hasMore} />}
     </>
   );
 };
