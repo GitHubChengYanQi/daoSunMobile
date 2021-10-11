@@ -1,15 +1,14 @@
-import React, {useState } from 'react';
 import { Affix, Col, Row } from 'antd';
 import { Button, Search } from 'weui-react-v2';
-import {
-  FilterOutlined, PlusOutlined,
-} from '@ant-design/icons';
-import CompetitorList from './CompetitorList';
+import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
+import { router } from 'umi';
+import React, { useState } from 'react';
+import OutstockApplyList from './OutstockApplyList';
 
-
-const Competitor = () => {
+const OutstockApply = () => {
 
   const [select, setSelect] = useState();
+
 
   return (
     <>
@@ -30,10 +29,10 @@ const Competitor = () => {
                   margin: 8,
                   borderRadius: 100,
                 }}
-                placeholder='搜索'
+                placeholder='搜索申请单号'
                 maxLength={8}
                 onConfirm={(value) => {
-                  setSelect({});
+                  setSelect({ businessName: value });
                 }} />
             </Col>
             <Col span={4}>
@@ -44,9 +43,9 @@ const Competitor = () => {
           </Row>
         </div>
       </Affix>
-      <CompetitorList select={select} />
+      <OutstockApplyList />
     </>
   );
 };
 
-export default Competitor;
+export default OutstockApply;

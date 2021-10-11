@@ -15,12 +15,12 @@ import styles from './index.css';
 import { router } from 'umi';
 import { Badge } from 'antd-mobile';
 import Icon from '../components/Icon';
-import { UserDeleteOutlined } from '@ant-design/icons';
+import { MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
 
 const Work = () => {
 
   const toast = () => {
-    Toast.text('暂未开通');
+    return Toast.text('暂未开通');
   };
 
   return (
@@ -79,6 +79,14 @@ const Work = () => {
           >
             <div className={styles.size}>竞争对手</div>
           </GridItem>
+          <GridItem
+            icon={<MoneyCollectOutlined />}
+            onClick={() => {
+              router.push('/Work/Quote');
+            }}
+          >
+            <div className={styles.size}>报价管理</div>
+          </GridItem>
         </Grid>
       </List>
 
@@ -122,7 +130,7 @@ const Work = () => {
       <List className={styles.title} title={<div>合同管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            router.push('/Work/Contract');
+            // router.push('/Work/Contract');
           }}>
             <div className={styles.size}>合同列表</div>
           </GridItem>
@@ -136,7 +144,7 @@ const Work = () => {
       <List className={styles.title} title={<div>发货申请管理</div>}>
         <Grid>
           <GridItem onClick={() => {
-            toast();
+            router.push('/Work/OutstockApply');
           }} icon={<Icon type='icon-fahuoshenqing' />}>
             <div className={styles.size}>发货申请列表</div>
           </GridItem>
