@@ -4,8 +4,7 @@ import {
   Search,
 } from 'weui-react-v2';
 import {
-  FilterOutlined,
-  UserAddOutlined,
+  FilterOutlined, PlusOutlined,
 } from '@ant-design/icons';
 import { router } from 'umi';
 import { Affix, Col, Row } from 'antd';
@@ -26,7 +25,7 @@ const Business = () => {
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>
             <Col span={4}>
-              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+              <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
                 router.push('/Work/Business/BusinessAdd');
               }} />
             </Col>

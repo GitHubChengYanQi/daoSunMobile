@@ -8,6 +8,8 @@ import StepList from '../StepList';
 import Dynamic from '../../Customer/Dynamic';
 import TrackList from '../../Customer/TrackList';
 import CompetitorList from '../../Competitor/CompetitorList';
+import QuoteList from '../../Quote/QuoteList';
+import ItemsDetail from '../ItemsDetail';
 
 const BusinessDetail = () => {
 
@@ -103,10 +105,10 @@ const BusinessDetail = () => {
               <CompetitorList select={{businessId:data.businessId}} />
             </TabPanel>
             <TabPanel tabKey='5' tab={<span className='tab_point'>报价</span>}>
-              贫穷~
+              <QuoteList select={{businessId:data.businessId}} />
             </TabPanel>
             <TabPanel tabKey='3' tab={<span className='tab_point'>产品明细</span>}>
-              666
+              <ItemsDetail businessId={data.businessId} />
             </TabPanel>
           </Tabs>
         </Card>

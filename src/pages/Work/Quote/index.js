@@ -1,13 +1,11 @@
-import React, {useState } from 'react';
 import { Affix, Col, Row } from 'antd';
-import { Button, Search } from 'weui-react-v2';
-import {
-  FilterOutlined, PlusOutlined,
-} from '@ant-design/icons';
-import CompetitorList from './CompetitorList';
+import { Button,  Search } from 'weui-react-v2';
+import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
+import React, { useState } from 'react';
+import QuoteList from './QuoteList';
 
 
-const Competitor = () => {
+const Quote = () => {
 
   const [select, setSelect] = useState();
 
@@ -44,9 +42,9 @@ const Competitor = () => {
           </Row>
         </div>
       </Affix>
-      <CompetitorList select={select} />
+      <QuoteList select={select} />
     </>
   );
 };
 
-export default Competitor;
+export default Quote;

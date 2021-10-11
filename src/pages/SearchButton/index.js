@@ -1,8 +1,9 @@
 import { Affix } from 'antd';
-import { List,
-  ListItem,  WhiteSpace,
+import {
+  List,
+  ListItem, Search, WhiteSpace,
 } from 'weui-react-v2';
-import { Grid, Search } from 'antd-mobile';
+import { Grid } from 'antd-mobile';
 import { ClockCircleOutlined, RightOutlined} from '@ant-design/icons';
 import { router } from 'umi';
 import React from 'react';
@@ -16,7 +17,7 @@ const SearchButton = () =>{
   return(
     <>
       <Affix >
-        <Search placeholder="全局搜索关键字" maxLength={8} />
+        <Search placeholder='搜索关键字'  />
       </Affix>
       <WhiteSpace size="lg" />
       <div>

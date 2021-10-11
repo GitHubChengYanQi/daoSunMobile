@@ -5,7 +5,7 @@ import {
   SegmentedControl,
   Search,
 } from 'weui-react-v2';
-import { FilterOutlined, UserAddOutlined } from '@ant-design/icons';
+import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
 import { router } from 'umi';
@@ -42,7 +42,7 @@ const Customer = () => {
         <div>
           <Row gutter={24} style={{ padding: 8, backgroundColor: '#fff' }}>
             <Col span={4}>
-              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+              <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
                 router.push('/Work/Customer/CustomerAdd');
               }} />
             </Col>

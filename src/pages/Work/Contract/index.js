@@ -1,8 +1,8 @@
 import React from 'react';
 import { Affix, Col, Row } from 'antd';
 import { Button,  Search, } from 'weui-react-v2';
-import  {
-  FilterOutlined,
+import {
+  FilterOutlined, PlusOutlined,
   UserAddOutlined,
 } from '@ant-design/icons';
 import ContractList from './ContractList';
@@ -17,7 +17,7 @@ const Contract = () => {
         <div style={{ backgroundColor: '#fff' }}>
           <Row gutter={24} style={{ padding: 8 }}>
             <Col span={4}>
-              <Button type='link' style={{ paddingTop: 16 }} icon={<UserAddOutlined />} onClick={() => {
+              <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
                 // router.push('/Work/Business/BusinessAdd');
               }} />
             </Col>
