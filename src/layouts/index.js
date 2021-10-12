@@ -4,19 +4,22 @@ import { Affix } from 'antd';
 import { router } from 'umi';
 import styles from './index.css';
 import Icon from '../pages/components/Icon';
-import cookie from 'js-cookie';
 import Auth from '../components/Auth';
+
+let url = '/Home'
 
 function BasicLayout(props) {
 
   window.scrollTo(0, 0);
+
+  const nav =  props.history.location.pathname.split('/')[1] !== 'Login' && props.history.location.pathname.split('/').length <= 2
 
   return (
     <Auth>
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
         {props.children}
       </SafeArea>
-      {cookie.get('cheng-token') && <Affix offsetBottom={0}>
+      {nav && <Affix offsetBottom={0}>
         <SegmentedControl className={styles.tab} style={{ backgroundColor: '#fff' }} data={
           [
             {
@@ -81,8 +84,8 @@ function BasicLayout(props) {
             // },
           ]
 
-        } defaultValue={window.sessionStorage.getItem('nav') || '/Home'} onChange={(value) => {
-          window.sessionStorage.setItem('nav', value);
+        } defaultValue={url} onChange={(value) => {
+          url= value;
           router.push(value);
         }} />
       </Affix>}
