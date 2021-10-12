@@ -9,9 +9,9 @@ import logo from '../../assets/img.png';
 
 const Login = () => {
 
-  cookie.remove('cheng-token');
-  cookie.remove('cheng-user');
-  window.sessionStorage.setItem('nav', '/Home');
+  // cookie.remove('cheng-token');
+  // cookie.remove('cheng-user');
+  // window.sessionStorage.setItem('nav', '/Home');
 
 
   const { run } = useRequest(

@@ -1,8 +1,12 @@
 import { useEffect } from 'react';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
+import GetUserInfo from '../../pages/GetUserInfo';
+import { router } from 'umi';
 
 const Auth = (props) => {
+
+  // http://ieonline.microsoft.com:8000/
 
   const {run:runCode} = useRequest({
     url:'/login/oauth/wxCp',
@@ -24,7 +28,8 @@ const Auth = (props) => {
         }
       });
       if (token){
-        
+        cookie.set('cheng-token', token);
+        router.push('/Home');
       }
     } else {
       login();
@@ -44,9 +49,13 @@ const Auth = (props) => {
     window.location.href = data && data.url
   }
 
+  const token = GetUserInfo().token;
+
   useEffect(()=>{
-    loginBycode();
-  },[loginBycode])
+    if (!token){
+      loginBycode();
+    }
+  },[loginBycode, token])
 
   return props.children;
 };
