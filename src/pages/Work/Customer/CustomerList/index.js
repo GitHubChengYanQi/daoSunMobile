@@ -122,8 +122,8 @@ const CustomerList = ({ select }) => {
 
 
   return (
-    <>
-      <div style={{ margin: 8, backgroundColor: '#fff' }}>客户数量 <span
+    <div>
+      <div style={{ padding: 8}}>客户数量 <span
         style={{ color: 'red' }}>{data && data.length}</span>家
       </div>
 
@@ -207,7 +207,7 @@ const CustomerList = ({ select }) => {
       {data && <InfiniteScroll loadMore={() => {
         return run({});
       }} hasMore={hasMore} />}
-    </>
+    </div>
   );
 };
 

@@ -41,12 +41,15 @@ ajaxService.interceptors.response.use((response) => {
             // GotoLogin();
             router.push('/')
           } catch (e) {
-            console.log('不能使用hook跳转');
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
           }
         }
       });
       throw new Error(response.message);
+    }else if (response.message.indexOf('JSON') !== -1){
+      Dialog.alert({
+        content: '输入格式错误！！！'
+      })
     }else if (response.errCode !== 200){
       Dialog.alert({
         content: response.message

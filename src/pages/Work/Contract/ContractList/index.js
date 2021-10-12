@@ -63,7 +63,7 @@ const ContractList = ({select,customerId}) => {
 
   return (
     <>
-      {!customerId && <Affix offsetTop={70}><List style={{ margin: 0 }} title={<>合同数量 <span style={{ color: 'red' }}>{data && data.length}</span></>} /></Affix>}
+      {!customerId && <List style={{ margin: 0 }} title={<>合同数量 <span style={{ color: 'red' }}>{data && data.length}</span></>} />}
       {
         data && data.map((items, index) => {
           return (
