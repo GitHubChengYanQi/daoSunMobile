@@ -85,7 +85,6 @@ const Track = (props) => {
               money: values.money,
             }],
           };
-          console.log(values);
 
           run({
             data: {
@@ -113,7 +112,7 @@ const Track = (props) => {
         <Card
           title='事项'
         >
-          <FormItem name='businessTrackParams' />
+
           <FormItem
             label='分类'
             name='classify'

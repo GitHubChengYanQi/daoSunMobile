@@ -1,0 +1,4 @@
+
+.dialogBody :global .adm-dialog-body-message-wrapper {
+  display: block !important;
+}

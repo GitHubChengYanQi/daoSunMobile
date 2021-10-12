@@ -5,13 +5,14 @@ import { router } from 'umi';
 import styles from './index.css';
 import Icon from '../pages/components/Icon';
 import cookie from 'js-cookie';
+import Auth from '../components/Auth';
 
 function BasicLayout(props) {
 
   window.scrollTo(0, 0);
 
   return (
-    <div>
+    <Auth>
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
         {props.children}
       </SafeArea>
@@ -85,7 +86,7 @@ function BasicLayout(props) {
           router.push(value);
         }} />
       </Affix>}
-    </div>
+    </Auth>
   );
 }
 

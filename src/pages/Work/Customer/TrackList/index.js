@@ -49,7 +49,7 @@ const TrackList = ({ customerId,classifyId,classify }) => {
                 <Avatar>{items.userResult && items.userResult.name && items.userResult.name.substring(0, 1)}</Avatar>}>
               跟进类型:{items.type}
               <WhiteSpace size={'sm'} />
-              图片: <Image src={items.image} width={100} />
+               {items.image && <>图片: <Image src={items.image} width={100} /></>}
               <WhiteSpace size={'sm'} />
               跟进内容:{items.note}
             </List.Item>

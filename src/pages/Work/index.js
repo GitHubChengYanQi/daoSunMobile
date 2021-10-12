@@ -130,7 +130,7 @@ const Work = () => {
       <List className={styles.title} title={<div>合同管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // router.push('/Work/Contract');
+            router.push('/Work/Contract');
           }}>
             <div className={styles.size}>合同列表</div>
           </GridItem>

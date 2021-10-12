@@ -79,7 +79,7 @@ const ContactsList = (props) => {
   };
 
   return (
-    <>
+    <div>
       {!customerId && <div style={{ margin: 8 }}>联系人数量 <span style={{ color: 'red' }}>{data && data.length}</span>位</div>}
       {data && data.map((items, index) => {
         return (
@@ -122,7 +122,7 @@ const ContactsList = (props) => {
       {data && <InfiniteScroll loadMore={() => {
         return run({});
       }} hasMore={hasMore} />}
-    </>
+    </div>
   );
 };
 

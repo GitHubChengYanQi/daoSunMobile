@@ -32,7 +32,7 @@ const OutstockApply = () => {
                 placeholder='搜索申请单号'
                 maxLength={8}
                 onConfirm={(value) => {
-                  setSelect({ businessName: value });
+                  setSelect({ outstockApplyId: value });
                 }} />
             </Col>
             <Col span={4}>
@@ -43,7 +43,7 @@ const OutstockApply = () => {
           </Row>
         </div>
       </Affix>
-      <OutstockApplyList />
+      <OutstockApplyList select={select} />
     </>
   );
 };
