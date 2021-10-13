@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { Card } from 'antd';
 import { Selector } from 'antd-mobile';
-import { Panel } from 'antd-mobile/2x/es/components/index-bar/panel';
+
 import { Button, ListItem } from 'weui-react-v2';
 
 const Screening = ({ select }) => {

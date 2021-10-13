@@ -1,17 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+
 import { useRequest } from '../../../../util/Request';
 import { Button, Card, Form, Selector, TextArea, Toast } from 'antd-mobile';
 import { FormItem } from 'antd-mobile/es/components/form/form-item';
-import { Input, SubmitButton } from 'weui-react-v2';
-import { ListItem } from 'antd-mobile/es/components/list/list-item';
+import { Input } from 'weui-react-v2';
+
 import { router } from 'umi';
-import MyTreeSelect from '../../../components/MyTreeSelect';
+
 import MySelector from '../../../components/MySelector';
 
 const DataAdd = () => {
-  const [detail, setDetail] = useState();
 
-  const formRef = useRef();
+
+
 
   const { data } = useRequest({
     url: '/items/listSelect',
