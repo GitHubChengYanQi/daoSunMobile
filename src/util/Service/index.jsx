@@ -4,7 +4,7 @@ import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
 import { router } from 'umi';
 
-const baseURI =  'http://192.168.1.230';
+const baseURI =  'http://192.168.1.45';
 
 
 const ajaxService = axios.create({
