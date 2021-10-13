@@ -141,6 +141,7 @@ const Work = () => {
           </GridItem>
         </Grid>
       </List>
+
       <List className={styles.title} title={<div>发货申请管理</div>}>
         <Grid>
           <GridItem onClick={() => {
@@ -161,6 +162,18 @@ const Work = () => {
             router.push('/CreateRepair');
           }} />}>
             <div className={styles.size}>创建报修</div>
+          </GridItem>
+        </Grid>
+      </List>
+
+
+
+      <List className={styles.title} title={<div>产品资料管理</div>}>
+        <Grid>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            router.push('/Work/DataManage');
+          }}>
+            <div className={styles.size}>产品资料</div>
           </GridItem>
         </Grid>
       </List>
