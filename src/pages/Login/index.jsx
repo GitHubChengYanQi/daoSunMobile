@@ -16,7 +16,7 @@ const Login = () => {
 
   const { run } = useRequest(
     {
-      url: '/rest/login', method: 'POST',
+      url: '/login/login', method: 'POST',
     }, {
       manual: true,
       onSuccess: async (res) => {

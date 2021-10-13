@@ -15,12 +15,14 @@ const GetUserInfo = () => {
   }
 
   try {
-    const [pre, data] = token.split('.');
+    const [data] = token.split('.');
 
     const base = Base64.parse(data);
 
-    const userInfo = base.toString(utf8);
-    if (userInfo.split(',')[5].split(':')[1] === 'null'){
+    // console.log(111,base,base.toString(utf8));
+
+    const userInfo = JSON.parse(base.toString(utf8));//window.eval(base.toString(utf8));
+    if (userInfo.userId === null){
       router.push('/Login');
     }
 

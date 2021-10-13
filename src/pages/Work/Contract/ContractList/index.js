@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
 import { Card, InfiniteScroll } from 'antd-mobile';
-import { Affix, Badge, Col, Row } from 'antd';
+import { Badge, Col, Row } from 'antd';
 import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
 import { router } from 'umi';
 

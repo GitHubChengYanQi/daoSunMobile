@@ -1848,8 +1848,6 @@
                 module && module.exports) {
             try {
                 oldLocale = globalLocale._abbr;
-                var aliasedRequire = require;
-                // aliasedRequire('./locale/' + name);
                 getSetGlobalLocale(oldLocale);
             } catch (e) {}
         }
@@ -3506,6 +3504,8 @@
                 time = this._d.valueOf();
                 time -= mod$1(time, MS_PER_SECOND);
                 break;
+          default:
+            break;
         }
 
         this._d.setTime(time);
@@ -3554,6 +3554,8 @@
                 time = this._d.valueOf();
                 time += MS_PER_SECOND - mod$1(time, MS_PER_SECOND) - 1;
                 break;
+          default:
+            break;
         }
 
         this._d.setTime(time);
@@ -4271,6 +4273,8 @@
                 case 'month':   return months;
                 case 'quarter': return months / 3;
                 case 'year':    return months / 12;
+              default:
+                break;
             }
         } else {
             // handle milliseconds separately because of floating point math errors (issue #1867)

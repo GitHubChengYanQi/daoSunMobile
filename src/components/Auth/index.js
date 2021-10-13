@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import GetUserInfo from '../../pages/GetUserInfo';
 import { router } from 'umi';
+import { useDebounceEffect } from 'ahooks';
 
 const Auth = (props) => {
 
@@ -51,11 +51,14 @@ const Auth = (props) => {
 
   const token = GetUserInfo().token;
 
-  useEffect(()=>{
+  useDebounceEffect(()=>{
     if (!token){
       loginBycode();
     }
-  },[loginBycode, token])
+  },[props],{
+    wait:0
+  })
+
 
   return props.children;
 };
