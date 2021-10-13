@@ -5,6 +5,8 @@ import { FormItem } from 'antd-mobile/es/components/form/form-item';
 import { Input, SubmitButton } from 'weui-react-v2';
 import { ListItem } from 'antd-mobile/es/components/list/list-item';
 import { router } from 'umi';
+import MyTreeSelect from '../../../components/MyTreeSelect';
+import MySelector from '../../../components/MySelector';
 
 const DataAdd = () => {
   const [detail, setDetail] = useState();
@@ -63,11 +65,7 @@ const DataAdd = () => {
             />
           </FormItem>
           <FormItem label="资料分类" name="dataclassId" rules={[{ required: false, message: '该字段是必填字段！' }]}>
-            <Selector
-              style={{ '--checked-color': '#ffe2e5' }}
-              options={dataClassification || []}
-              multiple={false}
-            />
+          <MySelector api={dataClassification} />
           </FormItem>
         </Card>
         <div style={{"text-align":'center'}} >

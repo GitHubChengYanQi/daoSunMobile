@@ -73,17 +73,15 @@ const DataList = ({ select }) => {
     <div>
 
       <Card style={{padding:'5px'}}>
-         数量：<span style={{color:'red'}}> {data && data[0].count}</span>
+         数量：<span style={{color:'red'}}> {data && data.length>0 && data[0].count}</span>
       </Card>
       {data && data.map((items, index) => {
         return (
               <Panel key={index} style={{padding:'20px'}}>
               <Card title={
               <div style={{ fontWeight: 'bolder',marginRight: '4px' }}>
-                <h1>
-                  资料名称：
-                </h1>
-                <p style={{"font-size":'15px'}}>
+
+                <p style={{fontSize:'15px'}}>
                    {items.name}
                 </p>
                 <p>分类：<span style={{color:'red'}}>{items.dataClassificationResult.title}</span></p>
@@ -94,9 +92,9 @@ const DataList = ({ select }) => {
 
                   {pares(items.content)}
                 </div>
-                <div style={{"padding-top":'11px',
-                "border-top":'1px solid #e5e5e5',
-                  "display":'flex',
+                <div style={{paddingTop:'11px',
+                borderTop:'1px solid #e5e5e5',
+                  display:'flex',
 
                 }} >
                   <h1>

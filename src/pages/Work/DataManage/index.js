@@ -34,6 +34,9 @@ const DataManage = () => {
           }}
           placeholder='资料名称'
           maxLength={8}
+          onConfirm={(value)=>{
+            setSelect({name:value})
+          }}
           />
         </Col>
 
