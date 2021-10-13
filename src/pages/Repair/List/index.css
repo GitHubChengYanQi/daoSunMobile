@@ -1,0 +1,12 @@
+
+.tab :global .weui-scrollable-tabbar-wrap {
+  position: fixed;
+  z-index: 99;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: white;
+}
+
+.tab :global .weui-swiper-tabcontent {
+  margin-top: 13%;
+}

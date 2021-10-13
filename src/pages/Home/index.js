@@ -2,7 +2,7 @@ import styles from './index.css';
 import React, { useState } from 'react';
 import {
   Brief, Button, List,
-  ListItem, Panel, PanelItem,
+  ListItem, Panel, PanelItem, TabPanel, Tabs,
 } from 'weui-react-v2';
 import Icon from '../components/Icon/index';
 import {
@@ -16,10 +16,7 @@ import {
 import { Badge, Col, Divider, Row, Select } from 'antd';
 import { router } from 'umi';
 import DataBoard from './component/DataBoard/index';
-import { Tabs } from 'antd-mobile';
-
 const { Option } = Select;
-const { TabPane } = Tabs;
 
 const Home = () => {
 
@@ -66,7 +63,7 @@ const Home = () => {
       <Tabs
         style={{ backgroundColor: '#fff' }}
       >
-        <TabPane key='0' title='今日日程'>
+        <TabPanel tabKey='0' tab='今日日程'>
           <div>
             <ListItem style={{ padding: 3, backgroundColor: '#096DD9' }} extra={
               <Button style={{ backgroundColor: '#096DD9', borderColor: 'white', color: 'white' }} onClick={() => {
@@ -267,13 +264,13 @@ const Home = () => {
                 </Panel>
               </div> : null}
           </div>
-        </TabPane>
+        </TabPanel>
 
-        <TabPane key='1' title='数据看板'>
+        <TabPanel tabKey='1' tab='数据看板'>
           <DataBoard />
-        </TabPane>
+        </TabPanel>
 
-        <TabPane key='2' title='待办事项'>
+        <TabPanel tabKey='2' tab='待办事项'>
           <div>
             <List title={time}>
               <ListItem thumb={<Icon type='icon-xuyue' style={{ color: '#9e3131', fontSize: '8vw' }} />}
@@ -326,9 +323,9 @@ const Home = () => {
               </ListItem>
             </List>
           </div>
-        </TabPane>
+        </TabPanel>
 
-        <TabPane key='3' title='工作动态'>
+        <TabPanel tabKey='3' tab='工作动态'>
           <div>
             <Panel>
               <PanelItem
@@ -476,7 +473,7 @@ const Home = () => {
               </PanelItem>
             </Panel>
           </div>
-        </TabPane>
+        </TabPanel>
 
 
       </Tabs>

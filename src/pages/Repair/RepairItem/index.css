@@ -28,7 +28,7 @@
 }
 .address{
   font-size: 25px;
-  color: #161616;
+  color: rgba(120, 172, 133, 0.88);
 }
 .addressn{
   font-size: 30px;
@@ -40,6 +40,14 @@
   border-right: 1PX #d6e4ef solid;
   border-left: 1PX #d6e4ef solid;
   margin: 20px;
+  padding: 16px;
   border-radius: 12px;
   background-color: #fff;
 }
+.card :global .adm-card-header-title {
+  font-size: 100%;
+}
+.card :global .adm-card-header {
+  padding: 8px;
+}
+

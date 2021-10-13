@@ -1,7 +1,6 @@
-import { Card } from 'antd';
-import Text from 'antd/es/typography/Text';
 import { router } from 'umi';
 import styles from './index.css';
+import { Card } from 'antd-mobile';
 
 const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
   const itemClick = ()=>{
@@ -25,18 +24,17 @@ const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
     <>
      <Card
       className={styles.card}
-      bordered
       onClick={()=>{itemClick()}}
       extra={'详细信息 >>'}
       title={'报修进度：' + progressName}
     >
       <div className={styles.repairItem}>
         <div className={styles.repairContent}>
-          <Text className={styles.spuName}>客户公司：{compnay}</Text>
-          <Text className={styles.spuName}>保修设备：{items}</Text>
-          <Text className={styles.spuName}>品牌：{brand}</Text>
-          <Text className={styles.spuName}>报修类型：{type} </Text>
-          <Text className={styles.address}>地址：{address} </Text>
+          <span className={styles.spuName}>客户公司：{compnay}</span>
+          <span className={styles.spuName}>保修设备：{items}</span>
+          <span className={styles.spuName}>品牌：{brand}</span>
+          <span className={styles.spuName}>报修类型：{type} </span>
+          <span className={styles.address}>地址：{address} </span>
         </div>
       </div>
     </Card>
