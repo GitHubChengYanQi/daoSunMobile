@@ -1,38 +1,66 @@
-import { Col, Row } from 'antd';
-import { Button } from 'antd-mobile';
+import { Affix, Col, Row } from 'antd';
 import { router } from 'umi';
-import { Search } from 'weui-react-v2';
-import React from 'react';
+import { Button, Search, SegmentedControl } from 'weui-react-v2';
+import React, { useState } from 'react';
+import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
+import CompetitorList from '../Competitor/CompetitorList';
+import DataList from './DataList';
+import { Popup } from 'antd-mobile';
+import Screening from '../DataManage/Screening';
 
 const DataManage = () => {
+  const [select, setSelect] = useState();
+
+  const [screening, setScreening] = useState();
   return (
     <div>
+      <Affix offsetTop={0}>
       <Row gutter={24} style={{ backgroundColor: '#fff' }}>
+
         <Col span={4} >
-          <Button color='primary' style={{ paddingTop: 15 }} fill='none' onClick={()=>{
+          <Button type='link' style={{ padding: 14 }} icon={<PlusOutlined />} onClick={() => {
             router.push('/Work/DataManage/DataAdd');
-          }}>
-          </Button>
+          }} />
         </Col>
+
         <Col span={16} >
           <Search
           style={{
             backgroundColor: '#fff',
             border: 'solid 1px #eee',
-            padding: '0 8px',
+            padding: '0 10px',
             margin: 8,
-            borderRadius: 100,
+            borderRadius: 10,
           }}
-          placeholder='搜索产品'
+          placeholder='资料名称'
           maxLength={8}
-          // onConfirm={(value) => {
-          //   setSelect({ customerName: value });
-          // }}
           />
         </Col>
 
-        <Col span={4}></Col>
+        <Col span={4}>
+          <Button type='link' style={{ padding: 14 }} icon={<FilterOutlined />}  onClick={() => {
+            setScreening(true);
+          }} />
+
+          <Popup
+            visible={screening}
+            onMaskClick={() => {
+              setScreening(false);
+            }}
+            position='right'
+            bodyStyle={{ minWidth: '70vw' }}
+          >
+            <Screening select={(value) => {
+              setScreening(false);
+              setSelect(value);
+            }} />
+          </Popup>
+        </Col>
       </Row>
+      </Affix>
+      <DataList select={select} />
+
+
     </div>
   );
 };
