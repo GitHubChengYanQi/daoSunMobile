@@ -1,7 +1,6 @@
 import { Affix, Col, Row } from 'antd';
 import { Button, Search } from 'weui-react-v2';
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
-import { router } from 'umi';
 import React, { useState } from 'react';
 import OutstockApplyList from './OutstockApplyList';
 

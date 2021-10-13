@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
-import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import { Card, InfiniteScroll } from 'antd-mobile';
+import {  List,  Spin } from 'weui-react-v2';
+import { InfiniteScroll } from 'antd-mobile';
 import { Col, Row } from 'antd';
 
 let pages = 1;

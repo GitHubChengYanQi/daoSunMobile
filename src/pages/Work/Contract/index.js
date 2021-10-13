@@ -3,7 +3,6 @@ import { Affix, Col, Row } from 'antd';
 import { Button,  Search, } from 'weui-react-v2';
 import {
   FilterOutlined, PlusOutlined,
-  UserAddOutlined,
 } from '@ant-design/icons';
 import ContractList from './ContractList';
 
