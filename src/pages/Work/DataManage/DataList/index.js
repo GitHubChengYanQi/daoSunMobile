@@ -1,11 +1,13 @@
 import { useRequest } from '../../../../util/Request';
 import React, { useEffect, useState } from 'react';
 import {
-  Panel, Spin,
+  Panel,
+ Spin,
 } from 'weui-react-v2';
 
 import pares from 'html-react-parser'
-import { Card, Space, Tag } from 'antd-mobile';
+import { Card, InfiniteScroll, Space, Tag } from 'antd-mobile';
+
 
 
 let pages = 1;
@@ -74,11 +76,12 @@ const DataList = ({ select }) => {
                 <p style={{fontSize:'15px'}}>
                    {items.name}
                 </p>
-                <p>分类：<span style={{color:'red'}}>{items.dataClassificationResult.title}</span></p>
+                <p>
+                  分类：<span style={{color:'red'}}>{items.dataClassificationResult.title}</span></p>
                 </div>
               }>
                 <div style={{}}>
-                  <h1>内容：</h1>
+                  <h2>内容：</h2>
 
                   {pares(items.content)}
                 </div>
@@ -87,9 +90,9 @@ const DataList = ({ select }) => {
                   display:'flex',
 
                 }} >
-                  <h1>
+                  <h3>
                     产品：
-                  </h1>
+                  </h3>
                   <Space  direction={'horizontal'} wrap={false}>
                     {items.itemId.length > 0 && items.itemId.map((li,index)=>{
                         return (<Tag key={index} color='primary'>{li.name}</Tag>)
@@ -102,6 +105,9 @@ const DataList = ({ select }) => {
             </Panel>
         );
       })}
+      {data && <InfiniteScroll loadMore={() => {
+        return run({});
+      }} hasMore={hasMore} />}
     </div>
   );
 };

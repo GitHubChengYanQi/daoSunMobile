@@ -1,9 +1,8 @@
 import { Affix, Col, Row } from 'antd';
 import { router } from 'umi';
-import { Button, Search, SegmentedControl } from 'weui-react-v2';
+import { Button, Search } from 'weui-react-v2';
 import React, { useState } from 'react';
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
-import CompetitorList from '../Competitor/CompetitorList';
 import DataList from './DataList';
 import { Popup } from 'antd-mobile';
 import Screening from '../DataManage/Screening';
