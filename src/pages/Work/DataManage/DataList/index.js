@@ -1,21 +1,11 @@
 import { useRequest } from '../../../../util/Request';
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
-  Flex,
-  FlexItem,
-  List,
-  ListItem,
-  Panel,
-  PanelItem,
-  Preview,
-  PreviewButton,
-  PreviewItem, Spin,
+  Panel, Spin,
 } from 'weui-react-v2';
 
 import pares from 'html-react-parser'
 import { Card, Space, Tag } from 'antd-mobile';
-import { AntOutline } from 'antd-mobile-icons'
 
 
 let pages = 1;
