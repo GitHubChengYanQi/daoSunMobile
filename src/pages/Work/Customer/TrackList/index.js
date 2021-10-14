@@ -8,11 +8,14 @@ const TrackList = ({ customerId,classifyId,classify }) => {
 
   const { loading } = useRequest({ url: '/trackMessage/list', method: 'POST', data: { customerId: customerId } }, {
     onSuccess: async (res) => {
-      if (customerId) {
+      const trackMessageIds = await res ? res.map((items, index) => {
+        return items.trackMessageId;
+      }) : [];
+      if (trackMessageIds) {
         await run(
           {
             data: {
-              customerId: customerId,
+              trackMessageIds: trackMessageIds,
               classifyId:classifyId,
               classify:classify
             },
