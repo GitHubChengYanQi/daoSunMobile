@@ -4,6 +4,7 @@ import { Affix } from 'antd';
 import { router } from 'umi';
 import styles from './index.css';
 import Icon from '../pages/components/Icon';
+import Auth from '../components/Auth';
 
 let url = '/Home'
 
@@ -14,7 +15,7 @@ function BasicLayout(props) {
   const nav =  props.history.location.pathname.split('/')[1] !== 'Login' && props.history.location.pathname.split('/').length <= 2
 
   return (
-    <div>
+    <Auth>
       <SafeArea style={{ minHeight: '100vh', backgroundColor: '#f4f4f4' }}>
         {props.children}
       </SafeArea>
@@ -88,7 +89,7 @@ function BasicLayout(props) {
           router.push(value);
         }} />
       </Affix>}
-    </div>
+    </Auth>
   );
 }
 
