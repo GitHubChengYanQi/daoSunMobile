@@ -8,14 +8,11 @@ const TrackList = ({ customerId,classifyId,classify }) => {
 
   const { loading } = useRequest({ url: '/trackMessage/list', method: 'POST', data: { customerId: customerId } }, {
     onSuccess: async (res) => {
-      const trackMessageIds = await res ? res.map((items, index) => {
-        return items.trackMessageId;
-      }) : [];
-      if (trackMessageIds) {
+      if (customerId) {
         await run(
           {
             data: {
-              trackMessageIds: trackMessageIds,
+              customerId: customerId,
               classifyId:classifyId,
               classify:classify
             },
@@ -26,7 +23,7 @@ const TrackList = ({ customerId,classifyId,classify }) => {
   });
 
   const { loading: LoadingTrack, data, run } = useRequest({
-    url: '/businessTrack/list',
+    url: '/trackMessage/list',
     method: 'POST',
   }, { manual: true });
 
