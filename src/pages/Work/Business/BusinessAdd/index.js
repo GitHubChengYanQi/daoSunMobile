@@ -95,7 +95,12 @@ const BusinessAdd = () => {
                 title: '提示：如有异议请联系创建人或领导协调',
                 children: `您输入的客户已经被创建 创建人：${user && user.name}`,
                 onConfirm: () => {
-                  router.goBack();
+                  return new Promise((resolve) => {
+                    setTimeout(() => {
+                      router.goBack();
+                      resolve(true);
+                    }, 2000);
+                  });
                 },
               });
             });

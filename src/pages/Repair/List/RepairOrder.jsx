@@ -10,7 +10,6 @@ let contents = [];
 
 const RepairOrder = ({ select }) => {
 
-
   const [data, setData] = useState();
 
   const [hasMore, setHasMore] = useState(true);

@@ -36,9 +36,6 @@ const Track = (props) => {
     formRef.current.setFieldsValue({ classify: params.classify || 0, customerId: params.customerId });
   }, [params.classify, params.customerId]);
 
-  useEffect(()=>{
-
-  },[classNmb])
 
   const label = [
     '日常', '商机', '合同', '订单', '回款',

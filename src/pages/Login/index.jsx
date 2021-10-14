@@ -16,8 +16,8 @@ const Login = () => {
 
   const { run } = useRequest(
     {
-      url: '/rest/login',
-      // url: '/login/login',
+      // url: '/rest/login',
+      url: '/login/login',
       method: 'POST',
     }, {
       manual: true,

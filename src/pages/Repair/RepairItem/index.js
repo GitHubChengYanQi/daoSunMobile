@@ -2,9 +2,9 @@ import { router } from 'umi';
 import styles from './index.css';
 import { Card } from 'antd-mobile';
 
-const RepairItem = ({compnay,items,brand,address, type, id, progress}) => {
+const RepairItem = ({compnay,items,brand,address, type, id, progress,select}) => {
   const itemClick = ()=>{
-    router.push(`/Repair/RepairList?${progress}`);
+    router.push(`/Repair/RepairList?id=${id}&select=${select}`);
   }
   let progressName;
   if(progress === 0) {

@@ -50,6 +50,22 @@ ajaxService.interceptors.response.use((response) => {
       Dialog.alert({
         content: '输入格式错误！！！'
       })
+    }else if (response.errCode === 402){
+      cookie.remove('cheng-token');
+      Modal.error({
+        title: '提示',
+        content: '认证失败！，请重新登录。',
+        okText: '重新登录',
+        onOk: () => {
+          Modal.destroyAll();
+          try {
+            // GotoLogin();
+            router.push('/')
+          } catch (e) {
+            window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
+          }
+        }
+      });
     }else if (response.errCode !== 200){
       Dialog.alert({
         content: response.message

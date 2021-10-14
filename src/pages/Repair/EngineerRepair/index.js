@@ -1,78 +1,136 @@
-import {
-  Form,
-  FormItem,
-  Input,
-  List,
-  SingleUpload,
-  TextArea,
-} from 'weui-react-v2';
+import React from 'react';
+import { useRequest } from '../../../util/Request';
+import { router } from 'umi';
+import { Button, Card, Form, Image, List, Toast } from 'antd-mobile';
+import { DatePicker, Input } from 'weui-react-v2';
+import MyPicker from '../../components/MyPicker';
+import { UserIdSelect } from '../RepairUrl';
 
-const EngineerRepair = () =>{
-  // let serviceTypes = [{value:1,label: '设备安装'}, {value: 2, label: '设备维修'}, {value: 3, label: '配件更换'}];
-  return(
-    <>
-      <Form labelWidth="30vw"
-        defaultModel={{
-          company: "a公司",
-          sbName:"b设备",
-          pct:"辽宁省鞍山市",
-          address:"c地址",
-          name: "d",
-          position:"经理",
-          phone:"18899994444",
-          type: "设备报修",
-          imgs:"",
-          date: "2021-09-09 10:30:00",
-          time: "2021-09-09 10:30:00",
-          feedback: "11111111111111111111111111111111",
-        }}
-      >
-        <List title="使用单位信息">
-          <FormItem  prop="company"  label="公司名称" >
-            <Input placeholder="请输入公司名称" maxlength={10} disabled/>
-          </FormItem >
-          <FormItem   prop="sbName"  label='设备名称'  >
-            <Input placeholder="请输入设备名称" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem  prop="pct"  label='省市区' >
-            <Input placeholder="请输入省市区" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem  prop="address"  label='详细地址' >
-            <Input placeholder="请输入详细地址" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem  prop="name"  label='姓名'  >
-            <Input placeholder="请输入姓名" maxlength={10} disabled />
-          </FormItem>
-          <FormItem  prop="position"  label='职务' >
-            <Input placeholder="请输入职务" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem prop="phone"  label='联系电话'  >
-            <Input placeholder="请输入联系电话"  type="phone" pattern="[0-9]*" maxlength={13} disabled />
-          </FormItem>
-        </List>
-        <List title="报修照片">
-          <FormItem prop="imgs" >
-            <SingleUpload style={{ marginLeft: '30px' }} action="/upload"  disabled/>
-          </FormItem>
-        </List>
-        <List title="服务类型">
-          <FormItem prop="type" label="服务类型" arrow={true}>
-            <Input placeholder="请输入职务" maxlength={10} disabled/>
-            {/*<Picker title="请选择" placeholder="请选择"  data={serviceTypes}/>*/}
-          </FormItem>
-          <FormItem prop="date" label="期望到达时间">
-            <Input placeholder="请输入职务" maxlength={10} disabled/>
-            {/*<DatePicker placeholder="请选择期望到达时间" useDefaultFormat={false} separator="" />*/}
-          </FormItem>
-        </List>
-        <List title="描述">
-          <FormItem prop="feedback" alignItems="flex-start">
-            <TextArea placeholder="请输入您遇到的问题" disabled/>
-          </FormItem>
-        </List>
-      </Form>
-    </>
+const { Item: ListItem } = List;
+
+const EngineerRepair = (props) => {
+
+  const { repairId, user, repairList } = props;
+
+  const { run: saveState } = useRequest({
+    url: '/api/updateRepair',
+    method: 'POST',
+  }, {
+    manual: true,
+  });
+
+  const { run: runSaveDispatching } = useRequest({
+    url: '/api/saveDispatching',
+    method: 'POST',
+  }, {
+    manual: true,
+  });
+
+  if (!(repairId && user && repairList)) {
+    return null;
+  }
+
+  return (
+    <div>
+      <Card title='使用单位信息'>
+        <ListItem
+          title='公司名称'
+        >
+          {repairList && repairList.customerResult && repairList.customerResult.customerName}
+        </ListItem>
+
+        <ListItem title='设备名称'>
+          {repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.detailesItems && repairList.deliveryDetailsResult.detailesItems.name}
+        </ListItem>
+        <ListItem title='品牌'>
+          { repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.detailsBrand && repairList.deliveryDetailsResult.detailsBrand.brandName}
+        </ListItem>
+        <ListItem title='产品编号'>
+          { repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.stockItemId}
+        </ListItem>
+        <ListItem title='省市区'>
+          {repairList.regionResult[0] && repairList.regionResult[0].province + '/' + repairList.regionResult[0].city + '/' + repairList.regionResult[0].area}
+        </ListItem>
+        <ListItem title='详细地址'>
+          {repairList && repairList.address}
+        </ListItem>
+        <ListItem title='姓名'>
+          {repairList && repairList.people}
+        </ListItem>
+        <ListItem title='职务'>
+          {repairList && repairList.position}
+        </ListItem>
+        <ListItem title='联系电话'>
+          {repairList && repairList.telephone}
+        </ListItem>
+      </Card>
+      <Card title='报修信息'>
+        <ListItem title='报修照片'>
+          {repairList && repairList.bannerResult.map((item, index) => {
+            return (
+              <Image
+                style={{ margin: 8 }}
+                width={90}
+                key={index}
+                src={item.imgUrl}
+              />
+            );
+          })}
+        </ListItem>
+        <ListItem title='服务类型'>
+          {repairList ? repairList.serviceType : null}
+        </ListItem>
+        <ListItem title='期望到达时间'>
+          {repairList ? repairList.expectTime : null}
+        </ListItem>
+        <ListItem title='描述'>
+          {repairList && repairList.comment}
+        </ListItem>
+      </Card>
+      <Card title='派工信息'>
+        <Form
+          onFinish={async (values) => {
+            values = {
+              ...values,
+              createUser: user && user.userId,
+              repairId: repairId,
+            };
+            await runSaveDispatching({ data: { ...values } });
+            await saveState({
+              data: {
+                progress: 1,
+                repairId: repairId,
+              },
+            }).then(() => {
+              Toast.show({
+                content: '派工成功！',
+              });
+              router.goBack();
+            });
+          }}
+          footer={
+            <Button type='submit' style={{ display: !repairList.power && 'none', width: '100%' }}>派工</Button>
+          }
+        >
+          <Form.Item label='工程师' name='name' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <MyPicker api={UserIdSelect} />
+          </Form.Item>
+
+          <Form.Item label='联系电话' name='phone' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <Input placeholder='请输入联系电话' />
+          </Form.Item>
+
+          <Form.Item label='到达时间' name='time' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <DatePicker />
+          </Form.Item>
+
+          <Form.Item label='负责区域' name='address' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <Input placeholder='请输入负责区域' />
+          </Form.Item>
+
+        </Form>
+      </Card>
+    </div>
   );
 };
-
 export default EngineerRepair;

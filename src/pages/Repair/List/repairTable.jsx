@@ -66,6 +66,7 @@ const RepairTable = ({select}) => {
                 return (
                   <RepairItem
                     key={index}
+                    select={true}
                     compnay={item.customerResult && item.customerResult.customerName}
                     items={item.deliveryDetailsResult && item.deliveryDetailsResult.detailesItems && item.deliveryDetailsResult.detailesItems.name}
                     brand={item.deliveryDetailsResult && item.deliveryDetailsResult.detailsBrand && item.deliveryDetailsResult.detailsBrand.brandName}

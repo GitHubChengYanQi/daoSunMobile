@@ -1,75 +1,149 @@
-import { Form, FormItem, Input, List, SingleUpload, TextArea } from 'weui-react-v2';
+import React  from 'react';
+import { useRequest } from '../../../util/Request';
+import { Button, Card, Form, Image, List } from 'antd-mobile';
+import { TextArea } from 'weui-react-v2';
+import UpLoadImg from '../../components/Upload';
+import { router } from 'umi';
 
-const CompletePage =() =>{
-  return(
-    <>
+const { Item: ListItem } = List;
 
-      <Form labelWidth="30vw"
-            defaultModel={{
-              company: "a公司",
-              sbName:"b设备",
-              brand: "波司登",
-              pct:"辽宁省鞍山市",
-              address:"c地址",
-              number: "111111",
-              name: '张三',
-              position:"经理",
-              phone:"18899994444",
-              type: "设备报修",
-              imgs:"",
-              date: "2021-09-09 10:30:00",
-              time: "2021-09-09 10:30:00",
-              rates: 3,
-              feedback: "11111111111111111111111111111111",
-              comment: "服务态度一般"
-            }}
-      >
-        <List title="报修设备信息">
-          <FormItem  prop="sbName"  label="名称" >
-            <Input placeholder="请输入设备名称" maxlength={10} disabled/>
-          </FormItem >
-          <FormItem   prop="brand"  label='品牌'  >
-            <Input placeholder="请输入品牌" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem  prop="time"  label='到货时间' >
-            {/*<DatePicker placeholder="请选择到货时间" useDefaultFormat={false} separator="" disabled/>*/}
-            <Input placeholder="请输入到货时间" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem  prop="number"  label='出场编号' >
-            <Input placeholder="请输入详出场编号" maxlength={10} disabled/>
-          </FormItem>
-        </List>
-        <List title="需求类型">
-          <FormItem  prop="name"  label='联系人信息'  >
-            <Input placeholder="请输入联系人信息" maxlength={10} disabled/>
-          </FormItem>
-        </List>
-        <List title="问题描述">
-          <FormItem prop="feedback"  alignItems="flex-start">
-            <TextArea placeholder="请输入您遇到的问题" disabled/>
-          </FormItem>
-        </List>
-        <List title="派工信息">
-          <FormItem  prop="name"  label='工程师'  >
-              {/*<Picker title="请选择" placeholder="请选择"  data={serviceTypes}/>*/}
-            <Input placeholder="请输入工程师" maxlength={10} disabled/>
-          </FormItem>
-          <FormItem prop="phone"  label='联系电话'  >
-            <Input placeholder="请输入联系电话"  type="phone" pattern="[0-9]*" maxlength={13}  disabled/>
-          </FormItem>
-        </List>
-        <List title="完成照片">
-          <FormItem prop="imgs" >
-            <SingleUpload style={{ marginLeft: '30px' }} action="/upload"  disabled/>
-          </FormItem>
-        </List>
-        <List title="完成描述">
-          <FormItem prop="feedback"  alignItems="flex-start">
-            <TextArea placeholder="请输入您遇到的问题" disabled/>
-          </FormItem>
-        </List>
-      </Form>
-    </>
+const CompletePage = (props) => {
+
+  const { repairId, select, repairList } = props;
+
+  const { run: saveState } = useRequest({
+    url: '/api/updateRepair',
+    method: 'POST',
+  }, {
+    manual: true,
+    onSuccess: () => {
+      router.push('/Repair');
+    },
+  });
+
+
+
+  const { run: dispatchingUpdate } = useRequest({
+    url: '/api/dispatchingUpdate',
+    method: 'POST',
+  }, {
+    manual: true,
+    onSuccess: () => {
+      saveState({
+        data: { progress: 4, repairId: repairId, type: 3 }});
+    },
+  });
+
+  if (!(repairId && repairList)) {
+    return null;
+  }
+
+
+  return (
+    <div style={{ marginBottom: '150rpx' }}>
+      <Card title='使用单位信息'>
+        <ListItem
+          title='公司名称'
+        >
+          {repairList.customerResult && repairList.customerResult.customerName}
+        </ListItem>
+
+        <ListItem title='设备名称'>
+          {repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.detailesItems && repairList.deliveryDetailsResult.detailesItems.name}
+        </ListItem>
+        <ListItem title='品牌'>
+          {repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.detailsBrand && repairList.deliveryDetailsResult.detailsBrand.brandName}
+        </ListItem>
+        <ListItem title='产品编号'>
+          {repairList.deliveryDetailsResult && repairList.deliveryDetailsResult.stockItemId}
+        </ListItem>
+        <ListItem title='省市区'>
+          {repairList.regionResult && [0] && repairList.regionResult[0].province + '/' + repairList.regionResult[0].city + '/' + repairList.regionResult[0].area}
+        </ListItem>
+        <ListItem title='详细地址'>
+          {repairList.address}
+        </ListItem>
+        <ListItem title='姓名'>
+          {repairList.people}
+        </ListItem>
+        <ListItem title='职务'>
+          {repairList.position}
+        </ListItem>
+        <ListItem title='联系电话'>
+          {repairList.telephone}
+        </ListItem>
+      </Card>
+      <Card title='报修信息'>
+        <ListItem title='报修照片'>
+          {repairList.bannerResult && repairList.bannerResult.map((item, index) => {
+            return (
+              <Image
+                style={{ margin: 8 }}
+                width={90}
+                key={index}
+                src={item.imgUrl}
+              />
+            );
+          })}
+        </ListItem>
+        <ListItem title='服务类型'>
+          {repairList.serviceType}
+        </ListItem>
+        <ListItem title='期望到达时间'>
+          {repairList.expectTime}
+        </ListItem>
+        <ListItem title='描述'>
+          {repairList.comment}
+        </ListItem>
+      </Card>
+      <Card title='维保人员信息'>
+        <ListItem
+          title='工程师姓名'
+        >
+          {repairList.dispatchingResults.length > 0 && repairList.dispatchingResults[0].userName}
+        </ListItem>
+        <ListItem
+          title='手机号'
+        >
+          {repairList.dispatchingResults.length > 0 && repairList.dispatchingResults[0].phone}
+        </ListItem>
+        <ListItem
+          title='派单时间'
+        >
+          {repairList.dispatchingResults.length > 0 && repairList.dispatchingResults[0].time}
+        </ListItem>
+      </Card>
+
+      <Card title='完成信息'>
+        <Form
+          onFinish={async (values) => {
+            await dispatchingUpdate(
+              {
+                data: {
+                  ...values,
+                  dispatchingId: repairList.dispatchingResults && repairList.dispatchingResults.length > 0 && repairList.dispatchingResults[0].dispatchingId,
+                  state: 1,
+                },
+              },
+            );
+          }}
+          footer={
+            <Button
+              type='submit'
+              style={{ display: !select && (!repairList.power && 'none'), width: '100%' }}>提交</Button>
+          }
+        >
+          <Form.Item label='完成照片' name='imgUrl' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <UpLoadImg />
+          </Form.Item>
+
+          <Form.Item label='完成描述' name='note' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+            <TextArea placeholder='请输入完成描述' />
+          </Form.Item>
+
+        </Form>
+      </Card>
+    </div>
   );
 };
 export default CompletePage;
