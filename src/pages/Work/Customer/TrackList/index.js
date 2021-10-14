@@ -26,7 +26,7 @@ const TrackList = ({ customerId,classifyId,classify }) => {
   });
 
   const { loading: LoadingTrack, data, run } = useRequest({
-    url: '/trackMessage/list',
+    url: '/businessTrack/list',
     method: 'POST',
   }, { manual: true });
 
