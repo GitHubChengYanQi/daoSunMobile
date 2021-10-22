@@ -1,5 +1,4 @@
-import React from 'react';
-import Login from './Login';
+import Home from './Home';
 
 
 export default function() {
@@ -7,7 +6,7 @@ export default function() {
 
   return (
     <>
-      <Login />
+      <Home />
     </>
   );
 }

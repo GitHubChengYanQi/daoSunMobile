@@ -64,7 +64,7 @@ const CreateRepair = () => {
         <FromItem label='公司名称' name='customerId' rules={[{ required: true, message: '该字段是必填字段！' }]}>
           <MyPicker api={CustomerNameListSelect} />
         </FromItem>
-        <FromItem label='省市区' name='area'>
+        <FromItem label='省市区' name='area' rules={[{ required: true, message: '该字段是必填字段！' }]}>
           <MyTreeSelect api={commonArea} />
         </FromItem>
 

@@ -1,3 +1,4 @@
+import React from 'react';
 
 const pxtoviewport = require('postcss-px-to-viewport');
 // ref: https://umijs.org/config/
@@ -20,15 +21,9 @@ export default {
       exclude: [/dumi/,/ant/],
     }),
   ],
-  // routes: [
-    // {
-    //   path: '/',
-    //   component: '../layouts/index',
-    //   routes: [
-    //     { path: '/', component: '../pages/index' }
-    //   ]
-    // }
-  // ],
+
+  publicPath: process.env.NODE_ENV === 'development' ? '/' : '/cp/',
+
   plugins: [
 
     // ref: https://umijs.org/plugin/umi-plugin-react.html

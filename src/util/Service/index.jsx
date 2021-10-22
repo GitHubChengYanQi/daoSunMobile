@@ -2,9 +2,13 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
-import { router } from 'umi';
+import Login from '../../pages/Login';
 
-const baseURI =  'http://192.168.1.228';
+// const baseURI =  'https://api.zjzc.gf2025.com';
+
+
+const baseURI = process.env.NODE_ENV === 'development' ? "http://192.168.1.228" : 'https://api.zjzc.gf2025.com';
+
 
 
 const ajaxService = axios.create({
@@ -39,7 +43,8 @@ ajaxService.interceptors.response.use((response) => {
           Modal.destroyAll();
           try {
             // GotoLogin();
-            router.push('/')
+            cookie.remove('cheng-token');
+            window.location.href = window.location.href+''
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
           }
@@ -60,7 +65,8 @@ ajaxService.interceptors.response.use((response) => {
           Modal.destroyAll();
           try {
             // GotoLogin();
-            router.push('/')
+            cookie.remove('cheng-token');
+            window.location.href = window.location.href+''
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
           }

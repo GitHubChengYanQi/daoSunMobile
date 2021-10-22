@@ -108,7 +108,6 @@ const Engineer = (props) => {
                 data:{
                   progress: 2,
                   repairId: repairId,
-                  type: 1
                 }
               });
             }}>确定接单</Button>

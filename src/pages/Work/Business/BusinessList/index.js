@@ -94,7 +94,7 @@ const BusinessList = ({select}) => {
               <Flex type='flex' justify='space-around'>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/Track?classify=1&customerId=${data.customerId}&businessId=${data.businessId}`);
+                    router.push(`/Work/Customer/Track?classify=1&customerId=${items.customerId}&businessId=${items.businessId}`);
                   }}> 跟进</Button>
                 </FlexItem>
                 <FlexItem>

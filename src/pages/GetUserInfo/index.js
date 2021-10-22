@@ -5,7 +5,9 @@ import utf8 from 'crypto-js/enc-utf8';
 
 
 const GetUserInfo = () => {
+
   const token = cookie.get('cheng-token');
+
   /**
    * token 不存在就返回空
    */

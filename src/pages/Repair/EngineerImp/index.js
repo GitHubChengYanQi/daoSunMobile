@@ -17,7 +17,8 @@ const EngineerImp = (props) => {
   }, {
     manual: true,
     onSuccess:()=>{
-      router.push(`/Repair/RepairList?id=${repairId}&select=${select}`);
+      // router.push(`/Repair/RepairList?id=${repairId}&select=${select}`);
+      router.goBack();
     }
   });
 
@@ -112,7 +113,7 @@ const EngineerImp = (props) => {
                   type: 2,
                 },
               });
-            }}>完成</Button>
+            }}>确定到达</Button>
         }
       />
 

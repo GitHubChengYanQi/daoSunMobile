@@ -14,17 +14,16 @@ import React, { useEffect } from 'react';
 import { Chart } from '@antv/f2';
 import DealRank from '@/pages/Home/component/DealRank';
 import SaleFunnel from '@/pages/Home/component/SaleFunnel';
-import { Card } from 'antd-mobile';
+import { Button, Card } from 'antd-mobile';
 
 const DataBoard = () => {
-
 
   const columns = [
     {
       title: '时间',
       dataIndex: 'time',
       key: 'time',
-      render: text => <a href>{text}</a>,
+      render: text => <Button color='primary' fill='none'>{text}</Button>,
     },
     {
       title: '商机数量',
@@ -111,67 +110,66 @@ const DataBoard = () => {
     },
   ];
 
-  useEffect(() => {
-    const data1 = [{
-      name: '目标金额',
-      percent: 83.59,
-      a: '1',
-    }, {
-      name: '完成金额',
-      percent: 32.17,
-      a: '1',
-    }];
+  {/*useEffect(() => {*/}
+  {/*  const data1 = [{*/}
+  //     name: '目标金额',
+  //     percent: 83.59,
+  //     a: '1',
+  //   }, {
+  //     name: '完成金额',
+  //     percent: 32.17,
+  //     a: '1',
+  //   }];
+  //
+  //   const map = {};
+  //   data1.map((obj) => {
+  {/*    return map[obj.name] = obj.percent + '%';*/}
+  {/*  });*/}
 
-    const map = {};
-    data1.map((obj) => {
-      return map[obj.name] = obj.percent + '%';
-    });
-
-    const chart = new Chart({
-      id: 'myChart',
-      pixelRatio: window.devicePixelRatio,
-      padding: [20, 'auto'],
-    });
-    chart.source(data1, {
-      percent: {
-        formatter: function formatter(val) {
-          return val + '%';
-        },
-      },
-    });
-    chart.tooltip(false);
-    chart.legend({
-      position: 'right',
-      itemFormatter: function itemFormatter(val) {
-        return val + '    ' + map[val];
-      },
-    });
-    chart.coord('polar', {
-      transposed: true,
-      innerRadius: 0.7,
-      radius: 0.85,
-    });
-    chart.axis(false);
-    chart.interval().position('a*percent').color('name', ['#3BA4FF', '#afabab']).adjust('stack');
-
-    chart.guide().html({
-      position: ['50%', '45%'],
-      html: '<div style="width: 250px;height: 40px;text-align: center;"><div style="font-size: 16px">完成度</div><div style="font-size: 24px">133.08 亿</div></div>',
-    });
-    chart.render();
-  });
+  //   const chart = new Chart({
+  //     id: 'myChart',
+  //     pixelRatio: window.devicePixelRatio,
+  //     padding: [20, 'auto'],
+  //   });
+  //   chart.source(data1, {
+  //     percent: {
+  //       formatter: function formatter(val) {
+  //         return val + '%';
+  //       },
+  //     },
+  //   });
+  //   chart.tooltip(false);
+  //   chart.legend({
+  //     position: 'right',
+  //     itemFormatter: function itemFormatter(val) {
+  //       return val + '    ' + map[val];
+  //     },
+  //   });
+  //   chart.coord('polar', {
+  {/*    transposed: true,*/}
+  {/*    innerRadius: 0.7,*/}
+  {/*    radius: 0.85,*/}
+  {/*  });*/}
+  //   chart.axis(false);
+  //   chart.interval().position('a*percent').color('name', ['#3BA4FF', '#afabab']).adjust('stack');
+  //
+  //   chart.guide().html({
+  //     position: ['50%', '45%'],
+  //     html: '<div style="width: 250px;height: 40px;text-align: center;"><div style="font-size: 16px">完成度</div><div style="font-size: 24px">133.08 亿</div></div>',
+  //   });
+  //   chart.render();
+  // });
 
   return (
     <>
       <div>
-        <ListItem extra={<div style={{ fontSize: 14 }} onClick={() => {
-          router.push('/CompleteTrack');
-        }}>详情 {<RightOutlined />}</div>}>业绩目标</ListItem>
-
-        <canvas id='myChart' style={{ width: '100%', height: 260 }} />
+        {/*<Card extra={<div style={{ fontSize: 14 }} onClick={() => {*/}
+        {/*  router.push('/CompleteTrack');*/}
+        {/*}}>详情 {<RightOutlined />}</div>} title='业绩目标'>*/}
+        {/*  <canvas id='myChart' style={{ width: '100%', height: 260 }} />*/}
+        {/*</Card>*/}
 
         <Card
-          style={{ marginTop: 30 }}
           title='销售简报'
         >
           <div>

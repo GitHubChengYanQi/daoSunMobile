@@ -54,3 +54,13 @@
 :global .am-tabs-content-wrap {
   margin-top: 12%!important;
 }
+.tab :global .weui-scrollable-tabbar {
+  position: fixed;
+  background-color: white;
+  z-index: 99;
+}
+
+.tab :global .weui-swiper-tabcontent {
+  margin-top: 16%;
+}
+

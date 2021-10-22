@@ -100,6 +100,7 @@ const EngineerRepair = (props) => {
               data: {
                 progress: 1,
                 repairId: repairId,
+                type:1,
               },
             }).then(() => {
               Toast.show({
