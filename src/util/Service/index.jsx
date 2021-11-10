@@ -2,12 +2,19 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
-import Login from '../../pages/Login';
 
 // const baseURI =  'https://api.zjzc.gf2025.com';
 
 
-const baseURI = process.env.NODE_ENV === 'development' ? "http://192.168.1.228" : 'https://api.zjzc.gf2025.com';
+const baseURI =
+  process.env.NODE_ENV === 'development'
+    ?
+    "http://192.168.1.119"
+    // 'https://api.daoxin.gf2025.com'
+    :
+    // 'https://api.zjzc.gf2025.com'
+    'https://api.daoxin.gf2025.com'
+;
 
 
 
@@ -44,6 +51,9 @@ ajaxService.interceptors.response.use((response) => {
           try {
             // GotoLogin();
             cookie.remove('cheng-token');
+            const search = new URLSearchParams(window.location.search);
+            search.delete('code');
+            search.delete('state');
             window.location.href = window.location.href+''
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;

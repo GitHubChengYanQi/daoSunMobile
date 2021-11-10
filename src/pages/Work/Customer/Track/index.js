@@ -6,15 +6,33 @@ import {
   TextArea, WhiteSpace,
 } from 'weui-react-v2';
 import { router } from 'umi';
-import { Button, Card, Form } from 'antd-mobile';
+import { Button, Card, Dialog, Form } from 'antd-mobile';
 import MyPicker from '../../../components/MyPicker';
 import UpLoadImg from '../../../components/Upload';
 import { BusinessNameListSelect, contractIdSelect, customerIdSelect, trackMessageAdd } from '../CustomerUrl';
 import { useRequest } from '../../../../util/Request';
+import wx from 'populee-weixin-js-sdk';
 
 const { Item: FormItem } = Form;
 
 const Track = (props) => {
+
+  const [location,setLocation] = useState();
+
+
+  useEffect(()=>{
+    wx.ready(function() {
+      wx.getLocation({
+        type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+        success: function(res) {
+          const latitude = res.latitude; // 纬度，浮点数，范围为90 ~ -90
+          const longitude = res.longitude; // 经度，浮点数，范围为180 ~ -180。
+          setLocation({ latitude, longitude });
+        },
+      });
+    });
+  },[]);
+
 
 
   const params = props.location.query;
@@ -24,9 +42,7 @@ const Track = (props) => {
   const [classNmb, setClassNmb] = useState(parseInt(params.classify) || 0);
 
   const { run } = useRequest(trackMessageAdd, {
-    manual: true, onSuccess: (res) => {
-      router.goBack();
-    },
+    manual: true,
   });
 
 
@@ -69,25 +85,29 @@ const Track = (props) => {
           }
         }}
         onFinish={async (values) => {
-          values = {
-            ...values,
-            businessTrackParams: [{
-              classifyId: values.classifyId,
-              classify: values.classify,
-              type: values.type,
-              note: values.note,
-              image: values.image,
-              time: values.time,
-              message: values.message,
-              money: values.money,
-            }],
-          };
-
-          run({
+          await run({
             data: {
               ...values,
+              businessTrackParams: [{
+                classifyId: values.classifyId,
+                classify: values.classify,
+                type: values.type,
+                note: values.note,
+                image: values.image,
+                time: values.time,
+                message: values.message,
+                money: values.money,
+                longitude:location && location.longitude,
+                latitude:location && location.latitude,
+              }],
             },
           });
+          Dialog.alert({
+            content: '添加成功',
+            onConfirm: () => {
+              router.goBack();
+            },
+          })
         }}
         footer={
           <div style={{ textAlign: 'center' }}>

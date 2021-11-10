@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import {
   DatePicker,
-  DialogPop,
   Input,
   List,
   ListItem, NumberInput,
@@ -91,18 +90,12 @@ const BusinessAdd = () => {
             businessAdd({
               data: { ...values },
             }).then(() => {
-              DialogPop({
-                title: '提示：如有异议请联系创建人或领导协调',
-                children: `您输入的客户已经被创建 创建人：${user && user.name}`,
+              Dialog.alert({
+                content: `项目已经被创建 创建人：${user && user.name}`,
                 onConfirm: () => {
-                  return new Promise((resolve) => {
-                    setTimeout(() => {
-                      router.goBack();
-                      resolve(true);
-                    }, 2000);
-                  });
+                  router.goBack();
                 },
-              });
+              })
             });
           }}
         >

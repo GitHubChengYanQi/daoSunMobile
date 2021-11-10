@@ -1,4 +1,4 @@
-import { Flex, FlexItem, ListItem,  WhiteSpace } from 'weui-react-v2';
+import { Flex, FlexItem,   WhiteSpace } from 'weui-react-v2';
 import { Table } from 'antd';
 import { router } from 'umi';
 import {
@@ -10,8 +10,7 @@ import {
   SolutionOutlined, TeamOutlined, TransactionOutlined,
   UploadOutlined,
 } from '@ant-design/icons';
-import React, { useEffect } from 'react';
-import { Chart } from '@antv/f2';
+import React from 'react';
 import DealRank from '@/pages/Home/component/DealRank';
 import SaleFunnel from '@/pages/Home/component/SaleFunnel';
 import { Button, Card } from 'antd-mobile';
@@ -110,8 +109,8 @@ const DataBoard = () => {
     },
   ];
 
-  {/*useEffect(() => {*/}
-  {/*  const data1 = [{*/}
+  /*useEffect(() => {*/
+  /*  const data1 = [{*/
   //     name: '目标金额',
   //     percent: 83.59,
   //     a: '1',
@@ -123,8 +122,8 @@ const DataBoard = () => {
   //
   //   const map = {};
   //   data1.map((obj) => {
-  {/*    return map[obj.name] = obj.percent + '%';*/}
-  {/*  });*/}
+  /*    return map[obj.name] = obj.percent + '%';*/
+  /*  });*/
 
   //   const chart = new Chart({
   //     id: 'myChart',
@@ -146,10 +145,10 @@ const DataBoard = () => {
   //     },
   //   });
   //   chart.coord('polar', {
-  {/*    transposed: true,*/}
-  {/*    innerRadius: 0.7,*/}
-  {/*    radius: 0.85,*/}
-  {/*  });*/}
+  /*    transposed: true,*/
+  /*    innerRadius: 0.7,*/
+  /*    radius: 0.85,*/
+  /*  });*/
   //   chart.axis(false);
   //   chart.interval().position('a*percent').color('name', ['#3BA4FF', '#afabab']).adjust('stack');
   //

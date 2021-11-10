@@ -99,7 +99,7 @@ const BusinessList = ({select}) => {
                 </FlexItem>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                    router.push('/Work/Business/BusinessDetail');
+                    router.push(`/Work/Business/BusinessDetail?${items.businessId}`);
                   }}> 更多</Button></FlexItem>
               </Flex>
             </ListItem>

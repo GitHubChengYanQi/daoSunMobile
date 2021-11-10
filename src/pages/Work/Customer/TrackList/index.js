@@ -15,7 +15,7 @@ const TrackList = ({ customerId,classifyId,classify }) => {
         await run(
           {
             data: {
-              trackMessageIds: trackMessageIds,
+              trackMessageIds: trackMessageIds.length > 0 ? trackMessageIds : null,
               classifyId:classifyId,
               classify:classify
             },

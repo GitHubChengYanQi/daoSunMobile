@@ -15,7 +15,7 @@ const BusinessDetail = () => {
 
   const params = window.location.href.split('?')[1];
 
-  const { loading, data,refresh } = useRequest(
+  const { loading, data, refresh } = useRequest(
     {
       url: '/crmBusiness/detail',
       method: 'POST',
@@ -44,7 +44,8 @@ const BusinessDetail = () => {
                 src={data.avatar}>{data.businessName && data.businessName.substring(0, 1)}</Avatar>
               <span>
                 {data.businessName}
-                <em style={{ display: 'block', fontWeight: 400 }}>客户：{data.customer && data.customer.customerName} / 负责人：{data.user && data.user.name}</em>
+                <em style={{ display: 'block', fontWeight: 400 }}>客户：{data.customer && data.customer.customerName}</em>
+                <em style={{ display: 'block', fontWeight: 400 }}>负责人：{data.user && data.user.name}</em>
               </span>
             </Space>
           }
@@ -96,16 +97,17 @@ const BusinessDetail = () => {
         <Card style={{ backgroundColor: '#fff', marginTop: 8 }}>
           <Tabs className='swiper-demo2' lazy={true}>
             <TabPanel tabKey='1' tab={<span className='tab_point'>动态</span>}>
-              <Dynamic api={{url:'/businessDynamic/list',method:'POST',data:{businessId:data.businessId || ''}}} />
+              <Dynamic
+                api={{ url: '/businessDynamic/list', method: 'POST', data: { businessId: data.businessId || '' } }} />
             </TabPanel>
             <TabPanel tabKey='2' tab={<span className='tab_point'>跟进</span>}>
               <TrackList classifyId={data.businessId} classify={1} />
             </TabPanel>
             <TabPanel tabKey='4' tab={<span className='tab_point'>竞争对手</span>}>
-              <CompetitorList select={{businessId:data.businessId}} />
+              <CompetitorList select={{ businessId: data.businessId }} />
             </TabPanel>
             <TabPanel tabKey='5' tab={<span className='tab_point'>报价</span>}>
-              <QuoteList select={{businessId:data.businessId}} />
+              <QuoteList select={{ businessId: data.businessId }} />
             </TabPanel>
             <TabPanel tabKey='3' tab={<span className='tab_point'>产品明细</span>}>
               <ItemsDetail businessId={data.businessId} />

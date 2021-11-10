@@ -6,21 +6,22 @@ import {
   List,
   ListItem,
 
-  Toast,
-
 } from 'weui-react-v2';
 
 import { Affix } from 'antd';
 import styles from './index.css';
 import { router } from 'umi';
-import { Badge } from 'antd-mobile';
+import { Badge, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import wx from 'populee-weixin-js-sdk';
 
 const Work = () => {
 
   const toast = () => {
-    return Toast.text('暂未开通');
+    return Toast.show({
+      content:'暂未开通',
+    });
   };
 
   return (
@@ -38,7 +39,19 @@ const Work = () => {
             <div className={styles.size}>全局查找</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-saoyisao1' />} onClick={() => {
-            toast();
+            wx.scanQRCode({
+              desc: 'scanQRCode desc',
+              needResult: 0, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
+              scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是条形码（一维码），默认二者都有
+              success: function(res) {
+                // 回调
+              },
+              error: function(res) {
+                if (res.errMsg.indexOf('function_not_exist') > 0) {
+                  alert('版本过低请升级')
+                }
+              }
+            });
           }}>
             <div className={styles.size}>扫一扫</div>
           </GridItem>

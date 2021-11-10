@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  DatePicker, DialogPop,
+  DatePicker,
   Input,
   ListItem,
   Switch,
   TextArea,
 } from 'weui-react-v2';
 import { router } from 'umi';
-import { Button, Card, Form, Radio, Space } from 'antd-mobile';
+import { Button, Card, Dialog, Form, Radio, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import {
   commonArea,
@@ -72,18 +72,12 @@ const CustomerAdd = () => {
               data: { ...values },
             },
           );
-          DialogPop({
-            title: '提示：如有异议请联系创建人或领导协调',
-            children: `您输入的客户已经被创建 创建人：${user && user.name}`,
+          Dialog.alert({
+            content: `您输入的客户已经被创建 创建人：${user && user.name}`,
             onConfirm: () => {
-              return new Promise((resolve) => {
-                setTimeout(() => {
-                  router.goBack();
-                  resolve(true);
-                }, 2000);
-              });
+              router.goBack();
             },
-          });
+          })
         }}
         footer={
           <div style={{ textAlign: 'center', margin: 8 }}>

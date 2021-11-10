@@ -1,10 +1,11 @@
-import { Button, List } from 'antd-mobile';
+import { Button, Card, List } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Input } from 'weui-react-v2';
 import { router } from 'umi';
 import cookie from 'js-cookie';
 import GetUserInfo from '../GetUserInfo';
+import SendCode from '@jiumao/rc-send-code';
 
 
 const Sms = () => {
@@ -26,7 +27,7 @@ const Sms = () => {
   const [sms, setSms] = useState({});
 
   return (
-    <>
+    <Card title='首次登录请输入手机号'>
       <List
         style={{
           '--prefix-width': '6em',
@@ -37,17 +38,19 @@ const Sms = () => {
             setSms({ ...sms, phone: value });
           }} />
         </List.Item>
-        <List.Item prefix='短信验证码' extra={<Button color='primary' onClick={() => {
-          run(
-            {
-              data: {
-                phone: sms && sms.phone,
-              },
-            },
-          );
-        }} fill='none'>
-          发送验证码
-        </Button>}>
+        <List.Item prefix='短信验证码' extra={
+          <SendCode
+            onCaptcha={() => {
+              run(
+                {
+                  data: {
+                    phone: sms && sms.phone,
+                  },
+                },
+              );
+              return true;
+            }}
+          />}>
           <Input placeholder='请输入验证码' clearable onChange={(value) => {
             setSms({ ...sms, code: value });
           }} />
@@ -62,7 +65,7 @@ const Sms = () => {
           }}>登录</Button>
         </List.Item>
       </List>
-    </>
+    </Card>
   );
 };
 

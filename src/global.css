@@ -14,4 +14,8 @@ body {
   z-index: auto;
 }
 
+:global .weui-popup-content {
+  position:fixed;
+}
+
 

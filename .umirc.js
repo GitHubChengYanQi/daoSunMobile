@@ -23,6 +23,7 @@ export default {
   ],
 
   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/cp/',
+  history: 'hash',
 
   plugins: [
 
@@ -30,8 +31,8 @@ export default {
     ['umi-plugin-react', {
       antd: false,
       dva: true,
-      dynamicImport: false,
-      title: 'daoSunMobile',
+      dynamicImport: {  },
+      title: '道昕云',
       dll: false,
 
 

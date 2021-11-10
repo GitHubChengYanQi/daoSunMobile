@@ -3,9 +3,11 @@ import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 
-const MyTreeSelect = ({ api, value, onChange, title }) => {
+const MyTreeSelect = ({ api, value,defaultParams, onChange, title }) => {
 
-  const { data } = useRequest(api);
+  const { data } = useRequest(api,{
+    defaultParams
+  });
 
   const [visible, setVisible] = useState();
 
@@ -13,15 +15,16 @@ const MyTreeSelect = ({ api, value, onChange, title }) => {
 
   return (
     <>
-      <ListItem arrow={true} style={{padding:0}} onClick={()=>{
+      <ListItem arrow={true} style={{padding:0,border:'none'}} onClick={()=>{
         setVisible(true);
       }} >
         {name.length && name.map((items,index)=>{
           return (
             <span key={index}>{index !== 0 && '-'}{items.label}</span>
           );
-        }) || '请选择'}
+        }) || (title || '请选择')}
       </ListItem>
+
       <Popup
         visible={visible}
       >
