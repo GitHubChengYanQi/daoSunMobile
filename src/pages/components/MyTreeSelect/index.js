@@ -1,44 +1,103 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 
-const MyTreeSelect = ({ api, value,defaultParams, onChange, title }) => {
+const getParentValue = (value, data) => {
+  if (!Array.isArray(data)) {
+    return [];
+  }
+  for (let i = 0; i < data.length; i++) {
+    if (`${data[i].value}` === `${value}`) {
+      return [{ label: data[i].label, value: `${value}` }];
+    }
+    if (data[i].children.length > 0) {
+      const values = getParentValue(value, data[i].children);
+      if (values.length > 0) {
+        return [{ label: `${data[i].label}`, value: `${data[i].value}` }, ...values];
+      }
+    }
+  }
+  return [];
+};
 
-  const { data } = useRequest(api,{
-    defaultParams
+const MyTreeSelect = ({ api, value,poputTitle, defaultParams, onChange, show, title, clear }) => {
+
+  const { data } = useRequest(api, {
+    defaultParams,
   });
 
   const [visible, setVisible] = useState();
 
-  const [name,setName] = useState([]);
+  useEffect(() => {
+    if (show !== undefined){
+      setVisible(true);
+    }
+  }, [show]);
+
+
+  let valueArray = [];
+  if ((value || value === 0) && typeof `${value}` === 'string') {
+    const $tmpValue = `${value}`;
+    if ($tmpValue.indexOf(',') >= 0) {
+      const tmpValue = $tmpValue.split(',');
+      for (let i = 0; i < tmpValue.length; i++) {
+        const item = tmpValue[i];
+        if (item) {
+          valueArray.push(item);
+        }
+      }
+    } else {
+      valueArray = getParentValue($tmpValue, data);
+    }
+  } else if (Array.isArray(value)) {
+    valueArray = value;
+  } else {
+    valueArray = [];
+  }
+
+
+  const change = (value) => {
+    const result = value ? value[value.length - 1] : value;
+    onChange(result);
+  };
+
 
   return (
     <>
-      <ListItem arrow={true} style={{padding:0,border:'none'}} onClick={()=>{
+      <ListItem arrow={true} style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
-      }} >
-        {name.length && name.map((items,index)=>{
+      }}>
+        {valueArray.length > 0 ? valueArray.map((items, index) => {
           return (
-            <span key={index}>{index !== 0 && '-'}{items.label}</span>
+            <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
           );
-        }) || (title || '请选择')}
+        }) : (title || '请选择')}
       </ListItem>
 
       <Popup
         visible={visible}
       >
-        <Card title={title || '选择'} style={{maxHeight:'30vh',overflow:'auto'}} extra={<Button color='primary' fill='none' onClick={()=>{
-          setVisible(false);
-        }}>确定</Button>}>
+        <Card title={
+          <><Button color='primary' fill='none' onClick={() => {
+            setVisible(false);
+            typeof clear === 'function' && clear();
+          }}>取消</Button>
+          </>} style={{ maxHeight: '30vh', overflow: 'auto' }} extra={
+          <>
+            {poputTitle || title || '选择'}
+            <Button color='primary' fill='none' onClick={() => {
+              setVisible(false);
+            }}>确定</Button>
+          </>
+        }>
           <TreeSelect
-            value={name.map((items)=>{
-              return items.value
+            value={valueArray.map((items) => {
+              return items.value;
             })}
-            options={data}
-            onChange={(value,object) => {
-              setName(object);
-              onChange(value.length > 0 && value[value.length - 1]);
+            options={data || []}
+            onChange={(value, object) => {
+              change(value);
             }}
           />
         </Card>

@@ -173,7 +173,6 @@ const CustomerAdd = () => {
         </Card>
 
         <Card title='联系人信息'>
-          <FormItem name='contactsParams' />
           <FormItem name='contactsName' label='联系人姓名' rules={[{ required: true, message: '该字段是必填字段！' }]}>
             <Input placeholder='请输入联系人姓名' />
           </FormItem>
@@ -185,11 +184,9 @@ const CustomerAdd = () => {
           </FormItem>
         </Card>
         <Card title='地址信息'>
-          <FormItem name='adressParams' />
           <FormItem name='region' label='所属区域'>
             <MyTreeSelect api={commonArea} />
           </FormItem>
-          <FormItem name='map' />
           <FormItem name='address' label='详细地址'>
             <Input placeholder='请输入详细地址' />
           </FormItem>

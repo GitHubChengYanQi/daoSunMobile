@@ -9,6 +9,7 @@ import Stock from '../Report/components/Stock';
 import InStock from '../Scan/InStock';
 import OutStock from '../Scan/OutStock';
 import { useDebounceEffect } from 'ahooks';
+import Quality from '../Scan/Quality';
 
 // https://dasheng-soft.picp.vip/#/OrCode?id=1453935045308170242
 
@@ -44,8 +45,15 @@ const OrCode = (props) => {
         scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是条形码（一维码），默认二者都有
         success: (res) => {
           // 回调
+          if (res.resultStr.indexOf('https') !== -1){
+            const param = res.resultStr.split('=');
+            if (param && param[1]){
+              getQrCode(param[1]);
+            }
+          }else {
+            getQrCode(res.resultStr);
+          }
 
-          getQrCode(res);
         },
         error: (res) => {
           alert(res);
@@ -81,7 +89,13 @@ const OrCode = (props) => {
         refresh();
       }} />;
     case "outstock":
-      return <OutStock />;
+      return <OutStock data={data} onChange={()=>{
+        refresh();
+      }} />;
+    case "quality":
+      return <Quality data={data} onChange={()=>{
+        refresh();
+      }} />;
     default:
       return  <Loading />
   }

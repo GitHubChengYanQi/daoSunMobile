@@ -2,18 +2,15 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
-
-// const baseURI =  'https://api.zjzc.gf2025.com';
-
+import { router } from 'umi';
+import { Config } from '../../../config';
 
 const baseURI =
   process.env.NODE_ENV === 'development'
     ?
     "http://192.168.1.119"
-    // 'https://api.daoxin.gf2025.com'
     :
-    // 'https://api.zjzc.gf2025.com'
-    'https://api.daoxin.gf2025.com'
+    Config().api
 ;
 
 
@@ -54,6 +51,9 @@ ajaxService.interceptors.response.use((response) => {
             const search = new URLSearchParams(window.location.search);
             search.delete('code');
             search.delete('state');
+            if (process.env.NODE_ENV === 'development'){
+              router.push('/');
+            }
             window.location.href = window.location.href+''
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;

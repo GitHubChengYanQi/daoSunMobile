@@ -7,8 +7,7 @@ export default function() {
 
   return (
     <>
-      <Home />
-      {/*<Login />*/}
+      {process.env.NODE_ENV === 'development' ? <Login /> :  <Home />}
     </>
   );
 }

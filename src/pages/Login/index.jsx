@@ -16,8 +16,7 @@ const Login = () => {
 
   const { run } = useRequest(
     {
-      // url: '/rest/login',
-      url: '/login/login',
+      url: process.env.NODE_ENV === 'development' ? '/rest/login' : '/login/login',
       method: 'POST',
     }, {
       manual: true,

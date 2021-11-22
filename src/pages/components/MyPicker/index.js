@@ -17,13 +17,13 @@ const MyPicker = ({ api,value,onChange,option,disabled }) => {
 
   if (option || data){
     return (
-      <>
+      <div>
         <Picker title='请选择' placeholder='请选择' disabled={disabled} data={option || data} value={[value]} onConfirm={(value,object)=>{
           onChange(value && value[0]);
         }}>
           <ListItem arrow={true} style={{padding:0}} />
         </Picker>
-      </>
+      </div>
     );
   }else {
     return <Stripe />;

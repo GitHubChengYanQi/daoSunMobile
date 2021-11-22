@@ -15,7 +15,8 @@ body {
 }
 
 :global .weui-popup-content {
-  position:fixed;
+  position:fixed !important;
 }
+
 
 

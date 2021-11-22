@@ -15,8 +15,11 @@ import { Badge, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import wx from 'populee-weixin-js-sdk';
+import { useRequest } from '../../util/Request';
 
 const Work = () => {
+
+  const { data: user } = useRequest({ url: '/rest/system/currentUserInfo', method: 'POST' });
 
   const toast = () => {
     return Toast.show({
@@ -28,7 +31,7 @@ const Work = () => {
     <>
       <Affix offsetTop={0}>
         <ListItem extra={<div>开发部</div>}>
-          <div>下午好，程彦祺</div>
+          <div>下午好，{user && user.name}</div>
         </ListItem>
       </Affix>
       <List title={<div>常用工具</div>}>
@@ -179,6 +182,39 @@ const Work = () => {
         </Grid>
       </List>
 
+      <List className={styles.title} title={<div>仓储管理</div>}>
+        <Grid>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            // router.push('/Work/DataManage');
+            toast();
+          }}>
+            <div className={styles.size}>入库管理</div>
+          </GridItem>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            // router.push('/Work/DataManage');
+            toast();
+          }}>
+            <div className={styles.size}>库存管理</div>
+          </GridItem>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            // router.push('/Work/DataManage');
+            toast();
+          }}>
+            <div className={styles.size}>出库管理</div>
+          </GridItem>
+        </Grid>
+      </List>
+
+      <List className={styles.title} title={<div>生产管理</div>}>
+        <Grid>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            // router.push('/Work/DataManage');
+            toast();
+          }}>
+            <div className={styles.size}>质检任务</div>
+          </GridItem>
+        </Grid>
+      </List>
 
 
       <List className={styles.title} title={<div>产品资料管理</div>}>
