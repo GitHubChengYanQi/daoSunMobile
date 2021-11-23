@@ -28,7 +28,7 @@ const Work = () => {
   };
 
   return (
-    <>
+    <di>
       <Affix offsetTop={0}>
         <ListItem extra={<div>开发部</div>}>
           <div>下午好，{user && user.name}</div>
@@ -226,7 +226,7 @@ const Work = () => {
           </GridItem>
         </Grid>
       </List>
-    </>
+    </di>
   );
 };
 

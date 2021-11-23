@@ -71,7 +71,6 @@ const Quality = ({ data, onChange }) => {
       } else {
         Toast.show({
           content: '没有质检通过的物料！',
-          icon: 'fail',
         });
       }
     }
@@ -123,7 +122,7 @@ const Quality = ({ data, onChange }) => {
   }, [data]);
 
   if (data) {
-    return <>
+    return <div style={{overflowX:'hidden'}}>
       <Card title='基本信息'>
 
         <List.Item>质检编码：{data.coding}</List.Item>
@@ -219,7 +218,7 @@ const Quality = ({ data, onChange }) => {
         </Tabs.TabPane>
       </Tabs>
       <CreateInstock show={show} />
-    </>;
+    </div>;
   } else {
     return <Empty
       style={{ padding: '64px 0' }}

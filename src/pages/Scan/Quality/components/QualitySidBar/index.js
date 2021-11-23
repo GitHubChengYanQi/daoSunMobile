@@ -1,15 +1,16 @@
 import { Col, Row } from 'antd';
-import { Badge, Button, Card, Dialog,  Radio, SideBar, Space, Toast } from 'antd-mobile';
+import { Badge, Button,  Dialog, Divider, Radio, SafeArea, SideBar, Space, Toast } from 'antd-mobile';
 import { CheckOutlined, CloseOutlined, ScanOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { NumberInput, TextArea, WhiteSpace } from 'weui-react-v2';
 import UpLoadImg from '../../../../components/Upload';
 import { request } from '../../../../../util/Request';
 import wx from 'populee-weixin-js-sdk';
+import pares from 'html-react-parser';
 
 const testCodeId = '1461996335041687553';
 
-const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, defaultValue }) => {
+const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, defaultValue }) => {
 
   // 侧边导航的key
   const [key, setKey] = useState('0');
@@ -103,7 +104,7 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
               ...items,
               id: items.skuId,
               number: batch ? number : 1,
-              inkindType:'质检',
+              inkindType: '质检',
             },
           }).then((res) => {
             if (typeof res === 'string') {
@@ -195,7 +196,7 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
         formValues,
         module: 'item',
         number: batch ? number : 1,
-        qualityTaskDetailId:data.qualityTaskDetailId
+        qualityTaskDetailId: data.qualityTaskDetailId,
       },
     });
 
@@ -232,7 +233,7 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
   const bars = () => {
 
     if (plan) {
-      const Operator = (value,bai) => {
+      const Operator = (value, bai) => {
         switch (value) {
           case 1:
             return <>{'='}{plan.standardValue}{bai && '%'}</>;
@@ -245,7 +246,7 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
           case 5:
             return <>{'<'}{plan.standardValue}{bai && '%'}</>;
           case 6:
-            return <>{`\< ${plan.standardValue.split(',')[0]}`} {`${bai ? '%' : ''}`}            {`\> ${plan.standardValue.split(',')[1]}`} {`${bai ? '%' : ''}`}</>;
+            return <>{`\< ${plan.standardValue.split(',')[0]}`} {`${bai ? '%' : ''}`} {`\> ${plan.standardValue.split(',')[1]}`} {`${bai ? '%' : ''}`}</>;
           default:
             break;
         }
@@ -253,11 +254,15 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
       switch (plan.qualityCheckResult && plan.qualityCheckResult.type) {
         case 1:
           return <div>
-            <div><strong>合格标准：</strong>{Operator(plan.operator)} &nbsp;&nbsp;&nbsp;&nbsp; {plan.unit && plan.unit.unitName}</div>
+            <div>
+              <strong style={{fontSize:16}}>合格标准：</strong>{Operator(plan.operator)} &nbsp;&nbsp;&nbsp;&nbsp; {plan.unit && plan.unit.unitName}
+            </div>
             <WhiteSpace size='sm' />
-            <div><Space><strong>检测结果：</strong>
+            <div><Space><strong style={{fontSize:16}}>检测结果：</strong>
               <NumberInput
+                style={{backgroundColor:'#eee'}}
                 placeholder='输入验收值'
+                precision={5}
                 value={value[key] || ''}
                 onChange={(val) => {
                   change(val);
@@ -289,9 +294,9 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
           }} />;
         case 5:
           return <div>
-            <div><strong>合格标准：</strong>{Operator(plan.operator,true)}</div>
+            <div><strong style={{fontSize:16}}>合格标准：</strong>{Operator(plan.operator, true)}</div>
             <WhiteSpace size='sm' />
-            <div><Space><strong>检测结果：</strong>
+            <div><Space><strong style={{fontSize:16}}>检测结果：</strong>
               <NumberInput
                 min={0}
                 max={100}
@@ -323,121 +328,142 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
   }
 
 
-  return <div style={{ height: '100vh' }}><Row gutter={24}>
-    <Col span={9} style={{ maxHeight: '70vh', overflow: 'auto' }}>
-      <SideBar style={{ '--width': '100%' }} activeKey={key} onChange={(value) => {
-        // setValue(null);
-        setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[value]);
-        setKey(value);
-      }}>
-        {
-          data
-          &&
-          data.qualityPlanResult
-          &&
-          data.qualityPlanResult.qualityPlanDetailParams
-          &&
-          data.qualityPlanResult.qualityPlanDetailParams.map((items, index) => {
-            return <SideBar.Item
-              key={index}
-              badge={!state[index] && Badge.dot}
-              title={<>{items.qualityCheckResult && items.qualityCheckResult.name}{state[index] && res(!!state[index].judge)}</>} />;
-          })
-        }
-      </SideBar>
+  return <div style={{ height: '100vh' }}><Row gutter={24} style={{height: '100%'}}>
+    <Col span={9} style={{ height: '100%',backgroundColor:'#f5f5f5',padding:0 }}>
+      <div style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+        <SideBar style={{ '--width': '100%' }} activeKey={key} onChange={(value) => {
+          // setValue(null);
+          setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[value]);
+          setKey(value);
+        }}>
+          {
+            data
+            &&
+            data.qualityPlanResult
+            &&
+            data.qualityPlanResult.qualityPlanDetailParams
+            &&
+            data.qualityPlanResult.qualityPlanDetailParams.map((items, index) => {
+              return <SideBar.Item
+                key={index}
+                badge={!state[index] && Badge.dot}
+                title={<>{items.qualityCheckResult && items.qualityCheckResult.name}{state[index] && res(!!state[index].judge)}</>} />;
+            })
+          }
+        </SideBar>
+      </div>
     </Col>
-    <Col span={15} style={{ padding: 8 }}>
+    <Col span={14} style={{ padding: 8,maxHeight: '85vh', overflowY: 'auto',overflowX:'hidden'  }}>
       <WhiteSpace size='sm' />
+      <div><strong style={{fontSize:16}}>供应商 / 品牌：</strong>{data.brand && data.brand.brandName}</div>
       <WhiteSpace size='sm' />
-      <div><strong>供应商 / 品牌：</strong>{data.brand && data.brand.brandName}</div>
-      <WhiteSpace size='sm' />
-      <div><strong>数量：</strong>{batch ? number : 1}</div>
+      <div><strong style={{fontSize:16}}>数量：</strong>{batch ? number : 1}</div>
       <WhiteSpace size='sm' />
       {bars()}
       <WhiteSpace size='sm' />
       {
         !state[key]
         &&
-        <Button color='primary' fill='none' style={{ float: 'right' }} onClick={() => {
+        <Row gutter={24}>
+          <Col span={14} />
+          <Col span={10}>
+            <Button color='primary' fill='none' onClick={() => {
+              if (plan.qualityCheckResult && plan.qualityCheckResult.type) {
+                let judge = true;
 
-          if (plan.qualityCheckResult && plan.qualityCheckResult.type) {
-            let judge = true;
+                if (plan.isNull === 0 || value[key]) {
 
-            if (plan.isNull === 0 || value[key]) {
-
-              if (value[key]){
-                switch (plan.qualityCheckResult && plan.qualityCheckResult.type) {
-                  case 3:
-                    judge = value[key] === '1';
-                    break;
-                  case 1:
-                  case 5:
-                    switch (plan.operator) {
-                      case 1:
-                        judge = value[key] === parseInt(plan.standardValue);
-                        break;
-                      case 2:
-                        judge = value[key] >= parseInt(plan.standardValue);
-                        break;
+                  if (value[key]) {
+                    switch (plan.qualityCheckResult && plan.qualityCheckResult.type) {
                       case 3:
-                        judge = value[key] <= parseInt(plan.standardValue);
+                        judge = value[key] === '1';
                         break;
-                      case 4:
-                        judge = value[key] > parseInt(plan.standardValue);
-                        break;
+                      case 1:
                       case 5:
-                        judge = value[key] < parseInt(plan.standardValue);
-                        break;
-                      case 6:
-                        judge = value[key] > parseInt(plan.standardValue.split(',')[0]) && value[key] < parseInt(plan.standardValue.split(',')[1]);
+                        switch (plan.operator) {
+                          case 1:
+                            judge = value[key] === parseInt(plan.standardValue);
+                            break;
+                          case 2:
+                            judge = value[key] >= parseInt(plan.standardValue);
+                            break;
+                          case 3:
+                            judge = value[key] <= parseInt(plan.standardValue);
+                            break;
+                          case 4:
+                            judge = value[key] > parseInt(plan.standardValue);
+                            break;
+                          case 5:
+                            judge = value[key] < parseInt(plan.standardValue);
+                            break;
+                          case 6:
+                            judge = value[key] > parseInt(plan.standardValue.split(',')[0]) && value[key] < parseInt(plan.standardValue.split(',')[1]);
+                            break;
+                          default:
+                            break;
+                        }
                         break;
                       default:
                         break;
                     }
-                    break;
-                  default:
-                    break;
+                  }
+
+                  const count = sysState(value[key] || '', judge);
+                  if (count === true) {
+                    setKey(`${parseInt(key) + 1}`);
+                    setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[parseInt(key) + 1]);
+                  }
+
+                } else {
+                  Toast.show({
+                    content: '请输入检测结果',
+                    icon: 'fail',
+                  });
                 }
               }
 
-              const count = sysState(value[key] || '', judge);
-              if (count === true) {
-                setKey(`${parseInt(key) + 1}`);
-                setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[parseInt(key) + 1]);
-              }
-
-            } else {
-              Toast.show({
-                content: '请输入检测结果',
-                icon: 'fail',
-              });
-            }
-          }
-
-        }}>确定</Button>}
+            }}>确定</Button>
+          </Col>
+        </Row>
+      }
       <WhiteSpace size='sm' />
-      <div style={{marginTop:16}}>
-        <strong>规范:</strong>{plan && plan.qualityCheckResult && plan.qualityCheckResult.norm}
+      <Divider>规范</Divider>
+      <div style={{ padding: 16 }}>
+        {pares(plan && plan.qualityCheckResult && plan.qualityCheckResult.norm)}
       </div>
     </Col>
   </Row>
-    <div style={{ position: 'fixed', bottom: 0 }}>
-      <Card title={
-        <Space align='center'>
-          <Card title={<Button onClick={() => {
+
+    <div style={{ width: '100%', padding: 8,paddingBottom:0, position: 'fixed', bottom: 0 ,backgroundColor:'#fff',borderTop:'solid 1px #eee'}}>
+      <Row gutter={24}>
+        <Col span={7} style={{ textAlign: 'center' }}>
+          <Button style={{ padding: 8 }} onClick={() => {
             typeof create === 'function' && create();
-          }}>提交入库</Button>} />
-          <Button disabled={bind} onClick={() => {
+          }}>提交入库</Button>
+        </Col>
+        <Col span={10} style={{ textAlign: 'center' }}>
+          <Button style={{ padding: 8 }} disabled={bind} onClick={() => {
             scan({ brandId: data.brandId, skuId: data.skuId });
           }}><ScanOutlined />绑定当前物料</Button>
-          <Button color='primary' disabled={values && values.key !== undefined} onClick={() => {
-            if (bind) {
-              if (state.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
-                const valueNull = state.filter((value) => {
-                  return value || value === '';
-                });
-                if (valueNull.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
-                  comlete(state);
+        </Col>
+        <Col span={7} style={{ textAlign: 'center' }}>
+          <Button
+            style={{ padding: 8 }}
+            color='primary'
+            disabled={values && values.key !== undefined}
+            onClick={() => {
+              if (bind) {
+                if (state.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
+                  const valueNull = state.filter((value) => {
+                    return value || value === '';
+                  });
+                  if (valueNull.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
+                    comlete(state);
+                  } else {
+                    Toast.show({
+                      content: '请全部检验完成！',
+                    });
+                  }
                 } else {
                   Toast.show({
                     content: '请全部检验完成！',
@@ -445,18 +471,18 @@ const QualitySidBar = ({ data, batch, taskId, values,create, number, onChange, d
                 }
               } else {
                 Toast.show({
-                  content: '请全部检验完成！',
+                  content: '请绑定该物料！',
                 });
               }
-            } else {
-              Toast.show({
-                content: '请绑定该物料！',
-              });
-            }
-          }}>检验完成</Button>
-        </Space>} />
+            }}>检验完成</Button>
+        </Col>
+      </Row>
+      <div>
+        <SafeArea position='bottom' />
+      </div>
     </div>
   </div>;
 };
 
 export default QualitySidBar;
+;

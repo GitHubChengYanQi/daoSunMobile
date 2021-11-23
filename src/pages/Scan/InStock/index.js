@@ -1,5 +1,5 @@
-import { Button, Card, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
-import { Col, Row } from 'antd';
+import { Button,  Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
+import {  Col, Row } from 'antd';
 import { BarsOutlined, ScanOutlined } from '@ant-design/icons';
 import wx from 'populee-weixin-js-sdk';
 import React, { useState } from 'react';
@@ -10,11 +10,13 @@ import { useBoolean } from 'ahooks';
 import TreeSelectSee from '../../components/TreeSelectSee';
 import { WhiteSpace } from 'weui-react-v2';
 
-const testCodeId = '1461922566356918273';
+const testCodeId = ['1461996334790029314', '1461996334806806530'];
 
 const InStock = ({ data, onChange }) => {
 
   const [visible, setVisible] = useState(false);
+
+  const [count, setCount] = useState(0);
 
   const [stroeHousePostion, setStroeHousePostion] = useState();
 
@@ -96,7 +98,7 @@ const InStock = ({ data, onChange }) => {
 
 
   // 判断二维码状态
-  const code = async (codeId, items,batch) => {
+  const code = async (codeId, items, batch) => {
     setCodeId(codeId);
     setBatch(batch);
     const isBind = await request(
@@ -122,7 +124,7 @@ const InStock = ({ data, onChange }) => {
         },
       });
       if (judgeBind === true) {
-          setVisible(true);
+        setVisible(true);
       } else {
         //不一致报错
         Toast.show({
@@ -133,18 +135,18 @@ const InStock = ({ data, onChange }) => {
     } else {
       setVisibleNumber(false);
       //如果未绑定，提示用户绑定
-      if (batch){
+      if (batch) {
         setVisibleNumber(true);
-      }else {
+      } else {
         bind(codeId, items);
       }
     }
   };
 
   // 开启扫码
-  const scan = async (items,batch) => {
+  const scan = async (items, batch) => {
     if (process.env.NODE_ENV === 'development') {
-      code(testCodeId, items,batch);
+      code(testCodeId[count], items, batch);
     } else {
       await wx.ready(async () => {
         await wx.scanQRCode({
@@ -155,10 +157,10 @@ const InStock = ({ data, onChange }) => {
             if (res.resultStr.indexOf('https') !== -1) {
               const param = res.resultStr.split('=');
               if (param && param[1]) {
-                code(param[1], items,batch);
+                code(param[1], items, batch);
               }
             } else {
-              code(res.resultStr, items,batch);
+              code(res.resultStr, items, batch);
             }
           },
           error: (res) => {
@@ -179,7 +181,6 @@ const InStock = ({ data, onChange }) => {
       closeOnAction: true,
       onAction: async (action) => {
         if (action.key === 'ok') {
-
           await request({
             url: '/orCode/backCode',
             method: 'POST',
@@ -188,8 +189,8 @@ const InStock = ({ data, onChange }) => {
               source: 'item',
               ...items,
               id: items.skuId,
-              number,
-              inkindType:'入库',
+              number: number,
+              inkindType: '入库',
             },
           }).then((res) => {
             if (typeof res === 'string') {
@@ -197,6 +198,7 @@ const InStock = ({ data, onChange }) => {
                 content: '绑定成功！',
               });
               setVisible(true);
+              setCount(1);
             }
           });
 
@@ -228,9 +230,9 @@ const InStock = ({ data, onChange }) => {
       onAction: async (action) => {
         if (action.key === 'ok') {
           if (batch) {
-            setVisibleNumber(true);
+            scan(items, true);
           } else {
-            scan(items);
+            scan(items, false);
           }
         }
       },
@@ -258,164 +260,105 @@ const InStock = ({ data, onChange }) => {
   } else {
     return (
       <>
-        <Card title='入库信息'>
+        <Collapse defaultActiveKey={['0', '1', '2']}>
+          <Collapse.Panel key='0' title='入库信息'>
+            <div>
+              <List.Item>入库单号：{data.coding}</List.Item>
+              <List.Item>仓库名称：{data.storehouseResult && data.storehouseResult.name}</List.Item>
+              <List.Item>负责人：{data.userResult && data.userResult.name}</List.Item>
+              <List.Item>入库类别：{data.type || '手动添加'}</List.Item>
+              <List.Item>创建时间：{data.createTime}</List.Item>
+            </div>
+          </Collapse.Panel>
 
-          <List.Item>入库单号：{data.coding}</List.Item>
-          <List.Item>仓库名称：{data.storehouseResult && data.storehouseResult.name}</List.Item>
-          <List.Item>负责人：{data.userResult && data.userResult.name}</List.Item>
-          <List.Item>入库类别：{data.type || '手动添加'}</List.Item>
-          <List.Item>创建时间：{data.createTime}</List.Item>
-
-        </Card>
-
-        <Card title='入库清单'>
-          <List.Item>
-            <Row gutter={24}>
-              <Col span={16} style={{ textAlign: 'center' }}>
-                物料信息
-              </Col>
-              <Col span={8} style={{ textAlign: 'center' }}>
-                操作
-              </Col>
-            </Row>
-          </List.Item>
-          {data.instockListResults && data.instockListResults.length > 0 ?
-            data.instockListResults.map((items, index) => {
-              if (items.number > 0) {
-                return <List.Item key={index}>
-                  <Row gutter={24}>
-                    <Col span={16}>
-                      {items.sku && items.sku.skuName}
-                      &nbsp;/&nbsp;
-                      {items.spuResult && items.spuResult.name}
-                      &nbsp;&nbsp;
-                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                        (
-                        {
-                          items.backSkus
-                          &&
-                          items.backSkus.map((items, index) => {
-                            return <span key={index}>
+          <Collapse.Panel key='1' title='入库清单'>
+            <List.Item>
+              <Row gutter={24}>
+                <Col span={16} style={{ textAlign: 'center' }}>
+                  物料信息
+                </Col>
+                <Col span={8} style={{ textAlign: 'center' }}>
+                  操作
+                </Col>
+              </Row>
+            </List.Item>
+            {data.instockListResults && data.instockListResults.length > 0 ?
+              data.instockListResults.map((items, index) => {
+                if (items.number > 0) {
+                  return <List.Item key={index}>
+                    <Row gutter={24}>
+                      <Col span={16}>
+                        {items.sku && items.sku.skuName}
+                        &nbsp;/&nbsp;
+                        {items.spuResult && items.spuResult.name}
+                        &nbsp;&nbsp;
+                        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                          (
+                          {
+                            items.backSkus
+                            &&
+                            items.backSkus.map((items, index) => {
+                              return <span key={index}>
                         {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
                       </span>;
-                          })
-                        }
-                        )
-                      </em>
-                    </Col>
-                    <Col span={8} style={{ textAlign: 'center' }}>
-                      <Space>
-                        <Button
-                          color='primary'
-                          fill='none'
-                          style={{ padding: 0 }}
-                          onClick={async () => {
+                            })
+                          }
+                          )
+                        </em>
+                      </Col>
+                      <Col span={8} style={{ textAlign: 'center' }}>
+                        <Space>
+                          <Button
+                            color='primary'
+                            fill='none'
+                            style={{ padding: 0 }}
+                            onClick={async () => {
 
-                            if (items.number !== 0) {
+                              if (items.number !== 0) {
+                                setItems(items);
+                                setInstockNumber(1);
+                                setNumber(1);
+                                scan(items);
+                              } else {
+                                Toast.show({
+                                  content: '已全部入库！',
+                                });
+                              }
+
+                            }}
+                          ><ScanOutlined />扫码入库</Button>
+                        </Space>
+                      </Col>
+                    </Row>
+                    <WhiteSpace size='sm' />
+                    <Row gutter={24}>
+                      <Col span={16}>
+                        {items.brandResult && items.brandResult.brandName}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        ×
+                        {items.number}
+                      </Col>
+                      <Col span={8} style={{ textAlign: 'center' }}>
+                        <Space>
+                          <Button
+                            color='primary'
+                            fill='none'
+                            style={{ padding: 0 }}
+                            onClick={() => {
                               setItems(items);
                               setInstockNumber(items.number);
                               setNumber(items.number);
-                              scan(items);
-                            } else {
-                              Toast.show({
-                                content: '已全部入库！',
-                              });
-                            }
+                              scan(items, true);
+                            }}
+                          ><BarsOutlined />批量入库</Button>
+                        </Space>
+                      </Col>
+                    </Row>
+                  </List.Item>;
+                } else {
+                  return null;
+                }
 
-                          }}
-                        ><ScanOutlined />扫码入库</Button>
-                      </Space>
-                    </Col>
-                  </Row>
-                  <WhiteSpace size='sm' />
-                  <Row gutter={24}>
-                    <Col span={16}>
-                      {items.brandResult && items.brandResult.brandName}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      ×
-                      {items.number}
-                    </Col>
-                    <Col span={8} style={{ textAlign: 'center' }}>
-                      <Space>
-                        <Button
-                          color='primary'
-                          fill='none'
-                          style={{ padding: 0 }}
-                          onClick={() => {
-                            setItems(items);
-                            setInstockNumber(items.number);
-                            setNumber(items.number);
-                            scan(items,true);
-                          }}
-                        ><BarsOutlined />批量入库</Button>
-                      </Space>
-                    </Col>
-                  </Row>
-                </List.Item>;
-              } else {
-                return null;
-              }
-
-            })
-            :
-            <Empty
-              style={{ padding: '64px 0' }}
-              imageStyle={{ width: 128 }}
-              description='暂无数据'
-            />}
-        </Card>
-
-        {loading ?
-          <Empty
-            style={{ padding: '64px 0' }}
-            imageStyle={{ width: 128 }}
-            description='暂无数据'
-          />
-          :
-          <Card title='入库明细'>
-            {data.instockResults && data.instockResults.length > 0 ?
-              data.instockResults.map((items, index) => {
-                return <List.Item key={index}>
-                  <Row gutter={24}>
-                    <Col span={20}>
-                      {items.sku && items.sku.skuName}
-                      &nbsp;/&nbsp;
-                      {items.spuResult && items.spuResult.name}
-                      &nbsp;&nbsp;
-                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                        (
-                        {
-                          items.backSkus
-                          &&
-                          items.backSkus.map((items, index) => {
-                            return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-                          })
-                        }
-                        )
-                      </em>
-                    </Col>
-                    <Col span={4}>
-                      ×
-                      {items.number}
-                    </Col>
-                  </Row>
-
-                  <Row gutter={24}>
-                    <Col span={12}>
-                      <strong>品牌(供应商):</strong>{items.brandResult && items.brandResult.brandName}
-                    </Col>
-                    <Col span={12}>
-                      <strong>仓库库位：</strong>
-                      {items.storehousePositions
-                        ?
-                        <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
-                        :
-                        (items.storehouseResult && items.storehouseResult.name)}
-                    </Col>
-                  </Row>
-                </List.Item>;
               })
               :
               <Empty
@@ -423,7 +366,70 @@ const InStock = ({ data, onChange }) => {
                 imageStyle={{ width: 128 }}
                 description='暂无数据'
               />}
-          </Card>}
+          </Collapse.Panel>
+
+          <Collapse.Panel key='2' title='入库明细'>
+            {loading ?
+              <Empty
+                style={{ padding: '64px 0' }}
+                imageStyle={{ width: 128 }}
+                description='暂无数据'
+              />
+              :
+              <>
+                {data.instockResults && data.instockResults.length > 0 ?
+                  data.instockResults.map((items, index) => {
+                    return <List.Item key={index}>
+                      <Row gutter={24}>
+                        <Col span={20}>
+                          {items.sku && items.sku.skuName}
+                          &nbsp;/&nbsp;
+                          {items.spuResult && items.spuResult.name}
+                          &nbsp;&nbsp;
+                          <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                            (
+                            {
+                              items.backSkus
+                              &&
+                              items.backSkus.map((items, index) => {
+                                return <span key={index}>
+                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
+                      </span>;
+                              })
+                            }
+                            )
+                          </em>
+                        </Col>
+                        <Col span={4}>
+                          ×
+                          {items.number}
+                        </Col>
+                      </Row>
+
+                      <Row gutter={24}>
+                        <Col span={12}>
+                          <strong>品牌(供应商):</strong>{items.brandResult && items.brandResult.brandName}
+                        </Col>
+                        <Col span={12}>
+                          <strong>仓库库位：</strong>
+                          {items.storehousePositions
+                            ?
+                            <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
+                            :
+                            (items.storehouseResult && items.storehouseResult.name)}
+                        </Col>
+                      </Row>
+                    </List.Item>;
+                  })
+                  :
+                  <Empty
+                    style={{ padding: '64px 0' }}
+                    imageStyle={{ width: 128 }}
+                    description='暂无数据'
+                  />}
+              </>}
+          </Collapse.Panel>
+        </Collapse>
 
         {/*---------------------------------选择库位进行入库操作----------------------*/}
         <Dialog
@@ -449,7 +455,7 @@ const InStock = ({ data, onChange }) => {
               </em>
             </>}
           content={
-            <div style={{textAlign:'center'}}>
+            <div style={{ textAlign: 'center' }}>
               <Space direction='vertical'>
                 <MyTreeSelect
                   poputTitle={scanStorehousePositon()}
@@ -496,7 +502,11 @@ const InStock = ({ data, onChange }) => {
                 }).then((res) => {
                   if (res !== 0) {
                     setInstockNumber(res);
-                    setNumber(res);
+                    if (batch) {
+                      setNumber(res);
+                    } else {
+                      setNumber(1);
+                    }
                     next(items);
                   } else {
                     Toast.show({
@@ -504,7 +514,6 @@ const InStock = ({ data, onChange }) => {
                     });
                   }
                   typeof onChange === 'function' && onChange();
-                  setNumber(1);
                   setVisible(false);
                 });
               } else {
