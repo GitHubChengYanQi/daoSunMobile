@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, List, Steps, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Empty, Input, List, Loading, Steps, TextArea, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { CheckCircleOutlined, CloseCircleOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import { router } from 'umi';
@@ -13,6 +13,10 @@ const Workflow = (props) => {
   const [current, setCurrent] = useState({});
 
   const [audit, setAudit] = useState([]);
+
+  const [visible, setVisible] = useState(false);
+
+  const [note, setNote] = useState('');
 
   // 执行审批接口
   const { loading, run: processLogRun } = useRequest(
@@ -28,6 +32,7 @@ const Workflow = (props) => {
           content: '审批完成！',
           position: 'bottom',
         });
+        setVisible(false);
       },
       onError: () => {
         refresh();
@@ -35,6 +40,7 @@ const Workflow = (props) => {
           content: '审批失败！',
           position: 'bottom',
         });
+        setVisible(false);
       },
     },
   );
@@ -81,21 +87,6 @@ const Workflow = (props) => {
   );
 
 
-  // 审批同意或拒绝调用
-  const complent = (value) => {
-    Dialog.confirm({
-      content: `是否${value ? '同意' : '拒绝'}审批`,
-      onConfirm: async () => {
-        await processLogRun({
-          params: {
-            taskId: query.id,
-            status: value ? 1 : 0,
-          },
-        });
-      },
-    });
-  };
-
   useEffect(() => {
     setDetail(null);
     if (query.id) {
@@ -126,7 +117,8 @@ const Workflow = (props) => {
     }
   };
 
-  if (loading || !detail) {
+
+  if (!detail) {
     return <Empty
       style={{ padding: '64px 0' }}
       imageStyle={{ width: 128 }}
@@ -219,49 +211,57 @@ const Workflow = (props) => {
       }
       <Divider contentPosition='left'>审批流程</Divider>
 
+      <div style={{ marginBottom: '10vh' }}>
 
-      <Steps direction='vertical' current={current.index}>
-        {
-          audit.map((item, index) => {
-            if (item) {
-              const users = [];
-              if (item.rule && item.rule.qualityRules) {
+        <Steps direction='vertical' current={current.index}>
+          {
+            audit.map((item, index) => {
+              if (item) {
+                const users = [];
+                if (item.rule && item.rule.qualityRules) {
 
-                item.rule.qualityRules.users.map((items) => {
-                  return users.push(items.title);
-                });
+                  item.rule.qualityRules.users.map((items) => {
+                    return users.push(items.title);
+                  });
 
-                item.rule.qualityRules.depts.map((items) => {
-                  return users.push(`${items.title}(${items.positions && items.positions.map((items) => {
-                    return items.label;
-                  })})`);
-                });
+                  item.rule.qualityRules.depts.map((items) => {
+                    return users.push(`${items.title}(${items.positions && items.positions.map((items) => {
+                      return items.label;
+                    })})`);
+                  });
+                }
+                if (item.type === 'quality_task_start') {
+                  return <Steps.Step
+                    key={index}
+                    title={Type(item.type)}
+                    description={detail.createName}
+                    icon={status(item)} />;
+                } else if (item.type === 'route' || item.type === 'branch') {
+                  return null;
+                } else {
+                  return <Steps.Step
+                    key={index}
+                    title={Type(item.type)}
+                    description={users.toString()}
+                    icon={status(item)} />;
+                }
+
               }
-              if (item.type === 'quality_task_start') {
-                return <Steps.Step
-                  key={index}
-                  title={Type(item.type)}
-                  description={detail.createName}
-                  icon={status(item)} />;
-              } else if (item.type === 'route' || item.type === 'branch') {
-                return null;
-              } else {
-                return <Steps.Step
-                  key={index}
-                  title={Type(item.type)}
-                  description={users.toString()}
-                  icon={status(item)} />;
-              }
-
-            }
-            return null;
-          })
-        }
-      </Steps>
-
+              return null;
+            })
+          }
+        </Steps>
+      </div>
     </Card>
 
-    <div style={{ marginTop: 8 }}>
+    <div style={{
+      width: '100%',
+      zIndex: 99,
+      paddingBottom: 0,
+      position: 'fixed',
+      bottom: 0,
+      backgroundColor: '#fff',
+    }}>
       {
         current.items
         &&
@@ -274,17 +274,56 @@ const Workflow = (props) => {
             color='primary'
             style={{ width: '50%', borderRadius: 0, borderTopLeftRadius: 50, borderBottomLeftRadius: 50 }}
             onClick={() => {
-              complent(true);
+              setVisible('agree');
             }}>同意</Button>
           <Button
             color='default'
             style={{ width: '50%', borderRadius: 0, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}
             onClick={() => {
-              complent(false);
+              setVisible('reject');
             }}>拒绝</Button>
         </div>
       }
     </div>
+
+
+    {/*审批同意或拒绝*/}
+    <Dialog
+      visible={visible}
+      title={`是否${visible === 'agree' ? '同意' : '拒绝'}审批`}
+      content={<TextArea
+        placeholder='请输入备注...'
+        rows={2}
+        maxLength={50}
+        showCount
+        onChange={(value) => {
+          setNote(value);
+        }} />}
+      onAction={(action) => {
+        if (action.key === 'confirm') {
+          processLogRun({
+            params: {
+              taskId: query.id,
+              status: visible === 'agree' ? 1 : 0,
+            },
+          });
+        } else {
+          setVisible(false);
+        }
+      }}
+      actions={[
+        [
+          {
+            key: 'confirm',
+            text: <Button style={{padding:0}} loading={loading} color='primary' size='large' fill='none'>确定</Button>,
+          },
+          {
+            key: 'close',
+            text: '取消',
+          },
+        ],
+      ]}
+    />
   </div>;
 
 };

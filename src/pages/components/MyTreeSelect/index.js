@@ -59,7 +59,7 @@ const MyTreeSelect = ({ api, value,poputTitle, defaultParams, onChange, show, ti
 
   const change = (value) => {
     const result = value ? value[value.length - 1] : value;
-    onChange(result);
+    typeof onChange === 'function' && onChange(result);
   };
 
 

@@ -8,7 +8,7 @@ import { Config } from '../../../config';
 const baseURI =
   process.env.NODE_ENV === 'development'
     ?
-    "http://192.168.1.229"
+    "http://192.168.1.119"
     // Config().api
     :
     Config().api

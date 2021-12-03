@@ -588,7 +588,7 @@ const QualitySidBar = (
           </SideBar>
         </div>
       </Col>
-      <Col span={16} style={{ padding: 8, maxHeight: '70%', overflowY: 'auto', overflowX: 'hidden' }}>
+      <Col span={16} style={{ padding: 8, maxHeight: '70%',overflowY: 'auto', overflowX: 'hidden' }}>
         <Card
           title={<>
             {

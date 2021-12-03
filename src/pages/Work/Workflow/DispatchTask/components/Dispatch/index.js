@@ -1,16 +1,19 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Card, Dialog, Form, Popup, Selector, Space } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Form, Popup, Selector, Space } from 'antd-mobile';
 import { DatePicker, Input, ListItem, TextArea } from 'weui-react-v2';
 import { UserIdSelect } from '../../../../Customer/CustomerUrl';
 import { useRequest } from '../../../../../../util/Request';
+import MyTreeSelect from '../../../../../components/MyTreeSelect';
 
 const { Item: FormItem } = Form;
 
 export const Users = ({ onChange }) => {
 
-  const { data } = useRequest(UserIdSelect);
+  const { data, run } = useRequest(UserIdSelect);
 
   const [userIds, setUserIds] = useState([]);
+
+  const [deptId, setDeptId] = useState();
 
   const [usersVisabled, setUsersVisabled] = useState(false);
 
@@ -19,16 +22,39 @@ export const Users = ({ onChange }) => {
   });
 
   return <>
-    <Input placeholder={'请选择分派人'} value={userIds.length > 0 && userName.toString()} onFocus={() => {
-      setUsersVisabled(true);
-    }} />
+    <Button
+      style={{ padding: 0, width: '100%', textAlign: 'left' }}
+      fill='none'
+      onClick={() => {
+        setUsersVisabled(true);
+      }}>
+      {userIds.length > 0 ? userName.toString() : <span style={{ color: '#cccccc' }}>请选择分派人</span>}
+    </Button>
     <Popup
       visible={usersVisabled}
       position='right'
       bodyStyle={{ minWidth: '60vw' }}
     >
       <div style={{ padding: 16 }}>
-        <div style={{maxHeight:'70vh',overflowY:'auto'}}>
+        <MyTreeSelect
+          title={<span style={{ color: '#ccc' }}>选择部门搜索</span>}
+          value={deptId}
+          api={
+            {
+              url: '/rest/dept/tree',
+              method: 'POST',
+            }
+          }
+          onChange={async (value) => {
+            setDeptId(value);
+            await run({
+              data: {
+                deptId: value,
+              },
+            });
+          }} />
+        <Divider />
+        <div style={{ maxHeight: '70vh', overflowY: 'auto' }}>
           <Selector
             value={userIds.map((items) => {
               return items.value;
@@ -114,10 +140,10 @@ const Dispatch = ({ qualityTaskId, qualityDetailIds, onSuccess }, ref) => {
           <FormItem name='person' label='对接人' rules={[{ required: true, message: '该字段是必填字段！' }]}>
             <Input placeholder='输入对接人' />
           </FormItem>
-          <FormItem name='phone' label='联系方式' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+          <FormItem name='phone' label='联系方式' rules={[{ required: true, message: '请输入正确的手机号码！', pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/ }]}>
             <Input placeholder='输入联系方式' />
           </FormItem>
-          <FormItem name='note' label='备注' >
+          <FormItem name='note' label='备注'>
             <TextArea placeholder='备注' />
           </FormItem>
         </Card>

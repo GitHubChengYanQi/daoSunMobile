@@ -6,6 +6,7 @@ import Dispatch from './components/Dispatch';
 import style from './index.css';
 import { qualityPlanListSelect, qualityTaskDetailEdit } from './components/URL';
 import { useDebounceEffect } from 'ahooks';
+import { CheckOutlined, CheckSquareOutlined, PlusSquareOutlined } from '@ant-design/icons';
 
 
 const DispatchTask = (props) => {
@@ -107,6 +108,13 @@ const DispatchTask = (props) => {
       <Card title='质检任务' bodyStyle={{ padding: 0 }}>
         {qualityTaskDetail.qualityLising && qualityTaskDetail.qualityLising.length > 0 ? <div>
             <Checkbox
+              icon={(check)=>{
+                if (!check){
+                  return <PlusSquareOutlined />
+                }else {
+                  return <CheckSquareOutlined />
+                }
+              }}
               onChange={(value) => {
                 if (value) {
                   const ids = qualityTaskDetail.qualityLising.filter((value) => {
@@ -152,6 +160,13 @@ const DispatchTask = (props) => {
                 {qualityTaskDetail.qualityLising.map((items, index) => {
                   return <Checkbox
                     key={index}
+                    icon={(check)=>{
+                      if (!check){
+                        return <PlusSquareOutlined />
+                      }else {
+                        return <CheckSquareOutlined />
+                      }
+                    }}
                     className={style.checkBox}
                     style={{ width: '100%' }}
                     disabled={items.userIds}
