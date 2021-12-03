@@ -5,26 +5,6 @@ import Tark from './component/Tark';
 
 const Home = () => {
 
-  // const { data: jssdk } = useRequest({
-  //   url: '/api/ticket',
-  //   method: 'GET',
-  //   params: {
-  //     url: window.location.protocol + '//' + window.location.host + window.location.pathname,
-  //   },
-  // }, {
-  //   onSuccess: () => {
-  //     wx.config({
-  //       beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
-  //       // debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-  //       appId: jssdk.appId, // 必填，企业微信的corpID
-  //       timestamp: jssdk.timestamp, // 必填，生成签名的时间戳
-  //       nonceStr: jssdk.nonceStr, // 必填，生成签名的随机串
-  //       signature: jssdk.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-  //       jsApiList: ['ready', 'getLocation','scanQRCode'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
-  //     });
-  //   },
-  // });
-
   const data = new Date();
 
   const time = data.getFullYear() + '年' + (data.getMonth() + 1) + '月' + data.getDate();

@@ -1,36 +1,38 @@
-import React, { useEffect,  useState } from 'react';
-import { Button, Card,  Empty, List, Tabs, Toast } from 'antd-mobile';
+import React, {  useState } from 'react';
+import { Button, Card, Empty, List, Tabs, Toast } from 'antd-mobile';
 import './index.css';
 import QualityNumber from './components/QualityNumber';
-import { useRequest } from '../../../util/Request';
+import { request, useRequest } from '../../../util/Request';
 import { Affix } from 'antd';
 import CreateInstock from './components/CreateInstock';
 import Detail from './components/Detail';
+import { useDebounceEffect } from 'ahooks';
 
 
 const Quality = ({ data, onChange }) => {
 
   const [show, setShow] = useState(false);
 
-  const [key, setKey] = useState();
+  const [key, setKey] = useState('0');
 
   const [value, setValue] = useState([]);
 
-  const [count, setCount] = useState(0);
-
   const [defaval, setDefaval] = useState([]);
 
-  const { run } = useRequest(
-    { url: '/qualityTask/edit', method: 'POST' },
-    {
-      manual: true, onSuccess: () => {
-        typeof onChange === 'function' && onChange();
-      },
-    });
+  const [complete, setComplete] = useState(false);
 
   const { run: detail } = useRequest(
     {
       url: '/qualityTask/formDetail',
+      method: 'POST',
+    },
+    {
+      manual: true,
+    });
+
+  const { run: qualityEdit } = useRequest(
+    {
+      url: '/qualityTask/checkOver',
       method: 'POST',
     },
     {
@@ -87,43 +89,51 @@ const Quality = ({ data, onChange }) => {
 
     setValue(arrs);
 
-    console.log(arrs.length,count , arrs.length === count);
-    if (arrs.length === count) {
-      const valueNull = arrs.filter((value) => {
-        return value != null;
-      });
-      if (valueNull.length === count) {
-        run({
-          data: {
-            qualityTaskId: data && data.qualityTaskId,
-            state: 1,
-          },
-        });
-      }
-      return false;
-    } else {
-      return true;
-    }
+    typeof onChange === 'function' && onChange();
+
+    return !(arrs.length === (data && data.details.length));
   };
 
-  useEffect(() => {
-    let number = 0;
-    let key = null;
-    data && data.details && data.details.forEach((items, index) => {
-      if (items.remaining > 0) {
-        if (key === null) {
-          key = index;
-        }
-        number++;
+  const qualityTaskDetail = async (qualityTaskId) => {
+    const data = await request({
+      url: '/qualityTaskDetail/list',
+      method: 'POST',
+      data:{
+        qualityTaskId,
       }
     });
-    setKey(`${key}`);
-    setCount(number);
-  }, [data]);
+
+    const count = data && data.filter((value) => {
+      return value.status !== '完成';
+    });
+
+    if (count.length === 0) {
+      qualityEdit(
+        {
+          data: {
+            qualityTaskId,
+            state: 1,
+          },
+        },
+      );
+    }
+    setComplete(count.length === 0);
+  };
+
+  useDebounceEffect(() => {
+    if (data && data.state === 0) {
+      qualityTaskDetail(data.qualityTaskId);
+    } else {
+      setComplete(true);
+    }
+  }, [data],{
+    wait:0
+  });
+
 
   if (data) {
-    return <div style={{overflowX:'hidden'}}>
-      <Card title='基本信息'>
+    return <div style={{ overflowX: 'hidden' }}>
+      <Card title='基本信息' bodyStyle={{ padding: 0 }}>
 
         <List.Item>质检编码：{data.coding}</List.Item>
         <List.Item>质检类型：{data.type}</List.Item>
@@ -137,20 +147,20 @@ const Quality = ({ data, onChange }) => {
         if (value === '0') {
           setValue([]);
           setDefaval([]);
+          setKey('0');
           typeof onChange === 'function' && onChange();
         }
 
       }}>
         <Tabs.TabPane title='质检任务' key='0'>
           {/*skus*/}
-          <Affix offsetTop={0}>
-            <div style={{ backgroundColor: '#fff' }}>
-              <Tabs activeKey={key} onChange={(value) => {
-                setKey(value);
-              }}>
-                {
-                  data.details && data.details.map((items, index) => {
-                    if (items.remaining > 0) {
+          {!complete ? <Affix offsetTop={0}>
+              <div style={{ backgroundColor: '#fff' }}>
+                <Tabs activeKey={key} onChange={(value) => {
+                  setKey(value);
+                }}>
+                  {
+                    data.details && data.details.map((items, index) => {
 
                       return <Tabs.TabPane title={
                         <>
@@ -175,43 +185,40 @@ const Quality = ({ data, onChange }) => {
                           </em>
                         </>
                       } key={index}>
-                        {/*数量*/}
+                        { /* 数量 */}
                         <QualityNumber
-                          number={items.remaining}
+                          number={items.number}
                           taskId={data.qualityTaskId}
                           batch={items.batch}
                           values={defaval[index] && defaval[index].values}
                           data={items}
-                          create={()=>{
+                          create={() => {
                             create();
                           }}
                           defaultValue={(value) => {
                             defa(value);
-                          }} onChange={(value) => {
-                          const val = onchange(value);
-                          console.log('quality',val);
-                          if (val === true) {
-                            setKey(`${parseInt(key) + 1}`);
-                          }
-                        }} />
+                          }}
+                          onChange={(value) => {
+                            const val = onchange(value);
+                            if (val === true) {
+                              setKey(`${parseInt(key) + 1}`);
+                            }
+                          }} />
                       </Tabs.TabPane>;
-                    } else {
-                      return null;
-                    }
-
-
-                  })
-                }
-              </Tabs>
-            </div>
-          </Affix>
-          {count === 0 && <Empty
-            style={{ padding: '64px 0' }}
-            imageStyle={{ width: 128 }}
-            description={<>质检已经完成了,<Button style={{ padding: 0 }} color='primary' fill='none' onClick={() => {
-              create();
-            }}>点击生成入库单</Button> </>}
-          />}
+                    })
+                  }
+                </Tabs>
+              </div>
+            </Affix>
+            :
+            <Empty
+              style={{ padding: '64px 0' }}
+              imageStyle={{ width: 128 }}
+              description={<>质检已经完成了{data.state === 2 &&
+              <Button style={{ padding: 0 }} color='primary' fill='none' onClick={() => {
+                create();
+              }}>点击生成入库单</Button>}</>}
+            />}
         </Tabs.TabPane>
         <Tabs.TabPane title='质检详情' key='1'>
           <Detail qualityTaskId={data.qualityTaskId} />

@@ -1,3 +1,10 @@
 :global .adm-tabs-content {
   padding: 0;
 }
+.sidebar :global .adm-badge-wrap {
+  width: 100%;
+}
+
+.space :global .adm-space-item {
+  width: 80%;
+}

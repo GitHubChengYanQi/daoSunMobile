@@ -358,7 +358,6 @@ const InStock = ({ data, onChange }) => {
                 } else {
                   return null;
                 }
-
               })
               :
               <Empty

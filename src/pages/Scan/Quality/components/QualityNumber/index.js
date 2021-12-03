@@ -65,6 +65,12 @@ const QualityNumber = ({ data,values,batch,number,create,taskId,onChange,default
   }
 
   const numbers = () => {
+
+    if (data.remaining){
+      const value = data.number * (25/100);
+      console.log(value > value.toFixed() ? (parseInt(value.toFixed())+1) : parseInt(value.toFixed()));
+    }
+
     const array = new Array(batch || number);
     for (let i = 0; i < array.length; i++) {
       array[i] = data;
@@ -72,13 +78,12 @@ const QualityNumber = ({ data,values,batch,number,create,taskId,onChange,default
     return array.map((items, index) => {
       return <Tabs.TabPane title={<>{index + 1}{res(value[index] && value[index].key)}</>} key={index}>
         {/*质检项*/}
-        <QualitySidBar batch={batch} number={number} create={() => {
+        <QualitySidBar batch={batch} index={index} number={number} create={() => {
           typeof create === 'function' && create();
-        }} taskId={taskId} data={items} values={defaval[index]} defaultValue={(value) => {
+        }} taskId={taskId} data={items} allValues={defaval} values={defaval[index]} defaultValue={(value) => {
           defa(value);
         }} onChange={(value) => {
           const val = onchange(value);
-          console.log('number', val);
           if (val) {
             setKey(`${parseInt(key) + 1}`);
           }

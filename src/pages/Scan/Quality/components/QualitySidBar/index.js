@@ -1,19 +1,37 @@
 import { Col, Row } from 'antd';
-import { Badge, Button,  Dialog, Divider, Radio, SafeArea, SideBar, Space, Toast } from 'antd-mobile';
+import { Badge, Button, Card, Dialog, Divider, Ellipsis, Radio, SafeArea, SideBar, Space, Toast } from 'antd-mobile';
 import { CheckOutlined, CloseOutlined, ScanOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NumberInput, TextArea, WhiteSpace } from 'weui-react-v2';
 import UpLoadImg from '../../../../components/Upload';
-import { request } from '../../../../../util/Request';
+import { request, useRequest } from '../../../../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import pares from 'html-react-parser';
+import style from '../../index.css';
+import ImgUpload from '../../../../components/Upload/ImgUpload';
+import { useBoolean } from 'ahooks';
+import { qualityTaskDetailEdit } from '../../../../Work/Workflow/DispatchTask/components/URL';
 
-const testCodeId = '1461996335041687553';
+const testCodeId = '1461996334550953986';
 
-const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, defaultValue }) => {
+const QualitySidBar = (
+  {
+    data,
+    batch,
+    taskId,
+    values,
+    allValues,
+    number,
+    index,
+    onChange,
+    defaultValue,
+  },
+) => {
 
   // 侧边导航的key
   const [key, setKey] = useState('0');
+
+  const [imgloading, { toggle }] = useBoolean();
 
   // 绑定的二维码id
   const [bind, setBind] = useState(values && values.bind);
@@ -26,9 +44,55 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
     return items && items.values;
   })) || []);
 
+  const { loading, run: addData } = useRequest(
+    {
+      url: '/qualityTask/addData',
+      method: 'POST',
+    },
+    {
+      manual: true,
+    },
+  );
+
+  const { run } = useRequest(
+    {
+      url: '/qualityTaskDetail/backValue',
+      method: 'GET',
+    }, {
+      manual: true,
+      onSuccess: (res) => {
+        const value = res.map((items, index) => {
+          if (items.value) {
+            return {
+              judge: getJudge(JSON.parse(items.value).value, index),
+              values: JSON.parse(items.value),
+            };
+          } else {
+            return null;
+          }
+
+        });
+        setState(value);
+        setValue(value.map((items) => {
+          return items && items.values;
+        }));
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (!values && data.inkindId && data.inkindId.split(',')[index]) {
+      run({
+        params: {
+          inkind: data.inkindId.split(',')[index],
+        },
+      });
+    }
+  }, [data.inkindId, index, run, values]);
+
+
   // 所有状态
   const [state, setState] = useState(values && values.values || []);
-
 
   // 判断二维码状态
   const code = async (codeId, items) => {
@@ -106,7 +170,7 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
               number: batch ? number : 1,
               inkindType: '质检',
             },
-          }).then((res) => {
+          }).then(async (res) => {
             if (typeof res === 'string') {
               setBind(res);
               typeof defaultValue === 'function' && defaultValue({
@@ -114,14 +178,51 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
                 res: values && values.res,
                 values: state,
               });
+
+              let inkindId = [];
+
+              if (batch) {
+                inkindId = res;
+              } else {
+                if (data.inkindId) {
+                  const inkinds = data.inkindId.split(',');
+                  allValues.map((items) => {
+                    if (items.bind) {
+                      console.log(values.bind);
+                      inkinds.push(items.bind);
+                    }
+                    return null;
+                  });
+                  inkinds.push(res);
+                  inkindId = inkinds.toString();
+                } else {
+                  const arr = [];
+                  allValues.map((items) => {
+                    if (items.bind) {
+                      arr.push(items.bind);
+                    }
+                    return null;
+                  });
+                  arr.push(res);
+                  inkindId = arr.toString();
+                }
+              }
+
+
+              await request({
+                ...qualityTaskDetailEdit,
+                data: {
+                  qualityTaskDetailId: data.qualityTaskDetailId,
+                  inkindId: inkindId,
+                },
+              });
+
               Toast.show({
                 content: '绑定成功！',
               });
             }
           });
 
-        } else {
-          // typeof onChange === 'function' && onChange();
         }
 
       },
@@ -143,9 +244,9 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
   // 检验结果图标
   const res = (value) => {
     if (value === true) {
-      return <>&nbsp;&nbsp;<CheckOutlined style={{ color: 'green' }} /></>;
+      return <><CheckOutlined style={{ color: 'green' }} /></>;
     } else if (value === false) {
-      return <>&nbsp;&nbsp;<CloseOutlined style={{ color: 'red' }} /></>;
+      return <><CloseOutlined style={{ color: 'red' }} /></>;
     } else {
       return null;
     }
@@ -153,7 +254,7 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
 
 
   // 记录验收值的集合
-  const change = (val) => {
+  const change = (val, imgs) => {
 
     const arrs = [];
 
@@ -161,14 +262,58 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
       return arrs[index] = items;
     });
 
-    arrs[key] = val;
+    arrs[key] = { value: val || value[key] && value[key].value, imgValues: imgs || value[key] && value[key].imgValues };
 
     setValue(arrs);
+  };
+
+  // 判断
+  const getJudge = (value, index) => {
+    let judge = true;
+
+    const planType = data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[index];
+
+    if (value) {
+      switch (planType.qualityCheckResult && planType.qualityCheckResult.type) {
+        case 3:
+          judge = value === '1';
+          break;
+        case 1:
+        case 5:
+          switch (planType.operator) {
+            case 1:
+              judge = value === parseInt(planType.standardValue);
+              break;
+            case 2:
+              judge = value >= parseInt(planType.standardValue);
+              break;
+            case 3:
+              judge = value <= parseInt(planType.standardValue);
+              break;
+            case 4:
+              judge = value > parseInt(planType.standardValue);
+              break;
+            case 5:
+              judge = value < parseInt(planType.standardValue);
+              break;
+            case 6:
+              judge = value > parseInt(planType.standardValue.split(',')[0]) && value < parseInt(planType.standardValue.split(',')[1]);
+              break;
+            default:
+              break;
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    return judge;
   };
 
 
   // 质检完成
   const comlete = async (arrs) => {
+
     const qualityPlanIds =
       data
       &&
@@ -183,22 +328,30 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
     const formValues = qualityPlanIds && qualityPlanIds.map((items, index) => {
       return {
         field: items,
-        value: arrs[index].values,
+        dataValues: arrs[index].values,
       };
     });
 
-    await request({
-      url: '/qualityTask/addData',
-      method: 'POST',
+    console.log(JSON.stringify({
+      taskId,
+      formId: data.inkindId ? (data.inkindId.split(',')[index] || bind) : bind,
+      formValues,
+      module: 'item',
+      number: batch ? number : 1,
+      qualityTaskDetailId: data.qualityTaskDetailId,
+    }));
+
+    await addData({
       data: {
         taskId,
-        formId: bind,
+        formId: data.inkindId ? (data.inkindId.split(',')[index] || bind) : bind,
         formValues,
         module: 'item',
         number: batch ? number : 1,
         qualityTaskDetailId: data.qualityTaskDetailId,
       },
     });
+
 
     const judge = arrs.filter((value) => {
       return value.judge === false;
@@ -207,12 +360,14 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
     Toast.show({
       content: '检验完成！',
     });
+
     typeof onChange === 'function' && onChange({ bind, res: judge.length <= 0, values: arrs });
   };
 
 
   // 控制状态
   const sysState = (val, judge) => {
+
     const arrs = [];
 
     state.map((items, index) => {
@@ -230,56 +385,76 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
   };
 
 
-  const bars = () => {
+  const bars = (disabled) => {
 
     if (plan) {
       const Operator = (value, bai) => {
         switch (value) {
           case 1:
-            return <>{'='}{plan.standardValue}{bai && '%'}</>;
+            return <span style={{ color: '#639bf8' }}>{'='}{plan.standardValue}{bai && '%'}</span>;
           case 2:
-            return <>{'>='}{plan.standardValue}{bai && '%'}</>;
+            return <span style={{ color: '#639bf8' }}>{'>='}{plan.standardValue}{bai && '%'}</span>;
           case 3:
-            return <>{'<='}{plan.standardValue}{bai && '%'}</>;
+            return <span style={{ color: '#639bf8' }}>{'<='}{plan.standardValue}{bai && '%'}</span>;
           case 4:
-            return <>{'>'}{plan.standardValue}{bai && '%'}</>;
+            return <span style={{ color: '#639bf8' }}>{'>'}{plan.standardValue}{bai && '%'}</span>;
           case 5:
-            return <>{'<'}{plan.standardValue}{bai && '%'}</>;
+            return <span style={{ color: '#639bf8' }}>{'<'}{plan.standardValue}{bai && '%'}</span>;
           case 6:
-            return <>{`\< ${plan.standardValue.split(',')[0]}`} {`${bai ? '%' : ''}`} {`\> ${plan.standardValue.split(',')[1]}`} {`${bai ? '%' : ''}`}</>;
+            return <span
+              style={{ color: '#639bf8' }}>{`${plan.standardValue.split(',')[0]}`} {`${bai ? '%' : ''}`} &nbsp;—&nbsp; {`${plan.standardValue.split(',')[1]}`} {`${bai ? '%' : ''}`}</span>;
           default:
             break;
         }
       };
+
       switch (plan.qualityCheckResult && plan.qualityCheckResult.type) {
         case 1:
           return <div>
             <div>
-              <strong style={{fontSize:16}}>合格标准：</strong>{Operator(plan.operator)} &nbsp;&nbsp;&nbsp;&nbsp; {plan.unit && plan.unit.unitName}
+              <span style={{
+                fontSize: 16,
+                color: '#639bf8',
+              }}>合格标准：</span>{Operator(plan.operator)} &nbsp;&nbsp;&nbsp;&nbsp;
+              <strong style={{ fontSize: 16, color: '#639bf8' }}>{plan.unit && plan.unit.unitName}</strong>
             </div>
             <WhiteSpace size='sm' />
-            <div><Space><strong style={{fontSize:16}}>检测结果：</strong>
-              <NumberInput
-                style={{backgroundColor:'#eee'}}
-                placeholder='输入验收值'
-                precision={5}
-                value={value[key] || ''}
-                onChange={(val) => {
-                  change(val);
-                }} /></Space></div>
+            <div>
+              <Space align='center'>
+                <span style={{ fontSize: 16 }}>验收值：</span>
+                <NumberInput
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #eee',
+                    padding: '0 8px',
+                    fontSize: 8,
+                    maxWidth: 120,
+                  }}
+                  placeholder='输入结果'
+                  disabled={disabled}
+                  precision={5}
+                  value={value[key] && value[key].value || ''}
+                  onChange={(val) => {
+                    change(val);
+                  }} />
+                {plan.unit && plan.unit.unitName}
+              </Space>
+            </div>
           </div>;
         case 2:
           return <div>
             <TextArea
+              disabled={disabled}
+              style={{ border: '1px solid #eee', padding: 8 }}
               placeholder='输入文本'
-              value={value[key] || ''}
+              value={value[key] && value[key].value || ''}
               onChange={(val) => {
                 change(val);
               }} />
           </div>;
         case 3:
           return <div>
-            <Radio.Group value={value[key] || ''} onChange={(val) => {
+            <Radio.Group value={value[key] && value[key].value || ''} onChange={(val) => {
               change(val);
             }}>
               <Space direction='horizontal'>
@@ -289,29 +464,31 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
             </Radio.Group>
           </div>;
         case 4:
-          return <UpLoadImg value={value[key]} onChange={(value) => {
-            change(value);
-          }} />;
-        case 5:
           return <div>
-            <div><strong style={{fontSize:16}}>合格标准：</strong>{Operator(plan.operator, true)}</div>
+            <div>
+              <span style={{ fontSize: 16, color: '#639bf8' }}>合格标准：</span>
+              <strong style={{ fontSize: 16 }}>{Operator(plan.operator, true)}</strong></div>
             <WhiteSpace size='sm' />
-            <div><Space><strong style={{fontSize:16}}>检测结果：</strong>
+            <div><Space align='center'><span style={{ fontSize: 16 }}>验收值：</span>
               <NumberInput
                 min={0}
+                disabled={disabled}
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #eee',
+                  padding: '0 8px',
+                  fontSize: 8,
+                  maxWidth: 150,
+                }}
                 max={100}
-                placeholder='输入验收值(%)'
-                value={value[key] || ''}
+                placeholder='输入检测结果(%)'
+                value={value[key] && value[key].value || ''}
                 onChange={(value) => {
                   change(value);
                 }} /></Space></div>
           </div>;
-        case 6:
-          return <UpLoadImg value={value[key] || ''} onChange={(value) => {
-            change(value);
-          }} />;
-        case 7:
-          return <UpLoadImg value={value[key] || ''} onChange={(value) => {
+        case 5:
+          return <UpLoadImg disabled={disabled} value={value[key] && value[key].value || ''} onChange={(value) => {
             change(value);
           }} />;
         default:
@@ -328,142 +505,223 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
   }
 
 
-  return <div style={{ height: '100vh' }}><Row gutter={24} style={{height: '100%'}}>
-    <Col span={9} style={{ height: '100%',backgroundColor:'#f5f5f5',padding:0 }}>
-      <div style={{ maxHeight: '85vh', overflowY: 'auto' }}>
-        <SideBar style={{ '--width': '100%' }} activeKey={key} onChange={(value) => {
-          // setValue(null);
-          setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[value]);
-          setKey(value);
-        }}>
-          {
-            data
-            &&
-            data.qualityPlanResult
-            &&
-            data.qualityPlanResult.qualityPlanDetailParams
-            &&
-            data.qualityPlanResult.qualityPlanDetailParams.map((items, index) => {
-              return <SideBar.Item
-                key={index}
-                badge={!state[index] && Badge.dot}
-                title={<>{items.qualityCheckResult && items.qualityCheckResult.name}{state[index] && res(!!state[index].judge)}</>} />;
-            })
+  // 上传图片
+  const imgs = () => {
+
+    if (state[key]) {
+      if (value[key] && value[key].imgValues) {
+        return <>
+          <WhiteSpace size='sm' />
+          <span style={{
+            fontSize: 16,
+          }}>拍照 / 录像：</span>
+          <div style={{ padding: 8 }}>
+            <ImgUpload
+              loading={imgloading}
+              value={value[key] && value[key].imgValues}
+              disabled={state[key]}
+              onChange={(value) => {
+                change(null, value);
+              }} />
+          </div>
+        </>;
+      } else {
+        return null;
+      }
+    } else {
+      return <>
+        <WhiteSpace size='sm' />
+        <span style={{
+          fontSize: 16,
+        }}>拍照 / 录像：</span>
+        <div style={{ padding: 8 }}>
+          <ImgUpload
+            loading={imgloading}
+            value={value[key] && value[key].imgValues || []}
+            disabled={state[key]}
+            onChange={(value) => {
+              change(null, value);
+            }} />
+        </div>
+      </>;
+    }
+
+  };
+
+  return <div style={{ height: '100vh' }}>
+    <Row gutter={24} style={{ height: '100%' }}>
+      <Col span={7} style={{ height: '100%', backgroundColor: '#f5f5f5', padding: 0 }}>
+        <div style={{ maxHeight: '85vh', overflowY: 'auto' }}>
+          <SideBar style={{ '--width': '100%', overflowY: 'auto', overflowX: 'hidden' }} activeKey={key}
+                   onChange={(value) => {
+                     toggle();
+                     setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[value]);
+                     setKey(value);
+                   }}>
+            {
+              data
+              &&
+              data.qualityPlanResult
+              &&
+              data.qualityPlanResult.qualityPlanDetailParams
+              &&
+              data.qualityPlanResult.qualityPlanDetailParams.map((items, index) => {
+                return <SideBar.Item
+                  key={index}
+                  className={style.sidebar}
+                  badge={!state[index] && Badge.dot}
+                  title={
+                    <Space style={{ width: '100%' }} className={style.space}>
+                      <div style={{ width: '100%', display: 'inline-block' }}>
+                        <Ellipsis
+                          rows={1}
+                          style={{ fontSize: 16 }}
+                          direction='end'
+                          content={items.qualityCheckResult && items.qualityCheckResult.name} />
+                      </div>
+                      <div style={{ display: 'inline-block', width: '20%' }}>
+                        {state[index] && res(!!state[index].judge)}
+                      </div>
+                    </Space>} />;
+              })
+            }
+          </SideBar>
+        </div>
+      </Col>
+      <Col span={16} style={{ padding: 8, maxHeight: '70%', overflowY: 'auto', overflowX: 'hidden' }}>
+        <Card
+          title={<>
+            {
+              plan.isNull === 1
+              &&
+              <span style={{ color: 'red', marginRight: 4 }}>*</span>
+            }
+            <Ellipsis style={{display:'inline-block'}} direction='end' content={
+              '质检项：' + (plan.qualityCheckResult && plan.qualityCheckResult.name)
+            } />
+          </>
+
           }
-        </SideBar>
-      </div>
-    </Col>
-    <Col span={14} style={{ padding: 8,maxHeight: '85vh', overflowY: 'auto',overflowX:'hidden'  }}>
-      <WhiteSpace size='sm' />
-      <div><strong style={{fontSize:16}}>供应商 / 品牌：</strong>{data.brand && data.brand.brandName}</div>
-      <WhiteSpace size='sm' />
-      <div><strong style={{fontSize:16}}>数量：</strong>{batch ? number : 1}</div>
-      <WhiteSpace size='sm' />
-      {bars()}
-      <WhiteSpace size='sm' />
-      {
-        !state[key]
-        &&
-        <Row gutter={24}>
-          <Col span={14} />
-          <Col span={10}>
-            <Button color='primary' fill='none' onClick={() => {
-              if (plan.qualityCheckResult && plan.qualityCheckResult.type) {
-                let judge = true;
+          headerStyle={{ borderLeft: 'solid 4px #000', padding: 8 }}>
+          {bars(state[key])}
+          {imgs()}
+          <WhiteSpace size='sm' />
+          <div>
+            <Button
+              disabled={state[key]}
+              color='primary'
+              block
+              shape='rounded'
+              style={{ backgroundColor: '#4B8BF5', width: '100%', borderRadius: 50 }}
+              onClick={() => {
+                if (plan.qualityCheckResult && plan.qualityCheckResult.type) {
 
-                if (plan.isNull === 0 || value[key]) {
-
-                  if (value[key]) {
-                    switch (plan.qualityCheckResult && plan.qualityCheckResult.type) {
-                      case 3:
-                        judge = value[key] === '1';
-                        break;
-                      case 1:
-                      case 5:
-                        switch (plan.operator) {
-                          case 1:
-                            judge = value[key] === parseInt(plan.standardValue);
-                            break;
-                          case 2:
-                            judge = value[key] >= parseInt(plan.standardValue);
-                            break;
-                          case 3:
-                            judge = value[key] <= parseInt(plan.standardValue);
-                            break;
-                          case 4:
-                            judge = value[key] > parseInt(plan.standardValue);
-                            break;
-                          case 5:
-                            judge = value[key] < parseInt(plan.standardValue);
-                            break;
-                          case 6:
-                            judge = value[key] > parseInt(plan.standardValue.split(',')[0]) && value[key] < parseInt(plan.standardValue.split(',')[1]);
-                            break;
-                          default:
-                            break;
-                        }
-                        break;
-                      default:
-                        break;
-                    }
-                  }
+                  const judge = getJudge(value[key] && value[key].values, key);
 
                   const count = sysState(value[key] || '', judge);
                   if (count === true) {
+                    toggle();
                     setKey(`${parseInt(key) + 1}`);
                     setPlan(data.qualityPlanResult && data.qualityPlanResult.qualityPlanDetailParams[parseInt(key) + 1]);
                   }
 
-                } else {
-                  Toast.show({
-                    content: '请输入检测结果',
-                    icon: 'fail',
-                  });
                 }
-              }
+              }}>下一项</Button>
+          </div>
+        </Card>
 
-            }}>确定</Button>
-          </Col>
-        </Row>
-      }
-      <WhiteSpace size='sm' />
-      <Divider>规范</Divider>
-      <div style={{ padding: 16 }}>
-        {pares(plan && plan.qualityCheckResult && plan.qualityCheckResult.norm)}
-      </div>
-    </Col>
-  </Row>
+        <Divider>其他信息</Divider>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>供应商 / 品牌：{data.brand && data.brand.brandName}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>数量：{batch ? number : 1}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>检查类型：{batch ? '抽检' : '固定检查'}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>质检人：</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>质检地点：{data.address}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>质检时间：{data.time}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>接头人：{data.person}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>联系方式：{data.phone}</span>
+        </div>
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>备注：{data.note}</span>
+        </div>
 
-    <div style={{ width: '100%', padding: 8,paddingBottom:0, position: 'fixed', bottom: 0 ,backgroundColor:'#fff',borderTop:'solid 1px #eee'}}>
-      <Row gutter={24}>
-        <Col span={7} style={{ textAlign: 'center' }}>
-          <Button style={{ padding: 8 }} onClick={() => {
-            typeof create === 'function' && create();
-          }}>提交入库</Button>
-        </Col>
-        <Col span={10} style={{ textAlign: 'center' }}>
-          <Button style={{ padding: 8 }} disabled={bind} onClick={() => {
+        <WhiteSpace size='sm' />
+        <div>
+          <span style={{ fontSize: 16, color: '#999' }}>规范：</span>
+          <Button color='primary' fill='none' style={{ padding: 0 }} onClick={() => {
+            Dialog.alert({
+              content: pares(plan && plan.qualityCheckResult && plan.qualityCheckResult.norm),
+            });
+          }}>查看</Button>
+        </div>
+      </Col>
+    </Row>
+
+    <div style={{
+      width: '100%',
+      paddingBottom: 0,
+      position: 'fixed',
+      bottom: 0,
+      backgroundColor: '#fff',
+    }}>
+      <div style={{ padding: '0 8px' }}>
+        <Button
+          style={{
+            padding: 8,
+            width: '60%',
+            backgroundColor: '#f2b321',
+            color: '#fff',
+            borderRadius: 0,
+            borderTopLeftRadius: 50,
+            borderBottomLeftRadius: 50,
+          }}
+          disabled={data.inkindId ? (data.inkindId.split(',')[index] || bind) : bind}
+          onClick={() => {
             scan({ brandId: data.brandId, skuId: data.skuId });
           }}><ScanOutlined />绑定当前物料</Button>
-        </Col>
-        <Col span={7} style={{ textAlign: 'center' }}>
-          <Button
-            style={{ padding: 8 }}
-            color='primary'
-            disabled={values && values.key !== undefined}
-            onClick={() => {
-              if (bind) {
-                if (state.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
-                  const valueNull = state.filter((value) => {
-                    return value || value === '';
-                  });
-                  if (valueNull.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
-                    comlete(state);
-                  } else {
-                    Toast.show({
-                      content: '请全部检验完成！',
-                    });
-                  }
+        <Button
+          style={{
+            padding: 8,
+            width: '40%',
+            backgroundColor: '#4B8BF5',
+            borderRadius: 0,
+            borderTopRightRadius: 50,
+            borderBottomRightRadius: 50,
+          }}
+          loading={loading}
+          color='primary'
+          disabled={values && values.key !== undefined}
+          onClick={() => {
+            if (data.inkindId ? (data.inkindId.split(',')[index] || bind) : bind) {
+              if (state.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
+                const valueNull = state.filter((value) => {
+                  return value || value === '';
+                });
+                if (valueNull.length === data.qualityPlanResult.qualityPlanDetailParams.length) {
+                  comlete(state);
                 } else {
                   Toast.show({
                     content: '请全部检验完成！',
@@ -471,12 +729,18 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
                 }
               } else {
                 Toast.show({
-                  content: '请绑定该物料！',
+                  content: '请全部检验完成！',
                 });
               }
-            }}>检验完成</Button>
-        </Col>
-      </Row>
+            } else {
+              Toast.show({
+                content: '请绑定该物料！',
+              });
+            }
+          }}>
+          检验完成
+        </Button>
+      </div>
       <div>
         <SafeArea position='bottom' />
       </div>
@@ -485,4 +749,3 @@ const QualitySidBar = ({ data, batch, taskId, values, create, number, onChange, 
 };
 
 export default QualitySidBar;
-;

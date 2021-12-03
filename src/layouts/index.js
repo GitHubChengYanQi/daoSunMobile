@@ -27,7 +27,7 @@ function BasicLayout(props) {
 
           if (process.env.NODE_ENV === 'development') {
             if (value === '/OrCode') {
-              value = '/OrCode?id=1462675230879481857';
+              value = '/OrCode?id=1466277914157101058';
             }
           }
           router.push(value);

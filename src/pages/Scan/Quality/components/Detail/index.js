@@ -8,7 +8,7 @@ import { Gallery } from 'weui-react-v2';
 
 const Detail = ({ qualityTaskId }) => {
 
-  const [visible,setVisible] = useState();
+  const [visible, setVisible] = useState();
 
   const { data, run } = useRequest({
     url: '/qualityTask/formDetail',
@@ -26,20 +26,20 @@ const Detail = ({ qualityTaskId }) => {
   }, [qualityTaskId, run]);
 
 
-  const operator = (value) => {
-    switch (value) {
+  const operator = (operator, value) => {
+    switch (operator) {
       case 1:
-        return <>=</>;
+        return <>{'=' + value}</>;
       case 2:
-        return <>{'>='}</>;
+        return <>{'>=' + value}</>;
       case 3:
-        return <>{'<='}</>;
+        return <>{'<=' + value}</>;
       case 4:
-        return <>{'>'}</>;
+        return <>{'>' + value}</>;
       case 5:
-        return <>{'<'}</>;
+        return <>{'<' + value}</>;
       case 6:
-        return <>{'<>'}</>;
+        return <>{value.split(',')[0] + '  —  ' + value.split(',')[1]}</>;
       default:
         break;
     }
@@ -48,18 +48,14 @@ const Detail = ({ qualityTaskId }) => {
   const Type = (items) => {
     switch (items.type) {
       case 1:
-        return <>{operator(items.field.operator)}  {items.field.standardValue}</>;
+        return <>{operator(items.field.operator, items.field.standardValue)} </>;
       case 2:
         return <>文本</>;
       case 3:
         return <>是否</>;
       case 4:
-        return <>图片</>;
+        return <>{operator(items.field.operator, items.field.standardValue)} % </>;
       case 5:
-        return <>{operator(items.field.operator)}  {items.field.standardValue} % </>;
-      case 6:
-        return <>视频</>;
-      case 7:
         return <>附件</>;
       default:
         return null;
@@ -69,26 +65,35 @@ const Detail = ({ qualityTaskId }) => {
   const valueType = (items) => {
     switch (items.type) {
       case 1:
-        return <>{items.value}</>;
+        return <>{items.value && items.value.value}</>;
       case 2:
-        return <>{items.value}</>;
+        return <>{items.value && items.value.value}</>;
       case 3:
-        return <>{items.value === '1' ? '合格' : '不合格'}</>;
+        return <>{(items.value && items.value.value === '1') ? '合格' : '不合格'}</>;
       case 4:
-        return  <Button style={{padding:0}} color='primary' fill='none' onClick={() => setVisible(items.value)}>查看</Button>
+        return <>{items.value && items.value.value} % </>;
       case 5:
-        return <>{items.value} % </>;
-      case 6:
-        return <Button style={{padding:0}} color='primary' fill='none' onClick={() => setVisible(items.value)}>查看</Button>;
-      case 7:
-        return <Button style={{padding:0}} color='primary' fill='none' onClick={() => setVisible(items.value)}>查看</Button>;
+        return items.value && items.value.value &&
+          <Button
+            style={{ padding: 0 }}
+            color='primary'
+            fill='none'
+            onClick={() => setVisible([items.value.value])}>查看</Button>;
       default:
         return null;
     }
   };
 
+  if (!data) {
+    return <Empty
+      style={{ padding: '64px 0' }}
+      imageStyle={{ width: 128 }}
+      description='暂无数据'
+    />;
+  }
+
   return <>
-    {data && data.length > 0 ? <Collapse accordion>
+    {data.length > 0 ? <Collapse accordion>
         {
           data.map((items, index) => {
             const standar = items.valueResults && items.valueResults.filter((value) => {
@@ -130,35 +135,56 @@ const Detail = ({ qualityTaskId }) => {
               </>
             }>
               <Row key={index} gutter={24}>
-                <Col span={5}>
+                <Col span={4} style={{ padding: 0 }}>
                   <strong>质检项</strong>
                 </Col>
-                <Col span={7}>
-                  <strong>合格标准</strong>
+                <Col span={7} style={{ padding: 0 }}>
+                  <strong>标准值</strong>
                 </Col>
-                <Col span={7}>
-                  <strong>检测结果</strong>
+                <Col span={7} style={{ padding: 0 }}>
+                  <strong>验收值</strong>
                 </Col>
-                <Col span={3}>
+                <Col span={2} style={{ padding: 0 }}>
+                  <strong>图片</strong>
+                </Col>
+                <Col span={2} style={{ padding: 0 }}>
                   <strong>结果</strong>
                 </Col>
               </Row>
               {items.valueResults && items.valueResults.map((items, index) => {
                 return <Row key={index} gutter={24}>
-                  <Col span={5}>
+                  <Col span={4} style={{ padding: 0 }}>
                     <Ellipsis direction='end' content={items.name} />
                   </Col>
-                  <Col span={7}>
-                  {Type(items)}
+                  <Col span={7} style={{ padding: 0 }}>
+                    {Type(items)}
                   </Col>
-                  <Col span={7}>
-                  {valueType(items)}
+                  <Col span={7} style={{ padding: 0 }}>
+                    {valueType(items)}
                   </Col>
-                  <Col span={3}>
-                  {items.standar ?
-                    <CheckCircleOutlined style={{ color: 'green' }} />
-                    :
-                    <CloseCircleOutlined style={{ color: 'red' }} />}
+                  <Col span={2} style={{ padding: 0 }}>
+                    {
+                      items
+                      &&
+                      items.value
+                      &&
+                      items.value.imgValues
+                      &&
+                      items.value.imgValues.length > 0
+                      &&
+                      <Button
+                        style={{ padding: 0 }}
+                        color='primary'
+                        fill='none'
+                        onClick={() => {
+                          setVisible(items.value && items.value.imgValues);
+                        }}>查看</Button>}
+                  </Col>
+                  <Col span={2} style={{ padding: 0, textAlign: 'center' }}>
+                    {items.standar ?
+                      <CheckCircleOutlined style={{ color: 'green' }} />
+                      :
+                      <CloseCircleOutlined style={{ color: 'red' }} />}
                   </Col>
                 </Row>;
               })}
@@ -174,7 +200,11 @@ const Detail = ({ qualityTaskId }) => {
         description='暂无数据'
       />
     }
-    <Gallery className="image-view-demo" data={[{ src:visible }]} visible={visible} onVisibleChange={setVisible} />;
+    <Gallery className='image-view-demo' data={visible ? visible.map((items) => {
+      return {
+        src: items.url,
+      };
+    }) : []} visible={visible} onVisibleChange={setVisible} />;
   </>;
 
 };

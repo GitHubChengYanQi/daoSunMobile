@@ -8,7 +8,8 @@ import { Config } from '../../../config';
 const baseURI =
   process.env.NODE_ENV === 'development'
     ?
-    "http://192.168.1.119"
+    "http://192.168.1.229"
+    // Config().api
     :
     Config().api
 ;
@@ -48,9 +49,6 @@ ajaxService.interceptors.response.use((response) => {
           try {
             // GotoLogin();
             cookie.remove('cheng-token');
-            const search = new URLSearchParams(window.location.search);
-            search.delete('code');
-            search.delete('state');
             if (process.env.NODE_ENV === 'development'){
               router.push('/');
             }

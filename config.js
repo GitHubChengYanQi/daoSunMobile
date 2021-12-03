@@ -9,12 +9,12 @@ export const Config = () => {
     case 'daoxin':
       return {
         api:'https://api.daoxin.gf2025.com',
-        code:'https://wx.daoxin.gf2025.com/cp/#/OrCode',
+        wxCp:'https://wx.daoxin.gf2025.com/cp/#/',
       };
     case 'zjzc':
       return {
         api:'https://api.zjzc.gf2025.com',
-        code:'https://wx.zjzc.gf2025.com/cp/#/OrCode',
+        wxCp:'https://wx.zjzc.gf2025.com/cp/#/OrCode',
       };
     default:
       break;

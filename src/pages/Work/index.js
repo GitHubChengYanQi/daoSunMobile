@@ -1,11 +1,9 @@
 import React from 'react';
 import {
-
   Grid,
   GridItem,
   List,
   ListItem,
-
 } from 'weui-react-v2';
 
 import { Affix } from 'antd';
@@ -13,7 +11,7 @@ import styles from './index.css';
 import { router } from 'umi';
 import { Badge, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
-import { MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { AuditOutlined, MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
 import wx from 'populee-weixin-js-sdk';
 import { useRequest } from '../../util/Request';
 
@@ -40,6 +38,11 @@ const Work = () => {
             router.push('/SearchButton');
           }}>
             <div className={styles.size}>全局查找</div>
+          </GridItem>
+          <GridItem icon={<AuditOutlined />} onClick={() => {
+            router.push('/Work/Workflow');
+          }}>
+            <div className={styles.size}>审批</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-saoyisao1' />} onClick={() => {
             wx.scanQRCode({

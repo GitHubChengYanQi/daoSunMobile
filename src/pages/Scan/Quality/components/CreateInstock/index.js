@@ -160,7 +160,7 @@ const CreateInstock = ({ show }) => {
               {
                 data: {
                   coding,
-                  url: Config().code+'?id=codeId',
+                  url: Config().wxCp+'OrCode?id=codeId',
                   storeHouseId: storehoust,
                   userId: user,
                   number: 1,

@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {Upload} from 'antd';
-import {LoadingOutlined, PlusOutlined} from '@ant-design/icons';
-import {useRequest} from '@/util/Request';
+import React, { useState, useEffect } from 'react';
+import { Upload } from 'antd';
+import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import { useRequest } from '@/util/Request';
 
 
 const UpLoadImg = (props) => {
-  const {value, onChange, button,type} = props;
+  const { value, onChange, disabled, button, type } = props;
   const [loading, setLoading] = useState(false); // loading 状态
   const [imageUrl, setImageUrl] = useState(''); // 图片地址
   const [oss, setOss] = useState({}); // OSS上传所需参数
@@ -24,7 +24,7 @@ const UpLoadImg = (props) => {
   const beforUpLoad = (imgType) => {
     setLoading(true);
     return new Promise((resolve) => {
-      getOssObj({params: {type: imgType}}).then(res => {
+      getOssObj({ params: { type: imgType } }).then(res => {
         resolve();
       });
     });
@@ -32,11 +32,11 @@ const UpLoadImg = (props) => {
 
   const getSTSToken = {
     url: '/media/getToken', // 获取OSS凭证接口
-    data: {}
+    data: {},
   };
 
   // 获取OSS配置
-  const {run: getOssObj} = useRequest(getSTSToken, {
+  const { run: getOssObj } = useRequest(getSTSToken, {
     manual: true,
     formatResult: (e) => {
       return e;
@@ -49,9 +49,9 @@ const UpLoadImg = (props) => {
         oss.Signature = res.data.Signature;
         oss.mediaId = res.data.mediaId;
         oss.OSSAccessKeyId = res.data.OSSAccessKeyId;
-        setOss({...oss});
+        setOss({ ...oss });
       }
-    }
+    },
   });
 
 
@@ -59,7 +59,7 @@ const UpLoadImg = (props) => {
   const uploadButton = (
     <div>
       {loading ? <LoadingOutlined /> : <PlusOutlined />}
-      <div style={{marginTop: 8}}>Upload</div>
+      <div style={{ marginTop: 8 }}>Upload</div>
     </div>
   );
 
@@ -67,15 +67,16 @@ const UpLoadImg = (props) => {
   return (
     // name 为发送到后台的文件名
     <Upload
+      disabled={disabled}
       listType={type || 'picture-card'}
-      className="avatar-uploader"
+      className='avatar-uploader'
       showUploadList={false}
       data={oss}
       action={oss.host}
       beforeUpload={(file) => {
         return beforUpLoad(file.type.split('/')[1]);
       }}
-      onChange={({file}) => {
+      onChange={({ file }) => {
         if (file.status === 'done') {
           setImageUrl(`${oss.host}/${oss.key}`);
           setLoading(false);
@@ -84,7 +85,7 @@ const UpLoadImg = (props) => {
       }
       }
     >
-      {button || (imageUrl ? <img src={imageUrl} alt="" style={{width: '100%', height: '100%'}} /> : uploadButton)}
+      {button || (imageUrl ? <img src={imageUrl} alt='' style={{ width: '100%', height: '100%' }} /> : uploadButton)}
     </Upload>
   );
 };
