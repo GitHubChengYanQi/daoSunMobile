@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CheckList, Dialog, Space, Toast } from 'antd-mobile';
-import MyPicker from '../../../../components/MyPicker';
 import { codingRulesList, codingRulesListSelect, storeHouseSelect, UserIdSelect } from '../Url';
-import {  useRequest } from '../../../../../util/Request';
 import { Badge } from 'antd';
-import { Config } from '../../../../../../config';
+import { Config } from '../../../../../config';
+import { useRequest } from '../../../../util/Request';
+import MyPicker from '../../../components/MyPicker';
 
-const CreateInstock = ({ show }) => {
+const CreateInstock = ({ show, qualityDeatlis }) => {
 
   const [visible, setVisible] = useState(false);
 
-  const [inkindIds,setInkindIds] = useState([]);
+  const [inkindIds, setInkindIds] = useState([]);
 
   const [coding, setCoding] = useState();
 
@@ -18,11 +18,40 @@ const CreateInstock = ({ show }) => {
 
   const [user, setUser] = useState();
 
+  const datas = (values) => {
+    if (typeof values === 'object') {
+      const array = [];
+      values.map((items) => {
+        // 找到集合中相同的实物
+        const item = array.filter((value) => {
+          return items.formId === value.formId;
+        });
+        // 找到和当前相同实物
+        const allItem = values.filter((value) => {
+          return items.formId === value.formId;
+        });
+        // 取出相同实物中不合格的实物
+        const getJudge = allItem.filter((value) => {
+          const judges = value.values.filter((value) => {
+            return value.dataValues.judge === 0;
+          });
+          return judges.length > 0;
+        });
+        if (item.length <= 0) {
+          return array.push({ ...items, getJudge: getJudge.length === 0 });
+        }else {
+          return null;
+        }
+      });
+      setVisible(array);
+    }
+  };
+
   useEffect(() => {
     setInkindIds([]);
     setStorehoust(null);
     setUser(null);
-    setVisible(show);
+    datas(show);
   }, [show]);
 
   const { loading, data } = useRequest(codingRulesList, {
@@ -65,7 +94,7 @@ const CreateInstock = ({ show }) => {
       visible={visible}
       title='创建入库单'
       content={<>
-        <div style={{ marginLeft:'30%' }}>
+        <div style={{ marginLeft: '30%' }}>
           <Space direction='vertical'>
             <Space>
               <div>编码:</div>
@@ -89,41 +118,58 @@ const CreateInstock = ({ show }) => {
         </div>
         <Card title='选择入库物料'>
           <div style={{ maxheight: '50vh', overflow: 'auto' }}>
-            <CheckList multiple onChange={(value)=>{
+            <CheckList multiple onChange={(value) => {
               setInkindIds(value);
             }}>
-              {visible && visible.map((items, index) => {
-                if (items.inkind && items.inkind.sku && items.inkind.inkind && (!items.inkind.inkind.instockOrderId)) {
-                  return <CheckList.Item value={items.inkind.inkind.inkindId} key={index}>
+              {typeof visible === 'object' && visible.map((items, index) => {
+
+
+                const qualityDetail = qualityDeatlis.filter((value) => {
+                  const inkindIds = (value.inkindId && value.inkindId !== '') ? value.inkindId.split(',') : [];
+                  const codeIds = inkindIds.filter((value) => {
+                    return value === items.qrcodeId;
+                  });
+                  return codeIds.length > 0;
+                });
+
+                if (qualityDetail && qualityDetail[0]) {
+                  return <CheckList.Item value={items.formId} key={index}>
                     <div>
-                      {items.inkind.sku.skuName}
+                      {qualityDetail[0].skuResult && qualityDetail[0].skuResult.skuName}
                       &nbsp;/&nbsp;
-                      {items.inkind.sku.spuResult && items.inkind.sku.spuResult.name}
+                      {qualityDetail[0].skuResult && qualityDetail[0].skuResult.spuResult && qualityDetail[0].skuResult.spuResult.name}
                       &nbsp;&nbsp;
-                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                        (
-                        {
-                          items.inkind.sku.skuJsons
-                          &&
-                          items.inkind.sku.skuJsons.map((items, index) => {
-                            return (
-                              <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
-                            );
-                          })
-                        }
-                        )
-                      </em>
+                      {
+                        qualityDetail[0].skuResult
+                        &&
+                        qualityDetail[0].skuResult.list
+                        &&
+                        qualityDetail[0].skuResult.list.length > 0
+                        &&
+                        qualityDetail[0].skuResult.list[0].attributeValues
+                        &&
+                        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                          (
+                          {
+                            qualityDetail[0].skuResult.list.map((items, index) => {
+                              return <span key={index}>
+                {items.itemAttributeResult.attribute}：{items.attributeValues}
+                  </span>;
+                            })
+                          }
+                          )
+                        </em>}
                     </div>
                     <div>
-                      {items.inkind.brand && items.inkind.brand.brandName}
+                      {qualityDetail[0].brand && qualityDetail[0].brand.brandName}
                       &nbsp;&nbsp;  &nbsp;&nbsp;
-                      × {items.inkind.inkind.number}
-                      <div style={{float:'right'}}>
+                      × 1
+                      <div style={{ float: 'right' }}>
                         {
-                          !items.success ?
-                            <Badge text='不合格' color='red' />
-                            :
+                          items.getJudge ?
                             <Badge text='合格' color='green' />
+                            :
+                            <Badge text='不合格' color='red' />
                         }
                       </div>
                     </div>
@@ -131,7 +177,6 @@ const CreateInstock = ({ show }) => {
                 } else {
                   return null;
                 }
-
               })}
             </CheckList>
           </div>
@@ -160,7 +205,7 @@ const CreateInstock = ({ show }) => {
               {
                 data: {
                   coding,
-                  url: Config().wxCp+'OrCode?id=codeId',
+                  url: Config().wxCp + 'OrCode?id=codeId',
                   storeHouseId: storehoust,
                   userId: user,
                   number: 1,

@@ -1,20 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from 'weui-react-v2';
 import { UploadOutlined } from '@ant-design/icons';
 import { Space, Upload } from 'antd';
 import { useRequest } from '../../../../util/Request';
 import { Toast } from 'antd-mobile';
+import { useDebounceEffect } from 'ahooks';
 
-const CustomerUpload = ({customerId}) => {
+const CustomerUpload = ({ customerId }) => {
 
   const [oss, setOss] = useState({});
 
   const [file, setFile] = useState();
 
 
-  const {run} = useRequest({
+  const { run } = useRequest({
     url: '/media/getToken',
-    method: 'GET'
+    method: 'GET',
   }, {
     manual: true,
     formatResult: (e) => {
@@ -28,22 +29,22 @@ const CustomerUpload = ({customerId}) => {
         oss.Signature = res.data.Signature;
         oss.mediaId = res.data.mediaId;
         oss.OSSAccessKeyId = res.data.OSSAccessKeyId;
-        setOss({...oss});
+        setOss({ ...oss });
       }
-    }
+    },
   });
-  const {run: runFile} = useRequest({
+  const { run: runFile } = useRequest({
     url: '/customerFile/add',
-    method: 'POST'
-  }, {manual: true});
-  const {run: runDeleteFile} = useRequest({
+    method: 'POST',
+  }, { manual: true });
+  const { run: runDeleteFile } = useRequest({
     url: '/customerFile/delete',
-    method: 'POST'
-  }, {manual: true});
-  const {run: runListFile, refresh} = useRequest({
+    method: 'POST',
+  }, { manual: true });
+  const { run: runListFile, refresh } = useRequest({
     url: '/customerFile/list?',
     method: 'POST',
-    data: {customerId:customerId}
+    data: { customerId: customerId },
   }, {
     manual: true, onSuccess: async (res) => {
       const fileList = await res && res.data ? res.data.map((items, index) => {
@@ -54,33 +55,35 @@ const CustomerUpload = ({customerId}) => {
         };
       }) : [];
       setFile(fileList);
-    }
+    },
   });
 
-  useEffect(() => {
+  useDebounceEffect(() => {
     runListFile({
       params: {
         limit: 20,
-        page: 1
-      }
+        page: 1,
+      },
     });
-  }, [runListFile]);
+  }, [], {
+    wait: 0,
+  });
 
 
   return (
-    <Space direction="vertical" style={{width: '100%'}} size="large">
+    <Space direction='vertical' style={{ width: '100%' }} size='large'>
       <Upload
-        style={{width: '100%'}}
-        className="avatar-uploader"
+        style={{ width: '100%' }}
+        className='avatar-uploader'
         data={oss}
         action={oss.host}
-        listType="picture"
+        listType='picture'
         fileList={file}
         beforeUpload={(file) => {
           const type = file.type.split('/')[1];
           if (type) {
             return new Promise((resolve) => {
-              run({params: {type}}).then(res => {
+              run({ params: { type } }).then(res => {
                 resolve();
               });
             });
@@ -88,11 +91,11 @@ const CustomerUpload = ({customerId}) => {
             Toast.show({
               content: '附件类型不正确',
               icon: 'fail',
-            })
+            });
             refresh();
           }
         }}
-        onChange={async ({file, fileList}) => {
+        onChange={async ({ file, fileList }) => {
           console.log(file.status);
           switch (file.status) {
             case 'done':
@@ -101,8 +104,8 @@ const CustomerUpload = ({customerId}) => {
                   url: `${oss && oss.host}/${oss && oss.key}`,
                   customerId,
                   uid: file.uid,
-                  name: file.name
-                }
+                  name: file.name,
+                },
               });
               refresh();
               break;
@@ -114,8 +117,8 @@ const CustomerUpload = ({customerId}) => {
             case 'removed':
               await runDeleteFile({
                 data: {
-                  uid: file.uid
-                }
+                  uid: file.uid,
+                },
               });
               await refresh();
               break;

@@ -1,54 +1,57 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Card, Collapse, Empty, List } from 'antd-mobile';
 import { Col, Row } from 'antd';
 import { router } from 'umi';
 import { useRequest } from '../../../../util/Request';
-import Detail from '../../../Scan/Quality/components/Detail';
+import { useDebounceEffect } from 'ahooks';
+import Detail from '../../Quality/Detail';
 
 const QualityDetails = (props) => {
 
   const query = props.location.query;
 
-  const [qualityTaskDetail,setQualityTaskDtail] = useState({});
+  const [qualityTaskDetail, setQualityTaskDtail] = useState({});
 
-  const {run:detail} = useRequest({
+  const { run: detail } = useRequest({
     url: '/qualityTask/detail',
     method: 'POST',
-  },{
-    manual:true,
-    onSuccess:(res)=>{
-      setQualityTaskDtail({...qualityTaskDetail,detail:res});
-    }
+  }, {
+    manual: true,
+    onSuccess: (res) => {
+      setQualityTaskDtail({ ...qualityTaskDetail, detail: res });
+    },
   });
 
-  const {run:qualityLising} = useRequest({
+  const { run: qualityLising } = useRequest({
     url: '/qualityTaskDetail/list',
     method: 'POST',
-  },{
-    manual:true,
-    onSuccess:(res)=>{
-      setQualityTaskDtail({...qualityTaskDetail,qualityLising:res});
-    }
+  }, {
+    manual: true,
+    onSuccess: (res) => {
+      setQualityTaskDtail({ ...qualityTaskDetail, qualityLising: res });
+    },
   });
 
 
-  useEffect(()=>{
-    if (query.qualityTaskId){
+  useDebounceEffect(() => {
+    if (query.qualityTaskId) {
       detail({
-        data:{
-          qualityTaskId:query.qualityTaskId
-        }
+        data: {
+          qualityTaskId: query.qualityTaskId,
+        },
       });
 
       qualityLising({
-        data:{
-          qualityTaskId:query.qualityTaskId
-        }
+        data: {
+          qualityTaskId: query.qualityTaskId,
+        },
       });
     }
-  },[detail, qualityLising, query.qualityTaskId])
+  }, [], {
+    wait: 0,
+  });
 
-  return <Card title='质检任务信息' extra={<Button style={{padding:0}} color='primary' fill='none' onClick={()=>{
+  return <Card title='质检任务信息' extra={<Button style={{ padding: 0 }} color='primary' fill='none' onClick={() => {
     router.goBack();
   }}>返回审批页面</Button>}>
     <Collapse defaultActiveKey={['0', '1', '2']}>
@@ -69,19 +72,11 @@ const QualityDetails = (props) => {
         {qualityTaskDetail.qualityLising && qualityTaskDetail.qualityLising.length > 0 ? <div>
             <List.Item>
               <Row gutter={24}>
-                <Col span={10} style={{ padding:0 ,textAlign:'center'}}>
-                  物料
+                <Col span={14} style={{ padding: 0, textAlign: 'center' }}>
+                  物料+供应商 / 品牌
                 </Col>
-                <Col span={6} style={{ padding:0 }}>
-                  供应商 / 品牌
-                </Col>
-                <Col span={2} style={{ padding:0,textAlign:'center' }}>
-                  总数
-                </Col>
-                <Col span={2} style={{ padding:0,textAlign:'center' }}>
-                  未检
-                </Col>
-                <Col span={4} style={{ padding:0 }}>
+                <Col span={2} style={{ padding: 0 }} />
+                <Col span={8} style={{ padding: 0 }}>
                   质检方案
                 </Col>
               </Row>
@@ -90,12 +85,12 @@ const QualityDetails = (props) => {
               if (items.number > 0) {
                 return <List.Item key={index}>
                   <Row gutter={24}>
-                    <Col span={10} style={{ padding:0 }}>
+                    <Col span={14}>
                       {items.skuResult && items.skuResult.skuName}
                       &nbsp;/&nbsp;
                       {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-                      &nbsp;&nbsp;
-                      <em style={{color: '#c9c8c8', fontSize: 10}}>
+                      <br />
+                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
                         (
                         {
                           items.skuResult
@@ -111,17 +106,19 @@ const QualityDetails = (props) => {
                         )
                       </em>
                     </Col>
-                    <Col span={6} style={{ padding:0 }}>
+                    <Col span={2} style={{ padding: 0 }}>
+                      × {items.number}
+                    </Col>
+                    <Col span={8} style={{ padding: 0 }}>
+                      {items.qualityPlanResult && items.qualityPlanResult.planName}
+                    </Col>
+                  </Row>
+                  <Row gutter={24}>
+                    <Col span={10}>
                       {items.brand && items.brand.brandName}
                     </Col>
-                    <Col span={2} style={{ padding:0 }}>
-                      {items.number}
-                    </Col>
-                    <Col span={2} style={{ padding:0 }}>
-                      {items.remaining}
-                    </Col>
-                    <Col span={4} style={{ padding:0 }}>
-                      {items.qualityPlanResult && items.qualityPlanResult.planName}
+                    <Col span={14}>
+                      {items.userIds && ('质检人:' + (items.users && items.users.toString()))}
                     </Col>
                   </Row>
                 </List.Item>;

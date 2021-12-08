@@ -1,9 +1,10 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Card, Dialog, Divider, Form, Popup, Selector, Space } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Form, Popup, Selector, Space, Toast } from 'antd-mobile';
 import { DatePicker, Input, ListItem, TextArea } from 'weui-react-v2';
 import { UserIdSelect } from '../../../../Customer/CustomerUrl';
 import { useRequest } from '../../../../../../util/Request';
 import MyTreeSelect from '../../../../../components/MyTreeSelect';
+import { router } from 'umi';
 
 const { Item: FormItem } = Form;
 
@@ -82,18 +83,27 @@ export const Users = ({ onChange }) => {
   </>;
 };
 
-const Dispatch = ({ qualityTaskId, qualityDetailIds, onSuccess }, ref) => {
+const Dispatch = ({ detail, taskId, onSuccess }, ref) => {
 
   const [visible, setVisiable] = useState(false);
 
   const { loading, run } = useRequest({
-    url: '/qualityTaskDetail/addDetails',
+    url: '/qualityTask/addChild',
     method: 'POST',
   }, {
     manual: true,
     onSuccess: () => {
-      typeof onSuccess === 'function' && onSuccess();
+      Toast.show({
+        content: '分派成功！',
+      });
+      router.push(`/Work/Workflow/DispatchTask?id=${taskId}`);
     },
+    onError:()=>{
+      Toast.show({
+        content: '分派失败！',
+      });
+      router.push(`/Work/Workflow/DispatchTask?id=${taskId}`);
+    }
   });
 
   useImperativeHandle(ref, () => ({
@@ -106,13 +116,27 @@ const Dispatch = ({ qualityTaskId, qualityDetailIds, onSuccess }, ref) => {
       <Form
         onFinish={async (values) => {
 
-          console.log(JSON.stringify({
-            ...values, userIds: values.userIds.toString(), detailsIds: qualityDetailIds, qualityTaskId,
-          }));
+          console.log(
+            // JSON.stringify(
+            {
+              taskParams: {
+                ...detail.detail,
+                ...values,
+                userIds: values.userIds.toString(),
+                details: detail.qualityLising,
+              },
+            },
+            // )
+          );
 
           await run({
             data: {
-              ...values, userIds: values.userIds.toString(), detailsIds: qualityDetailIds, qualityTaskId,
+              taskParams: {
+                ...detail.detail,
+                ...values,
+                userIds: values.userIds.toString(),
+                details: detail.qualityLising,
+              },
             },
           });
         }}
@@ -140,7 +164,11 @@ const Dispatch = ({ qualityTaskId, qualityDetailIds, onSuccess }, ref) => {
           <FormItem name='person' label='对接人' rules={[{ required: true, message: '该字段是必填字段！' }]}>
             <Input placeholder='输入对接人' />
           </FormItem>
-          <FormItem name='phone' label='联系方式' rules={[{ required: true, message: '请输入正确的手机号码！', pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/ }]}>
+          <FormItem name='phone' label='联系方式' rules={[{
+            required: true,
+            message: '请输入正确的手机号码！',
+            pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
+          }]}>
             <Input placeholder='输入联系方式' />
           </FormItem>
           <FormItem name='note' label='备注'>

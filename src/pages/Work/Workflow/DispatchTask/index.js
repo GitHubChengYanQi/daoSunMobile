@@ -1,12 +1,10 @@
-import React, {  useRef, useState } from 'react';
-import { Button, Card, Checkbox, Dialog, Empty, List, SafeArea, Selector, Space, Toast } from 'antd-mobile';
+import React, { useState } from 'react';
+import { Button, Card, Checkbox,  Divider, Empty, List, SafeArea, Space, Toast } from 'antd-mobile';
 import { request, useRequest } from '../../../../util/Request';
-import { Col, Row } from 'antd';
-import Dispatch from './components/Dispatch';
 import style from './index.css';
-import { qualityPlanListSelect, qualityTaskDetailEdit } from './components/URL';
 import { useDebounceEffect } from 'ahooks';
-import { CheckOutlined, CheckSquareOutlined, PlusSquareOutlined } from '@ant-design/icons';
+import Icon from '../../../components/Icon';
+import { router } from 'umi';
 
 
 const DispatchTask = (props) => {
@@ -15,13 +13,7 @@ const DispatchTask = (props) => {
 
   const [qualityTaskDetail, setQualityTaskDtail] = useState({});
 
-  const [updateQualityPlan, setUpdateQualityPlan] = useState();
-
-  const [visible, setVisible] = useState(false);
-
   const [check, setCheck] = useState([]);
-
-  const ref = useRef();
 
   const { run: detail } = useRequest({
     url: '/qualityTask/detail',
@@ -33,29 +25,37 @@ const DispatchTask = (props) => {
     },
   });
 
-  const { data: qualityPlan } = useRequest(qualityPlanListSelect);
-
-  const { run: update } = useRequest(qualityTaskDetailEdit,
+  // 执行审批接口
+  const { run: processLogRun } = useRequest(
+    {
+      url: '/audit/post',
+      method: 'GET',
+    },
     {
       manual: true,
-      onSuccess: () => {
-        refresh();
-        Toast.show(
-          {
-            content: '修改成功！',
-          },
-        );
-      },
-    });
+    },
+  );
 
-
-  const { run: qualityLising, refresh } = useRequest({
+  const { run: qualityLising } = useRequest({
     url: '/qualityTaskDetail/list',
     method: 'POST',
   }, {
     manual: true,
     onSuccess: (res) => {
-      setQualityTaskDtail({ ...qualityTaskDetail, qualityLising: res });
+      if (res){
+        const qualitys = res.filter((value)=>{
+          return value.remaining === 0
+        })
+        if (qualitys.length === res.length){
+          processLogRun({
+            params: {
+              taskId: query.id,
+              status: 1,
+            },
+          });
+        }
+        setQualityTaskDtail({ ...qualityTaskDetail, qualityLising: res });
+      }
     },
   });
 
@@ -86,12 +86,12 @@ const DispatchTask = (props) => {
 
   useDebounceEffect(() => {
     qualityTaskId(query.id);
-  }, [],{
-    wait:0
+  }, [], {
+    wait: 0,
   });
 
   return <>
-    <Card title='质检任务分派' bodyStyle={{ padding: 0 }}>
+    <Card title='质检任务分派' bodyStyle={{ padding: 0, overflowX: 'hidden' }}>
       <Card title='基本信息' bodyStyle={{ padding: 0 }}>
         {qualityTaskDetail.detail ? <div>
           <List.Item>质检编码：{qualityTaskDetail.detail.coding}</List.Item>
@@ -107,39 +107,6 @@ const DispatchTask = (props) => {
       </Card>
       <Card title='质检任务' bodyStyle={{ padding: 0 }}>
         {qualityTaskDetail.qualityLising && qualityTaskDetail.qualityLising.length > 0 ? <div>
-            <Checkbox
-              icon={(check)=>{
-                if (!check){
-                  return <PlusSquareOutlined />
-                }else {
-                  return <CheckSquareOutlined />
-                }
-              }}
-              onChange={(value) => {
-                if (value) {
-                  const ids = qualityTaskDetail.qualityLising.filter((value) => {
-                    return !value.userIds;
-                  });
-                  setCheck(ids);
-                } else {
-                  setCheck([]);
-                }
-              }}
-              className={style.checkBox}
-              style={{ width: '100%', padding: '8px 0' }}>
-              <Row gutter={24}>
-                <Col span={1} />
-                <Col span={12} style={{ padding: 0 }}>
-                  物料
-                </Col>
-                <Col span={6} style={{ padding: 0 }}>
-                  供应商 / 品牌
-                </Col>
-                <Col span={4} style={{ padding: 0 }}>
-                  质检方案
-                </Col>
-              </Row>
-            </Checkbox>
             <Checkbox.Group
               value={check}
               onChange={(value) => {
@@ -158,26 +125,28 @@ const DispatchTask = (props) => {
             >
               <Space direction='vertical' style={{ width: '100%' }}>
                 {qualityTaskDetail.qualityLising.map((items, index) => {
-                  return <Checkbox
-                    key={index}
-                    icon={(check)=>{
-                      if (!check){
-                        return <PlusSquareOutlined />
-                      }else {
-                        return <CheckSquareOutlined />
-                      }
-                    }}
-                    className={style.checkBox}
-                    style={{ width: '100%' }}
-                    disabled={items.userIds}
-                    value={items}>
-                    <Row gutter={24}>
-                      <Col span={1} />
-                      <Col span={12} style={{ padding: 0 }}>
+                  return <div key={index}>
+                    <Checkbox
+                      icon={(check) => {
+                        if (items.remaining <= 0) {
+                          return <Icon type='icon-fangxingxuanzhongfill' style={{ color: '#dcdcdc' }} />;
+                        } else {
+                          if (check) {
+                            return <Icon type='icon-duoxuanxuanzhong1' />;
+                          } else {
+                            return <Icon type='icon-duoxuanxuanzhong' style={{ color: '#666' }} />;
+                          }
+                        }
+                      }}
+                      className={style.checkBox}
+                      style={{ width: '100%', padding: 8 }}
+                      disabled={items.remaining <= 0}
+                      value={items}>
+                      <div>
                         {items.skuResult && items.skuResult.skuName}
                         &nbsp;/&nbsp;
                         {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-                        <br />
+                        &nbsp;&nbsp;
                         <em style={{ color: '#c9c8c8', fontSize: 10 }}>
                           (
                           {
@@ -193,25 +162,18 @@ const DispatchTask = (props) => {
                           }
                           )
                         </em>
-                      </Col>
-                      <Col span={6} style={{ padding: 0 }}>
+                      </div>
+                      <div>
                         {items.brand && items.brand.brandName}
-                        ×
-                        {items.number}
-                      </Col>
-                      <Col span={4} style={{ padding: 0 }}>
-                        <Button
-                          color='primary'
-                          fill='none'
-                          disabled={items.userIds}
-                          style={{ padding: 0 }}
-                          onClick={() => {
-                            setVisible(items);
-                          }}>{items.qualityPlanResult ? items.qualityPlanResult.planName : '添加'}</Button>
-                      </Col>
-                    </Row>
-                  </Checkbox>;
-
+                        &nbsp;&nbsp;
+                        <strong>
+                          ×
+                          {items.remaining}
+                        </strong>
+                      </div>
+                    </Checkbox>
+                    <Divider style={{ margin: 0, marginTop: 8 }} />
+                  </div>;
                 })}
               </Space>
             </Checkbox.Group>
@@ -224,7 +186,7 @@ const DispatchTask = (props) => {
           />
         }
       </Card>
-    </Card>;
+    </Card>
 
     <div style={{
       width: '100%',
@@ -244,7 +206,13 @@ const DispatchTask = (props) => {
           color='primary'
           disabled={check.length === 0}
           onClick={() => {
-            ref.current.setVisiable(true);
+            router.push({
+              pathname: '/Work/Workflow/DispatchTask/EditChildTask',
+              state: {
+                detail: { ...qualityTaskDetail,qualityLising:check },
+                taskId:query.id,
+              },
+            });
           }}>
           分派
         </Button>
@@ -253,56 +221,6 @@ const DispatchTask = (props) => {
         <SafeArea position='bottom' />
       </div>
     </div>
-
-
-    <Dispatch
-      qualityTaskId={qualityTaskDetail.detail && qualityTaskDetail.detail.qualityTaskId}
-      qualityDetailIds={check.map((items) => {
-      return items.qualityTaskDetailId;
-    })} ref={ref} onSuccess={() => {
-      refresh();
-      setCheck([]);
-      ref.current.setVisiable(false);
-    }} />
-
-    <Dialog
-      title='修改质检方案'
-      visible={visible}
-      content={<Selector
-        defaultValue={typeof visible === 'object' && visible.qualityPlanId}
-        options={qualityPlan || []}
-        columns={1}
-        onChange={(arr, extend) => setUpdateQualityPlan(arr[0])}
-      />
-      }
-      onAction={async (action) => {
-        if (action.key === 'update') {
-          await update({
-            data: {
-              qualityTaskDetailId: visible.qualityTaskDetailId,
-              qualityPlanId: updateQualityPlan,
-            },
-          });
-          setUpdateQualityPlan(null);
-          setVisible(false);
-          setCheck([]);
-        } else {
-          setVisible(false);
-          setUpdateQualityPlan(null);
-        }
-      }}
-      actions={[
-        [{
-          key: 'update',
-          text: '修改',
-          disabled: !updateQualityPlan,
-        },
-          {
-            key: 'close',
-            text: '取消',
-          }],
-      ]}
-    />
 
   </>;
 

@@ -9,7 +9,6 @@ import Stock from '../Report/components/Stock';
 import InStock from '../Scan/InStock';
 import OutStock from '../Scan/OutStock';
 import { useDebounceEffect } from 'ahooks';
-import Quality from '../Scan/Quality';
 
 // https://dasheng-soft.picp.vip/#/OrCode?id=1453935045308170242
 
@@ -90,10 +89,6 @@ const OrCode = (props) => {
       }} />;
     case "outstock":
       return <OutStock data={data} onChange={()=>{
-        refresh();
-      }} />;
-    case "quality":
-      return <Quality data={data} onChange={()=>{
         refresh();
       }} />;
     default:

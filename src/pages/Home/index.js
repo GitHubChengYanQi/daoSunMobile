@@ -1,9 +1,10 @@
 import React from 'react';
-import { NoticeBar } from 'antd-mobile';
+import {  NoticeBar } from 'antd-mobile';
 import Tark from './component/Tark';
 
 
 const Home = () => {
+
 
   const data = new Date();
 

@@ -8,11 +8,10 @@ import { Config } from '../../../config';
 const baseURI =
   process.env.NODE_ENV === 'development'
     ?
-    "http://192.168.1.119"
+    "http://192.168.1.229"
     // Config().api
     :
     Config().api
-;
 
 
 
@@ -51,8 +50,13 @@ ajaxService.interceptors.response.use((response) => {
             cookie.remove('cheng-token');
             if (process.env.NODE_ENV === 'development'){
               router.push('/');
+            }else {
+              router.push(window.location.hash.replace('#',''));
             }
-            window.location.href = window.location.href+''
+
+            // props.location.pathname+props.location.search
+
+            // window.location.href = window.location.href+''
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
           }

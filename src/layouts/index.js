@@ -4,11 +4,15 @@ import Icon from '../pages/components/Icon';
 import { SafeArea, TabBar } from 'antd-mobile';
 import { QrcodeOutlined } from '@ant-design/icons';
 import Auth from '../components/Auth';
+// import * as VConsole from 'vconsole';
 
 
 function BasicLayout(props) {
 
   window.scrollTo(0, 0);
+
+  // var vConsole = new VConsole();
+
 
   const nav =
     props.history.location.pathname.split('/')[1] !== 'OrCode'
@@ -27,12 +31,12 @@ function BasicLayout(props) {
 
           if (process.env.NODE_ENV === 'development') {
             if (value === '/OrCode') {
-              value = '/OrCode?id=1466277914157101058';
+              value = '/OrCode?id=1467726432537276417';
             }
           }
           router.push(value);
         }}>
-          <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' />} title='首页' />
+          <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' style={{color:'#000'}} />} title='首页' />
           <TabBar.Item key='/Notice' icon={<Icon type='icon-xiaoxi' />} title='通知' />
           <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />
           <TabBar.Item key='/Work' icon={<Icon type='icon-fenlei' />} title='工作' />

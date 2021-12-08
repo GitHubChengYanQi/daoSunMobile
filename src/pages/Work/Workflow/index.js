@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, Input, List, Loading, Steps, TextArea, Toast } from 'antd-mobile';
+import React, { useState } from 'react';
+import { Button, Card, Dialog, Divider, Empty, List, Loading, Steps, TextArea, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { CheckCircleOutlined, CloseCircleOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
 import { router } from 'umi';
+import { useDebounceEffect } from 'ahooks';
 
 const Workflow = (props) => {
 
@@ -63,7 +64,7 @@ const Workflow = (props) => {
 
         res.logResults && res.logResults.map((items) => {
           if (items.stepsResult.serviceAudit.type !== 'route' && items.stepsResult.serviceAudit.type !== 'branch') {
-            if (items.status === -1 && current === null) {
+            if (current === null && (items.status === 0 || items.status === -1)) {
               current = {
                 index: number,
                 items: { ...items.stepsResult && items.stepsResult.serviceAudit, status: items.status },
@@ -87,7 +88,7 @@ const Workflow = (props) => {
   );
 
 
-  useEffect(() => {
+  useDebounceEffect(() => {
     setDetail(null);
     if (query.id) {
       run({
@@ -96,7 +97,9 @@ const Workflow = (props) => {
         },
       });
     }
-  }, [props, query.id, run]);
+  }, [], {
+    wait: 0,
+  });
 
   const Type = (value) => {
     switch (value) {
@@ -213,7 +216,7 @@ const Workflow = (props) => {
 
       <div style={{ marginBottom: '10vh' }}>
 
-        <Steps direction='vertical' current={current.index}>
+        <Steps direction='vertical' current={current && current.index}>
           {
             audit.map((item, index) => {
               if (item) {
@@ -263,7 +266,12 @@ const Workflow = (props) => {
       backgroundColor: '#fff',
     }}>
       {
+
+        current
+        &&
         current.items
+        &&
+        current.items.status === -1
         &&
         current.items.type === 'quality_task_person'
         &&
@@ -301,6 +309,7 @@ const Workflow = (props) => {
         }} />}
       onAction={(action) => {
         if (action.key === 'confirm') {
+          console.log(note);
           processLogRun({
             params: {
               taskId: query.id,
@@ -314,8 +323,9 @@ const Workflow = (props) => {
       actions={[
         [
           {
+            disable: loading,
             key: 'confirm',
-            text: <Button style={{padding:0}} loading={loading} color='primary' size='large' fill='none'>确定</Button>,
+            text: loading ? <Loading /> : '确定',
           },
           {
             key: 'close',
