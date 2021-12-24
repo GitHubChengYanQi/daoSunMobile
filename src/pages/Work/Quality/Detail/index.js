@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Card, Collapse, Ellipsis, Empty } from 'antd-mobile';
+import { Button, Card, Collapse, Ellipsis, Empty,  Space } from 'antd-mobile';
 import { Badge, Col, Row } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Gallery } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
@@ -88,7 +88,7 @@ const Detail = (props) => {
             style={{ padding: 0 }}
             color='primary'
             fill='none'
-            onClick={() => setVisible([value])}>查看</Button>;
+            onClick={() => setVisible([value])}><EyeOutlined /></Button>;
       default:
         return null;
     }
@@ -112,41 +112,41 @@ const Detail = (props) => {
               return value.dataValues.judge === 0;
             });
             return <Collapse.Panel key={index} title={
-              <>
-                {qualityDetail.skuResult && qualityDetail.skuResult.skuName}
-                &nbsp;/&nbsp;
-                {qualityDetail.skuResult && qualityDetail.skuResult.spuResult && qualityDetail.skuResult.spuResult.name}
-                &nbsp;&nbsp;
-                {
-                  qualityDetail.skuResult
-                  &&
-                  qualityDetail.skuResult.list
-                  &&
-                  qualityDetail.skuResult.list.length > 0
-                  &&
-                  qualityDetail.skuResult.list[0].attributeValues
-                  &&
-                  <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                    (
-                    {
-                      qualityDetail.skuResult.list.map((items, index) => {
-                        return <span key={index}>
+              <Space align='center'>
+                <div style={{width:'70vw'}}>
+                  {qualityDetail.skuResult && qualityDetail.skuResult.skuName}
+                  &nbsp;/&nbsp;
+                  {qualityDetail.skuResult && qualityDetail.skuResult.spuResult && qualityDetail.skuResult.spuResult.name}
+                  &nbsp;&nbsp;
+                  {
+                    qualityDetail.skuResult
+                    &&
+                    qualityDetail.skuResult.list
+                    &&
+                    qualityDetail.skuResult.list.length > 0
+                    &&
+                    qualityDetail.skuResult.list[0].attributeValues
+                    &&
+                    <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                      (
+                      {
+                        qualityDetail.skuResult.list.map((items, index) => {
+                          return <span key={index}>
                 {items.itemAttributeResult.attribute}：{items.attributeValues}
                   </span>;
-                      })
-                    }
-                    )
-                  </em>}
-                &nbsp;&nbsp;
-                {qualityDetail.brand && qualityDetail.brand.brandName}
-                <div style={{ float: 'right' }}>
-                  {(standar && standar.length > 0)
-                    ?
-                    <Badge text='不合格' color='red' />
-                    :
-                    <Badge text='合格' color='green' />}
+                        })
+                      }
+                      )
+                    </em>}
+                  <br />
+                  {qualityDetail.brand && qualityDetail.brand.brandName}
                 </div>
-              </>
+                <div>{(standar && standar.length > 0)
+                  ?
+                  <Badge text='不合格' color='red' />
+                  :
+                  <Badge text='合格' color='green' />}</div>
+              </Space>
             }>
               <Row key={index} gutter={24}>
                 <Col span={4} style={{ padding: 0 }}>
@@ -155,13 +155,13 @@ const Detail = (props) => {
                 <Col span={7} style={{ padding: 0 }}>
                   <strong>标准值</strong>
                 </Col>
-                <Col span={7} style={{ padding: 0 }}>
+                <Col span={6} style={{ padding: 0 }}>
                   <strong>验收值</strong>
                 </Col>
-                <Col span={2} style={{ padding: 0 }}>
+                <Col span={2} style={{ padding: 0, textAlign: 'center' }}>
                   <strong>图片</strong>
                 </Col>
-                <Col span={2} style={{ padding: 0 }}>
+                <Col span={3} style={{ padding: 0, textAlign: 'center' }}>
                   <strong>结果</strong>
                 </Col>
               </Row>
@@ -176,12 +176,13 @@ const Detail = (props) => {
                         items.qualityPlanDetailResult.qualityCheckResult
                         &&
                         items.qualityPlanDetailResult.qualityCheckResult.name
-                      } />
+                      }
+                    />
                   </Col>
                   <Col span={7} style={{ padding: 0 }}>
                     {Type(items.qualityPlanDetailResult)}
                   </Col>
-                  <Col span={7} style={{ padding: 0 }}>
+                  <Col span={6} style={{ padding: 0 }}>
                     {valueType(
                       items.qualityPlanDetailResult
                       &&
@@ -191,7 +192,7 @@ const Detail = (props) => {
                       items.dataValues && items.dataValues.value,
                     )}
                   </Col>
-                  <Col span={2} style={{ padding: 0 }}>
+                  <Col span={2} style={{ padding: 0, textAlign: 'center' }}>
                     {
                       items
                       &&
@@ -207,9 +208,9 @@ const Detail = (props) => {
                         fill='none'
                         onClick={() => {
                           setVisible(items.dataValues.imgValues);
-                        }}>查看</Button>}
+                        }}><EyeOutlined /></Button>}
                   </Col>
-                  <Col span={2} style={{ padding: 0, textAlign: 'center' }}>
+                  <Col span={3} style={{ padding: 0, textAlign: 'center' }}>
                     {items.dataValues && items.dataValues.judge !== 0 ?
                       <CheckCircleOutlined style={{ color: 'green' }} />
                       :

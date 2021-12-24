@@ -1,14 +1,12 @@
-import React  from 'react';
-import { Collapse, List, Toast } from 'antd-mobile';
+import React from 'react';
+import { Collapse, List } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import MyEmpty from '../../../components/MyEmpty';
 import { router } from 'umi';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { useDebounceEffect } from 'ahooks';
+import { Badge } from 'antd';
 
 const MainTask = ({ id }) => {
-
-  const { data: user } = useRequest({ url: '/rest/system/currentUserInfo', method: 'POST' });
 
   const { data, run } = useRequest(
     {
@@ -36,49 +34,87 @@ const MainTask = ({ id }) => {
     return <MyEmpty />;
   }
 
+  const taskState = (value) => {
+    switch (value) {
+      case -1:
+        return <Badge text='已拒绝' color='red' />;
+      case 1:
+        return <Badge text='进行中' color='yellow' />;
+      case 2:
+        return <Badge text='已完成' color='blue' />;
+      case 3:
+        return <Badge text='已入库' color='green' />;
+      default:
+        break;
+    }
+  };
+
   return <>
     <Collapse defaultActiveKey={['1', '2']}>
-      <Collapse.Panel key='1' title={<>主任务信息</>}>
-        <List.Item>编码：{data.coding}</List.Item>
-        <List.Item>类型：{data.type}</List.Item>
-        <List.Item>创建人：{data.user && data.user.name}</List.Item>
-        <List.Item>备注：{data.fatherTask.remark || '无'}</List.Item>
-        <List.Item>创建时间：{data.fatherTask.createTime}</List.Item>
-      </Collapse.Panel>
-
-      <Collapse.Panel key='2' title={<>子任务信息</>}>
-        <List>
-          {data.childTasks ?
+      <Collapse.Panel key='1' title={<>子任务信息</>}>
+        <List
+          style={{ border: 'none' }}
+        >
+          {data.childTasks && data.childTasks.length > 0 ?
             data.childTasks.map((items, index) => {
               return <List.Item
                 key={index}
-                title={<>分派人：{items.user && items.user.name} &nbsp;&nbsp; {items.createTime}</>}
-                description={<>地点：{items.address}</>}
-                clickable
-                extra={items.state > 0 ?
-                  <><CheckCircleOutlined style={{ color: 'green' }} /> &nbsp;&nbsp;完成</>
+                title={<>指派人：{items.user && items.user.name} &nbsp;&nbsp; {items.createTime}</>}
+                description={items.state > 0 ?
+                  <>地点：{items.address && JSON.parse(items.address).address}</>
                   :
-                  <><CloseCircleOutlined style={{ color: 'red' }} />&nbsp;&nbsp; 未完成</>
+                  <>原因：{items.note || '无'}</>
                 }
+                clickable
+                extra={taskState(items.state)}
                 onClick={() => {
-                  const userIds = items.users.filter((value) => {
-                    return value.userId === user.userId;
-                  });
-                  if (userIds.length > 0) {
-                    router.push(`/Work/Quality?id=${items.qualityTaskId}`);
-                  } else {
-                    Toast.show({
-                      content: '您没有权限！',
-                    });
-                  }
-
+                  router.push(`/Work/Quality?id=${items.qualityTaskId}`);
                 }}
               >
                 质检人：{items.users && items.users.map((items) => {
                 return items.name;
               }).toString()}
               </List.Item>;
-
+            })
+            :
+            <MyEmpty />
+          }
+        </List>
+      </Collapse.Panel>
+      <Collapse.Panel key='2' title={<>驳回物料信息</>}>
+        <List
+          style={{ border: 'none' }}
+        >
+          {data.refuse && data.refuse.length > 0 ?
+            data.refuse.map((items, index) => {
+                return <List.Item
+                  key={index}
+                  title={<>驳回人：{items.user && items.user.name}</>}
+                  description={<>{items.createTime} <br/>原因：{items.note || '无'}</>}
+                >
+                  {items.skuResult && items.skuResult.skuName}
+                  &nbsp;/&nbsp;
+                  {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
+                  &nbsp;&nbsp;
+                  <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                    (
+                    {
+                      items.skuResult
+                      &&
+                      items.skuResult.list
+                      &&
+                      items.skuResult.list.map((items, index) => {
+                        return (
+                          <span key={index}>{items.itemAttributeResult.attribute}：{items.attributeValues}</span>
+                        );
+                      })
+                    }
+                    )
+                  </em>
+                  <br/>
+                  {items.brandResult && items.brandResult.brandName}
+                  &nbsp;&nbsp; × {items.number}
+                </List.Item>;
             })
             :
             <MyEmpty />

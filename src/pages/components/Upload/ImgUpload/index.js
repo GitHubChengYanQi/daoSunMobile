@@ -4,11 +4,11 @@ import { MultiUpload } from 'weui-react-v2';
 import { useBoolean } from 'ahooks';
 import { Loading } from 'antd-mobile';
 
-const ImgUpload = ({ value = [], onChange, disabled, loading }) => {
+const ImgUpload = ({ value = [], onChange, disabled, loading,length }) => {
 
   const [oss, setOss] = useState({}); // OSS上传所需参数
 
-  const [state, { setTrue,setFalse }] = useBoolean();
+  const [state, { setTrue, setFalse }] = useBoolean();
 
   const getSTSToken = {
     url: '/media/getToken', // 获取OSS凭证接口
@@ -47,23 +47,23 @@ const ImgUpload = ({ value = [], onChange, disabled, loading }) => {
     });
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setTrue();
-    setTimeout(()=>{
+    setTimeout(() => {
       setFalse();
-    },100);
-  },[loading, setFalse, setTrue])
+    }, 100);
+  }, [loading, setFalse, setTrue]);
 
-  if (state){
-    return <Loading />
+  if (state) {
+    return <Loading />;
   }
 
   return <MultiUpload
-    value={value && value.map((items)=>{
+    value={value && value.map((items) => {
       return items.url;
     })}
     disabled={disabled}
-    length={3}
+    length={ length || 3}
     action='https://gpkx.oss-cn-beijing.aliyuncs.com'
     // action={oss.host}
     data={oss}

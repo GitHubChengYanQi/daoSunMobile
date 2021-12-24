@@ -1,5 +1,17 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, SafeArea, Selector, Stepper, Toast } from 'antd-mobile';
+import {
+  Button,
+  Card,
+  Dialog,
+  Divider,
+  Empty,
+  Loading,
+  SafeArea,
+  Selector,
+  Stepper,
+  TextArea,
+  Toast,
+} from 'antd-mobile';
 import LinkButton from '../../../../components/LinkButton';
 import { router } from 'umi';
 import { Col, Row } from 'antd';
@@ -10,6 +22,12 @@ import Dispatch from '../components/Dispatch';
 const EditChildTask = (props) => {
 
   const locationState = props.location.state;
+
+  const action = locationState && locationState.action;
+
+  const [note, setNote] = useState('');
+
+  const [refuse, setRefuse] = useState(false);
 
   const [detail, setDetail] = useState(
     locationState
@@ -36,10 +54,33 @@ const EditChildTask = (props) => {
         Toast.show(
           {
             content: '修改成功！',
+            position: 'bottom',
           },
         );
       },
     });
+
+  // 驳回接口
+  const { loading, run } = useRequest({
+    url: 'qualityTaskRefuse/refuse',
+    method: 'POST',
+  }, {
+    manual: true,
+    onSuccess: () => {
+      Toast.show({
+        content: '驳回成功！',
+        position: 'bottom',
+      });
+      setRefuse(false);
+      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+    },
+    onError: () => {
+      Toast.show({
+        content: '驳回失败！',
+        position: 'bottom',
+      });
+    },
+  });
 
   if (!detail) {
     return <Empty
@@ -50,8 +91,8 @@ const EditChildTask = (props) => {
   }
 
   return <>
-    <Card title='编辑任务分派' extra={<LinkButton title='返回' onClick={() => {
-      router.push(`/Work/Workflow/DispatchTask?id=${locationState.taskId}`);
+    <Card title={action === 'refuse' ? '任务驳回' : '任务指派'} extra={<LinkButton title='返回' onClick={() => {
+      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     }} />}>
       {detail.qualityLising ? detail.qualityLising.map((items, index) => {
           return <div key={index}>
@@ -82,6 +123,7 @@ const EditChildTask = (props) => {
               </Col>
               <Col span={7}>
                 <Stepper
+                  enterKeyHint
                   digits={0}
                   min={1}
                   max={items.remaining}
@@ -93,14 +135,17 @@ const EditChildTask = (props) => {
               </Col>
             </Row>
             <div>
-              <Button
-                color='primary'
-                fill='none'
-                disabled={items.userIds}
-                style={{ padding: 0 }}
-                onClick={() => {
-                  setVisible(items);
-                }}>{items.qualityPlanResult ? items.qualityPlanResult.planName : '添加'}</Button>
+              {action === 'refuse' ?
+                items.qualityPlanResult && items.qualityPlanResult.planName
+                :
+                <Button
+                  color='primary'
+                  fill='none'
+                  disabled={items.userIds}
+                  style={{ padding: 0 }}
+                  onClick={() => {
+                    setVisible(items);
+                  }}>{items.qualityPlanResult ? items.qualityPlanResult.planName : '添加'}</Button>}
             </div>
             <Divider style={{ margin: 0, marginTop: 8 }} />
           </div>;
@@ -123,6 +168,7 @@ const EditChildTask = (props) => {
     }}>
       <div style={{ padding: '0 8px' }}>
         <Button
+          loading={loading}
           style={{
             padding: 8,
             width: '100%',
@@ -130,10 +176,23 @@ const EditChildTask = (props) => {
             borderRadius: 50,
           }}
           color='primary'
-          onClick={() => {
-            ref.current.setVisiable(true);
+          onClick={async () => {
+            if (action === 'refuse') {
+              setRefuse(true);
+            } else {
+              const plans = detail.qualityLising.filter((items) => {
+                return !items.qualityPlanId;
+              });
+              if (plans.length > 0)
+                Toast.show({
+                  content: '请添加质检方案！',
+                  position: 'bottom',
+                });
+              else
+                ref.current.setVisiable(true);
+            }
           }}>
-          分派
+          {action === 'refuse' ? '驳回' : '指派'}
         </Button>
       </div>
       <div>
@@ -141,14 +200,49 @@ const EditChildTask = (props) => {
       </div>
     </div>
 
+    <Dialog
+      visible={refuse}
+      title={`是否执行驳回操作?`}
+      content={<TextArea
+        placeholder='请输入驳回原因...'
+        rows={2}
+        maxLength={50}
+        showCount
+        onChange={(value) => {
+          setNote(value);
+        }} />}
+      onAction={async (action) => {
+        if (action.key === 'confirm') {
+          await run({
+            data: {
+              note,
+              qualityTaskId: detail.detail && detail.detail.qualityTaskId,
+              detailParams: detail.qualityLising,
+            },
+          });
+        } else {
+          setRefuse(false);
+        }
+      }}
+      actions={[
+        [
+          {
+            disabled: loading,
+            key: 'confirm',
+            text: loading ? <Loading /> : '确定',
+          },
+          {
+            key: 'close',
+            text: '取消',
+          },
+        ],
+      ]}
+    />
+
     <Dispatch
-      taskId={locationState.taskId}
       detail={detail}
-      qualityTaskId={detail.detail && detail.detail.qualityTaskId}
-      qualityDetailIds={detail.qualityLising.map((items) => {
-        return items.qualityTaskDetailId;
-      })}
-      ref={ref} />
+      ref={ref}
+    />
 
     <Dialog
       title='修改质检方案'
@@ -186,7 +280,7 @@ const EditChildTask = (props) => {
           await update({
             data: {
               qualityTaskDetailId: visible.qualityTaskDetailId,
-              qualityPlanId: updateQualityPlan,
+              qualityPlanId: updateQualityPlan.value,
             },
           });
 

@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CheckList, Dialog, Space, Toast } from 'antd-mobile';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
+import { Card,  Dialog, List, Loading, Space, Stepper, Toast } from 'antd-mobile';
 import { codingRulesList, codingRulesListSelect, storeHouseSelect, UserIdSelect } from '../Url';
-import { Badge } from 'antd';
 import { Config } from '../../../../../config';
 import { useRequest } from '../../../../util/Request';
 import MyPicker from '../../../components/MyPicker';
 
-const CreateInstock = ({ show, qualityDeatlis }) => {
+const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
 
   const [visible, setVisible] = useState(false);
 
-  const [inkindIds, setInkindIds] = useState([]);
+  // const [inkindIds, setInkindIds] = useState([]);
+
+  const [skus, setSkus] = useState([]);
 
   const [coding, setCoding] = useState();
 
@@ -18,41 +19,16 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
 
   const [user, setUser] = useState();
 
-  const datas = (values) => {
-    if (typeof values === 'object') {
-      const array = [];
-      values.map((items) => {
-        // 找到集合中相同的实物
-        const item = array.filter((value) => {
-          return items.formId === value.formId;
-        });
-        // 找到和当前相同实物
-        const allItem = values.filter((value) => {
-          return items.formId === value.formId;
-        });
-        // 取出相同实物中不合格的实物
-        const getJudge = allItem.filter((value) => {
-          const judges = value.values.filter((value) => {
-            return value.dataValues.judge === 0;
-          });
-          return judges.length > 0;
-        });
-        if (item.length <= 0) {
-          return array.push({ ...items, getJudge: getJudge.length === 0 });
-        }else {
-          return null;
-        }
-      });
-      setVisible(array);
-    }
-  };
+  useImperativeHandle(ref, () => ({
+    setVisible,
+  }));
+
 
   useEffect(() => {
-    setInkindIds([]);
+    // setInkindIds([]);
     setStorehoust(null);
     setUser(null);
-    datas(show);
-  }, [show]);
+  }, [visible]);
 
   const { loading, data } = useRequest(codingRulesList, {
     defaultParams: {
@@ -63,9 +39,9 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
     },
   });
 
-  const { run } = useRequest(
+  const { loading:instockLoading,run } = useRequest(
     {
-      url: '/instockOrder/addByQuality',
+      url: '/qualityTask/qualityDetailInstock',
       method: 'POST',
     },
     {
@@ -73,8 +49,9 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
       onSuccess: () => {
         Toast.show({
           content: '创建入库单成功！',
+          position: 'bottom',
         });
-        setVisible(false);
+        typeof onSuccess === 'function' && onSuccess();
       },
     });
 
@@ -116,42 +93,27 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
             </Space>
           </Space>
         </div>
-        <Card title='选择入库物料'>
+        <Card title='入库物料'>
           <div style={{ maxheight: '50vh', overflow: 'auto' }}>
-            <CheckList multiple onChange={(value) => {
-              setInkindIds(value);
-            }}>
-              {typeof visible === 'object' && visible.map((items, index) => {
-
-
-                const qualityDetail = qualityDeatlis.filter((value) => {
-                  const inkindIds = (value.inkindId && value.inkindId !== '') ? value.inkindId.split(',') : [];
-                  const codeIds = inkindIds.filter((value) => {
-                    return value === items.qrcodeId;
-                  });
-                  return codeIds.length > 0;
-                });
-
-                if (qualityDetail && qualityDetail[0]) {
-                  return <CheckList.Item value={items.formId} key={index}>
-                    <div>
-                      {qualityDetail[0].skuResult && qualityDetail[0].skuResult.skuName}
-                      &nbsp;/&nbsp;
-                      {qualityDetail[0].skuResult && qualityDetail[0].skuResult.spuResult && qualityDetail[0].skuResult.spuResult.name}
-                      &nbsp;&nbsp;
-                      {
-                        qualityDetail[0].skuResult
+            <List>
+              {
+                qualityDeatlis && qualityDeatlis.map((items, index) => {
+                  if ((items.number - items.instockNumber) > 0)
+                    return <List.Item
+                      key={index}
+                      description={
+                        items.skuResult
                         &&
-                        qualityDetail[0].skuResult.list
+                        items.skuResult.list
                         &&
-                        qualityDetail[0].skuResult.list.length > 0
+                        items.skuResult.list.length > 0
                         &&
-                        qualityDetail[0].skuResult.list[0].attributeValues
+                        items.skuResult.list[0].attributeValues
                         &&
                         <em style={{ color: '#c9c8c8', fontSize: 10 }}>
                           (
                           {
-                            qualityDetail[0].skuResult.list.map((items, index) => {
+                            items.skuResult.list.map((items, index) => {
                               return <span key={index}>
                 {items.itemAttributeResult.attribute}：{items.attributeValues}
                   </span>;
@@ -159,60 +121,139 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
                           }
                           )
                         </em>}
-                    </div>
-                    <div>
-                      {qualityDetail[0].brand && qualityDetail[0].brand.brandName}
-                      &nbsp;&nbsp;  &nbsp;&nbsp;
-                      × 1
-                      <div style={{ float: 'right' }}>
-                        {
-                          items.getJudge ?
-                            <Badge text='合格' color='green' />
-                            :
-                            <Badge text='不合格' color='red' />
-                        }
-                      </div>
-                    </div>
-                  </CheckList.Item>;
-                } else {
-                  return null;
-                }
-              })}
-            </CheckList>
+                      extra={
+                        <Stepper
+                          digits={0}
+                          min={0}
+                          max={items.number - items.instockNumber}
+                          defaultValue={0}
+                          onChange={value => {
+                            const array = skus.filter((value) => {
+                              return value.qualityTaskDetailId !== items.qualityTaskDetailId;
+                            });
+                            if (value) {
+                              setSkus([
+                                ...array,
+                                {
+                                  ...items,
+                                  number: value,
+                                },
+                              ]);
+                            } else {
+                              setSkus([...array]);
+                            }
+                          }}
+                        />
+                      }
+                    >
+                      {items.skuResult && items.skuResult.skuName}
+                      &nbsp;/&nbsp;
+                      {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
+                    </List.Item>;
+                  else
+                    return null;
+                })
+              }
+
+            </List>
+
+
+            {/*<CheckList multiple onChange={(value) => {*/}
+            {/*  setInkindIds(value);*/}
+            {/*}}>*/}
+            {/*  {typeof visible === 'object' && visible.map((items, index) => {*/}
+
+
+            {/*    const qualityDetail = qualityDeatlis.filter((value) => {*/}
+            {/*      const inkindIds = (value.inkindId && value.inkindId !== '') ? value.inkindId.split(',') : [];*/}
+            {/*      const codeIds = inkindIds.filter((value) => {*/}
+            {/*        return value === items.qrcodeId;*/}
+            {/*      });*/}
+            {/*      return codeIds.length > 0;*/}
+            {/*    });*/}
+
+            {/*    if (qualityDetail && qualityDetail[0]) {*/}
+            {/*      return <CheckList.Item value={items.formId} key={index}>*/}
+            {/*        <div>*/}
+            {/*          {qualityDetail[0].skuResult && qualityDetail[0].skuResult.skuName}*/}
+            {/*          &nbsp;/&nbsp;*/}
+            {/*          {qualityDetail[0].skuResult && qualityDetail[0].skuResult.spuResult && qualityDetail[0].skuResult.spuResult.name}*/}
+            {/*          &nbsp;&nbsp;*/}
+            {/*          {*/}
+            {/*            qualityDetail[0].skuResult*/}
+            {/*            &&*/}
+            {/*            qualityDetail[0].skuResult.list*/}
+            {/*            &&*/}
+            {/*            qualityDetail[0].skuResult.list.length > 0*/}
+            {/*            &&*/}
+            {/*            qualityDetail[0].skuResult.list[0].attributeValues*/}
+            {/*            &&*/}
+            {/*            <em style={{ color: '#c9c8c8', fontSize: 10 }}>*/}
+            {/*              (*/}
+            {/*              {*/}
+            {/*                qualityDetail[0].skuResult.list.map((items, index) => {*/}
+            {/*                  return <span key={index}>*/}
+            {/*    {items.itemAttributeResult.attribute}：{items.attributeValues}*/}
+            {/*      </span>;*/}
+            {/*                })*/}
+            {/*              }*/}
+            {/*              )*/}
+            {/*            </em>}*/}
+            {/*        </div>*/}
+            {/*        <div>*/}
+            {/*          {qualityDetail[0].brand && qualityDetail[0].brand.brandName}*/}
+            {/*          &nbsp;&nbsp;  &nbsp;&nbsp;*/}
+            {/*          × {qualityDetail[0].batch ? qualityDetail[0].number : 1}*/}
+            {/*          <div style={{ float: 'right' }}>*/}
+            {/*            {*/}
+            {/*              items.getJudge ?*/}
+            {/*                <Badge text='合格' color='green' />*/}
+            {/*                :*/}
+            {/*                <Badge text='不合格' color='red' />*/}
+            {/*            }*/}
+            {/*          </div>*/}
+            {/*        </div>*/}
+            {/*      </CheckList.Item>;*/}
+            {/*    } else {*/}
+            {/*      return null;*/}
+            {/*    }*/}
+            {/*  })}*/}
+            {/*</CheckList>*/}
           </div>
         </Card>
       </>}
       onAction={async (action) => {
         if (action.key === 'ok') {
-          if (!coding) {
+          if (!coding)
             Toast.show({
               content: '编码不能为空！',
+              position: 'bottom',
             });
-          } else if (!storehoust) {
+          else if (!storehoust)
             Toast.show({
               content: '仓库不能为空！',
+              position: 'bottom',
             });
-          } else if (!user) {
+          else if (!user)
             Toast.show({
               content: '负责人不能为空！',
+              position: 'bottom',
             });
-          } else if (inkindIds.length === 0) {
+          else if (skus.length === 0)
             Toast.show({
-              content: '请选择物料！',
+              content: '入库物料不能为空！',
+              position: 'bottom',
             });
-          } else {
-            await run(
-              {
-                data: {
-                  coding,
-                  url: Config().wxCp + 'OrCode?id=codeId',
-                  storeHouseId: storehoust,
-                  userId: user,
-                  number: 1,
-                  inkinds: inkindIds,
-                },
-              },
-            );
+          else {
+            run({
+              data:{
+                coding,
+                storeHouseId: storehoust,
+                userId: user,
+                instockRequest:skus,
+                url:Config().wxCp + 'OrCode?id=codeId'
+              }
+            });
           }
 
         } else {
@@ -222,7 +263,7 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
       actions={[
         [{
           key: 'ok',
-          text: '确定',
+          text: instockLoading ? <Loading /> : '确定',
         },
           {
             key: 'close',
@@ -233,4 +274,4 @@ const CreateInstock = ({ show, qualityDeatlis }) => {
   </>;
 };
 
-export default CreateInstock;
+export default React.forwardRef(CreateInstock);

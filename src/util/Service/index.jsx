@@ -1,18 +1,15 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
-import {Modal} from 'antd';
 import { Dialog } from 'antd-mobile';
-import { router } from 'umi';
 import { Config } from '../../../config';
 
 const baseURI =
   process.env.NODE_ENV === 'development'
     ?
-    "http://192.168.1.229"
+    'http://192.168.1.119'
     // Config().api
     :
-    Config().api
-
+    Config().api;
 
 
 const ajaxService = axios.create({
@@ -20,7 +17,7 @@ const ajaxService = axios.create({
   withCredentials: true,
   headers: {
     // 'Content-Type':'application/json;charset=UTF-8',
-  }
+  },
 });
 
 ajaxService.interceptors.request.use((config) => {
@@ -36,58 +33,58 @@ ajaxService.interceptors.response.use((response) => {
     throw new Error('网络错误');
   }
   response = response.data;
-  const errCode = typeof response.errCode!=='undefined'?parseInt(response.errCode, 0):0;
+  const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
   if (errCode !== 0) {
     if (errCode === 1502) {
-      Modal.error({
+      Dialog.confirm({
         title: '提示',
         content: '您已登录超时，请重新登录。',
-        okText: '重新登录',
-        onOk: () => {
-          Modal.destroyAll();
-          try {
-            // GotoLogin();
-            cookie.remove('cheng-token');
-            if (process.env.NODE_ENV === 'development'){
-              router.push('/');
-            }else {
-              router.push(window.location.hash.replace('#',''));
-            }
-
-            // props.location.pathname+props.location.search
-
-            // window.location.href = window.location.href+''
-          } catch (e) {
-            window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
-          }
-        }
+        confirmText: '重新登录',
+        onConfirm: async () => {
+          cookie.remove('cheng-token');
+          // if (process.env.NODE_ENV === 'development') {
+          //   const res = await request(
+          //     {
+          //       url: '/rest/login',
+          //       method: 'POST',
+          //       data: {
+          //         username: 'cheng',
+          //         password: '2683941980',
+          //       },
+          //     },
+          //   );
+          //
+          //   if (res.data) {
+          //     await cookie.set('cheng-token', res.data);
+          //   }
+          // }
+          window.location.reload();
+        },
       });
       throw new Error(response.message);
-    }else if (response.message.indexOf('JSON') !== -1){
+    } else if (response.message.indexOf('JSON') !== -1) {
       Dialog.alert({
-        content: '输入格式错误！！！'
-      })
-    }else if (response.errCode === 402){
-      cookie.remove('cheng-token');
-      Modal.error({
+        content: '输入格式错误！！！',
+      });
+    } else if (response.errCode === 402) {
+      Dialog.confirm({
         title: '提示',
         content: '认证失败！，请重新登录。',
-        okText: '重新登录',
-        onOk: () => {
-          Modal.destroyAll();
+        confirmText: '重新登录',
+        onConfirm: () => {
           try {
             // GotoLogin();
             cookie.remove('cheng-token');
-            window.location.href = window.location.href+''
+            window.location.reload();
           } catch (e) {
             window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
           }
-        }
+        },
       });
-    }else if (response.errCode !== 200){
+    } else if (response.errCode !== 200) {
       Dialog.alert({
-        content: response.message
-      })
+        content: response.message,
+      });
     }
     throw new Error(response.message);
   }
@@ -101,7 +98,7 @@ ajaxService.interceptors.response.use((response) => {
 
 const requestService = () => {
   return {
-    ajaxService
+    ajaxService,
   };
 };
 

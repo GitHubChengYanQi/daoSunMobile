@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
-import { useRequest } from '../../../../util/Request';
-import { qualityTaskDetailEdit } from '../../Workflow/DispatchTask/components/URL';
-import { Button, Collapse, Empty, List, SafeArea, Space, Toast } from 'antd-mobile';
-import LinkButton from '../../../components/LinkButton';
+import React, { useRef, useState } from 'react';
+import { request, useRequest } from '../../../../util/Request';
+import {
+  Button,
+  Collapse,
+  Dialog,
+  List,
+  Loading,
+  SafeArea,
+  SearchBar,
+  Space,
+  TextArea,
+  Toast,
+} from 'antd-mobile';
 import { router } from 'umi';
 import ScanCodeBind from '../../../Scan/ScanCodeBind';
 import CreateInstock from '../CreateInstock';
 import { useDebounceEffect } from 'ahooks';
+import MyEmpty from '../../../components/MyEmpty';
+import { Skeleton } from 'weui-react-v2';
+import { qualityTaskDetailEdit } from '../DispatchTask/components/URL';
+import { PlayCircleOutlined, ScanOutlined } from '@ant-design/icons';
+import LinkButton from '../../../components/LinkButton';
 
 const Subtasks = ({ id }) => {
 
-  // 打开入库操作页面
-  const [show, setShow] = useState(false);
+  const ref = useRef();
 
-  // 入库的实物
-  const { run: inkind } = useRequest({
-    url: '/qualityTask/inStockDetail',
-    method: 'POST',
-  }, {
-    manual: true,
-    onSuccess: (res) => {
-      setShow(res);
-    },
-  });
+  // 当前状态 【-1：驳回,0:新建,1：执行完成，2：入库操作,3:入库完成】
+  const [status, setStatus] = useState();
 
+  const [visible, setVisible] = useState(false);
+
+  const [note, setNote] = useState();
+
+  const [items, setItmes] = useState({});
+
+  // 当前所有实物
+  const [qrCodeIds, setQrCodeIds] = useState([]);
+
+  // 添加data数据
   const { run: addData } = useRequest(
     {
       url: '/qualityTask/addData',
@@ -34,17 +49,38 @@ const Subtasks = ({ id }) => {
     },
   );
 
-  const { loading, run: childTaskState } = useRequest(
+  // 自动绑定
+  const { run: autoBind } = useRequest(
     {
-      url: '/qualityTask/updateChildTask',
-      method: 'GET',
+      url: '/orCode/automaticBinding',
+      method: 'POST',
     },
     {
       manual: true,
     },
   );
 
-  const { data, run } = useRequest({
+
+  // 拒绝
+  const { run: refuse } = useRequest(
+    {
+      url: '/qualityTask/childRefuse',
+      method: 'POST',
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        Toast.show({
+          content: '已拒绝',
+          position: 'bottom',
+        });
+        setVisible(false);
+        refresh();
+      },
+    },
+  );
+
+  const { loading, data, run, refresh } = useRequest({
     url: '/qualityTask/backChildTask',
     method: 'GET',
   }, {
@@ -52,25 +88,81 @@ const Subtasks = ({ id }) => {
     onSuccess: (res) => {
 
       if (res.details) {
-        // 判断子任务是否全部完成
-        const complete = res.details.filter((value) => {
-          if (value.batch) {
-            return Math.ceil(value.number * value.percentum) === value.remaining;
-          } else {
-            return value.number === value.remaining;
-          }
-        });
 
-        if (complete.length === res.details.length) {
-          childTaskState({
-            params: {
-              id: res.qualityTaskId,
-            },
-          });
+        // 取出所有当前子任务绑定的二维码
+        const codeIds = [];
+        res.details.map((item) => {
+          if (item.inkindId) {
+            item.inkindId.split(',').map((item) => {
+              return codeIds.push(item);
+            });
+          }
+          return null;
+        });
+        setQrCodeIds(codeIds);
+
+        switch (res.state) {
+          case -1:
+            setStatus(-1);
+            break;
+          case 1:
+            // 指派完成
+            const complete = res.details.filter((value) => {
+              if (value.batch) {
+                return Math.ceil(value.number * value.percentum) === value.remaining;
+              } else {
+                return value.number === value.remaining;
+              }
+            });
+            // 判断子任务是否全部完成
+            if (complete.length === res.details.length) {
+              setStatus(1);
+            }
+
+            // 判断子任务是否已经是否已经绑定物料
+            if (codeIds.length === 0) {
+              // 未绑定则可以驳回
+              setStatus(0);
+            }
+            break;
+          case 2:
+            // 质检完成
+            const instocks = res.details.filter((value) => {
+              return (value.number - value.instockNumber) === 0;
+            });
+            // 判断子任务是否全部入库
+            if (instocks.length === res.details.length) {
+              setStatus(3);
+            } else {
+              // 未全部入库可以进行入库操作
+              setStatus(2);
+            }
+            break;
+          default:
+            break;
         }
+
+
       }
     },
   });
+
+  const { loading: childTaskStateLoading, run: childTaskState } = useRequest(
+    {
+      url: '/qualityTask/updateChildTask',
+      method: 'GET',
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        Toast.show({
+          content: '上报成功！',
+          position: 'bottom',
+        });
+        refresh();
+      },
+    },
+  );
 
   const { run: qualityDetailEdit } = useRequest(
     qualityTaskDetailEdit,
@@ -90,204 +182,387 @@ const Subtasks = ({ id }) => {
     wait: 0,
   });
 
-  if (!data || loading) {
-    return <Empty
-      style={{ padding: '64px 0' }}
-      imageStyle={{ width: 128 }}
-      description='暂无数据'
-    />;
+  const bottomButtonClick = () => {
+    switch (status) {
+      case 0:
+        // 驳回
+        setVisible(true);
+        break;
+      case 1:
+        // 上报质检完成
+        childTaskState({
+          params: {
+            id: data.qualityTaskId,
+            state: 2,
+          },
+        });
+        break;
+      case 2:
+        // 入库操作
+        ref.current.setVisible(true);
+        break;
+      case 3:
+        // 上报入库完成
+        childTaskState({
+          params: {
+            id: data.qualityTaskId,
+            state: 3,
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  const bottomButtonText = () => {
+    switch (status) {
+      case -1:
+        return '已驳回';
+      case 0:
+        return '驳回';
+      case 1:
+        return '质检完成上报';
+      case 2:
+        return '入库';
+      case 3:
+        return '入库完成上报';
+      default:
+        break;
+    }
+  };
+
+  if (loading) {
+    return <Skeleton loading={loading} />;
   }
 
-  return <>
-    <Collapse defaultActiveKey={['1', '2']}>
-      <Collapse.Panel key='1' title={<>任务信息</>}>
-        <List.Item>分派人：<LinkButton style={{ float: 'right', padding: 0 }} title='查看主任务' onClick={() => {
-          router.push(`/Work/Quality?id=${data.parentId}`);
-        }} /></List.Item>
-        <List.Item>分派时间：{data.createTime}</List.Item>
-        <List.Item>质检人员：{data.names && data.names.toString()}</List.Item>
-        <List.Item>质检地点：{data.address}</List.Item>
-        <List.Item>质检时间：{data.time}</List.Item>
-        <List.Item>联系人：{data.person}</List.Item>
-        <List.Item>联系方式：{data.phone}</List.Item>
-        <List.Item>备注：{data.note || '无'}</List.Item>
-      </Collapse.Panel>
+  if (!data) {
+    return <MyEmpty />;
+  }
 
-      <Collapse.Panel key='2' title='质检信息'>
-        {
-          data.details ?
-            data.details.map((items, index) => {
+  const bindCode = async (codeId, items) => {
+    // 未绑定的码
+    let ids = [];
+    if (items.inkindId) {
+      ids = items.inkindId.split(',');
+    }
+    ids.push(codeId);
 
-              return <List.Item
-                key={index}
-                extra={<Space>
-                  <>{items.remaining}/{items.batch ? Math.ceil(items.number * items.percentum) : items.number}</>
-                  <ScanCodeBind
-                    complete={items.remaining === items.number}
-                    batchComplete={items.batch && (items.remaining === Math.ceil(items.number * items.percentum))}
-                    bind={items.inkindId && (items.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])}
-                    items={items}
-                    onBind={async (res) => {
-                      // 未绑定的码
-                      let ids = [];
-                      if (items.inkindId) {
-                        ids = items.inkindId.split(',');
-                      }
-                      ids.push(res);
+    // 任务详情关联二维码
+    await qualityDetailEdit({
+      data: {
+        qualityTaskDetailId: items.qualityTaskDetailId,
+        inkindId: ids.toString(),
+      },
+    });
 
-                      // 任务详情关联二维码
-                      await qualityDetailEdit({
-                        data: {
-                          qualityTaskDetailId: items.qualityTaskDetailId,
-                          inkindId: ids.toString(),
-                        },
-                      });
+    // data表添加一条数据
+    await addData({
+      data: {
+        module: 'item',
+        qrCodeId: codeId,
+        maxNumber: 1,
+        planId: items.qualityPlanId,
+        qualityTaskId: items.qualityTaskId,
+      },
+    }).then(() => {
+      // 添加成功跳转到执行质检任务页面
+      router.push({
+        pathname: '/Work/Quality/QualityTask',
+        state: {
+          items,
+          codeId: codeId,
+        },
+      });
+    });
+  };
 
-                      // data表添加一条数据
-                      await addData({
-                        data: {
-                          module: 'item',
-                          qrCodeId: res,
-                          maxNumber: 1,
-                          planId: items.qualityPlanId,
-                        },
-                      }).then(() => {
-                        // 添加成功跳转到执行质检任务页面
-                        router.push({
-                          pathname: '/Work/Quality/QualityTask',
-                          state: {
-                            items,
-                            taskDetailId: items.qualityTaskDetailId,
-                            codeId: res,
-                            id,
-                          },
-                        });
-                      });
-                    }}
-                    onCodeId={(codeId) => {
+  // 绑定二维码
+  const codeBind = (codeId, items) => {
+    Dialog.show({
+      content: `是否绑定此二维码？`,
+      closeOnMaskClick: true,
+      closeOnAction: true,
+      onAction: async (action) => {
+        if (action.key === 'ok') {
 
-                      // 已经绑定过的码
-                      const ids = items.inkindId.split(',');
-
-                      const inkindId = ids.filter((value) => {
-                        return value === codeId;
-                      });
-
-                      if (inkindId.length > 0) {
-                        router.push({
-                          pathname: '/Work/Quality/QualityTask',
-                          state: {
-                            items,
-                            taskDetailId: items.qualityTaskDetailId,
-                            codeId,
-                            id,
-                          },
-                        });
-                      } else {
-                        Toast.show({
-                          content: '二维码已绑定其他物料，请重新选择!',
-                        });
-                      }
-
-                    }} />
-                </Space>}>
-                <div onClick={() => {
-                  router.push({
-                    pathname: '/Work/Quality/Detail',
-                    state: {
-                      qualityDetails: items,
-                    },
-                  });
-                }}>
-                  {items.skuResult && items.skuResult.skuName}
-                  &nbsp;/&nbsp;
-                  {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-                  &nbsp;&nbsp;
-                  {
-                    items.skuResult
-                    &&
-                    items.skuResult.list
-                    &&
-                    items.skuResult.list.length > 0
-                    &&
-                    items.skuResult.list[0].attributeValues
-                    &&
-                    <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                      (
-                      {
-                        items.skuResult.list.map((items, index) => {
-                          return <span key={index}>
-                {items.itemAttributeResult.attribute}：{items.attributeValues}
-                  </span>;
-                        })
-                      }
-                      )
-                    </em>}
-
-                  <br />
-                  {items.brand && items.brand.brandName}
-                  <br />
-                  <Space>
-                    {items.qualityPlanResult && items.qualityPlanResult.planName}
-                    /
-                    <>总数：{items.number}</>
-                    /
-                    {items.batch ? '抽检' + (items.percentum * 100) + '%' : '固定检查'}
-                  </Space>
-
-                </div>
-              </List.Item>;
-            })
-
-            :
-            <Empty
-              style={{ padding: '64px 0' }}
-              imageStyle={{ width: 128 }}
-              description='暂无数据'
-            />
-        }
-      </Collapse.Panel>;
-    </Collapse>
-
-    <CreateInstock qualityDeatlis={data.details} show={show} />
-
-    {data.state === 2 && <div style={{
-      width: '100%',
-      paddingBottom: 0,
-      padding: '0 8px',
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      backgroundColor: '#fff',
-    }}>
-      <Button
-        style={{
-          width: '100%',
-          backgroundColor: '#4B8BF5',
-          borderRadius: 50,
-        }}
-        color='primary'
-        onClick={async () => {
-          const array = [];
-          data.details.map((items) => {
-            if (items.inkindId) {
-              return items.inkindId.split(',').map((items) => {
-                return array.push(items);
+          await request({
+            url: '/orCode/backCode',
+            method: 'POST',
+            data: {
+              codeId: codeId,
+              source: 'item',
+              brandId: items.brandId,
+              id: items.skuId,
+              number: 1,
+              inkindType: '质检',
+              taskDetailId: items.qualityTaskDetailId,
+            },
+          }).then(async (res) => {
+            if (typeof res === 'string') {
+              bindCode(res, items);
+              Toast.show({
+                content: '绑定成功！',
+                position: 'bottom',
               });
             }
-            return null;
           });
-          await inkind({
+
+        }
+
+      },
+      actions: [
+        [
+          {
+            key: 'ok',
+            text: '是',
+          },
+          {
+            key: 'no',
+            text: '否',
+          },
+        ],
+      ],
+    });
+  };
+
+  return <>
+    <Collapse defaultActiveKey={['0', '1']}>
+      <Collapse.Panel key='0' title='查找二维码'>
+        <SearchBar
+          placeholder='查找二维码'
+          showCancelButton
+          style={{
+            '--border-radius': '100px',
+            '--background': '#ffffff',
+          }}
+          onFocus={() => {
+            router.push({
+              pathname: '/Work/Quality/SelectQrCode',
+              state: {
+                qrCodeIds,
+              },
+            });
+          }}
+        />
+      </Collapse.Panel>
+      <Collapse.Panel key='1' title={<>任务列表</>}>
+        <List
+          style={{ border: 'none' }}
+        >
+          {
+            data.details ?
+              data.details.map((items, index) => {
+                return <List.Item
+                  key={index}
+                  extra={<Space>
+                    <>{items.remaining}/{items.batch ? Math.ceil(items.number * items.percentum) : items.number}</>
+                    {data.permission && status !== -1
+                    &&
+                    <Space>
+                      <LinkButton onClick={() => {
+                        setItmes(items);
+                        if (items.batch && (items.remaining === Math.ceil(items.number * items.percentum))){
+                          Toast.show({
+                            content:'该物料已经全部质检完成！',
+                            position: 'bottom',
+                          });
+                        }else {
+                          ref.current.scanCode(items);
+                        }
+                      }}><ScanOutlined /></LinkButton>
+                      {/* 自动绑定 */}
+                      <LinkButton
+                        disabled={
+                          items.remaining === items.number
+                          ||
+                          items.inkindId && (items.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
+                        }
+                        onClick={async () => {
+                          await autoBind({
+                            data: {
+                              taskDetailId: items.qualityTaskDetailId,
+                              source: 'item',
+                              brandId: items.brandId,
+                              id: items.skuId,
+                              number: 1,
+                              inkindType: '质检',
+                            },
+                          }).then((res) => {
+                            bindCode(res, items);
+                          });
+                        }} title={<PlayCircleOutlined />} />
+                    </Space>}
+                  </Space>}>
+                  <div onClick={() => {
+                    router.push({
+                      pathname: '/Work/Quality/Detail',
+                      state: {
+                        qualityDetails: items,
+                      },
+                    });
+                  }}>
+                    {items.skuResult && items.skuResult.skuName}
+                    &nbsp;/&nbsp;
+                    {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
+                    &nbsp;&nbsp;
+                    {
+                      items.skuResult
+                      &&
+                      items.skuResult.list
+                      &&
+                      items.skuResult.list.length > 0
+                      &&
+                      items.skuResult.list[0].attributeValues
+                      &&
+                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                        (
+                        {
+                          items.skuResult.list.map((items, index) => {
+                            return <span key={index}>
+                {items.itemAttributeResult.attribute}：{items.attributeValues}
+                  </span>;
+                          })
+                        }
+                        )
+                      </em>}
+
+                    <br />
+                    {items.brand && items.brand.brandName}
+                    <br />
+                    <Space>
+                      {items.qualityPlanResult && items.qualityPlanResult.planName}
+                      /
+                      <>总数：{items.number}</>
+                      /
+                      {items.batch ? '抽检' + (items.percentum * 100) + '%' : '固定检查'}
+                    </Space>
+                  </div>
+                </List.Item>;
+              })
+              :
+              <MyEmpty />
+          }
+        </List>
+      </Collapse.Panel>
+    </Collapse>
+
+    <CreateInstock qualityDeatlis={data.details} ref={ref} onSuccess={() => {
+      refresh();
+      ref.current.setVisible(false);
+    }} />
+
+    <Dialog
+      visible={visible}
+      title={`是否执行驳回操作?`}
+      content={<TextArea
+        placeholder='请输入驳回原因...'
+        rows={2}
+        maxLength={50}
+        showCount
+        onChange={(value) => {
+          setNote(value);
+        }} />}
+      onAction={async (action) => {
+        if (action.key === 'confirm') {
+          refuse({
             data: {
-              qrcodeIds: array,
+              qualityTaskId: data.qualityTaskId,
+              note,
             },
           });
+        } else {
+          setVisible(false);
+        }
+      }}
+      actions={[
+        [
+          {
+            disabled: loading,
+            key: 'confirm',
+            text: loading ? <Loading /> : '确定',
+          },
+          {
+            key: 'close',
+            text: '取消',
+          },
+        ],
+      ]}
+    />
+
+    <ScanCodeBind
+      ref={ref}
+      onBind={(codeId)=>{
+        //如果未绑定，提示用户绑定
+        if (items.remaining === items.number){
+          Toast.show({
+            content:'已经全部质检完成！，不能继续绑定空码啦！',
+            position: 'bottom',
+          });
+        }else {
+          if (!items.inkindId && (items.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])){
+            codeBind(codeId, items);
+          }else {
+            Toast.show({
+              content:'请先完成当前质检！',
+              position: 'bottom',
+            });
+          }
+        }
+      }}
+      onCodeId={(codeId) => {
+        // 已经绑定过的码
+        const ids = items.inkindId.split(',');
+
+        const inkindId = ids.filter((value) => {
+          return value === codeId;
+        });
+
+        if (inkindId.length > 0) {
+          router.push({
+            pathname: '/Work/Quality/QualityTask',
+            state: {
+              items,
+              codeId,
+            },
+          });
+        } else {
+          Toast.show({
+            content: '二维码已绑定其他物料，请重新选择!',
+            position: 'bottom',
+          });
+        }
+
+      }} />
+
+
+    <div
+      hidden={status === undefined || !data.permission}
+      style={{
+        width: '100%',
+        paddingBottom: 0,
+        padding: '0 8px',
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        backgroundColor: '#fff',
+      }}>
+      <Button
+        loading={childTaskStateLoading}
+        style={{
+          width: '100%',
+          borderRadius: 50,
+        }}
+        disabled={status === -1 || (status > 0 && !data.isNext)}
+        color={status > 0 ? 'primary' : 'default'}
+        onClick={async () => {
+          bottomButtonClick();
         }}
       >
-        入库
+        {bottomButtonText()}
       </Button>
       <SafeArea position='bottom' />
-    </div>}
+    </div>
   </>;
 
 };

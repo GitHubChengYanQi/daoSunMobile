@@ -90,7 +90,7 @@ const CustomerUpload = ({ customerId }) => {
           } else {
             Toast.show({
               content: '附件类型不正确',
-              icon: 'fail',
+              position: 'bottom',
             });
             refresh();
           }

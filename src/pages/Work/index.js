@@ -22,6 +22,7 @@ const Work = () => {
   const toast = () => {
     return Toast.show({
       content:'暂未开通',
+      position: 'bottom',
     });
   };
 
@@ -40,7 +41,7 @@ const Work = () => {
             <div className={styles.size}>全局查找</div>
           </GridItem>
           <GridItem icon={<AuditOutlined />} onClick={() => {
-            router.push('/Work/Workflow');
+            router.push('/Work/ProcessTask');
           }}>
             <div className={styles.size}>审批</div>
           </GridItem>

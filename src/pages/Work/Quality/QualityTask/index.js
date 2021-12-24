@@ -21,12 +21,14 @@ import { router } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import ImgUpload from '../../../components/Upload/ImgUpload';
 import UpLoadImg from '../../../components/Upload';
-import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, QrcodeOutlined } from '@ant-design/icons';
 import { useDebounceEffect } from 'ahooks';
+import MyEmpty from '../../../components/MyEmpty';
 
 const QualityTask = (props) => {
 
   const state = props.location.state;
+  console.log(state);
 
   const items = state && state.items;
 
@@ -46,13 +48,13 @@ const QualityTask = (props) => {
   const [values, setValues] = useState([]);
 
   // 获取质检项信息
-  const { loading, data, run } = useRequest({
+  const { loading, data, run, refresh } = useRequest({
     url: '/qualityTask/backDataValue',
     method: 'GET',
   }, {
     manual: true,
     onSuccess: (res) => {
-      setStatus(res.data && (res.data.status === 99));
+      setStatus(res.data && (res.data.status > 0));
       if (res && res.dataValueResults) {
 
         let key = null;
@@ -96,7 +98,7 @@ const QualityTask = (props) => {
     {
       manual: true,
       onSuccess: () => {
-        router.push(`/Work/Quality?id=${state.id}`);
+        router.push(`/Work/Quality?id=${items.qualityTaskId}`);
       },
     },
   );
@@ -115,29 +117,63 @@ const QualityTask = (props) => {
     method: 'POST',
   }, {
     manual: true,
-    onSuccess: async () => {
-      // 如果是抽检，完成之后再次添加一条数据
-      if (items.batch && (items.remaining + 1) !== Math.ceil(items.number * items.percentum)) {
-        await addData({
-          data: {
-            module: 'item',
-            qrCodeId: state.codeId,
-            planId: items.qualityPlanId,
-          },
-        });
+    onSuccess: async (res) => {
+      if (res && res.length === 0) {
+        // 如果是抽检，完成之后再次添加一条数据
+        if (items.batch && (items.remaining + 1) !== Math.ceil(items.number * items.percentum)) {
+          await addData({
+            data: {
+              module: 'item',
+              qrCodeId: state.codeId,
+              planId: items.qualityPlanId,
+            },
+          });
+        } else {
+          router.push(`/Work/Quality?id=${items.qualityTaskId}`);
+        }
       } else {
-        router.push(`/Work/Quality?id=${state.id}`);
-      }
+        // 提示未填写的必填项
+        const qualitys = data.dataValueResults && data.dataValueResults.filter((items) => {
+          return res.filter((value) => {
+            return value === items.valueId;
+          }).length > 0;
+        });
 
+        Dialog.alert({
+          title: '请检查必填项',
+          onConfirm: () => {
+            refresh();
+          },
+          content: <>
+            {
+              qualitys && qualitys.map((items, index) => {
+                return <List.Item key={index} style={{ textAlign: 'center' }}>
+                  {
+                    items.qualityPlanDetailResult
+                    &&
+                    items.qualityPlanDetailResult.qualityCheckResult
+                    &&
+                    items.qualityPlanDetailResult.qualityCheckResult.name
+                  }
+                </List.Item>;
+              })
+            }
+          </>,
+        });
+      }
     },
   });
-
   // 判断
   const getJudge = (value, index) => {
 
     let judge = true;
 
     const planType = data.dataValueResults[index].qualityPlanDetailResult;
+
+    // 必填不输入判定未false
+    if (planType.isNull && !value) {
+      return false;
+    }
 
     if (value) {
       switch (planType.qualityCheckResult && planType.qualityCheckResult.type) {
@@ -235,7 +271,7 @@ const QualityTask = (props) => {
 
   };
 
-  const changeValue = () => {
+  const changeValue = (status) => {
 
     if (plan) {
       const Operator = (value, bai) => {
@@ -357,7 +393,7 @@ const QualityTask = (props) => {
   };
 
   // 上传图片
-  const imgs = () => {
+  const imgs = (status) => {
 
     if (status) {
       if (values[key] && values[key].imgValues) {
@@ -418,47 +454,47 @@ const QualityTask = (props) => {
     }
   };
 
+  if (!items)
+    return <MyEmpty />
+
 
   return <div>
     <Card title='质检任务' extra={<LinkButton onClick={() => {
-      router.push(`/Work/Quality?id=${state.id}`);
+      router.push(`/Work/Quality?id=${items.qualityTaskId}`);
     }} title='返回' />}>
-      {items ? <>
-          <List.Item>{items.skuResult && items.skuResult.skuName}
-            &nbsp;/&nbsp;
-            {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-            &nbsp;&nbsp;
-            {
-              items.skuResult
-              &&
-              items.skuResult.list
-              &&
-              items.skuResult.list.length > 0
-              &&
-              items.skuResult.list[0].attributeValues
-              &&
-              <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                (
-                {
-                  items.skuResult.list.map((items, index) => {
-                    return <span key={index}>
+      <>
+        <List.Item>
+          <QrcodeOutlined /> &nbsp;&nbsp;{state.codeId}
+        </List.Item>
+        <List.Item>
+          {items.skuResult && items.skuResult.skuName}
+          &nbsp;/&nbsp;
+          {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
+          &nbsp;&nbsp;
+          {
+            items.skuResult
+            &&
+            items.skuResult.list
+            &&
+            items.skuResult.list.length > 0
+            &&
+            items.skuResult.list[0].attributeValues
+            &&
+            <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+              (
+              {
+                items.skuResult.list.map((items, index) => {
+                  return <span key={index}>
                 {items.itemAttributeResult.attribute}：{items.attributeValues}
                   </span>;
-                  })
-                }
-                )
-              </em>}
-          </List.Item>
-          <List.Item>品牌 / 供应商：{items.brand && items.brand.brandName}</List.Item>
-          <List.Item>数量：{items.number}</List.Item>
-        </>
-        :
-        <Empty
-          style={{ padding: '64px 0' }}
-          imageStyle={{ width: 128 }}
-          description='暂无数据'
-        />
-      }
+                })
+              }
+              )
+            </em>}
+        </List.Item>
+        <List.Item>品牌 / 供应商：{items.brand && items.brand.brandName}</List.Item>
+        <List.Item>数量：{items.number}</List.Item>
+      </>
 
       <Affix offsetTop={0}>
         <Divider>质检项</Divider>
@@ -519,16 +555,15 @@ const QualityTask = (props) => {
 
                 }
                 headerStyle={{ borderLeft: 'solid 4px #000', padding: 8 }}>
-                {changeValue()}
-                {imgs()}
+                {changeValue(status || values[key] && values[key].judge !== undefined)}
+                {imgs(status || values[key] && values[key].judge !== undefined)}
                 <WhiteSpace size='sm' />
                 <div>
                   <Button
-                    disabled={status}
+                    disabled={status || values[key] && values[key].judge !== undefined}
                     loading={nextLoading}
                     color='primary'
                     block
-                    shape='rounded'
                     style={{ backgroundColor: '#4B8BF5', width: '100%', borderRadius: 50 }}
                     onClick={async () => {
 
@@ -552,7 +587,6 @@ const QualityTask = (props) => {
                         setPlan(data.dataValueResults[parseInt(key) + 1].qualityPlanDetailResult);
                         setValueId(data.dataValueResults[parseInt(key) + 1].valueId);
                       }
-
 
                     }}>下一项</Button>
                 </div>

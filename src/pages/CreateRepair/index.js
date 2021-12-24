@@ -28,7 +28,8 @@ const CreateRepair = () => {
     manual: true,
     onSuccess: () => {
       Toast.show({
-        content:'报修成功！'
+        content:'报修成功！',
+        position: 'bottom',
       });
       router.goBack();
     },

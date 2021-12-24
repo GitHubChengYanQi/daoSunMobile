@@ -105,6 +105,7 @@ const EngineerRepair = (props) => {
             }).then(() => {
               Toast.show({
                 content: '派工成功！',
+                position: 'bottom',
               });
               router.goBack();
             });

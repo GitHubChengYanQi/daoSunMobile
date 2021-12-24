@@ -21,7 +21,7 @@ const getParentValue = (value, data) => {
   return [];
 };
 
-const MyTreeSelect = ({ api, value,poputTitle, defaultParams, onChange, show, title, clear }) => {
+const MyTreeSelect = ({ api, value, poputTitle, defaultParams, onChange, show, title, clear, onOk }) => {
 
   const { data } = useRequest(api, {
     defaultParams,
@@ -30,9 +30,7 @@ const MyTreeSelect = ({ api, value,poputTitle, defaultParams, onChange, show, ti
   const [visible, setVisible] = useState();
 
   useEffect(() => {
-    if (show !== undefined){
-      setVisible(true);
-    }
+    setVisible(show);
   }, [show]);
 
 
@@ -80,14 +78,15 @@ const MyTreeSelect = ({ api, value,poputTitle, defaultParams, onChange, show, ti
       >
         <Card title={
           <><Button color='primary' fill='none' onClick={() => {
-            setVisible(false);
+            setVisible(false)
             typeof clear === 'function' && clear();
           }}>取消</Button>
           </>} style={{ maxHeight: '30vh', overflow: 'auto' }} extra={
           <>
             {poputTitle || title || '选择'}
             <Button color='primary' fill='none' onClick={() => {
-              setVisible(false);
+              setVisible(false)
+              typeof onOk === 'function' && onOk();
             }}>确定</Button>
           </>
         }>

@@ -10,3 +10,8 @@ export const qualityTaskDetailEdit = {
   method: 'POST',
   rowKey:'qualityTaskDetailId'
 };
+
+export const qualityTaskEdit = {
+  url: '/qualityTask/edit',
+  method: 'POST',
+};

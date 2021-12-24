@@ -383,6 +383,7 @@ const OutStock = ({ data, onChange }) => {
                 } else if (res === 0) {
                   Toast.show({
                     content: '出库成功！',
+                    position: 'bottom',
                   });
                   setVisible(false);
                 } else {

@@ -28,7 +28,8 @@ const DataAdd = () => {
       manual: true,
       onSuccess: (res) => {
         Toast.show({
-          content:"保存成功"
+          content:"保存成功",
+          position: 'bottom',
         })
         router.goBack();
       },

@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, List, Loading, Steps, TextArea, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Steps, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { CheckCircleOutlined, CloseCircleOutlined, SendOutlined, UserOutlined } from '@ant-design/icons';
-import { router } from 'umi';
+import { FormOutlined } from '@ant-design/icons';
 import { useDebounceEffect } from 'ahooks';
+import QualityTask from './components/QualityTask';
+import { Avatar, Skeleton } from 'antd';
+import PurchaseAsk from './components/PurchaseAsk';
+import MentionsNote from '../../components/MentionsNote';
+import BottomButton from '../../components/BottomButton';
+import ImgUpload from '../../components/Upload/ImgUpload';
+import Icon from '../../components/Icon';
 
 const Workflow = (props) => {
 
@@ -11,19 +17,32 @@ const Workflow = (props) => {
 
   const [detail, setDetail] = useState({});
 
-  const [current, setCurrent] = useState({});
-
   const [audit, setAudit] = useState([]);
+
+  const [comments, setComments] = useState(false);
+
+  const [imgs, setImgs] = useState([]);
+
+
+  const [userIds, setUserIds] = useState([]);
 
   const [visible, setVisible] = useState(false);
 
   const [note, setNote] = useState('');
 
+  const clearState = () => {
+    setComments(false);
+    setVisible(false);
+    setNote('');
+    setUserIds([]);
+    setImgs([]);
+  };
+
   // 执行审批接口
   const { loading, run: processLogRun } = useRequest(
     {
       url: '/audit/post',
-      method: 'GET',
+      method: 'POST',
     },
     {
       manual: true,
@@ -33,7 +52,7 @@ const Workflow = (props) => {
           content: '审批完成！',
           position: 'bottom',
         });
-        setVisible(false);
+        clearState();
       },
       onError: () => {
         refresh();
@@ -41,14 +60,41 @@ const Workflow = (props) => {
           content: '审批失败！',
           position: 'bottom',
         });
-        setVisible(false);
+        clearState();
+      },
+    },
+  );
+
+  // 任务评论
+  const { loading: commentsLoading, run: taskComments } = useRequest(
+    {
+      url: '/audit/comments',
+      method: 'POST',
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        refresh();
+        Toast.show({
+          content: '评论完成！',
+          position: 'bottom',
+        });
+        clearState();
+      },
+      onError: () => {
+        refresh();
+        Toast.show({
+          content: '评论失败！',
+          position: 'bottom',
+        });
+        clearState();
       },
     },
   );
 
 
   // 审批详情接口
-  const { run, refresh } = useRequest(
+  const { loading: detailLoading, run, refresh } = useRequest(
     {
       url: '/audit/detail',
       method: 'GET',
@@ -56,33 +102,13 @@ const Workflow = (props) => {
     {
       manual: true,
       onSuccess: (res) => {
-        let current = null;
+        if (res) {
+          // 所有配置
+          setAudit(res.stepsResult);
+          // 详细数据
+          setDetail(res);
+        }
 
-        let number = 0;
-
-        const arrays = [];
-
-        res.logResults && res.logResults.map((items) => {
-          if (items.stepsResult.serviceAudit.type !== 'route' && items.stepsResult.serviceAudit.type !== 'branch') {
-            if (current === null && (items.status === 0 || items.status === -1)) {
-              current = {
-                index: number,
-                items: { ...items.stepsResult && items.stepsResult.serviceAudit, status: items.status },
-                permissions: items.stepsResult.permissions,
-              };
-            } else {
-              number++;
-            }
-            arrays.push({ ...items.stepsResult && items.stepsResult.serviceAudit, status: items.status });
-          }
-
-          return null;
-
-        });
-
-        setCurrent(current);
-        setAudit(arrays);
-        setDetail(res);
       },
     },
   );
@@ -101,57 +127,60 @@ const Workflow = (props) => {
     wait: 0,
   });
 
-  const Type = (value) => {
+  const processType = (value) => {
     switch (value) {
-      case 'quality_task_person':
-        return <>审批</>;
-      case 'quality_task_send':
-        return <>抄送</>;
-      case 'quality_task_start':
-        return <>发起人</>;
-      case 'quality_task_dispatch':
-        return <>分派任务</>;
-      case 'quality_task_perform':
+      case 'quality_dispatch':
+        return <>指派任务</>;
+      case 'quality_perform':
         return <>执行任务</>;
-      case 'quality_task_complete':
+      case 'quality_complete':
         return <>完成任务</>;
+      case 'purchase_complete':
+        return <>采购完成</>;
       default:
         break;
     }
   };
 
+  if (detailLoading)
+    return <Skeleton loading={detailLoading} />;
 
-  if (!detail) {
+  if (!detail)
     return <Empty
       style={{ padding: '64px 0' }}
       imageStyle={{ width: 128 }}
       description='暂无数据'
     />;
-  }
 
-  const status = (state) => {
-    switch (state.type) {
-      case 'quality_task_start':
-        return <UserOutlined />;
-      case 'quality_task_send':
-        return <SendOutlined />;
-      default:
-        switch (state.status) {
-          case 0:
-            return <CloseCircleOutlined />;
-          case 1:
-            return <CheckCircleOutlined />;
+  const status = (step, stepStatus) => {
+    switch (step.auditType) {
+      case 'start':
+        return <Icon type='icon-caigou_faqiren' style={{ fontSize: 24 }} />;
+      case 'send':
+        return <Icon type='icon-caigou_chaosong' style={{ fontSize: 24 }} />;
+      case 'process':
+        switch (step.auditRule.type) {
+          case 'audit':
+            switch (step.logResult.status) {
+              case -1:
+                switch (stepStatus) {
+                  case 'process':
+                    return <Icon type='icon-shenhe' style={{ fontSize: 24 }} />;
+                  case 'wait':
+                    return <Icon type='icon-caigou_weishenpi1' style={{ fontSize: 24 }} />;
+                  default:
+                    return;
+                }
+              case 0:
+                return <Icon type='icon-caigou_shenpibutongguo1' style={{ fontSize: 24 }} />;
+              case 1:
+                return <Icon type='icon-caigou_shenpitongguo1' style={{ fontSize: 24 }} />;
+              default:
+                return null;
+            }
           default:
-            return <UserOutlined />;
+            return <Icon type='icon-caigou_dongzuo' style={{ fontSize: 24 }} />;
         }
-    }
-
-  };
-
-  const type = (value) => {
-    switch (value) {
-      case 'audit':
-        return <>审核</>;
       default:
         break;
     }
@@ -159,177 +188,285 @@ const Workflow = (props) => {
 
   const module = (value) => {
     switch (value) {
-      case 'inQuality':
-        return <>入厂检</>;
+      case 'quality_task':
+        return <QualityTask detail={detail.object} />;
+      case 'purchase':
+        return <PurchaseAsk detail={detail.object} />;
       default:
         break;
     }
   };
 
-  return <div style={{ backgroundColor: '#fff' }}>
+  const rules = (rule) => {
+    const users = [];
+    if (rule && rule.rules) {
+      rule.rules.map((items) => {
+        switch (items.type) {
+          case 'AppointUsers':
+            items.appointUsers && items.appointUsers.map((itemuser) => {
+              return users.push(itemuser.title);
+            });
+            break;
+          case 'DeptPositions':
+            items.deptPositions && items.deptPositions.map((itemdept) => {
+              return users.push(`${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
+                return items.label;
+              })})`);
+            });
+            break;
+          case 'AllPeople':
+            users.push('所有人');
+            break;
+          default:
+            break;
+        }
+        return null;
+      });
+      return <Space direction='vertical' wrap>
+        {
+          users.map((items, index) => {
+            return <Space align='center' key={index}>
+              <Avatar
+                style={{ fontSize: 14 }}
+                size={20}
+                shape='square'
+                key={index}
+              >{items.substring(0, 1)}</Avatar>
+              {items}
+            </Space>;
+          })
+        }
+      </Space>;
+    } else
+      return null;
+  };
+
+  const steps = (step, next) => {
+    let stepStatus;
+    switch (step.logResult && step.logResult.status) {
+      case -1:
+        if (next)
+          stepStatus = 'process';
+        else
+          stepStatus = 'wait';
+        break;
+      case 0:
+        stepStatus = 'error';
+        break;
+      case 1:
+        stepStatus = 'process';
+        break;
+      default:
+        break;
+    }
+    switch (step.auditType) {
+      case 'start':
+        return <div>
+          <Steps.Step
+            status={stepStatus}
+            description={<Space align='center'>
+              <Avatar
+                size={20}
+                shape='square'
+              >{detail.createName.substring(0, 1)}</Avatar>
+              {detail.createName}
+            </Space>}
+            icon={status(step)} />
+          {steps(step.childNode, step.logResult && step.logResult.status === 1)}
+        </div>;
+      case 'route':
+        return <div>
+          <Steps.Step
+            status={stepStatus}
+            description={
+              <div style={{ maxWidth: '100vw', overflowX: 'auto' }}>
+                <Space>
+                  {step.conditionNodeList.map((items, index) => {
+                    return allStep(items.childNode, items.logResult.status === -1, index);
+                  })}
+                </Space>
+              </div>
+            }
+            icon={status(step)} />
+          {steps(step.childNode, step.logResult && step.logResult.status === 1)}
+        </div>;
+      case 'send':
+      case 'process':
+        return <div>
+          <Steps.Step
+            status={stepStatus}
+            title={processType(step.auditRule.type)}
+            description={rules(step.auditRule)}
+            icon={status(step, stepStatus)} />
+          {steps(step.childNode, step.logResult && step.logResult.status === 1)}
+        </div>;
+      default:
+        break;
+    }
+  };
+
+  const allStep = (audit, next, index) => {
+    return <Steps key={index} direction='vertical'>
+      {steps(audit, next)}
+    </Steps>;
+  };
+
+  return <div style={{
+    backgroundColor: '#fff',
+    overflowY: 'scroll',
+    maxHeight: detail.permissions ? '90vh' : '100vh',
+    overflowX: 'hidden',
+  }}>
     <Card
-      title='审批'
+      title={detail.taskName}
       bodyStyle={{ padding: 0 }}
     >
-      <Divider contentPosition='left'>流程信息</Divider>
-      {detail.activitiProcessTaskResult ?
-        <>
-          <List.Item>任务名称：{detail.activitiProcessTaskResult.taskName}</List.Item>
-          <List.Item>类型：{type(detail.process.type)}</List.Item>
-          <List.Item>功能：{module(detail.process.module)}</List.Item>
-        </>
-        :
-        <Empty
-          style={{ padding: '64px 0' }}
-          imageStyle={{ width: 128 }}
-          description='暂无数据'
-        />
-      }
 
-      <Divider contentPosition='left'>质检任务信息</Divider>
-      {detail ?
-        <>
-          <List.Item>质检编码：{detail.coding}
-            <Button
-              color='primary'
-              fill='none'
-              style={{ padding: 0, float: 'right' }}
-              onClick={() => {
-                router.push(`/Work/Workflow/QualityDetails?qualityTaskId=${detail.qualityTaskId}`);
-              }}
-            >查看详情
-            </Button>
-          </List.Item>
-          <List.Item>质检类型：{detail.type}</List.Item>
-          <List.Item>负责人：{detail.userName || '无'}</List.Item>
-          <List.Item>备注：{detail.remark || '无'}</List.Item>
-          <List.Item>创建时间：{detail.createTime}</List.Item>
-        </>
-        :
-        <Empty
-          style={{ padding: '64px 0' }}
-          imageStyle={{ width: 128 }}
-          description='暂无数据'
-        />
-      }
+      {module(detail && detail.type)}
+
       <Divider contentPosition='left'>审批流程</Divider>
 
-      <div style={{ marginBottom: '10vh' }}>
+      <div>
 
-        <Steps direction='vertical' current={current && current.index}>
-          {
-            audit.map((item, index) => {
-              if (item) {
-                const users = [];
-                if (item.rule && item.rule.qualityRules) {
+        {allStep(audit, true, 0)}
 
-                  item.rule.qualityRules.users.map((items) => {
-                    return users.push(items.title);
-                  });
-
-                  item.rule.qualityRules.depts.map((items) => {
-                    return users.push(`${items.title}(${items.positions && items.positions.map((items) => {
-                      return items.label;
-                    })})`);
-                  });
-                }
-                if (item.type === 'quality_task_start') {
-                  return <Steps.Step
-                    key={index}
-                    title={Type(item.type)}
-                    description={detail.createName}
-                    icon={status(item)} />;
-                } else if (item.type === 'route' || item.type === 'branch') {
-                  return null;
-                } else {
-                  return <Steps.Step
-                    key={index}
-                    title={Type(item.type)}
-                    description={users.toString()}
-                    icon={status(item)} />;
-                }
-
-              }
-              return null;
-            })
-          }
-        </Steps>
       </div>
     </Card>
 
-    <div style={{
-      width: '100%',
-      zIndex: 99,
-      paddingBottom: 0,
-      position: 'fixed',
-      bottom: 0,
-      backgroundColor: '#fff',
-    }}>
-      {
+    {detail.remarks && detail.remarks.length > 0 ?
+      <Card title={`评论(${detail.remarks.length})`} extra={<FormOutlined onClick={() => {
+        setComments(true);
+      }} />}>
+        <List>
+          {
+            detail.remarks.map((items, index) => {
+              return <List.Item
+                key={index}
+                title={items.user &&
+                <Space align='center'>
+                  <Avatar
+                    shape='square'
+                    size={24}
+                    style={{ fontSize: 14 }}>
+                    {items.user.name.substring(0, 1)}
+                  </Avatar>
+                  {items.user.name}
+                  {items.createTime}
+                </Space>}
+                description={items.photoId && <div style={{ marginLeft: 32 }}><ImgUpload
+                  disabled
+                  length={5}
+                  value={items.photoId.split(',').map((items) => {
+                    return { url: items };
+                  })} /></div>}
+              >
+                <div style={{ marginLeft: 32 }}>
+                  {items.content}
+                </div>
+              </List.Item>;
+            })
+          }
+        </List>
+      </Card> :
+      <div style={{ padding: 16 }}>
+        <Button
+          style={{ width: '100%' }}
+          onClick={() => {
+            setComments(true);
+          }}
+        >
+          <FormOutlined /> 添加评论
+        </Button>
+      </div>}
 
-        current
-        &&
-        current.items
-        &&
-        current.items.status === -1
-        &&
-        current.items.type === 'quality_task_person'
-        &&
-        current.permissions
-        &&
-        <div style={{ padding: 16 }}>
-          <Button
-            color='primary'
-            style={{ width: '50%', borderRadius: 0, borderTopLeftRadius: 50, borderBottomLeftRadius: 50 }}
-            onClick={() => {
-              setVisible('agree');
-            }}>同意</Button>
-          <Button
-            color='default'
-            style={{ width: '50%', borderRadius: 0, borderTopRightRadius: 50, borderBottomRightRadius: 50 }}
-            onClick={() => {
-              setVisible('reject');
-            }}>拒绝</Button>
-        </div>
-      }
-    </div>
+    {detail.permissions && <BottomButton
+      leftText='拒绝'
+      leftOnClick={() => {
+        setVisible('reject');
+      }}
+      rightText='同意'
+      rightOnClick={() => {
+        setVisible('agree');
+      }}
+    />}
 
 
     {/*审批同意或拒绝*/}
     <Dialog
-      visible={visible}
-      title={`是否${visible === 'agree' ? '同意' : '拒绝'}审批`}
-      content={<TextArea
-        placeholder='请输入备注...'
-        rows={2}
-        maxLength={50}
-        showCount
-        onChange={(value) => {
-          setNote(value);
-        }} />}
+      visible={visible || comments}
+      title={comments ? '添加评论' : `是否${visible === 'agree' ? '同意' : '拒绝'}审批`}
+      content={
+        <MentionsNote
+          placeholder={visible ? '添加备注，可@相关人员...' : '添加评论，可@相关人员...'}
+          onChange={(value) => {
+            setNote(value);
+          }}
+          value={note}
+          getUserIds={(value) => {
+            if (value && value.length > 0) {
+            }
+            const userIds = value.map((items) => {
+              return items.value;
+            });
+            setUserIds(userIds);
+          }}
+          getImgs={(imgs) => {
+            if (imgs && imgs.length > 0) {
+            }
+            const imgIds = imgs.map((items) => {
+              return items.id;
+            });
+            setImgs(imgIds);
+          }}
+        />
+      }
       onAction={(action) => {
         if (action.key === 'confirm') {
-          console.log(note);
-          processLogRun({
-            params: {
-              taskId: query.id,
-              status: visible === 'agree' ? 1 : 0,
-            },
-          });
+          if (visible)
+            processLogRun({
+              data: {
+                taskId: query.id,
+                status: visible === 'agree' ? 1 : 0,
+                userIds: userIds.filter((item, index) => {
+                  return userIds.indexOf(item, 0) === index;
+                }).toString(),
+                photoId: imgs.toString(),
+                note,
+              },
+            });
+          else if (comments) {
+            if (note)
+              taskComments({
+                data: {
+                  taskId: query.id,
+                  userIds: userIds.filter((item, index) => {
+                    return userIds.indexOf(item, 0) === index;
+                  }).toString(),
+                  photoId: imgs.toString(),
+                  note,
+                },
+              });
+            else
+              Toast.show({
+                content: '请输入备注！',
+                position: 'bottom',
+              });
+          }
         } else {
           setVisible(false);
+          setComments(false);
         }
       }}
       actions={[
         [
           {
-            disable: loading,
-            key: 'confirm',
-            text: loading ? <Loading /> : '确定',
-          },
-          {
             key: 'close',
             text: '取消',
+          },
+          {
+            disabled: loading || commentsLoading,
+            key: 'confirm',
+            text: loading || commentsLoading ? <Loading /> : (comments ? '发表' : '确定'),
           },
         ],
       ]}

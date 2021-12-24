@@ -5,6 +5,7 @@ import { UserIdSelect } from '../../../../Customer/CustomerUrl';
 import { useRequest } from '../../../../../../util/Request';
 import MyTreeSelect from '../../../../../components/MyTreeSelect';
 import { router } from 'umi';
+import Amap from '../../../../../../components/Amap';
 
 const { Item: FormItem } = Form;
 
@@ -29,7 +30,7 @@ export const Users = ({ onChange }) => {
       onClick={() => {
         setUsersVisabled(true);
       }}>
-      {userIds.length > 0 ? userName.toString() : <span style={{ color: '#cccccc' }}>请选择分派人</span>}
+      {userIds.length > 0 ? userName.toString() : <span style={{ color: '#cccccc' }}>请选择质检人</span>}
     </Button>
     <Popup
       visible={usersVisabled}
@@ -83,27 +84,29 @@ export const Users = ({ onChange }) => {
   </>;
 };
 
-const Dispatch = ({ detail, taskId, onSuccess }, ref) => {
+const Dispatch = ({ detail, onSuccess }, ref) => {
 
   const [visible, setVisiable] = useState(false);
 
   const { loading, run } = useRequest({
-    url: '/qualityTask/addChild',
+    url: '/qualityTask/add',
     method: 'POST',
   }, {
     manual: true,
     onSuccess: () => {
       Toast.show({
-        content: '分派成功！',
+        content: '指派成功！',
+        position: 'bottom',
       });
-      router.push(`/Work/Workflow/DispatchTask?id=${taskId}`);
+      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
-    onError:()=>{
+    onError: () => {
       Toast.show({
-        content: '分派失败！',
+        content: '指派失败！',
+        position: 'bottom',
       });
-      router.push(`/Work/Workflow/DispatchTask?id=${taskId}`);
-    }
+      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+    },
   });
 
   useImperativeHandle(ref, () => ({
@@ -117,26 +120,25 @@ const Dispatch = ({ detail, taskId, onSuccess }, ref) => {
         onFinish={async (values) => {
 
           console.log(
-            // JSON.stringify(
-            {
-              taskParams: {
-                ...detail.detail,
-                ...values,
-                userIds: values.userIds.toString(),
-                details: detail.qualityLising,
+            JSON.stringify(
+              {
+                taskParams: {
+                  ...detail.detail,
+                  ...values,
+                  userIds: values.userIds.toString(),
+                  details: detail.qualityLising,
+                },
               },
-            },
-            // )
+            ),
           );
 
           await run({
             data: {
-              taskParams: {
-                ...detail.detail,
-                ...values,
-                userIds: values.userIds.toString(),
-                details: detail.qualityLising,
-              },
+              state:1,
+              parentId:detail.detail.qualityTaskId,
+              ...values,
+              userIds: values.userIds.toString(),
+              details: detail.qualityLising,
             },
           });
         }}
@@ -149,23 +151,22 @@ const Dispatch = ({ detail, taskId, onSuccess }, ref) => {
           </Space>
         }
       >
-        <Card title='分派信息' bodyStyle={{ maxHeight: '50vh', overflow: 'auto' }}>
-          <FormItem label='分派人' name='userIds' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+        <Card title='指派信息' bodyStyle={{ maxHeight: '50vh', overflow: 'auto' }}>
+          <FormItem label='质检人' name='userIds' rules={[{ required: true, message: '该字段是必填字段！' }]}>
             <Users />
           </FormItem>
-          <FormItem name='address' label='地点' rules={[{ required: true, message: '该字段是必填字段！' }]}>
-            <Input placeholder='请输入分派地点' />
+          <FormItem name='address' label='地点'>
+            <Amap title='选择地点' />
           </FormItem>
-          <FormItem name='time' label='时间' rules={[{ required: true, message: '该字段是必填字段！' }]}>
+          <FormItem name='time' label='时间'>
             <DatePicker placeholder='请选择' defaultValue={null} useDefaultFormat={false} separator=''>
               <ListItem style={{ padding: 0 }} arrow={true} />
             </DatePicker>
           </FormItem>
-          <FormItem name='person' label='对接人' rules={[{ required: true, message: '该字段是必填字段！' }]}>
-            <Input placeholder='输入对接人' />
+          <FormItem name='person' label='联系人'>
+            <Input placeholder='输入联系人' />
           </FormItem>
           <FormItem name='phone' label='联系方式' rules={[{
-            required: true,
             message: '请输入正确的手机号码！',
             pattern: /^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\d{8}$/,
           }]}>
