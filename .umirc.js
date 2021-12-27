@@ -3,7 +3,7 @@ import React from 'react';
 const pxtoviewport = require('postcss-px-to-viewport');
 // ref: https://umijs.org/config/
 export default {
-  treeShaking: true,
+  // treeShaking: true,
 
   theme: {
     // '@primary-color': '#CDDC39',
@@ -18,33 +18,29 @@ export default {
       selectorBlackList: [],
       minPixelValue: 1,
       mediaQuery: false,
-      exclude: [/dumi/,/ant/],
+      exclude: [/dumi/, /ant/],
     }),
   ],
 
   publicPath: process.env.NODE_ENV === 'development' ? '/' : '/cp/',
-  history: 'hash',
+  history: { type: 'hash' },
 
-  plugins: [
+  antd: false,
+  dva: {},
+  dynamicImport: {
+    loading: '@/Loading',
+  },
+  title: '道昕云',
+  dll: false,
 
-    // ref: https://umijs.org/plugin/umi-plugin-react.html
-    ['umi-plugin-react', {
-      antd: false,
-      dva: true,
-      dynamicImport: {  },
-      title: '道昕云',
-      dll: false,
+  // routes: {
+  //   exclude: [
+  //     /models\//,
+  //     /services\//,
+  //     /model\.([tj])sx?$/,
+  //     /service\.([tj])sx?$/,
+  //     /components\//,
+  //   ],
+  // },
 
-
-      routes: {
-        exclude: [
-          /models\//,
-          /services\//,
-          /model\.(t|j)sx?$/,
-          /service\.(t|j)sx?$/,
-          /components\//,
-        ],
-      },
-    }],
-  ],
-}
+};
