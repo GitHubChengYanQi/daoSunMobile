@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRequest } from '../../../util/Request';
 import { Button, Card, Form, Image, List } from 'antd-mobile';
-import { router } from 'umi';
+import { history } from 'umi';
 
 const { Item:ListItem } = List;
 
@@ -15,7 +15,7 @@ const Engineer = (props) => {
   }, {
     manual: true,
     onSuccess:()=>{
-      router.goBack();
+      history.goBack();
     }
   });
 

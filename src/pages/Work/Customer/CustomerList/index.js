@@ -11,7 +11,7 @@ import {
 } from 'weui-react-v2';
 import { Col, Row } from 'antd';
 import { EllipsisOutlined, OrderedListOutlined, PhoneOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Card, InfiniteScroll } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 
@@ -131,7 +131,7 @@ const CustomerList = ({ select }) => {
         return (
           <List key={index}>
             <ListItem style={{ padding: 8 }} onClick={() => {
-              router.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
+              history.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
             }}>
               <ListItem style={{ padding: 0 }} extra={items.signIn}><h3>{items.customerName}</h3></ListItem>
               <WhiteSpace size='md' />
@@ -183,12 +183,12 @@ const CustomerList = ({ select }) => {
               <Flex type='flex' justify='space-around'>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/Track?classify=0&customerId=${items.customerId}`);
+                    history.push(`/Work/Customer/Track?classify=0&customerId=${items.customerId}`);
                   }}> 跟进</Button>
                 </FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<OrderedListOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
+                    history.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
                   }}>任务</Button></FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<PhoneOutlined />} onClick={() => {
@@ -196,7 +196,7 @@ const CustomerList = ({ select }) => {
                   }}> 电话</Button></FlexItem>
                 <FlexItem span={4}>
                   <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
+                    history.push(`/Work/Customer/CustomerDetail?${items.customerId}`);
                   }}> 更多</Button></FlexItem>
               </Flex>
             </ListItem>

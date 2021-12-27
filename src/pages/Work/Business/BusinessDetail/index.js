@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, Result, Space } from 'antd-mobile';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Avatar, Col, Row, Select } from 'antd';
 import { Button, Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
@@ -58,7 +58,7 @@ const BusinessDetail = () => {
                     type='link'
                     style={{ padding: 0 }}
                     onClick={() => {
-                      router.push(`/Work/Customer/Track?classify=1&customerId=${data.customerId}&businessId=${data.businessId}`);
+                      history.push(`/Work/Customer/Track?classify=1&customerId=${data.customerId}&businessId=${data.businessId}`);
                     }}>添加跟进</Button>
                 , value: '0',
               },
@@ -68,7 +68,7 @@ const BusinessDetail = () => {
                   size='small'
                   type='link'
                   onClick={() => {
-                    router.goBack();
+                    history.goBack();
                   }}>返回</Button>, value: '1',
               },
             ]} />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Empty } from 'antd-mobile';
+import MyEmpty from '../components/MyEmpty';
 
 // const { Column } = Table;
 
@@ -93,11 +93,7 @@ const Report = () => {
   //   }
   // };
 
-  return (<Empty
-    style={{ padding: '64px 0' }}
-    imageStyle={{ width: 128 }}
-    description='暂无数据'
-  />)
+  return (<MyEmpty />)
 
 
   // return (

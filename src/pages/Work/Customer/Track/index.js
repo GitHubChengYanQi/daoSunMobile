@@ -5,7 +5,7 @@ import {
   Switch,
   TextArea, WhiteSpace,
 } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Button, Card, Dialog, Form } from 'antd-mobile';
 import MyPicker from '../../../components/MyPicker';
 import UpLoadImg from '../../../components/Upload';
@@ -105,7 +105,7 @@ const Track = (props) => {
           Dialog.alert({
             content: '添加成功',
             onConfirm: () => {
-              router.goBack();
+              history.goBack();
             },
           })
         }}
@@ -113,7 +113,7 @@ const Track = (props) => {
           <div style={{ textAlign: 'center' }}>
             <Button color='primary' type='submit' style={{ width: '45%', marginRight: '5%' }}>保存</Button>
             <Button color='default' style={{ width: '45%' }} onClick={() => {
-              router.goBack();
+              history.goBack();
             }}>返回</Button>
           </div>
         }

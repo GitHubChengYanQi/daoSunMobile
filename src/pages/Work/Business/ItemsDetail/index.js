@@ -67,7 +67,7 @@ const ItemsDetail = ({ businessId }) => {
         return (
           <List key={index}>
             <ListItem onClick={() => {
-              // router.push('/Work/Business/BusinessDetail');
+              // history.push('/Work/Business/BusinessDetail');
             }}>
               <Card
                 extra={<div>品牌: <Button

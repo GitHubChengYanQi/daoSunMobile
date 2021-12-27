@@ -13,7 +13,7 @@ import {
   Toast,
 } from 'antd-mobile';
 import LinkButton from '../../../../components/LinkButton';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Col, Row } from 'antd';
 import { useRequest } from '../../../../../util/Request';
 import { qualityPlanListSelect, qualityTaskDetailEdit } from '../components/URL';
@@ -72,7 +72,7 @@ const EditChildTask = (props) => {
         position: 'bottom',
       });
       setRefuse(false);
-      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
     onError: () => {
       Toast.show({
@@ -92,7 +92,7 @@ const EditChildTask = (props) => {
 
   return <>
     <Card title={action === 'refuse' ? '任务驳回' : '任务指派'} extra={<LinkButton title='返回' onClick={() => {
-      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     }} />}>
       {detail.qualityLising ? detail.qualityLising.map((items, index) => {
           return <div key={index}>

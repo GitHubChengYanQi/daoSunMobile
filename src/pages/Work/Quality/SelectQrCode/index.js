@@ -2,7 +2,7 @@ import React from 'react';
 import { List, SearchBar } from 'antd-mobile';
 import { request, useRequest } from '../../../../util/Request';
 import { Spin } from 'antd';
-import { router } from 'umi';
+import { history } from 'umi';
 
 const SelectQrCode = (props) => {
 
@@ -19,7 +19,7 @@ const SelectQrCode = (props) => {
   const inkindType = (codeId, data) => {
     switch (data.source) {
       case '质检':
-        router.push({
+        history.push({
           pathname: '/Work/Quality/QualityTask',
           state: {
             items: {
@@ -47,7 +47,7 @@ const SelectQrCode = (props) => {
       case 'spu':
       case 'storehouse':
       case 'stock':
-        router.push(`/OrCode?id=${codeId}`);
+        history.push(`/OrCode?id=${codeId}`);
         break;
       default:
         break;

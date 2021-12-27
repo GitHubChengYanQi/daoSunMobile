@@ -16,7 +16,7 @@ const Quote = () => {
           <Row gutter={24} style={{ padding: 8 }}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
-                // router.push('/Work/Business/BusinessAdd');
+                // history.push('/Work/Business/BusinessAdd');
               }} />
             </Col>
             <Col span={16}>
@@ -36,7 +36,7 @@ const Quote = () => {
             </Col>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
-                // router.push('/Work/Business/Screening');
+                // history.push('/Work/Business/Screening');
               }} />
             </Col>
           </Row>

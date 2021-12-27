@@ -2,7 +2,7 @@ import React from 'react';
 import { Collapse, List } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import MyEmpty from '../../../components/MyEmpty';
-import { router } from 'umi';
+import { history } from 'umi';
 import { useDebounceEffect } from 'ahooks';
 import { Badge } from 'antd';
 
@@ -68,7 +68,7 @@ const MainTask = ({ id }) => {
                 clickable
                 extra={taskState(items.state)}
                 onClick={() => {
-                  router.push(`/Work/Quality?id=${items.qualityTaskId}`);
+                  history.push(`/Work/Quality?id=${items.qualityTaskId}`);
                 }}
               >
                 质检人：{items.users && items.users.map((items) => {

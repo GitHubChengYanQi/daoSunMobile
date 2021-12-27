@@ -4,7 +4,7 @@ import { DatePicker, Input, ListItem, TextArea } from 'weui-react-v2';
 import { UserIdSelect } from '../../../../Customer/CustomerUrl';
 import { useRequest } from '../../../../../../util/Request';
 import MyTreeSelect from '../../../../../components/MyTreeSelect';
-import { router } from 'umi';
+import { history } from 'umi';
 import Amap from '../../../../../../components/Amap';
 
 const { Item: FormItem } = Form;
@@ -98,14 +98,14 @@ const Dispatch = ({ detail, onSuccess }, ref) => {
         content: '指派成功！',
         position: 'bottom',
       });
-      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
     onError: () => {
       Toast.show({
         content: '指派失败！',
         position: 'bottom',
       });
-      router.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
   });
 

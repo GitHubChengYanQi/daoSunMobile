@@ -1,6 +1,6 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Button, Form } from 'antd-mobile';
 import { Input } from 'antd';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
@@ -18,7 +18,7 @@ const Login = () => {
       onSuccess: async (res) => {
         if (res) {
           await cookie.set('cheng-token', res);
-          await router.push('/Home');
+          await history.push('/');
         }
       },
     },

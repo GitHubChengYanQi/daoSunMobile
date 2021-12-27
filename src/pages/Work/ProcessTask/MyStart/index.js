@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Affix } from 'antd';
 import { Dropdown, List, Selector, Tag } from 'antd-mobile';
 import MyList from '../../../components/MyList';
-import { router } from 'umi';
+import { history } from 'umi';
 import { useSetState } from 'ahooks';
 import { useRequest } from '../../../../util/Request';
 import { Skeleton } from 'weui-react-v2';
@@ -112,7 +112,7 @@ const MyStart = () => {
               extra={status(items.status)}
               description={items.createTime}
               onClick={() => {
-                router.push(`/Work/Workflow?id=${items.processTaskId}`);
+                history.push(`/Work/Workflow?id=${items.processTaskId}`);
               }}
             >
               发起人：{items.user && items.user.name}

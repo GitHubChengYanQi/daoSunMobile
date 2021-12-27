@@ -10,12 +10,16 @@ import Sms from '../../pages/Sms';
 import wx from 'populee-weixin-js-sdk';
 import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
+import { useLocation } from 'umi';
+import { Toast } from 'antd-mobile';
 
-const Auth = ({ url,...props }) => {
+const Auth = (props) => {
 
   // https://dasheng-soft.picp.vip
 
   const [isLogin, setIsLogin] = useState();
+
+  const location = useLocation();
 
   const [type, stType] = useState();
 
@@ -97,30 +101,57 @@ const Auth = ({ url,...props }) => {
     },
   });
 
-  const getUrl = () => {
-    // if (url.indexOf('/Scan/InStock')){
-    //   return 'instock';
-    // }
-    // if (url.indexOf('/Scan')){
-    //   return 'intock';
-    // }
+  useDebounceEffect(() => {
+    switch (location.pathname) {
+      case '/Scan/InStock/AppInstock':
+        props.dispatch({
+          type: 'qrCode/scanCodeState',
+          payload: {
+            action: 'instock',
+          },
+        });
+        break;
+      default:
+        props.dispatch({
+          type: 'qrCode/scanCodeState',
+          payload: {
+            action: null,
+          },
+        });
+        break;
+    }
+  }, [
+    location.pathname,
+  ],{
+    wait:0
+  });
 
-  }
 
-
-  useDebounceEffect(()=>{
-    getUrl();
-    window.receive = (number) => {
-      props.dispatch({
-        type: 'qrCode/backObject',
-        payload:{
-          code:number
+  useDebounceEffect(() => {
+    window.receive = (code) => {
+      let codeId = '';
+      if (code.indexOf('https') !== -1) {
+        const param = code.split('=');
+        if (param && param[1]) {
+          codeId = param[1];
+        }else {
+          Toast.show({
+            content:'请扫正确的码！'
+          });
         }
+      } else {
+        codeId = code;
+      }
+      props.dispatch({
+        type: 'qrCode/appAction',
+        payload: {
+          code: codeId,
+        },
       });
     };
-  },[],{
-    wait:0
-  })
+  }, [], {
+    wait: 0,
+  });
 
   useDebounceEffect(() => {
     setIsLogin(token);
@@ -135,7 +166,26 @@ const Auth = ({ url,...props }) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
+  // if (process.env.NODE_ENV === 'development')
+  //   return <>
+  //     <Button onClick={() => {
+  //       // const code = '1473977842541821954'; // 库位
+  //       // const code = '1470279322141204481'; // 实物
+  //       // const code = '1474546242691313666'; //入库
+  //       props.dispatch({
+  //         type: 'qrCode/appAction',
+  //         payload: {
+  //           code,
+  //         },
+  //       });
+  //     }}>扫码</Button>
+  //     {
+  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+  //     }
+  //   </>;
+  // else
+    return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
+
 };
 
 export default connect(({ qrCode }) => ({ qrCode }))(Auth);

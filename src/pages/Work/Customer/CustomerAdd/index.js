@@ -6,7 +6,7 @@ import {
   Switch,
   TextArea,
 } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Button, Card, Dialog, Form, Radio, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import {
@@ -75,7 +75,7 @@ const CustomerAdd = () => {
           Dialog.alert({
             content: `您输入的客户已经被创建 创建人：${user && user.name}`,
             onConfirm: () => {
-              router.goBack();
+              history.goBack();
             },
           })
         }}
@@ -83,7 +83,7 @@ const CustomerAdd = () => {
           <div style={{ textAlign: 'center', margin: 8 }}>
             <Button color='primary' type='submit' style={{ width: '20%', marginRight: '5%' }}>保存</Button>
             <Button color='default' style={{ width: '20%', marginRight: '5%' }} onClick={() => {
-              router.goBack();
+              history.goBack();
             }}>返回</Button>
             <Button color='primary' type='submit' style={{ width: '50%' }} fill='none'>保存并完善更多信息</Button>
           </div>

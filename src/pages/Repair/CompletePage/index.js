@@ -3,7 +3,7 @@ import { useRequest } from '../../../util/Request';
 import { Button, Card, Form, Image, List } from 'antd-mobile';
 import { TextArea } from 'weui-react-v2';
 import UpLoadImg from '../../components/Upload';
-import { router } from 'umi';
+import { history } from 'umi';
 
 const { Item: ListItem } = List;
 
@@ -17,7 +17,7 @@ const CompletePage = (props) => {
   }, {
     manual: true,
     onSuccess: () => {
-      router.push('/Repair');
+      history.push('/Repair');
     },
   });
 

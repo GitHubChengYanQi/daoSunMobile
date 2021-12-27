@@ -4,7 +4,7 @@ import { useRequest } from '../../../../util/Request';
 import style from './index.css';
 import { useDebounceEffect } from 'ahooks';
 import Icon from '../../../components/Icon';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Skeleton } from 'weui-react-v2';
 import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
@@ -223,7 +223,7 @@ const DispatchTask = ({ taskDetail }) => {
             borderBottomRightRadius: 0,
           }}
           onClick={() => {
-            router.push({
+            history.push({
               pathname: '/Work/Quality/DispatchTask/EditChildTask',
               state: {
                 action: 'refuse',
@@ -244,7 +244,7 @@ const DispatchTask = ({ taskDetail }) => {
           }}
           color='primary'
           onClick={() => {
-            router.push({
+            history.push({
               pathname: '/Work/Quality/DispatchTask/EditChildTask',
               state: {
                 action: 'agree',

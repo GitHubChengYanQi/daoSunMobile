@@ -2,7 +2,7 @@ import { Button, Card, List } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
 import React, { useState } from 'react';
 import { Input } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 import cookie from 'js-cookie';
 import GetUserInfo from '../GetUserInfo';
 import SendCode from '@jiumao/rc-send-code';
@@ -18,7 +18,7 @@ const Sms = () => {
         cookie.set('cheng-token', res);
         const userInfo = GetUserInfo().userInfo;
         if (userInfo && userInfo.userId){
-          router.push('/Login');
+          history.push('/Login');
         }
       }
     },

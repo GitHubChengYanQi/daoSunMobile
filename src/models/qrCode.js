@@ -1,6 +1,6 @@
 import wx from 'populee-weixin-js-sdk';
 import { request } from '../util/Request';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Toast } from 'antd-mobile';
 
 const scan = () => new Promise((resolve, reject) => {
@@ -34,26 +34,23 @@ export default {
   reducers: {
     //改变state
     scanCodeState(state, { payload }) {
+      console.log('state', payload);
       return { ...state, ...payload };
+    },
+    // 清楚二维码
+    clearCode(state) {
+      console.log('clearCode');
+      return { ...state,codeId:null};
     },
   },
 
   effects: {
     // 企业微信扫码
     * wxCpScan({ payload }, { call, put }) {
+      yield put({ type: 'clearCode'});
+      console.log('wxCpScan');
       if (process.env.NODE_ENV === 'development') {
-        let code = '';
-        switch (payload.action) {
-          case 'scanStorehousePositon':
-            code = '1473977842541821954'; // 库位
-            break;
-          case 'scanInstock':
-            code = '1470279322342531073'; // 实物
-            break;
-          default:
-            code = '1473927950846943233'; //入库
-            break;
-        }
+        let code = '1473927950846943233';
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -63,32 +60,33 @@ export default {
     },
 
     // 扫码跳路由
-    * router({ payload }) {
+    * router({ payload },{put}) {
       const codeId = payload.codeId;
       const type = payload.type;
+      yield put({ type: 'clearCode' });
       switch (type) {
         case 'spu':
-          router.push(`/Scan/Spu?id=${codeId}`);
+          // history.push(`/Scan/Spu?id=${codeId}`);
           break;
         case 'storehouse':
-          router.push(`/Scan/Storehouse?id=${codeId}`);
+          // history.push(`/Scan/Storehouse?id=${codeId}`);
           break;
         case 'storehousePositions':
-          router.push(`/Scan/StorehousePositions?id=${codeId}`);
+          // history.push(`/Scan/StorehousePositions?id=${codeId}`);
           break;
         case 'stock':
-          router.push(`/Scan/Stock?id=${codeId}`);
+          // history.push(`/Scan/Stock?id=${codeId}`);
           break;
         case 'instock':
-          router.push(`/Scan/InStock?id=${codeId}`);
+          history.push(`/Scan/InStock?id=${codeId}`);
           break;
         case 'outstock':
-          router.push(`/Scan/Outstock?id=${codeId}`);
+          // history.push(`/Scan/Outstock?id=${codeId}`);
           break;
         default:
           break;
       }
-      yield
+      yield;
     },
 
 
@@ -98,7 +96,7 @@ export default {
       const items = payload.items;
       const batch = payload.batch;
       // 判断二维码是否绑定
-      const isBind = yield call(()=>request(
+      const isBind = yield call(() => request(
         {
           url: '/orCode/isNotBind',
           method: 'POST',
@@ -111,7 +109,7 @@ export default {
       if (isBind) {
         // 已经绑定
         // 判断二维码和物料是否对应
-        const judgeBind = yield call(()=>request({
+        const judgeBind = yield call(() => request({
           url: '/orCode/judgeBind',
           method: 'POST',
           data: {
@@ -119,17 +117,17 @@ export default {
             ...items,
           },
         }));
-        if (judgeBind === true) {
+        if (judgeBind) {
           // 如果一致,选择库位进行入库
-          yield put({ type: 'scanCodeState', payload: { instockAction: true } });
+          yield put({ type: 'scanCodeState', payload: { instockAction: judgeBind } });
         } else {
           //不一致报错
           Toast.show({
             content: '二维码已绑定其他物料，或物料已绑定其他二维码！请重新选择!',
             position: 'bottom',
           });
+          yield put({ type: 'clearCode'});
         }
-
       } else {
         // 未绑定
         // 是否是批量
@@ -144,7 +142,7 @@ export default {
     },
 
     // 扫描库位
-    * scanStorehousePositon({payload},{put}){
+    * scanStorehousePositon({ payload }, { put }) {
       const res = payload.res;
       const data = payload.data;
       if (res.type === 'storehousePositions') {
@@ -169,8 +167,9 @@ export default {
     },
 
 
-    // 获取二维码数据
+    // wxCp获取二维码数据
     * backObject({ payload }, { call, put }) {
+      console.log('wxCpbackObject', payload);
       const codeId = payload.code;
       const action = payload.action;
       // 入库参数
@@ -181,8 +180,8 @@ export default {
       const data = payload.data;
 
       let res = {};
-      if (!action || action === 'scanStorehousePositon'){
-        res = yield call(()=>request({
+      if (!action || action === 'scanStorehousePositon') {
+        res = yield call(() => request({
           url: '/orCode/backObject',
           method: 'GET',
           params: {
@@ -196,7 +195,7 @@ export default {
         switch (action) {
           case 'scanStorehousePositon':
             // 扫描库位
-            yield put({ type: 'scanStorehousePositon', payload: { res ,data } });
+            yield put({ type: 'scanStorehousePositon', payload: { res, data } });
             break;
           case 'scanInstock':
             // 扫码入库操作
@@ -213,6 +212,31 @@ export default {
         }
 
       }
+    },
+
+    // app获取二维码数据
+    * appAction({ payload }, { select, call, put }) {
+      const states = yield select(states => states['qrCode']);
+      const codeId = payload.code;
+      const action = states.action;
+      switch (action) {
+        case 'instock':
+          yield put({ type: 'scanCodeState', payload: { codeId } });
+          break;
+        default:
+          // 没有动作跳路由
+          // 获取数据
+          const res = yield call(() => request({
+            url: '/orCode/backObject',
+            method: 'GET',
+            params: {
+              id: codeId,
+            },
+          }));
+          yield put({ type: 'router', payload: { codeId, type: res.type } });
+          break;
+      }
+
     },
   },
 };

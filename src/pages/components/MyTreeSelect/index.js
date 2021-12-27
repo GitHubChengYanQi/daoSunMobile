@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
@@ -21,7 +21,7 @@ const getParentValue = (value, data) => {
   return [];
 };
 
-const MyTreeSelect = ({ api, value, poputTitle, defaultParams, onChange, show, title, clear, onOk }) => {
+const MyTreeSelect = ({ api, value, poputTitle,arrow = true, defaultParams, onChange,  title, clear, onOk },ref) => {
 
   const { data } = useRequest(api, {
     defaultParams,
@@ -29,9 +29,14 @@ const MyTreeSelect = ({ api, value, poputTitle, defaultParams, onChange, show, t
 
   const [visible, setVisible] = useState();
 
-  useEffect(() => {
-    setVisible(show);
-  }, [show]);
+  const show = () => {
+    setVisible(true);
+  }
+
+  useImperativeHandle(ref,()=>({
+    show,
+  }))
+
 
 
   let valueArray = [];
@@ -63,7 +68,7 @@ const MyTreeSelect = ({ api, value, poputTitle, defaultParams, onChange, show, t
 
   return (
     <>
-      <ListItem arrow={true} style={{ padding: 0, border: 'none' }} onClick={() => {
+      <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
       }}>
         {valueArray.length > 0 ? valueArray.map((items, index) => {
@@ -105,4 +110,4 @@ const MyTreeSelect = ({ api, value, poputTitle, defaultParams, onChange, show, t
   );
 };
 
-export default MyTreeSelect;
+export default React.forwardRef(MyTreeSelect);

@@ -6,7 +6,7 @@ import { commonArea, CustomerNameListSelect } from '../Repair/RepairUrl';
 import MyTreeSelect from '../components/MyTreeSelect';
 import { DatePicker, Input, NumberInput, TextArea } from 'weui-react-v2';
 import UploadImg from './UploadImg';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Affix } from 'antd';
 
 const { Item: FromItem } = Form;
@@ -31,7 +31,7 @@ const CreateRepair = () => {
         content:'报修成功！',
         position: 'bottom',
       });
-      router.goBack();
+      history.goBack();
     },
   });
 

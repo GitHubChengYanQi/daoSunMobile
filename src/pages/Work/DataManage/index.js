@@ -1,5 +1,5 @@
 import { Affix, Col, Row } from 'antd';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Button, Search } from 'weui-react-v2';
 import React, { useState } from 'react';
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
@@ -18,7 +18,7 @@ const DataManage = () => {
 
         <Col span={4} >
           <Button type='link' style={{ padding: 14 }} icon={<PlusOutlined />} onClick={() => {
-            router.push('/Work/DataManage/DataAdd');
+            history.push('/Work/DataManage/DataAdd');
           }} />
         </Col>
 

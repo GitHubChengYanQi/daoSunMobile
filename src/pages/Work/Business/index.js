@@ -6,7 +6,7 @@ import {
 import {
   FilterOutlined, PlusOutlined,
 } from '@ant-design/icons';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Affix, Col, Row } from 'antd';
 import BusinessList from './BusinessList';
 import { Popup } from 'antd-mobile';
@@ -26,7 +26,7 @@ const Business = () => {
           <Row gutter={24} style={{ padding: 8 }}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
-                router.push('/Work/Business/BusinessAdd');
+                history.push('/Work/Business/BusinessAdd');
               }} />
             </Col>
             <Col span={16}>

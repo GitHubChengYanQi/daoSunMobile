@@ -1,6 +1,9 @@
 import { useDebounceEffect } from 'ahooks';
 import { connect } from 'dva';
-import MyDialog from '../components/MyDialog';
+import MyEmpty from '../components/MyEmpty';
+import { ScanOutlined } from '@ant-design/icons';
+import React from 'react';
+import LinkButton from '../components/LinkButton';
 
 // https://dasheng-soft.picp.vip/#/OrCode?id=1453935045308170242
 
@@ -26,6 +29,10 @@ const OrCode = (props) => {
   });
 
 
-  return <MyDialog visible={true} />;
+  return <MyEmpty description={<LinkButton onClick={() => {
+    props.dispatch({
+      type: 'qrCode/wxCpScan',
+    });
+  }} title={<><ScanOutlined />点击扫码</>} />} />;
 };
 export default connect(({ qrCode }) => ({ qrCode }))(OrCode);

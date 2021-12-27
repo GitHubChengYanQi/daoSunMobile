@@ -4,7 +4,7 @@ import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
 import { Card, InfiniteScroll } from 'antd-mobile';
 import { Badge, Col, Row } from 'antd';
 import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
-import { router } from 'umi';
+import { history } from 'umi';
 
 let pages = 1;
 let limit = 10;
@@ -69,7 +69,7 @@ const ContractList = ({select,customerId}) => {
           return (
             <List key={index}>
               <ListItem onClick={() => {
-                // router.push('/Work/Business/BusinessDetail');
+                // history.push('/Work/Business/BusinessDetail');
               }}>
                 <Card style={{ padding: 0 }} title={items.name}
                       extra={items.audit ? <Badge color='green' text='已审核' /> : <Badge color='red' text='未审核' />}>
@@ -97,12 +97,12 @@ const ContractList = ({select,customerId}) => {
                 <Flex type='flex' justify='space-around'>
                   <FlexItem>
                     <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                      router.push('/Work/Customer/Track?2');
+                      history.push('/Work/Customer/Track?2');
                     }}> 跟进</Button>
                   </FlexItem>
                   <FlexItem>
                     <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                      // router.push('/Work/Business/BusinessDetail');
+                      // history.push('/Work/Business/BusinessDetail');
                     }}> 更多</Button></FlexItem>
                 </Flex>
               </ListItem>}

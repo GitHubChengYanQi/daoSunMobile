@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRequest } from '../../../util/Request';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Button, Card, Form, Image, List, Toast } from 'antd-mobile';
 import { DatePicker, Input } from 'weui-react-v2';
 import MyPicker from '../../components/MyPicker';
@@ -107,7 +107,7 @@ const EngineerRepair = (props) => {
                 content: '派工成功！',
                 position: 'bottom',
               });
-              router.goBack();
+              history.goBack();
             });
           }}
           footer={

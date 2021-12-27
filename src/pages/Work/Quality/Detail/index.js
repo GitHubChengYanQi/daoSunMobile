@@ -5,7 +5,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, EyeOutlined } from '@ant-desi
 import { Gallery } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
-import { router } from 'umi';
+import { history } from 'umi';
 import { useDebounceEffect } from 'ahooks';
 
 
@@ -103,7 +103,7 @@ const Detail = (props) => {
   }
 
   return <Card title='质检详情' extra={<LinkButton title='返回' onClick={() => {
-    router.push(`/Work/Quality?id=${qualityDetail.qualityTaskId}`);
+    history.push(`/Work/Quality?id=${qualityDetail.qualityTaskId}`);
   }} />}>
     {data.length > 0 ? <Collapse accordion>
         {

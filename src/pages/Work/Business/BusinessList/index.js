@@ -1,5 +1,5 @@
 import { Button, Flex, FlexItem, List, ListItem, Spin } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Card, InfiniteScroll } from 'antd-mobile';
 import { Col, Row } from 'antd';
 import { EllipsisOutlined, WhatsAppOutlined } from '@ant-design/icons';
@@ -66,7 +66,7 @@ const BusinessList = ({select}) => {
         return (
           <List key={index}>
             <ListItem onClick={() => {
-              router.push(`/Work/Business/BusinessDetail?${items.businessId}`);
+              history.push(`/Work/Business/BusinessDetail?${items.businessId}`);
             }}>
               <Card style={{ padding: 0 }} extra={items.customer ? items.customer.customerName : null} title={items.businessName}>
                 <Row gutter={24}>
@@ -94,12 +94,12 @@ const BusinessList = ({select}) => {
               <Flex type='flex' justify='space-around'>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<WhatsAppOutlined />} onClick={() => {
-                    router.push(`/Work/Customer/Track?classify=1&customerId=${items.customerId}&businessId=${items.businessId}`);
+                    history.push(`/Work/Customer/Track?classify=1&customerId=${items.customerId}&businessId=${items.businessId}`);
                   }}> 跟进</Button>
                 </FlexItem>
                 <FlexItem>
                   <Button type='link' style={{ padding: 0 }} icon={<EllipsisOutlined />} onClick={() => {
-                    router.push(`/Work/Business/BusinessDetail?${items.businessId}`);
+                    history.push(`/Work/Business/BusinessDetail?${items.businessId}`);
                   }}> 更多</Button></FlexItem>
               </Flex>
             </ListItem>

@@ -2,7 +2,7 @@ import React from 'react';
 import { useRequest } from '../../../util/Request';
 import { Button, Card, Divider, Form, Image, List, Rate } from 'antd-mobile';
 import { TextArea } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 
 const { Item: ListItem } = List;
 
@@ -31,7 +31,7 @@ const EvaluationPage = (props) => {
   }, {
     manual: true,
     onSuccess: async () => {
-      router.goBack();
+      history.goBack();
     },
   });
 

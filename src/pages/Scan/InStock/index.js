@@ -1,16 +1,20 @@
 import { Button, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
 import { Col, Row } from 'antd';
 import { BarsOutlined, ScanOutlined } from '@ant-design/icons';
-import React, { useEffect,  useState } from 'react';
+import React, {  useRef, useState } from 'react';
 import MyTreeSelect from '../../components/MyTreeSelect';
 import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
-import { useBoolean } from 'ahooks';
 import TreeSelectSee from '../../components/TreeSelectSee';
 import { WhiteSpace } from 'weui-react-v2';
 import MyEmpty from '../../components/MyEmpty';
-import MyDialog from '../../components/MyDialog';
 import { connect } from 'dva';
+import { getHeader } from '../../components/GetHeader';
+import { history } from 'umi';
+import CodeBind from '../CodeBind';
+import { MyLoading } from '../../components/MyLoading';
+import { useDebounceEffect } from 'ahooks';
+import IsDev from '../../../components/IsDev';
 
 
 const InStock = (props) => {
@@ -39,7 +43,7 @@ const InStock = (props) => {
     },
   });
 
-  useEffect(() => {
+  useDebounceEffect(() => {
     if (id) {
       run({
         params: {
@@ -48,7 +52,9 @@ const InStock = (props) => {
       });
     }
 
-  }, [id, run]);
+  }, [id], {
+    wait: 0,
+  });
 
 
   const [stroeHousePostion, setStroeHousePostion] = useState();
@@ -61,7 +67,39 @@ const InStock = (props) => {
 
   const [instockNumber, setInstockNumber] = useState(0);
 
-  const [show, { setTrue, setFalse }] = useBoolean();
+  const getSkuResult = (items, br) => {
+    return <>
+      {items.sku && items.sku.skuName}
+      &nbsp;/&nbsp;
+      {items.spuResult && items.spuResult.name}
+      {br ? <br /> : <>&nbsp;&nbsp;</>}
+      {
+        items.backSkus
+        &&
+        items.backSkus.length > 0
+        &&
+        items.backSkus[0].attributeValues
+        &&
+        items.backSkus[0].attributeValues.attributeValues
+        &&
+        <em style={{ color: '#c9c8c8', fontSize: 12 }}>
+          (
+          {
+            items.backSkus
+            &&
+            items.backSkus.map((items, index) => {
+              return <span key={index}>
+                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
+                      </span>;
+            })
+          }
+          )
+        </em>
+      }
+    </>;
+  };
+
+  const showRef = useRef();
 
 
   const { loading: storehousepostionLoading, data: storehouseposition } = useRequest(storehousePositionsTreeView);
@@ -73,7 +111,6 @@ const InStock = (props) => {
       fill='none'
       style={{ padding: 0 }}
       onClick={() => {
-        setTrue();
         //扫描库位
         props.dispatch({
           type: 'qrCode/wxCpScan',
@@ -125,7 +162,7 @@ const InStock = (props) => {
 
 
   if (loading)
-    return <MyDialog visible={true} />;
+    return <MyLoading />;
 
   if (!data)
     return <MyEmpty />;
@@ -145,115 +182,128 @@ const InStock = (props) => {
         </Collapse.Panel>
 
         <Collapse.Panel key='1' title='入库清单'>
-          <List.Item>
-            <Row gutter={24}>
-              <Col span={16} style={{ textAlign: 'center' }}>
-                物料信息
-              </Col>
-              <Col span={8} style={{ textAlign: 'center' }}>
-                操作
-              </Col>
-            </Row>
-          </List.Item>
-          {data.instockListResults && data.instockListResults.length > 0 ?
-            data.instockListResults.map((items, index) => {
-              if (items.number > 0) {
-                return <List.Item key={index}>
-                  <Row gutter={24}>
-                    <Col span={16}>
-                      {items.sku && items.sku.skuName}
-                      &nbsp;/&nbsp;
-                      {items.spuResult && items.spuResult.name}
-                      &nbsp;&nbsp;
-                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                        (
-                        {
-                          items.backSkus
-                          &&
-                          items.backSkus.map((items, index) => {
-                            return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-                          })
-                        }
-                        )
-                      </em>
-                    </Col>
-                    <Col span={8} style={{ textAlign: 'center' }}>
-                      <Space>
-                        <Button
-                          color='primary'
-                          fill='none'
-                          style={{ padding: 0 }}
-                          onClick={async () => {
-                            await setItems(items);
-                            await setBatch(false);
-                            await setInstockNumber(1);
-                            await setNumber(1);
-                            await props.dispatch({
-                              type: 'qrCode/wxCpScan',
-                              payload: {
-                                items: {
-                                  Id: items.skuId,
-                                  type: 'item',
-                                  ...items,
-                                },
-                                batch: false,
-                                action: 'scanInstock',
-                              },
-                            });
-                          }}
-                        ><ScanOutlined />扫码入库</Button>
-                      </Space>
-                    </Col>
-                  </Row>
-                  <WhiteSpace size='sm' />
-                  <Row gutter={24}>
-                    <Col span={16}>
-                      {items.brandResult && items.brandResult.brandName}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      ×
-                      {items.number}
-                    </Col>
-                    <Col span={8} style={{ textAlign: 'center' }}>
-                      <Space>
-                        <Button
-                          color='primary'
-                          fill='none'
-                          style={{ padding: 0 }}
-                          onClick={async () => {
-                            await setBatch(true);
-                            await setItems(items);
-                            await setInstockNumber(items.number);
-                            await setNumber(items.number);
-                            await props.dispatch({
-                              type: 'qrCode/wxCpScan',
-                              payload: {
-                                items: {
-                                  Id: items.skuId,
-                                  type: 'item',
-                                  ...items,
-                                },
-                                batch: true,
-                                action: 'scanInstock',
-                              },
-                            });
-                          }}
-                        ><BarsOutlined />批量入库</Button>
-                      </Space>
-                    </Col>
-                  </Row>
-                </List.Item>;
-              } else {
-                return null;
+          {data.instockListResults
+          &&
+          data.instockListResults.length > 0
+          &&
+          data.instockListResults.filter((value) => {
+            return value.number !== 0;
+          }).length !== 0
+            ?
+            <>
+              <List.Item>
+                <Row gutter={24}>
+                  <Col span={16} style={{ textAlign: 'center' }}>
+                    物料信息
+                  </Col>
+                  <Col span={8} style={{ textAlign: 'center' }}>
+                    操作
+                  </Col>
+                </Row>
+              </List.Item>
+              {
+                data.instockListResults.map((items, index) => {
+                  if (items.number > 0) {
+                    return <List.Item key={index}>
+                      <Row gutter={24}>
+                        <Col span={16}>
+                          {getSkuResult(items)}
+                        </Col>
+                        <Col span={8} style={{ textAlign: 'center' }}>
+                          <Space>
+                            <Button
+                              color='primary'
+                              fill='none'
+                              style={{ padding: 0 }}
+                              onClick={async () => {
+                                if (IsDev() ? false : getHeader()) {
+                                  await setItems(items);
+                                  await setBatch(false);
+                                  await setInstockNumber(1);
+                                  await setNumber(1);
+                                  await props.dispatch({
+                                    type: 'qrCode/wxCpScan',
+                                    payload: {
+                                      items: {
+                                        Id: items.skuId,
+                                        type: 'item',
+                                        ...items,
+                                      },
+                                      batch: false,
+                                      action: 'scanInstock',
+                                    },
+                                  });
+                                } else {
+                                  history.push({
+                                    pathname: '/Scan/InStock/AppInstock',
+                                    state: {
+                                      items,
+                                      data,
+                                      batch: false,
+                                    },
+                                  });
+                                }
+                              }}
+                            ><ScanOutlined />扫码入库</Button>
+                          </Space>
+                        </Col>
+                      </Row>
+                      <WhiteSpace size='sm' />
+                      <Row gutter={24}>
+                        <Col span={16}>
+                          {items.brandResult && items.brandResult.brandName}
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          ×
+                          {items.number}
+                        </Col>
+                        <Col span={8} style={{ textAlign: 'center' }}>
+                          <Space>
+                            <Button
+                              color='primary'
+                              fill='none'
+                              style={{ padding: 0 }}
+                              onClick={async () => {
+                                if (IsDev() ? false : getHeader()) {
+                                  await setBatch(true);
+                                  await setItems(items);
+                                  await setInstockNumber(items.number);
+                                  await setNumber(items.number);
+                                  await props.dispatch({
+                                    type: 'qrCode/wxCpScan',
+                                    payload: {
+                                      items: {
+                                        Id: items.skuId,
+                                        type: 'item',
+                                        ...items,
+                                      },
+                                      batch: true,
+                                      action: 'scanInstock',
+                                    },
+                                  });
+                                } else {
+                                  history.push({
+                                    pathname: '/Scan/InStock/AppInstock',
+                                    state: {
+                                      items,
+                                      data,
+                                      batch: true,
+                                    },
+                                  });
+                                }
+                              }}
+                            ><BarsOutlined />批量入库</Button>
+                          </Space>
+                        </Col>
+                      </Row>
+                    </List.Item>;
+                  } else {
+                    return null;
+                  }
+                })
               }
-            })
+            </>
             :
-            <Empty
-              style={{ padding: '64px 0' }}
-              imageStyle={{ width: 128 }}
-              description='暂无数据'
-            />}
+            <MyEmpty description='已全部入库' />}
         </Collapse.Panel>
 
         <Collapse.Panel key='2' title='入库明细'>
@@ -263,46 +313,18 @@ const InStock = (props) => {
             <>
               {data.instockResults && data.instockResults.length > 0 ?
                 data.instockResults.map((items, index) => {
-                  return <List.Item key={index}>
-                    <Row gutter={24}>
-                      <Col span={20}>
-                        {items.sku && items.sku.skuName}
-                        &nbsp;/&nbsp;
-                        {items.spuResult && items.spuResult.name}
-                        &nbsp;&nbsp;
-                        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                          (
-                          {
-                            items.backSkus
-                            &&
-                            items.backSkus.map((items, index) => {
-                              return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-                            })
-                          }
-                          )
-                        </em>
-                      </Col>
-                      <Col span={4}>
-                        ×
-                        {items.number}
-                      </Col>
-                    </Row>
-
-                    <Row gutter={24}>
-                      <Col span={12}>
-                        <strong>品牌(供应商):</strong>{items.brandResult && items.brandResult.brandName}
-                      </Col>
-                      <Col span={12}>
-                        <strong>仓库库位：</strong>
-                        {items.storehousePositions
-                          ?
-                          <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
-                          :
-                          (items.storehouseResult && items.storehouseResult.name)}
-                      </Col>
-                    </Row>
+                  return <List.Item
+                    key={index}
+                    extra={<>×
+                      {items.number}</>}>
+                    {getSkuResult(items)}
+                    <br />
+                    <strong>库位：</strong>
+                    {items.storehousePositions
+                      ?
+                      <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
+                      :
+                      (items.storehouseResult && items.storehouseResult.name)}
                   </List.Item>;
                 })
                 :
@@ -345,7 +367,7 @@ const InStock = (props) => {
                 poputTitle={scanStorehousePositon()}
                 title='选择库位'
                 value={(qrCode.stroeHousePostion && qrCode.stroeHousePostion.storehousePositionsId) || stroeHousePostion}
-                show={show}
+                ref={showRef}
                 api={storehousePositionsTreeView}
                 defaultParams={
                   {
@@ -356,14 +378,7 @@ const InStock = (props) => {
                 }
                 onChange={(value) => {
                   setStroeHousePostion(value);
-                  setFalse();
                 }}
-                // onOk={() => {
-                //   setFalse();
-                // }}
-                // clear={() => {
-                //   setFalse();
-                // }}
               />
 
               {scanStorehousePositon()}
@@ -371,19 +386,17 @@ const InStock = (props) => {
           </div>
         }
         onClose={() => {
-          setFalse();
-          props.dispatch({
-            type: 'qrCode/scanCodeState',
-            payload: {
-              instockAction: false,
-            },
+          scanCodeState({
+            instockAction: null,
           });
         }}
         onAction={async (action) => {
           if (action.key === 'instock') {
             if (stroeHousePostion || qrCode.stroeHousePostion) {
               await request({
-                url: '/orCode/instockByCode', method: 'POST', data: {
+                url: '/orCode/instockByCode',
+                method: 'POST',
+                data: {
                   type: 'item',
                   codeId: qrCode.codeId,
                   Id: items.skuId,
@@ -395,12 +408,8 @@ const InStock = (props) => {
                 },
               }).then(async (res) => {
                 await refresh();
-                setFalse();
-                await props.dispatch({
-                  type: 'qrCode/scanCodeState',
-                  payload: {
-                    instockAction: false,
-                  },
+                await scanCodeState({
+                  instockAction: null,
                 });
                 if (res !== 0) {
                   await setInstockNumber(res);
@@ -418,17 +427,13 @@ const InStock = (props) => {
                 }
               });
             } else {
-              setTrue();
+              showRef.current.show();
             }
             //如果入库成功
           } else {
-            props.dispatch({
-              type: 'qrCode/scanCodeState',
-              payload: {
-                instockAction: false,
-              },
+            scanCodeState({
+              instockAction: null,
             });
-            setFalse();
           }
 
         }}
@@ -449,23 +454,7 @@ const InStock = (props) => {
         visible={items && qrCode.batchBind}
         title={
           items && <>
-            {items.sku && items.sku.skuName}
-            &nbsp;/&nbsp;
-            {items.spuResult && items.spuResult.name}
-            &nbsp;&nbsp;
-            <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-              (
-              {
-                items.backSkus
-                &&
-                items.backSkus.map((items, index) => {
-                  return <span key={index}>
-          {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-            </span>;
-                })
-              }
-              )
-            </em>
+            {getSkuResult(items)}
           </>}
         content={
           <div style={{ textAlign: 'center' }}>
@@ -498,8 +487,8 @@ const InStock = (props) => {
               });
             } else {
               scanCodeState({
-                bind:true,
-              })
+                bind: true,
+              });
               scanCodeState({
                 batchBind: false,
               });
@@ -524,58 +513,38 @@ const InStock = (props) => {
       />
 
       {/*绑定二维码*/}
-      <Dialog
-        visible={items && qrCode.codeId && qrCode.bind}
-        content={items && `“ ${items.sku && items.sku.skuName} \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
-        onAction={async (action) => {
-          if (action.key === 'ok') {
-            await request({
-              url: '/orCode/backCode',
-              method: 'POST',
-              data: {
-                codeId: qrCode.codeId,
-                source: 'item',
-                ...items,
-                id: items.skuId,
-                number: number,
-                inkindType: '入库',
-              },
-            }).then((res) => {
-              if (typeof res === 'string') {
-                scanCodeState({
-                  bind: false,
-                  instockAction: true,
-                });
-                Toast.show({
-                  content: '绑定成功！',
-                  position: 'bottom',
-                });
-              }else {
-                scanCodeState({
-                  bind: false,
-                });
-              }
-            })
-          } else {
-            scanCodeState({
-              bind: false,
-            });
-          }
+      {items && <CodeBind
+        visible={qrCode.codeId && qrCode.bind}
+        title={`“ ${items.sku && items.sku.skuName} \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
+        data={{
+          codeId: qrCode.codeId,
+          source: 'item',
+          ...items,
+          id: items.skuId,
+          number: number,
+          inkindType: '入库',
         }}
-        actions={[
-          [
-            {
-              key: 'ok',
-              text: '是',
-            },
-            {
-              key: 'no',
-              text: '否',
-            },
-          ],
-        ]}
-      />
-
+        onSuccess={() => {
+          scanCodeState({
+            bind: false,
+            instockAction: {},
+          });
+          Toast.show({
+            content: '绑定成功！',
+            position: 'bottom',
+          });
+        }}
+        onError={() => {
+          scanCodeState({
+            bind: false,
+          });
+        }}
+        onClose={() => {
+          scanCodeState({
+            bind: false,
+          });
+        }}
+      />}
     </>
   );
 };

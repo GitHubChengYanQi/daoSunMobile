@@ -12,7 +12,7 @@ import {
   TextArea,
   Toast,
 } from 'antd-mobile';
-import { router } from 'umi';
+import { history } from 'umi';
 import ScanCodeBind from '../../../Scan/ScanCodeBind';
 import CreateInstock from '../CreateInstock';
 import { useDebounceEffect } from 'ahooks';
@@ -267,7 +267,7 @@ const Subtasks = ({ id }) => {
       },
     }).then(() => {
       // 添加成功跳转到执行质检任务页面
-      router.push({
+      history.push({
         pathname: '/Work/Quality/QualityTask',
         state: {
           items,
@@ -337,7 +337,7 @@ const Subtasks = ({ id }) => {
             '--background': '#ffffff',
           }}
           onFocus={() => {
-            router.push({
+            history.push({
               pathname: '/Work/Quality/SelectQrCode',
               state: {
                 qrCodeIds,
@@ -381,7 +381,7 @@ const Subtasks = ({ id }) => {
                         onClick={async () => {
                           await autoBind({
                             data: {
-                              taskDetailId: items.qualityTaskDetailId,
+                              sourceId: items.qualityTaskDetailId,
                               source: 'item',
                               brandId: items.brandId,
                               id: items.skuId,
@@ -395,7 +395,7 @@ const Subtasks = ({ id }) => {
                     </Space>}
                   </Space>}>
                   <div onClick={() => {
-                    router.push({
+                    history.push({
                       pathname: '/Work/Quality/Detail',
                       state: {
                         qualityDetails: items,
@@ -519,7 +519,7 @@ const Subtasks = ({ id }) => {
         });
 
         if (inkindId.length > 0) {
-          router.push({
+          history.push({
             pathname: '/Work/Quality/QualityTask',
             state: {
               items,

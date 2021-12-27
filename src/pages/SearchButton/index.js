@@ -5,7 +5,7 @@ import {
 } from 'weui-react-v2';
 import { Grid } from 'antd-mobile';
 import { ClockCircleOutlined, RightOutlined} from '@ant-design/icons';
-import { router } from 'umi';
+import { history } from 'umi';
 import React from 'react';
 
 const SearchButton = () =>{
@@ -26,29 +26,29 @@ const SearchButton = () =>{
         <Grid data={data} activeStyle={false} />
       </div>
       <List title="搜素历史">
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
 
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
-        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
+        <ListItem thumb={<ClockCircleOutlined style={{ fontSize: '4vw' }} />} extra={<div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}> {<RightOutlined />}</div>}>
           搜素关键词
         </ListItem>
       </List>

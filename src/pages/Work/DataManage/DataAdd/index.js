@@ -4,7 +4,7 @@ import { Button, Card, Form, Selector, TextArea, Toast } from 'antd-mobile';
 import { FormItem } from 'antd-mobile/es/components/form/form-item';
 import { Input } from 'weui-react-v2';
 
-import { router } from 'umi';
+import { history } from 'umi';
 
 import MySelector from '../../../components/MySelector';
 
@@ -31,7 +31,7 @@ const DataAdd = () => {
           content:"保存成功",
           position: 'bottom',
         })
-        router.goBack();
+        history.goBack();
       },
     },
   );
@@ -74,7 +74,7 @@ const DataAdd = () => {
           <div style={{ textAlign: 'center', margin: 8 }}>
             <Button color='primary' type='submit' style={{ width: '20%', marginRight: '5%' }}>保存</Button>
             <Button color='default' style={{ width: '20%', marginRight: '5%' }} onClick={() => {
-              router.goBack();
+              history.goBack();
             }}>返回</Button>
           </div>
 

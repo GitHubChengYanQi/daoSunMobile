@@ -8,8 +8,7 @@ import {
 import { FilterOutlined, PlusOutlined } from '@ant-design/icons';
 import CustomerList from './CustomerList';
 import ContactsList from './ContactsList';
-import { router } from 'umi';
-import './index.scss';
+import { history } from 'umi';
 import { Affix, Col, Row } from 'antd';
 import Screening from './Screening';
 import { Popup } from 'antd-mobile';
@@ -43,7 +42,7 @@ const Customer = () => {
           <Row gutter={24} style={{ padding: 8, backgroundColor: '#fff' }}>
             <Col span={4}>
               <Button type='link' style={{ paddingTop: 16 }} icon={<PlusOutlined />} onClick={() => {
-                router.push('/Work/Customer/CustomerAdd');
+                history.push('/Work/Customer/CustomerAdd');
               }} />
             </Col>
             <Col span={16}>

@@ -17,7 +17,7 @@ import style from '../index.css';
 import { NumberInput, TextArea, WhiteSpace } from 'weui-react-v2';
 import pares from 'html-react-parser';
 import LinkButton from '../../../components/LinkButton';
-import { router } from 'umi';
+import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import ImgUpload from '../../../components/Upload/ImgUpload';
 import UpLoadImg from '../../../components/Upload';
@@ -98,7 +98,7 @@ const QualityTask = (props) => {
     {
       manual: true,
       onSuccess: () => {
-        router.push(`/Work/Quality?id=${items.qualityTaskId}`);
+        history.push(`/Work/Quality?id=${items.qualityTaskId}`);
       },
     },
   );
@@ -129,7 +129,7 @@ const QualityTask = (props) => {
             },
           });
         } else {
-          router.push(`/Work/Quality?id=${items.qualityTaskId}`);
+          history.push(`/Work/Quality?id=${items.qualityTaskId}`);
         }
       } else {
         // 提示未填写的必填项
@@ -460,7 +460,7 @@ const QualityTask = (props) => {
 
   return <div>
     <Card title='质检任务' extra={<LinkButton onClick={() => {
-      router.push(`/Work/Quality?id=${items.qualityTaskId}`);
+      history.push(`/Work/Quality?id=${items.qualityTaskId}`);
     }} title='返回' />}>
       <>
         <List.Item>

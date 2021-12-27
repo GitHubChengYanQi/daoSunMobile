@@ -8,7 +8,7 @@ import {
 
 import { Affix } from 'antd';
 import styles from './index.css';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Badge, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { AuditOutlined, MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
@@ -36,12 +36,12 @@ const Work = () => {
       <List title={<div>常用工具</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-sousuo' />} onClick={() => {
-            router.push('/SearchButton');
+            history.push('/SearchButton');
           }}>
             <div className={styles.size}>全局查找</div>
           </GridItem>
           <GridItem icon={<AuditOutlined />} onClick={() => {
-            router.push('/Work/ProcessTask');
+            history.push('/Work/ProcessTask');
           }}>
             <div className={styles.size}>审批</div>
           </GridItem>
@@ -68,7 +68,7 @@ const Work = () => {
             <div className={styles.size}>拜访签到</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-rili' />} onClick={() => {
-            router.push('/Schedule');
+            history.push('/Schedule');
           }}>
             <div className={styles.size}>日程管理</div>
           </GridItem>
@@ -80,7 +80,7 @@ const Work = () => {
           <GridItem
             icon={<Icon type='icon-dingdan1' />}
             onClick={() => {
-              router.push('/Work/Business');
+              history.push('/Work/Business');
             }}>
             <div className={styles.size}>项目列表</div>
           </GridItem>
@@ -94,7 +94,7 @@ const Work = () => {
           <GridItem
             icon={<UserDeleteOutlined />}
             onClick={() => {
-              router.push('/Work/Competitor');
+              history.push('/Work/Competitor');
             }}
           >
             <div className={styles.size}>竞争对手</div>
@@ -102,7 +102,7 @@ const Work = () => {
           <GridItem
             icon={<MoneyCollectOutlined />}
             onClick={() => {
-              router.push('/Work/Quote');
+              history.push('/Work/Quote');
             }}
           >
             <div className={styles.size}>报价管理</div>
@@ -119,14 +119,14 @@ const Work = () => {
                 style={{ fontSize: 32 }} />
             </Badge>}
             onClick={() => {
-              router.push('/Work/Customer');
+              history.push('/Work/Customer');
             }}
           >
             <div className={styles.size}>客户列表</div>
           </GridItem>
           <GridItem
             onClick={() => {
-              router.push('/Work/Customer');
+              history.push('/Work/Customer');
             }}
             icon={<Badge content={5}><Icon type='icon-shequ' style={{ fontSize: 32 }} /></Badge>}
           >
@@ -135,7 +135,7 @@ const Work = () => {
           <GridItem
             icon={<Badge content={0}><Icon type='icon-yuangongliebiao' style={{ fontSize: 32 }} /></Badge>}
             onClick={() => {
-              router.push('/Work/Customer?contacts');
+              history.push('/Work/Customer?contacts');
             }}>
             <div className={styles.size}>联系人</div>
           </GridItem>
@@ -150,7 +150,7 @@ const Work = () => {
       <List className={styles.title} title={<div>合同管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            router.push('/Work/Contract');
+            history.push('/Work/Contract');
           }}>
             <div className={styles.size}>合同列表</div>
           </GridItem>
@@ -165,7 +165,7 @@ const Work = () => {
       <List className={styles.title} title={<div>发货申请管理</div>}>
         <Grid>
           <GridItem onClick={() => {
-            router.push('/Work/OutstockApply');
+            history.push('/Work/OutstockApply');
           }} icon={<Icon type='icon-fahuoshenqing' />}>
             <div className={styles.size}>发货申请列表</div>
           </GridItem>
@@ -174,12 +174,12 @@ const Work = () => {
       <List className={styles.title} title={<div>售后管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-gongdanliebiao' onClick={() => {
-            router.push('/Repair');
+            history.push('/Repair');
           }} />}>
             <div className={styles.size}>工单管理</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-baoxiu' onClick={() => {
-            router.push('/CreateRepair');
+            history.push('/CreateRepair');
           }} />}>
             <div className={styles.size}>创建报修</div>
           </GridItem>
@@ -189,19 +189,19 @@ const Work = () => {
       <List className={styles.title} title={<div>仓储管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // router.push('/Work/DataManage');
+            // history.push('/Work/DataManage');
             toast();
           }}>
             <div className={styles.size}>入库管理</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // router.push('/Work/DataManage');
+            // history.push('/Work/DataManage');
             toast();
           }}>
             <div className={styles.size}>库存管理</div>
           </GridItem>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // router.push('/Work/DataManage');
+            // history.push('/Work/DataManage');
             toast();
           }}>
             <div className={styles.size}>出库管理</div>
@@ -212,7 +212,7 @@ const Work = () => {
       <List className={styles.title} title={<div>生产管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // router.push('/Work/DataManage');
+            // history.push('/Work/DataManage');
             toast();
           }}>
             <div className={styles.size}>质检任务</div>
@@ -224,9 +224,18 @@ const Work = () => {
       <List className={styles.title} title={<div>产品资料管理</div>}>
         <Grid>
           <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            router.push('/Work/DataManage');
+            history.push('/Work/DataManage');
           }}>
             <div className={styles.size}>产品资料</div>
+          </GridItem>
+        </Grid>
+      </List>
+      <List className={styles.title} title={<div>操作</div>}>
+        <Grid>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+
+          }}>
+            <div className={styles.size}>退出</div>
           </GridItem>
         </Grid>
       </List>

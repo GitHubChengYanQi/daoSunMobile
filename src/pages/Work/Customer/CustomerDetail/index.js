@@ -2,7 +2,7 @@ import React  from 'react';
 import { Avatar, Col, Row, Select } from 'antd';
 import { Button, Flex, FlexItem,  Skeleton, TabPanel, Tabs, WhiteSpace } from 'weui-react-v2';
 import ContactsList from '../ContactsList';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Card, Collapse,  Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import Dynamic from '../Dynamic';
@@ -61,7 +61,7 @@ const CustomerDetail = () => {
                     type='link'
                     style={{ padding: 0 }}
                     onClick={() => {
-                      router.push(`/Work/Customer/Track?classify=0&customerId=${data.customerId}`);
+                      history.push(`/Work/Customer/Track?classify=0&customerId=${data.customerId}`);
                     }}>添加跟进</Button>
                 , value: '0',
               },
@@ -71,7 +71,7 @@ const CustomerDetail = () => {
                   size='small'
                   type='link'
                   onClick={() => {
-                    router.goBack();
+                    history.goBack();
                   }}>返回</Button>, value: '1',
               },
             ]} />

@@ -63,7 +63,7 @@ const QuoteList = ({ select }) => {
         return (
           <List key={index}>
             <ListItem onClick={() => {
-              // router.push('/Work/Business/BusinessDetail');
+              // history.push('/Work/Business/BusinessDetail');
             }}>
               <Card extra={<div>关联项目: <Button type='link'>{items.crmBusinessResult ? items.crmBusinessResult.businessName : '无'}</Button></div>} title={
                 items.competitorResult ? items.competitorResult.name : items.campType === 0 && '我方报价'

@@ -1,6 +1,6 @@
 import { Flex, FlexItem,   WhiteSpace } from 'weui-react-v2';
 import { Table } from 'antd';
-import { router } from 'umi';
+import { history } from 'umi';
 import {
   DollarCircleOutlined, DollarOutlined,
   DownloadOutlined, FileProtectOutlined,
@@ -163,7 +163,7 @@ const DataBoard = () => {
     <>
       <div>
         {/*<Card extra={<div style={{ fontSize: 14 }} onClick={() => {*/}
-        {/*  router.push('/CompleteTrack');*/}
+        {/*  history.push('/CompleteTrack');*/}
         {/*}}>详情 {<RightOutlined />}</div>} title='业绩目标'>*/}
         {/*  <canvas id='myChart' style={{ width: '100%', height: 260 }} />*/}
         {/*</Card>*/}
@@ -335,7 +335,7 @@ const DataBoard = () => {
         <Card
           title='成交排行'
           extra={<div onClick={() => {
-            router.push('/CompleteTrack');
+            history.push('/CompleteTrack');
           }}>详情 {<RightOutlined />}</div>}
         >
           <div>
@@ -346,7 +346,7 @@ const DataBoard = () => {
         <Card
           title='销售漏斗'
           extra={<div onClick={() => {
-            router.push('/CompleteTrack');
+            history.push('/CompleteTrack');
           }}>详情 {<RightOutlined />}</div>}
         >
           <div>
@@ -357,7 +357,7 @@ const DataBoard = () => {
         <Card
           title='销售预测'
           extra={<div onClick={() => {
-            router.push('/CompleteTrack');
+            history.push('/CompleteTrack');
           }}>详情 {<RightOutlined />}</div>}
         >
           <div>

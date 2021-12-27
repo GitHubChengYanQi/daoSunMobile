@@ -5,7 +5,7 @@ import {
 } from 'weui-react-v2';
 import { RightOutlined } from '@ant-design/icons';
 import React from 'react';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Select } from 'antd';
 import { Option } from 'antd/es/mentions';
 
@@ -142,7 +142,7 @@ const CompleteTtem = () =>{
       </Preview>
       <Preview subTitle={<div style={{marginLeft: 10, fontSize: 26}}>预约下次计划</div>} >
         <PreviewItem title="计划时间:">2020-09-09 10:00</PreviewItem>
-        <PreviewItem title="安排给:"><div style={{fontSize: 20}} onClick={()=>{router.push('/CompleteTrack');}}>自己 {<RightOutlined />}</div></PreviewItem>
+        <PreviewItem title="安排给:"><div style={{fontSize: 20}} onClick={()=>{history.push('/CompleteTrack');}}>自己 {<RightOutlined />}</div></PreviewItem>
         <PreviewItem title="事件主题:">2020-09-09 10:00</PreviewItem>
         <PreviewItem title="事项主题:">   <Select defaultValue="1" style={{width: '30%', backgroundColor: '#E6E6E6'}}>
           <Option value="1">日常维护</Option>

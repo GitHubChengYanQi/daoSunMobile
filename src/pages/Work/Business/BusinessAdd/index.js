@@ -5,7 +5,7 @@ import {
   List,
   ListItem, NumberInput,
 } from 'weui-react-v2';
-import { router } from 'umi';
+import { history } from 'umi';
 import { Card } from 'antd';
 import './index.css';
 import { Button, Dialog, Form } from 'antd-mobile';
@@ -76,7 +76,7 @@ const BusinessAdd = () => {
             <div style={{ textAlign: 'center' }}>
               <Button color='primary' type='submit' style={{ margin: 8 }}>保存</Button>
               <Button style={{ margin: 8 }} onClick={() => {
-                router.goBack();
+                history.goBack();
               }}>返回</Button>
             </div>
           }
@@ -93,7 +93,7 @@ const BusinessAdd = () => {
               Dialog.alert({
                 content: `项目已经被创建 创建人：${user && user.name}`,
                 onConfirm: () => {
-                  router.goBack();
+                  history.goBack();
                 },
               })
             });

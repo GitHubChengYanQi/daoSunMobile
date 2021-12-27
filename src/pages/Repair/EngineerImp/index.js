@@ -1,7 +1,7 @@
 import React  from 'react';
 import { useRequest } from '../../../util/Request';
 import { Button, Card, Form, Image, List } from 'antd-mobile';
-import { router } from 'umi';
+import { history } from 'umi';
 
 const { Item: ListItem } = List;
 
@@ -17,8 +17,8 @@ const EngineerImp = (props) => {
   }, {
     manual: true,
     onSuccess:()=>{
-      // router.push(`/Repair/RepairList?id=${repairId}&select=${select}`);
-      router.goBack();
+      // history.push(`/Repair/RepairList?id=${repairId}&select=${select}`);
+      history.goBack();
     }
   });
 
