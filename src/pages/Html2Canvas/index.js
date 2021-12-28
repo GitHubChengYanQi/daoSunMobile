@@ -87,7 +87,7 @@ const Html2Canvas = ({ ...props }, ref) => {
     }}
     actions={[{
       key: 'pring',
-      text: '已打印二维码',
+      text: '打印二维码',
     }]}
   />;
 };
