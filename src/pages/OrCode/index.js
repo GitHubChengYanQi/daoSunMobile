@@ -5,7 +5,7 @@ import { ScanOutlined } from '@ant-design/icons';
 import React from 'react';
 import LinkButton from '../components/LinkButton';
 
-// https://dasheng-soft.picp.vip/#/OrCode?id=1453935045308170242
+// https://dasheng-soft.picp.vip/#/OrCode?id=1475666613936861185
 
 const OrCode = (props) => {
 

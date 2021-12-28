@@ -50,7 +50,7 @@ export default {
       yield put({ type: 'clearCode' });
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
-        let code = '1475360769512423425'; // 入库
+        let code = '1475669259821264897'; // 入库
         // let code = '1475358083438198786'; // 出库
         // let code = '1475357188682711042'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
@@ -186,8 +186,8 @@ export default {
         },
       }));
       console.log(res);
-      if (JSON.stringify(res) !== '{}' && res.stockDetails){
-        yield put({ type: 'scanCodeState', payload: { outstockAction:res } });
+      if (JSON.stringify(res) !== '{}' && res.stockDetails) {
+        yield put({ type: 'scanCodeState', payload: { outstockAction: res } });
       }
     },
 
@@ -205,15 +205,13 @@ export default {
       const data = payload.data;
 
       let res = {};
-      if (!action || action === 'scanStorehousePositon') {
-        res = yield call(() => request({
-          url: '/orCode/backObject',
-          method: 'GET',
-          params: {
-            id: codeId,
-          },
-        }), codeId);
-      }
+      res = yield call(() => request({
+        url: '/orCode/backObject',
+        method: 'GET',
+        params: {
+          id: codeId,
+        },
+      }), codeId);
 
 
       if (codeId) {

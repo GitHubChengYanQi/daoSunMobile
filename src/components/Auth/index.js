@@ -169,7 +169,7 @@ const Auth = (props) => {
     return <>
       <Button onClick={() => {
         // const code = '1473977842541821954'; // 库位
-        const code = '1475357188682711042'; // 实物
+        const code = '1465969087541440515'; // 实物
         // const code = '1474546242691313666'; //入库
         props.dispatch({
           type: 'qrCode/appAction',

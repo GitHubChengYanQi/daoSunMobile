@@ -53,6 +53,7 @@ const Html2Canvas = ({ ...props }, ref) => {
       allowTaint: true,
     }).then((canvas) => {
       window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
+      setCodeId(null);
     });
     return null;
   };
@@ -80,10 +81,9 @@ const Html2Canvas = ({ ...props }, ref) => {
             height={100} />
         </Space>
       </div>
-      {canvasBase64()}
     </div>}
     onAction={() => {
-      setCodeId(null);
+      canvasBase64();
     }}
     actions={[{
       key: 'pring',
