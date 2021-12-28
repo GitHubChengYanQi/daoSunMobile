@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import MyNavBar from '../../../components/MyNavBar';
 import { Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
 import React, { useState } from 'react';
-import {  useRequest } from '../../../../util/Request';
+import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../../components/MyLoading';
 import { WhiteSpace } from 'weui-react-v2';
@@ -25,10 +25,11 @@ const AppOutstock = (props) => {
   const data = state && state.data;
 
   const [number, setNumber] = useState(1);
+  console.log(number);
 
-  const [stockDetail,setStockDetail] = useState({});
+  const [stockDetail, setStockDetail] = useState({});
 
-  const [batchOutstock,setBatchOutstock] = useState(false);
+  const [batchOutstock, setBatchOutstock] = useState(false);
 
   const clearCode = () => {
     props.dispatch({
@@ -60,7 +61,9 @@ const AppOutstock = (props) => {
         }
       }
     },
-    onError:()=>{clearCode()}
+    onError: () => {
+      clearCode();
+    },
   });
 
   useDebounceEffect(() => {
@@ -86,6 +89,7 @@ const AppOutstock = (props) => {
     manual: true,
     onSuccess: () => {
       clearCode();
+      setBatchOutstock(false);
       items.number = items.number - number;
       setNumber(1);
       Toast.show({
@@ -93,7 +97,10 @@ const AppOutstock = (props) => {
         position: 'bottom',
       });
     },
-    onError:()=>{clearCode()}
+    onError: () => {
+      clearCode();
+      setNumber(1);
+    },
   });
 
   const outstockAction = (number) => {
@@ -199,11 +206,10 @@ const AppOutstock = (props) => {
       visible={batchOutstock}
       content={outstockContent(items)}
       onAction={async (action) => {
-        setNumber(1);
         if (action.key === 'out') {
           outstockAction(number);
         } else {
-         setBatchOutstock(false);
+          setBatchOutstock(false);
           clearCode();
         }
       }}

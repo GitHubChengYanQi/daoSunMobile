@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas';
 import jrQrcode from 'jr-qrcode';
 import { Dialog, Space } from 'antd-mobile';
 
-const Html2Canvas = ({...props}, ref) => {
+const Html2Canvas = ({ ...props }, ref) => {
 
   const [codeId, setCodeId] = useState();
   const [items, setItems] = useState();
@@ -38,9 +38,9 @@ const Html2Canvas = ({...props}, ref) => {
             )
           </em>
         }
-        <br/>
+        <br />
         {items.brandResult && items.brandResult.brandName}
-        <br/>
+        <br />
         × {items.number}
       </>;
   };
@@ -53,8 +53,8 @@ const Html2Canvas = ({...props}, ref) => {
       allowTaint: true,
     }).then((canvas) => {
       window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
-      setCodeId(null);
     });
+    return null;
   };
 
 
@@ -69,7 +69,7 @@ const Html2Canvas = ({...props}, ref) => {
     content={<div style={{ textAlign: 'center' }}>
       <div id='code' style={{ display: 'inline-block', textAlign: 'center', width: 200 }}>
         <Space>
-          <div style={{width:100}}>
+          <div style={{ width: 100 }}>
             {getItemsResult() || '暂无物料'}
           </div>
           <img
@@ -80,13 +80,14 @@ const Html2Canvas = ({...props}, ref) => {
             height={100} />
         </Space>
       </div>
+      {canvasBase64()}
     </div>}
     onAction={() => {
-      canvasBase64();
+      setCodeId(null);
     }}
     actions={[{
       key: 'pring',
-      text: '打印二维码',
+      text: '已打印二维码',
     }]}
   />;
 };
