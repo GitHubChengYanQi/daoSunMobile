@@ -2,14 +2,14 @@ import React from 'react';
 import { SafeArea } from 'antd-mobile';
 import Auth from '../components/Auth';
 
-import * as VConsole from 'vconsole';
+// import * as VConsole from 'vconsole';
 
 function BasicLayout(props) {
   console.log(process.env);
 
   window.scrollTo(0, 0);
 
-  var vConsole = new VConsole();
+  // var vConsole = new VConsole();
 
   return (
     <>

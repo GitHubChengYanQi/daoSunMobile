@@ -25,7 +25,6 @@ const AppOutstock = (props) => {
   const data = state && state.data;
 
   const [number, setNumber] = useState(1);
-  console.log(number);
 
   const [stockDetail, setStockDetail] = useState({});
 
@@ -44,6 +43,7 @@ const AppOutstock = (props) => {
   }, {
     manual: true,
     onSuccess: (res) => {
+      console.log('stockdetails',res);
       setStockDetail(res);
       if (items.number <= 0) {
         Toast.show({

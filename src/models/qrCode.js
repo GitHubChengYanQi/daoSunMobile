@@ -50,7 +50,7 @@ export default {
       yield put({ type: 'clearCode' });
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
-        let code = '1475669259821264897'; // 入库
+        let code = '1475701320133238785'; // 入库
         // let code = '1475358083438198786'; // 出库
         // let code = '1475357188682711042'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });

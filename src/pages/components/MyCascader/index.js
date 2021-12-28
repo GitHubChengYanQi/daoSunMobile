@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
+import { Cascader } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
@@ -22,7 +22,7 @@ const getParentValue = (value, data) => {
   return [];
 };
 
-const MyTreeSelect = (
+const MyCascader = (
   {
     api,
     value,
@@ -80,6 +80,20 @@ const MyTreeSelect = (
 
   return (
     <>
+      <Cascader
+        options={data || []}
+        visible={visible}
+        onCancel={() => {
+          typeof clear === 'function' && clear();
+          setVisible(false);
+        }}
+        value={valueArray.map((items) => {
+          return items.value;
+        })}
+        onConfirm={(value) => {
+          change(value);
+        }}
+      />
       <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
       }}>
@@ -97,37 +111,8 @@ const MyTreeSelect = (
 
         }) : (title || '请选择')}
       </ListItem>
-
-      <Popup
-        visible={visible}
-      >
-        <Card title={
-          <><Button color='primary' fill='none' onClick={() => {
-            setVisible(false)
-            typeof clear === 'function' && clear();
-          }}>取消</Button>
-          </>} style={{ maxHeight: '30vh', overflow: 'auto' }} extra={
-          <>
-            {poputTitle || title || '选择'}
-            <Button color='primary' fill='none' onClick={() => {
-              setVisible(false)
-              typeof onOk === 'function' && onOk();
-            }}>确定</Button>
-          </>
-        }>
-          <TreeSelect
-            value={valueArray.map((items) => {
-              return items.value;
-            })}
-            options={data || []}
-            onChange={(value, object) => {
-              change(value);
-            }}
-          />
-        </Card>
-      </Popup>
     </>
   );
 };
 
-export default React.forwardRef(MyTreeSelect);
+export default React.forwardRef(MyCascader);

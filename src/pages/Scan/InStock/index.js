@@ -201,7 +201,7 @@ const InStock = (props) => {
               </List.Item>
               {
                 data.instockListResults.map((items, index) => {
-                  const batch = items.batch === 1;
+                  const batch = items.sku.batch === 1;
                   if (items.number > 0) {
                     return <List.Item
                       key={index}

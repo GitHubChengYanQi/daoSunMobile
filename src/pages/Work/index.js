@@ -206,6 +206,12 @@ const Work = () => {
           }}>
             <div className={styles.size}>出库管理</div>
           </GridItem>
+          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+            // history.push('/Work/DataManage');
+            toast();
+          }}>
+            <div className={styles.size}>自由入库管理</div>
+          </GridItem>
         </Grid>
       </List>
 

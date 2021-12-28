@@ -13,6 +13,7 @@ import Html2Canvas from '../../../Html2Canvas';
 import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
+import MyCascader from '../../../components/MyCascader';
 
 const fontSize = 24;
 
@@ -83,8 +84,10 @@ const AppInstock = (props) => {
         if (storehousePositionsId) {
           instockAction(res);
         } else {
+          const complent = waitNumber + number;
           setWaitCodeIds([...waitCodeIds, res]);
-          setWaitNumber(waitNumber + number);
+          setWaitNumber(complent);
+          batch && setNumber(complent)
         }
       },
     },
@@ -285,6 +288,7 @@ const AppInstock = (props) => {
             position: 'bottom',
           });
         } else {
+          console.log(qrCode);
           const completeNumber = waitNumber + qrCode.instockAction.number;
           if (completeNumber > items.number) {
             Toast.show({
@@ -345,7 +349,6 @@ const AppInstock = (props) => {
            <MyTreeSelect
              arrow={false}
              poputTitle='选择库位'
-             textType='link'
              title={<Typography.Link underline>点击选择或扫描库位</Typography.Link>}
              value={storehousePositionsId}
              ref={treeRef}
@@ -357,13 +360,11 @@ const AppInstock = (props) => {
                  },
                }
              }
-             onOk={() => {
-               waitCodeInstock();
-             }}
              clear={() => {
                setStorehousePositionsId(null);
              }}
              onChange={(value) => {
+               waitCodeInstock();
                setStorehousePositionsId(value);
              }}
            />
@@ -430,7 +431,7 @@ const AppInstock = (props) => {
           });
           setItemBind(false);
           setAutoBatch(false);
-          setNumber(items.number);
+          setNumber(items.number - waitNumber);
           clearCode();
         }
       }}
@@ -466,7 +467,7 @@ const AppInstock = (props) => {
         } else {
           setWaitCodeIds([...waitCodeIds, codeId]);
           setWaitNumber(completeNumber);
-          setNumber(items.number - number);
+          batch && setNumber(items.number - completeNumber);
           clearCode();
         }
         setComplete((items.number - completeNumber) === 0);
