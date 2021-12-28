@@ -22,7 +22,7 @@ export default {
     }),
   ],
 
-  publicPath: process.env.NODE_ENV === 'development' ? '/' : '/cp/',
+  publicPath: process.env.ENV === 'test' ? '/' : '/cp/',
   history: { type: 'hash' },
 
   antd: false,

@@ -1,15 +1,8 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
-import { Config } from '../../../config';
 
-const baseURI =
-  process.env.NODE_ENV === 'development'
-    ?
-    'http://192.168.1.119'
-    // Config().api
-    :
-    Config().api;
+const baseURI = process.env.api
 
 
 const ajaxService = axios.create({

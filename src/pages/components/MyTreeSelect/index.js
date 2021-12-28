@@ -2,6 +2,7 @@ import React, { useImperativeHandle, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
+import { Typography } from 'antd';
 
 const getParentValue = (value, data) => {
   if (!Array.isArray(data)) {
@@ -21,7 +22,7 @@ const getParentValue = (value, data) => {
   return [];
 };
 
-const MyTreeSelect = ({ api, value, poputTitle,arrow = true, defaultParams, onChange,  title, clear, onOk },ref) => {
+const MyTreeSelect = ({ api, value, poputTitle,arrow = true, defaultParams, onChange,  title, clear, onOk,textType },ref) => {
 
   const { data } = useRequest(api, {
     defaultParams,
@@ -72,9 +73,17 @@ const MyTreeSelect = ({ api, value, poputTitle,arrow = true, defaultParams, onCh
         setVisible(true);
       }}>
         {valueArray.length > 0 ? valueArray.map((items, index) => {
-          return (
-            <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
-          );
+          switch (textType) {
+            case 'link':
+              return (
+                <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+              );
+            default:
+              return (
+                <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
+              );
+          }
+
         }) : (title || '请选择')}
       </ListItem>
 

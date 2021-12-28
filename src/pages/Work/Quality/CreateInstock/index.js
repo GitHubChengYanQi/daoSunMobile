@@ -1,7 +1,6 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Card,  Dialog, List, Loading, Space, Stepper, Toast } from 'antd-mobile';
 import { codingRulesList, codingRulesListSelect, storeHouseSelect, UserIdSelect } from '../Url';
-import { Config } from '../../../../../config';
 import { useRequest } from '../../../../util/Request';
 import MyPicker from '../../../components/MyPicker';
 
@@ -251,7 +250,7 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
                 storeHouseId: storehoust,
                 userId: user,
                 instockRequest:skus,
-                url:Config().wxCp + 'OrCode?id=codeId'
+                url:process.env.wxCp + 'OrCode?id=codeId'
               }
             });
           }

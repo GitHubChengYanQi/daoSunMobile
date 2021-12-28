@@ -158,7 +158,6 @@ const AppInstock = (props) => {
           Id: items.skuId,
           instockListParam: {
             ...items,
-            codeId: qrCode.codeId,
             storehousePositionsId: storehousePositionsId,
           },
         },
@@ -346,6 +345,7 @@ const AppInstock = (props) => {
            <MyTreeSelect
              arrow={false}
              poputTitle='选择库位'
+             textType='link'
              title={<Typography.Link underline>点击选择或扫描库位</Typography.Link>}
              value={storehousePositionsId}
              ref={treeRef}

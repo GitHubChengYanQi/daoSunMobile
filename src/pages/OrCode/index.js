@@ -29,7 +29,7 @@ const OrCode = (props) => {
   });
 
 
-  return <MyEmpty description={<LinkButton onClick={() => {
+  return <MyEmpty height='100vh' description={<LinkButton onClick={() => {
     props.dispatch({
       type: 'qrCode/wxCpScan',
     });

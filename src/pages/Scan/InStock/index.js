@@ -23,7 +23,6 @@ const InStock = (props) => {
 
   const qrCode = props.qrCode;
 
-
   const [data, setData] = useState();
 
   const scanCodeState = (payload) => {
@@ -51,7 +50,6 @@ const InStock = (props) => {
         },
       });
     }
-
   }, [id], {
     wait: 0,
   });

@@ -40,17 +40,19 @@ export default {
     // 清楚二维码
     clearCode(state) {
       console.log('clearCode');
-      return { ...state,codeId:null};
+      return { ...state, codeId: null };
     },
   },
 
   effects: {
     // 企业微信扫码
     * wxCpScan({ payload }, { call, put }) {
-      yield put({ type: 'clearCode'});
+      yield put({ type: 'clearCode' });
       console.log('wxCpScan');
-      if (process.env.NODE_ENV === 'development') {
-        let code = '1473927950846943233';
+      if (process.env.ENV === 'test') {
+        let code = '1475360769512423425'; // 入库
+        // let code = '1475358083438198786'; // 出库
+        // let code = '1475357188682711042'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -60,7 +62,7 @@ export default {
     },
 
     // 扫码跳路由
-    * router({ payload },{put}) {
+    * router({ payload }, { put }) {
       const codeId = payload.codeId;
       const type = payload.type;
       yield put({ type: 'clearCode' });
@@ -81,7 +83,7 @@ export default {
           history.push(`/Scan/InStock?id=${codeId}`);
           break;
         case 'outstock':
-          // history.push(`/Scan/Outstock?id=${codeId}`);
+          history.push(`/Scan/OutStock?id=${codeId}`);
           break;
         default:
           break;
@@ -126,7 +128,7 @@ export default {
             content: '二维码已绑定其他物料，或物料已绑定其他二维码！请重新选择!',
             position: 'bottom',
           });
-          yield put({ type: 'clearCode'});
+          yield put({ type: 'clearCode' });
         }
       } else {
         // 未绑定
@@ -163,6 +165,29 @@ export default {
           content: '请扫库位码！',
           position: 'bottom',
         });
+      }
+    },
+
+    // 扫码出库
+    * scanOutstock({ payload }, { call, put }) {
+      const codeId = payload.codeId;
+      const items = payload.items;
+      const data = payload.data;
+
+      // 取出二维码对应的实物信息
+      const res = yield call(() => request({
+        url: '/orCode/backInkindByCode',
+        method: 'POST',
+        data: {
+          codeId,
+          id: items && items.skuId,
+          brandId: items && items.brandId,
+          storehouse: data && data.storehouseId,
+        },
+      }));
+      console.log(res);
+      if (JSON.stringify(res) !== '{}' && res.stockDetails){
+        yield put({ type: 'scanCodeState', payload: { outstockAction:res } });
       }
     },
 
@@ -204,6 +229,13 @@ export default {
               yield put({ type: 'scanInstock', payload: { codeId, items, batch } });
             }
             break;
+          case 'scanOutstock':
+            // 扫码出库操作
+            if (items) {
+              yield put({ type: 'scanCodeState', payload: { codeId } });
+              yield put({ type: 'scanOutstock', payload: { codeId, items, data } });
+            }
+            break;
           default:
             // 没有动作跳路由
             // 获取数据
@@ -221,6 +253,7 @@ export default {
       const action = states.action;
       switch (action) {
         case 'instock':
+        case 'outstock':
           yield put({ type: 'scanCodeState', payload: { codeId } });
           break;
         default:

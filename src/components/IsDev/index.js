@@ -1,6 +1,6 @@
 
 const IsDev = () => {
-  return process.env.NODE_ENV === 'development';
+  return process.env.ENV === 'test';
 };
 
 export default IsDev;

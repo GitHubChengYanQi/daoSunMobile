@@ -1,7 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import html2canvas from 'html2canvas';
 import jrQrcode from 'jr-qrcode';
-import { Config } from '../../../config';
 import { Dialog, Space } from 'antd-mobile';
 
 const Html2Canvas = ({...props}, ref) => {
@@ -75,7 +74,7 @@ const Html2Canvas = ({...props}, ref) => {
           </div>
           <img
             id='img'
-            src={jrQrcode.getQrBase64(`${Config().wxCp}OrCode?id=${codeId}`)}
+            src={jrQrcode.getQrBase64(`${process.env.wxCp}OrCode?id=${codeId}`)}
             alt=''
             width={100}
             height={100} />

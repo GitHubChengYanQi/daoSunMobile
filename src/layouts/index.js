@@ -5,6 +5,7 @@ import Auth from '../components/Auth';
 // import * as VConsole from 'vconsole';
 
 function BasicLayout(props) {
+  console.log(process.env);
 
   window.scrollTo(0, 0);
 
