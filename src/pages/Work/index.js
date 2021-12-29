@@ -1,7 +1,5 @@
 import React from 'react';
 import {
-  Grid,
-  GridItem,
   List,
   ListItem,
 } from 'weui-react-v2';
@@ -9,10 +7,9 @@ import {
 import { Affix } from 'antd';
 import styles from './index.css';
 import { history } from 'umi';
-import { Badge, Toast } from 'antd-mobile';
+import { Badge, Card, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { AuditOutlined, MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
-import wx from 'populee-weixin-js-sdk';
 import { useRequest } from '../../util/Request';
 
 const Work = () => {
@@ -21,232 +18,165 @@ const Work = () => {
 
   const toast = () => {
     return Toast.show({
-      content:'暂未开通',
+      content: '暂未开通',
       position: 'bottom',
     });
   };
 
+  const GridContent = (icon, title, routers) => {
+    return <Grid.Item onClick={() => {
+      typeof routers === 'string' ? history.push(routers) : routers();
+    }}>
+      <Space direction='vertical' justify='center' align='center'>
+        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: 24 }} /> : icon}
+        {title}
+      </Space>
+    </Grid.Item>;
+  };
+
+  const GridStyle = (chirlen) => {
+    return <Grid columns={4} style={{ '--gap-vertical': '16px' }}>
+      {chirlen}
+    </Grid>
+  }
+
   return (
-    <di>
+    <div>
       <Affix offsetTop={0}>
         <ListItem extra={<div>开发部</div>}>
           <div>下午好，{user && user.name}</div>
         </ListItem>
       </Affix>
-      <List title={<div>常用工具</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-sousuo' />} onClick={() => {
-            history.push('/SearchButton');
-          }}>
-            <div className={styles.size}>全局查找</div>
-          </GridItem>
-          <GridItem icon={<AuditOutlined />} onClick={() => {
-            history.push('/Work/ProcessTask');
-          }}>
-            <div className={styles.size}>审批</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-saoyisao1' />} onClick={() => {
-            wx.scanQRCode({
-              desc: 'scanQRCode desc',
-              needResult: 0, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
-              scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是条形码（一维码），默认二者都有
-              success: function(res) {
-                // 回调
-              },
-              error: function(res) {
-                if (res.errMsg.indexOf('function_not_exist') > 0) {
-                  alert('版本过低请升级')
-                }
-              }
-            });
-          }}>
-            <div className={styles.size}>扫一扫</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-riqian' />} onClick={() => {
-            toast();
-          }}>
-            <div className={styles.size}>拜访签到</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-rili' />} onClick={() => {
-            history.push('/Schedule');
-          }}>
-            <div className={styles.size}>日程管理</div>
-          </GridItem>
-        </Grid>
-      </List>
+      <Card title='常用工具'>
+        {GridStyle(
+          <>
+            {GridContent('icon-sousuo', '全局查找', '/SearchButton')}
+            {GridContent(<AuditOutlined style={{ fontSize: 24 }} />, '审批', '/Work/ProcessTask')}
+            {GridContent('icon-saoyisao1', '扫一扫', ()=>{
 
-      <List title={<div>项目管理</div>}>
-        <Grid>
-          <GridItem
-            icon={<Icon type='icon-dingdan1' />}
-            onClick={() => {
-              history.push('/Work/Business');
-            }}>
-            <div className={styles.size}>项目列表</div>
-          </GridItem>
-          <GridItem
-            icon={<Icon type='icon-xiaojuchang' />}
-            onClick={() => {
+            })}
+            {GridContent('icon-riqian', '拜访签到', () => {
               toast();
-            }}>
-            <div className={styles.size}>项目流程</div>
-          </GridItem>
-          <GridItem
-            icon={<UserDeleteOutlined />}
-            onClick={() => {
-              history.push('/Work/Competitor');
-            }}
-          >
-            <div className={styles.size}>竞争对手</div>
-          </GridItem>
-          <GridItem
-            icon={<MoneyCollectOutlined />}
-            onClick={() => {
-              history.push('/Work/Quote');
-            }}
-          >
-            <div className={styles.size}>报价管理</div>
-          </GridItem>
-        </Grid>
-      </List>
-
-      <List className={styles.title} title={<div>客户管理</div>}>
-        <Grid>
-          <GridItem
-            icon={<Badge content={77} size={'small'} overflowCount={55}>
-              <Icon
-                type='icon-shuju'
-                style={{ fontSize: 32 }} />
-            </Badge>}
-            onClick={() => {
-              history.push('/Work/Customer');
-            }}
-          >
-            <div className={styles.size}>客户列表</div>
-          </GridItem>
-          <GridItem
-            onClick={() => {
-              history.push('/Work/Customer');
-            }}
-            icon={<Badge content={5}><Icon type='icon-shequ' style={{ fontSize: 32 }} /></Badge>}
-          >
-            <div className={styles.size}>公海获客</div>
-          </GridItem>
-          <GridItem
-            icon={<Badge content={0}><Icon type='icon-yuangongliebiao' style={{ fontSize: 32 }} /></Badge>}
-            onClick={() => {
-              history.push('/Work/Customer?contacts');
-            }}>
-            <div className={styles.size}>联系人</div>
-          </GridItem>
-          <GridItem onClick={() => {
-            toast();
-          }} icon={<Icon type='icon-jiaoseguanli' />}>
-            <div className={styles.size}>角色管理</div>
-          </GridItem>
-        </Grid>
-      </List>
-
-      <List className={styles.title} title={<div>合同管理</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            history.push('/Work/Contract');
-          }}>
-            <div className={styles.size}>合同列表</div>
-          </GridItem>
-          <GridItem onClick={() => {
-            toast();
-          }} icon={<Icon type='icon-zulinhetongmoban' />}>
-            <div className={styles.size}>合同模板</div>
-          </GridItem>
-        </Grid>
-      </List>
-
-      <List className={styles.title} title={<div>发货申请管理</div>}>
-        <Grid>
-          <GridItem onClick={() => {
-            history.push('/Work/OutstockApply');
-          }} icon={<Icon type='icon-fahuoshenqing' />}>
-            <div className={styles.size}>发货申请列表</div>
-          </GridItem>
-        </Grid>
-      </List>
-      <List className={styles.title} title={<div>售后管理</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-gongdanliebiao' onClick={() => {
-            history.push('/Repair');
-          }} />}>
-            <div className={styles.size}>工单管理</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-baoxiu' onClick={() => {
-            history.push('/CreateRepair');
-          }} />}>
-            <div className={styles.size}>创建报修</div>
-          </GridItem>
-        </Grid>
-      </List>
-
-      <List className={styles.title} title={<div>仓储管理</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // history.push('/Work/DataManage');
-            toast();
-          }}>
-            <div className={styles.size}>入库管理</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // history.push('/Work/DataManage');
-            toast();
-          }}>
-            <div className={styles.size}>库存管理</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // history.push('/Work/DataManage');
-            toast();
-          }}>
-            <div className={styles.size}>出库管理</div>
-          </GridItem>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // history.push('/Work/DataManage');
-            toast();
-          }}>
-            <div className={styles.size}>自由入库管理</div>
-          </GridItem>
-        </Grid>
-      </List>
-
-      <List className={styles.title} title={<div>生产管理</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            // history.push('/Work/DataManage');
-            toast();
-          }}>
-            <div className={styles.size}>质检任务</div>
-          </GridItem>
-        </Grid>
-      </List>
+            })}
+            {GridContent('icon-rili', '日程管理', '/Schedule')}
+          </>
+        )}
+      </Card>
 
 
-      <List className={styles.title} title={<div>产品资料管理</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
-            history.push('/Work/DataManage');
-          }}>
-            <div className={styles.size}>产品资料</div>
-          </GridItem>
-        </Grid>
-      </List>
-      <List className={styles.title} title={<div>操作</div>}>
-        <Grid>
-          <GridItem icon={<Icon type='icon-shuju' />} onClick={() => {
+      <Card title='项目管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-dingdan1', '项目列表', '/Work/Business')}
+              {GridContent('icon-xiaojuchang', '项目流程', ()=>{
+                toast();
+              })}
+              {GridContent('icon-dingdan1', '竞争对手', '/Work/Competitor')}
+              {GridContent('icon-dingdan1', '报价管理', '/Work/Quote')}
+              {GridContent('icon-dingdan1', '项目列表', '/Work/Business')}
+            </>
+          )
+        }
+      </Card>
 
-          }}>
-            <div className={styles.size}>退出</div>
-          </GridItem>
-        </Grid>
-      </List>
-    </di>
-  );
+      <Card title='客户管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '客户列表', '/Work/Customer')}
+              {GridContent('icon-shequ', '公海获客', '/Work/Customer')}
+              {GridContent('icon-yuangongliebiao', '联系人', '/Work/Customer?contacts')}
+              {GridContent('icon-jiaoseguanli', '角色管理', ()=>{
+                toast();
+              })}
+            </>
+          )
+        }
+      </Card>
+
+      <Card title='合同管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '合同列表', '/Work/Contract')}
+              {GridContent('icon-zulinhetongmoban', '合同模板', ()=> toast())}
+            </>
+          )
+        }
+
+      </Card>
+
+      <Card title='发货申请管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-fahuoshenqing', '发货申请列表', '/Work/OutstockApply')}
+            </>
+          )
+        }
+
+      </Card>
+
+      <Card title='售后管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-gongdanliebiao', '工单管理', '/Repair')}
+              {GridContent('icon-baoxiu', '创建报修', '/CreateRepair')}
+            </>
+          )
+        }
+
+      </Card>
+
+      <Card title='仓储管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '入库管理', ()=>toast())}
+              {GridContent('icon-shuju', '自由入库', '/Scan/InStock/FreeInstock')}
+              {GridContent('icon-shuju', '库存管理', ()=>toast())}
+              {GridContent('icon-shuju', '出库管理', ()=>toast())}
+              {GridContent('icon-shuju', '自由出库', ()=>toast())}
+            </>
+          )
+        }
+      </Card>
+
+      <Card title='生产管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '质检任务管理', ()=>toast())}
+            </>
+          )
+        }
+      </Card>
+
+
+      <Card title='产品资料管理'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '产品资料管理', '/Work/DataManage')}
+            </>
+          )
+        }
+
+      </Card>
+      <Card title='操作'>
+        {
+          GridStyle(
+            <>
+              {GridContent('icon-shuju', '退出', '/Work/DataManage')}
+            </>
+          )
+        }
+      </Card>
+    </div>
+  )
+    ;
 };
 
 export default Work;

@@ -50,7 +50,8 @@ export default {
       yield put({ type: 'clearCode' });
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
-        let code = '1475701320133238785'; // 入库
+        // let code = '1475701320133238785'; // 入库
+        let code = '1473977842541821954'; // 库位
         // let code = '1475358083438198786'; // 出库
         // let code = '1475357188682711042'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
@@ -185,7 +186,6 @@ export default {
           storehouse: data && data.storehouseId,
         },
       }));
-      console.log(res);
       if (JSON.stringify(res) !== '{}' && res.stockDetails) {
         yield put({ type: 'scanCodeState', payload: { outstockAction: res } });
       }
@@ -204,18 +204,19 @@ export default {
       // 选择库位参数
       const data = payload.data;
 
-      let res = {};
-      res = yield call(() => request({
-        url: '/orCode/backObject',
-        method: 'GET',
-        params: {
-          id: codeId,
-        },
-      }), codeId);
-
-
       if (codeId) {
+        const res = yield call(() => request({
+          url: '/orCode/backObject',
+          method: 'GET',
+          params: {
+            id: codeId,
+          },
+        }), codeId);
         switch (action) {
+          case 'freeInstock':
+            // 自由入库
+            yield put({ type: 'scanCodeState', payload: { codeId } });
+            break;
           case 'scanStorehousePositon':
             // 扫描库位
             yield put({ type: 'scanStorehousePositon', payload: { res, data } });
@@ -241,7 +242,13 @@ export default {
             break;
         }
 
+      }else {
+        Toast.show({
+          content: '请扫描正确的二维码！',
+          position: "bottom",
+        });
       }
+
     },
 
     // app获取二维码数据
@@ -252,6 +259,7 @@ export default {
       switch (action) {
         case 'instock':
         case 'outstock':
+        case 'freeInstock':
           yield put({ type: 'scanCodeState', payload: { codeId } });
           break;
         default:

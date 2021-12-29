@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
@@ -33,10 +33,13 @@ const MyTreeSelect = (
     title,
     clear,
     onOk,
+    branch,
+    branchText,
     textType,
+    resh,
   }, ref) => {
 
-  const { data } = useRequest(api, {
+  const { data ,run,refresh } = useRequest(api, {
     defaultParams,
   });
 
@@ -48,8 +51,14 @@ const MyTreeSelect = (
 
   useImperativeHandle(ref, () => ({
     show,
+    run,
   }));
 
+  useEffect(()=>{
+    if (resh){
+      refresh();
+    }
+  },[resh])
 
   let valueArray = [];
   if ((value || value === 0) && typeof `${value}` === 'string') {
@@ -77,10 +86,10 @@ const MyTreeSelect = (
     typeof onChange === 'function' && onChange(result);
   };
 
-
   return (
     <>
-      <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
+      {!branch ?
+        <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
       }}>
         {valueArray.length > 0 ? valueArray.map((items, index) => {
@@ -97,20 +106,23 @@ const MyTreeSelect = (
 
         }) : (title || '请选择')}
       </ListItem>
+      :
+      <>{branchText}</>
+      }
 
       <Popup
         visible={visible}
       >
         <Card title={
           <><Button color='primary' fill='none' onClick={() => {
-            setVisible(false)
+            setVisible(false);
             typeof clear === 'function' && clear();
           }}>取消</Button>
           </>} style={{ maxHeight: '30vh', overflow: 'auto' }} extra={
           <>
             {poputTitle || title || '选择'}
             <Button color='primary' fill='none' onClick={() => {
-              setVisible(false)
+              setVisible(false);
               typeof onOk === 'function' && onOk();
             }}>确定</Button>
           </>

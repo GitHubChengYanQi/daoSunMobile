@@ -110,6 +110,9 @@ const Auth = (props) => {
       case '/Scan/OutStock/AppOutstock':
         action = 'outstock'
         break;
+      case '/Scan/InStock/FreeInstock':
+        action = 'freeInstock'
+        break;
       default:
         break;
     }
@@ -165,24 +168,24 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  if (process.env.NODE_ENV === 'development')
-    return <>
-      <Button onClick={() => {
-        // const code = '1473977842541821954'; // 库位
-        const code = '1465969087197507585'; // 实物
-        // const code = '1474546242691313666'; //入库
-        props.dispatch({
-          type: 'qrCode/appAction',
-          payload: {
-            code,
-          },
-        });
-      }}>扫码</Button>
-      {
-        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-      }
-    </>;
-  else
+  // if (process.env.NODE_ENV === 'development')
+  //   return <>
+  //     <Button onClick={() => {
+  //       const code = '1473977842541821954'; // 库位
+  //       // const code = '1465969087197507585'; // 实物
+  //       // const code = '1474546242691313666'; //入库
+  //       props.dispatch({
+  //         type: 'qrCode/appAction',
+  //         payload: {
+  //           code,
+  //         },
+  //       });
+  //     }}>扫码</Button>
+  //     {
+  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+  //     }
+  //   </>;
+  // else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

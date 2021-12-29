@@ -70,6 +70,43 @@ const AppInstock = (props) => {
   // 库位
   const [storehousePositionsId, setStorehousePositionsId] = useState();
 
+  const getItemsResult = (items) => {
+    if (items)
+      return <>
+        {items.sku && items.sku.skuName}
+        &nbsp;/&nbsp;
+        {items.spuResult && items.spuResult.name}
+        <br />
+        {
+          items.backSkus
+          &&
+          items.backSkus.length > 0
+          &&
+          items.backSkus[0].attributeValues
+          &&
+          items.backSkus[0].attributeValues.attributeValues
+          &&
+          <em style={{ color: '#c9c8c8', fontSize: 12 }}>
+            (
+            {
+              items.backSkus
+              &&
+              items.backSkus.map((items, index) => {
+                return <span key={index}>
+                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
+                      </span>;
+              })
+            }
+            )
+          </em>
+        }
+        <br />
+        {items.brandResult && items.brandResult.brandName}
+        <br />
+        × {items.number}
+      </>;
+  };
+
   // 自动绑定
   const { loading: autoLoading, run: autoBind } = useRequest(
     {
@@ -79,7 +116,7 @@ const AppInstock = (props) => {
     {
       manual: true,
       onSuccess: async (res) => {
-        await ref.current.setItems({ ...items,number });
+        await ref.current.setItems(getItemsResult({ ...items,number }));
         await ref.current.setCodeId(res);
         if (storehousePositionsId) {
           instockAction(res);
@@ -352,6 +389,7 @@ const AppInstock = (props) => {
              title={<Typography.Link underline>点击选择或扫描库位</Typography.Link>}
              value={storehousePositionsId}
              ref={treeRef}
+             textType='link'
              api={storehousePositionsTreeView}
              defaultParams={
                {
