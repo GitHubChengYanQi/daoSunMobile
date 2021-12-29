@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react';
 import html2canvas from 'html2canvas';
 import { Dialog } from 'antd-mobile';
-import pares, { attributesToProps } from 'html-react-parser';
+import pares  from 'html-react-parser';
 
 const Html2Canvas = ({ ...props }, ref) => {
 

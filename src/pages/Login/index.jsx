@@ -1,8 +1,7 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { history } from 'umi';
-import { Button, Form } from 'antd-mobile';
-import { Input } from 'antd';
+import { Button, Form, Input } from 'antd-mobile';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
 import logo from '../../assets/img.png';
@@ -25,7 +24,7 @@ const Login = () => {
   );
 
   return (
-    <div style={{ backgroundColor: '#fff' }}>
+    <div style={{ backgroundColor: '#fff',marginTop:24 }}>
       <div style={{ textAlign: 'center' }}>
         <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
       </div>

@@ -8,7 +8,7 @@ import { history } from 'umi';
 
 const Tark = () => {
 
-  const date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
+  // const date = new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate();
 
 
   const { loading: messageLoading, data: messageData } = useRequest({

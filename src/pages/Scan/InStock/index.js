@@ -1,5 +1,4 @@
 import { Button, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
-import { Col, Row } from 'antd';
 import { BarsOutlined, ScanOutlined } from '@ant-design/icons';
 import React, { useRef, useState } from 'react';
 import MyTreeSelect from '../../components/MyTreeSelect';
@@ -340,7 +339,7 @@ const InStock = (props) => {
               style={{
                 '--border-top': 'none',
                 '--border-bottom': 'none',
-                '--border-inner': '1px solid #1677ff',
+                // '--border-inner': '1px solid #1677ff',
               }}
             >
               {data.instockResults && data.instockResults.length > 0 ?
