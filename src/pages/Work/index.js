@@ -1,15 +1,13 @@
 import React from 'react';
 import {
-  List,
   ListItem,
 } from 'weui-react-v2';
 
 import { Affix } from 'antd';
-import styles from './index.css';
 import { history } from 'umi';
-import { Badge, Card, Grid, Space, Toast } from 'antd-mobile';
+import {  Card, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
-import { AuditOutlined, MoneyCollectOutlined, UserDeleteOutlined } from '@ant-design/icons';
+import { AuditOutlined, } from '@ant-design/icons';
 import { useRequest } from '../../util/Request';
 
 const Work = () => {

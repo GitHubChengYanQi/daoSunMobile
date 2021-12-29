@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
-import { useRequest } from '../../../../util/Request';
+import { request, useRequest } from '../../../../util/Request';
 import { storehousePositionsTreeView } from '../../Url';
 import CodeBind from '../../CodeBind';
 import MyNavBar from '../../../components/MyNavBar';
@@ -13,7 +13,6 @@ import Html2Canvas from '../../../Html2Canvas';
 import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
-import MyCascader from '../../../components/MyCascader';
 
 const fontSize = 24;
 
@@ -70,43 +69,6 @@ const AppInstock = (props) => {
   // 库位
   const [storehousePositionsId, setStorehousePositionsId] = useState();
 
-  const getItemsResult = (items) => {
-    if (items)
-      return <>
-        {items.sku && items.sku.skuName}
-        &nbsp;/&nbsp;
-        {items.spuResult && items.spuResult.name}
-        <br />
-        {
-          items.backSkus
-          &&
-          items.backSkus.length > 0
-          &&
-          items.backSkus[0].attributeValues
-          &&
-          items.backSkus[0].attributeValues.attributeValues
-          &&
-          <em style={{ color: '#c9c8c8', fontSize: 12 }}>
-            (
-            {
-              items.backSkus
-              &&
-              items.backSkus.map((items, index) => {
-                return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-              })
-            }
-            )
-          </em>
-        }
-        <br />
-        {items.brandResult && items.brandResult.brandName}
-        <br />
-        × {items.number}
-      </>;
-  };
-
   // 自动绑定
   const { loading: autoLoading, run: autoBind } = useRequest(
     {
@@ -116,13 +78,20 @@ const AppInstock = (props) => {
     {
       manual: true,
       onSuccess: async (res) => {
-        await ref.current.setItems(getItemsResult({ ...items,number }));
-        await ref.current.setCodeId(res);
+        const templete = await request({
+          url:'/inkind/detail',
+          method:'POST',
+          data:{
+            inkindId:res.inkindId
+          }
+        })
+        await ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
+        await ref.current.setCodeId(res.codeId);
         if (storehousePositionsId) {
-          instockAction(res);
+          instockAction(res.codeId);
         } else {
           const complent = waitNumber + number;
-          setWaitCodeIds([...waitCodeIds, res]);
+          setWaitCodeIds([...waitCodeIds, res.codeId]);
           setWaitNumber(complent);
           batch && setNumber(complent)
         }
@@ -325,7 +294,6 @@ const AppInstock = (props) => {
             position: 'bottom',
           });
         } else {
-          console.log(qrCode);
           const completeNumber = waitNumber + qrCode.instockAction.number;
           if (completeNumber > items.number) {
             Toast.show({
@@ -402,8 +370,10 @@ const AppInstock = (props) => {
                setStorehousePositionsId(null);
              }}
              onChange={(value) => {
-               waitCodeInstock();
                setStorehousePositionsId(value);
+             }}
+             onOk={()=>{
+               waitCodeInstock();
              }}
            />
         </span>

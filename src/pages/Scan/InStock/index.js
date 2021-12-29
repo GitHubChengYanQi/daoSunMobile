@@ -167,19 +167,44 @@ const InStock = (props) => {
 
 
   return (
-    <>
+    <div style={{ margin: 16 }}>
       <Collapse defaultActiveKey={['0', '1', '2']}>
-        <Collapse.Panel key='0' title='入库信息'>
-          <div>
+        <Collapse.Panel
+          key='0'
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+            }}>
+            入库信息
+          </strong>}
+          style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}>
+          <List
+            style={{
+              '--border-inner': 'none',
+              '--border-top': 'none',
+              '--border-bottom': 'none',
+            }}
+          >
             <List.Item>入库单号：{data.coding}</List.Item>
             <List.Item>仓库名称：{data.storehouseResult && data.storehouseResult.name}</List.Item>
             <List.Item>负责人：{data.userResult && data.userResult.name}</List.Item>
             <List.Item>入库类别：{data.type || '手动添加'}</List.Item>
             <List.Item>创建时间：{data.createTime}</List.Item>
-          </div>
+          </List>
         </Collapse.Panel>
 
-        <Collapse.Panel key='1' title='入库清单'>
+        <Collapse.Panel
+          key='1'
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+            }}>入库清单</strong>}
+          style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}
+        >
           {data.instockListResults
           &&
           data.instockListResults.length > 0
@@ -188,95 +213,98 @@ const InStock = (props) => {
             return value.number !== 0;
           }).length !== 0
             ?
-            <>
-              <List.Item>
-                <Row gutter={24}>
-                  <Col span={16} style={{ textAlign: 'center' }}>
-                    物料信息
-                  </Col>
-                  <Col span={8} style={{ textAlign: 'center' }}>
-                    操作
-                  </Col>
-                </Row>
-              </List.Item>
+            <List
+              style={{
+                '--border-top': 'none',
+                '--border-bottom': 'none',
+                '--border-inner': 'none',
+              }}
+            >
               {
                 data.instockListResults.map((items, index) => {
                   const batch = items.sku.batch === 1;
                   if (items.number > 0) {
                     return <List.Item
                       key={index}
-                      extra={
-                        batch
-                          ?
-                          <Button
-                            color='primary'
-                            fill='none'
-                            style={{ padding: 0 }}
-                            onClick={async () => {
-                              if (IsDev() ? false : getHeader()) {
-                                await setBatch(true);
-                                await setItems(items);
-                                await setInstockNumber(items.number);
-                                await setNumber(items.number);
-                                await props.dispatch({
-                                  type: 'qrCode/wxCpScan',
-                                  payload: {
-                                    items: {
-                                      Id: items.skuId,
-                                      type: 'item',
-                                      ...items,
-                                    },
-                                    batch: true,
-                                    action: 'scanInstock',
-                                  },
-                                });
-                              } else {
-                                history.push({
-                                  pathname: '/Scan/InStock/AppInstock',
-                                  state: {
-                                    items,
-                                    data,
-                                    batch: true,
-                                  },
-                                });
-                              }
-                            }}
-                          ><BarsOutlined />批量入库</Button>
-                          :
-                          <Button
-                            color='primary'
-                            fill='none'
-                            style={{ padding: 0 }}
-                            onClick={async () => {
-                              if (IsDev() ? false : getHeader()) {
-                                await setItems(items);
-                                await setBatch(false);
-                                await setInstockNumber(1);
-                                await setNumber(1);
-                                await props.dispatch({
-                                  type: 'qrCode/wxCpScan',
-                                  payload: {
-                                    items: {
-                                      Id: items.skuId,
-                                      type: 'item',
-                                      ...items,
-                                    },
-                                    batch: false,
-                                    action: 'scanInstock',
-                                  },
-                                });
-                              } else {
-                                history.push({
-                                  pathname: '/Scan/InStock/AppInstock',
-                                  state: {
-                                    items,
-                                    data,
-                                    batch: false,
-                                  },
-                                });
-                              }
-                            }}
-                          ><ScanOutlined />扫码入库</Button>
+                      description={
+                        <>
+                          {
+                            batch
+                              ?
+                              <Button
+                                style={{ padding: 0, backgroundColor: '#1845b5' }}
+                                onClick={async () => {
+                                  if (IsDev() ? false : getHeader()) {
+                                    await setBatch(true);
+                                    await setItems(items);
+                                    await setInstockNumber(items.number);
+                                    await setNumber(items.number);
+                                    await props.dispatch({
+                                      type: 'qrCode/wxCpScan',
+                                      payload: {
+                                        items: {
+                                          Id: items.skuId,
+                                          type: 'item',
+                                          ...items,
+                                        },
+                                        batch: true,
+                                        action: 'scanInstock',
+                                      },
+                                    });
+                                  } else {
+                                    history.push({
+                                      pathname: '/Scan/InStock/AppInstock',
+                                      state: {
+                                        items,
+                                        data,
+                                        batch: true,
+                                      },
+                                    });
+                                  }
+                                }}
+                              ><BarsOutlined />批量入库</Button>
+                              :
+                              <Button
+                                color='primary'
+                                fill='none'
+                                style={{
+                                  width: '100%',
+                                  marginTop: 8,
+                                  border: 'none',
+                                  borderBottom: '1px solid #1677ff',
+                                }}
+                                onClick={async () => {
+                                  if (IsDev() ? false : getHeader()) {
+                                    await setItems(items);
+                                    await setBatch(false);
+                                    await setInstockNumber(1);
+                                    await setNumber(1);
+                                    await props.dispatch({
+                                      type: 'qrCode/wxCpScan',
+                                      payload: {
+                                        items: {
+                                          Id: items.skuId,
+                                          type: 'item',
+                                          ...items,
+                                        },
+                                        batch: false,
+                                        action: 'scanInstock',
+                                      },
+                                    });
+                                  } else {
+                                    history.push({
+                                      pathname: '/Scan/InStock/AppInstock',
+                                      state: {
+                                        items,
+                                        data,
+                                        batch: false,
+                                      },
+                                    });
+                                  }
+                                }}
+                              ><ScanOutlined />扫码入库</Button>
+                          }
+                        </>
                       }
                     >
                       {getSkuResult(items)}
@@ -291,22 +319,36 @@ const InStock = (props) => {
                   }
                 })
               }
-            </>
+            </List>
             :
             <MyEmpty description='已全部入库' />}
         </Collapse.Panel>
 
-        <Collapse.Panel key='2' title='入库明细'>
+        <Collapse.Panel
+          key='2'
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+            }}>入库明细</strong>}
+          style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}>
           {storehousepostionLoading ?
             <MyEmpty />
             :
-            <>
+            <List
+              style={{
+                '--border-top': 'none',
+                '--border-bottom': 'none',
+                '--border-inner': '1px solid #1677ff',
+              }}
+            >
               {data.instockResults && data.instockResults.length > 0 ?
                 data.instockResults.map((items, index) => {
                   return <List.Item
                     key={index}
-                    extra={<>×
-                      {items.number}</>}>
+                    extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
+                      {items.number}</Button>}>
                     {getSkuResult(items)}
                     <br />
                     <strong>库位：</strong>
@@ -323,7 +365,8 @@ const InStock = (props) => {
                   imageStyle={{ width: 128 }}
                   description='暂无数据'
                 />}
-            </>}
+            </List>}
+
         </Collapse.Panel>
       </Collapse>
 
@@ -535,7 +578,7 @@ const InStock = (props) => {
           });
         }}
       />}
-    </>
+    </div>
   );
 };
 export default connect(({ qrCode }) => ({ qrCode }))(InStock);

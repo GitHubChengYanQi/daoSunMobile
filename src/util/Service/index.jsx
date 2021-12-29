@@ -2,7 +2,7 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
 
-const baseURI = process.env.ENV === 'test' ? 'http://192.168.1.119' : process.env.api;
+const baseURI = process.env.ENV === 'test' ? 'http://192.168.1.229' : process.env.api;
 
 
 const ajaxService = axios.create({
@@ -35,22 +35,21 @@ ajaxService.interceptors.response.use((response) => {
         confirmText: '重新登录',
         onConfirm: async () => {
           cookie.remove('cheng-token');
-          // if (process.env.NODE_ENV === 'development') {
-          //   const res = await request(
-          //     {
-          //       url: '/rest/login',
-          //       method: 'POST',
-          //       data: {
-          //         username: 'cheng',
-          //         password: '2683941980',
-          //       },
-          //     },
-          //   );
-          //
-          //   if (res.data) {
-          //     await cookie.set('cheng-token', res.data);
-          //   }
-          // }
+          if (process.env.NODE_ENV === 'development') {
+            const res = await request(
+              {
+                url: '/login/wxCp',
+                method: 'POST',
+                data: {
+                  username: 'cheng',
+                  password: '2683941980',
+                },
+              },
+            );
+            if (res.data) {
+              await cookie.set('cheng-token', res.data);
+            }
+          }
           window.location.reload();
         },
       });

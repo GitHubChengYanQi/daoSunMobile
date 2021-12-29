@@ -1,8 +1,9 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
+import { useDebounceEffect } from 'ahooks';
 
 const getParentValue = (value, data) => {
   if (!Array.isArray(data)) {
@@ -54,11 +55,13 @@ const MyTreeSelect = (
     run,
   }));
 
-  useEffect(()=>{
+  useDebounceEffect(()=>{
     if (resh){
       refresh();
     }
-  },[resh])
+  },[resh],{
+    wait:0
+  })
 
   let valueArray = [];
   if ((value || value === 0) && typeof `${value}` === 'string') {
@@ -132,7 +135,7 @@ const MyTreeSelect = (
               return items.value;
             })}
             options={data || []}
-            onChange={(value, object) => {
+            onChange={(value) => {
               change(value);
             }}
           />

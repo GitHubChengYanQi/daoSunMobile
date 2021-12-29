@@ -12,18 +12,16 @@ function BasicLayout(props) {
   // var vConsole = new VConsole();
 
   return (
-    <>
-      <Auth>
-        <div style={{ height: '100vh' }}>
-          <div style={{ backgroundColor: '#f4f4f4', marginBottom: '10vh' }}>
-            {props.children}
-          </div>
-          <div>
-            <SafeArea position='bottom' />
-          </div>
+    <Auth>
+      <div style={{ height: '100vh', backgroundColor: '#f4f4f4' }}>
+        <div style={{ marginBottom: '10vh' }}>
+          {props.children}
         </div>
-      </Auth>
-    </>
+        <div>
+          <SafeArea position='bottom' />
+        </div>
+      </div>
+    </Auth>
   );
 }
 

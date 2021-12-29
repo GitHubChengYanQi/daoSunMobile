@@ -11,7 +11,9 @@ import wx from 'populee-weixin-js-sdk';
 import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
-import { Button, Toast } from 'antd-mobile';
+import {
+  // Button,
+  Toast } from 'antd-mobile';
 
 const Auth = (props) => {
 

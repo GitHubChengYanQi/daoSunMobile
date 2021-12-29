@@ -1,7 +1,8 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { List, Popup, SearchBar, Space } from 'antd-mobile';
 import { useRequest } from '../../../../../../util/Request';
 import { Spin } from 'antd';
+import { useDebounceEffect } from 'ahooks';
 
 const Search = ({ onChange, ...props }, ref) => {
 
@@ -95,7 +96,7 @@ const Search = ({ onChange, ...props }, ref) => {
     }
   };
 
-  useEffect(() => {
+  useDebounceEffect(() => {
     switch (type) {
       case 'sku':
         skuRun();
@@ -116,7 +117,9 @@ const Search = ({ onChange, ...props }, ref) => {
       default:
         break;
     }
-  }, [type, params]);
+  }, [type, params],{
+    wait:0
+  });
 
 
   useImperativeHandle(ref, () => ({

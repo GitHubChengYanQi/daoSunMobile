@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, List, SafeArea, Space, Stepper, Toast } from 'antd-mobile';
+import { Button, Card, List, Space, Stepper, Toast } from 'antd-mobile';
 import { Typography } from 'antd';
 import Search from './components/Search';
 import MyTreeSelect from '../../../components/MyTreeSelect';
@@ -88,7 +88,7 @@ const FreeInstock = (props) => {
           const brandId = data.brand.value;
           const id = data.sku.value;
           if (brandId && id) {
-            const codeId = await request({
+            const res = await request({
               url: '/orCode/automaticBinding',
               method: 'POST',
               data: {
@@ -99,8 +99,16 @@ const FreeInstock = (props) => {
                 inkindType: '自由入库',
               },
             });
+            const teplemete = await request({
+              url:'/inkind/detail',
+              method:'POST',
+              data:{
+                inkindId:res.inkindId
+              }
+            })
+            console.log(teplemete);
             const arr = items.data;
-            arr[i] = { ...arr[i], codeId };
+            arr[i] = { ...arr[i], codeId:res.codeId };
             setItmes({ data: arr });
             await html2ref.current.setItems(<>
               {data.sku.label}
@@ -109,7 +117,7 @@ const FreeInstock = (props) => {
               <br />
               × {item.number}
             </>);
-            await html2ref.current.setCodeId(codeId);
+            await html2ref.current.setCodeId(res.codeId);
           } else {
             Toast.show({
               content: '请先将物料和供应商信息填写完整!',
