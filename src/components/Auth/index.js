@@ -172,7 +172,7 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  if (process.env.NODE_ENV === 'development')
+  // if (process.env.NODE_ENV === 'development')
   //   return <>
   //     <Button onClick={() => {
   //       // const code = '1473977842541821954'; // 库位
