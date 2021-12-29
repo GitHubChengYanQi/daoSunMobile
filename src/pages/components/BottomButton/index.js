@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, SafeArea } from 'antd-mobile';
 
-const BottomButton = ({ leftText, leftOnClick, rightText, rightOnClick }) => {
+const BottomButton = ({ leftText,leftDisabled, leftOnClick, rightText, rightOnClick,rightDisabled ,only, disabled, onClick, text }) => {
 
 
   return <div
@@ -13,34 +13,48 @@ const BottomButton = ({ leftText, leftOnClick, rightText, rightOnClick }) => {
       backgroundColor: '#fff',
     }}>
     <div style={{ padding: '0 8px' }}>
-      <Button
-        style={{
-          padding: 8,
-          width: '50%',
-          borderRadius: 50,
-          borderTopRightRadius: 0,
-          borderBottomRightRadius: 0,
-        }}
-        onClick={() => {
-          typeof leftOnClick === 'function' && leftOnClick();
-        }}>
-        {leftText || '取消'}
-      </Button>
-      <Button
-        style={{
-          padding: 8,
-          width: '50%',
-          backgroundColor: '#4B8BF5',
-          borderRadius: 50,
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-        }}
-        color='primary'
-        onClick={() => {
-          typeof rightOnClick === 'function' && rightOnClick();
-        }}>
-        {rightText || '保存'}
-      </Button>
+      {only ?
+        <Button
+          disabled={disabled}
+          style={{ '--border-radius': '50px', width: '100%' }}
+          color='primary'
+          onClick={() => {
+            typeof onClick === 'function' && onClick();
+          }}
+        >{text || '确定'}</Button>
+        :
+        <>
+          <Button
+            disabled={leftDisabled}
+            style={{
+              padding: 8,
+              width: '50%',
+              borderRadius: 50,
+              borderTopRightRadius: 0,
+              borderBottomRightRadius: 0,
+            }}
+            onClick={() => {
+              typeof leftOnClick === 'function' && leftOnClick();
+            }}>
+            {leftText || '取消'}
+          </Button>
+          <Button
+            disabled={rightDisabled}
+            style={{
+              padding: 8,
+              width: '50%',
+              backgroundColor: '#4B8BF5',
+              borderRadius: 50,
+              borderTopLeftRadius: 0,
+              borderBottomLeftRadius: 0,
+            }}
+            color='primary'
+            onClick={() => {
+              typeof rightOnClick === 'function' && rightOnClick();
+            }}>
+            {rightText || '保存'}
+          </Button>
+        </>}
     </div>
     <div>
       <SafeArea position='bottom' />

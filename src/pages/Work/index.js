@@ -138,7 +138,7 @@ const Work = () => {
               {GridContent('icon-shuju', '自由入库', '/Scan/InStock/FreeInstock')}
               {GridContent('icon-shuju', '库存管理', ()=>toast())}
               {GridContent('icon-shuju', '出库管理', ()=>toast())}
-              {GridContent('icon-shuju', '自由出库', ()=>toast())}
+              {GridContent('icon-shuju', '自由出库', '/Scan/OutStock/FreeOutstock')}
             </>
           )
         }

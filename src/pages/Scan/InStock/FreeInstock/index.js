@@ -13,6 +13,7 @@ import { useDebounceEffect, useSetState } from 'ahooks';
 import Html2Canvas from '../../../Html2Canvas';
 import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
+import BottomButton from '../../../components/BottomButton';
 
 const FreeInstock = (props) => {
 
@@ -168,7 +169,7 @@ const FreeInstock = (props) => {
         sku: {},
         brand: {},
         storehouse: {},
-        storehousepostion: null,
+        storehousepostionId: null,
       });
       setCount(1);
       Toast.show({
@@ -197,7 +198,7 @@ const FreeInstock = (props) => {
     <List>
       <List.Item title='物料'>
         <Typography.Link underline onClick={() => {
-          ref.current.search('sku');
+          ref.current.search({ type:'sku' });
         }}>
           {
             data.sku.label || '请选择物料'
@@ -206,7 +207,7 @@ const FreeInstock = (props) => {
       </List.Item>
       <List.Item title='供应商(品牌)'>
         <Typography.Link underline onClick={() => {
-          ref.current.search('brand');
+          ref.current.search({ type:'brand' });
         }}>
           {
             data.brand.label || '请选择供应商(品牌)'
@@ -215,7 +216,7 @@ const FreeInstock = (props) => {
       </List.Item>
       <List.Item title='仓库'>
         <Typography.Link underline onClick={() => {
-          ref.current.search('storehouse');
+          ref.current.search({ type:'storehouse' });
         }}>
           {
             data.storehouse.label || '请选择仓库'
@@ -273,7 +274,7 @@ const FreeInstock = (props) => {
               ids: value.value,
             },
           });
-          setData({ ...data, storehouse: value, storehousepostion: null });
+          setData({ ...data, storehouse: value, storehousepostionId: null });
           break;
         default:
           break;
@@ -286,44 +287,30 @@ const FreeInstock = (props) => {
       loading={instockLoading || loading}
       title={instockLoading ? '入库中...' : '扫描中...'} />
 
-    <div
-      style={{
-        padding: 16,
-        width: '100%',
-        paddingBottom: 0,
-        position: 'fixed',
-        bottom: 0,
-        backgroundColor: '#fff',
+    <BottomButton
+      only
+      disabled={
+        !data.storehousepostionId
+        ||
+        !data.storehouse.value
+        ||
+        items.data.filter((value) => {
+          return value.codeId;
+        }).length !== count
+      }
+      onClick={() => {
+        instockRun({
+          data: {
+            positionsId: data.storehousepostionId,
+            codeIds: items.data.map((items) => {
+              return items.codeId;
+            }),
+            storeHouseId: data.storehouse.value,
+          },
+        });
       }}
-    >
-      <Button
-        disabled={
-          !data.storehousepostionId
-          ||
-          !data.storehouse.value
-          ||
-          items.data.filter((value) => {
-            return value.codeId;
-          }).length !== count
-        }
-        style={{ '--border-radius': '50px', width: '100%' }}
-        color='primary'
-        onClick={() => {
-          instockRun({
-            data: {
-              positionsId: data.storehousepostion,
-              codeIds: items.data.map((items) => {
-                return items.codeId;
-              }),
-              storeHouseId: data.storehouse.value,
-            },
-          });
-        }}
-      >入库</Button>
-      <div>
-        <SafeArea position='bottom' />
-      </div>
-    </div>
+      text='入库'
+    />
   </>;
 };
 

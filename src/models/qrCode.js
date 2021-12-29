@@ -51,9 +51,9 @@ export default {
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
         // let code = '1475701320133238785'; // 入库
-        let code = '1473977842541821954'; // 库位
+        // let code = '1473977842541821954'; // 库位
         // let code = '1475358083438198786'; // 出库
-        // let code = '1475357188682711042'; // 实物
+        let code = '1475746898903113729'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -214,7 +214,8 @@ export default {
         }), codeId);
         switch (action) {
           case 'freeInstock':
-            // 自由入库
+          case 'freeOutstock':
+            // 自由入库出库
             yield put({ type: 'scanCodeState', payload: { codeId } });
             break;
           case 'scanStorehousePositon':
@@ -242,10 +243,10 @@ export default {
             break;
         }
 
-      }else {
+      } else {
         Toast.show({
           content: '请扫描正确的二维码！',
-          position: "bottom",
+          position: 'bottom',
         });
       }
 
@@ -260,6 +261,7 @@ export default {
         case 'instock':
         case 'outstock':
         case 'freeInstock':
+        case 'freeOutstock':
           yield put({ type: 'scanCodeState', payload: { codeId } });
           break;
         default:

@@ -70,7 +70,6 @@ const Auth = (props) => {
 
 
   const login = async () => {
-
     const data = await runCode({
       params: {
         url: Url(),
@@ -112,6 +111,9 @@ const Auth = (props) => {
         break;
       case '/Scan/InStock/FreeInstock':
         action = 'freeInstock'
+        break;
+      case '/Scan/OutStock/FreeOutstock':
+        action = 'freeOutstock'
         break;
       default:
         break;
@@ -168,11 +170,11 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  // if (process.env.NODE_ENV === 'development')
+  if (process.env.NODE_ENV === 'development')
   //   return <>
   //     <Button onClick={() => {
-  //       const code = '1473977842541821954'; // 库位
-  //       // const code = '1465969087197507585'; // 实物
+  //       // const code = '1473977842541821954'; // 库位
+  //       const code = '1475767614885113857'; // 实物
   //       // const code = '1474546242691313666'; //入库
   //       props.dispatch({
   //         type: 'qrCode/appAction',
