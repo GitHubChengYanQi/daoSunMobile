@@ -109,8 +109,8 @@ const FreeInstock = (props) => {
             const arr = items.data;
             arr[i] = { ...arr[i], codeId:res.codeId };
             setItmes({ data: arr });
-            await ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
-            await ref.current.setCodeId(res.codeId);
+            await html2ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
+            await html2ref.current.setCodeId(res.codeId);
           } else {
             Toast.show({
               content: '请先将物料和供应商信息填写完整!',
