@@ -19,9 +19,9 @@ import style from './index.css';
 const InStock = (props) => {
 
 
-  window.addEventListener("popstate", function(e) {
-    history.push('/')
-  }, false);
+  // window.addEventListener("popstate", function(e) {
+  //   history.push('/')
+  // }, false);
 
   const id = props.location.query.id;
 
