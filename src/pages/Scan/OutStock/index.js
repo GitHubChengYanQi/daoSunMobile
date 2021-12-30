@@ -1,6 +1,5 @@
 import { Button, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
-import { Col, Row } from 'antd';
-import { DownOutlined, LeftOutlined, ScanOutlined } from '@ant-design/icons';
+import {  ScanOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
@@ -16,6 +15,10 @@ import IsDev from '../../../components/IsDev';
 import style from './index.css';
 
 const OutStock = (props) => {
+
+  window.addEventListener("popstate", function(e) {
+    history.push('/')
+  }, false);
 
     const id = props.location.query.id;
 
