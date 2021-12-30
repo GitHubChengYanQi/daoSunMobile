@@ -1,10 +1,36 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { history } from 'umi';
-import { Button, Form, Input } from 'antd-mobile';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Space } from 'antd-mobile';
 import React from 'react';
-import logo from '../../assets/img.png';
+import logo from '../../assets/logo.png';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import style from './index.css';
+
+export const Username = (props) => {
+  return <Space style={{ width: '100%' }}>
+    <UserOutlined />
+    <Input
+      style={{ width: '80vw' }}
+      name='account'
+      placeholder='手机号/邮箱/账号'
+      autoComplete='off'
+      {...props}
+    />
+  </Space>;
+};
+
+export const Password = (props) => {
+  return <Space>
+    <LockOutlined />
+    <Input
+      style={{ width: '80vw' }}
+      type='password'
+      placeholder='请填写最低长度为6位的密码'
+      {...props}
+    />
+  </Space>;
+};
 
 const Login = () => {
 
@@ -24,9 +50,12 @@ const Login = () => {
   );
 
   return (
-    <div style={{ backgroundColor: '#fff',marginTop:24,height:'100vh' }}>
-      <div style={{ textAlign: 'center' }}>
-        <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
+    <div className={style.login} style={{ backgroundColor: '#fff', marginTop: 24, height: '100vh' }}>
+      <div style={{ textAlign: 'center', margin: 24 }}>
+        <Space direction='vertical'>
+          <img src={logo} width='20%' alt='' />
+          <h2 style={{fontWeight:'bolder'}}>道昕智造</h2>
+        </Space>
       </div>
       <Form
         onFinish={(values) => {
@@ -38,18 +67,13 @@ const Login = () => {
         }}
         layout='horizontal'
         footer={
-          <Button block type='submit' color='primary'>
-            提交
+          <Button block type='submit' style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
+            登录
           </Button>
         }
       >
         <Form.Item name='username' rules={[{ required: true, message: '请填写：手机号/邮箱/账号' }]}>
-          <Input
-            prefix={<UserOutlined />}
-            name='account'
-            placeholder='手机号/邮箱/账号'
-            autoComplete='off'
-          />
+          <Username />
         </Form.Item>
         <Form.Item name='password' rules={[
           { required: true, message: '请填写密码' },
@@ -62,11 +86,7 @@ const Login = () => {
             },
           }),
         ]}>
-          <Input
-            prefix={<LockOutlined />}
-            type='password'
-            placeholder='请填写最低长度为6位的密码'
-          />
+          <Password />
         </Form.Item>
       </Form>
     </div>

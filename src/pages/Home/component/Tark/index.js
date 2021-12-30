@@ -12,7 +12,7 @@ const Tark = () => {
 
 
   const { loading: messageLoading, data: messageData } = useRequest({
-    url: '/message/list', method: 'POST', data: {
+    url: '/message/list?limit=10', method: 'POST', data: {
       // createTime: date,
     },
   });
@@ -50,9 +50,7 @@ const Tark = () => {
           </Row>
         </Collapse.Panel>
 
-        <Collapse.Panel key='1' title={`今日代办 (${messageData.filter((value) => {
-          return value.state === 0;
-        }).length})`}>
+        <Collapse.Panel key='1' title={`我的代办 (最近10条)`}>
           {
             messageData.filter((value) => {
               return value.state === 0;
@@ -68,10 +66,9 @@ const Tark = () => {
                           history.push(`/${items.url.replace(process.env.wxCp, '')}`);
                         }
                       }}
-                      title={items.title}
+                      title={<>{items.title} <em style={{fontSize:12,color:'#c7c5c5'}}>{items.time}</em></>}
                       style={{ borderLeft: `#${color} 2px solid` }}
                       key={index}
-                      description={items.time}
                     >
                       {items.content}
                     </List.Item>
@@ -83,9 +80,7 @@ const Tark = () => {
           }
         </Collapse.Panel>
 
-        <Collapse.Panel key='2' title={`今日完成 (${messageData.filter((value) => {
-          return value.state === 1;
-        }).length})`}>
+        <Collapse.Panel key='2' title={`已完成代办 (最近10条)`}>
           {
             messageData.filter((value) => {
               return value.state === 1;

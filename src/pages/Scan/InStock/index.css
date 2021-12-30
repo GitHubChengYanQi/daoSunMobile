@@ -1,0 +1,46 @@
+
+.instockListing :global .adm-list-item {
+  padding: 0;
+}
+
+.instockListing div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+.instockListing div a :global .adm-list-item-content {
+  padding-left: 16px;
+}
+
+.instockOrder div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+.instock div a :global .adm-list-item-content {
+  border: none;
+}
+
+.instockDetails div div :global .adm-list-item {
+  background-color: #f4f4f4;
+  padding: 0;
+}
+
+.instockDetailsList :global .adm-list-item-content {
+  padding: 16px !important;
+}
+
+.instockDetails div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+
+.instockListing div {
+  border-radius: 10px;
+}
+
+.instock :global .adm-list-item-content-main {
+  color: #333333;
+}
+
+.instockOrderList :global .adm-list-item-content {
+  padding: 16px !important;
+}

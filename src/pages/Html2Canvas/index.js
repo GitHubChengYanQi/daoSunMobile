@@ -1,11 +1,12 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import html2canvas from 'html2canvas';
-import { Dialog } from 'antd-mobile';
-import pares  from 'html-react-parser';
+import { Dialog, Toast } from 'antd-mobile';
+import pares from 'html-react-parser';
 
 const Html2Canvas = ({ ...props }, ref) => {
 
   const [codeId, setCodeId] = useState();
+  const [disabled, setDisabled] = useState(false);
   const [templete, setTemplete] = useState();
 
   const canvasBase64 = () => {
@@ -17,6 +18,12 @@ const Html2Canvas = ({ ...props }, ref) => {
     }).then((canvas) => {
       console.log('打印二维码', codeId);
       window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
+      if (process.env.ENV !== 'test')
+        Toast.show({
+          icon: 'loading',
+          duration: 0,
+          content: '打印中...',
+        });
       setCodeId(null);
     });
     return null;
@@ -28,31 +35,36 @@ const Html2Canvas = ({ ...props }, ref) => {
     setTemplete,
   }));
 
+  useEffect(() => {
+    if (codeId) {
+      setDisabled(false);
+    }
+  }, [codeId]);
 
   return <Dialog
     visible={codeId}
     content={<div>
-      <div id='code' style={{ display: 'inline-block',margin:'auto' }}>
+      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: '100%' }}>
         {templete ?
           pares(templete, {
             replace: domNode => {
-              if (domNode.name === 'p'){
+              if (domNode.name === 'p') {
                 domNode.attribs = {
-                  padding:0,
-                  margin:0
-                }
-                console.log(domNode);
+                  style: 'padding:0;margin:0',
+                };
                 return domNode;
               }
-            }
+            },
           })
           :
           '暂无'}</div>
     </div>}
     onAction={() => {
+      setDisabled(true);
       canvasBase64();
     }}
     actions={[{
+      disabled,
       key: 'pring',
       text: '打印二维码',
     }]}

@@ -13,7 +13,7 @@ function BasicLayout(props) {
 
   return (
     <Auth>
-      <div style={{ height: '100vh', backgroundColor: '#f4f4f4' }}>
+      <div style={{backgroundColor: '#f4f4f4' }}>
         <div style={{ marginBottom: '10vh' }}>
           {props.children}
         </div>

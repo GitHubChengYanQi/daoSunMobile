@@ -1,0 +1,46 @@
+
+.outstockListing :global .adm-list-item {
+  padding: 0;
+}
+
+.outstockListing div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+.outstockListing div a :global .adm-list-item-content {
+  padding-left: 16px;
+}
+
+.outstockOrder div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+.outstock div a :global .adm-list-item-content {
+  border: none;
+}
+
+.outstockDetails div div :global .adm-list-item {
+  background-color: #f4f4f4;
+  padding: 0;
+}
+
+.outstockDetailsList :global .adm-list-item-content {
+  padding: 16px !important;
+}
+
+.outstockDetails div div :global .adm-list-item-content {
+  padding: 0;
+}
+
+
+.outstockListing div {
+  border-radius: 10px;
+}
+
+.outstock :global .adm-list-item-content-main {
+  color: #333333;
+}
+
+.outstockOrderList :global .adm-list-item-content {
+  padding: 16px !important;
+}

@@ -1,11 +1,10 @@
-import { Button, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Button, Collapse, Dialog, Ellipsis, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
 import { BarsOutlined, ScanOutlined } from '@ant-design/icons';
 import React, { useRef, useState } from 'react';
 import MyTreeSelect from '../../components/MyTreeSelect';
 import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
 import TreeSelectSee from '../../components/TreeSelectSee';
-import { WhiteSpace } from 'weui-react-v2';
 import MyEmpty from '../../components/MyEmpty';
 import { connect } from 'dva';
 import { getHeader } from '../../components/GetHeader';
@@ -14,6 +13,7 @@ import CodeBind from '../CodeBind';
 import { MyLoading } from '../../components/MyLoading';
 import { useDebounceEffect } from 'ahooks';
 import IsDev from '../../../components/IsDev';
+import style from './index.css';
 
 
 const InStock = (props) => {
@@ -64,12 +64,11 @@ const InStock = (props) => {
 
   const [instockNumber, setInstockNumber] = useState(0);
 
-  const getSkuResult = (items, br) => {
-    return <>
-      {items.sku && items.sku.skuName}
-      &nbsp;/&nbsp;
-      {items.spuResult && items.spuResult.name}
-      {br ? <br /> : <>&nbsp;&nbsp;</>}
+  const getSkuResult = (items) => {
+    return <Space>
+      <Ellipsis style={{ display: 'inline-block', maxWidth: '50vw' }} content={
+        `${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name}`
+      } />
       {
         items.backSkus
         &&
@@ -79,21 +78,26 @@ const InStock = (props) => {
         &&
         items.backSkus[0].attributeValues.attributeValues
         &&
-        <em style={{ color: '#c9c8c8', fontSize: 12 }}>
-          (
-          {
-            items.backSkus
-            &&
-            items.backSkus.map((items, index) => {
-              return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-            })
-          }
-          )
+        <em style={{ color: '#c9c8c8', fontSize: 12, width: '100%' }}>
+          <Space style={{ width: '100%' }} block={false}>
+            (
+            <Ellipsis
+              // expandText='展开'
+              // collapseText='收起'
+              style={{ display: 'inline-block', width: '30vw' }}
+              direction='end'
+              content={
+                items.backSkus
+                &&
+                items.backSkus.map((items) => {
+                  return items.itemAttribute.attribute + '：' + items.attributeValues.attributeValues;
+                }).toString()
+              } />
+            )
+          </Space>
         </em>
       }
-    </>;
+    </Space>;
   };
 
   const showRef = useRef();
@@ -166,8 +170,8 @@ const InStock = (props) => {
 
 
   return (
-    <div style={{ margin: 16 }}>
-      <Collapse defaultActiveKey={['0', '1', '2']}>
+    <div style={{ padding: 16 }} className={style.instock}>
+      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockOrder}>
         <Collapse.Panel
           key='0'
           title={<strong
@@ -175,11 +179,14 @@ const InStock = (props) => {
               borderBottom: 'solid 1px #1845b5',
               padding: 8,
               margin: 8,
+              color: '#1E1E1E',
             }}>
             入库信息
           </strong>}
-          style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}>
+          style={{ paddingBottom: 8 }}
+        >
           <List
+            className={style.instockOrderList}
             style={{
               '--border-inner': 'none',
               '--border-top': 'none',
@@ -193,7 +200,8 @@ const InStock = (props) => {
             <List.Item>创建时间：{data.createTime}</List.Item>
           </List>
         </Collapse.Panel>
-
+      </Collapse>
+      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockListing}>
         <Collapse.Panel
           key='1'
           title={<strong
@@ -201,6 +209,7 @@ const InStock = (props) => {
               borderBottom: 'solid 1px #1845b5',
               padding: 8,
               margin: 8,
+              color: '#666666',
             }}>入库清单</strong>}
           style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}
         >
@@ -214,6 +223,8 @@ const InStock = (props) => {
             ?
             <List
               style={{
+                padding: 0,
+                backgroundColor: '#f4f4f4',
                 '--border-top': 'none',
                 '--border-bottom': 'none',
                 '--border-inner': 'none',
@@ -225,13 +236,29 @@ const InStock = (props) => {
                   if (items.number > 0) {
                     return <List.Item
                       key={index}
+                      style={{
+                        padding: 0,
+                        marginBottom: 16,
+                        backgroundColor: '#fff',
+                        boxShadow: '0px 3px 6px rgba(24,69,181,30%)',
+                        borderRadius: 10,
+                      }}
                       description={
                         <>
                           {
                             batch
                               ?
                               <Button
-                                style={{ padding: 0, backgroundColor: '#1845b5' }}
+                                style={{
+                                  width: '100%',
+                                  marginTop: 8,
+                                  border: 'none',
+                                  color: '#fff',
+                                  '--border-radius': 0,
+                                  borderBottomLeftRadius: 10,
+                                  borderBottomRightRadius: 10,
+                                  backgroundColor: '#1845B5',
+                                }}
                                 onClick={async () => {
                                   if (IsDev() ? false : getHeader()) {
                                     await setBatch(true);
@@ -261,16 +288,27 @@ const InStock = (props) => {
                                     });
                                   }
                                 }}
-                              ><BarsOutlined />批量入库</Button>
+                              >
+                                <Space>
+                                  <BarsOutlined />
+                                  批量入库
+                                  <div>
+                                    {items.number} / {items.instockNumber}
+                                  </div>
+                                </Space>
+                              </Button>
                               :
                               <Button
                                 color='primary'
-                                fill='none'
                                 style={{
                                   width: '100%',
                                   marginTop: 8,
                                   border: 'none',
-                                  borderBottom: '1px solid #1677ff',
+                                  color: '#fff',
+                                  '--border-radius': 0,
+                                  borderBottomLeftRadius: 10,
+                                  borderBottomRightRadius: 10,
+                                  backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
                                   if (IsDev() ? false : getHeader()) {
@@ -301,17 +339,23 @@ const InStock = (props) => {
                                     });
                                   }
                                 }}
-                              ><ScanOutlined />扫码入库</Button>
+                              >
+                                <Space>
+                                  <ScanOutlined />
+                                  扫码入库
+                                  <div>
+                                    {items.number} / {items.instockNumber}
+                                  </div>
+                                </Space>
+                              </Button>
                           }
                         </>
                       }
                     >
-                      {getSkuResult(items)}
-                      <WhiteSpace size='sm' />
-                      {items.brandResult && items.brandResult.brandName}
-                      &nbsp;&nbsp;&nbsp;&nbsp;
-                      ×
-                      {items.number}
+                      <Space direction='vertical' style={{ padding: 16 }}>
+                        {getSkuResult(items)}
+                        {items.brandResult && items.brandResult.brandName}
+                      </Space>
                     </List.Item>;
                   } else {
                     return null;
@@ -322,7 +366,8 @@ const InStock = (props) => {
             :
             <MyEmpty description='已全部入库' />}
         </Collapse.Panel>
-
+      </Collapse>
+      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockDetails}>
         <Collapse.Panel
           key='2'
           title={<strong
@@ -330,32 +375,45 @@ const InStock = (props) => {
               borderBottom: 'solid 1px #1845b5',
               padding: 8,
               margin: 8,
+              color: '#666666',
             }}>入库明细</strong>}
           style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}>
           {storehousepostionLoading ?
             <MyEmpty />
             :
             <List
+              className={style.instockDetailsList}
               style={{
                 '--border-top': 'none',
                 '--border-bottom': 'none',
-                // '--border-inner': '1px solid #1677ff',
+                backgroundColor: '#f4f4f4',
               }}
             >
               {data.instockResults && data.instockResults.length > 0 ?
                 data.instockResults.map((items, index) => {
                   return <List.Item
                     key={index}
+                    style={{
+                      marginBottom: 16,
+                      backgroundColor: '#fff',
+                      boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
+                      borderRadius: 5,
+                    }}
                     extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
-                      {items.number}</Button>}>
-                    {getSkuResult(items)}
-                    <br />
-                    <strong>库位：</strong>
-                    {items.storehousePositions
-                      ?
-                      <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
-                      :
-                      (items.storehouseResult && items.storehouseResult.name)}
+                      {items.number}</Button>}
+                  >
+                    <Space direction='vertical'>
+                      {getSkuResult(items)}
+                      {items.brandResult && items.brandResult.brandName}
+                      <div>
+                        <strong>库位：</strong>
+                        {items.storehousePositions
+                          ?
+                          <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
+                          :
+                          (items.storehouseResult && items.storehouseResult.name)}
+                      </div>
+                    </Space>
                   </List.Item>;
                 })
                 :

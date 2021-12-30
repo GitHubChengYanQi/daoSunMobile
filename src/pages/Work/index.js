@@ -9,6 +9,7 @@ import {  Card, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
 import { AuditOutlined, } from '@ant-design/icons';
 import { useRequest } from '../../util/Request';
+import cookie from 'js-cookie';
 
 const Work = () => {
 
@@ -167,7 +168,10 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '退出', '/Work/DataManage')}
+              {GridContent('icon-shuju', '退出登陆', ()=>{
+                cookie.remove('cheng-token');
+                history.push('/Login')
+              })}
             </>
           )
         }

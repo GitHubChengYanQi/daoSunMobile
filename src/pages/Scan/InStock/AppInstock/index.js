@@ -93,6 +93,7 @@ const AppInstock = (props) => {
           const complent = waitNumber + number;
           setWaitCodeIds([...waitCodeIds, res.codeId]);
           setWaitNumber(complent);
+          setComplete((items.number - complent) === 0)
           batch && setNumber(complent)
         }
       },
@@ -219,6 +220,18 @@ const AppInstock = (props) => {
   };
 
   const instockAction = (codeId) => {
+    console.log(JSON.stringify(
+      {
+        type: 'item',
+        codeId,
+        Id: items.skuId,
+        instockListParam: {
+          ...items,
+          codeId: qrCode.codeId,
+          storehousePositionsId: storehousePositionsId,
+        },
+      }
+    ));
     instock({
       data: {
         type: 'item',
