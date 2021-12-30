@@ -133,11 +133,13 @@ const Auth = (props) => {
 
 
   useDebounceEffect(() => {
-    wxTicket({
-      params: {
-        url: window.location.protocol + '//' + window.location.host + window.location.pathname,
-      },
-    });
+    if (getHeader()){
+      wxTicket({
+        params: {
+          url: window.location.protocol + '//' + window.location.host + window.location.pathname,
+        },
+      });
+    }
 
     window.printOk = () => {
       Toast.clear();
