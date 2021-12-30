@@ -422,11 +422,7 @@ const InStock = (props) => {
                   </List.Item>;
                 })
                 :
-                <Empty
-                  style={{ padding: '64px 0' }}
-                  imageStyle={{ width: 128 }}
-                  description='暂无数据'
-                />}
+                <MyEmpty />}
             </List>}
 
         </Collapse.Panel>

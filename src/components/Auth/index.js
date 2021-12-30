@@ -102,12 +102,6 @@ const Auth = (props) => {
 
   useDebounceEffect(() => {
 
-    // wx.ready(() => {
-    //   wx.onHistoryBack(function(){
-    //       return alert('111')
-    //   });
-    // });
-
     let action = '';
     switch (location.pathname) {
       case '/Scan/InStock/AppInstock':

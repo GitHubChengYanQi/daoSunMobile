@@ -63,6 +63,7 @@ const Tark = () => {
                     <List.Item
                       onClick={() => {
                         if (items.url) {
+                          console.log(`/${items.url.replace(process.env.wxCp, '')}`);
                           history.push(`/${items.url.replace(process.env.wxCp, '')}`);
                         }
                       }}
