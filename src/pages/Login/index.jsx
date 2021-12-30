@@ -24,7 +24,7 @@ const Login = () => {
   );
 
   return (
-    <div style={{ backgroundColor: '#fff',marginTop:24 }}>
+    <div style={{ backgroundColor: '#fff',marginTop:24,height:'100vh' }}>
       <div style={{ textAlign: 'center' }}>
         <img src={logo} width='40%' style={{ margin: 24 }} alt='' />
       </div>

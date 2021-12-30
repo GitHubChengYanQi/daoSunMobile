@@ -99,25 +99,18 @@ const FreeInstock = (props) => {
                 inkindType: '自由入库',
               },
             });
-            const teplemete = await request({
+            const templete = await request({
               url:'/inkind/detail',
               method:'POST',
               data:{
                 inkindId:res.inkindId
               }
             })
-            console.log(teplemete);
             const arr = items.data;
             arr[i] = { ...arr[i], codeId:res.codeId };
             setItmes({ data: arr });
-            await html2ref.current.setItems(<>
-              {data.sku.label}
-              <br />
-              {data.brand.label}
-              <br />
-              × {item.number}
-            </>);
-            await html2ref.current.setCodeId(res.codeId);
+            await ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
+            await ref.current.setCodeId(res.codeId);
           } else {
             Toast.show({
               content: '请先将物料和供应商信息填写完整!',
