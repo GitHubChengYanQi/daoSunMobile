@@ -14,6 +14,7 @@ import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 import pares from 'html-react-parser';
+import { Input } from 'weui-react-v2';
 
 const fontSize = 24;
 
@@ -456,32 +457,37 @@ const AppInstock = (props) => {
       title={getSkuResult()}
       content={
         <div style={{ textAlign: 'center' }}>
-          <Space>
-            <div>
-              入库数量：
-            </div>
-            <Stepper
-              min={1}
-              max={items.number - waitNumber}
+          <Space align='center'>
+            入库数量：
+            <Input
+              style={{ width: 100,color:'#1677ff' }}
+              type='number'
               value={number}
-              onChange={value => {
-                setNumber(value);
-              }}
-            />
+              onChange={(value) => {
+                setNumber(parseInt(value));
+              }} />
           </Space>
         </div>
       }
       onAction={async (action) => {
         if (action.key === 'next') {
-          if (autoBatch) {
-            auto();
+          if (number > 0 && number <= (items.number - waitNumber)) {
+            if (autoBatch) {
+              auto();
+            } else {
+              setItemBind(true);
+            }
+            setAutoBatch(false);
+            scanCodeState({
+              bind: false,
+            });
           } else {
-            setItemBind(true);
+            Toast.show({
+              content: '请填入正确的数量!',
+              position: 'bottom',
+            });
           }
-          setAutoBatch(false);
-          scanCodeState({
-            bind: false,
-          });
+
         } else {
           scanCodeState({
             bind: false,

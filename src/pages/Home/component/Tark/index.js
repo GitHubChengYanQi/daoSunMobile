@@ -4,6 +4,7 @@ import { Collapse, List } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import { Col, Row } from 'antd';
 import { history } from 'umi';
+import style from './index.css';
 
 
 const Tark = () => {
@@ -27,7 +28,7 @@ const Tark = () => {
   }
 
   return (
-    <>
+    <div className={style.tark}>
       <Collapse defaultActiveKey={['0', '1', '2']} style={{ backgroundColor: '#fff', marginTop: 8 }}>
         <Collapse.Panel key='0' title='工作任务'>
           <Row>
@@ -104,7 +105,7 @@ const Tark = () => {
           }
         </Collapse.Panel>
       </Collapse>
-    </>
+    </div>
 
   );
 };

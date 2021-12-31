@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../../components/MyLoading';
-import { WhiteSpace } from 'weui-react-v2';
+import { Input, WhiteSpace } from 'weui-react-v2';
+import { AddOutline } from 'antd-mobile-icons';
 
 const fontSize = 24;
 
@@ -43,7 +44,7 @@ const AppOutstock = (props) => {
   }, {
     manual: true,
     onSuccess: (res) => {
-      console.log('stockdetails',res);
+      console.log('stockdetails', res);
       setStockDetail(res);
       if (items.number <= 0) {
         Toast.show({
@@ -149,8 +150,6 @@ const AppOutstock = (props) => {
 
   const outstockContent = (items) => {
     const stockNumber = stockDetail && stockDetail.stockDetails && stockDetail.stockDetails.number;
-    const maxNumber = stockNumber < items.number ? stockNumber : items.number;
-
     return <>
       {getSkuResult(items)}
       <WhiteSpace size='sm' />
@@ -160,18 +159,15 @@ const AppOutstock = (props) => {
       <WhiteSpace size='sm' />
       库存数量:&nbsp;&nbsp;×{stockNumber}
       <WhiteSpace size='sm' />
-      {stockNumber > 1 && <Space>
-        <div>
-          出库数量：
-        </div>
-        <Stepper
-          min={1}
-          max={maxNumber}
+      {stockNumber > 1 && <Space align='center'>
+        出库数量：
+        <Input
+          style={{ width: 100, color: '#1677ff' }}
+          type='number'
           value={number}
-          onChange={value => {
-            setNumber(value);
-          }}
-        />
+          onChange={(value) => {
+            setNumber(parseInt(value));
+          }} />
       </Space>}
     </>;
   };
@@ -207,7 +203,16 @@ const AppOutstock = (props) => {
       content={outstockContent(items)}
       onAction={async (action) => {
         if (action.key === 'out') {
-          outstockAction(number);
+          const stockNumber = stockDetail && stockDetail.stockDetails && stockDetail.stockDetails.number;
+          const maxNumber = stockNumber < items.number ? stockNumber : items.number;
+          if (number > 0 && number <= maxNumber) {
+            outstockAction(number);
+          } else {
+            Toast.show({
+              content: '请填入正确的数量!',
+              position: 'bottom',
+            });
+          }
         } else {
           setBatchOutstock(false);
           clearCode();

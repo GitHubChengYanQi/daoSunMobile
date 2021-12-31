@@ -9,7 +9,7 @@ const BottomButton = ({ leftText,leftDisabled, leftOnClick, rightText, rightOnCl
       width: '100%',
       paddingBottom: 0,
       position: 'fixed',
-      bottom: 0,
+      bottom: 16,
       backgroundColor: '#fff',
     }}>
     <div style={{ padding: '0 8px' }}>

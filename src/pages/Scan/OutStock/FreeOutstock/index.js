@@ -10,6 +10,9 @@ import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect } from 'ahooks';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
+import { Input } from 'weui-react-v2';
+import { AddOutline } from 'antd-mobile-icons';
+import { FieldNumberOutlined, NumberOutlined } from '@ant-design/icons';
 
 const FreeOutstock = (props) => {
 
@@ -170,7 +173,7 @@ const FreeOutstock = (props) => {
 
   return <>
     <Card title='物料信息' />
-    {/*<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAACDElEQVR42tWYQW6FMAxEjViwzBFyk3IxJJC4GNwkR2CZBcKdcaD9UvW305ZFBDwWVjweO5i/u+wvk8twjUdf7MP6UrF45SshSe51PCwPl025jn5y8aIkiyEiBLP7acOVVmeAejL7sCWEhW/yr5C0Fsdd9i15kRPk5yOdDf/InIJQkPHye3lRr4BETV42l9ohLNzH8lXBAsL8oE4nA1lZrDNj64UEwRjEgWWjUP3ouUxZR+gPyM+S8TwXYOPjaUoSNmUMEFvSQZ7tGyHpQ5mOJM1eO2TKDDnTET8MHglJhF8PdIphp1B1xBfK0wtCmstArcSdjlxh1aELvrLEb26FqIgZuibKAmE1oVajc8sI8sOXq6Nrrm1yGPzJnIYwNXQobk2OGQLFOpmWOGUCZS7sHTHKNO3oCCeH0iYHxhZlqyNXDA20zNHvycFvv1YRFghTg5cc3djCnjpVEXRIFghL1GOECsPSERQm+wQ2Zm99Gx388WsNCX/YkZAWm/vKOm2zi4o4Dy84y8SBhpnC7iymJNgYijJKFPtE17rVqyJ4Dq8Kf9iPaBuLkLQZFkly9g7ahXGkdR15zrQOmbBvt1FmMSGJswxqozVvu61LSu4TZWWVcIRiflaXE4TVHW1jYorOasLbjX8WODmgaF5OuwLCRk2H4p8FFmtrokISZ9o4UcIf2vKiXgH5n//f3pJPsjydwloXIwIAAAAASUVORK5CYII=' alt='' />*/}
+    {/*<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkAQAAAABYmaj5AAABS0lEQVR42tXUsdHeIAwGYGhgBWjwaqYxK0CDTWOvAI1ZzW5MmxI1KF/u8l2cgwV+dU8lvaeTCL7qF/kxqkQJIeO00V6AJ7MmlwwDhUjL5XKUQ3ldIh8rJThuGArTndK/fm9VItOf+s75FmJ1R8HyzfcWbEofUbht6oU33Jf3yptedZG7dxeT90DMUmi8ejeQTKda95mGXo1YZRddTemF4ajEuou4XtXPTBBa6T0QPQ083oWjV+OQS4pqLb2wCkv4yS89EOBmNomnGylaXU6eci9IdZk+22ymV2WE3zltfxP9rwkeirBr6NU8P0oUOoRe8CwLRTxXHAg3oQRhOgx0tEU2nh8zUBNWuYfQo9cnbqlE33Xt9bkctVgrU+gFGOeZ0VT1QCGuodmZ5qEYk2mXZaRULhOnJgfCfJpLQnS9KhFuN7v5zvnWT/xgvwENT7/yyl6DpAAAAABJRU5ErkJggg==' alt='' />*/}
     <List>
       <List.Item title='仓库'>
         <Typography.Link underline onClick={() => {
@@ -232,14 +235,13 @@ const FreeOutstock = (props) => {
       <List.Item
         title='出库数量'
         extra={
-          <Stepper
-            min={1}
-            max={data.item.number}
+          <Input
+            style={{ width: 100,color:'#1677ff' }}
+            type='number'
             value={number}
-            onChange={value => {
-              setNumber(value);
-            }}
-          />
+            onChange={(value) => {
+              setNumber(parseInt(value));
+            }} />
         }
       />}
     </List>
@@ -280,12 +282,20 @@ const FreeOutstock = (props) => {
         });
       }}
       rightOnClick={() => {
-        outstockRun({
-          data: {
-            codeId: data.item.value,
-            number,
-          },
-        });
+        if (number > 0 && number <= data.item.number) {
+          outstockRun({
+            data: {
+              codeId: data.item.value,
+              number,
+            },
+          });
+        } else {
+          Toast.show({
+            content: '请填入正确的数量!',
+            position: 'bottom',
+          });
+        }
+
       }}
       onClick={() => {
         outstockRun({

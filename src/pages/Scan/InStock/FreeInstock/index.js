@@ -15,6 +15,7 @@ import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import pares from 'html-react-parser';
+import { Input } from 'weui-react-v2';
 
 const FreeInstock = (props) => {
 
@@ -129,7 +130,7 @@ const FreeInstock = (props) => {
 
         }} />
       }>
-        <Space>
+        <Space align='center'>
           <LinkButton
             onClick={() => {
               items.data.splice(i, 1);
@@ -144,16 +145,17 @@ const FreeInstock = (props) => {
             data.sku.batch ? '批' : '个'
           }
           {
-            data.sku.batch && <Stepper
-              min={1}
+            data.sku.batch && <Input
+              prefix={<span style={{color:'#000'}}>入库数量：</span>}
               disabled={item.codeId}
+              style={{ width: 200 ,color:'#1677ff' }}
+              type='number'
               value={item.number}
-              onChange={value => {
+              onChange={(value) => {
                 const arr = items.data;
-                arr[i] = { ...arr[i], number: value };
+                arr[i] = { ...arr[i], number: parseInt(value) };
                 setItmes({ data: arr });
-              }}
-            />
+              }} />
           }
         </Space>
       </List.Item>);
@@ -357,15 +359,25 @@ const FreeInstock = (props) => {
         }).length !== count
       }
       onClick={() => {
-        instockRun({
-          data: {
-            positionsId: data.storehousepostionId,
-            codeIds: items.data.map((items) => {
-              return items.codeId;
-            }),
-            storeHouseId: data.storehouse.value,
-          },
-        });
+        if (items.data.filter((value) => {
+          return value.number <= 0;
+        }).length > 0) {
+          instockRun({
+            data: {
+              positionsId: data.storehousepostionId,
+              codeIds: items.data.map((items) => {
+                return items.codeId;
+              }),
+              storeHouseId: data.storehouse.value,
+            },
+          });
+        } else {
+          Toast.show({
+            content: '数量不能小于0个!',
+            position: 'bottom',
+          });
+        }
+
       }}
       text='入库'
     />
