@@ -99,18 +99,20 @@ const FreeInstock = (props) => {
                 inkindType: '自由入库',
               },
             });
-            const templete = await request({
-              url:'/inkind/detail',
-              method:'POST',
-              data:{
-                inkindId:res.inkindId
-              }
-            })
+            if (!getHeader()) {
+              const templete = await request({
+                url: '/inkind/detail',
+                method: 'POST',
+                data: {
+                  inkindId: res.inkindId,
+                },
+              });
+              await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
+              await html2ref.current.setCodeId(res.codeId);
+            }
             const arr = items.data;
-            arr[i] = { ...arr[i], codeId:res.codeId };
+            arr[i] = { ...arr[i], codeId: res.codeId };
             setItmes({ data: arr });
-            await html2ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
-            await html2ref.current.setCodeId(res.codeId);
           } else {
             Toast.show({
               content: '请先将物料和供应商信息填写完整!',
@@ -199,7 +201,7 @@ const FreeInstock = (props) => {
     <List>
       <List.Item title='物料'>
         <Typography.Link underline onClick={() => {
-          ref.current.search({ type:'sku' });
+          ref.current.search({ type: 'sku' });
         }}>
           {
             data.sku.label || '请选择物料'
@@ -208,7 +210,7 @@ const FreeInstock = (props) => {
       </List.Item>
       <List.Item title='供应商(品牌)'>
         <Typography.Link underline onClick={() => {
-          ref.current.search({ type:'brand' });
+          ref.current.search({ type: 'brand' });
         }}>
           {
             data.brand.label || '请选择供应商(品牌)'
@@ -217,7 +219,7 @@ const FreeInstock = (props) => {
       </List.Item>
       <List.Item title='仓库'>
         <Typography.Link underline onClick={() => {
-          ref.current.search({ type:'storehouse' });
+          ref.current.search({ type: 'storehouse' });
         }}>
           {
             data.storehouse.label || '请选择仓库'
@@ -228,9 +230,9 @@ const FreeInstock = (props) => {
         title={<ScanOutlined />} onClick={() => {
         props.dispatch({
           type: 'qrCode/wxCpScan',
-          payload:{
-            action:'freeInstock'
-          }
+          payload: {
+            action: 'freeInstock',
+          },
         });
       }} />}>
         <MyTreeSelect

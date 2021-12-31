@@ -144,6 +144,7 @@ const Auth = (props) => {
     window.printOk = () => {
       Toast.clear();
     }
+
     window.receive = (code) => {
       let codeId = '';
       if (code.indexOf('https') !== -1) {

@@ -10,6 +10,12 @@ const Html2Canvas = ({ ...props }, ref) => {
   const [templete, setTemplete] = useState();
 
   const canvasBase64 = () => {
+    if (process.env.ENV !== 'test')
+      Toast.show({
+        icon: 'loading',
+        duration: 0,
+        content: '打印中...',
+      });
     html2canvas(document.getElementById('code'), {
       scale: 2,
       logging: false,
@@ -18,12 +24,6 @@ const Html2Canvas = ({ ...props }, ref) => {
     }).then((canvas) => {
       console.log('打印二维码', codeId);
       window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
-      if (process.env.ENV !== 'test')
-        Toast.show({
-          icon: 'loading',
-          duration: 0,
-          content: '打印中...',
-        });
       setCodeId(null);
     });
     return null;
