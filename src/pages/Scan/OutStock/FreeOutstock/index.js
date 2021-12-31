@@ -298,12 +298,19 @@ const FreeOutstock = (props) => {
 
       }}
       onClick={() => {
-        outstockRun({
-          data: {
-            codeId: data.item.value,
-            number,
-          },
-        });
+        if (number > 0 && number <= data.item.number) {
+          outstockRun({
+            data: {
+              codeId: data.item.value,
+              number,
+            },
+          });
+        } else {
+          Toast.show({
+            content: '请填入正确的数量!',
+            position: 'bottom',
+          });
+        }
       }}
       text='出库'
     />

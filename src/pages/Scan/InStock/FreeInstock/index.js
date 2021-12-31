@@ -285,7 +285,7 @@ const FreeInstock = (props) => {
         <List
           style={{
             '--border-top': 'none',
-            '--border-bottom': 'none',
+            '--border-inner': 'none',
           }}
         >
           {listItems()}
