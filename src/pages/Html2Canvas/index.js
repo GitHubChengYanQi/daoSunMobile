@@ -44,7 +44,7 @@ const Html2Canvas = ({ ...props }, ref) => {
   return <Dialog
     visible={codeId}
     content={<div>
-      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: '100%' }}>
+      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: 200 }}>
         {templete ?
           pares(templete, {
             replace: domNode => {

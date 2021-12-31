@@ -170,6 +170,7 @@ const FreeOutstock = (props) => {
 
   return <>
     <Card title='物料信息' />
+    {/*<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADIAQAAAACFI5MzAAACDElEQVR42tWYQW6FMAxEjViwzBFyk3IxJJC4GNwkR2CZBcKdcaD9UvW305ZFBDwWVjweO5i/u+wvk8twjUdf7MP6UrF45SshSe51PCwPl025jn5y8aIkiyEiBLP7acOVVmeAejL7sCWEhW/yr5C0Fsdd9i15kRPk5yOdDf/InIJQkPHye3lRr4BETV42l9ohLNzH8lXBAsL8oE4nA1lZrDNj64UEwRjEgWWjUP3ouUxZR+gPyM+S8TwXYOPjaUoSNmUMEFvSQZ7tGyHpQ5mOJM1eO2TKDDnTET8MHglJhF8PdIphp1B1xBfK0wtCmstArcSdjlxh1aELvrLEb26FqIgZuibKAmE1oVajc8sI8sOXq6Nrrm1yGPzJnIYwNXQobk2OGQLFOpmWOGUCZS7sHTHKNO3oCCeH0iYHxhZlqyNXDA20zNHvycFvv1YRFghTg5cc3djCnjpVEXRIFghL1GOECsPSERQm+wQ2Zm99Gx388WsNCX/YkZAWm/vKOm2zi4o4Dy84y8SBhpnC7iymJNgYijJKFPtE17rVqyJ4Dq8Kf9iPaBuLkLQZFkly9g7ahXGkdR15zrQOmbBvt1FmMSGJswxqozVvu61LSu4TZWWVcIRiflaXE4TVHW1jYorOasLbjX8WODmgaF5OuwLCRk2H4p8FFmtrokISZ9o4UcIf2vKiXgH5n//f3pJPsjydwloXIwIAAAAASUVORK5CYII=' alt='' />*/}
     <List>
       <List.Item title='仓库'>
         <Typography.Link underline onClick={() => {

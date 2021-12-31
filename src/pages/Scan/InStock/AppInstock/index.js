@@ -13,6 +13,7 @@ import Html2Canvas from '../../../Html2Canvas';
 import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
+import pares from 'html-react-parser';
 
 const fontSize = 24;
 
@@ -21,6 +22,8 @@ const AppInstock = (props) => {
   const ref = useRef();
 
   const treeRef = useRef();
+
+  const [canvas, setCanvas] = useState([]);
 
   // 显示绑定操作
   const [itemBind, setItemBind] = useState(false);
@@ -79,13 +82,17 @@ const AppInstock = (props) => {
       manual: true,
       onSuccess: async (res) => {
         const templete = await request({
-          url:'/inkind/detail',
-          method:'POST',
-          data:{
-            inkindId:res.inkindId
-          }
-        })
-        await ref.current.setTemplete(templete.printTemplateResult &&templete.printTemplateResult.templete);
+          url: '/inkind/detail',
+          method: 'POST',
+          data: {
+            inkindId: res.inkindId,
+          },
+        });
+        setCanvas([...canvas, {
+          templete: templete.printTemplateResult && templete.printTemplateResult.templete,
+          codeId: res.codeId,
+        }]);
+        await ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
         await ref.current.setCodeId(res.codeId);
         if (storehousePositionsId) {
           instockAction(res.codeId);
@@ -93,8 +100,8 @@ const AppInstock = (props) => {
           const complent = waitNumber + number;
           setWaitCodeIds([...waitCodeIds, res.codeId]);
           setWaitNumber(complent);
-          setComplete((items.number - complent) === 0)
-          batch && setNumber(complent)
+          setComplete((items.number - complent) === 0);
+          batch && setNumber(complent);
         }
       },
     },
@@ -230,7 +237,7 @@ const AppInstock = (props) => {
           codeId: qrCode.codeId,
           storehousePositionsId: storehousePositionsId,
         },
-      }
+      },
     ));
     instock({
       data: {
@@ -325,8 +332,8 @@ const AppInstock = (props) => {
         instockAction: null,
       });
     }
-  }, [qrCode.instockAction],{
-    wait:0
+  }, [qrCode.instockAction], {
+    wait: 0,
   });
 
   useDebounceEffect(() => {
@@ -337,8 +344,8 @@ const AppInstock = (props) => {
         },
       });
     }
-  }, [codeId],{
-    wait:0
+  }, [codeId], {
+    wait: 0,
   });
 
 
@@ -385,7 +392,7 @@ const AppInstock = (props) => {
              onChange={(value) => {
                setStorehousePositionsId(value);
              }}
-             onOk={()=>{
+             onOk={() => {
                waitCodeInstock();
              }}
            />
@@ -413,6 +420,35 @@ const AppInstock = (props) => {
         extra={<span style={{ fontSize, color: 'green' }}>{items.instockNumber - items.number}</span>} />
       <List.Item title='待入库数量' extra={<span style={{ fontSize, color: 'red' }}>{waitNumber}</span>} />
     </List>
+
+    {canvas.length > 0 && <Card title='已绑定的二维码'>
+      <List>
+        {
+          canvas.map((items, index) => {
+            return <List.Item
+              key={index}
+              extra={<LinkButton title='打印' onClick={async () => {
+                await ref.current.setTemplete(items.templete);
+                await ref.current.setCodeId(items.codeId);
+              }} />}
+            >
+              {
+                pares(items.templete, {
+                  replace: domNode => {
+                    if (domNode.name === 'p') {
+                      domNode.attribs = {
+                        style: 'padding:0;margin:0',
+                      };
+                      return domNode;
+                    }
+                  },
+                })
+              }
+            </List.Item>;
+          })
+        }
+      </List>
+    </Card>}
 
     {/*------------------------------批量入库选择数量-------------------------*/}
     <Dialog

@@ -8,6 +8,7 @@ import Notice from './Notice';
 import OrCode from './OrCode';
 import Work from './Work';
 import Report from './Report';
+import IsDev from '../components/IsDev';
 
 
 export default function(props) {
@@ -50,7 +51,7 @@ export default function(props) {
         }}>
           <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' style={{ color: '#000' }} />} title='首页' />
           <TabBar.Item key='/Notice' icon={<Icon type='icon-xiaoxi' />} title='通知' />
-          {getHeader() && <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />}
+          {getHeader() || IsDev() && <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />}
           <TabBar.Item key='/Work' icon={<Icon type='icon-fenlei' />} title='工作' />
           <TabBar.Item key='/Report' icon={<Icon type='icon-shuju' />} title='报表' />
         </TabBar>

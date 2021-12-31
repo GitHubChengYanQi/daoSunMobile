@@ -14,6 +14,7 @@ import Html2Canvas from '../../../Html2Canvas';
 import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
+import pares from 'html-react-parser';
 
 const FreeInstock = (props) => {
 
@@ -21,6 +22,8 @@ const FreeInstock = (props) => {
   const ref = useRef();
   const html2ref = useRef();
   const treeRef = useRef();
+
+  const [canvas, setCanvas] = useState([]);
 
   const codeId = props.qrCode && props.qrCode.codeId;
 
@@ -107,6 +110,10 @@ const FreeInstock = (props) => {
                   inkindId: res.inkindId,
                 },
               });
+              setCanvas([...canvas, {
+                templete: templete.printTemplateResult && templete.printTemplateResult.templete,
+                codeId: res.codeId,
+              }]);
               await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
               await html2ref.current.setCodeId(res.codeId);
             }
@@ -197,69 +204,117 @@ const FreeInstock = (props) => {
   });
 
   return <>
-    <Card title='物料信息' />
-    <List>
-      <List.Item title='物料'>
-        <Typography.Link underline onClick={() => {
-          ref.current.search({ type: 'sku' });
-        }}>
-          {
-            data.sku.label || '请选择物料'
-          }
-        </Typography.Link>
-      </List.Item>
-      <List.Item title='供应商(品牌)'>
-        <Typography.Link underline onClick={() => {
-          ref.current.search({ type: 'brand' });
-        }}>
-          {
-            data.brand.label || '请选择供应商(品牌)'
-          }
-        </Typography.Link>
-      </List.Item>
-      <List.Item title='仓库'>
-        <Typography.Link underline onClick={() => {
-          ref.current.search({ type: 'storehouse' });
-        }}>
-          {
-            data.storehouse.label || '请选择仓库'
-          }
-        </Typography.Link>
-      </List.Item>
-      <List.Item title='库位' extra={getHeader() && <LinkButton
-        title={<ScanOutlined />} onClick={() => {
-        props.dispatch({
-          type: 'qrCode/wxCpScan',
-          payload: {
-            action: 'freeInstock',
-          },
-        });
-      }} />}>
-        <MyTreeSelect
-          arrow={false}
-          ref={treeRef}
-          branch={!data.storehouse.value}
-          poputTitle='选择库位'
-          branchText='请选择仓库或直接扫码选择库位'
-          textType='link'
-          resh={data.storehouse.value}
-          title={<Typography.Link underline>选择库位</Typography.Link>}
-          value={data.storehousepostionId}
-          api={storehousePositionsTreeView}
-          onChange={(value) => {
-            setData({ ...data, storehousepostionId: value });
-          }}
-        />
-      </List.Item>
-    </List>
+    <Card title='物料信息'>
+      <List
+        style={{
+          '--border-top': 'none',
+          '--border-bottom': 'none',
+        }}
+      >
+        <List.Item title='物料'>
+          <Typography.Link underline onClick={() => {
+            ref.current.search({ type: 'sku' });
+          }}>
+            {
+              data.sku.label || '请选择物料'
+            }
+          </Typography.Link>
+        </List.Item>
+        <List.Item title='供应商(品牌)'>
+          <Typography.Link underline onClick={() => {
+            ref.current.search({ type: 'brand' });
+          }}>
+            {
+              data.brand.label || '请选择供应商(品牌)'
+            }
+          </Typography.Link>
+        </List.Item>
+        <List.Item title='仓库'>
+          <Typography.Link underline onClick={() => {
+            ref.current.search({ type: 'storehouse' });
+          }}>
+            {
+              data.storehouse.label || '请选择仓库'
+            }
+          </Typography.Link>
+        </List.Item>
+        <List.Item title='库位' extra={getHeader() && <LinkButton
+          title={<ScanOutlined />} onClick={() => {
+          props.dispatch({
+            type: 'qrCode/wxCpScan',
+            payload: {
+              action: 'freeInstock',
+            },
+          });
+        }} />}>
+          <MyTreeSelect
+            arrow={false}
+            ref={treeRef}
+            branch={!data.storehouse.value}
+            poputTitle='选择库位'
+            branchText='请选择仓库或直接扫码选择库位'
+            textType='link'
+            resh={data.storehouse.value}
+            title={<Typography.Link underline>选择库位</Typography.Link>}
+            value={data.storehousepostionId}
+            api={storehousePositionsTreeView}
+            onChange={(value) => {
+              setData({ ...data, storehousepostionId: value });
+            }}
+          />
+        </List.Item>
+      </List>
+    </Card>
 
-    <Card title='分批入库' />
-    <List>
-      {listItems()}
-      <Button color='default' style={{ width: '100%' }} onClick={() => {
-        setCount(count + 1);
-      }}><AddOutline /></Button>
-    </List>
+    <div style={{ margin: '16px 0' }}>
+      <Card title='分批入库'>
+        <List
+          style={{
+            '--border-top': 'none',
+            '--border-bottom': 'none',
+          }}
+        >
+          {listItems()}
+          <Button color='default' style={{ width: '100%' }} onClick={() => {
+            setCount(count + 1);
+          }}><AddOutline /></Button>
+        </List>
+      </Card>
+    </div>
+
+    {canvas.length > 0 && <Card title='已绑定的二维码'>
+      <List
+        style={{
+          '--border-top': 'none',
+          '--border-bottom': 'none',
+        }}
+      >
+        {
+          canvas.map((items, index) => {
+            return <List.Item
+              key={index}
+              extra={<LinkButton title='打印' onClick={async () => {
+                await html2ref.current.setTemplete(items.templete);
+                await html2ref.current.setCodeId(items.codeId);
+              }} />}
+            >
+              {
+                pares(items.templete, {
+                  replace: domNode => {
+                    if (domNode.name === 'p') {
+                      domNode.attribs = {
+                        style: 'padding:0;margin:0',
+                      };
+                      return domNode;
+                    }
+                  },
+                })
+              }
+            </List.Item>;
+          })
+        }
+      </List>
+    </Card>}
 
     <Search ref={ref} onChange={(value) => {
       switch (value.type) {

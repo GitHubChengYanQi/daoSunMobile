@@ -1,4 +1,4 @@
-import { Button, Collapse, Dialog, Ellipsis, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Button, Card, Collapse, Dialog, Ellipsis, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
 import { BarsOutlined, ScanOutlined } from '@ant-design/icons';
 import React, { useRef, useState } from 'react';
 import MyTreeSelect from '../../components/MyTreeSelect';
@@ -14,14 +14,10 @@ import { MyLoading } from '../../components/MyLoading';
 import { useDebounceEffect } from 'ahooks';
 import IsDev from '../../../components/IsDev';
 import style from './index.css';
+import MyNavBar from '../../components/MyNavBar';
 
 
 const InStock = (props) => {
-
-
-  // window.addEventListener("popstate", function(e) {
-  //   history.push('/')
-  // }, false);
 
   const id = props.location.query.id;
 
@@ -175,10 +171,13 @@ const InStock = (props) => {
 
 
   return (
-    <div style={{ padding: 16 }} className={style.instock}>
-      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockOrder}>
-        <Collapse.Panel
-          key='0'
+    <>
+      {getHeader() && <MyNavBar title='入库' />}
+      <div style={{ padding: 16 }} className={style.instock}>
+        <Card
+          style={{ backgroundColor: '#f4f4f4' }}
+          headerStyle={{ border: 'none', padding: 8, backgroundColor: '#fff' }}
+          bodyStyle={{ backgroundColor: '#fff' }}
           title={<strong
             style={{
               borderBottom: 'solid 1px #1845b5',
@@ -188,7 +187,6 @@ const InStock = (props) => {
             }}>
             入库信息
           </strong>}
-          style={{ paddingBottom: 8 }}
         >
           <List
             className={style.instockOrderList}
@@ -204,11 +202,9 @@ const InStock = (props) => {
             <List.Item>入库类别：{data.type || '手动添加'}</List.Item>
             <List.Item>创建时间：{data.createTime}</List.Item>
           </List>
-        </Collapse.Panel>
-      </Collapse>
-      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockListing}>
-        <Collapse.Panel
-          key='1'
+        </Card>
+        <Card
+          headerStyle={{ border: 'none', padding: 8 }}
           title={<strong
             style={{
               borderBottom: 'solid 1px #1845b5',
@@ -227,6 +223,7 @@ const InStock = (props) => {
           }).length !== 0
             ?
             <List
+              className={style.instockListingList}
               style={{
                 padding: 0,
                 backgroundColor: '#f4f4f4',
@@ -370,11 +367,9 @@ const InStock = (props) => {
             </List>
             :
             <MyEmpty description='已全部入库' />}
-        </Collapse.Panel>
-      </Collapse>
-      <Collapse defaultActiveKey={['0', '1', '2']} className={style.instockDetails}>
-        <Collapse.Panel
-          key='2'
+        </Card>
+        <Card
+          headerStyle={{ border: 'none', padding: 8 }}
           title={<strong
             style={{
               borderBottom: 'solid 1px #1845b5',
@@ -392,6 +387,7 @@ const InStock = (props) => {
                 '--border-top': 'none',
                 '--border-bottom': 'none',
                 backgroundColor: '#f4f4f4',
+                '--border-inner': 'none',
               }}
             >
               {data.instockResults && data.instockResults.length > 0 ?
@@ -399,6 +395,7 @@ const InStock = (props) => {
                   return <List.Item
                     key={index}
                     style={{
+                      padding: 8,
                       marginBottom: 16,
                       backgroundColor: '#fff',
                       boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
@@ -425,218 +422,218 @@ const InStock = (props) => {
                 <MyEmpty />}
             </List>}
 
-        </Collapse.Panel>
-      </Collapse>
+        </Card>
 
-      {/*---------------------------------选择库位进行入库操作----------------------*/}
-      <Dialog
-        visible={qrCode && qrCode.instockAction}
-        title={
-          items && <>
-            {items.sku && items.sku.skuName}
-            &nbsp;/&nbsp;
-            {items.spuResult && items.spuResult.name}
-            &nbsp;&nbsp;
-            <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-              (
-              {
-                items.backSkus
-                &&
-                items.backSkus.map((items, index) => {
-                  return <span key={index}>
+        {/*---------------------------------选择库位进行入库操作----------------------*/}
+        <Dialog
+          visible={qrCode && qrCode.instockAction}
+          title={
+            items && <>
+              {items.sku && items.sku.skuName}
+              &nbsp;/&nbsp;
+              {items.spuResult && items.spuResult.name}
+              &nbsp;&nbsp;
+              <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                (
+                {
+                  items.backSkus
+                  &&
+                  items.backSkus.map((items, index) => {
+                    return <span key={index}>
           {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
             </span>;
-                })
-              }
-              )
-            </em>
-          </>}
-        content={
-          <div style={{ textAlign: 'center' }}>
-            <Space direction='vertical'>
-              <MyTreeSelect
-                poputTitle={scanStorehousePositon()}
-                title='选择库位'
-                value={(qrCode.stroeHousePostion && qrCode.stroeHousePostion.storehousePositionsId) || stroeHousePostion}
-                ref={showRef}
-                api={storehousePositionsTreeView}
-                defaultParams={
-                  {
-                    params: {
-                      ids: data.storeHouseId,
-                    },
-                  }
+                  })
                 }
-                onChange={(value) => {
-                  setStroeHousePostion(value);
-                }}
-              />
+                )
+              </em>
+            </>}
+          content={
+            <div style={{ textAlign: 'center' }}>
+              <Space direction='vertical'>
+                <MyTreeSelect
+                  poputTitle={scanStorehousePositon()}
+                  title='选择库位'
+                  value={(qrCode.stroeHousePostion && qrCode.stroeHousePostion.storehousePositionsId) || stroeHousePostion}
+                  ref={showRef}
+                  api={storehousePositionsTreeView}
+                  defaultParams={
+                    {
+                      params: {
+                        ids: data.storeHouseId,
+                      },
+                    }
+                  }
+                  onChange={(value) => {
+                    setStroeHousePostion(value);
+                  }}
+                />
 
-              {scanStorehousePositon()}
-            </Space>
-          </div>
-        }
-        onClose={() => {
-          scanCodeState({
-            instockAction: null,
-          });
-        }}
-        onAction={async (action) => {
-          if (action.key === 'instock') {
-            if (stroeHousePostion || qrCode.stroeHousePostion) {
-              await request({
-                url: '/orCode/instockByCode',
-                method: 'POST',
-                data: {
-                  type: 'item',
-                  codeId: qrCode.codeId,
-                  Id: items.skuId,
-                  instockListParam: {
-                    ...items,
-                    codeId: qrCode.codeId,
-                    storehousePositionsId: (qrCode.stroeHousePostion && qrCode.stroeHousePostion.storehousePositionsId) || stroeHousePostion,
-                  },
-                },
-              }).then(async (res) => {
-                await refresh();
-                await scanCodeState({
-                  instockAction: null,
-                });
-                if (res !== 0) {
-                  await setInstockNumber(res);
-                  if (batch) {
-                    await setNumber(res);
-                  } else {
-                    await setNumber(1);
-                  }
-                  next(items);
-                } else {
-                  Toast.show({
-                    content: '已经全部入库！',
-                    position: 'bottom',
-                  });
-                }
-              });
-            } else {
-              showRef.current.show();
-            }
-            //如果入库成功
-          } else {
+                {scanStorehousePositon()}
+              </Space>
+            </div>
+          }
+          onClose={() => {
             scanCodeState({
               instockAction: null,
             });
-          }
-
-        }}
-        actions={[
-          [{
-            key: 'instock',
-            text: '入库',
-          },
-            {
-              key: 'close',
-              text: '取消',
-            }],
-        ]}
-      />
-
-      {/*------------------------------批量入库选择数量-------------------------*/}
-      <Dialog
-        visible={items && qrCode.batchBind}
-        title={
-          items && <>
-            {getSkuResult(items)}
-          </>}
-        content={
-          <div style={{ textAlign: 'center' }}>
-            <Space>
-              <div>
-                入库数量：
-              </div>
-              <Stepper
-                min={1}
-                max={instockNumber}
-                value={number}
-                onChange={value => {
-                  setNumber(value);
-                }}
-              />
-            </Space>
-          </div>
-        }
-        onClose={() => {
-          scanCodeState({
-            batchBind: false,
-          });
-        }}
-        onAction={async (action) => {
-          if (action.key === 'next') {
-            if (number > instockNumber) {
-              Toast.show({
-                content: '不能超过未入库数量！',
-                position: 'bottom',
-              });
+          }}
+          onAction={async (action) => {
+            if (action.key === 'instock') {
+              if (stroeHousePostion || qrCode.stroeHousePostion) {
+                await request({
+                  url: '/orCode/instockByCode',
+                  method: 'POST',
+                  data: {
+                    type: 'item',
+                    codeId: qrCode.codeId,
+                    Id: items.skuId,
+                    instockListParam: {
+                      ...items,
+                      codeId: qrCode.codeId,
+                      storehousePositionsId: (qrCode.stroeHousePostion && qrCode.stroeHousePostion.storehousePositionsId) || stroeHousePostion,
+                    },
+                  },
+                }).then(async (res) => {
+                  await refresh();
+                  await scanCodeState({
+                    instockAction: null,
+                  });
+                  if (res !== 0) {
+                    await setInstockNumber(res);
+                    if (batch) {
+                      await setNumber(res);
+                    } else {
+                      await setNumber(1);
+                    }
+                    next(items);
+                  } else {
+                    Toast.show({
+                      content: '已经全部入库！',
+                      position: 'bottom',
+                    });
+                  }
+                });
+              } else {
+                showRef.current.show();
+              }
+              //如果入库成功
             } else {
               scanCodeState({
-                bind: true,
-              });
-              scanCodeState({
-                batchBind: false,
+                instockAction: null,
               });
             }
-          } else {
+
+          }}
+          actions={[
+            [{
+              key: 'instock',
+              text: '入库',
+            },
+              {
+                key: 'close',
+                text: '取消',
+              }],
+          ]}
+        />
+
+        {/*------------------------------批量入库选择数量-------------------------*/}
+        <Dialog
+          visible={items && qrCode.batchBind}
+          title={
+            items && <>
+              {getSkuResult(items)}
+            </>}
+          content={
+            <div style={{ textAlign: 'center' }}>
+              <Space>
+                <div>
+                  入库数量：
+                </div>
+                <Stepper
+                  min={1}
+                  max={instockNumber}
+                  value={number}
+                  onChange={value => {
+                    setNumber(value);
+                  }}
+                />
+              </Space>
+            </div>
+          }
+          onClose={() => {
             scanCodeState({
               batchBind: false,
             });
-            setNumber(1);
-          }
-        }}
-        actions={[
-          [{
-            key: 'next',
-            text: '下一步',
-          },
-            {
-              key: 'close',
-              text: '取消',
-            }],
-        ]}
-      />
+          }}
+          onAction={async (action) => {
+            if (action.key === 'next') {
+              if (number > instockNumber) {
+                Toast.show({
+                  content: '不能超过未入库数量！',
+                  position: 'bottom',
+                });
+              } else {
+                scanCodeState({
+                  bind: true,
+                });
+                scanCodeState({
+                  batchBind: false,
+                });
+              }
+            } else {
+              scanCodeState({
+                batchBind: false,
+              });
+              setNumber(1);
+            }
+          }}
+          actions={[
+            [{
+              key: 'next',
+              text: '下一步',
+            },
+              {
+                key: 'close',
+                text: '取消',
+              }],
+          ]}
+        />
 
-      {/*绑定二维码*/}
-      {items && <CodeBind
-        visible={qrCode.codeId && qrCode.bind}
-        title={`“ ${items.sku && items.sku.skuName} \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
-        data={{
-          codeId: qrCode.codeId,
-          source: 'item',
-          ...items,
-          id: items.skuId,
-          number: number,
-          inkindType: '入库',
-        }}
-        onSuccess={() => {
-          scanCodeState({
-            bind: false,
-            instockAction: {},
-          });
-          Toast.show({
-            content: '绑定成功！',
-            position: 'bottom',
-          });
-        }}
-        onError={() => {
-          scanCodeState({
-            bind: false,
-          });
-        }}
-        onClose={() => {
-          scanCodeState({
-            bind: false,
-          });
-        }}
-      />}
-    </div>
+        {/*绑定二维码*/}
+        {items && <CodeBind
+          visible={qrCode.codeId && qrCode.bind}
+          title={`“ ${items.sku && items.sku.skuName} \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
+          data={{
+            codeId: qrCode.codeId,
+            source: 'item',
+            ...items,
+            id: items.skuId,
+            number: number,
+            inkindType: '入库',
+          }}
+          onSuccess={() => {
+            scanCodeState({
+              bind: false,
+              instockAction: {},
+            });
+            Toast.show({
+              content: '绑定成功！',
+              position: 'bottom',
+            });
+          }}
+          onError={() => {
+            scanCodeState({
+              bind: false,
+            });
+          }}
+          onClose={() => {
+            scanCodeState({
+              bind: false,
+            });
+          }}
+        />}
+      </div>
+    </>
   );
 };
 export default connect(({ qrCode }) => ({ qrCode }))(InStock);

@@ -1,5 +1,5 @@
-import { Button, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
-import {  ScanOutlined } from '@ant-design/icons';
+import { Button, Card, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
+import { ScanOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
@@ -13,391 +13,385 @@ import { connect } from 'dva';
 import { history } from 'umi';
 import IsDev from '../../../components/IsDev';
 import style from './index.css';
+import MyNavBar from '../../components/MyNavBar';
 
 const OutStock = (props) => {
 
-  // window.addEventListener("popstate", function(e) {
-  //   history.push('/')
-  // }, false);
 
-    const id = props.location.query.id;
+  const id = props.location.query.id;
 
-    const qrCode = props.qrCode;
+  const qrCode = props.qrCode;
 
-    const outstockAction = qrCode.outstockAction;
+  const outstockAction = qrCode.outstockAction;
 
-    // 控制全局状态
-    const scanCodeState = (payload) => {
-      props.dispatch({
-        type: 'qrCode/scanCodeState',
-        payload,
-      });
-    };
-
-    const [data, setData] = useState();
-
-    const { loading, run, refresh } = useRequest({
-      url: '/orCode/backObject',
-      method: 'GET',
-    }, {
-      manual: true,
-      onSuccess: (res) => {
-        setData(res.result);
-      },
+  // 控制全局状态
+  const scanCodeState = (payload) => {
+    props.dispatch({
+      type: 'qrCode/scanCodeState',
+      payload,
     });
+  };
 
-    const [number, setNumber] = useState(1);
+  const [data, setData] = useState();
 
-    const [itemNumber, setItemNumber] = useState(1);
+  const { loading, run, refresh } = useRequest({
+    url: '/orCode/backObject',
+    method: 'GET',
+  }, {
+    manual: true,
+    onSuccess: (res) => {
+      setData(res.result);
+    },
+  });
 
-    const [items, setItems] = useState();
+  const [number, setNumber] = useState(1);
 
-    const [stockDetails, setStockDetails] = useState();
+  const [itemNumber, setItemNumber] = useState(1);
 
-    const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
+  const [items, setItems] = useState();
+
+  const [stockDetails, setStockDetails] = useState();
+
+  const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
 
 
-    const next = (items) => {
-      Dialog.show({
-        content: `出库成功！是否继续出库 [ ${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name} ]？`,
-        closeOnMaskClick: true,
-        closeOnAction: true,
-        onAction: async (action) => {
-          if (action.key === 'ok') {
-            await props.dispatch({
-              type: 'qrCode/wxCpScan',
-              payload: {
-                items: {
-                  Id: items.skuId,
-                  type: 'item',
-                  ...items,
-                },
-                action: 'scanOutstock',
-                data,
+  const next = (items) => {
+    Dialog.show({
+      content: `出库成功！是否继续出库 [ ${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name} ]？`,
+      closeOnMaskClick: true,
+      closeOnAction: true,
+      onAction: async (action) => {
+        if (action.key === 'ok') {
+          await props.dispatch({
+            type: 'qrCode/wxCpScan',
+            payload: {
+              items: {
+                Id: items.skuId,
+                type: 'item',
+                ...items,
               },
-            });
-          }
-        },
-        actions: [
-          [
-            {
-              key: 'ok',
-              text: '是',
+              action: 'scanOutstock',
+              data,
             },
-            {
-              key: 'no',
-              text: '否',
-            },
-          ],
-        ],
-      });
-    };
-
-    useDebounceEffect(() => {
-      if (id) {
-        run({
-          params: {
-            id,
+          });
+        }
+      },
+      actions: [
+        [
+          {
+            key: 'ok',
+            text: '是',
           },
-        });
-      }
-    }, [id], {
-      wait: 0,
+          {
+            key: 'no',
+            text: '否',
+          },
+        ],
+      ],
     });
+  };
 
-    const getSkuResult = (items, br) => {
-      if (!items)
-        return null;
-      return <>
-        {items.sku && items.sku.skuName}
-        &nbsp;/&nbsp;
-        {items.spuResult && items.spuResult.name}
-        {br ? <br /> : <>&nbsp;&nbsp;</>}
-        {
-          items.backSkus
-          &&
-          items.backSkus.length > 0
-          &&
-          items.backSkus[0].attributeValues
-          &&
-          items.backSkus[0].attributeValues.attributeValues
-          &&
-          <em style={{ color: '#c9c8c8', fontSize: 12 }}>
-            (
-            {
-              items.backSkus
-              &&
-              items.backSkus.map((items, index) => {
-                return <span key={index}>
+  useDebounceEffect(() => {
+    if (id) {
+      run({
+        params: {
+          id,
+        },
+      });
+    }
+  }, [id], {
+    wait: 0,
+  });
+
+  const getSkuResult = (items, br) => {
+    if (!items)
+      return null;
+    return <>
+      {items.sku && items.sku.skuName}
+      &nbsp;/&nbsp;
+      {items.spuResult && items.spuResult.name}
+      {br ? <br /> : <>&nbsp;&nbsp;</>}
+      {
+        items.backSkus
+        &&
+        items.backSkus.length > 0
+        &&
+        items.backSkus[0].attributeValues
+        &&
+        items.backSkus[0].attributeValues.attributeValues
+        &&
+        <em style={{ color: '#c9c8c8', fontSize: 12 }}>
+          (
+          {
+            items.backSkus
+            &&
+            items.backSkus.map((items, index) => {
+              return <span key={index}>
                         {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
                       </span>;
-              })
-            }
-            )
-          </em>
-        }
-      </>;
-    };
+            })
+          }
+          )
+        </em>
+      }
+    </>;
+  };
 
-    const outstockContent = (items) => {
-      const stockNumber = outstockAction && outstockAction.stockDetails && outstockAction.stockDetails.number;
-      const maxNumber = stockNumber < itemNumber ? stockNumber : itemNumber;
+  const outstockContent = (items) => {
+    const stockNumber = outstockAction && outstockAction.stockDetails && outstockAction.stockDetails.number;
+    const maxNumber = stockNumber < itemNumber ? stockNumber : itemNumber;
 
-      return <>
-        {getSkuResult(items)}
-        <WhiteSpace size='sm' />
-        {items && items.brandResult && items.brandResult.brandName}
-        <WhiteSpace size='sm' />
-        库位：{data && data.storehouseResult && data.storehouseResult.name} - {outstockAction && outstockAction.positions && outstockAction.positions.name}
-        <WhiteSpace size='sm' />
-        库存数量:&nbsp;&nbsp;×{stockNumber}
-        <WhiteSpace size='sm' />
-        {stockNumber > 1 && <Space>
-          <div>
-            出库数量：
-          </div>
-          <Stepper
-            min={1}
-            max={maxNumber}
-            value={number}
-            onChange={value => {
-              setNumber(value);
-            }}
-          />
-        </Space>}
-      </>;
-    };
+    return <>
+      {getSkuResult(items)}
+      <WhiteSpace size='sm' />
+      {items && items.brandResult && items.brandResult.brandName}
+      <WhiteSpace size='sm' />
+      库位：{data && data.storehouseResult && data.storehouseResult.name} - {outstockAction && outstockAction.positions && outstockAction.positions.name}
+      <WhiteSpace size='sm' />
+      库存数量:&nbsp;&nbsp;×{stockNumber}
+      <WhiteSpace size='sm' />
+      {stockNumber > 1 && <Space>
+        <div>
+          出库数量：
+        </div>
+        <Stepper
+          min={1}
+          max={maxNumber}
+          value={number}
+          onChange={value => {
+            setNumber(value);
+          }}
+        />
+      </Space>}
+    </>;
+  };
 
-    if (loading)
-      return <MyLoading />;
+  if (loading)
+    return <MyLoading />;
 
-    if (!data)
-      return <MyEmpty height='100vh' />;
+  if (!data)
+    return <MyEmpty height='100vh' />;
 
-    return (
+  return (
+    <>
+      {getHeader() && <MyNavBar title='出库' />}
       <div style={{ padding: 16 }} className={style.outstock}>
-        <Collapse defaultActiveKey={['0', '1', '2']} className={style.outstockOrder}>
-          <Collapse.Panel
-            key='0'
-            title={<strong
-              style={{
-                borderBottom: 'solid 1px #1845b5',
-                padding: 8,
-                margin: 8,
-                color: '#1E1E1E',
-              }}>
-              出库信息
-            </strong>}
-            style={{ paddingBottom: 8 }}
-          >
+        <Card
+          style={{ backgroundColor: '#f4f4f4', borderRadius: 10 }}
+          headerStyle={{ border: 'none', padding: 8, backgroundColor: '#fff' }}
+          bodyStyle={{ backgroundColor: '#fff' }}
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+              color: '#1E1E1E',
+            }}>
+            出库信息
+          </strong>}
+        >
 
-            <List
-              className={style.outstockOrderList}
-              style={{
-                '--border-inner': 'none',
-                '--border-top': 'none',
-                '--border-bottom': 'none',
-              }}
-            >
-              <List.Item>出库单号：{data.coding}</List.Item>
-              <List.Item>仓库名称：{data.storehouseResult && data.storehouseResult.name}</List.Item>
-              <List.Item>负责人：{data.userResult && data.userResult.name}</List.Item>
-              <List.Item>备注：{data.note || '无'}</List.Item>
-              <List.Item>创建时间：{data.createTime}</List.Item>
-            </List>
-          </Collapse.Panel>
-        </Collapse>
-        <Collapse defaultActiveKey={['0', '1', '2']} className={style.outstockListing}>
-          <Collapse.Panel
-            key='1'
-            title={<strong
-              style={{
-                borderBottom: 'solid 1px #1845b5',
-                padding: 8,
-                margin: 8,
-                color: '#666666',
-              }}>出库清单</strong>}
-            style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}
+          <List
+            className={style.outstockOrderList}
+            style={{
+              '--border-inner': 'none',
+              '--border-top': 'none',
+              '--border-bottom': 'none',
+            }}
           >
-            <List
-              style={{
-                padding: 0,
-                backgroundColor: '#f4f4f4',
-                '--border-top': 'none',
-                '--border-bottom': 'none',
-                '--border-inner': 'none',
-              }}
-            >
-              {data.outstockListing && data.outstockListing.length > 0 ?
-                data.outstockListing.map((items, index) => {
-                  if (items.number > 0) {
-                    return <List.Item
-                      key={index}
+            <List.Item>出库单号：{data.coding}</List.Item>
+            <List.Item>仓库名称：{data.storehouseResult && data.storehouseResult.name}</List.Item>
+            <List.Item>负责人：{data.userResult && data.userResult.name}</List.Item>
+            <List.Item>备注：{data.note || '无'}</List.Item>
+            <List.Item>创建时间：{data.createTime}</List.Item>
+          </List>
+        </Card>
+        <Card
+          headerStyle={{ border: 'none', padding: 8 }}
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+              color: '#666666',
+            }}>出库清单</strong>}
+          style={{ backgroundColor: '#f4f4f4' }}
+        >
+          <List
+            className={style.outstocklistingList}
+            style={{
+              padding: 0,
+              backgroundColor: '#f4f4f4',
+              '--border-top': 'none',
+              '--border-bottom': 'none',
+              '--border-inner': 'none',
+            }}
+          >
+            {data.outstockListing && data.outstockListing.length > 0 ?
+              data.outstockListing.map((items, index) => {
+                if (items.number > 0) {
+                  return <List.Item
+                    key={index}
+                    style={{
+                      padding: 0,
+                      marginBottom: 16,
+                      backgroundColor: '#fff',
+                      boxShadow: '0px 3px 6px rgba(24,69,181,30%)',
+                      borderRadius: 10,
+                    }}
+                    description={<Button
                       style={{
-                        padding: 0,
-                        marginBottom: 16,
-                        backgroundColor: '#fff',
-                        boxShadow: '0px 3px 6px rgba(24,69,181,30%)',
-                        borderRadius: 10,
+                        width: '100%',
+                        marginTop: 8,
+                        border: 'none',
+                        color: '#fff',
+                        '--border-radius': 0,
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10,
+                        backgroundColor: '#1845B5',
                       }}
-                      description={<Button
-                        style={{
-                          width: '100%',
-                          marginTop: 8,
-                          border: 'none',
-                          color: '#fff',
-                          '--border-radius': 0,
-                          borderBottomLeftRadius: 10,
-                          borderBottomRightRadius: 10,
-                          backgroundColor: '#1845B5',
-                        }}
+                      onClick={async () => {
+                        if (!IsDev() && getHeader()) {
+                          setItems(items);
+                          setItemNumber(items.number);
+                          //调用扫码
+                          // scan(items);
+                          await props.dispatch({
+                            type: 'qrCode/wxCpScan',
+                            payload: {
+                              items: {
+                                Id: items.skuId,
+                                type: 'item',
+                                ...items,
+                              },
+                              action: 'scanOutstock',
+                              data,
+                            },
+                          });
+                        } else {
+                          history.push({
+                            pathname: '/Scan/OutStock/AppOutstock',
+                            state: {
+                              items,
+                              data,
+                            },
+                          });
+                        }
+                      }}
+                    >
+                      <Space>
+                        <ScanOutlined />
+                        扫码出库
+                        <>
+                          {items.number} / {items.delivery}
+                        </>
+                      </Space>
+                    </Button>}
+                  >
+                    <Space direction='vertical' style={{ padding: 8 }}>
+                      {getSkuResult(items)}
+                      {items.brandResult && items.brandResult.brandName}
+                      {
+                        stockDetails && stockDetails.index && stockDetails.index === `${index}`
+                        &&
+                        <Space direction='vertical'>
+                          {
+                            stockDetails.stockDetails && stockDetails.stockDetails.map((items, index) => {
+                              if (items.number > 0) {
+                                return <div key={index}>
+                                  {data.storehouseResult && data.storehouseResult.name} -
+                                  <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
+                                  &nbsp;&nbsp;× {items.number}
+                                </div>;
+                              } else {
+                                return null;
+                              }
+                            })
+                          }
+
+                        </Space>
+                      }
+                      <Button
+                        color='primary'
+                        fill='none'
+                        style={{ padding: 0 }}
                         onClick={async () => {
-                          if (!IsDev() && getHeader()) {
-                            setItems(items);
-                            setItemNumber(items.number);
-                            //调用扫码
-                            // scan(items);
-                            await props.dispatch({
-                              type: 'qrCode/wxCpScan',
-                              payload: {
-                                items: {
-                                  Id: items.skuId,
-                                  type: 'item',
-                                  ...items,
-                                },
-                                action: 'scanOutstock',
-                                data,
-                              },
-                            });
+                          const details = await request({
+                            url: '/stockDetails/list',
+                            method: 'POST',
+                            data: {
+                              skuId: items.skuId,
+                              storehouseId: data && data.storehouseId,
+                              brandId: items.brandId,
+                            },
+                          });
+                          if (stockDetails && stockDetails.index && stockDetails.index === `${index}`) {
+                            setStockDetails(false);
                           } else {
-                            history.push({
-                              pathname: '/Scan/OutStock/AppOutstock',
-                              state: {
-                                items,
-                                data,
-                              },
-                            });
+                            setStockDetails({ index: `${index}`, stockDetails: details });
                           }
                         }}
-                      >
-                        <Space>
-                          <ScanOutlined />
-                          扫码出库
-                          <>
-                            {items.number} / {items.delivery}
-                          </>
-                        </Space>
-                      </Button>}
-                    >
-                      <Space direction='vertical' style={{ padding: 16 }}>
-                        {getSkuResult(items)}
-                        {items.brandResult && items.brandResult.brandName}
-                        {
-                          stockDetails && stockDetails.index && stockDetails.index === `${index}`
-                          &&
-                          <Space direction='vertical'>
-                            {
-                              stockDetails.stockDetails && stockDetails.stockDetails.map((items, index) => {
-                                if (items.number > 0) {
-                                  return <div key={index}>
-                                    {data.storehouseResult && data.storehouseResult.name} -
-                                    <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
-                                    &nbsp;&nbsp;× {items.number}
-                                  </div>;
-                                } else {
-                                  return null;
-                                }
-                              })
-                            }
+                      >{stockDetails && stockDetails.index && stockDetails.index === `${index}` ? <>
+                        收起库位</> : <>查看库位</>}</Button>
+                    </Space>
+                  </List.Item>;
+                } else {
+                  return null;
+                }
 
-                          </Space>
-                        }
-                        <Button
-                          color='primary'
-                          fill='none'
-                          style={{ padding: 0 }}
-                          onClick={async () => {
-                            const details = await request({
-                              url: '/stockDetails/list',
-                              method: 'POST',
-                              data: {
-                                skuId: items.skuId,
-                                storehouseId: data && data.storehouseId,
-                                brandId: items.brandId,
-                              },
-                            });
-                            if (stockDetails && stockDetails.index && stockDetails.index === `${index}`) {
-                              setStockDetails(false);
-                            } else {
-                              setStockDetails({ index: `${index}`, stockDetails: details });
-                            }
-                          }}
-                        >{stockDetails && stockDetails.index && stockDetails.index === `${index}` ? <>
-                          收起库位</> : <>查看库位</>}</Button>
-                      </Space>
-                    </List.Item>;
-                  } else {
-                    return null;
-                  }
-
-                })
-                :
-                <MyEmpty description='已全部出库' />}
-            </List>
-          </Collapse.Panel>
-        </Collapse>
-        <Collapse defaultActiveKey={['0', '1', '2']} className={style.outstockDetails}>
-          <Collapse.Panel
-            key='2'
-            title={<strong
-              style={{
-                borderBottom: 'solid 1px #1845b5',
-                padding: 8,
-                margin: 8,
-                color: '#666666',
-              }}>出库明细</strong>}
-            style={{ backgroundColor: '#f4f4f4', paddingBottom: 8 }}
+              })
+              :
+              <MyEmpty description='已全部出库' />}
+          </List>
+        </Card>
+        <Card
+          headerStyle={{ border: 'none', padding: 8 }}
+          title={<strong
+            style={{
+              borderBottom: 'solid 1px #1845b5',
+              padding: 8,
+              margin: 8,
+              color: '#666666',
+            }}>出库明细</strong>}
+          style={{ backgroundColor: '#f4f4f4' }}
+        >
+          <List
+            className={style.outstockDetailsList}
+            style={{
+              '--border-top': 'none',
+              '--border-bottom': 'none',
+              '--border-inner': 'none',
+              backgroundColor: '#f4f4f4',
+            }}
           >
-            <List
-              className={style.outstockDetailsList}
-              style={{
-                '--border-top': 'none',
-                '--border-bottom': 'none',
-                backgroundColor: '#f4f4f4',
-              }}
-            >
-              {data.outstockResults && data.outstockResults.length > 0 ?
-                data.outstockResults.map((items, index) => {
-                    return <List.Item
-                      key={index}
-                      style={{
-                        marginBottom: 16,
-                        backgroundColor: '#fff',
-                        boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
-                        borderRadius: 5,
-                      }}
-                      extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
-                        {items.number}</Button>}
-                    >
-                      <Space direction='vertical'>
-                        <><strong>编号:</strong>{items.stockItemId}</>
-                        {getSkuResult(items)}
-                        {items.brandResult && items.brandResult.brandName}
-                      </Space>
+            {data.outstockResults && data.outstockResults.length > 0 ?
+              data.outstockResults.map((items, index) => {
+                  return <List.Item
+                    key={index}
+                    style={{
+                      padding: 8,
+                      marginBottom: 16,
+                      backgroundColor: '#fff',
+                      boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
+                      borderRadius: 5,
+                    }}
+                    extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
+                      {items.number}</Button>}
+                  >
+                    <Space direction='vertical'>
+                      <><strong>编号:</strong>{items.stockItemId}</>
+                      {getSkuResult(items)}
+                      {items.brandResult && items.brandResult.brandName}
+                    </Space>
 
-                    </List.Item>;
-                  },
-                )
-                :
-                <Empty
-                  style={{ padding: '64px 0' }}
-                  imageStyle={{ width: 128 }}
-                  description='暂无数据'
-                />
-              }
-            </List>
-          </Collapse.Panel>
-        </Collapse>
+                  </List.Item>;
+                },
+              )
+              :
+              <MyEmpty />
+            }
+          </List>
+        </Card>
 
         {/*------------------------------出库弹窗-------------------------*/
         }
@@ -455,8 +449,8 @@ const OutStock = (props) => {
           />
         }
       </div>
-    );
-  }
-;
+    </>
+  );
+};
 export default connect(({ qrCode }) => ({ qrCode }))(OutStock);
 
