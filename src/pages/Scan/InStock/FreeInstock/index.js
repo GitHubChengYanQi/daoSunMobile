@@ -82,6 +82,10 @@ const FreeInstock = (props) => {
   const [items, setItmes] = useSetState({
     data: [],
   });
+  console.log(items.data,items.data.filter((value) => {
+    console.log(value,value.number <= 0);
+    return value.number <= 0;
+  }).length === 0);
 
   const listItems = () => {
     const arrays = new Array(count);
@@ -92,35 +96,43 @@ const FreeInstock = (props) => {
           const brandId = data.brand.value;
           const id = data.sku.value;
           if (brandId && id) {
-            const res = await request({
-              url: '/orCode/automaticBinding',
-              method: 'POST',
-              data: {
-                source: 'item',
-                brandId,
-                id,
-                number: item.number,
-                inkindType: '自由入库',
-              },
-            });
-            if (!getHeader()) {
-              const templete = await request({
-                url: '/inkind/detail',
+            if (item.number > 0){
+              const res = await request({
+                url: '/orCode/automaticBinding',
                 method: 'POST',
                 data: {
-                  inkindId: res.inkindId,
+                  source: 'item',
+                  brandId,
+                  id,
+                  number: item.number,
+                  inkindType: '自由入库',
                 },
               });
-              setCanvas([...canvas, {
-                templete: templete.printTemplateResult && templete.printTemplateResult.templete,
-                codeId: res.codeId,
-              }]);
-              await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-              await html2ref.current.setCodeId(res.codeId);
+              if (!getHeader()) {
+                const templete = await request({
+                  url: '/inkind/detail',
+                  method: 'POST',
+                  data: {
+                    inkindId: res.inkindId,
+                  },
+                });
+                setCanvas([...canvas, {
+                  templete: templete.printTemplateResult && templete.printTemplateResult.templete,
+                  codeId: res.codeId,
+                }]);
+                await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
+                await html2ref.current.setCodeId(res.codeId);
+              }
+              const arr = items.data;
+              arr[i] = { ...arr[i], codeId: res.codeId };
+              setItmes({ data: arr });
+            }else {
+              Toast.show({
+                content: '数量不能小于0!',
+                position: 'bottom',
+              });
             }
-            const arr = items.data;
-            arr[i] = { ...arr[i], codeId: res.codeId };
-            setItmes({ data: arr });
+
           } else {
             Toast.show({
               content: '请先将物料和供应商信息填写完整!',
@@ -361,7 +373,7 @@ const FreeInstock = (props) => {
       onClick={() => {
         if (items.data.filter((value) => {
           return value.number <= 0;
-        }).length > 0) {
+        }).length === 0) {
           instockRun({
             data: {
               positionsId: data.storehousepostionId,
