@@ -52,8 +52,8 @@ export default {
       if (process.env.ENV === 'test') {
         // let code = '1476356885154385921'; // 入库
         // let code = '1473977842541821954'; // 库位
-        let code = '1475358083438198786'; // 出库
-        // let code = '1475746898903113729'; // 实物
+        // let code = '1475358083438198786'; // 出库
+        let code = '1476374017911943170'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);

@@ -174,7 +174,7 @@ const OutStock = (props) => {
 
   return (
     <>
-      {getHeader() && <MyNavBar title='出库' />}
+      {!getHeader() && <MyNavBar title='出库' />}
       <div style={{ padding: 16 }} className={style.outstock}>
         <Card
           style={{ backgroundColor: '#f4f4f4', borderRadius: 10 }}

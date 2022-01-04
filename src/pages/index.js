@@ -1,5 +1,5 @@
 import Home from './Home';
-import { SafeArea, TabBar } from 'antd-mobile';
+import { TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import { getHeader } from './components/GetHeader';
 import { QrcodeOutlined } from '@ant-design/icons';
@@ -9,6 +9,8 @@ import OrCode from './OrCode';
 import Work from './Work';
 import Report from './Report';
 import IsDev from '../components/IsDev';
+import SafeArea from '../components/SafeArea';
+import safeAreaInsets from 'safe-area-insets';
 
 
 export default function(props) {
@@ -20,24 +22,24 @@ export default function(props) {
     &&
     props.history.location.pathname.split('/').length <= 2;
 
-  const [module,setModule] = useState('/Home');
+  const [module, setModule] = useState('/Home');
 
   const content = () => {
     switch (module) {
       case '/Home':
-        return <Home {...props} />
+        return <Home {...props} />;
       case '/Notice':
-        return <Notice {...props} />
+        return <Notice {...props} />;
       case '/OrCode':
-        return <OrCode {...props} />
+        return <OrCode {...props} />;
       case '/Work':
-        return <Work {...props} />
+        return <Work {...props} />;
       case '/Report':
-        return <Report {...props} />
+        return <Report {...props} />;
       default:
-        return <></>
+        return <></>;
     }
-  }
+  };
 
   return (
     <>
@@ -48,16 +50,13 @@ export default function(props) {
           activeKey={module}
           onChange={(value) => {
             setModule(value);
-        }}>
+          }}>
           <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' style={{ color: '#000' }} />} title='首页' />
           <TabBar.Item key='/Notice' icon={<Icon type='icon-xiaoxi' />} title='通知' />
-          {getHeader() || IsDev() && <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />}
+          {(getHeader() || IsDev()) && <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />}
           <TabBar.Item key='/Work' icon={<Icon type='icon-fenlei' />} title='工作' />
           <TabBar.Item key='/Report' icon={<Icon type='icon-shuju' />} title='报表' />
         </TabBar>
-        <div style={{ background: '#ffcfac' }}>
-          <SafeArea position='bottom' />
-        </div>
       </div>}
     </>
   );

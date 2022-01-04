@@ -172,7 +172,7 @@ const InStock = (props) => {
 
   return (
     <>
-      {getHeader() && <MyNavBar title='入库' />}
+      {!getHeader() && <MyNavBar title='入库' />}
       <div style={{ padding: 16 }} className={style.instock}>
         <Card
           style={{ backgroundColor: '#f4f4f4' }}
