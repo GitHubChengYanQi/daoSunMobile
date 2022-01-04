@@ -92,7 +92,7 @@ const MyTreeSelect = (
   return (
     <>
       {!branch ?
-        <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
+        <div style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
       }}>
         {valueArray.length > 0 ? valueArray.map((items, index) => {
@@ -108,7 +108,7 @@ const MyTreeSelect = (
           }
 
         }) : (title || '请选择')}
-      </ListItem>
+      </div>
       :
       <>{branchText}</>
       }

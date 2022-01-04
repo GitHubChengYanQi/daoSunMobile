@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Card, List, Space, Toast } from 'antd-mobile';
+import React from 'react';
+import { Card, Space, Toast } from 'antd-mobile';
 import BottomButton from '../../../components/BottomButton';
 import { getHeader } from '../../../components/GetHeader';
 import { storehousePositionsTreeView } from '../../Url';
@@ -17,7 +17,6 @@ import { DeleteOutline } from 'antd-mobile-icons';
 const FreeOutstock = (props) => {
 
   const [outstockData, setOutstockData] = useSetState({ data: [] });
-  console.log(outstockData);
 
   const codeId = props.qrCode && props.qrCode.codeId;
 
@@ -93,6 +92,15 @@ const FreeOutstock = (props) => {
             if (codeIds.length > 0) {
               Toast.show({
                 content: '已经扫描过此物料！',
+                position:'bottom'
+              });
+              break;
+            }
+
+            if (res.inkindResult.inkindDetail.stockDetails.number <= 0) {
+              Toast.show({
+                content: '此物料已全部出库！',
+                position:'bottom'
               });
               break;
             }
@@ -142,10 +150,11 @@ const FreeOutstock = (props) => {
     wait: 0,
   });
 
-
   if (outstockData.data.length === 0)
-    return <MyEmpty description={<Space direction='vertical'>
-      请扫描物料
+    return <MyEmpty description={<Space direction='vertical' align='center'>
+      <span style={{ fontSize: 24 }}>
+        请扫描物料
+      </span>
       {
         getHeader() && <LinkButton onClick={() => {
           props.dispatch({
@@ -184,10 +193,10 @@ const FreeOutstock = (props) => {
               供应商(品牌)：{items.brand.label}
             </div>
             <div>
-              物料：{items.item} ×{items.stocknumber}
+              物料：{items.item}
             </div>
             <Space align='center'>
-              <div style={{width:'50vw'}}>
+              <div style={{ width: '50vw' }}>
                 仓库数量：{items.stocknumber}
               </div>
               {
@@ -198,12 +207,12 @@ const FreeOutstock = (props) => {
                   <Input
                     style={{
                       width: 100,
-                      color: (items.stocknumber < items.number || items.number <= 0) ? 'red' : '#1677ff'
+                      color: (items.stocknumber < items.number || items.number <= 0) ? 'red' : '#1677ff',
                     }}
                     type='number'
                     value={outstockData.data[index].number}
                     onChange={(value) => {
-                      if (items.stocknumber < value || value < 0){
+                      if (items.stocknumber < value || value < 0) {
                         Toast.show({
                           content: '数量不符！',
                         });

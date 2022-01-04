@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Button, Card, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Button, Card, List, Space, Toast } from 'antd-mobile';
 import { Typography } from 'antd';
 import Search from './components/Search';
 import MyTreeSelect from '../../../components/MyTreeSelect';
@@ -82,10 +82,6 @@ const FreeInstock = (props) => {
   const [items, setItmes] = useSetState({
     data: [],
   });
-  console.log(items.data,items.data.filter((value) => {
-    console.log(value,value.number <= 0);
-    return value.number <= 0;
-  }).length === 0);
 
   const listItems = () => {
     const arrays = new Array(count);
@@ -182,34 +178,32 @@ const FreeInstock = (props) => {
     storehousepostionId: null,
   });
 
+  const clear = () => {
+    setItmes({ data: [] });
+    setCanvas([]);
+    setData({
+      sku: {},
+      brand: {},
+      storehouse: {},
+      storehousepostionId: null,
+    });
+    setCount(1);
+  }
+
   const { loading: instockLoading, run: instockRun } = useRequest({
     url: '/instockOrder/freeInstock',
     method: 'POST',
   }, {
     manual: true,
-    onSuccess: (res) => {
-      setItmes({ data: [] });
-      setData({
-        sku: {},
-        brand: {},
-        storehouse: {},
-        storehousepostionId: null,
-      });
-      setCount(1);
+    onSuccess: () => {
+      clear();
       Toast.show({
         content: '入库成功！',
         position: 'bottom',
       });
     },
     onError: () => {
-      setItmes({ data: [] });
-      setCount(1);
-      setData({
-        sku: {},
-        brand: {},
-        storehouse: {},
-        storehousepostionId: null,
-      });
+      clear();
       Toast.show({
         content: '入库失败！',
         position: 'bottom',
