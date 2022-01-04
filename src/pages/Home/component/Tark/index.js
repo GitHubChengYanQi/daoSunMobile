@@ -51,7 +51,7 @@ const Tark = () => {
           </Row>
         </Collapse.Panel>
 
-        <Collapse.Panel key='1' title={`我的代办 (最近10条)`}>
+        <Collapse.Panel key='1' title={`我的待办 (最近10条)`}>
           {
             messageData.filter((value) => {
               return value.state === 0;
@@ -82,7 +82,7 @@ const Tark = () => {
           }
         </Collapse.Panel>
 
-        <Collapse.Panel key='2' title={`已完成代办 (最近10条)`}>
+        <Collapse.Panel key='2' title={`已完成待办 (最近10条)`}>
           {
             messageData.filter((value) => {
               return value.state === 1;
