@@ -16,6 +16,7 @@ import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import pares from 'html-react-parser';
 import { Input } from 'weui-react-v2';
+import MyCascader from '../../../components/MyCascader';
 
 const FreeInstock = (props) => {
 
@@ -255,7 +256,7 @@ const FreeInstock = (props) => {
             },
           });
         }} />}>
-          <MyTreeSelect
+          <MyCascader
             arrow={false}
             ref={treeRef}
             branch={!data.storehouse.value}

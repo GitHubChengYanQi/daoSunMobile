@@ -32,11 +32,13 @@ const MyCascader = (
     onChange,
     title,
     clear,
+    branch,
+    branchText,
     onOk,
     textType,
   }, ref) => {
 
-  const { data } = useRequest(api, {
+  const { data,run } = useRequest(api, {
     defaultParams,
   });
 
@@ -48,6 +50,7 @@ const MyCascader = (
 
   useImperativeHandle(ref, () => ({
     show,
+    run,
   }));
 
 
@@ -82,7 +85,7 @@ const MyCascader = (
     <>
       <Cascader
         options={data || []}
-        visible={visible}
+        visible={!branch && visible}
         onCancel={() => {
           typeof clear === 'function' && clear();
           setVisible(false);
@@ -97,19 +100,25 @@ const MyCascader = (
       <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
         setVisible(true);
       }}>
-        {valueArray.length > 0 ? valueArray.map((items, index) => {
-          switch (textType) {
-            case 'link':
-              return (
-                <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
-              );
-            default:
-              return (
-                <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
-              );
-          }
+        {!branch ?
+          <>
+            {valueArray.length > 0 ? valueArray.map((items, index) => {
+              switch (textType) {
+                case 'link':
+                  return (
+                    <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+                  );
+                default:
+                  return (
+                    <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
+                  );
+              }
 
-        }) : (title || '请选择')}
+            }) : (title || '请选择')}
+          </>
+          :
+          <>{branchText}</>
+        }
       </ListItem>
     </>
   );

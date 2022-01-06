@@ -8,6 +8,7 @@ import Search from '../../../InStock/FreeInstock/components/Search';
 import Html2Canvas from '../../../../Html2Canvas';
 import { Input } from 'weui-react-v2';
 import BottomButton from '../../../../components/BottomButton';
+import MyCascader from '../../../../components/MyCascader';
 
 const ItemInventory = (
   {
@@ -140,7 +141,7 @@ const ItemInventory = (
           <List.Item
             title='库位'
           >
-            <MyTreeSelect
+            <MyCascader
               arrow={false}
               ref={treeRef}
               branch={!storehouse.value}
