@@ -9,9 +9,10 @@ import OrCode from './OrCode';
 import Work from './Work';
 import Report from './Report';
 import IsDev from '../components/IsDev';
+import { connect } from 'dva';
 
 
-export default function(props) {
+const Index = (props) => {
 
   const nav =
     props.history.location.pathname.split('/')[1] !== 'OrCode'
@@ -20,7 +21,18 @@ export default function(props) {
     &&
     props.history.location.pathname.split('/').length <= 2;
 
-  const [module, setModule] = useState('/Home');
+  const routes = props.qrCode && props.qrCode.route;
+
+  const [module, setModule] = useState(routes || '/Home');
+
+  const route = (name) => {
+    props.dispatch({
+      type: 'qrCode/scanCodeState',
+      payload: {
+        route:name,
+      },
+    });
+  }
 
   const content = () => {
     switch (module) {
@@ -47,6 +59,7 @@ export default function(props) {
           safeArea
           activeKey={module}
           onChange={(value) => {
+            route(value);
             setModule(value);
           }}>
           <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' style={{ color: '#000' }} />} title='首页' />
@@ -59,3 +72,5 @@ export default function(props) {
     </>
   );
 }
+
+export default connect(({ qrCode }) => ({ qrCode }))(Index);
