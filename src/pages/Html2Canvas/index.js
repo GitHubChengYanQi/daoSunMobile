@@ -3,19 +3,20 @@ import html2canvas from 'html2canvas';
 import { Dialog, Toast } from 'antd-mobile';
 import pares from 'html-react-parser';
 
-const Html2Canvas = ({ ...props }, ref) => {
+const Html2Canvas = ({ success,...props }, ref) => {
 
   const [codeId, setCodeId] = useState();
   const [disabled, setDisabled] = useState(false);
   const [templete, setTemplete] = useState();
 
   const canvasBase64 = () => {
-    if (process.env.ENV !== 'test')
+    if (process.env.ENV !== 'test'){
       Toast.show({
         icon: 'loading',
         duration: 0,
         content: '打印中...',
       });
+    }
     html2canvas(document.getElementById('code'), {
       scale: 2,
       logging: false,
@@ -23,6 +24,7 @@ const Html2Canvas = ({ ...props }, ref) => {
       allowTaint: true,
     }).then((canvas) => {
       console.log('打印二维码', codeId);
+      typeof success === 'function' && success(codeId);
       window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
       setCodeId(null);
     });

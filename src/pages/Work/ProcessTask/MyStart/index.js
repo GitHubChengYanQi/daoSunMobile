@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Affix } from 'antd';
 import { Dropdown, List, Selector, Tag } from 'antd-mobile';
 import MyList from '../../../components/MyList';
@@ -21,6 +21,8 @@ const MyStart = () => {
         });
       },
     });
+
+  const ref = useRef();
 
   const [taskType, setTaskType] = useState();
 
@@ -75,6 +77,7 @@ const MyStart = () => {
               columns={1}
               options={[{ label: '质检任务', value: 'quality_task' }, { label: '采购申请', value: 'purchase' }]}
               onChange={(arr, extend) => {
+                ref.current.refresh();
                 setTaskType(extend.items[0]);
                 setSelect({ ...select, type: arr[0] });
               }}
@@ -85,6 +88,7 @@ const MyStart = () => {
               columns={1}
               options={[{ label: '进行中', value: 0 }, { label: '已通过', value: 1 }, { label: '已拒绝', value: 2 }]}
               onChange={(arr, extend) => {
+                ref.current.refresh();
                 setTaskStatus(extend.items[0]);
                 setSelect({ ...select, status: arr[0] });
               }}
@@ -94,6 +98,7 @@ const MyStart = () => {
       </div>
     </Affix>
     <MyList
+      ref={ref}
       api={{
         url: '/activitiProcessTask/list',
         method: 'POST',

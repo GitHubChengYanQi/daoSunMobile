@@ -51,15 +51,14 @@ export default {
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
         // let code = '1476356885154385921'; // 入库
-        // let code = '1473977842541821954'; // 库位
+        let code = '1478642803273969665'; // 库位
         // let code = '1475358083438198786'; // 出库
-        let code = '1476374017911943170'; // 实物
+        // let code = '1478892912677826561'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
         yield put({ type: 'backObject', payload: { code: result, ...payload } });
       }
-
     },
 
     // 扫码跳路由
@@ -215,7 +214,10 @@ export default {
         switch (action) {
           case 'freeInstock':
           case 'freeOutstock':
-            // 自由入库出库
+          case 'inventory':
+            // 自由入库
+            // 自由出库
+            // 盘点
             yield put({ type: 'scanCodeState', payload: { codeId } });
             break;
           case 'scanStorehousePositon':
@@ -262,6 +264,7 @@ export default {
         case 'outstock':
         case 'freeInstock':
         case 'freeOutstock':
+        case 'inventory':
           yield put({ type: 'scanCodeState', payload: { codeId } });
           break;
         default:

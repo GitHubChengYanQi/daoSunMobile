@@ -10,6 +10,11 @@ export const storeHouseSelect = {
   method: 'POST'
 };
 
+export const storeHouseList = {
+  url: '/storehouse/list',
+  method: 'POST'
+};
+
 export const UserIdSelect = {
   url: '/rest/mgr/Select',
   method: 'POST',

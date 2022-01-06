@@ -83,9 +83,7 @@ const InStock = (props) => {
           <Space style={{ width: '100%' }} block={false}>
             (
             <Ellipsis
-              // expandText='展开'
-              // collapseText='收起'
-              style={{ display: 'inline-block', width: '30vw' }}
+              style={{ display: 'inline-block', maxWidth: '30vw' }}
               direction='end'
               content={
                 items.backSkus

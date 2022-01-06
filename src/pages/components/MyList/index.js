@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { Spin } from 'weui-react-v2';
 import { InfiniteScroll } from 'antd-mobile';
@@ -7,7 +7,7 @@ let pages = 1;
 let limit = 10;
 let contents = [];
 
-const MyList = ({children,getData,data,select,api}) => {
+const MyList = ({children,getData,data,api,select},ref) => {
 
   const [hasMore, setHasMore] = useState(true)
 
@@ -15,19 +15,15 @@ const MyList = ({children,getData,data,select,api}) => {
 
   const { loading,run } = useRequest({
     ...api,
-    data: {
-      ...select,
-    },
     params: {
       limit: limit,
       page: pages,
     },
   }, {
     debounceInterval: 500,
-    refreshDeps: [select],
     onSuccess: (res) => {
       if (res && res.length > 0) {
-        res.map((items, index) => {
+        res.map((items) => {
           return contents.push(items);
         });
         typeof getData === 'function' && getData(contents);
@@ -44,10 +40,20 @@ const MyList = ({children,getData,data,select,api}) => {
     }
   });
 
+  const refresh = () => {
+    pages = 1;
+    contents = [];
+    typeof getData === 'function' && getData([]);
+  }
+
+  useImperativeHandle(ref,()=>({
+    refresh,
+  }));
+
   useEffect(() => {
     pages = 1;
     contents = [];
-  }, [select]);
+  }, []);
 
   if (loading && pages === 1) {
     return (
@@ -60,9 +66,13 @@ const MyList = ({children,getData,data,select,api}) => {
   return <>
     {children}
     {error && data && <InfiniteScroll loadMore={() => {
-      return run({});
+      return run({
+        data:{
+          ...select
+        }
+      });
     }} hasMore={hasMore} />}
   </>
 };
 
-export default MyList;
+export default React.forwardRef(MyList);

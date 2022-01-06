@@ -40,7 +40,7 @@ const MyTreeSelect = (
     resh,
   }, ref) => {
 
-  const { data ,run,refresh } = useRequest(api, {
+  const { data, run, refresh } = useRequest(api, {
     defaultParams,
   });
 
@@ -55,13 +55,13 @@ const MyTreeSelect = (
     run,
   }));
 
-  useDebounceEffect(()=>{
-    if (resh){
+  useDebounceEffect(() => {
+    if (resh) {
       refresh();
     }
-  },[resh],{
-    wait:0
-  })
+  }, [resh], {
+    wait: 0,
+  });
 
   let valueArray = [];
   if ((value || value === 0) && typeof `${value}` === 'string') {
@@ -93,43 +93,46 @@ const MyTreeSelect = (
     <>
       {!branch ?
         <div style={{ padding: 0, border: 'none' }} onClick={() => {
-        setVisible(true);
-      }}>
-        {valueArray.length > 0 ? valueArray.map((items, index) => {
-          switch (textType) {
-            case 'link':
-              return (
-                <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
-              );
-            default:
-              return (
-                <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
-              );
-          }
+          setVisible(true);
+        }}>
+          {valueArray.length > 0 ? valueArray.map((items, index) => {
+            switch (textType) {
+              case 'link':
+                return (
+                  <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+                );
+              default:
+                return (
+                  <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
+                );
+            }
 
-        }) : (title || '请选择')}
-      </div>
-      :
-      <>{branchText}</>
+          }) : (title || '请选择')}
+        </div>
+        :
+        <>{branchText}</>
       }
 
       <Popup
         visible={visible}
       >
-        <Card title={
-          <><Button color='primary' fill='none' onClick={() => {
-            setVisible(false);
-            typeof clear === 'function' && clear();
-          }}>取消</Button>
-          </>} style={{ maxHeight: '30vh', overflow: 'auto' }} extra={
-          <>
-            {poputTitle || title || '选择'}
-            <Button color='primary' fill='none' onClick={() => {
+        <Card
+          title={
+            <><Button color='primary' fill='none' onClick={() => {
               setVisible(false);
-              typeof onOk === 'function' && onOk();
-            }}>确定</Button>
-          </>
-        }>
+              typeof clear === 'function' && clear();
+            }}>取消</Button>
+            </>}
+          style={{overflow: 'auto'}}
+          extra={
+            <>
+              {poputTitle || title || '选择'}
+              <Button color='primary' fill='none' onClick={() => {
+                setVisible(false);
+                typeof onOk === 'function' && onOk();
+              }}>确定</Button>
+            </>
+          }>
           <TreeSelect
             value={valueArray.map((items) => {
               return items.value;

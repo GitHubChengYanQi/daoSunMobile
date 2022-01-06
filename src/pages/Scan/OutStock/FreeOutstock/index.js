@@ -33,10 +33,16 @@ const FreeOutstock = (props) => {
   const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
 
   const { loading: outstockLoading, run: outstockRun } = useRequest({
-    url: '/outstockOrder/freeOutStock',
+    url: '/orCode/batchOutStockByCode',
     method: 'POST',
   }, {
     manual: true,
+    onSuccess: () => {
+      Toast.show({
+        content: '出库成功！',
+      });
+      clear();
+    },
     onError: () => {
       Toast.show({
         content: '出库失败！',
@@ -81,8 +87,6 @@ const FreeOutstock = (props) => {
           if (
             res.inkindResult
             &&
-            res.inkindResult
-            &&
             res.inkindResult.inkindDetail
           ) {
 
@@ -92,7 +96,7 @@ const FreeOutstock = (props) => {
             if (codeIds.length > 0) {
               Toast.show({
                 content: '已经扫描过此物料！',
-                position:'bottom'
+                position: 'bottom',
               });
               break;
             }
@@ -100,7 +104,7 @@ const FreeOutstock = (props) => {
             if (res.inkindResult.inkindDetail.stockDetails.number <= 0) {
               Toast.show({
                 content: '此物料已全部出库！',
-                position:'bottom'
+                position: 'bottom',
               });
               break;
             }
@@ -257,44 +261,40 @@ const FreeOutstock = (props) => {
             content: '数量不符！',
           });
         }
-        outstockData.data.map(async (items) => {
-          await outstockRun({
-            data: {
-              codeId: items.codeId,
-              number: items.number,
-            },
-          });
-          return null;
+        outstockRun({
+          data: {
+            batchOutStockParams:outstockData.data.map((items)=>{
+              return {
+                codeId: items.codeId,
+                number: items.number,
+              }
+            }),
+          },
         });
-        Toast.show({
-          content: '出库成功！',
-        });
-        clear();
       }}
       onClick={() => {
         const outstockNumber = outstockData.data.filter((items) => {
-          return items.stocknumber < items.number || items.number <= 0;
+          return items.stocknumber >= items.number || items.number > 0;
         });
 
-        if (outstockNumber.length > 0) {
+        if (outstockNumber.length !== outstockData.data.length) {
           return Toast.show({
-            content: '数量不符！',
+            content: '请填入正确的数量!',
+            position: 'bottom',
           });
         }
 
-        outstockData.data.map(async (items) => {
-          await outstockRun({
-            data: {
-              codeId: items.codeId,
-              number: items.number,
-            },
-          });
-          return null;
+        outstockRun({
+          data: {
+            type:'自由出库',
+            batchOutStockParams:outstockData.data.map((items)=>{
+              return {
+                codeId: items.codeId,
+                number: items.number,
+              }
+            }),
+          },
         });
-        Toast.show({
-          content: '出库成功！',
-        });
-        clear();
       }}
       text='出库'
     />

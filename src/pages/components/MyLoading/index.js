@@ -13,7 +13,7 @@ export const MyLoading = ({ loading,title }) => {
     }else {
       Toast.clear();
     }
-  }, [title,loading]);
+  }, [loading]);
 
   return <></>;
 };

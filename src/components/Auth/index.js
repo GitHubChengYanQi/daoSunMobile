@@ -16,6 +16,7 @@ import {
   // Button,
   Toast,
 } from 'antd-mobile';
+import IsDev from '../IsDev';
 
 const Auth = (props) => {
 
@@ -84,11 +85,11 @@ const Auth = (props) => {
 
   const token = GetUserInfo().token;
 
-  const { run:wxTicket } = useRequest({
+  const { run: wxTicket } = useRequest({
     url: '/api/ticket',
     method: 'GET',
   }, {
-    manual:true,
+    manual: true,
     onSuccess: (res) => {
       wx.config({
         beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
@@ -97,7 +98,7 @@ const Auth = (props) => {
         timestamp: res.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.nonceStr, // 必填，生成签名的随机串
         signature: res.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['ready', 'getLocation', 'scanQRCode','onHistoryBack'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
       });
     },
   });
@@ -107,16 +108,19 @@ const Auth = (props) => {
     let action = '';
     switch (location.pathname) {
       case '/Scan/InStock/AppInstock':
-        action = 'instock'
+        action = 'instock';
         break;
       case '/Scan/OutStock/AppOutstock':
-        action = 'outstock'
+        action = 'outstock';
         break;
       case '/Scan/InStock/FreeInstock':
-        action = 'freeInstock'
+        action = 'freeInstock';
         break;
       case '/Scan/OutStock/FreeOutstock':
-        action = 'freeOutstock'
+        action = 'freeOutstock';
+        break;
+      case '/Scan/Inventory':
+        action = 'inventory';
         break;
       default:
         break;
@@ -127,15 +131,20 @@ const Auth = (props) => {
         action,
       },
     });
+    if (props.qrCode && props.qrCode.codeId){
+      props.dispatch({
+        type: 'qrCode/clearCode',
+      });
+    }
   }, [
     location.pathname,
-  ],{
-    wait:0
+  ], {
+    wait: 0,
   });
 
 
   useDebounceEffect(() => {
-    if (getHeader()){
+    if (!IsDev() && getHeader()) {
       wxTicket({
         params: {
           url: window.location.protocol + '//' + window.location.host + window.location.pathname,
@@ -145,7 +154,7 @@ const Auth = (props) => {
 
     window.printOk = () => {
       Toast.clear();
-    }
+    };
 
     window.receive = (code) => {
       let codeId = '';
@@ -153,9 +162,9 @@ const Auth = (props) => {
         const param = code.split('=');
         if (param && param[1]) {
           codeId = param[1];
-        }else {
+        } else {
           Toast.show({
-            content:'请扫正确的码！'
+            content: '请扫正确的码！',
           });
         }
       } else {
@@ -185,24 +194,24 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  if (process.env.NODE_ENV === 'development')
-    return <>
-      <Button onClick={() => {
-        // const code = '1473977842541821954'; // 库位
-        const code = '1475357188682711042'; // 实物
-        // const code = '1474546242691313666'; //入库
-        props.dispatch({
-          type: 'qrCode/appAction',
-          payload: {
-            code,
-          },
-        });
-      }}>扫码</Button>
-      {
-        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-      }
-    </>;
-  else
+  // if (process.env.NODE_ENV === 'development')
+  //   return <>
+  //     <Button onClick={() => {
+  //       // const code = '1473977842541821954'; // 库位
+  //       const code = '1475357188682711042'; // 实物
+  //       // const code = '1474546242691313666'; //入库
+  //       props.dispatch({
+  //         type: 'qrCode/appAction',
+  //         payload: {
+  //           code,
+  //         },
+  //       });
+  //     }}>扫码</Button>
+  //     {
+  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+  //     }
+  //   </>;
+  // else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

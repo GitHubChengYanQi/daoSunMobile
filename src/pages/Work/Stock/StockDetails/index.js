@@ -1,0 +1,70 @@
+import React, { useEffect, useRef } from 'react';
+import { stockDetailsList } from '../../../Scan/Url';
+import { Button, List } from 'antd-mobile';
+import MyList from '../../../components/MyList';
+import { useSetState } from 'ahooks';
+import MyEmpty from '../../../components/MyEmpty';
+
+const StockDetails = (props) => {
+
+  const ids = props.location.query;
+
+  const [datas, setDatas] = useSetState({ data: [] });
+
+  if (!datas) {
+    return <MyEmpty height='100vh' />;
+  }
+
+  return <>
+    <MyList
+      select={
+        {
+          storehousePositionsId: ids.storehousePositionsId,
+        }
+      }
+      api={stockDetailsList}
+      data={datas}
+      getData={(value) => {
+        setDatas({ data: value });
+      }}>
+      <List>
+        {
+          datas.data && datas.data.map((items, index) => {
+            return <List.Item
+              key={index}
+              description={items.createTime}
+              extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
+                {items.number}</Button>}
+            >
+              {items.sku && `${items.sku.skuName}  /  `}
+              {items.spuResult && items.spuResult.name}
+              &nbsp;&nbsp;
+              {
+                items.backSkus
+                &&
+                items.backSkus.length > 0
+                &&
+                items.backSkus[0].attributeValues.attributeValues
+                &&
+                <em style={{ color: '#c9c8c8', fontSize: 10 }}>
+                  (
+                  {
+                    items.backSkus.map((items) => {
+                      if (items.attributeValues.attributeValues) {
+                        return `${items.itemAttribute.attribute} : ${items.attributeValues.attributeValues}`;
+                      } else {
+                        return null;
+                      }
+                    }).toString()
+                  }
+                  )
+                </em>}
+            </List.Item>;
+          })
+        }
+      </List>
+    </MyList>
+  </>;
+};
+
+export default StockDetails;

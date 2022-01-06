@@ -63,12 +63,15 @@ const Tark = () => {
                   return (
                     <List.Item
                       onClick={() => {
-                        if (items.url) {
-                          console.log(`/${items.url.replace(process.env.wxCp, '')}`);
-                          history.push(`/${items.url.replace(process.env.wxCp, '')}`);
+                        switch (items.source) {
+                          case '入库':
+                            history.push(`/Scan/InStock?id=${items.sourceId}`);
+                            break;
+                          default:
+                            break;
                         }
                       }}
-                      title={<>{items.title} <em style={{fontSize:12,color:'#c7c5c5'}}>{items.time}</em></>}
+                      title={<>{items.title} <em style={{ fontSize: 12, color: '#c7c5c5' }}>{items.time}</em></>}
                       style={{ borderLeft: `#${color} 2px solid` }}
                       key={index}
                     >

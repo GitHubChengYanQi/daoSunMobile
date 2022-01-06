@@ -9,8 +9,6 @@ import OrCode from './OrCode';
 import Work from './Work';
 import Report from './Report';
 import IsDev from '../components/IsDev';
-import SafeArea from '../components/SafeArea';
-import safeAreaInsets from 'safe-area-insets';
 
 
 export default function(props) {

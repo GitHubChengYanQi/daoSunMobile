@@ -23,7 +23,7 @@ const Work = () => {
   };
 
   const GridContent = (icon, title, routers) => {
-    return <Grid.Item onClick={() => {
+    return <Grid.Item style={{width:'20vw',textAlign:'center'}} onClick={() => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
@@ -40,7 +40,7 @@ const Work = () => {
   }
 
   return (
-    <div>
+    <div style={{marginBottom:'10vh'}}>
       <Affix offsetTop={0}>
         <ListItem extra={<div>开发部</div>}>
           <div>下午好，{user && user.name}</div>
@@ -133,11 +133,13 @@ const Work = () => {
         {
           GridStyle(
             <>
+              {GridContent('icon-shuju', '库存管理', ()=>toast())}
+              {GridContent('icon-shuju', '仓库管理', '/Work/StoreHouse')}
               {GridContent('icon-shuju', '入库管理', ()=>toast())}
               {GridContent('icon-shuju', '自由入库', '/Scan/InStock/FreeInstock')}
-              {GridContent('icon-shuju', '库存管理', ()=>toast())}
               {GridContent('icon-shuju', '出库管理', ()=>toast())}
               {GridContent('icon-shuju', '自由出库', '/Scan/OutStock/FreeOutstock')}
+              {GridContent('icon-shuju', '盘点', '/Scan/Inventory')}
             </>
           )
         }
