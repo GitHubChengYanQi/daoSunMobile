@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { Button, Card, List, Space, Toast } from 'antd-mobile';
 import { Typography } from 'antd';
 import Search from './components/Search';
-import MyTreeSelect from '../../../components/MyTreeSelect';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
 import { connect } from 'dva';
@@ -17,6 +16,7 @@ import BottomButton from '../../../components/BottomButton';
 import pares from 'html-react-parser';
 import { Input } from 'weui-react-v2';
 import MyCascader from '../../../components/MyCascader';
+import IsDev from '../../../../components/IsDev';
 
 const FreeInstock = (props) => {
 
@@ -105,7 +105,7 @@ const FreeInstock = (props) => {
                   inkindType: '自由入库',
                 },
               });
-              if (!getHeader()) {
+              if (IsDev() || !getHeader()) {
                 const templete = await request({
                   url: '/inkind/detail',
                   method: 'POST',
@@ -113,12 +113,14 @@ const FreeInstock = (props) => {
                     inkindId: res.inkindId,
                   },
                 });
-                setCanvas([...canvas, {
-                  templete: templete.printTemplateResult && templete.printTemplateResult.templete,
-                  codeId: res.codeId,
-                }]);
-                await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-                await html2ref.current.setCodeId(res.codeId);
+                if (templete.printTemplateResult && templete.printTemplateResult.templete){
+                  setCanvas([...canvas, {
+                    templete: templete.printTemplateResult && templete.printTemplateResult.templete,
+                    codeId: res.codeId,
+                  }]);
+                  await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
+                  await html2ref.current.setCodeId(res.codeId);
+                }
               }
               const arr = items.data;
               arr[i] = { ...arr[i], codeId: res.codeId };
