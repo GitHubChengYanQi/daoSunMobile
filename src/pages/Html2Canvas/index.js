@@ -29,13 +29,11 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
   };
 
   const canvasBase64 = () => {
-    if (process.env.ENV === 'test') {
-      Toast.show({
-        icon: 'loading',
-        duration: 0,
-        content: '打印中...',
-      });
-    }
+    Toast.show({
+      icon: 'loading',
+      duration: 0,
+      content: '打印中...',
+    });
     html2canvas(document.getElementById('code'), {
       scale: 2,
       logging: false,
@@ -66,7 +64,7 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
   return <Dialog
     visible={codeId}
     content={<div>
-      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: 200 }}>
+      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: 200, maxHeight: 200 }}>
         {templete ?
           pares(templete, {
             replace: domNode => {
@@ -83,8 +81,8 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
     </div>}
     onAction={(action) => {
       if (action.key === 'print') {
-        setDisabled(true);
         canvasBase64();
+        setDisabled(true);
       } else {
         setCodeId(null);
       }

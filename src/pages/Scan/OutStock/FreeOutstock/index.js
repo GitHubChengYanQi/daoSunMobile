@@ -127,6 +127,10 @@ const FreeOutstock = (props) => {
                 item: getSkuResult(res.inkindResult.skuResult),
               }],
             });
+          }else {
+            Toast.show({
+              content:'库存不存在此物料！'
+            });
           }
           break;
         default:
