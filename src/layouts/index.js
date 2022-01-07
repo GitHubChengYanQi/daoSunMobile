@@ -1,8 +1,11 @@
 import React from 'react';
 import Auth from '../components/Auth';
-// import * as VConsole from 'vconsole';
+import * as VConsole from 'vconsole';
+import { SafeArea } from 'antd-mobile';
 
 function BasicLayout(props) {
+
+  // const console = new VConsole();
 
   window.scrollTo(0, 0);
 

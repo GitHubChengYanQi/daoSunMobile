@@ -7,12 +7,13 @@ import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect, useSetState } from 'ahooks';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
-import { Input } from 'weui-react-v2';
+import { Input, NumberInput } from 'weui-react-v2';
 import { ScanOutlined } from '@ant-design/icons';
 import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import { DeleteOutline } from 'antd-mobile-icons';
+import style from '../../InStock/FreeInstock/index.css';
 
 const FreeOutstock = (props) => {
 
@@ -208,12 +209,13 @@ const FreeOutstock = (props) => {
                 &&
                 <Space align='center'>
                   出库数量：
-                  <Input
+                  <NumberInput
+                    precision={0}
+                    className={(items.stocknumber < items.number || items.number <= 0) ? style.red : style.blue}
                     style={{
                       width: 100,
-                      color: (items.stocknumber < items.number || items.number <= 0) ? 'red' : '#1677ff',
                     }}
-                    type='number'
+                    type='amount'
                     value={outstockData.data[index].number}
                     onChange={(value) => {
                       if (items.stocknumber < value || value < 0) {

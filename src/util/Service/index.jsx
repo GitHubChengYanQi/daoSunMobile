@@ -1,9 +1,12 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
+import { getHeader } from '../../pages/components/GetHeader';
 
-const baseURI = process.env.ENV === 'test' ? 'https://api.hh.gf2025.com/' : process.env.api;
-
+const baseURI = process.env.ENV === 'test' ?
+  'https://api.hh.gf2025.com'
+  :
+  process.env.api;
 
 const ajaxService = axios.create({
   baseURL: baseURI,

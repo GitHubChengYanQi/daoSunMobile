@@ -1,14 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { storehousePositionsTreeView } from '../../../Url';
-import { Dialog, List, Space, Toast } from 'antd-mobile';
+import { List,  Toast } from 'antd-mobile';
 import TreeSelectSee from '../../../../components/TreeSelectSee';
 import { Typography } from 'antd';
-import MyTreeSelect from '../../../../components/MyTreeSelect';
 import Search from '../../../InStock/FreeInstock/components/Search';
 import Html2Canvas from '../../../../Html2Canvas';
-import { Input } from 'weui-react-v2';
+import { NumberInput } from 'weui-react-v2';
 import BottomButton from '../../../../components/BottomButton';
 import MyCascader from '../../../../components/MyCascader';
+import { useRequest } from '../../../../../util/Request';
+import style from '../../../../Work/Quality/DispatchTask/index.css';
 
 const ItemInventory = (
   {
@@ -16,31 +17,58 @@ const ItemInventory = (
     clearCode,
     data,
     state,
+    inventory,
     storehouseposition,
     setData,
     outstockRun,
-    instockRun,
-    number: defaultNumber,
   }) => {
-
   const ref = useRef();
 
   const refSearch = useRef();
 
-  const [number, setNumber] = useState(defaultNumber);
+  const [number, setNumber] = useState();
 
   const [storehouse, setStorehouse] = useState({});
 
   const [storehousePosition, setStorehousePosition] = useState();
 
-  const instockAction = (positionsId,storeHouseId) => {
-    instockRun({
-      data: {
-        positionsId,
-        codeIds: [codeId],
-        storeHouseId,
-      },
-    });
+  const { run } = useRequest({
+    url: '/inventoryDetail/inventoryInstock',
+    method: 'POST',
+  }, {
+    manual: true,
+    onSuccess: async () => {
+      Toast.show({
+        content: '入库成功！',
+        position: 'bottom',
+      });
+      clearCode();
+      setData(null)
+    },
+    onError: () => {
+      Toast.show({
+        content: '入库失败！',
+        position: 'bottom',
+      });
+    },
+  });
+
+  const instockAction = (positionId, storeHouseId) => {
+    if (number > 0){
+      run({
+        data: {
+          inkindId: data.inkindId,
+          number: number,
+          storeHouseId,
+          positionId,
+          qrCodeId:codeId
+        },
+      });
+    }else {
+      Toast.show({
+        content:'数量不能小于1！'
+      });
+    }
   };
 
   const out = (number) => {
@@ -85,6 +113,10 @@ const ItemInventory = (
     </>;
   };
 
+  useEffect(()=>{
+    setNumber(data.number || 1);
+  },[data])
+
   return <>
     <List
       style={{
@@ -97,19 +129,21 @@ const ItemInventory = (
       <List.Item title='供应商(品牌)'>
         <h3>{data.brand && data.brand.brandName}</h3>
       </List.Item>
-      <List.Item title={state && data.skuResult.batch === 1 ? '数量 (可修改) ' : '数量'}>
+      <List.Item title={data.skuResult.batch === 1 ? '数量 (可修改) ' : '数量'}>
         {
-          state && data.skuResult.batch === 1
+          data.skuResult.batch === 1
             ?
-            <Input
-              style={{ width: 100, color: number >= 0 ? '#1677ff' : 'red' }}
-              type='number'
+            <NumberInput
+              className={number > 0 ? style.blue : style.red}
+              style={{ width: 100 }}
+              precision={0}
+              type='amount'
               value={number}
               onChange={(value) => {
                 setNumber(value);
               }} />
             :
-            <h3>{data.number}</h3>
+            <h3>{number}</h3>
         }
       </List.Item>
       {state ? <>
@@ -180,16 +214,19 @@ const ItemInventory = (
     }} />
 
     <BottomButton
-      only={!state && data.skuResult.batch === 1}
+      only={!state || data.skuResult.batch !== 1}
       leftText='下一项'
       rightText='修复库存'
       rightDisabled={parseInt(number) === data.number}
       rightOnClick={() => {
-        if (parseInt(number) >= 0) {
+        if (parseInt(number) > 0) {
           if (number > data.number) {
             // 入库
+            inventory(1);
+            instockAction();
           } else if (number < data.number) {
             // 出库
+            inventory(2);
             out(data.number - number);
           }
         } else {
@@ -210,7 +247,8 @@ const ItemInventory = (
           clearCode();
         } else {
           if (storehousePosition && storehouse.value) {
-            instockAction(storehousePosition,storehouse.value);
+            inventory(1);
+            instockAction(storehousePosition, storehouse.value);
           } else {
             Toast.show({
               content: '请选择仓库和库位',
@@ -221,6 +259,7 @@ const ItemInventory = (
       }}
     />
   </>;
+
 };
 
 export default ItemInventory;

@@ -3,10 +3,11 @@ import { useRequest } from '../../../../util/Request';
 import { storehousePositionsTreeView } from '../../../Scan/Url';
 import { Skeleton } from 'weui-react-v2';
 import MyEmpty from '../../../components/MyEmpty';
-import { List, Space } from 'antd-mobile';
+import { Dialog, List, Space } from 'antd-mobile';
 import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import Html2Canvas from '../../../Html2Canvas';
+import { AppstoreOutline } from 'antd-mobile-icons';
 
 const StoreHousePositions = (props) => {
 
@@ -16,7 +17,7 @@ const StoreHousePositions = (props) => {
 
   const { loading, data, run } = useRequest(storehousePositionsTreeView, { manual: true });
 
-  const {run:getCode} = useRequest(
+  const { run: getCode } = useRequest(
     {
       url: '/storehousePositions/positionsResultById',
       method: 'GET',
@@ -26,13 +27,47 @@ const StoreHousePositions = (props) => {
       onSuccess: (res) => {
         ref.current.setTemplete(res.printTemplateResult.templete);
         ref.current.setCodeId(true);
-      }
+      },
     });
 
   useEffect(() => {
     if (id)
       run({ params: { ids: id } });
   }, []);
+
+  const action = (items) => {
+    return items.children.length === 0 && <LinkButton title={<AppstoreOutline />} onClick={()=>{
+      Dialog.show({
+        content: items.title,
+        closeOnAction: true,
+        onAction: (action) => {
+          if (action.key === 'print') {
+            getCode({
+              params: {
+                id: items.key,
+              },
+            });
+          } else if (action.key === 'see') {
+            history.push(`/Work/Stock/StockDetails?storehousePositionsId=${items.key}`);
+          }
+        },
+        actions: [
+          {
+            key: 'print',
+            text: '打印二维码',
+          },
+          {
+            key: 'see',
+            text: '查看库存',
+          },
+          {
+            key: 'close',
+            text: '取消',
+          },
+        ],
+      });
+    }} />
+  }
 
   if (loading)
     return <Skeleton loading={loading} />;
@@ -42,29 +77,17 @@ const StoreHousePositions = (props) => {
 
   const storehousePositions = (values) => {
     return <List
-    style={{
-      '--border-inner':'none',
-      '--border-top':'none',
-      '--border-bottom':'none',
-    }}
+      style={{
+        '--border-inner': 'none',
+        '--border-top': 'none',
+        '--border-bottom': 'none',
+      }}
     >
       {values.map((items, index) => {
         return <List.Item
           key={index}
-          title={items.title}
-          extra={items.children.length <= 0 && <Space>
-            <LinkButton onClick={() => {
-              getCode({
-                params: {
-                  id:items.key,
-                }
-              });
-            }} title='打印二维码' />
-            <LinkButton onClick={() => {
-              history.push(`/Work/Stock/StockDetails?storehousePositionsId=${items.key}`);
-            }} title='查看库存' />
-          </Space>}
-          >
+          title={<Space>{items.title}{action(items)}</Space>}
+        >
           {
             items.children && storehousePositions(items.children)
           }
@@ -76,7 +99,7 @@ const StoreHousePositions = (props) => {
   return <>
     {storehousePositions(data)}
     <Html2Canvas ref={ref} />
-  </>
+  </>;
 };
 
 export default StoreHousePositions;

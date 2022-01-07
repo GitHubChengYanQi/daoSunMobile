@@ -14,7 +14,9 @@ import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 import pares from 'html-react-parser';
-import { Input } from 'weui-react-v2';
+import { Input, NumberInput } from 'weui-react-v2';
+import style from '../FreeInstock/index.css';
+import MyCascader from '../../../components/MyCascader';
 
 const fontSize = 24;
 
@@ -372,7 +374,7 @@ const AppInstock = (props) => {
           setStorehousePositionsId(null);
         }} />}>
         <span style={{ fontSize }}>
-           <MyTreeSelect
+           <MyCascader
              arrow={false}
              poputTitle='选择库位'
              title={<Typography.Link underline>点击选择或扫描库位</Typography.Link>}
@@ -459,9 +461,11 @@ const AppInstock = (props) => {
         <div style={{ textAlign: 'center' }}>
           <Space align='center'>
             入库数量：
-            <Input
-              style={{ width: 100,color:'#1677ff' }}
-              type='number'
+            <NumberInput
+              precision={0}
+              className={number > 0 && number <= (items.number - waitNumber) ? style.blue : style.red}
+              style={{ width: 100 }}
+              type='amount'
               value={number}
               onChange={(value) => {
                 setNumber(parseInt(value));

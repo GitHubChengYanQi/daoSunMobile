@@ -14,9 +14,10 @@ import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import pares from 'html-react-parser';
-import { Input } from 'weui-react-v2';
+import { Input, NumberInput } from 'weui-react-v2';
 import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
+import style from './index.css';
 
 const FreeInstock = (props) => {
 
@@ -156,11 +157,13 @@ const FreeInstock = (props) => {
             data.sku.batch ? '批' : '个'
           }
           {
-            data.sku.batch && <Input
-              prefix={<span style={{color:'#000'}}>入库数量：</span>}
+            data.sku.batch && <NumberInput
+              precision={0}
+              className={item.number <=0 ? style.red : style.blue}
+              type='amount'
               disabled={item.codeId}
-              style={{ width: 200 ,color:'#1677ff' }}
-              type='number'
+              style={{ width: 200 }}
+              prefix={<span style={{color:'#000'}}>入库数量：</span>}
               value={item.number}
               onChange={(value) => {
                 const arr = items.data;
@@ -382,7 +385,7 @@ const FreeInstock = (props) => {
           });
         } else {
           Toast.show({
-            content: '数量不能小于0个!',
+            content: '数量不能小于1个!',
             position: 'bottom',
           });
         }

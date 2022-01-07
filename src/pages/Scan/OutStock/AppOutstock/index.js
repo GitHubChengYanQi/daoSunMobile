@@ -6,8 +6,9 @@ import React, { useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../../components/MyLoading';
-import { Input, WhiteSpace } from 'weui-react-v2';
+import { Input, NumberInput, WhiteSpace } from 'weui-react-v2';
 import { AddOutline } from 'antd-mobile-icons';
+import style from '../../InStock/FreeInstock/index.css';
 
 const fontSize = 24;
 
@@ -161,9 +162,11 @@ const AppOutstock = (props) => {
       <WhiteSpace size='sm' />
       {stockNumber > 1 && <Space align='center'>
         出库数量：
-        <Input
-          style={{ width: 100, color: '#1677ff' }}
-          type='number'
+        <NumberInput
+          precision={0}
+          className={style.blue}
+          style={{ width: 100 }}
+          type='amount'
           value={number}
           onChange={(value) => {
             setNumber(parseInt(value));

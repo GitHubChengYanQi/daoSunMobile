@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { getHeader } from '../../components/GetHeader';
 import { Space, Toast } from 'antd-mobile';
-import { request, useRequest } from '../../../util/Request';
+import { useRequest } from '../../../util/Request';
 import { connect } from 'dva';
 import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../components/MyLoading';
@@ -29,9 +29,13 @@ const Inventory = (props) => {
 
   const [data, setData] = useState();
 
+  const [item, setItem] = useState();
+
   const [state, setState] = useState(true);
 
   const [type, setType] = useState('');
+
+  const [position, setPosition] = useState(false);
 
   const { loading, run } = useRequest(
     {
@@ -40,30 +44,44 @@ const Inventory = (props) => {
     }, {
       manual: true,
       onSuccess: (res) => {
-        setType(res.type);
-        setData(res.object);
-        switch (res.type) {
-          case 'inkind':
-            if (!res.object.positionsResult) {
-              inventory(res.object.inkindId, 0);
-              Toast.show({
-                content: '库存中不存在此物料！',
-              });
-              setState(false);
-            } else {
-              inventory(res.object.inkindId, 99);
-              setState(true);
-              Toast.show({
-                content: '扫描成功！',
-              });
-            }
-            break;
-          case 'positions':
-            break;
-          default:
-            break;
+        if (position) {
+          if (res.type === 'inkind' && !(res.object && res.object.positionsResult)) {
+            setItem(res.object);
+          } else {
+            clearCode();
+            Toast.show({
+              content: '请扫不在库存的实物码！',
+            });
+          }
+        } else {
+          setType(res.type);
+          setData(res.object);
+          switch (res.type) {
+            case 'inkind':
+              if (!(res.object && res.object && res.object.positionsResult)) {
+                Toast.show({
+                  content: '库存中不存在此物料！',
+                  position:'bottom'
+                });
+                setState(false);
+              } else {
+                inventory(res.object.inkindId, 0);
+                setState(true);
+                Toast.show({
+                  content: '扫描成功！',
+                  position:'bottom'
+                });
+              }
+              break;
+            case 'positions':
+              setPosition(true);
+              break;
+            default:
+              break;
+          }
         }
       },
+      onError:()=>{clearCode()}
     },
   );
 
@@ -83,29 +101,6 @@ const Inventory = (props) => {
       },
     });
   };
-
-
-  // 入库
-  const { loading: instockLoading, run: instockRun } = useRequest({
-    url: '/instockOrder/freeInstock',
-    method: 'POST',
-  }, {
-    manual: true,
-    onSuccess: async () => {
-      Toast.show({
-        content: '入库成功！',
-        position: 'bottom',
-      });
-      clearCode();
-      setData(null)
-    },
-    onError: () => {
-      Toast.show({
-        content: '入库失败！',
-        position: 'bottom',
-      });
-    },
-  });
 
 
   // 批量出库
@@ -164,12 +159,11 @@ const Inventory = (props) => {
       case 'inkind':
         return <ItemInventory
           storehouseposition={storehouseposition}
-          number={`${ data.number }`}
+          inventory={(res)=>{
+            inventory(data.inkindId, res);
+          }}
           outstockRun={(res) => {
             outstockRun(res);
-          }}
-          instockRun={(res) => {
-            instockRun(res);
           }}
           clearCode={() => {
             clearCode();
@@ -184,7 +178,18 @@ const Inventory = (props) => {
       case 'positions':
         return <PositionsInventory
           data={data}
+          codeId={codeId}
+          setPosition={(res) => {
+            setPosition(res);
+          }}
+          setData={(res) => {
+            setData(res);
+          }}
+          clearCode={() => {
+            clearCode();
+          }}
           storehouseposition={storehouseposition}
+          item={item}
         />;
       default:
         return null;
@@ -195,7 +200,7 @@ const Inventory = (props) => {
     {module()}
 
     <MyLoading
-      loading={loading || instockLoading || outstockLoading}
+      loading={loading || outstockLoading}
       title={'处理中...'} />
 
     <Html2Canvas ref={ref} success={() => {

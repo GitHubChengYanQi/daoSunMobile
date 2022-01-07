@@ -1,5 +1,5 @@
 import Home from './Home';
-import { TabBar } from 'antd-mobile';
+import { SafeArea, TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import { getHeader } from './components/GetHeader';
 import { QrcodeOutlined } from '@ant-design/icons';
@@ -29,10 +29,10 @@ const Index = (props) => {
     props.dispatch({
       type: 'qrCode/scanCodeState',
       payload: {
-        route:name,
+        route: name,
       },
     });
-  }
+  };
 
   const content = () => {
     switch (module) {
@@ -62,15 +62,48 @@ const Index = (props) => {
             route(value);
             setModule(value);
           }}>
-          <TabBar.Item key='/Home' icon={<Icon type='icon-shouye' style={{ color: '#000' }} />} title='首页' />
-          <TabBar.Item key='/Notice' icon={<Icon type='icon-xiaoxi' />} title='通知' />
-          {(getHeader() || IsDev()) && <TabBar.Item key='/OrCode' icon={<QrcodeOutlined />} title='扫码' />}
-          <TabBar.Item key='/Work' icon={<Icon type='icon-fenlei' />} title='工作' />
-          <TabBar.Item key='/Report' icon={<Icon type='icon-shuju' />} title='报表' />
+          <TabBar.Item
+            title='首页'
+            key='/Home'
+            icon={(check) => {
+              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-shouye-xuanzhong' : 'icon-shouye2'} />;
+            }}
+          />
+          <TabBar.Item
+            title='通知'
+            key='/Notice'
+            icon={(check) => {
+              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
+            }}
+          />
+          {(getHeader() || IsDev()) &&
+          <TabBar.Item
+            title='扫码'
+            key='/OrCode'
+            icon={(check) => {
+              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
+            }}
+          />
+          }
+          <TabBar.Item
+            title='工作'
+            key='/Work'
+            icon={(check) => {
+              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-gongzuo-xuanzhong' : 'icon-gongzuo'} />;
+            }}
+          />
+          <TabBar.Item
+            title='报表'
+            key='/Report'
+            icon={(check) => {
+              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-baobiao-xuanzhong' : 'icon-baobiao'} />;
+            }}
+          />
         </TabBar>
+        <SafeArea position='bottom' />
       </div>}
     </>
   );
-}
+};
 
 export default connect(({ qrCode }) => ({ qrCode }))(Index);

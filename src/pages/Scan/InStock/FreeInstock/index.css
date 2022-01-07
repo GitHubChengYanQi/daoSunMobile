@@ -1,0 +1,7 @@
+.red :global .weui-input-inner {
+  color:red;
+}
+
+.blue :global .weui-input-inner {
+  color:#1677ff;
+}

@@ -3,14 +3,33 @@ import html2canvas from 'html2canvas';
 import { Dialog, Toast } from 'antd-mobile';
 import pares from 'html-react-parser';
 
-const Html2Canvas = ({ success,...props }, ref) => {
+const Html2Canvas = ({ success, close, ...props }, ref) => {
 
   const [codeId, setCodeId] = useState();
   const [disabled, setDisabled] = useState(false);
   const [templete, setTemplete] = useState();
 
+  const actions = () => {
+    if (close) {
+      return [{
+        disabled,
+        key: 'print',
+        text: '打印二维码',
+      }, {
+        key: 'close',
+        text: '取消',
+      }];
+    } else {
+      return [{
+        disabled,
+        key: 'print',
+        text: '打印二维码',
+      }];
+    }
+  };
+
   const canvasBase64 = () => {
-    if (process.env.ENV !== 'test'){
+    if (process.env.ENV === 'test') {
       Toast.show({
         icon: 'loading',
         duration: 0,
@@ -43,6 +62,7 @@ const Html2Canvas = ({ success,...props }, ref) => {
     }
   }, [codeId]);
 
+
   return <Dialog
     visible={codeId}
     content={<div>
@@ -61,15 +81,15 @@ const Html2Canvas = ({ success,...props }, ref) => {
           :
           '暂无'}</div>
     </div>}
-    onAction={() => {
-      setDisabled(true);
-      canvasBase64();
+    onAction={(action) => {
+      if (action.key === 'print') {
+        setDisabled(true);
+        canvasBase64();
+      } else {
+        setCodeId(null);
+      }
     }}
-    actions={[{
-      disabled,
-      key: 'pring',
-      text: '打印二维码',
-    }]}
+    actions={actions()}
   />;
 };
 

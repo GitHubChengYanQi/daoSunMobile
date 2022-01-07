@@ -3,6 +3,7 @@ import { Cascader } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
+import style from './index.css';
 
 const getParentValue = (value, data) => {
   if (!Array.isArray(data)) {
@@ -76,6 +77,7 @@ const MyCascader = (
 
 
   const change = (value) => {
+    setVisible(false);
     const result = value ? value[value.length - 1] : value;
     typeof onChange === 'function' && onChange(result);
   };
@@ -84,6 +86,8 @@ const MyCascader = (
   return (
     <>
       <Cascader
+        className={style.content}
+        style={{height:'100vh'}}
         options={data || []}
         visible={!branch && visible}
         onCancel={() => {
