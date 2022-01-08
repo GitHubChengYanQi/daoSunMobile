@@ -217,6 +217,12 @@ const FreeInstock = (props) => {
     },
   });
 
+  if (loading || instockLoading){
+    return <MyLoading
+      loading={instockLoading || loading}
+      title={instockLoading ? '入库中...' : '扫描中...'} />
+  }
+
   return <>
     <Card title='物料信息'>
       <List
@@ -354,10 +360,6 @@ const FreeInstock = (props) => {
     }} />
 
     <Html2Canvas ref={html2ref} />
-
-    <MyLoading
-      loading={instockLoading || loading}
-      title={instockLoading ? '入库中...' : '扫描中...'} />
 
     <BottomButton
       only

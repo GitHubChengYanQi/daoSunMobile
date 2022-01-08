@@ -10,7 +10,7 @@ export const MyLoading = ({ loading,title }) => {
         duration: 0,
         content: title || '加载中…',
       });
-    }else {
+    }else if (loading === false) {
       Toast.clear();
     }
   }, [loading]);

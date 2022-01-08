@@ -75,15 +75,15 @@ const Work = () => {
       <Card title='常用工具'>
         {GridStyle(
           <>
-            {GridContent('icon-sousuo', '全局查找', '/SearchButton')}
-            {GridContent(<AuditOutlined style={{ fontSize: 24 }} />, '审批', '/Work/ProcessTask')}
-            {GridContent('icon-saoyisao1', '扫一扫', () => {
+            {GridContent('icon-quanjusousuo1', '全局查找', '/SearchButton')}
+            {GridContent('icon-shenpi1', '审批', '/Work/ProcessTask')}
+            {GridContent('icon-saoyisao4', '扫一扫', () => {
 
             })}
-            {GridContent('icon-riqian', '拜访签到', () => {
+            {GridContent('icon-baifangqiandao1', '拜访签到', () => {
               toast();
             })}
-            {GridContent('icon-rili', '日程管理', '/Schedule')}
+            {GridContent('icon-richengguanli1', '日程管理', '/Schedule')}
           </>,
         )}
       </Card>
@@ -93,13 +93,12 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-dingdan1', '项目列表', '/Work/Business')}
-              {GridContent('icon-xiaojuchang', '项目流程', () => {
+              {GridContent('icon-xiangmuliebiao1', '项目列表', '/Work/Business')}
+              {GridContent('icon-xiangmuliucheng1', '项目流程', () => {
                 toast();
               })}
-              {GridContent('icon-dingdan1', '竞争对手', '/Work/Competitor')}
-              {GridContent('icon-dingdan1', '报价管理', '/Work/Quote')}
-              {GridContent('icon-dingdan1', '项目列表', '/Work/Business')}
+              {GridContent('icon-jingzhengduishou1', '竞争对手', '/Work/Competitor')}
+              {GridContent('icon-baojiaguanli1', '报价管理', '/Work/Quote')}
             </>,
           )
         }
@@ -109,10 +108,10 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '客户列表', '/Work/Customer')}
-              {GridContent('icon-shequ', '公海获客', '/Work/Customer')}
-              {GridContent('icon-yuangongliebiao', '联系人', '/Work/Customer?contacts')}
-              {GridContent('icon-jiaoseguanli', '角色管理', () => {
+              {GridContent('icon-kehuliebiao1', '客户列表', '/Work/Customer')}
+              {GridContent('icon-gonghaihuoke1', '公海获客', '/Work/Customer')}
+              {GridContent('icon-lianxiren1', '联系人', '/Work/Customer?contacts')}
+              {GridContent('icon-jiaoseguanli2', '角色管理', () => {
                 toast();
               })}
             </>,
@@ -124,8 +123,8 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '合同列表', '/Work/Contract')}
-              {GridContent('icon-zulinhetongmoban', '合同模板', () => toast())}
+              {GridContent('icon-hetongliebiao1', '合同列表', '/Work/Contract')}
+              {GridContent('icon-hetongmoban1', '合同模板', () => toast())}
             </>,
           )
         }
@@ -136,7 +135,7 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-fahuoshenqing', '发货申请列表', '/Work/OutstockApply')}
+              {GridContent('icon-fahuoshenqingliebiao1', '发货申请列表', '/Work/OutstockApply')}
             </>,
           )
         }
@@ -147,8 +146,8 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-gongdanliebiao', '工单管理', '/Repair')}
-              {GridContent('icon-baoxiu', '创建报修', '/CreateRepair')}
+              {GridContent('icon-gongdanguanli1', '工单管理', '/Repair')}
+              {GridContent('icon-chuangjianbaoxiu1', '创建报修', '/CreateRepair')}
             </>,
           )
         }
@@ -159,12 +158,12 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '仓库管理', '/Work/StoreHouse')}
-              {GridContent('icon-shuju', '入库管理', () => toast())}
-              {GridContent('icon-shuju', '自由入库', '/Scan/InStock/FreeInstock')}
-              {GridContent('icon-shuju', '出库管理', () => toast())}
-              {GridContent('icon-shuju', '自由出库', '/Scan/OutStock/FreeOutstock')}
-              {GridContent('icon-shuju', '盘点', '/Scan/Inventory')}
+              {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
+              {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
+              {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
+              {GridContent('icon-chukuguanli1', '出库管理', () => toast())}
+              {GridContent('icon-ziyouchuku', '自由出库', '/Scan/OutStock/FreeOutstock')}
+              {GridContent('icon-pandian', '盘点', '/Scan/Inventory')}
             </>,
           )
         }
@@ -174,7 +173,7 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '质检任务管理', () => toast())}
+              {GridContent('icon-zhijianrenwuguanli', '质检任务管理', () => toast())}
             </>,
           )
         }
@@ -185,7 +184,7 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-shuju', '产品资料管理', '/Work/DataManage')}
+              {GridContent('icon-chanpinziliaoguanli', '产品资料管理', '/Work/DataManage')}
             </>,
           )
         }
@@ -195,7 +194,7 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent(<ExportOutlined style={{ fontSize: 24 }} />, '退出登陆', () => {
+              {GridContent('icon-tuichudenglu', '退出登陆', () => {
                 cookie.remove('cheng-token');
                 history.push('/Login');
               })}

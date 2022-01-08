@@ -127,9 +127,9 @@ const FreeOutstock = (props) => {
                 item: getSkuResult(res.inkindResult.skuResult),
               }],
             });
-          }else {
+          } else {
             Toast.show({
-              content:'库存不存在此物料！'
+              content: '库存不存在此物料！',
             });
           }
           break;
@@ -158,6 +158,12 @@ const FreeOutstock = (props) => {
   }, [codeId], {
     wait: 0,
   });
+
+  if (loading || outstockLoading) {
+    return <MyLoading
+      loading={loading || outstockLoading}
+      title={outstockLoading ? '出库中...' : '扫描中...'} />;
+  }
 
   if (outstockData.data.length === 0)
     return <MyEmpty description={<Space direction='vertical' align='center'>
@@ -240,11 +246,6 @@ const FreeOutstock = (props) => {
       })
     }
 
-    <MyLoading
-      loading={loading || outstockLoading}
-      title={outstockLoading ? '出库中...' : '扫描中...'} />
-
-
     <BottomButton
       only={!getHeader()}
       leftText='扫码'
@@ -269,11 +270,11 @@ const FreeOutstock = (props) => {
         }
         outstockRun({
           data: {
-            batchOutStockParams:outstockData.data.map((items)=>{
+            batchOutStockParams: outstockData.data.map((items) => {
               return {
                 codeId: items.codeId,
                 number: items.number,
-              }
+              };
             }),
           },
         });
@@ -292,12 +293,12 @@ const FreeOutstock = (props) => {
 
         outstockRun({
           data: {
-            type:'自由出库',
-            batchOutStockParams:outstockData.data.map((items)=>{
+            type: '自由出库',
+            batchOutStockParams: outstockData.data.map((items) => {
               return {
                 codeId: items.codeId,
                 number: items.number,
-              }
+              };
             }),
           },
         });

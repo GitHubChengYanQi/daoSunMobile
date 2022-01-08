@@ -28,26 +28,35 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
     }
   };
 
+  const canvas = () => new Promise((resolve) => {
+    html2canvas(document.getElementById('code'), {
+      scale: 1,
+      logging: false,
+      useCORS: true,
+      allowTaint: true,
+    }).then((canvas) => {
+      resolve(canvas);
+    });
+  });
+
   const canvasBase64 = () => {
     Toast.show({
       icon: 'loading',
       duration: 0,
       content: '打印中...',
     });
-    html2canvas(document.getElementById('code'), {
-      scale: 2,
-      logging: false,
-      useCORS: true,
-      allowTaint: true,
-    }).then((canvas) => {
-      console.log('打印二维码', codeId);
+    setTimeout(async () => {
+      const response = await canvas();
       typeof success === 'function' && success(codeId);
-      window.Android && window.Android.print(canvas.toDataURL().split(',')[1]);
-      setCodeId(null);
-    });
+      if (process.env.ENV === 'test') {
+        Toast.clear();
+      }
+      console.log(response.toDataURL());
+      window.Android && window.Android.print(response.toDataURL().split(',')[1]);
+      // setCodeId(null);
+    }, 0);
     return null;
   };
-
 
   useImperativeHandle(ref, () => ({
     setCodeId,
@@ -63,8 +72,19 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
 
   return <Dialog
     visible={codeId}
+    afterShow={() => {
+      canvasBase64();
+    }}
     content={<div>
-      <div id='code' style={{ display: 'inline-block', margin: 'auto', maxWidth: 200, maxHeight: 200 }}>
+      <div
+        id='code'
+        style={{
+          display: 'inline-block',
+          margin: 'auto',
+          maxWidth: 400,
+          maxHeight: 250,
+          overflow: 'auto',
+        }}>
         {templete ?
           pares(templete, {
             replace: domNode => {

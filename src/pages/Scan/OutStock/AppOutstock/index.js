@@ -175,6 +175,12 @@ const AppOutstock = (props) => {
     </>;
   };
 
+  if (loading || outstockLoading){
+    return  <MyLoading
+      loading={loading || outstockLoading}
+      title={loading ? '处理中...' : '出库中...'} />
+  }
+
   if (!(items || data)) {
     return <MyEmpty />;
   }
@@ -233,9 +239,6 @@ const AppOutstock = (props) => {
       ]}
     />
 
-    <MyLoading
-      loading={loading || outstockLoading}
-      title={loading ? '处理中...' : '出库中...'} />
   </>;
 };
 export default connect(({ qrCode }) => ({ qrCode }))(AppOutstock);

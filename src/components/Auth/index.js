@@ -158,7 +158,7 @@ const Auth = (props) => {
 
     window.receive = (code) => {
       let codeId = '';
-      if (code.indexOf('https') !== -1) {
+      if (code.indexOf('wx.daoxin.gf2025.com/cp') !== -1 || code.indexOf('wx.hh.gf2025.com/cp') !== -1) {
         const param = code.split('=');
         if (param && param[1]) {
           codeId = param[1];
@@ -170,12 +170,18 @@ const Auth = (props) => {
       } else {
         codeId = code;
       }
-      props.dispatch({
-        type: 'qrCode/appAction',
-        payload: {
-          code: codeId,
-        },
-      });
+      if (codeId !== ''){
+        props.dispatch({
+          type: 'qrCode/appAction',
+          payload: {
+            code: codeId,
+          },
+        });
+      }else {
+        Toast.show({
+          content:'请扫正确二维码！'
+        });
+      }
     };
   }, [], {
     wait: 0,
@@ -198,7 +204,7 @@ const Auth = (props) => {
     return <>
       <Button onClick={() => {
         // const code = '1473977842541821954'; // 库位
-        const code = '1478571092191768578'; // 实物
+        const code = '1476395125282988033'; // 实物
         // const code = '1474546242691313666'; //入库
         props.dispatch({
           type: 'qrCode/appAction',

@@ -167,7 +167,7 @@ const OutStock = (props) => {
   };
 
   if (loading)
-    return <MyLoading />;
+    return <MyLoading loading={loading} />;
 
   if (!data)
     return <MyEmpty height='100vh' />;

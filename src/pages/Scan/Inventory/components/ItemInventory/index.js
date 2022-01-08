@@ -213,38 +213,37 @@ const ItemInventory = (
       setData(null);
     }} />
 
-    <BottomButton
-      only={!state || data.skuResult.batch !== 1}
-      leftText='下一项'
-      rightText='修复库存'
-      rightDisabled={parseInt(number) === data.number}
-      rightOnClick={() => {
-        if (parseInt(number) > 0) {
-          if (number > data.number) {
-            // 入库
-            inventory(1);
-            instockAction();
-          } else if (number < data.number) {
-            // 出库
-            inventory(2);
-            out(data.number - number);
-          }
-        } else {
-          Toast.show({
-            content: '请输入正确数量!',
-            position: 'bottom',
-          });
-        }
-      }}
-      leftOnClick={() => {
-        setData(null);
-        clearCode();
-      }}
-      text={state ? '下一项' : '添加库存'}
+    {
+      (!state ||  data.skuResult.batch === 1)
+      &&
+      <BottomButton
+      only
+      disabled={parseInt(number) === data.number}
+      text={state ? '确定数量' : '添加库存'}
       onClick={() => {
         if (state) {
-          setData(null);
-          clearCode();
+          if (parseInt(number) > 0) {
+            if (number > data.number) {
+              // 入库
+              inventory(1);
+              if (data.positionsResult){
+                instockAction(data.positionsResult.storehousePositionsId,data.positionsResult.storehouseId);
+              }else {
+                Toast.show({
+                  content:'请查看库存和库位！'
+                });
+              }
+            } else if (number < data.number) {
+              // 出库
+              inventory(2);
+              out(data.number - number);
+            }
+          } else {
+            Toast.show({
+              content: '请输入正确数量!',
+              position: 'bottom',
+            });
+          }
         } else {
           if (storehousePosition && storehouse.value) {
             inventory(1);
@@ -257,7 +256,7 @@ const ItemInventory = (
           }
         }
       }}
-    />
+    />}
   </>;
 
 };

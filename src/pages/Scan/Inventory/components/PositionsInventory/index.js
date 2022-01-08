@@ -131,15 +131,20 @@ const PositionsInventory = (
 
   useEffect(() => {
     const list = data.detailsResults ? data.detailsResults.map((items) => {
-      const batch = items.inkindResult.skuResult.batch === 1;
-      return {
-        sku: getSku(items.inkindResult && items.inkindResult.skuResult),
-        brand: items.inkindResult && items.inkindResult.brandResult && items.inkindResult.brandResult.brandName,
-        inkindId: items.inkindId,
-        number: batch ? items.number || 1 : 1,
-        batch,
-        codeId: items.qrCodeId,
-      };
+      if (items.inkindResult && items.inkindResult.skuResult && items.inkindResult.brandResult) {
+        const batch = items.inkindResult.skuResult.batch === 1;
+        return {
+          sku: getSku(items.inkindResult && items.inkindResult.skuResult),
+          brand: items.inkindResult.brandResult.brandName,
+          inkindId: items.inkindId,
+          number: batch ? items.number || 1 : 1,
+          batch,
+          codeId: items.qrCodeId,
+        };
+      } else {
+        return null;
+      }
+
     }) : [];
     setCheck(list.map((items) => {
       return items.inkindId;
@@ -227,10 +232,9 @@ const PositionsInventory = (
           :
           <MyEmpty />
       }
-
     </Card>
     {inkinds.data.length > 0 && <BottomButton
-      text='完成'
+      text='确认库存'
       only
       onClick={() => {
 

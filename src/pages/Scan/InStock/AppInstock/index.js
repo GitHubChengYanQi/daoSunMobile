@@ -351,6 +351,11 @@ const AppInstock = (props) => {
     wait: 0,
   });
 
+  if (autoLoading || loading || instockLoading || batchInstockLoading) {
+    return <MyLoading
+      loading={autoLoading || loading || instockLoading || batchInstockLoading}
+      title={instockLoading || batchInstockLoading ? '入库中...' : '处理中...'} />;
+  }
 
   if (!(items || data)) {
     return <MyEmpty />;
@@ -562,10 +567,6 @@ const AppInstock = (props) => {
     />}
 
     <Html2Canvas ref={ref} />
-
-    <MyLoading
-      loading={autoLoading || loading || instockLoading || batchInstockLoading}
-      title={instockLoading || batchInstockLoading ? '入库中...' : '处理中...'} />
   </>);
 };
 

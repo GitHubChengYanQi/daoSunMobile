@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { stockDetailsList } from '../../../Scan/Url';
-import { Button, List } from 'antd-mobile';
+import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { useSetState } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
@@ -8,6 +8,7 @@ import IsDev from '../../../../components/IsDev';
 import { getHeader } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import Html2Canvas from '../../../Html2Canvas';
+import LinkButton from '../../../components/LinkButton';
 
 const StockDetails = (props) => {
 
@@ -20,6 +21,22 @@ const StockDetails = (props) => {
   if (!datas) {
     return <MyEmpty height='100vh' />;
   }
+
+  const print = async (inkindId) => {
+    if (IsDev() || !getHeader()) {
+      const templete = await request({
+        url: '/inkind/detail',
+        method: 'POST',
+        data: {
+          inkindId,
+        },
+      });
+      if (templete.printTemplateResult && templete.printTemplateResult.templete) {
+        await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
+        await html2ref.current.setCodeId(true);
+      }
+    }
+  };
 
   return <>
     <MyList
@@ -39,23 +56,15 @@ const StockDetails = (props) => {
             return <List.Item
               key={index}
               description={items.createTime}
-              onClick={async () => {
-                if (IsDev() || !getHeader()) {
-                  const templete = await request({
-                    url: '/inkind/detail',
-                    method: 'POST',
-                    data: {
-                      inkindId: items.inkindId,
-                    },
-                  });
-                  if (templete.printTemplateResult && templete.printTemplateResult.templete) {
-                    await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-                    await html2ref.current.setCodeId(true);
-                  }
-                }
-              }}
-              extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×
-                {items.number}</Button>}
+              extra={<Space align='center'>
+                <Button style={{ '--border-radius': '10px', color: '#1845b5' }}>
+                  ×
+                  {items.number}
+                </Button>
+                <LinkButton title='打印二维码' onClick={() => {
+                  print(items.inkindId);
+                }} />
+              </Space>}
             >
               {items.sku && `${items.sku.skuName}  /  `}
               {items.spuResult && items.spuResult.name}

@@ -162,7 +162,7 @@ const InStock = (props) => {
 
 
   if (loading)
-    return <MyLoading />;
+    return <MyLoading loading={loading} />;
 
   if (!data)
     return <MyEmpty />;
