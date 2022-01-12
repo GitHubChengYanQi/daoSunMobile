@@ -18,7 +18,6 @@ import BackSkus from '../Sku/components/BackSkus';
 
 const OutStock = (props) => {
 
-
   const id = props.location.query.id;
 
   const qrCode = props.qrCode;
@@ -209,7 +208,7 @@ const OutStock = (props) => {
                       padding: 0,
                       marginBottom: 16,
                       backgroundColor: '#fff',
-                      boxShadow: '0px 3px 6px rgba(24,69,181,30%)',
+                      boxShadow: 'rgba(24,69,181,0.1) 0px 3px 6px',
                       borderRadius: 10,
                     }}
                     description={<Button
@@ -345,7 +344,7 @@ const OutStock = (props) => {
                       padding: 8,
                       marginBottom: 16,
                       backgroundColor: '#fff',
-                      boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
+                      boxShadow: 'rgba(24,69,181,0.1) 0px 3px 6px',
                       borderRadius: 5,
                     }}
                     extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×

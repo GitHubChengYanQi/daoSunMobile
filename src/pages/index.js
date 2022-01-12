@@ -11,7 +11,7 @@ import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.css';
 
-const iconSize = 30;
+const iconSize = getHeader() ? 30 : 40;
 
 const Index = (props) => {
 
@@ -55,7 +55,14 @@ const Index = (props) => {
   return (
     <>
       {content()}
-      {nav && <div style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 999, backgroundColor: '#fff' }}>
+      {nav && <div style={{
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+        zIndex: 999,
+        backgroundColor: '#fff',
+        boxShadow: 'rgb(24, 69, 181,0.1) 0px 0px 10px',
+      }}>
         <TabBar
           className={style.tabBarItem}
           safeArea

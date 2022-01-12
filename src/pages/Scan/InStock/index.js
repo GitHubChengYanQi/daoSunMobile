@@ -211,7 +211,7 @@ const InStock = (props) => {
                         padding: 0,
                         marginBottom: 16,
                         backgroundColor: '#fff',
-                        boxShadow: '0px 3px 6px rgba(24,69,181,30%)',
+                        boxShadow: 'rgba(24,69,181,0.1) 0px 3px 6px',
                         borderRadius: 10,
                       }}
                       description={
@@ -367,7 +367,7 @@ const InStock = (props) => {
                       padding: 8,
                       marginBottom: 16,
                       backgroundColor: '#fff',
-                      boxShadow: '0px 3px 6px rgba(24,69,181,10%)',
+                      boxShadow: 'rgba(24,69,181,0.1) 0px 3px 6px',
                       borderRadius: 5,
                     }}
                     extra={<Button style={{ '--border-radius': '10px', color: '#1845b5' }}>×

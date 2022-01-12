@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { connect } from 'dva';
-import { Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Card, Dialog, List, Space, Toast } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
 import { request, useRequest } from '../../../../util/Request';
@@ -9,22 +9,17 @@ import CodeBind from '../../CodeBind';
 import MyNavBar from '../../../components/MyNavBar';
 import { MyLoading } from '../../../components/MyLoading';
 import { ClearOutlined, PlayCircleOutlined } from '@ant-design/icons';
-import Html2Canvas from '../../../Html2Canvas';
-import MyTreeSelect from '../../../components/MyTreeSelect';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 import pares from 'html-react-parser';
-import { Input, NumberInput } from 'weui-react-v2';
-import style from '../FreeInstock/index.css';
 import MyCascader from '../../../components/MyCascader';
 import BackSkus from '../../Sku/components/BackSkus';
 import Number from '../../../components/Number';
+import PrintCode from '../../../components/PrintCode';
 
 const fontSize = 24;
 
 const AppInstock = (props) => {
-
-  const ref = useRef();
 
   const treeRef = useRef();
 
@@ -97,8 +92,10 @@ const AppInstock = (props) => {
           templete: templete.printTemplateResult && templete.printTemplateResult.templete,
           codeId: res.codeId,
         }]);
-        await ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-        await ref.current.setCodeId(res.codeId);
+        if (templete.printTemplateResult && templete.printTemplateResult.templete) {
+          PrintCode.print([templete.printTemplateResult && templete.printTemplateResult.templete], 0);
+        }
+
         if (storehousePositionsId) {
           instockAction(res.codeId);
         } else {
@@ -410,8 +407,7 @@ const AppInstock = (props) => {
             return <List.Item
               key={index}
               extra={<LinkButton title='打印' onClick={async () => {
-                await ref.current.setTemplete(items.templete);
-                await ref.current.setCodeId(items.codeId);
+                PrintCode.print([items.templete], 0);
               }} />}
             >
               {
@@ -537,8 +533,6 @@ const AppInstock = (props) => {
         clearCode();
       }}
     />}
-
-    <Html2Canvas ref={ref} />
   </>);
 };
 

@@ -2,15 +2,14 @@ import React from 'react';
 import {
   ListItem,
 } from 'weui-react-v2';
-
 import { Affix } from 'antd';
 import { history } from 'umi';
 import { Card, Divider, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
-import { AuditOutlined, ExportOutlined } from '@ant-design/icons';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import moment from 'moment';
+import { getHeader } from '../components/GetHeader';
 
 const Work = () => {
   const hours = moment().hours();
@@ -53,7 +52,7 @@ const Work = () => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
-        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: 40 }} /> : icon}
+        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: getHeader() ? 40 : 50 }} /> : icon}
         {title}
       </Space>
     </Grid.Item>;
