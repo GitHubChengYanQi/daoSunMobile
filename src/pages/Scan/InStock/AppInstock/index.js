@@ -18,6 +18,7 @@ import { Input, NumberInput } from 'weui-react-v2';
 import style from '../FreeInstock/index.css';
 import MyCascader from '../../../components/MyCascader';
 import BackSkus from '../../Sku/components/BackSkus';
+import Number from '../../../components/Number';
 
 const fontSize = 24;
 
@@ -271,7 +272,7 @@ const AppInstock = (props) => {
   };
 
   const getSkuResult = () => {
-    return <BackSkus record={items} />
+    return <BackSkus record={items} />;
   };
 
 
@@ -439,14 +440,12 @@ const AppInstock = (props) => {
         <div style={{ textAlign: 'center' }}>
           <Space align='center'>
             入库数量：
-            <NumberInput
-              precision={0}
-              className={number > 0 && number <= (items.number - waitNumber) ? style.blue : style.red}
-              style={{ width: 100 }}
-              type='amount'
+            <Number
+              color={number > 0 && number <= (items.number - waitNumber) ? 'blue' : 'red'}
+              width={100}
               value={number}
               onChange={(value) => {
-                setNumber(parseInt(value));
+                setNumber(value);
               }} />
           </Space>
         </div>

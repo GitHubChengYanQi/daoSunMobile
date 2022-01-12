@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, List, Space, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, List, Space, Toast } from 'antd-mobile';
 import { Typography } from 'antd';
 import Search from './components/Search';
 import { storehousePositionsTreeView } from '../../Url';
@@ -19,6 +19,7 @@ import IsDev from '../../../../components/IsDev';
 import style from './index.css';
 import pares from 'html-react-parser';
 import PrintCode from '../../../components/PrintCode';
+import Number from '../../../components/Number';
 
 const FreeInstock = (props) => {
 
@@ -27,6 +28,10 @@ const FreeInstock = (props) => {
   const treeRef = useRef();
 
   const codeId = props.qrCode && props.qrCode.codeId;
+
+  const [visible,setVisible] = useState();
+
+  const [number,setNumber] = useState();
 
   const clearCode = () => {
     props.dispatch({
@@ -85,7 +90,7 @@ const FreeInstock = (props) => {
 
 
   const addCanvas = async (inkindIds) => {
-    if (!getHeader()) {
+    if (IsDev() || !getHeader()) {
       const templete = await request({
         url: '/inkind/details',
         method: 'POST',
@@ -149,7 +154,9 @@ const FreeInstock = (props) => {
         <Space align='center'>
           <LinkButton
             onClick={() => {
-              items.data.splice(i, 1);
+              const array = items.data
+              array.splice(i, 1);
+              setItmes({data:array});
             }}
             disabled={item.inkindId || items.data.length === 1}
             title={
@@ -161,21 +168,19 @@ const FreeInstock = (props) => {
               data.sku.batch ? '批' : '个'
             }
           </div>
-          {
-            data.sku.batch && <NumberInput
-              precision={0}
-              className={item.inkindId ? style.black : (item.number > 0 ? style.blue : style.red)}
-              type='amount'
+          {data.sku.batch && <Space align='center'>
+            入库数量:
+            <Number
+              color={item.inkindId ? 'black' : (item.number > 0 ? 'blue' : 'red')}
+              width={100}
               disabled={item.inkindId}
-              style={{ width: 200, borderBottom: 'solid #eee 1px' }}
-              prefix={<span style={{ color: '#000' }}>入库数量：</span>}
               value={item.number}
               onChange={(value) => {
                 const arr = items.data;
-                arr[i] = { ...arr[i], number: parseInt(value) };
+                arr[i] = { ...arr[i], number: value };
                 setItmes({ data: arr });
               }} />
-          }
+          </Space>}
         </Space>
       </List.Item>);
     }
@@ -309,11 +314,15 @@ const FreeInstock = (props) => {
         >
           {listItems()}
           <Button color='default' style={{ width: '100%' }} onClick={() => {
-            setItmes({
-              data: [...items.data, {
-                number: 1,
-              }],
-            });
+            if (data.sku.batch !== 1) {
+              setVisible(true);
+            }else {
+              setItmes({
+                data: [...items.data, {
+                  number: 1,
+                }],
+              });
+            }
           }}><AddOutline /></Button>
         </List>
       </Card>
@@ -344,6 +353,44 @@ const FreeInstock = (props) => {
           break;
       }
     }} />
+
+    <Dialog
+      visible={visible}
+      content={<Number placeholder='输入入库数量' color={number > 0 ? 'blue' : 'red'} value={number} onChange={(value)=>{
+        setNumber(value);
+      }} />}
+      onAction={(action)=>{
+        if (action.key === 'ok'){
+          if (number > 0){
+            const array = [];
+            for (let i = 0; i < number; i++) {
+              array.push({
+                number: 1,
+              })
+            }
+            setItmes({
+              data: [...items.data, ...array],
+            });
+            setVisible(false);
+            setNumber(null);
+          }else {
+            Toast.show({
+              content:'请输入数量！'
+            });
+          }
+        }else {
+          setVisible(false);
+          setNumber(null);
+        }
+      }}
+      actions={[[{
+        key:'ok',
+        text:'确定',
+      },{
+        key:'close',
+        text:'取消',
+      }]]}
+    />
 
     <BottomButton
       leftText='批量打印'

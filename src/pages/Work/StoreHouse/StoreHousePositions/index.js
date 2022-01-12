@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { storehousePositionsTreeView } from '../../../Scan/Url';
 import { Skeleton } from 'weui-react-v2';
@@ -6,14 +6,12 @@ import MyEmpty from '../../../components/MyEmpty';
 import { Dialog, List, Space } from 'antd-mobile';
 import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
-import Html2Canvas from '../../../Html2Canvas';
 import { AppstoreOutline } from 'antd-mobile-icons';
+import PrintCode from '../../../components/PrintCode';
 
 const StoreHousePositions = (props) => {
 
   const { id } = props.location.query;
-
-  const ref = useRef();
 
   const { loading, data, run } = useRequest(storehousePositionsTreeView, { manual: true });
 
@@ -25,8 +23,7 @@ const StoreHousePositions = (props) => {
     {
       manual: true,
       onSuccess: (res) => {
-        ref.current.setTemplete(res.printTemplateResult.templete);
-        ref.current.setCodeId(true);
+        PrintCode.print([res.printTemplateResult.templete],0)
       },
     });
 
@@ -98,7 +95,6 @@ const StoreHousePositions = (props) => {
 
   return <>
     {storehousePositions(data)}
-    <Html2Canvas ref={ref} />
   </>;
 };
 

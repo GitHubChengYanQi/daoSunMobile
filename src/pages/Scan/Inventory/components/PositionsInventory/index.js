@@ -11,6 +11,7 @@ import { useSetState } from 'ahooks';
 import MyEmpty from '../../../../components/MyEmpty';
 import SkuResult from '../../../Sku/components/SkuResult';
 import SkuResultSkuJsons from '../../../Sku/components/SkuResult_skuJsons';
+import Number from '../../../../components/Number';
 
 const PositionsInventory = (
   {
@@ -164,16 +165,17 @@ const PositionsInventory = (
                       </Checkbox>
                     </div>
                     <div style={{ width: '20vw', textAlign: 'center' }}>
-                      <NumberInput
-                        style={{
+                      <Number
+                        center
+                        disabled={!items.batch}
+                        buttonStyle={{
+                          padding:'0 8px',
                           border: 'solid #999999 1px',
                           borderRadius: 10,
                           display: 'inline-block',
                         }}
-                        className={!items.batch ? style.eee : (items.number <= 0 ? style.red : style.blue)}
-                        type='amount'
-                        precision={0}
-                        disabled={!items.batch}
+                        color={!items.batch ? 'block' : (items.number <= 0 ? 'red' : 'blue')}
+                        width={80}
                         value={items.number}
                         onChange={(value) => {
                           const array = inkinds.data;

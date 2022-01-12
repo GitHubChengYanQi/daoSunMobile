@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { stockDetailsList } from '../../../Scan/Url';
 import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
@@ -7,15 +7,13 @@ import MyEmpty from '../../../components/MyEmpty';
 import IsDev from '../../../../components/IsDev';
 import { getHeader } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
-import Html2Canvas from '../../../Html2Canvas';
 import LinkButton from '../../../components/LinkButton';
 import BackSkus from '../../../Scan/Sku/components/BackSkus';
+import PrintCode from '../../../components/PrintCode';
 
 const StockDetails = (props) => {
 
   const ids = props.location.query;
-
-  const html2ref = useRef();
 
   const [datas, setDatas] = useSetState({ data: [] });
 
@@ -24,7 +22,7 @@ const StockDetails = (props) => {
   }
 
   const print = async (inkindId) => {
-    if (IsDev() || !getHeader()) {
+    if (!getHeader()) {
       const templete = await request({
         url: '/inkind/detail',
         method: 'POST',
@@ -32,10 +30,7 @@ const StockDetails = (props) => {
           inkindId,
         },
       });
-      if (templete.printTemplateResult && templete.printTemplateResult.templete) {
-        await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-        await html2ref.current.setCodeId(true);
-      }
+      PrintCode.print([templete.printTemplateResult && templete.printTemplateResult.templete],0);
     }
   };
 
@@ -73,8 +68,6 @@ const StockDetails = (props) => {
         }
       </List>
     </MyList>
-
-    <Html2Canvas close ref={html2ref} />
   </>;
 };
 

@@ -9,3 +9,7 @@
 .black :global .adm-input {
   color: black;
 }
+
+.center :global .adm-input {
+  text-align: center;
+}

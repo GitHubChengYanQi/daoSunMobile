@@ -10,6 +10,7 @@ import { Input, NumberInput, WhiteSpace } from 'weui-react-v2';
 import { AddOutline } from 'antd-mobile-icons';
 import style from '../../InStock/FreeInstock/index.css';
 import BackSkus from '../../Sku/components/BackSkus';
+import Number from '../../../components/Number';
 
 const fontSize = 24;
 
@@ -124,6 +125,7 @@ const AppOutstock = (props) => {
 
   const outstockContent = (items) => {
     const stockNumber = stockDetail && stockDetail.stockDetails && stockDetail.stockDetails.number;
+    const maxNumber = stockNumber < items.number ? stockNumber : items.number;
     return <>
       {getSkuResult(items)}
       <WhiteSpace size='sm' />
@@ -135,15 +137,14 @@ const AppOutstock = (props) => {
       <WhiteSpace size='sm' />
       {stockNumber > 1 && <Space align='center'>
         出库数量：
-        <NumberInput
-          precision={0}
-          className={style.blue}
-          style={{ width: 100 }}
-          type='amount'
+        <Number
+          color={(number > maxNumber || number === 0) ? 'red' : 'blue'}
+          width={100}
           value={number}
           onChange={(value) => {
             setNumber(parseInt(value));
-          }} />
+          }}
+        />
       </Space>}
     </>;
   };

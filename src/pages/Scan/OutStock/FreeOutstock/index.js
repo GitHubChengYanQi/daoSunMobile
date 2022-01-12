@@ -15,6 +15,7 @@ import TreeSelectSee from '../../../components/TreeSelectSee';
 import { DeleteOutline } from 'antd-mobile-icons';
 import style from '../../InStock/FreeInstock/index.css';
 import SkuResult from '../../Sku/components/SkuResult';
+import Number from '../../../components/Number';
 
 const FreeOutstock = (props) => {
 
@@ -54,7 +55,7 @@ const FreeOutstock = (props) => {
   });
 
   const getSkuResult = (skuResult) => {
-    return <SkuResult skuResult={skuResult} />
+    return <SkuResult skuResult={skuResult} />;
   };
 
   const { loading, run: codeRun } = useRequest({
@@ -198,13 +199,9 @@ const FreeOutstock = (props) => {
                 &&
                 <Space align='center'>
                   出库数量：
-                  <NumberInput
-                    precision={0}
-                    className={(items.stocknumber < items.number || items.number <= 0) ? style.red : style.blue}
-                    style={{
-                      width: 100,
-                    }}
-                    type='amount'
+                  <Number
+                    color={(items.stocknumber < items.number || items.number <= 0) ? 'red' : 'blue'}
+                    width={100}
                     value={outstockData.data[index].number}
                     onChange={(value) => {
                       if (items.stocknumber < value || value < 0) {

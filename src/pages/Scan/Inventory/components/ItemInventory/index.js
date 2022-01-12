@@ -11,6 +11,7 @@ import MyCascader from '../../../../components/MyCascader';
 import { useRequest } from '../../../../../util/Request';
 import style from '../../../../Work/Quality/DispatchTask/index.css';
 import SkuResult from '../../../Sku/components/SkuResult';
+import Number from '../../../../components/Number';
 
 const ItemInventory = (
   {
@@ -119,11 +120,9 @@ const ItemInventory = (
         {
           data.skuResult.batch === 1
             ?
-            <NumberInput
-              className={number > 0 ? style.blue : style.red}
-              style={{ width: 100 }}
-              precision={0}
-              type='amount'
+            <Number
+              color={number > 0 ? 'blue' : 'red'}
+              width='100%'
               value={number}
               onChange={(value) => {
                 setNumber(value);
