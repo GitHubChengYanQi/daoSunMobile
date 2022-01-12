@@ -14,6 +14,7 @@ import LinkButton from '../../../components/LinkButton';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import { DeleteOutline } from 'antd-mobile-icons';
 import style from '../../InStock/FreeInstock/index.css';
+import SkuResult from '../../Sku/components/SkuResult';
 
 const FreeOutstock = (props) => {
 
@@ -53,28 +54,7 @@ const FreeOutstock = (props) => {
   });
 
   const getSkuResult = (skuResult) => {
-    return <>
-      {skuResult.skuName}
-      &nbsp;/&nbsp;
-      {skuResult.spuResult && skuResult.spuResult.name}
-      &nbsp;&nbsp;
-      {
-        skuResult.list
-        &&
-        skuResult.list.length > 0
-        &&
-        skuResult.list[0].attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-          (
-          {
-            skuResult.list.map((items, index) => {
-              return <span key={index}>{items.itemAttributeResult.attribute}：{items.attributeValues}</span>;
-            })
-          }
-          )
-        </em>}
-    </>;
+    return <SkuResult skuResult={skuResult} />
   };
 
   const { loading, run: codeRun } = useRequest({
@@ -161,7 +141,6 @@ const FreeOutstock = (props) => {
 
   if (loading || outstockLoading) {
     return <MyLoading
-      loading={loading || outstockLoading}
       title={outstockLoading ? '出库中...' : '扫描中...'} />;
   }
 

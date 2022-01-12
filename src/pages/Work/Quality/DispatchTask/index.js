@@ -9,6 +9,7 @@ import { Skeleton } from 'weui-react-v2';
 import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
 import { ProfileOutlined } from '@ant-design/icons';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 
 const DispatchTask = ({ taskDetail }) => {
@@ -44,27 +45,7 @@ const DispatchTask = ({ taskDetail }) => {
   });
 
   const sku = (items) => {
-    return <>
-      {items.skuResult && items.skuResult.skuName}
-      &nbsp;/&nbsp;
-      {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-      &nbsp;&nbsp;
-      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-        (
-        {
-          items.skuResult
-          &&
-          items.skuResult.skuJsons
-          &&
-          items.skuResult.skuJsons.map((items, index) => {
-            return (
-              <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
-            );
-          })
-        }
-        )
-      </em>
-    </>;
+    return <SkuResultSkuJsons skuResult={items.skuResult} />;
   };
 
   const dispatchDetails = async (id, items) => {

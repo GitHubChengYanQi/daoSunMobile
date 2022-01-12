@@ -1,19 +1,18 @@
 import { Toast } from 'antd-mobile';
 import { useEffect } from 'react';
 
-export const MyLoading = ({ loading,title }) => {
+export const MyLoading = ({ title }) => {
 
   useEffect(() => {
-    if (loading){
-      Toast.show({
-        icon: 'loading',
-        duration: 0,
-        content: title || '加载中…',
-      });
-    }else if (loading === false) {
+    Toast.show({
+      icon: 'loading',
+      duration: 0,
+      content: title || '加载中…',
+    });
+    return () => {
       Toast.clear();
-    }
-  }, [loading]);
+    };
+  }, []);
 
   return <></>;
 };

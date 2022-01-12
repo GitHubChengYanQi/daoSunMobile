@@ -5,6 +5,7 @@ import MyEmpty from '../../../components/MyEmpty';
 import { history } from 'umi';
 import { useDebounceEffect } from 'ahooks';
 import { Badge } from 'antd';
+import SkuResult from '../../../Scan/Sku/components/SkuResult';
 
 const MainTask = ({ id }) => {
 
@@ -92,25 +93,7 @@ const MainTask = ({ id }) => {
                   title={<>驳回人：{items.user && items.user.name}</>}
                   description={<>{items.createTime} <br/>原因：{items.note || '无'}</>}
                 >
-                  {items.skuResult && items.skuResult.skuName}
-                  &nbsp;/&nbsp;
-                  {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-                  &nbsp;&nbsp;
-                  <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                    (
-                    {
-                      items.skuResult
-                      &&
-                      items.skuResult.list
-                      &&
-                      items.skuResult.list.map((items, index) => {
-                        return (
-                          <span key={index}>{items.itemAttributeResult.attribute}：{items.attributeValues}</span>
-                        );
-                      })
-                    }
-                    )
-                  </em>
+                  <SkuResult skuResult={items.skuResult} />
                   <br/>
                   {items.brandResult && items.brandResult.brandName}
                   &nbsp;&nbsp; × {items.number}

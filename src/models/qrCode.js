@@ -51,9 +51,9 @@ export default {
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
         // let code = '1476356885154385921'; // 入库
-        let code = '1478642803273969665'; // 库位
+        // let code = '1478642803273969665'; // 库位
         // let code = '1475358083438198786'; // 出库
-        // let code = '1478892912677826561'; // 实物
+        let code = '1470279322074095617'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);

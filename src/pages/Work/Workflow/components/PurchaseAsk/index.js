@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MyEmpty from '../../../../components/MyEmpty';
 import { Button, Card, Divider, List, Popup } from 'antd-mobile';
+import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const PurchaseAsk = ({ detail }) => {
 
@@ -11,26 +12,7 @@ const PurchaseAsk = ({ detail }) => {
 
   const sku = (items) => {
     return <>
-      {items.skuResult && `${items.skuResult.skuName}  /  `}
-      {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-      &nbsp;&nbsp;
-      {items.skuResult
-      &&
-      items.skuResult.skuJsons
-      &&
-      items.skuResult.skuJsons.length > 0
-      &&
-      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-        (
-        {
-          items.skuResult.skuJsons.map((items, index) => {
-            return <span key={index}>{items.attribute.attribute}
-              ：
-              {items.values.attributeValues}</span>;
-          })
-        }
-        )
-      </em>}
+      <SkuResultSkuJsons skuResult={items.skuResult} />
     </>;
   };
 

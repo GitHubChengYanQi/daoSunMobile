@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Card, Divider, List, Popup, } from 'antd-mobile';
 import MyEmpty from '../../../../components/MyEmpty';
 import { useRequest } from '../../../../../util/Request';
+import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const QualityTask = ({ detail }) => {
 
@@ -16,25 +17,7 @@ const QualityTask = ({ detail }) => {
 
   const sku = (items) => {
     return <>
-      {items.skuResult && items.skuResult.skuName}
-      &nbsp;/&nbsp;
-      {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-      &nbsp;&nbsp;
-      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-        (
-        {
-          items.skuResult
-          &&
-          items.skuResult.skuJsons
-          &&
-          items.skuResult.skuJsons.map((items, index) => {
-            return (
-              <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
-            );
-          })
-        }
-        )
-      </em>
+      <SkuResultSkuJsons skuResult={items.skuResult} />
     </>;
   };
 

@@ -50,8 +50,8 @@ const Login = () => {
   );
 
   return (
-    <div className={style.login} style={{ backgroundColor: '#fff', marginTop: 24, height: '100vh' }}>
-      <div style={{ textAlign: 'center', margin: 24 }}>
+    <div className={style.login} style={{ backgroundColor: '#fff', height: '100vh' }}>
+      <div style={{ textAlign: 'center', padding: 24 }}>
         <Space direction='vertical'>
           <img src={logo} width='20%' alt='' />
           <h2 style={{fontWeight:'bolder'}}>道昕智造</h2>
@@ -67,7 +67,7 @@ const Login = () => {
         }}
         layout='horizontal'
         footer={
-          <Button block type='submit' style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
+          <Button size='large' block type='submit' style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
             登录
           </Button>
         }

@@ -5,3 +5,7 @@
 .blue :global .weui-input-inner {
   color:#1677ff;
 }
+
+.black :global .weui-input-inner {
+  color: black;
+}

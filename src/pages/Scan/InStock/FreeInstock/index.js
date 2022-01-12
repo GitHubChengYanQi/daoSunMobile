@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Card, List, Space, Toast } from 'antd-mobile';
 import { Typography } from 'antd';
 import Search from './components/Search';
@@ -13,20 +13,18 @@ import Html2Canvas from '../../../Html2Canvas';
 import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
-import pares from 'html-react-parser';
-import { Input, NumberInput } from 'weui-react-v2';
+import { NumberInput } from 'weui-react-v2';
 import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
 import style from './index.css';
+import pares from 'html-react-parser';
+import PrintCode from '../../../components/PrintCode';
 
 const FreeInstock = (props) => {
 
 
   const ref = useRef();
-  const html2ref = useRef();
   const treeRef = useRef();
-
-  const [canvas, setCanvas] = useState([]);
 
   const codeId = props.qrCode && props.qrCode.codeId;
 
@@ -68,7 +66,7 @@ const FreeInstock = (props) => {
   });
 
   useDebounceEffect(() => {
-    if (codeId) {
+    if (codeId && codeId !== '') {
       codeRun({
         params: {
           id: codeId,
@@ -79,91 +77,98 @@ const FreeInstock = (props) => {
     wait: 0,
   });
 
-  const [count, setCount] = useState(1);
-
   const [items, setItmes] = useSetState({
-    data: [],
+    data: [{
+      number: 1,
+    }],
   });
 
+
+  const addCanvas = async (inkindIds) => {
+    if (!getHeader()) {
+      const templete = await request({
+        url: '/inkind/details',
+        method: 'POST',
+        data: {
+          inkindIds,
+        },
+      });
+      PrintCode.print(templete && templete.map((items) => {
+        return items.printTemplateResult && items.printTemplateResult.templete;
+      }), 0);
+    }
+
+  };
+
   const listItems = () => {
-    const arrays = new Array(count);
-    for (let i = 0; i < count; i++) {
-      const item = items.data[i] || { codeId: null, number: 1 };
-      arrays.push(<List.Item key={i} extra={
-        <LinkButton disabled={item.codeId} title={item.codeId ? '已生成二维码' : '生成二维码'} onClick={async () => {
-          const brandId = data.brand.value;
-          const id = data.sku.value;
-          if (brandId && id) {
-            if (item.number > 0){
-              const res = await request({
-                url: '/orCode/automaticBinding',
-                method: 'POST',
-                data: {
-                  source: 'item',
-                  brandId,
-                  id,
-                  number: item.number,
-                  inkindType: '自由入库',
-                },
-              });
-              if (IsDev() || !getHeader()) {
-                const templete = await request({
-                  url: '/inkind/detail',
+    const arrays = [];
+    for (let i = 0; i < items.data.length; i++) {
+      const item = items.data[i];
+      arrays.push(<List.Item
+        key={i}
+        extra={
+          <LinkButton title={item.inkindId ? '打印二维码' : '生成二维码'} onClick={async () => {
+            const brandId = data.brand.value;
+            const id = data.sku.value;
+            if (brandId && id) {
+              if (item.number > 0) {
+                const res = await request({
+                  url: '/orCode/automaticBinding',
                   method: 'POST',
                   data: {
-                    inkindId: res.inkindId,
+                    source: 'item',
+                    brandId,
+                    id,
+                    number: item.number,
+                    inkindType: '自由入库',
                   },
                 });
-                if (templete.printTemplateResult && templete.printTemplateResult.templete){
-                  setCanvas([...canvas, {
-                    templete: templete.printTemplateResult && templete.printTemplateResult.templete,
-                    codeId: res.codeId,
-                  }]);
-                  await html2ref.current.setTemplete(templete.printTemplateResult && templete.printTemplateResult.templete);
-                  await html2ref.current.setCodeId(res.codeId);
+                if (IsDev() || !getHeader()) {
+                  addCanvas([res.inkindId]);
                 }
+                const arr = items.data;
+                arr[i] = { ...arr[i], codeId: res.codeId, inkindId: res.inkindId };
+                setItmes({ data: arr });
+              } else {
+                Toast.show({
+                  content: '数量不能小于0!',
+                  position: 'bottom',
+                });
               }
-              const arr = items.data;
-              arr[i] = { ...arr[i], codeId: res.codeId };
-              setItmes({ data: arr });
-            }else {
+
+            } else {
               Toast.show({
-                content: '数量不能小于0!',
+                content: '请先将物料和供应商信息填写完整!',
                 position: 'bottom',
               });
             }
 
-          } else {
-            Toast.show({
-              content: '请先将物料和供应商信息填写完整!',
-              position: 'bottom',
-            });
-          }
-
-        }} />
-      }>
+          }} />
+        }
+      >
         <Space align='center'>
           <LinkButton
             onClick={() => {
               items.data.splice(i, 1);
-              setCount(count - 1);
             }}
-            disabled={item.codeId || count === 1}
+            disabled={item.inkindId || items.data.length === 1}
             title={
               <DeleteOutline />
             } />
-          第{i + 1}
-          {
-            data.sku.batch ? '批' : '个'
-          }
+          <div style={{ marginRight: 32 }}>
+            第{i + 1}
+            {
+              data.sku.batch ? '批' : '个'
+            }
+          </div>
           {
             data.sku.batch && <NumberInput
               precision={0}
-              className={item.number <=0 ? style.red : style.blue}
+              className={item.inkindId ? style.black : (item.number > 0 ? style.blue : style.red)}
               type='amount'
-              disabled={item.codeId}
-              style={{ width: 200 }}
-              prefix={<span style={{color:'#000'}}>入库数量：</span>}
+              disabled={item.inkindId}
+              style={{ width: 200, borderBottom: 'solid #eee 1px' }}
+              prefix={<span style={{ color: '#000' }}>入库数量：</span>}
               value={item.number}
               onChange={(value) => {
                 const arr = items.data;
@@ -185,16 +190,18 @@ const FreeInstock = (props) => {
   });
 
   const clear = () => {
-    setItmes({ data: [] });
-    setCanvas([]);
+    setItmes({
+      data: [{
+        number: 1,
+      }],
+    });
     setData({
       sku: {},
       brand: {},
       storehouse: {},
       storehousepostionId: null,
     });
-    setCount(1);
-  }
+  };
 
   const { loading: instockLoading, run: instockRun } = useRequest({
     url: '/instockOrder/freeInstock',
@@ -217,10 +224,10 @@ const FreeInstock = (props) => {
     },
   });
 
-  if (loading || instockLoading){
+  if (loading || instockLoading) {
     return <MyLoading
       loading={instockLoading || loading}
-      title={instockLoading ? '入库中...' : '扫描中...'} />
+      title={instockLoading ? '入库中...' : '扫描中...'} />;
   }
 
   return <>
@@ -235,27 +242,33 @@ const FreeInstock = (props) => {
           <Typography.Link underline onClick={() => {
             ref.current.search({ type: 'sku' });
           }}>
-            {
-              data.sku.label || '请选择物料'
-            }
+            <div style={{ width: '100vw' }}>
+              {
+                data.sku.label || '请选择物料'
+              }
+            </div>
           </Typography.Link>
         </List.Item>
         <List.Item title='供应商(品牌)'>
           <Typography.Link underline onClick={() => {
             ref.current.search({ type: 'brand' });
           }}>
-            {
-              data.brand.label || '请选择供应商(品牌)'
-            }
+            <div style={{ width: '100vw' }}>
+              {
+                data.brand.label || '请选择供应商(品牌)'
+              }
+            </div>
           </Typography.Link>
         </List.Item>
         <List.Item title='仓库'>
           <Typography.Link underline onClick={() => {
             ref.current.search({ type: 'storehouse' });
           }}>
-            {
-              data.storehouse.label || '请选择仓库'
-            }
+            <div style={{ width: '100vw' }}>
+              {
+                data.storehouse.label || '请选择仓库'
+              }
+            </div>
           </Typography.Link>
         </List.Item>
         <List.Item title='库位' extra={getHeader() && <LinkButton
@@ -296,51 +309,24 @@ const FreeInstock = (props) => {
         >
           {listItems()}
           <Button color='default' style={{ width: '100%' }} onClick={() => {
-            setCount(count + 1);
+            setItmes({
+              data: [...items.data, {
+                number: 1,
+              }],
+            });
           }}><AddOutline /></Button>
         </List>
       </Card>
     </div>
 
-    {canvas.length > 0 && <Card title='已绑定的二维码'>
-      <List
-        style={{
-          '--border-top': 'none',
-          '--border-bottom': 'none',
-        }}
-      >
-        {
-          canvas.map((items, index) => {
-            return <List.Item
-              key={index}
-              extra={<LinkButton title='打印' onClick={async () => {
-                await html2ref.current.setTemplete(items.templete);
-                await html2ref.current.setCodeId(items.codeId);
-              }} />}
-            >
-              {
-                pares(items.templete, {
-                  replace: domNode => {
-                    if (domNode.name === 'p') {
-                      domNode.attribs = {
-                        style: 'padding:0;margin:0',
-                      };
-                      return domNode;
-                    }
-                  },
-                })
-              }
-            </List.Item>;
-          })
-        }
-      </List>
-    </Card>}
-
     <Search ref={ref} onChange={(value) => {
       switch (value.type) {
         case 'sku':
-          setItmes({ data: [] });
-          setCount(1);
+          setItmes({
+            data: [{
+              number: 1,
+            }],
+          });
           setData({ ...data, sku: value });
           break;
         case 'brand':
@@ -359,20 +345,88 @@ const FreeInstock = (props) => {
       }
     }} />
 
-    <Html2Canvas ref={html2ref} />
-
     <BottomButton
-      only
-      disabled={
+      leftText='批量打印'
+      leftOnClick={async () => {
+        const brandId = data.brand.value;
+        const id = data.sku.value;
+        if (brandId && id) {
+          const numbers = items.data.filter((item) => {
+            return item.number < 1;
+          });
+
+          const binds = [];
+
+          items.data.map((items, index) => {
+            if (!items.codeId) {
+              binds.push({ number: items.number || 1, index });
+            }
+            return null;
+          });
+
+          const codeRequests = binds.map((items) => {
+            return {
+              source: 'item',
+              brandId,
+              id,
+              number: items.number || 1,
+              inkindType: '自由入库',
+            };
+          });
+          if (numbers.length === 0) {
+            let res = null;
+            if (binds.length > 0) {
+              res = await request({
+                url: '/orCode/batchAutomaticBinding',
+                method: 'POST',
+                data: {
+                  codeRequests,
+                },
+              });
+            }
+            const codeIds = res && res.map((items) => {
+              return items.codeId;
+            });
+            const inkindIds = res && res.map((items) => {
+              return items.inkindId;
+            });
+            const array = items.data;
+            binds.map((items, index) => {
+              return array[items.index] = {
+                codeId: codeIds[index],
+                number: items.number || 1,
+                inkindId: inkindIds[index],
+              };
+            });
+            const printInkinds = array.map((items) => {
+              return items.inkindId;
+            });
+            addCanvas(printInkinds);
+            setItmes({ data: array });
+          } else {
+            Toast.show({
+              content: '数量不能小于0!',
+              position: 'bottom',
+            });
+          }
+
+        } else {
+          Toast.show({
+            content: '请先将物料和供应商信息填写完整!',
+            position: 'bottom',
+          });
+        }
+      }}
+      rightDisabled={
         !data.storehousepostionId
         ||
         !data.storehouse.value
         ||
         items.data.filter((value) => {
-          return value.codeId;
-        }).length !== count
+          return !value.codeId;
+        }).length > 0
       }
-      onClick={() => {
+      rightOnClick={() => {
         if (items.data.filter((value) => {
           return value.number <= 0;
         }).length === 0) {
@@ -391,9 +445,8 @@ const FreeInstock = (props) => {
             position: 'bottom',
           });
         }
-
       }}
-      text='入库'
+      rightText='入库'
     />
   </>;
 };

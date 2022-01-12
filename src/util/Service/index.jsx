@@ -4,7 +4,10 @@ import { Dialog } from 'antd-mobile';
 import { getHeader } from '../../pages/components/GetHeader';
 
 const baseURI = process.env.ENV === 'test' ?
-  getHeader() ? 'http://192.168.1.229' : 'http://192.168.1.229'
+  // getHeader() ?
+  'http://192.168.1.119'
+  // :
+  // 'http://192.168.1.119'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :

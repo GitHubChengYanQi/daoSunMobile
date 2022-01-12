@@ -9,6 +9,8 @@ import LinkButton from '../../../../components/LinkButton';
 import { useRequest } from '../../../../../util/Request';
 import { useSetState } from 'ahooks';
 import MyEmpty from '../../../../components/MyEmpty';
+import SkuResult from '../../../Sku/components/SkuResult';
+import SkuResultSkuJsons from '../../../Sku/components/SkuResult_skuJsons';
 
 const PositionsInventory = (
   {
@@ -17,7 +19,7 @@ const PositionsInventory = (
     setData,
     codeId,
     clearCode,
-    setPosition,
+    setType,
     storehouseposition,
   },
 ) => {
@@ -34,7 +36,7 @@ const PositionsInventory = (
         content: '盘点完成！',
         position: 'bottom',
       });
-      setPosition(false);
+      setType(null);
       setData(null);
       clearCode();
     },
@@ -52,54 +54,9 @@ const PositionsInventory = (
     }
 
     if (list)
-      return <>
-        {skuResult.skuName}
-        &nbsp;/&nbsp;
-        {skuResult.spuResult && skuResult.spuResult.name}
-        &nbsp;&nbsp;
-        {
-          skuResult.list
-          &&
-          skuResult.list.length > 0
-          &&
-          skuResult.list[0].attributeValues
-          &&
-          <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-            (
-            {
-              skuResult.list.map((items, index) => {
-                return <span key={index}>{items.itemAttributeResult.attribute}：{items.attributeValues}</span>;
-              })
-            }
-            )
-          </em>}
-      </>;
+      return <SkuResult skuResult={skuResult} />;
     else
-      return <>
-        {skuResult.skuName}
-        &nbsp;/&nbsp;
-        {skuResult.spuResult && skuResult.spuResult.name}
-        &nbsp;&nbsp;
-        {
-          skuResult.skuJsons
-          &&
-          skuResult.skuJsons.length > 0
-          &&
-          skuResult.skuJsons[0].values.attributeValues
-          &&
-          <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-            (
-            {
-              skuResult.skuJsons.map((items, index) => {
-                return (
-                  <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
-                );
-              })
-            }
-            )
-          </em>
-        }
-      </>;
+      return <SkuResultSkuJsons skuResult={skuResult} />
   };
 
   const [inkinds, setInkinds] = useSetState({ data: [] });
@@ -167,7 +124,7 @@ const PositionsInventory = (
         </em>
       </Space>
     } extra={<LinkButton title='清空' onClick={() => {
-      setPosition(false);
+      setType(null);
       setData(null);
       clearCode();
     }} />}>

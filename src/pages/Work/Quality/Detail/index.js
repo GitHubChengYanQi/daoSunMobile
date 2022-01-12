@@ -7,6 +7,7 @@ import { useRequest } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import { useDebounceEffect } from 'ahooks';
+import SkuResult from '../../../Scan/Sku/components/SkuResult';
 
 
 const Detail = (props) => {
@@ -114,30 +115,7 @@ const Detail = (props) => {
             return <Collapse.Panel key={index} title={
               <Space align='center'>
                 <div style={{width:'70vw'}}>
-                  {qualityDetail.skuResult && qualityDetail.skuResult.skuName}
-                  &nbsp;/&nbsp;
-                  {qualityDetail.skuResult && qualityDetail.skuResult.spuResult && qualityDetail.skuResult.spuResult.name}
-                  &nbsp;&nbsp;
-                  {
-                    qualityDetail.skuResult
-                    &&
-                    qualityDetail.skuResult.list
-                    &&
-                    qualityDetail.skuResult.list.length > 0
-                    &&
-                    qualityDetail.skuResult.list[0].attributeValues
-                    &&
-                    <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                      (
-                      {
-                        qualityDetail.skuResult.list.map((items, index) => {
-                          return <span key={index}>
-                {items.itemAttributeResult.attribute}：{items.attributeValues}
-                  </span>;
-                        })
-                      }
-                      )
-                    </em>}
+                  <SkuResult skuResult={qualityDetail.skuResult} />
                   <br />
                   {qualityDetail.brand && qualityDetail.brand.brandName}
                 </div>

@@ -21,6 +21,7 @@ import { Skeleton } from 'weui-react-v2';
 import { qualityTaskDetailEdit } from '../DispatchTask/components/URL';
 import { PlayCircleOutlined, ScanOutlined } from '@ant-design/icons';
 import LinkButton from '../../../components/LinkButton';
+import SkuResult from '../../../Scan/Sku/components/SkuResult';
 
 const Subtasks = ({ id }) => {
 
@@ -402,31 +403,7 @@ const Subtasks = ({ id }) => {
                       },
                     });
                   }}>
-                    {items.skuResult && items.skuResult.skuName}
-                    &nbsp;/&nbsp;
-                    {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-                    &nbsp;&nbsp;
-                    {
-                      items.skuResult
-                      &&
-                      items.skuResult.list
-                      &&
-                      items.skuResult.list.length > 0
-                      &&
-                      items.skuResult.list[0].attributeValues
-                      &&
-                      <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                        (
-                        {
-                          items.skuResult.list.map((items, index) => {
-                            return <span key={index}>
-                {items.itemAttributeResult.attribute}：{items.attributeValues}
-                  </span>;
-                          })
-                        }
-                        )
-                      </em>}
-
+                    <SkuResult skuResult={items.skuResult} />
                     <br />
                     {items.brand && items.brand.brandName}
                     <br />

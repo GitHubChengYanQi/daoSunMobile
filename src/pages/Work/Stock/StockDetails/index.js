@@ -9,6 +9,7 @@ import { getHeader } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import Html2Canvas from '../../../Html2Canvas';
 import LinkButton from '../../../components/LinkButton';
+import BackSkus from '../../../Scan/Sku/components/BackSkus';
 
 const StockDetails = (props) => {
 
@@ -66,29 +67,7 @@ const StockDetails = (props) => {
                 }} />
               </Space>}
             >
-              {items.sku && `${items.sku.skuName}  /  `}
-              {items.spuResult && items.spuResult.name}
-              &nbsp;&nbsp;
-              {
-                items.backSkus
-                &&
-                items.backSkus.length > 0
-                &&
-                items.backSkus[0].attributeValues.attributeValues
-                &&
-                <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                  (
-                  {
-                    items.backSkus.map((items) => {
-                      if (items.attributeValues.attributeValues) {
-                        return `${items.itemAttribute.attribute} : ${items.attributeValues.attributeValues}`;
-                      } else {
-                        return null;
-                      }
-                    }).toString()
-                  }
-                  )
-                </em>}
+              <BackSkus record={items} />
             </List.Item>;
           })
         }

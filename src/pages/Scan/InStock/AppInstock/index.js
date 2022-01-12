@@ -17,6 +17,7 @@ import pares from 'html-react-parser';
 import { Input, NumberInput } from 'weui-react-v2';
 import style from '../FreeInstock/index.css';
 import MyCascader from '../../../components/MyCascader';
+import BackSkus from '../../Sku/components/BackSkus';
 
 const fontSize = 24;
 
@@ -270,35 +271,7 @@ const AppInstock = (props) => {
   };
 
   const getSkuResult = () => {
-    return <>
-      {items.sku && items.sku.skuName}
-      &nbsp;/&nbsp;
-      {items.spuResult && items.spuResult.name}
-      <br />
-      {
-        items.backSkus
-        &&
-        items.backSkus.length > 0
-        &&
-        items.backSkus[0].attributeValues
-        &&
-        items.backSkus[0].attributeValues.attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 16 }}>
-          (
-          {
-            items.backSkus
-            &&
-            items.backSkus.map((items, index) => {
-              return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-            })
-          }
-          )
-        </em>
-      }
-    </>;
+    return <BackSkus record={items} />
   };
 
 
@@ -523,7 +496,7 @@ const AppInstock = (props) => {
     {items && codeId && <CodeBind
       complete={complete}
       visible={batch ? itemBind : qrCode.bind}
-      title={`[  ${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name}     × ${number}  ]  是否绑定此二维码？`}
+      title={`[  ${items.spuResult && items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult && items.spuResult.name}     × ${number}  ]  是否绑定此二维码？`}
       data={{
         codeId: codeId,
         source: 'item',

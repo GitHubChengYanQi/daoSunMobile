@@ -14,6 +14,7 @@ import { history } from 'umi';
 import IsDev from '../../../components/IsDev';
 import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
+import BackSkus from '../Sku/components/BackSkus';
 
 const OutStock = (props) => {
 
@@ -57,7 +58,7 @@ const OutStock = (props) => {
 
   const next = (items) => {
     Dialog.show({
-      content: `出库成功！是否继续出库 [ ${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name} ]？`,
+      content: `出库成功！是否继续出库 [ ${items.spuResult && items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult && items.spuResult.name} ]？`,
       closeOnMaskClick: true,
       closeOnAction: true,
       onAction: async (action) => {
@@ -106,35 +107,7 @@ const OutStock = (props) => {
   const getSkuResult = (items, br) => {
     if (!items)
       return null;
-    return <>
-      {items.sku && items.sku.skuName}
-      &nbsp;/&nbsp;
-      {items.spuResult && items.spuResult.name}
-      {br ? <br /> : <>&nbsp;&nbsp;</>}
-      {
-        items.backSkus
-        &&
-        items.backSkus.length > 0
-        &&
-        items.backSkus[0].attributeValues
-        &&
-        items.backSkus[0].attributeValues.attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 12 }}>
-          (
-          {
-            items.backSkus
-            &&
-            items.backSkus.map((items, index) => {
-              return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-            })
-          }
-          )
-        </em>
-      }
-    </>;
+    return <BackSkus record={items} />
   };
 
   const outstockContent = (items) => {

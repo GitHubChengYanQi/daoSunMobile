@@ -15,6 +15,7 @@ import { useDebounceEffect } from 'ahooks';
 import IsDev from '../../../components/IsDev';
 import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
+import BackSkus from '../Sku/components/BackSkus';
 
 
 const InStock = (props) => {
@@ -66,37 +67,7 @@ const InStock = (props) => {
   const [instockNumber, setInstockNumber] = useState(0);
 
   const getSkuResult = (items) => {
-    return <Space>
-      <Ellipsis style={{ display: 'inline-block', maxWidth: '50vw' }} content={
-        `${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name}`
-      } />
-      {
-        items.backSkus
-        &&
-        items.backSkus.length > 0
-        &&
-        items.backSkus[0].attributeValues
-        &&
-        items.backSkus[0].attributeValues.attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 12, width: '100%' }}>
-          <Space style={{ width: '100%' }} block={false}>
-            (
-            <Ellipsis
-              style={{ display: 'inline-block', maxWidth: '30vw' }}
-              direction='end'
-              content={
-                items.backSkus
-                &&
-                items.backSkus.map((items) => {
-                  return items.itemAttribute.attribute + '：' + items.attributeValues.attributeValues;
-                }).toString()
-              } />
-            )
-          </Space>
-        </em>
-      }
-    </Space>;
+    return <BackSkus record={items} />
   };
 
   const showRef = useRef();
@@ -126,7 +97,7 @@ const InStock = (props) => {
 
   const next = (items) => {
     Dialog.show({
-      content: `“ ${items.sku && items.sku.skuName} / ${items.spuResult && items.spuResult.name} “是否要继续${batch ? '批量入库' : '扫码入库'} ？`,
+      content: `“ ${items.spuResult && items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult && items.spuResult.name} “是否要继续${batch ? '批量入库' : '扫码入库'} ？`,
       closeOnMaskClick: true,
       closeOnAction: true,
       onAction: async (action) => {
@@ -426,25 +397,8 @@ const InStock = (props) => {
         <Dialog
           visible={qrCode && qrCode.instockAction}
           title={
-            items && <>
-              {items.sku && items.sku.skuName}
-              &nbsp;/&nbsp;
-              {items.spuResult && items.spuResult.name}
-              &nbsp;&nbsp;
-              <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                (
-                {
-                  items.backSkus
-                  &&
-                  items.backSkus.map((items, index) => {
-                    return <span key={index}>
-          {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-            </span>;
-                  })
-                }
-                )
-              </em>
-            </>}
+            items && <BackSkus record={items} />
+          }
           content={
             <div style={{ textAlign: 'center' }}>
               <Space direction='vertical'>
@@ -600,7 +554,7 @@ const InStock = (props) => {
         {/*绑定二维码*/}
         {items && <CodeBind
           visible={qrCode.codeId && qrCode.bind}
-          title={`“ ${items.sku && items.sku.skuName} \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
+          title={`“ ${items.spuResult && items.spuResult.spuClassificationResult && items.skuResult.spuClassificationResult.name}. \\ ${items.spuResult && items.spuResult.name} ”是否绑定此二维码？`}
           data={{
             codeId: qrCode.codeId,
             source: 'item',

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { storehousePositionsTreeView } from '../../../Url';
-import { List,  Toast } from 'antd-mobile';
+import { List, Toast } from 'antd-mobile';
 import TreeSelectSee from '../../../../components/TreeSelectSee';
 import { Typography } from 'antd';
 import Search from '../../../InStock/FreeInstock/components/Search';
@@ -10,6 +10,7 @@ import BottomButton from '../../../../components/BottomButton';
 import MyCascader from '../../../../components/MyCascader';
 import { useRequest } from '../../../../../util/Request';
 import style from '../../../../Work/Quality/DispatchTask/index.css';
+import SkuResult from '../../../Sku/components/SkuResult';
 
 const ItemInventory = (
   {
@@ -17,6 +18,7 @@ const ItemInventory = (
     clearCode,
     data,
     state,
+    position,
     inventory,
     storehouseposition,
     setData,
@@ -32,6 +34,11 @@ const ItemInventory = (
 
   const [storehousePosition, setStorehousePosition] = useState();
 
+  useEffect(() => {
+    setStorehouse(position.storehouse || {});
+    setStorehousePosition(position.positionId);
+  }, [position]);
+
   const { run } = useRequest({
     url: '/inventoryDetail/inventoryInstock',
     method: 'POST',
@@ -43,7 +50,7 @@ const ItemInventory = (
         position: 'bottom',
       });
       clearCode();
-      setData(null)
+      setData(null);
     },
     onError: () => {
       Toast.show({
@@ -54,19 +61,19 @@ const ItemInventory = (
   });
 
   const instockAction = (positionId, storeHouseId) => {
-    if (number > 0){
+    if (number > 0) {
       run({
         data: {
           inkindId: data.inkindId,
           number: number,
           storeHouseId,
           positionId,
-          qrCodeId:codeId
+          qrCodeId: codeId,
         },
       });
-    }else {
+    } else {
       Toast.show({
-        content:'数量不能小于1！'
+        content: '数量不能小于1！',
       });
     }
   };
@@ -89,33 +96,12 @@ const ItemInventory = (
     if (!skuResult) {
       return null;
     }
-    return <>
-      {skuResult.skuName}
-      &nbsp;/&nbsp;
-      {skuResult.spuResult && skuResult.spuResult.name}
-      &nbsp;&nbsp;
-      {
-        skuResult.list
-        &&
-        skuResult.list.length > 0
-        &&
-        skuResult.list[0].attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-          (
-          {
-            skuResult.list.map((items, index) => {
-              return <span key={index}>{items.itemAttributeResult.attribute}：{items.attributeValues}</span>;
-            })
-          }
-          )
-        </em>}
-    </>;
+    return <SkuResult skuResult={skuResult} />
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     setNumber(data.number || 1);
-  },[data])
+  }, [data]);
 
   return <>
     <List
@@ -214,49 +200,49 @@ const ItemInventory = (
     }} />
 
     {
-      (!state ||  data.skuResult.batch === 1)
+      (!state || data.skuResult.batch === 1)
       &&
       <BottomButton
-      only
-      disabled={parseInt(number) === data.number}
-      text={state ? '确定数量' : '添加库存'}
-      onClick={() => {
-        if (state) {
-          if (parseInt(number) > 0) {
-            if (number > data.number) {
-              // 入库
-              inventory(1);
-              if (data.positionsResult){
-                instockAction(data.positionsResult.storehousePositionsId,data.positionsResult.storehouseId);
-              }else {
-                Toast.show({
-                  content:'请查看库存和库位！'
-                });
+        only
+        disabled={parseInt(number) === data.number}
+        text={state ? '确定数量' : '添加库存'}
+        onClick={() => {
+          if (state) {
+            if (parseInt(number) > 0) {
+              if (number > data.number) {
+                // 入库
+                inventory(1);
+                if (data.positionsResult) {
+                  instockAction(data.positionsResult.storehousePositionsId, data.positionsResult.storehouseId);
+                } else {
+                  Toast.show({
+                    content: '请查看库存和库位！',
+                  });
+                }
+              } else if (number < data.number) {
+                // 出库
+                inventory(2);
+                out(data.number - number);
               }
-            } else if (number < data.number) {
-              // 出库
-              inventory(2);
-              out(data.number - number);
+            } else {
+              Toast.show({
+                content: '请输入正确数量!',
+                position: 'bottom',
+              });
             }
           } else {
-            Toast.show({
-              content: '请输入正确数量!',
-              position: 'bottom',
-            });
+            if (storehousePosition && storehouse.value) {
+              inventory(1);
+              instockAction(storehousePosition, storehouse.value);
+            } else {
+              Toast.show({
+                content: '请选择仓库和库位',
+                position: 'bottom',
+              });
+            }
           }
-        } else {
-          if (storehousePosition && storehouse.value) {
-            inventory(1);
-            instockAction(storehousePosition, storehouse.value);
-          } else {
-            Toast.show({
-              content: '请选择仓库和库位',
-              position: 'bottom',
-            });
-          }
-        }
-      }}
-    />}
+        }}
+      />}
   </>;
 
 };

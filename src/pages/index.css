@@ -20,3 +20,10 @@
 .list code {
   background: #f7f7f7;
 }
+
+.tabBarItem :global .adm-tab-bar-item {
+  height: 10vh;
+}
+.tabBarItem :global .adm-tab-bar-item-title {
+  margin: 12px;
+}

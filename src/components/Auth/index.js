@@ -12,7 +12,7 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
-  Button,
+  Button, Dialog,
   // Button,
   Toast,
 } from 'antd-mobile';
@@ -22,7 +22,7 @@ const Auth = (props) => {
 
   // https://dasheng-soft.picp.vip
 
-  const [isLogin, setIsLogin] = useState();
+  const [isLogin, setIsLogin] = useState(true);
 
   const location = useLocation();
 
@@ -151,11 +151,6 @@ const Auth = (props) => {
         },
       });
     }
-
-    window.printOk = () => {
-      Toast.clear();
-    };
-
     window.receive = (code) => {
       let codeId = '';
       if (code.indexOf('wx.daoxin.gf2025.com/cp') !== -1 || code.indexOf('wx.hh.gf2025.com/cp') !== -1) {
@@ -168,7 +163,14 @@ const Auth = (props) => {
           });
         }
       } else {
-        codeId = code;
+        if (code.length === 19){
+          codeId = code;
+        }else {
+          Dialog.alert({
+            content:'请扫正确二维码！'
+          });
+        }
+
       }
       if (codeId !== ''){
         props.dispatch({
@@ -178,7 +180,7 @@ const Auth = (props) => {
           },
         });
       }else {
-        Toast.show({
+        Dialog.alert({
           content:'请扫正确二维码！'
         });
       }
@@ -200,24 +202,24 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  if (process.env.NODE_ENV === 'development')
-    return <>
-      <Button onClick={() => {
-        // const code = '1473977842541821954'; // 库位
-        const code = '1476395125282988033'; // 实物
-        // const code = '1474546242691313666'; //入库
-        props.dispatch({
-          type: 'qrCode/appAction',
-          payload: {
-            code,
-          },
-        });
-      }}>扫码</Button>
-      {
-        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-      }
-    </>;
-  else
+  // if (process.env.NODE_ENV === 'development')
+  //   return <>
+  //     <Button onClick={() => {
+  //       const code = '1473977842541821954'; // 库位
+  //       // const code = '1470279322627743745'; // 实物
+  //       // const code = '1474546242691313666'; //入库
+  //       props.dispatch({
+  //         type: 'qrCode/appAction',
+  //         payload: {
+  //           code,
+  //         },
+  //       });
+  //     }}>扫码</Button>
+  //     {
+  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+  //     }
+  //   </>;
+  // else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

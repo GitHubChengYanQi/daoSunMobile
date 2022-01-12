@@ -2,7 +2,6 @@ import Home from './Home';
 import { SafeArea, TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import { getHeader } from './components/GetHeader';
-import { QrcodeOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import Notice from './Notice';
 import OrCode from './OrCode';
@@ -10,7 +9,9 @@ import Work from './Work';
 import Report from './Report';
 import IsDev from '../components/IsDev';
 import { connect } from 'dva';
+import style from './index.css';
 
+const iconSize = 30;
 
 const Index = (props) => {
 
@@ -56,6 +57,7 @@ const Index = (props) => {
       {content()}
       {nav && <div style={{ position: 'fixed', bottom: 0, width: '100%', zIndex: 999, backgroundColor: '#fff' }}>
         <TabBar
+          className={style.tabBarItem}
           safeArea
           activeKey={module}
           onChange={(value) => {
@@ -66,14 +68,14 @@ const Index = (props) => {
             title='首页'
             key='/Home'
             icon={(check) => {
-              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-shouye-xuanzhong' : 'icon-shouye2'} />;
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-shouye-xuanzhong' : 'icon-shouye2'} />;
             }}
           />
           <TabBar.Item
             title='通知'
             key='/Notice'
             icon={(check) => {
-              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
             }}
           />
           {(getHeader() || IsDev()) &&
@@ -81,7 +83,7 @@ const Index = (props) => {
             title='扫码'
             key='/OrCode'
             icon={(check) => {
-              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
             }}
           />
           }
@@ -89,14 +91,14 @@ const Index = (props) => {
             title='工作'
             key='/Work'
             icon={(check) => {
-              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-gongzuo-xuanzhong' : 'icon-gongzuo'} />;
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-gongzuo-xuanzhong' : 'icon-gongzuo'} />;
             }}
           />
           <TabBar.Item
             title='报表'
             key='/Report'
             icon={(check) => {
-              return <Icon style={{ fontSize: 26 }} type={check ? 'icon-baobiao-xuanzhong' : 'icon-baobiao'} />;
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-baobiao-xuanzhong' : 'icon-baobiao'} />;
             }}
           />
         </TabBar>

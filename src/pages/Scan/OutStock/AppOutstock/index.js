@@ -9,6 +9,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import { Input, NumberInput, WhiteSpace } from 'weui-react-v2';
 import { AddOutline } from 'antd-mobile-icons';
 import style from '../../InStock/FreeInstock/index.css';
+import BackSkus from '../../Sku/components/BackSkus';
 
 const fontSize = 24;
 
@@ -118,35 +119,7 @@ const AppOutstock = (props) => {
   };
 
   const getSkuResult = () => {
-    return <>
-      {items.sku && items.sku.skuName}
-      &nbsp;/&nbsp;
-      {items.spuResult && items.spuResult.name}
-      <br />
-      {
-        items.backSkus
-        &&
-        items.backSkus.length > 0
-        &&
-        items.backSkus[0].attributeValues
-        &&
-        items.backSkus[0].attributeValues.attributeValues
-        &&
-        <em style={{ color: '#c9c8c8', fontSize: 16 }}>
-          (
-          {
-            items.backSkus
-            &&
-            items.backSkus.map((items, index) => {
-              return <span key={index}>
-                        {items.itemAttribute.attribute}：{items.attributeValues.attributeValues}
-                      </span>;
-            })
-          }
-          )
-        </em>
-      }
-    </>;
+    return <BackSkus record={items} />
   };
 
   const outstockContent = (items) => {

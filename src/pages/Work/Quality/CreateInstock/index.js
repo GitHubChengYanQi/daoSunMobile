@@ -145,7 +145,7 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
                         />
                       }
                     >
-                      {items.skuResult && items.skuResult.skuName}
+                      items.skuResult.spuResult && items.skuResult.spuResult.spuClassificationResult && items.skuResult.spuResult.spuClassificationResult.name
                       &nbsp;/&nbsp;
                       {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
                     </List.Item>;

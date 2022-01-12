@@ -53,7 +53,7 @@ const Work = () => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
-        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: 24 }} /> : icon}
+        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: 40 }} /> : icon}
         {title}
       </Space>
     </Grid.Item>;
@@ -194,7 +194,7 @@ const Work = () => {
         {
           GridStyle(
             <>
-              {GridContent('icon-tuichudenglu', '退出登陆', () => {
+              {GridContent('icon-a-tuichudenglu2', '退出登陆', () => {
                 cookie.remove('cheng-token');
                 history.push('/Login');
               })}

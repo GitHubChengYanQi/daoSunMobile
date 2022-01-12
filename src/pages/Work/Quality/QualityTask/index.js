@@ -24,6 +24,7 @@ import UpLoadImg from '../../../components/Upload';
 import { CheckOutlined, CloseOutlined, QrcodeOutlined } from '@ant-design/icons';
 import { useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
+import SkuResult from '../../../Scan/Sku/components/SkuResult';
 
 const QualityTask = (props) => {
 
@@ -467,30 +468,7 @@ const QualityTask = (props) => {
           <QrcodeOutlined /> &nbsp;&nbsp;{state.codeId}
         </List.Item>
         <List.Item>
-          {items.skuResult && items.skuResult.skuName}
-          &nbsp;/&nbsp;
-          {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-          &nbsp;&nbsp;
-          {
-            items.skuResult
-            &&
-            items.skuResult.list
-            &&
-            items.skuResult.list.length > 0
-            &&
-            items.skuResult.list[0].attributeValues
-            &&
-            <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-              (
-              {
-                items.skuResult.list.map((items, index) => {
-                  return <span key={index}>
-                {items.itemAttributeResult.attribute}：{items.attributeValues}
-                  </span>;
-                })
-              }
-              )
-            </em>}
+          <SkuResult skuResult={items.skuResult} />
         </List.Item>
         <List.Item>品牌 / 供应商：{items.brand && items.brand.brandName}</List.Item>
         <List.Item>数量：{items.number}</List.Item>

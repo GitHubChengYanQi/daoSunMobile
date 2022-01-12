@@ -18,6 +18,7 @@ import { Col, Row } from 'antd';
 import { useRequest } from '../../../../../util/Request';
 import { qualityPlanListSelect, qualityTaskDetailEdit } from '../components/URL';
 import Dispatch from '../components/Dispatch';
+import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const EditChildTask = (props) => {
 
@@ -97,25 +98,7 @@ const EditChildTask = (props) => {
       {detail.qualityLising ? detail.qualityLising.map((items, index) => {
           return <div key={index}>
             <div>
-              {items.skuResult && items.skuResult.skuName}
-              &nbsp;/&nbsp;
-              {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
-              &nbsp;&nbsp;
-              <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                (
-                {
-                  items.skuResult
-                  &&
-                  items.skuResult.skuJsons
-                  &&
-                  items.skuResult.skuJsons.map((items, index) => {
-                    return (
-                      <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
-                    );
-                  })
-                }
-                )
-              </em>
+              <SkuResultSkuJsons skuResult={items.skuResult} />
             </div>
             <Row gutter={24}>
               <Col span={17}>

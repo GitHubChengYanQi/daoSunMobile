@@ -39,23 +39,39 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
     });
   });
 
+  const htmlString = `
+      <!DOCTYPE html>
+        <html>
+          <head>
+              <meta charset='utf-8' />
+              <meta
+                 name='viewport'
+                 content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no'
+              />
+          </head>
+          <body>
+            <div style='max-width:384px;max-height: 230px;overflow-y: hidden'>${templete}</div>
+          </body>
+        </html>
+`;
+
   const canvasBase64 = () => {
+    window.Android && window.Android.nPrint(htmlString);
+    setCodeId(null);
     Toast.show({
       icon: 'loading',
       duration: 0,
       content: '打印中...',
     });
-    setTimeout(async () => {
-      const response = await canvas();
-      typeof success === 'function' && success(codeId);
-      if (process.env.ENV === 'test') {
-        Toast.clear();
-      }
-      console.log(response.toDataURL());
-      window.Android && window.Android.print(response.toDataURL().split(',')[1]);
-      // setCodeId(null);
-    }, 0);
-    return null;
+    // setTimeout(async () => {
+    //   const response = await canvas();
+    //   typeof success === 'function' && success(codeId);
+    //   if (process.env.ENV === 'test') {
+    //     Toast.clear();
+    //   }
+    //   window.Android && window.Android.print(response.toDataURL().split(',')[1]);
+    //   // setCodeId(null);
+    // }, 0);
   };
 
   useImperativeHandle(ref, () => ({
@@ -69,7 +85,6 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
     }
   }, [codeId]);
 
-
   return <Dialog
     visible={codeId}
     afterShow={() => {
@@ -81,7 +96,7 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
         style={{
           display: 'inline-block',
           margin: 'auto',
-          maxWidth: 400,
+          maxWidth: 'device-width',
           maxHeight: 250,
           overflow: 'auto',
         }}>
@@ -99,15 +114,6 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
           :
           '暂无'}</div>
     </div>}
-    onAction={(action) => {
-      if (action.key === 'print') {
-        canvasBase64();
-        setDisabled(true);
-      } else {
-        setCodeId(null);
-      }
-    }}
-    actions={actions()}
   />;
 };
 

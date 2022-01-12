@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getHeader } from '../../components/GetHeader';
 import { Space, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
@@ -8,7 +8,6 @@ import { MyLoading } from '../../components/MyLoading';
 import MyEmpty from '../../components/MyEmpty';
 import LinkButton from '../../components/LinkButton';
 import { ScanOutlined } from '@ant-design/icons';
-import Html2Canvas from '../../Html2Canvas';
 import ItemInventory from './components/ItemInventory';
 import PositionsInventory from './components/PositionsInventory';
 import { storehousePositionsTreeView } from '../Url';
@@ -23,19 +22,36 @@ const Inventory = (props) => {
     });
   };
 
-  const ref = useRef();
-
   const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
 
   const [data, setData] = useState();
 
   const [item, setItem] = useState();
 
+  const [position, setPosition] = useState({});
+
   const [state, setState] = useState(true);
 
-  const [type, setType] = useState('');
+  const [type, setType] = useState();
 
-  const [position, setPosition] = useState(false);
+  const scanInkind = (res) => {
+    if (!(res.object && res.object.inNotStock)) {
+      Toast.show({
+        content: '库存中不存在此物料！',
+        position: 'bottom',
+        duration: 5000,
+      });
+      setState(false);
+    } else {
+      inventory(res.object.inkindId, 0);
+      setState(true);
+      Toast.show({
+        content: '扫描成功！',
+        position: 'bottom',
+        duration: 5000,
+      });
+    }
+  };
 
   const { loading, run } = useRequest(
     {
@@ -44,39 +60,62 @@ const Inventory = (props) => {
     }, {
       manual: true,
       onSuccess: (res) => {
-        if (position) {
-          if (res.type === 'inkind' && !(res.object && res.object.inNotStock)) {
-            setItem(res.object);
-          } else {
-            clearCode();
-            Toast.show({
-              content: '请扫不在库存的实物码！',
-            });
+        if (type) {
+          switch (type) {
+            case 'inkind':
+              switch (res.type) {
+                case 'inkind':
+                  setData(res.object);
+                  scanInkind(res);
+                  break;
+                case 'positions':
+                  setPosition({
+                    storehouse: {
+                      label: res.object.storehouseResult.name,
+                      value: res.object.storehouseResult.storehouseId,
+                    },
+                    positionId: res.object.storehousePositionsId,
+                  });
+                  break;
+                default:
+                  clearCode();
+                  Toast.show({
+                    content: '请扫库位码！',
+                    position: 'bottom',
+                  });
+                  break;
+              }
+              break;
+            case 'positions':
+              switch (res.type) {
+                case 'inkind':
+                  if (!(res.object && res.object.inNotStock)) {
+                    setItem(res.object);
+                  }
+                  break;
+                case 'positions':
+                  setData(res.object);
+                  break;
+                default:
+                  clearCode();
+                  Toast.show({
+                    content: '请扫不在库存的实物码！',
+                    position: 'bottom',
+                  });
+                  break;
+              }
+              break;
+            default:
+              break;
           }
         } else {
           setType(res.type);
           setData(res.object);
           switch (res.type) {
             case 'inkind':
-              if (!(res.object && res.object.inNotStock)) {
-                Toast.show({
-                  content: '库存中不存在此物料！',
-                  position: 'bottom',
-                  duration:5000,
-                });
-                setState(false);
-              } else {
-                inventory(res.object.inkindId, 0);
-                setState(true);
-                Toast.show({
-                  content: '扫描成功！',
-                  position: 'bottom',
-                  duration:5000,
-                });
-              }
+              scanInkind(res);
               break;
             case 'positions':
-              setPosition(true);
               break;
             default:
               break;
@@ -179,6 +218,7 @@ const Inventory = (props) => {
     switch (type) {
       case 'inkind':
         return <ItemInventory
+          position={position}
           storehouseposition={storehouseposition}
           inventory={(res) => {
             inventory(data.inkindId, res);
@@ -200,8 +240,8 @@ const Inventory = (props) => {
         return <PositionsInventory
           data={data}
           codeId={codeId}
-          setPosition={(res) => {
-            setPosition(res);
+          setType={(res) => {
+            setType(res);
           }}
           setData={(res) => {
             setData(res);
@@ -219,12 +259,6 @@ const Inventory = (props) => {
 
   return <>
     {module()}
-
-    <Html2Canvas ref={ref} success={() => {
-      setData(null);
-    }} />
-
-
   </>;
 };
 

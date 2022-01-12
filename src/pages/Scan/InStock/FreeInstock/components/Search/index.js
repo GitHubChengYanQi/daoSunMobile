@@ -3,6 +3,7 @@ import { List, Popup, SearchBar, Space } from 'antd-mobile';
 import { useRequest } from '../../../../../../util/Request';
 import { Spin } from 'antd';
 import { useDebounceEffect } from 'ahooks';
+import BackSkus from '../../../../Sku/components/BackSkus';
 
 const Search = ({ onChange, ...props }, ref) => {
 
@@ -127,24 +128,7 @@ const Search = ({ onChange, ...props }, ref) => {
   }));
 
   const getItemResult = (record) => {
-    return <>
-      {record.sku && `${record.sku.skuName}  /  `}
-      {record.spuResult && record.spuResult.name}
-      &nbsp;&nbsp;
-      {record.backSkus && record.backSkus.length > 0
-      &&
-      <em style={{ fontSize: 10 }}>
-        (
-        {
-          record.backSkus.map((items, index) => {
-            return <span key={index}>{items.itemAttribute.attribute}
-              ：
-              {items.attributeValues.attributeValues}</span>;
-          })
-        }
-        )
-      </em>}
-    </>;
+    return <BackSkus record={record} />
   };
 
   const object = (items) => {
@@ -156,7 +140,7 @@ const Search = ({ onChange, ...props }, ref) => {
         return values += (item.values && item.values.attributeValues) ? `${item.attribute && item.attribute.attribute}：${item.values && item.values.attributeValues}，` : '';
       }
     });
-    return items.spuResult && `${items.skuName} / ${items.spuResult.name}   ${(values === '' ? '' : `( ${values} )`)}`;
+    return items.spuResult && `${items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult.name}   ${(values === '' ? '' : `( ${values} )`)}`;
   };
 
   return <div style={{ padding: 16 }}>
@@ -171,6 +155,7 @@ const Search = ({ onChange, ...props }, ref) => {
       <div style={{ padding: 16 }}>
         <Space direction='vertical' style={{ width: '100%' }}>
           <SearchBar
+            style={{height:'10vh'}}
             placeholder='请输入内容'
             showCancelButton={() => true}
             onCancel={() => {
