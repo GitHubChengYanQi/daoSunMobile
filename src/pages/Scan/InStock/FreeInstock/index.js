@@ -117,6 +117,13 @@ const FreeInstock = (props) => {
             const id = data.sku.value;
             if (brandId && id) {
               if (item.number > 0) {
+                if (item.inkindId){
+                  if (IsDev() || !getHeader()) {
+                    addCanvas([item.inkindId]);
+                  }
+                  return;
+                }
+
                 const res = await request({
                   url: '/orCode/automaticBinding',
                   method: 'POST',
@@ -215,16 +222,14 @@ const FreeInstock = (props) => {
     manual: true,
     onSuccess: () => {
       clear();
-      Toast.show({
+      Dialog.alert({
         content: '入库成功！',
-        position: 'bottom',
       });
     },
     onError: () => {
       clear();
-      Toast.show({
+      Dialog.alert({
         content: '入库失败！',
-        position: 'bottom',
       });
     },
   });
@@ -314,7 +319,7 @@ const FreeInstock = (props) => {
         >
           {listItems()}
           <Button color='default' style={{ width: '100%' }} onClick={() => {
-            if (data.sku.batch !== 1) {
+            if (!data.sku.batch) {
               setVisible(true);
             }else {
               setItmes({
