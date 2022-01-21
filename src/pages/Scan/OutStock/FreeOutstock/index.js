@@ -98,13 +98,13 @@ const FreeOutstock = (props) => {
     };
   });
 
-  useEffect(() => {
-    // detailRun({
-    //   data: {
-    //     storehousePositionsId: '1458599000046399490',
-    //   },
-    // });
-  }, []);
+  // useEffect(() => {
+  //   detailRun({
+  //     data: {
+  //       storehousePositionsId: '1458599000046399490',
+  //     },
+  //   });
+  // }, []);
 
   const codeId = props.qrCode && props.qrCode.codeId;
 

@@ -82,13 +82,13 @@ const FreeInstock = (props) => {
     storehouse: {},
   });
 
-  useEffect(() => {
-    detailRun({
-      data: {
-        storehousePositionsId: '1480351037381472258',
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   detailRun({
+  //     data: {
+  //       storehousePositionsId: '1480351037381472258',
+  //     },
+  //   });
+  // }, []);
 
   const ref = useRef();
   const treeRef = useRef();
