@@ -9,24 +9,6 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
   const [disabled, setDisabled] = useState(false);
   const [templete, setTemplete] = useState();
 
-  const actions = () => {
-    if (close) {
-      return [{
-        disabled,
-        key: 'print',
-        text: '打印二维码',
-      }, {
-        key: 'close',
-        text: '取消',
-      }];
-    } else {
-      return [{
-        disabled,
-        key: 'print',
-        text: '打印二维码',
-      }];
-    }
-  };
 
   const canvas = () => new Promise((resolve) => {
     html2canvas(document.getElementById('code'), {
@@ -56,6 +38,7 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
 `;
 
   const canvasBase64 = () => {
+    canvas();
     window.Android && window.Android.nPrint(htmlString);
     setCodeId(null);
     Toast.show({
@@ -63,15 +46,6 @@ const Html2Canvas = ({ success, close, ...props }, ref) => {
       duration: 0,
       content: '打印中...',
     });
-    // setTimeout(async () => {
-    //   const response = await canvas();
-    //   typeof success === 'function' && success(codeId);
-    //   if (process.env.ENV === 'test') {
-    //     Toast.clear();
-    //   }
-    //   window.Android && window.Android.print(response.toDataURL().split(',')[1]);
-    //   // setCodeId(null);
-    // }, 0);
   };
 
   useImperativeHandle(ref, () => ({

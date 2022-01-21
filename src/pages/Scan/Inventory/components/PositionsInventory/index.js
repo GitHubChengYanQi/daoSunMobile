@@ -3,7 +3,6 @@ import { Card, Checkbox, List, Space, Toast } from 'antd-mobile';
 import Icon from '../../../../components/Icon';
 import style from '../../../../Work/Quality/DispatchTask/index.css';
 import TreeSelectSee from '../../../../components/TreeSelectSee';
-import { NumberInput } from 'weui-react-v2';
 import BottomButton from '../../../../components/BottomButton';
 import LinkButton from '../../../../components/LinkButton';
 import { useRequest } from '../../../../../util/Request';

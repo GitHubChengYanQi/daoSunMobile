@@ -9,6 +9,8 @@ const Search = ({ onChange, ...props }, ref) => {
 
   const [visible, setVisible] = useState(false);
 
+  const [key, setKey] = useState();
+
   const [data, setData] = useState([]);
 
   const [type, setType] = useState();
@@ -25,13 +27,34 @@ const Search = ({ onChange, ...props }, ref) => {
     },
   });
 
-  const { loading: brandLoading, run: brandRun } = useRequest({
-    url: '/brand/list?limit=10',
+  const { loading: skuBindLoading, run: skuBindRun } = useRequest({
+    url: '/supply/conditionList',
     method: 'POST',
   }, {
     manual: true,
     onSuccess: (res) => {
-      setData(res);
+      const array = [];
+      const datas = res && res.filter((item) => {
+        switch (type) {
+          case 'brand':
+            if (array.includes(item.brandId)) {
+              return false;
+            } else {
+              array.push(item.brandId);
+              return true;
+            }
+          case 'supply':
+            if (array.includes(item.customerId)) {
+              return false;
+            } else {
+              array.push(item.customerId);
+              return true;
+            }
+          default:
+            return null;
+        }
+      });
+      setData(datas);
     },
   });
 
@@ -55,10 +78,11 @@ const Search = ({ onChange, ...props }, ref) => {
     },
   });
 
-  const search = ({ type, params }) => {
+  const search = ({ type, params, key }) => {
     setVisible(true);
     setType(type);
     setParams(params);
+    setKey(key);
   };
 
 
@@ -68,13 +92,6 @@ const Search = ({ onChange, ...props }, ref) => {
         skuRun({
           data: {
             skuName: value,
-          },
-        });
-        break;
-      case 'brand':
-        brandRun({
-          data: {
-            brandName: value,
           },
         });
         break;
@@ -92,6 +109,15 @@ const Search = ({ onChange, ...props }, ref) => {
           },
         });
         break;
+      case 'brand':
+      case 'supply':
+        skuBindRun({
+          data: {
+            ...params,
+            name: value,
+          },
+        });
+        break;
       default:
         break;
     }
@@ -102,8 +128,13 @@ const Search = ({ onChange, ...props }, ref) => {
       case 'sku':
         skuRun();
         break;
+      case 'supply':
       case 'brand':
-        brandRun();
+        skuBindRun({
+          data: {
+            ...params,
+          },
+        });
         break;
       case 'storehouse':
         storehouseRun();
@@ -118,8 +149,8 @@ const Search = ({ onChange, ...props }, ref) => {
       default:
         break;
     }
-  }, [type, params],{
-    wait:0
+  }, [type, params], {
+    wait: 0,
   });
 
 
@@ -128,7 +159,7 @@ const Search = ({ onChange, ...props }, ref) => {
   }));
 
   const getItemResult = (record) => {
-    return <BackSkus record={record} />
+    return <BackSkus record={record} />;
   };
 
   const object = (items) => {
@@ -143,7 +174,7 @@ const Search = ({ onChange, ...props }, ref) => {
     return items.spuResult && `${items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult.name}   ${(values === '' ? '' : `( ${values} )`)}`;
   };
 
-  return <div style={{ padding: 16 }}>
+  return <div>
     <Popup
       visible={visible}
       destroyOnClose
@@ -155,7 +186,7 @@ const Search = ({ onChange, ...props }, ref) => {
       <div style={{ padding: 16 }}>
         <Space direction='vertical' style={{ width: '100%' }}>
           <SearchBar
-            style={{height:'10vh'}}
+            style={{ height: '10vh' }}
             placeholder='请输入内容'
             showCancelButton={() => true}
             onCancel={() => {
@@ -167,7 +198,7 @@ const Search = ({ onChange, ...props }, ref) => {
           />
           <List>
             {
-              skuLoading || brandLoading || storehouseLoading || itemsLoading
+              skuLoading || skuBindLoading || storehouseLoading || itemsLoading
                 ?
                 <div style={{ textAlign: 'center', padding: 16 }}>
                   <Spin />
@@ -185,6 +216,7 @@ const Search = ({ onChange, ...props }, ref) => {
                             label: object(items),
                             value: items.skuId,
                             batch: items.batch === 1,
+                            key,
                           });
                         }}
                       >
@@ -197,12 +229,13 @@ const Search = ({ onChange, ...props }, ref) => {
                           setVisible(false);
                           onChange({
                             type,
-                            label: items.brandName,
+                            label: items.brandResult && items.brandResult.brandName,
                             value: items.brandId,
+                            key,
                           });
                         }}
                       >
-                        {items.brandName}
+                        {items.brandResult && items.brandResult.brandName}
                       </List.Item>;
                     case 'storehouse':
                       return <List.Item
@@ -213,10 +246,26 @@ const Search = ({ onChange, ...props }, ref) => {
                             type,
                             label: items.name,
                             value: items.storehouseId,
+                            key,
                           });
                         }}
                       >
                         {items.name}
+                      </List.Item>;
+                    case 'supply':
+                      return <List.Item
+                        key={index}
+                        onClick={() => {
+                          setVisible(false);
+                          onChange({
+                            type,
+                            label: items.customerResult && items.customerResult.customerName,
+                            value: items.customerId,
+                            key,
+                          });
+                        }}
+                      >
+                        {items.customerResult && items.customerResult.customerName}
                       </List.Item>;
                     case 'items':
                       if (items.number > 0) {
@@ -229,6 +278,7 @@ const Search = ({ onChange, ...props }, ref) => {
                               label: getItemResult(items),
                               value: items.qrCodeId,
                               number: items.number,
+                              key,
                             });
                           }}
                         >

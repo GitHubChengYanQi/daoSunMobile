@@ -1,14 +1,12 @@
 import MyEmpty from '../../../components/MyEmpty';
 import { connect } from 'dva';
 import MyNavBar from '../../../components/MyNavBar';
-import { Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Card, Dialog, List, Space, Toast } from 'antd-mobile';
 import React, { useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../../components/MyLoading';
-import { Input, NumberInput, WhiteSpace } from 'weui-react-v2';
-import { AddOutline } from 'antd-mobile-icons';
-import style from '../../InStock/FreeInstock/index.css';
+import { WhiteSpace } from 'weui-react-v2';
 import BackSkus from '../../Sku/components/BackSkus';
 import Number from '../../../components/Number';
 

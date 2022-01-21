@@ -1,25 +1,110 @@
-import React from 'react';
-import { Card, Space, Toast } from 'antd-mobile';
+import React, { useEffect, useRef, useState } from 'react';
+import { Card, List, Selector, Toast } from 'antd-mobile';
 import BottomButton from '../../../components/BottomButton';
 import { getHeader } from '../../../components/GetHeader';
-import { storehousePositionsTreeView } from '../../Url';
+import { stockDetailsList, storehousePositionsTreeView } from '../../Url';
 import { useRequest } from '../../../../util/Request';
 import { useDebounceEffect, useSetState } from 'ahooks';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
-import { Input, NumberInput } from 'weui-react-v2';
 import { ScanOutlined } from '@ant-design/icons';
-import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
-import TreeSelectSee from '../../../components/TreeSelectSee';
-import { DeleteOutline } from 'antd-mobile-icons';
-import style from '../../InStock/FreeInstock/index.css';
-import SkuResult from '../../Sku/components/SkuResult';
 import Number from '../../../components/Number';
+import MyCascader from '../../../components/MyCascader';
+import Search from '../../InStock/FreeInstock/components/Search';
+import BackSkus from '../../Sku/components/BackSkus';
+import MyEmpty from '../../../components/MyEmpty';
+
+const fontSize = 20;
 
 const FreeOutstock = (props) => {
 
-  const [outstockData, setOutstockData] = useSetState({ data: [] });
+  const [inkindIds, setInkindIds] = useSetState({ data: [] });
+
+  const treeRef = useRef();
+  const ref = useRef();
+
+  const [data, setData] = useSetState({
+    storehouse: {},
+    positionId: null,
+    skus: [],
+  });
+
+  const options = data.skus.map((item, index) => {
+    return {
+      value: item.inkindId,
+      label: <Card
+        key={index}
+        bodyStyle={{ padding: 0 }}
+        title={<span style={{ fontSize }}><BackSkus record={item} /> </span>}
+        extra={<div
+          style={{
+            padding: 8,
+            border: 'solid #999999 1px',
+            borderRadius: 10,
+            display: 'inline-block',
+          }}
+        >
+          库存:{item.number}
+        </div>}
+      >
+        <List
+          style={{
+            '--border-top': 'none',
+          }}
+        >
+          <List.Item
+            title='供应商'
+            style={{ padding: 0 }}
+          >
+            <span style={{ fontSize }}>
+              {item.customerResult && item.customerResult.customerName}
+            </span>
+          </List.Item>
+          <List.Item
+            title='品牌'
+            style={{ padding: 0 }}
+          >
+            <span style={{ fontSize }}>{item.brandResult && item.brandResult.brandName}</span>
+          </List.Item>
+          <List.Item
+            title='出库数量'
+            style={{ padding: 0 }}
+          >
+            <Number
+              center
+              buttonStyle={{ width: '100%' }}
+              color={(item.number < item.outNumber || item.outNumber <= 0) ? 'red' : 'blue'}
+              width={100}
+              value={item.outNumber}
+              onChange={(value) => {
+
+                if (item.number >= value && value > 0) {
+                  setInkindIds({ data: [...inkindIds.data, item.inkindId] });
+                } else {
+                  const array = inkindIds.data.filter((value) => {
+                    return value !== item.inkindId;
+                  });
+                  setInkindIds({ data: array });
+                }
+
+                const array = data.skus;
+                array[index] = { ...array[index], outNumber: value };
+                setData({ ...data, skus: array });
+              }} />
+          </List.Item>
+        </List>
+      </Card>,
+    };
+  });
+
+  useEffect(() => {
+    // detailRun({
+    //   data: {
+    //     storehousePositionsId: '1458599000046399490',
+    //   },
+    // });
+  }, []);
 
   const codeId = props.qrCode && props.qrCode.codeId;
 
@@ -30,10 +115,25 @@ const FreeOutstock = (props) => {
   };
 
   const clear = () => {
-    setOutstockData({ data: [] });
+    setInkindIds({ data: [] });
+    setData({
+      storehouse: {},
+      positionId: null,
+      skus: [],
+    });
   };
 
-  const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
+  const { loading: detailLoading, run: detailRun } = useRequest(stockDetailsList, {
+    manual: true,
+    onSuccess: (res) => {
+      setInkindIds({ data: [] });
+      setData({
+        ...data, skus: res.map((item) => {
+          return { ...item, outNumber: 0 };
+        }) || [],
+      });
+    },
+  });
 
   const { loading: outstockLoading, run: outstockRun } = useRequest({
     url: '/orCode/batchOutStockByCode',
@@ -50,13 +150,9 @@ const FreeOutstock = (props) => {
       Toast.show({
         content: '出库失败！',
       });
-      clear();
     },
   });
 
-  const getSkuResult = (skuResult) => {
-    return <SkuResult skuResult={skuResult} />;
-  };
 
   const { loading, run: codeRun } = useRequest({
     url: '/orCode/backObject',
@@ -65,60 +161,30 @@ const FreeOutstock = (props) => {
     manual: true,
     onSuccess: (res) => {
       switch (res.type) {
-        case 'item':
-          if (
-            res.inkindResult
-            &&
-            res.inkindResult.inkindDetail
-          ) {
-
-            const codeIds = outstockData.data.filter((value) => {
-              return value.codeId === codeId;
-            });
-            if (codeIds.length > 0) {
-              Toast.show({
-                content: '已经扫描过此物料！',
-                position: 'bottom',
-              });
-              break;
-            }
-
-            if (res.inkindResult.inkindDetail.stockDetails.number <= 0) {
-              Toast.show({
-                content: '此物料已全部出库！',
-                position: 'bottom',
-              });
-              break;
-            }
-
-            setOutstockData({
-              data: [...outstockData.data, {
-                stocknumber: res.inkindResult.inkindDetail.stockDetails.number,
-                number: res.inkindResult.inkindDetail.stockDetails.number,
-                codeId: codeId,
-                brand: {
-                  label: res.inkindResult.brand.brandName,
-                  value: res.inkindResult.brand.brandId,
-                },
-                storehouse: {
-                  label: res.inkindResult.inkindDetail.storehouse.name,
-                  value: res.inkindResult.inkindDetail.storehouse.storehouseId,
-                },
-                storehousepostionId: res.inkindResult.inkindDetail.storehousePositions.storehousePositionsId,
-                item: getSkuResult(res.inkindResult.skuResult),
-              }],
-            });
-          } else {
-            Toast.show({
-              content: '库存不存在此物料！',
+        case 'storehousePositions':
+          if (res.result && res.result.storehouseResult) {
+            setData({
+              ...data,
+              storehouse: {
+                label: res.result.storehouseResult.name,
+                value: res.result.storehouseResult.storehouseId,
+              },
+              postionId: res.result.storehousePositionsId,
             });
           }
+          detailRun({
+            data: {
+              storehousePositionsId: res.result.storehousePositionsId,
+            },
+          });
+          clearCode();
           break;
         default:
           Toast.show({
-            content: '请扫物料码！',
+            content: '请扫库位码！',
             position: 'bottom',
           });
+          clearCode();
           break;
       }
       clearCode();
@@ -140,129 +206,114 @@ const FreeOutstock = (props) => {
     wait: 0,
   });
 
-  if (loading || outstockLoading) {
-    return <MyLoading
-      title={outstockLoading ? '出库中...' : '扫描中...'} />;
-  }
 
-  if (outstockData.data.length === 0)
-    return <MyEmpty description={<Space direction='vertical' align='center'>
-      <span style={{ fontSize: 24 }}>
-        请扫描物料
-      </span>
-      {
-        getHeader() && <LinkButton onClick={() => {
+  return <>
+    <Card
+      title='库位信息'
+    >
+      <List
+        style={{
+          '--border-top': 'none',
+          '--border-bottom': 'none',
+        }}
+      >
+        <List.Item title='仓库'>
+          <LinkButton
+            style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.storehouse.value && 'red' }}
+            title={
+              data.storehouse.label || '请选择仓库'
+            } onClick={() => {
+            ref.current.search({ type: 'storehouse' });
+          }} />
+        </List.Item>
+        <List.Item title='库位' extra={getHeader() && <LinkButton
+          title={<ScanOutlined />} onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',
             payload: {
               action: 'freeOutstock',
             },
           });
-        }} title={<><ScanOutlined />点击扫码</>} />
-      }
-    </Space>} />;
-
-  return <>
-    {
-      outstockData.data.map((items, index) => {
-        return <Card title={`物料${index + 1}`} key={index} extra={
-          <LinkButton
-            color='danger'
-            onClick={() => {
-              outstockData.data.splice(index, 1);
-              setOutstockData({ data: outstockData.data });
-            }}
-            disabled={outstockData.data.length === 1}
+        }} />}>
+          <MyCascader
+            arrow={false}
+            ref={treeRef}
+            branch={!data.storehouse.value}
+            poputTitle='选择库位'
+            branchText='请选择仓库或直接扫码选择库位'
+            textType='link'
             title={
-              <DeleteOutline />
-            } />
-        }>
-          <Space direction='vertical'>
-            <div>
-              仓库：{items.storehouse && items.storehouse.label}
-            </div>
-            <div>
-              库位：<TreeSelectSee data={storehouseposition} value={items.storehousepostionId} />
-            </div>
-            <div>
-              供应商(品牌)：{items.brand.label}
-            </div>
-            <div>
-              物料：{items.item}
-            </div>
-            <Space align='center'>
-              <div style={{ width: '50vw' }}>
-                仓库数量：{items.stocknumber}
-              </div>
-              {
-                items.stocknumber > 1
-                &&
-                <Space align='center'>
-                  出库数量：
-                  <Number
-                    color={(items.stocknumber < items.number || items.number <= 0) ? 'red' : 'blue'}
-                    width={100}
-                    value={outstockData.data[index].number}
-                    onChange={(value) => {
-                      if (items.stocknumber < value || value < 0) {
-                        Toast.show({
-                          content: '数量不符！',
-                        });
-                      }
-
-                      const array = outstockData.data;
-                      array[index] = { ...array[index], number: parseInt(value) };
-                      setOutstockData({ data: array });
-                    }} />
-                </Space>
+              <LinkButton
+                style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.postionId && 'red' }}
+                title='选择库位'
+              />
+            }
+            value={data.positionId}
+            api={storehousePositionsTreeView}
+            onChange={(value) => {
+              if (value && value !== data.positionId) {
+                detailRun({
+                  data: {
+                    storehousePositionsId: value,
+                  },
+                });
+                setData({ ...data, positionId: value });
               }
-            </Space>
-          </Space>
-        </Card>;
-      })
+            }}
+          />
+        </List.Item>
+      </List>
+    </Card>
+
+    {
+      options.length > 0
+        ?
+        <div style={{ padding: 8, paddingBottom: '10vh' }}>
+          <Selector
+            value={inkindIds.data}
+            columns={1}
+            options={options || []}
+            multiple
+          />
+        </div>
+        :
+        <div style={{ marginTop: 16 }}>
+          <MyEmpty description='暂无物料' />
+        </div>
     }
 
-    <BottomButton
-      only={!getHeader()}
-      leftText='扫码'
-      rightText='出库'
-      leftOnClick={() => {
-        props.dispatch({
-          type: 'qrCode/wxCpScan',
-          payload: {
-            action: 'freeOutstock',
-          },
-        });
-      }}
-      rightOnClick={async () => {
-        const outstockNumber = outstockData.data.filter((items) => {
-          return items.stocknumber < items.number || items.number <= 0;
-        });
-
-        if (outstockNumber.length > 0) {
-          return Toast.show({
-            content: '数量不符！',
+    <Search ref={ref} onChange={async (value) => {
+      switch (value.type) {
+        case 'storehouse':
+          treeRef.current.run({
+            params: {
+              ids: value.value,
+            },
           });
-        }
-        outstockRun({
-          data: {
-            batchOutStockParams: outstockData.data.map((items) => {
-              return {
-                codeId: items.codeId,
-                number: items.number,
-              };
-            }),
-          },
-        });
-      }}
+          setData({ ...data, storehouse: value });
+          break;
+        default:
+          break;
+      }
+    }}
+    />
+
+    <BottomButton
+      only
+      disabled={inkindIds.data.length === 0}
       onClick={() => {
-        const outstockNumber = outstockData.data.filter((items) => {
-          return items.stocknumber >= items.number || items.number > 0;
+
+        const outInkinds = data.skus.filter((items) => {
+          return inkindIds.data.includes(items.inkindId);
         });
 
-        if (outstockNumber.length !== outstockData.data.length) {
+        const outstockNumber = outInkinds.filter((items) => {
+          return items.number >= items.outNumber && items.outNumber > 0;
+        });
+
+        if (outstockNumber.length !== outInkinds.length) {
           return Toast.show({
-            content: '请填入正确的数量!',
+            content: '请检查数量!',
             position: 'bottom',
           });
         }
@@ -270,17 +321,22 @@ const FreeOutstock = (props) => {
         outstockRun({
           data: {
             type: '自由出库',
-            batchOutStockParams: outstockData.data.map((items) => {
+            batchOutStockParams: outInkinds.map((items) => {
               return {
-                codeId: items.codeId,
-                number: items.number,
+                inkindId: items.inkindId,
+                codeId: items.qrCodeId,
+                number: items.outNumber,
               };
             }),
           },
         });
+
       }}
       text='出库'
     />
+
+    {(loading || outstockLoading || detailLoading) && <MyLoading />}
+
   </>;
 };
 export default connect(({ qrCode }) => ({ qrCode }))(FreeOutstock);

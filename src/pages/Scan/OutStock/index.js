@@ -1,4 +1,4 @@
-import { Button, Card, Collapse, Dialog, Empty, List, Space, Stepper, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
 import { ScanOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
 import { storehousePositionsTreeView } from '../Url';

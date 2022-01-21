@@ -1,7 +1,7 @@
 import React from 'react';
-import {Empty} from 'antd';
+import { Empty } from 'antd';
 
-const BackSkus = ({record}) => {
+const BackSkus = ({ record }) => {
 
   if (!record.spuResult) {
     return <Empty />;
@@ -12,11 +12,16 @@ const BackSkus = ({record}) => {
     &nbsp;/&nbsp;
     {record.spuResult.name}
     &nbsp;&nbsp;
-    <em style={{color: '#c9c8c8', fontSize: 10}}>
-      (
+    {record.backSkus
+    &&
+    record.backSkus[0]
+    &&
+    record.backSkus[0].attributeValues.attributeValues
+    &&
+    record.backSkus[0].itemAttribute.attribute
+    &&
+    <em style={{ color: '#c9c8c8', fontSize: 10 }}>(
       {
-        record.backSkus
-        &&
         record.backSkus.map((items, index) => {
           return (
             <span key={index}>{items.itemAttribute.attribute}：{items.attributeValues.attributeValues}</span>
@@ -25,6 +30,7 @@ const BackSkus = ({record}) => {
       }
       )
     </em>
+    }
   </>;
 };
 

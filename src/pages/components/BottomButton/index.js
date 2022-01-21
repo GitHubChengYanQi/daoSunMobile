@@ -1,18 +1,19 @@
 import React from 'react';
 import { Button, SafeArea } from 'antd-mobile';
 
-const BottomButton = ({
-                        leftText,
-                        leftDisabled,
-                        leftOnClick,
-                        rightText,
-                        rightOnClick,
-                        rightDisabled,
-                        only,
-                        disabled,
-                        onClick,
-                        text,
-                      }) => {
+const BottomButton = (
+  {
+    leftText,
+    leftDisabled,
+    leftOnClick,
+    rightText,
+    rightOnClick,
+    rightDisabled,
+    only,
+    disabled,
+    onClick,
+    text,
+  }) => {
 
 
   return <div

@@ -1,7 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { Button, Card, Popup, TreeSelect } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 

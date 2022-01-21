@@ -69,13 +69,20 @@ const Inventory = (props) => {
                   scanInkind(res);
                   break;
                 case 'positions':
-                  setPosition({
-                    storehouse: {
-                      label: res.object.storehouseResult.name,
-                      value: res.object.storehouseResult.storehouseId,
-                    },
-                    positionId: res.object.storehousePositionsId,
-                  });
+
+                  if (state){
+                    setType(res.type);
+                    setData(res.object);
+                  }else {
+                    setPosition({
+                      storehouse: {
+                        label: res.object.storehouseResult.name,
+                        value: res.object.storehouseResult.storehouseId,
+                      },
+                      positionId: res.object.storehousePositionsId,
+                    });
+                  }
+
                   break;
                 default:
                   clearCode();

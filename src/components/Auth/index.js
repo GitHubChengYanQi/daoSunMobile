@@ -12,8 +12,7 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
-  Button, Dialog,
-  // Button,
+  Dialog,
   Toast,
 } from 'antd-mobile';
 import IsDev from '../IsDev';

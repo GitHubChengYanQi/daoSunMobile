@@ -1,7 +1,6 @@
 import React from 'react';
 import Auth from '../components/Auth';
-import * as VConsole from 'vconsole';
-import { SafeArea } from 'antd-mobile';
+// import * as VConsole from 'vconsole';
 
 function BasicLayout(props) {
 

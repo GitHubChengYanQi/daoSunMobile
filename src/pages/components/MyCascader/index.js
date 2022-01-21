@@ -35,6 +35,7 @@ const MyCascader = (
     clear,
     branch,
     branchText,
+    fontStyle,
     onOk,
     textType,
   }, ref) => {
@@ -101,7 +102,7 @@ const MyCascader = (
           change(value);
         }}
       />
-      <ListItem arrow={arrow} style={{ padding: 0, border: 'none' }} onClick={() => {
+      <ListItem arrow={arrow} style={{ padding: 0, border: 'none',width:'100vw' }} onClick={() => {
         setVisible(true);
       }}>
         {!branch ?
@@ -110,11 +111,11 @@ const MyCascader = (
               switch (textType) {
                 case 'link':
                   return (
-                    <Typography.Link underline key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+                    <Typography.Link style={fontStyle} key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
                   );
                 default:
                   return (
-                    <span key={index}>{index !== 0 && '-'}{items && items.label}</span>
+                    <span key={index} style={fontStyle}>{index !== 0 && '-'}{items && items.label}</span>
                   );
               }
 

@@ -4,7 +4,6 @@ import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { useSetState } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
-import IsDev from '../../../../components/IsDev';
 import { getHeader } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';

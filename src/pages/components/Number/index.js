@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Input, NumberKeyboard } from 'antd-mobile';
+import { Button, Input, NumberKeyboard} from 'antd-mobile';
 import style from './index.css';
 
 const Number = (
@@ -36,9 +36,11 @@ const Number = (
   };
 
   return <>
-    <Button disabled={disabled} className={center && style.center}
-            style={{ padding: 0, border: 'none', width: width || 200, ...buttonStyle }}
-            onClick={() => setVisible(true)}>
+    <Button
+      disabled={disabled}
+      className={center && style.center}
+      style={{ padding: 0, border: 'none', width: width || 200, ...buttonStyle }}
+      onClick={() => setVisible(true)}>
       <Input className={inputColor()} placeholder={placeholder || '请输入'} value={valueString} readOnly />
     </Button>
     <NumberKeyboard

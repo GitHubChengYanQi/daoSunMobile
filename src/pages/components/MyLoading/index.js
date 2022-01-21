@@ -7,12 +7,12 @@ export const MyLoading = ({ title }) => {
     Toast.show({
       icon: 'loading',
       duration: 0,
-      content: title || '加载中…',
+      content: title || 'Loading...',
     });
     return () => {
       Toast.clear();
     };
   }, []);
 
-  return <></>;
+  return null;
 };
