@@ -82,13 +82,13 @@ const FreeInstock = (props) => {
     storehouse: {},
   });
 
-  // useEffect(() => {
-  //   detailRun({
-  //     data: {
-  //       storehousePositionsId: '1480351037381472258',
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    detailRun({
+      data: {
+        storehousePositionsId: '1480351037381472258',
+      },
+    });
+  }, []);
 
   const ref = useRef();
   const treeRef = useRef();
@@ -347,6 +347,7 @@ const FreeInstock = (props) => {
                 index={index}
                 params={params.data[index]}
                 sku={item}
+                batchNumber={item.batchNumber}
                 addCanvas={(res) => {
                   addCanvas(res);
                 }}
@@ -390,15 +391,12 @@ const FreeInstock = (props) => {
         setVisible(res);
       }}
       onChange={(res) => {
-        setVisible(false);
-        const array = res.map((item) => {
-          return {
-            skuId: item.value,
-            skuResult: item.label,
-            batch: item.batch,
-          };
-        });
-        setData({ ...data, skus: [...data.skus, ...array] });
+        setData({ ...data, skus: [...data.skus, {
+            skuId: res.value,
+            skuResult: res.label,
+            batch: res.batch,
+            batchNumber:res.batchNumber,
+          }] });
       }}
     />
 

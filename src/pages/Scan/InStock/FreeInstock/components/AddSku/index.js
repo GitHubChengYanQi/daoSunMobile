@@ -1,10 +1,15 @@
 import { Dialog, Selector } from 'antd-mobile';
 import React, { useState } from 'react';
+import Number from '../../../../../components/Number';
 
 
 const AddSku = ({ visible, data, setVisible, onChange }) => {
 
   const [keys, setKeys] = useState([]);
+
+  const [numberVisible,setNumbeVisible] = useState(false);
+
+  const [number, setNumber] = useState();
 
   const options = () => {
     const array = [];
@@ -28,14 +33,14 @@ const AddSku = ({ visible, data, setVisible, onChange }) => {
     <Dialog
       visible={visible}
       content={
-        <div style={{maxHeight:'50vh'}}>
+        <div style={{ maxHeight: '50vh' }}>
           <Selector
             value={keys.map((item) => {
               return item.value;
             })}
             columns={1}
             options={options() || []}
-            multiple={true}
+            multiple={false}
             onChange={(arr, extend) => {
               setKeys(extend.items);
             }}
@@ -44,10 +49,37 @@ const AddSku = ({ visible, data, setVisible, onChange }) => {
       }
       onAction={(action) => {
         if (action.key === 'ok') {
-          onChange(keys);
+          setVisible(false)
+          setNumbeVisible(true);
         } else {
           setVisible(false);
         }
+      }}
+      actions={[[{
+        key: 'ok',
+        text: '确定',
+      }, {
+        key: 'close',
+        text: '取消',
+      }]]}
+    />
+
+
+    <Dialog
+      visible={numberVisible}
+      content={
+        <Number
+          placeholder='请输入数量'
+          value={number}
+          onChange={(value) => {
+            setNumber(value);
+          }} />
+      }
+      onAction={(action) => {
+        if (action.key === 'ok') {
+          onChange({ ...keys[0],batchNumber:number });
+        }
+        setNumbeVisible(false);
       }}
       actions={[[{
         key: 'ok',

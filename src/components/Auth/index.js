@@ -12,6 +12,7 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
+  Button,
   Dialog,
   Toast,
 } from 'antd-mobile';
@@ -201,24 +202,24 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  // if (process.env.NODE_ENV === 'development')
-  //   return <>
-  //     <Button onClick={() => {
-  //       const code = '1473977842541821954'; // 库位
-  //       // const code = '1470279322627743745'; // 实物
-  //       // const code = '1474546242691313666'; //入库
-  //       props.dispatch({
-  //         type: 'qrCode/appAction',
-  //         payload: {
-  //           code,
-  //         },
-  //       });
-  //     }}>扫码</Button>
-  //     {
-  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-  //     }
-  //   </>;
-  // else
+  if (process.env.NODE_ENV === 'development')
+    return <>
+      <Button onClick={() => {
+        const code = '1461229451556483073'; // 库位
+        // const code = '1470279322627743745'; // 实物
+        // const code = '1474546242691313666'; //入库
+        props.dispatch({
+          type: 'qrCode/appAction',
+          payload: {
+            code,
+          },
+        });
+      }}>扫码</Button>
+      {
+        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+      }
+    </>;
+  else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

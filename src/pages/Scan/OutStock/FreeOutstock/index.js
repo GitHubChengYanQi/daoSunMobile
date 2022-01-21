@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Card, List, Selector, Toast } from 'antd-mobile';
 import BottomButton from '../../../components/BottomButton';
 import { getHeader } from '../../../components/GetHeader';
@@ -169,7 +169,7 @@ const FreeOutstock = (props) => {
                 label: res.result.storehouseResult.name,
                 value: res.result.storehouseResult.storehouseId,
               },
-              postionId: res.result.storehousePositionsId,
+              positionId: res.result.storehousePositionsId,
             });
           }
           detailRun({

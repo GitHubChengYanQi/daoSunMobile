@@ -16,6 +16,7 @@ const Skus = (
     addCanvas,
     onChange,
     params,
+    batchNumber,
   },
 ) => {
 
@@ -146,6 +147,12 @@ const Skus = (
     return arrays;
   };
 
+  useEffect(()=>{
+    if (batchNumber){
+      setSkuItem({ ...skuItem, batchNumber });
+    }
+  },[])
+
   return <>
     <Card
       bodyStyle={{ padding: 0 }}
@@ -163,6 +170,9 @@ const Skus = (
         width={80}
         value={skuItem.batchNumber}
         onChange={(value) => {
+          if (params.length > 0){
+            setItems({ data: params });
+          }
           setSkuItem({ ...skuItem, batchNumber: value });
         }} />}
     >
