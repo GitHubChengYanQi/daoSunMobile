@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Card, Dialog, FloatingBubble, List, Toast } from 'antd-mobile';
 import Search from './components/Search';
 import { storehousePositionsTreeView } from '../../Url';
@@ -20,7 +20,7 @@ import AddSku from './components/AddSku';
 import { AddOutline } from 'antd-mobile-icons';
 import MyEmpty from '../../../components/MyEmpty';
 
-const fontSize = 20;
+const fontSize = 18;
 
 const FreeInstock = (props) => {
 
@@ -82,13 +82,13 @@ const FreeInstock = (props) => {
     storehouse: {},
   });
 
-  useEffect(() => {
-    detailRun({
-      data: {
-        storehousePositionsId: '1480351037381472258',
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   detailRun({
+  //     data: {
+  //       storehousePositionsId: '1480351037381472258',
+  //     },
+  //   });
+  // }, []);
 
   const ref = useRef();
   const treeRef = useRef();

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, List, Selector, Toast } from 'antd-mobile';
 import BottomButton from '../../../components/BottomButton';
 import { getHeader } from '../../../components/GetHeader';
@@ -15,7 +15,7 @@ import Search from '../../InStock/FreeInstock/components/Search';
 import BackSkus from '../../Sku/components/BackSkus';
 import MyEmpty from '../../../components/MyEmpty';
 
-const fontSize = 20;
+const fontSize = 18;
 
 const FreeOutstock = (props) => {
 
@@ -36,9 +36,10 @@ const FreeOutstock = (props) => {
       label: <Card
         key={index}
         bodyStyle={{ padding: 0 }}
-        title={<span style={{ fontSize }}><BackSkus record={item} /> </span>}
+        title={<div style={{ fontSize,textAlign:'left',display:'inline-block'}}><BackSkus record={item} /> </div>}
         extra={<div
           style={{
+            minWidth:80,
             padding: 8,
             border: 'solid #999999 1px',
             borderRadius: 10,
@@ -101,7 +102,7 @@ const FreeOutstock = (props) => {
   // useEffect(() => {
   //   detailRun({
   //     data: {
-  //       storehousePositionsId: '1458599000046399490',
+  //       storehousePositionsId: '1480351037381472258',
   //     },
   //   });
   // }, []);

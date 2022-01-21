@@ -5,7 +5,7 @@ import Number from '../../../../../components/Number';
 
 const AddSku = ({ visible, data, setVisible, onChange }) => {
 
-  const [keys, setKeys] = useState([]);
+  const [keys, setKeys] = useState({});
 
   const [numberVisible,setNumbeVisible] = useState(false);
 
@@ -35,14 +35,12 @@ const AddSku = ({ visible, data, setVisible, onChange }) => {
       content={
         <div style={{ maxHeight: '50vh' }}>
           <Selector
-            value={keys.map((item) => {
-              return item.value;
-            })}
+            value={keys.value}
             columns={1}
             options={options() || []}
             multiple={false}
             onChange={(arr, extend) => {
-              setKeys(extend.items);
+              setKeys(extend.items[0]);
             }}
           />
         </div>
@@ -67,6 +65,7 @@ const AddSku = ({ visible, data, setVisible, onChange }) => {
 
     <Dialog
       visible={numberVisible}
+      title={keys.batch ? '请输入批次' : '请输入数量'}
       content={
         <Number
           placeholder='请输入数量'
@@ -77,7 +76,7 @@ const AddSku = ({ visible, data, setVisible, onChange }) => {
       }
       onAction={(action) => {
         if (action.key === 'ok') {
-          onChange({ ...keys[0],batchNumber:number });
+          onChange({ ...keys,batchNumber:number });
         }
         setNumbeVisible(false);
       }}
