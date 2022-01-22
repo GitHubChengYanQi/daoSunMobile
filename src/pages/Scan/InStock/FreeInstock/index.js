@@ -273,7 +273,6 @@ const FreeInstock = (props) => {
       });
     });
     setParams({ data: array });
-    addCanvas(printCodes);
     return printCodes;
   };
 
@@ -460,7 +459,7 @@ const FreeInstock = (props) => {
       leftText='批量打印'
       leftDisabled={data.skus.length === 0 || getSkuData('skus').length === 0 || (getSkuData('inkind').length === 0 && getSkuData('skuItems').length === 0)}
       leftOnClick={async () => {
-        printAllCode();
+        addCanvas(printAllCode());
       }}
       rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0 || getSkuData('brandOrCustomer')}
       rightOnClick={async () => {
