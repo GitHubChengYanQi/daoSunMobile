@@ -459,7 +459,8 @@ const FreeInstock = (props) => {
       leftText='批量打印'
       leftDisabled={data.skus.length === 0 || getSkuData('skus').length === 0 || (getSkuData('inkind').length === 0 && getSkuData('skuItems').length === 0)}
       leftOnClick={async () => {
-        addCanvas(printAllCode());
+        const inkindIds = await printAllCode()
+        addCanvas(inkindIds);
       }}
       rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0 || getSkuData('brandOrCustomer')}
       rightOnClick={async () => {
