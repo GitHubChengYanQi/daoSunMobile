@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { Card, List, Selector, Toast } from 'antd-mobile';
 import BottomButton from '../../../components/BottomButton';
 import { getHeader } from '../../../components/GetHeader';
@@ -11,9 +11,9 @@ import { ScanOutlined } from '@ant-design/icons';
 import LinkButton from '../../../components/LinkButton';
 import Number from '../../../components/Number';
 import MyCascader from '../../../components/MyCascader';
-import Search from '../../InStock/FreeInstock/components/Search';
 import BackSkus from '../../Sku/components/BackSkus';
 import MyEmpty from '../../../components/MyEmpty';
+import Search from '../../InStock/PositionFreeInstock/components/Search';
 
 const fontSize = 18;
 

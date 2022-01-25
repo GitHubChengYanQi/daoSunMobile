@@ -113,7 +113,8 @@ const Auth = (props) => {
       case '/Scan/OutStock/AppOutstock':
         action = 'outstock';
         break;
-      case '/Scan/InStock/FreeInstock':
+      case '/Scan/InStock/PositionFreeInstock':
+      case '/Scan/InStock/SkuFreeInstock':
         action = 'freeInstock';
         break;
       case '/Scan/OutStock/FreeOutstock':
@@ -205,7 +206,8 @@ const Auth = (props) => {
   if (process.env.NODE_ENV === 'development')
     return <>
       <Button onClick={() => {
-        const code = '1461229451556483073'; // 库位
+        const code = '1485410026625695745' // sku
+        // const code = '1461229451556483073'; // 库位
         // const code = '1470279322627743745'; // 实物
         // const code = '1474546242691313666'; //入库
         props.dispatch({

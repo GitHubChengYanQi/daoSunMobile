@@ -16,7 +16,7 @@ const Skus = (
     addCanvas,
     onChange,
     params,
-    batchNumber,
+    batchNumber = 1,
   },
 ) => {
 

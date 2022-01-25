@@ -1,6 +1,5 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, Dialog, FloatingBubble, List, Toast } from 'antd-mobile';
-import Search from './components/Search';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
 import { connect } from 'dva';
@@ -13,18 +12,22 @@ import BottomButton from '../../../components/BottomButton';
 import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
 import PrintCode from '../../../components/PrintCode';
-import { batchBind, storehousePositionsDetail } from '../components/Url';
+import { batchBind } from '../components/Url';
 import SkuResultSkuJsons from '../../Sku/components/SkuResult_skuJsons';
-import Skus from './components/Skus';
-import AddSku from './components/AddSku';
 import { AddOutline } from 'antd-mobile-icons';
 import MyEmpty from '../../../components/MyEmpty';
+import Skus from '../PositionFreeInstock/components/Skus';
+import Search from '../PositionFreeInstock/components/Search';
+import AddSku from '../PositionFreeInstock/components/AddSku';
+import TreeSelectSee from '../../../components/TreeSelectSee';
 
 const fontSize = 18;
 
 const FreeInstock = (props) => {
 
   const [params, setParams] = useSetState({ data: [] });
+
+  const { loading: storehousepostionLoading, data: storehouseposition } = useRequest(storehousePositionsTreeView);
 
   const [state, { setTrue, setFalse }] = useBoolean();
 
@@ -82,14 +85,6 @@ const FreeInstock = (props) => {
     storehouse: {},
   });
 
-  // useEffect(() => {
-  //   detailRun({
-  //     data: {
-  //       storehousePositionsId: '1480351037381472258',
-  //     },
-  //   });
-  // }, []);
-
   const ref = useRef();
   const treeRef = useRef();
 
@@ -103,28 +98,58 @@ const FreeInstock = (props) => {
     });
   };
 
-  const { loading: detailLoading, run: detailRun } = useRequest(
-    storehousePositionsDetail,
-    {
-      manual: true,
-      onSuccess: (res) => {
-        setData({
-          ...data, skus: res.skuResults.map((item) => {
-            return {
-              batch: item.batch === 1,
-              skuId: item.skuId,
-              skuResult: <SkuResultSkuJsons skuResult={item} />,
-            };
-          }),
-        });
-      },
-    },
-  );
-
   const { loading: CodeLoading, run: CodeRun } = useRequest(
     batchBind,
     {
       manual: true,
+    },
+  );
+
+  const { loading: getPositionsing, run: getPositionsRun } = useRequest(
+    {
+      url: '/storehousePositionsBind/getPositions',
+      method: 'POST',
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        if (res.length === 0){
+          return Dialog.alert({
+            content:'此物料没绑定库位！'
+          });
+        }
+        if (res.length === 1) {
+          setData({
+            ...data,
+            storehouse: {
+              label: res[0].storehouseResult.name,
+              value: res[0].storehouseResult.storehouseId,
+            },
+            postionId: res[0].storehousePositionsId,
+          });
+        } else {
+          Dialog.show({
+            title: '请选择库位',
+            closeOnAction: true,
+            onAction:(action)=>{
+              setData({
+                ...data,
+                storehouse: {
+                  label: action.key.storehouseResult.name,
+                  value: action.key.storehouseResult.storehouseId,
+                },
+                postionId: action.key.storehousePositionsId,
+              });
+            },
+            actions: res.map((item)=>{
+              return {
+                text:<>{item.storehouseResult.name} - <TreeSelectSee data={storehouseposition} value={item.storehousePositionsId} /></>,
+                key:item
+              }
+            }),
+          });
+        }
+      },
     },
   );
 
@@ -135,27 +160,27 @@ const FreeInstock = (props) => {
     manual: true,
     onSuccess: (res) => {
       switch (res.type) {
-        case 'storehousePositions':
-          if (res.result && res.result.storehouseResult) {
+        case 'sku':
+          if (res.result.skuId) {
+            const item = res.result;
             setData({
-              ...data,
-              storehouse: {
-                label: res.result.storehouseResult.name,
-                value: res.result.storehouseResult.storehouseId,
+              ...data, skus: [{
+                batch: item.batch === 1,
+                skuId: item.skuId,
+                skuResult: <SkuResultSkuJsons skuResult={item} />,
+              }],
+            });
+            getPositionsRun({
+              data: {
+                skuId: res.result.skuId,
               },
-              postionId: res.result.storehousePositionsId,
             });
           }
-          detailRun({
-            data: {
-              storehousePositionsId: res.result.storehousePositionsId,
-            },
-          });
           clearCode();
           break;
         default:
           Toast.show({
-            content: '请扫库位码！',
+            content: '请扫物料码！',
             position: 'bottom',
           });
           clearCode();
@@ -242,6 +267,37 @@ const FreeInstock = (props) => {
     },
   });
 
+  const searchComponemts = () => {
+    return <Search ref={ref} onChange={async (value) => {
+      switch (value.type) {
+        case 'sku':
+          setData({
+            ...data, skus: [{
+              batch: value.batch,
+              skuId: value.value,
+              skuResult: value.label,
+            }],
+          });
+          getPositionsRun({
+            data: {
+              skuId: value.value,
+            },
+          });
+          break;
+        case 'storehouse':
+          treeRef.current.run({
+            params: {
+              ids: value.value,
+            },
+          });
+          setData({ ...data, storehouse: value });
+          break;
+        default:
+          break;
+      }
+    }} />
+  }
+
   const printAllCode = async () => {
     const inkindIds = getSkuData('inkind');
     const codeRequests = getSkuData('skuItems');
@@ -276,10 +332,23 @@ const FreeInstock = (props) => {
     return printCodes;
   };
 
+  if (!data.postionId) {
+    return <MyEmpty
+      description={<span style={{fontSize}}>
+        请扫描物料，
+        <LinkButton title='手动选择' style={{fontSize}} onClick={() => {
+          ref.current.search({ type: 'sku'});
+        }}
+        />
+        {searchComponemts()}
+      </span>}
+    />;
+  }
+
   return <>
     <Card
       title='库位信息'
-      extra={<LinkButton title='清除' onClick={()=>{
+      extra={<LinkButton title='清除' onClick={() => {
         clear();
       }} />}
     >
@@ -290,13 +359,7 @@ const FreeInstock = (props) => {
         }}
       >
         <List.Item title='仓库'>
-          <LinkButton
-            style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.storehouse.label && 'red' }}
-            title={
-              data.storehouse.label || '请选择仓库'
-            } onClick={() => {
-            ref.current.search({ type: 'storehouse' });
-          }} />
+          {data.storehouse.label}
         </List.Item>
         <List.Item title='库位' extra={getHeader() && <LinkButton
           title={<ScanOutlined />} onClick={() => {
@@ -312,31 +375,15 @@ const FreeInstock = (props) => {
             ref={treeRef}
             fontStyle={{ fontSize }}
             branch={!data.storehouse.value}
-            poputTitle='选择库位'
-            branchText='请选择仓库或直接扫码选择库位'
-            textType='link'
-            title={
-              <LinkButton
-                style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.postionId && 'red' }}
-                title='选择库位'
-              />
-            }
+            title='选择库位'
             value={data.postionId}
             api={storehousePositionsTreeView}
-            onChange={(value) => {
-              if (value && value !== data.postionId) {
-                detailRun({
-                  data: {
-                    storehousePositionsId: value,
-                  },
-                });
-                setData({ ...data, postionId: value });
-              }
-            }}
           />
         </List.Item>
       </List>
     </Card>
+
+    {searchComponemts()}
 
     <div style={{ padding: '16px 0 10vh 0' }}>
       {
@@ -351,9 +398,6 @@ const FreeInstock = (props) => {
                   addCanvas(res);
                 }}
                 fontSize={fontSize}
-                search={(res) => {
-                  ref.current.search(res);
-                }}
                 onChange={(res) => {
                   const array = params.data;
                   array[index] = res;
@@ -367,22 +411,6 @@ const FreeInstock = (props) => {
       }
     </div>
 
-
-    <Search ref={ref} onChange={async (value) => {
-      switch (value.type) {
-        case 'storehouse':
-          treeRef.current.run({
-            params: {
-              ids: value.value,
-            },
-          });
-          setData({ ...data, storehouse: value });
-          break;
-        default:
-          break;
-      }
-    }} />
-
     <AddSku
       data={data.skus}
       visible={visible}
@@ -390,12 +418,14 @@ const FreeInstock = (props) => {
         setVisible(res);
       }}
       onChange={(res) => {
-        setData({ ...data, skus: [...data.skus, {
+        setData({
+          ...data, skus: [...data.skus, {
             skuId: res.value,
             skuResult: res.label,
             batch: res.batch,
-            batchNumber:res.batchNumber,
-          }] });
+            batchNumber: res.batchNumber,
+          }],
+        });
       }}
     />
 
@@ -459,7 +489,7 @@ const FreeInstock = (props) => {
       leftText='批量打印'
       leftDisabled={data.skus.length === 0 || getSkuData('skus').length === 0 || (getSkuData('inkind').length === 0 && getSkuData('skuItems').length === 0)}
       leftOnClick={async () => {
-        const inkindIds = await printAllCode()
+        const inkindIds = await printAllCode();
         addCanvas(inkindIds);
       }}
       rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0 || getSkuData('brandOrCustomer')}
@@ -467,7 +497,7 @@ const FreeInstock = (props) => {
 
         const inkindIds = await printAllCode();
 
-        if (inkindIds.length > 0){
+        if (inkindIds.length > 0) {
           instockRun({
             data: {
               positionsId: data.postionId,
@@ -475,9 +505,9 @@ const FreeInstock = (props) => {
               storeHouseId: data.storehouse.value,
             },
           });
-        }else {
+        } else {
           Toast.show({
-            content:'请选择实物！'
+            content: '请选择实物！',
           });
         }
 
@@ -486,7 +516,7 @@ const FreeInstock = (props) => {
     />
 
     {
-      (loading || instockLoading || detailLoading || CodeLoading) && <MyLoading />
+      (storehousepostionLoading || loading || instockLoading || CodeLoading || getPositionsing) && <MyLoading />
     }
 
   </>;

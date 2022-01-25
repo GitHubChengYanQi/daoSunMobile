@@ -3,15 +3,13 @@ import { storehousePositionsTreeView } from '../../../Url';
 import { List, Toast } from 'antd-mobile';
 import TreeSelectSee from '../../../../components/TreeSelectSee';
 import { Typography } from 'antd';
-import Search from '../../../InStock/FreeInstock/components/Search';
 import Html2Canvas from '../../../../Html2Canvas';
-import { NumberInput } from 'weui-react-v2';
 import BottomButton from '../../../../components/BottomButton';
 import MyCascader from '../../../../components/MyCascader';
 import { useRequest } from '../../../../../util/Request';
-import style from '../../../../Work/Quality/DispatchTask/index.css';
 import SkuResult from '../../../Sku/components/SkuResult';
 import Number from '../../../../components/Number';
+import Search from '../../../InStock/PositionFreeInstock/components/Search';
 
 const ItemInventory = (
   {
