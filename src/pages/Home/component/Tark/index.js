@@ -64,8 +64,11 @@ const Tark = () => {
                     <List.Item
                       onClick={() => {
                         switch (items.source) {
-                          case '入库':
+                          case 'instock':
                             history.push(`/Scan/InStock?id=${items.sourceId}`);
+                            break;
+                          case 'processTask':
+                            history.push(`/Work/Workflow?id=${items.sourceId}`);
                             break;
                           default:
                             break;

@@ -33,8 +33,6 @@ const QualityTask = ({ detail }) => {
   if (!detail)
     return <MyEmpty />;
 
-  console.log(data);
-
   return <>
     <Divider contentPosition='left'>质检任务信息</Divider>
     <>

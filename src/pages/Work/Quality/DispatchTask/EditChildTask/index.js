@@ -3,22 +3,23 @@ import {
   Button,
   Card,
   Dialog,
-  Divider,
-  Empty,
+  List,
   Loading,
   SafeArea,
-  Selector,
-  Stepper,
+  Selector, Space,
   TextArea,
   Toast,
 } from 'antd-mobile';
 import LinkButton from '../../../../components/LinkButton';
 import { history } from 'umi';
-import { Col, Row } from 'antd';
 import { useRequest } from '../../../../../util/Request';
 import { qualityPlanListSelect, qualityTaskDetailEdit } from '../components/URL';
 import Dispatch from '../components/Dispatch';
 import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { MyLoading } from '../../../../components/MyLoading';
+import MyEmpty from '../../../../components/MyEmpty';
+import Number from '../../../../components/Number';
+import { useSetState } from 'ahooks';
 
 const EditChildTask = (props) => {
 
@@ -30,7 +31,9 @@ const EditChildTask = (props) => {
 
   const [refuse, setRefuse] = useState(false);
 
-  const [detail, setDetail] = useState(
+  const [percentumNumber, setPercentumNumber] = useState();
+
+  const [detail, setDetail] = useSetState(
     locationState
     &&
     {
@@ -42,16 +45,23 @@ const EditChildTask = (props) => {
 
   const ref = useRef();
 
-  const [updateQualityPlan, setUpdateQualityPlan] = useState();
+  const [updateQualityPlan, setUpdateQualityPlan] = useState({});
 
   const [visible, setVisible] = useState(false);
 
-  const { data: qualityPlan } = useRequest(qualityPlanListSelect);
+  const [percentum, setPercentum] = useState(false);
+
+  const { loading: qualityPlanLoading, data: qualityPlan, run: qualityPlanRun } = useRequest(
+    qualityPlanListSelect,
+    {
+      manual: true,
+    });
 
   const { run: update } = useRequest(qualityTaskDetailEdit,
     {
       manual: true,
       onSuccess: () => {
+        setPercentum(false);
         Toast.show(
           {
             content: '修改成功！',
@@ -84,62 +94,82 @@ const EditChildTask = (props) => {
   });
 
   if (!detail) {
-    return <Empty
-      style={{ padding: '64px 0' }}
-      imageStyle={{ width: 128 }}
-      description='暂无数据'
-    />;
+    return <MyEmpty />;
   }
 
   return <>
     <Card title={action === 'refuse' ? '任务驳回' : '任务指派'} extra={<LinkButton title='返回' onClick={() => {
-      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
+      history.goBack();
     }} />}>
-      {detail.qualityLising ? detail.qualityLising.map((items, index) => {
-          return <div key={index}>
-            <div>
-              <SkuResultSkuJsons skuResult={items.skuResult} />
-            </div>
-            <Row gutter={24}>
-              <Col span={17}>
-                {items.brand && items.brand.brandName}
-              </Col>
-              <Col span={7}>
-                <Stepper
-                  enterKeyHint
-                  digits={0}
-                  min={1}
-                  max={items.remaining}
-                  defaultValue={items.remaining}
-                  onChange={value => {
-                    detail.qualityLising[index] = { ...detail.qualityLising[index], newNumber: value };
+      <List>
+        {detail.qualityLising ? detail.qualityLising.map((items, index) => {
+            return <List.Item
+              key={index}
+              extra={
+                <Number
+                  center
+                  buttonStyle={{
+                    padding: '0 8px',
+                    border: 'solid #999999 1px',
+                    borderRadius: 10,
+                    display: 'inline-block',
                   }}
-                />
-              </Col>
-            </Row>
-            <div>
-              {action === 'refuse' ?
-                items.qualityPlanResult && items.qualityPlanResult.planName
-                :
-                <Button
-                  color='primary'
-                  fill='none'
-                  disabled={items.userIds}
-                  style={{ padding: 0 }}
-                  onClick={() => {
-                    setVisible(items);
-                  }}>{items.qualityPlanResult ? items.qualityPlanResult.planName : '添加'}</Button>}
-            </div>
-            <Divider style={{ margin: 0, marginTop: 8 }} />
-          </div>;
-        })
-        :
-        <Empty
-          style={{ padding: '64px 0' }}
-          imageStyle={{ width: 128 }}
-          description='暂无数据'
-        />
-      }
+                  color={(items.newNumber > 0 && items.newNumber <= items.remaining) ? 'blue' : 'red'}
+                  width={80}
+                  value={items.newNumber}
+                  onChange={(value) => {
+                    detail.qualityLising[index] = { ...detail.qualityLising[index], newNumber: value };
+                    setDetail(detail);
+                  }} />
+              }
+              title={
+                <div style={{ color: '#000', fontSize: 16 }}>
+                  <SkuResultSkuJsons skuResult={items.skuResult} />
+                </div>
+              }
+            >
+              <div>
+                品牌：{items.brand && items.brand.brandName}
+              </div>
+              <div>
+                供应商：{items.customerResult && items.customerResult.customerName}
+              </div>
+              <div>
+                {action === 'refuse' ?
+                  items.qualityPlanResult && items.qualityPlanResult.planName
+                  :
+                  <Button
+                    color='primary'
+                    fill='none'
+                    disabled={items.userIds}
+                    style={{ padding: 0 }}
+                    onClick={async () => {
+                      await qualityPlanRun({
+                        data: {
+                          testingType: items.skuResult.batch === 1 ? 1 : 2,
+                        },
+                      });
+                      setPercentumNumber((items.percentum || 1) * 100);
+                      setVisible(items);
+                      setUpdateQualityPlan({
+                        value: items.qualityPlanId,
+                        label: items.qualityPlanResult && items.qualityPlanResult.planName,
+                      });
+                    }}>{items.qualityPlanResult ? items.qualityPlanResult.planName : '添加'}</Button>}
+              </div>
+              {items.qualityPlanResult && <div>
+                {items.skuResult.batch === 1 ?
+                  `抽检 ${(items.percentum || 1) * 100}%`
+                  :
+                  '固定检查'
+                }
+              </div>}
+            </List.Item>;
+          })
+          :
+          <MyEmpty />
+        }
+      </List>
     </Card>
 
     <div style={{
@@ -166,13 +196,23 @@ const EditChildTask = (props) => {
               const plans = detail.qualityLising.filter((items) => {
                 return !items.qualityPlanId;
               });
-              if (plans.length > 0)
-                Toast.show({
+              const newNumber = detail.qualityLising.filter((items) => {
+                return !(items.newNumber > 0 && items.newNumber <= items.remaining);
+              });
+              if (plans.length > 0) {
+                return Toast.show({
                   content: '请添加质检方案！',
                   position: 'bottom',
                 });
-              else
-                ref.current.setVisiable(true);
+              }
+              if (newNumber.length > 0) {
+                return Toast.show({
+                  content: '请检查数量！',
+                  position: 'bottom',
+                });
+              }
+
+              ref.current.setVisiable(true);
             }
           }}>
           {action === 'refuse' ? '驳回' : '指派'}
@@ -231,7 +271,7 @@ const EditChildTask = (props) => {
       title='修改质检方案'
       visible={visible}
       content={<Selector
-        defaultValue={typeof visible === 'object' && visible.qualityPlanId}
+        value={updateQualityPlan ? updateQualityPlan.value : null}
         options={qualityPlan || []}
         columns={1}
         onChange={(arr, { items }) => {
@@ -241,38 +281,9 @@ const EditChildTask = (props) => {
       }
       onAction={async (action) => {
         if (action.key === 'update') {
-          const array = [];
-          detail.qualityLising.map((items, index) => {
-            if (items.qualityTaskDetailId === visible.qualityTaskDetailId) {
-              array.push({
-                ...visible,
-                qualityPlanId: updateQualityPlan.value,
-                qualityPlanResult: {
-                  ...visible.qualityPlanResult,
-                  planName: updateQualityPlan.label,
-                },
-              });
-            } else {
-              array.push(items);
-            }
-            return null;
-          });
-
-          setDetail({ ...detail, qualityLising: array });
-
-          await update({
-            data: {
-              qualityTaskDetailId: visible.qualityTaskDetailId,
-              qualityPlanId: updateQualityPlan.value,
-            },
-          });
-
-          setUpdateQualityPlan(null);
-          setVisible(false);
-        } else {
-          setVisible(false);
-          setUpdateQualityPlan(null);
+          setPercentum(visible);
         }
+        setVisible(false);
       }}
       actions={[
         [{
@@ -286,6 +297,65 @@ const EditChildTask = (props) => {
           }],
       ]}
     />
+
+    <Dialog
+      title='抽检比例'
+      visible={percentum}
+      content={<div style={{ textAlign: 'center' }}><Space align='center'>
+        <Number
+          center
+          value={percentumNumber}
+          onChange={setPercentumNumber}
+          placeholder='请输入（%）'
+          width={100}
+          color={(percentumNumber <= 0 || percentumNumber > 100) ? 'red' : 'blue'}
+        /> %
+      </Space></div>}
+      onAction={async () => {
+        if (percentumNumber <= 0 || percentumNumber > 100) {
+          return Toast.show({
+            content: '请输入正确比例！',
+            position: 'bottom',
+          });
+        }
+        const array = [];
+        detail.qualityLising.map((items) => {
+          if (items.qualityTaskDetailId === percentum.qualityTaskDetailId) {
+            array.push({
+              ...percentum,
+              percentum: percentumNumber / 100,
+              qualityPlanId: updateQualityPlan.value,
+              qualityPlanResult: {
+                ...percentum.qualityPlanResult,
+                planName: updateQualityPlan.label,
+              },
+            });
+          } else {
+            array.push(items);
+          }
+          return null;
+        });
+
+        setDetail({ ...detail, qualityLising: array });
+
+        await update({
+          data: {
+            qualityTaskDetailId: percentum.qualityTaskDetailId,
+            qualityPlanId: updateQualityPlan.value,
+            percentum: percentumNumber / 100,
+          },
+        });
+      }}
+      actions={[
+        [{
+          key: 'ok',
+          text: '确定',
+        }],
+      ]}
+    />
+
+    {qualityPlanLoading && <MyLoading />}
+
   </>;
 };
 

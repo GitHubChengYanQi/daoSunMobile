@@ -4,6 +4,7 @@ import { useRequest } from '../../../../../../util/Request';
 import { Spin } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 import BackSkus from '../../../../Sku/components/BackSkus';
+import SkuResultSkuJsons from '../../../../Sku/components/SkuResult_skuJsons';
 
 const Search = ({ onChange, ...props }, ref) => {
 
@@ -163,15 +164,7 @@ const Search = ({ onChange, ...props }, ref) => {
   };
 
   const object = (items) => {
-    let values = '';
-    items.skuJsons && items.skuJsons.map((item, index) => {
-      if (index === items.skuJsons.length - 1) {
-        return values += (item.values && item.values.attributeValues) ? `${item.attribute && item.attribute.attribute}：${item.values && item.values.attributeValues}` : '';
-      } else {
-        return values += (item.values && item.values.attributeValues) ? `${item.attribute && item.attribute.attribute}：${item.values && item.values.attributeValues}，` : '';
-      }
-    });
-    return items.spuResult && `${items.spuResult.spuClassificationResult && items.spuResult.spuClassificationResult.name} / ${items.spuResult.name}   ${(values === '' ? '' : `( ${values} )`)}`;
+    return <SkuResultSkuJsons skuResult={items} />
   };
 
   return <div>
@@ -216,6 +209,7 @@ const Search = ({ onChange, ...props }, ref) => {
                             label: object(items),
                             value: items.skuId,
                             batch: items.batch === 1,
+                            item:items,
                             key,
                           });
                         }}

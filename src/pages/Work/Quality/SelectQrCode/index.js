@@ -1,8 +1,9 @@
 import React from 'react';
-import { List, SearchBar } from 'antd-mobile';
+import { Card, List, SearchBar } from 'antd-mobile';
 import { request, useRequest } from '../../../../util/Request';
 import { Spin } from 'antd';
 import { history } from 'umi';
+import LinkButton from '../../../components/LinkButton';
 
 const SelectQrCode = (props) => {
 
@@ -54,7 +55,7 @@ const SelectQrCode = (props) => {
     }
   };
 
-  return <>
+  return <Card title='查找二维码' extra={<LinkButton title='返回' onClick={() => history.goBack()} />}>
     <SearchBar
       placeholder='请输入二维码'
       showCancelButton
@@ -75,7 +76,7 @@ const SelectQrCode = (props) => {
     {
       loading
         ?
-        <div style={{textAlign:'center',padding:16}}>
+        <div style={{ textAlign: 'center', padding: 16 }}>
           <Spin />
         </div>
         :
@@ -108,7 +109,7 @@ const SelectQrCode = (props) => {
               })
             }
           </List>)}
-  </>;
+  </Card>;
 };
 
 export default SelectQrCode;

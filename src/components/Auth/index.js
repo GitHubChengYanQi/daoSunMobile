@@ -113,8 +113,7 @@ const Auth = (props) => {
       case '/Scan/OutStock/AppOutstock':
         action = 'outstock';
         break;
-      case '/Scan/InStock/PositionFreeInstock':
-      case '/Scan/InStock/SkuFreeInstock':
+      case '/Scan/InStock/FreeInstock':
         action = 'freeInstock';
         break;
       case '/Scan/OutStock/FreeOutstock':
@@ -203,25 +202,26 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  if (process.env.NODE_ENV === 'development')
-    return <>
-      <Button onClick={() => {
-        const code = '1485410026625695745' // sku
-        // const code = '1461229451556483073'; // 库位
-        // const code = '1470279322627743745'; // 实物
-        // const code = '1474546242691313666'; //入库
-        props.dispatch({
-          type: 'qrCode/appAction',
-          payload: {
-            code,
-          },
-        });
-      }}>扫码</Button>
-      {
-        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-      }
-    </>;
-  else
+  // if (process.env.NODE_ENV === 'development')
+  //   return <>
+  //     <Button onClick={() => {
+  //       // const code = '1486169638786392066' // sku 单
+  //        const code = '1486169788325912578' // sku 批
+  //       // const code = '1485405524538183681'; // 库位
+  //       // const code = '1470279322627743745'; // 实物
+  //       // const code = '1474546242691313666'; //入库
+  //       props.dispatch({
+  //         type: 'qrCode/appAction',
+  //         payload: {
+  //           code,
+  //         },
+  //       });
+  //     }}>扫码</Button>
+  //     {
+  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+  //     }
+  //   </>;
+  // else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

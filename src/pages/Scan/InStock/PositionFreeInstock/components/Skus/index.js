@@ -5,9 +5,11 @@ import Number from '../../../../../components/Number';
 import LinkButton from '../../../../../components/LinkButton';
 import IsDev from '../../../../../../components/IsDev';
 import { getHeader } from '../../../../../components/GetHeader';
-import { request } from '../../../../../../util/Request';
+import { useRequest } from '../../../../../../util/Request';
 import { DeleteOutline } from 'antd-mobile-icons';
 import { useSetState } from 'ahooks';
+import { batchBind } from '../../../components/Url';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const Skus = (
   {
@@ -21,6 +23,13 @@ const Skus = (
 ) => {
 
   const selectRef = useRef();
+
+  const { loading: CodeLoading, run: CodeRun } = useRequest(
+    batchBind,
+    {
+      manual: true,
+    },
+  );
 
   const [skuItem, setSkuItem] = useState({
     skuId: sku.skuId,
@@ -85,24 +94,27 @@ const Skus = (
                 }
                 return;
               }
-              const res = await request({
-                url: '/orCode/automaticBinding',
-                method: 'POST',
+              const res = await CodeRun({
                 data: {
-                  source: 'item',
-                  brandId: skuItem.brandId,
-                  id: skuItem.skuId,
-                  number: item.number,
-                  inkindType: '自由入库',
+                  codeRequests:[{
+                    source: 'item',
+                    brandId: skuItem.brandId,
+                    id: skuItem.skuId,
+                    number: item.number,
+                    inkindType: '自由入库',
+                  }],
                 },
-              });
-              if (IsDev() || !getHeader()) {
-                addCanvas([res.inkindId]);
+              })
+              if (res && res.length > 0){
+                if (IsDev() || !getHeader()) {
+                  addCanvas([res[0].inkindId]);
+                }
+                setItems([]);
+                const arr = params;
+                arr[i] = { ...item, codeId: res.codeId, inkindId: res.inkindId };
+                setItems({ data: arr });
               }
-              setItems([]);
-              const arr = params;
-              arr[i] = { ...item, codeId: res.codeId, inkindId: res.inkindId };
-              setItems({ data: arr });
+
             } else {
               Toast.show({
                 content: '数量不能小于0!',
@@ -251,6 +263,11 @@ const Skus = (
           break;
       }
     }} />
+
+    {
+      CodeLoading && <MyLoading />
+    }
+
   </>;
 };
 

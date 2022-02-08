@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, Dialog, FloatingBubble, List, Toast } from 'antd-mobile';
 import Search from './components/Search';
 import { storehousePositionsTreeView } from '../../Url';
@@ -6,7 +6,7 @@ import { request, useRequest } from '../../../../util/Request';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
-import { useBoolean, useDebounceEffect, useSetState } from 'ahooks';
+import { useBoolean, useSetState } from 'ahooks';
 import { ScanOutlined } from '@ant-design/icons';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
@@ -22,7 +22,7 @@ import MyEmpty from '../../../components/MyEmpty';
 
 const fontSize = 18;
 
-const FreeInstock = (props) => {
+const PositionFreeInstock = ({ scanData, ...props }) => {
 
   const [params, setParams] = useSetState({ data: [] });
 
@@ -82,26 +82,32 @@ const FreeInstock = (props) => {
     storehouse: {},
   });
 
-  // useEffect(() => {
-  //   detailRun({
-  //     data: {
-  //       storehousePositionsId: '1480351037381472258',
-  //     },
-  //   });
-  // }, []);
+  useEffect(() => {
+    if (scanData) {
+      if (scanData && scanData.storehouseResult) {
+        setData({
+          ...data,
+          storehouse: {
+            label: scanData.storehouseResult.name,
+            value: scanData.storehouseResult.storehouseId,
+          },
+          postionId: scanData.storehousePositionsId,
+        });
+      }
+      detailRun({
+        data: {
+          storehousePositionsId: scanData.storehousePositionsId,
+        },
+      });
+    }
+  }, [scanData]);
 
   const ref = useRef();
   const treeRef = useRef();
 
-  const codeId = props.qrCode && props.qrCode.codeId;
 
   const [visible, setVisible] = useState();
 
-  const clearCode = () => {
-    props.dispatch({
-      type: 'qrCode/clearCode',
-    });
-  };
 
   const { loading: detailLoading, run: detailRun } = useRequest(
     storehousePositionsDetail,
@@ -127,54 +133,6 @@ const FreeInstock = (props) => {
       manual: true,
     },
   );
-
-  const { loading, run: codeRun } = useRequest({
-    url: '/orCode/backObject',
-    method: 'GET',
-  }, {
-    manual: true,
-    onSuccess: (res) => {
-      switch (res.type) {
-        case 'storehousePositions':
-          if (res.result && res.result.storehouseResult) {
-            setData({
-              ...data,
-              storehouse: {
-                label: res.result.storehouseResult.name,
-                value: res.result.storehouseResult.storehouseId,
-              },
-              postionId: res.result.storehousePositionsId,
-            });
-          }
-          detailRun({
-            data: {
-              storehousePositionsId: res.result.storehousePositionsId,
-            },
-          });
-          clearCode();
-          break;
-        default:
-          Toast.show({
-            content: '请扫库位码！',
-            position: 'bottom',
-          });
-          clearCode();
-          break;
-      }
-    },
-  });
-
-  useDebounceEffect(() => {
-    if (codeId && codeId !== '') {
-      codeRun({
-        params: {
-          id: codeId,
-        },
-      });
-    }
-  }, [codeId], {
-    wait: 0,
-  });
 
 
   const addCanvas = async (inkindIds) => {
@@ -278,7 +236,7 @@ const FreeInstock = (props) => {
 
   return <>
     <Card
-      title='库位信息'
+      title='入库库位'
       extra={<LinkButton title='清除' onClick={()=>{
         clear();
       }} />}
@@ -339,32 +297,34 @@ const FreeInstock = (props) => {
     </Card>
 
     <div style={{ padding: '16px 0 10vh 0' }}>
-      {
-        data.skus.length > 0 ? data.skus.map((item, index) => {
-            return <div key={index} style={{ marginBottom: 16 }}>
-              <Skus
-                index={index}
-                params={params.data[index]}
-                sku={item}
-                batchNumber={item.batchNumber}
-                addCanvas={(res) => {
-                  addCanvas(res);
-                }}
-                fontSize={fontSize}
-                search={(res) => {
-                  ref.current.search(res);
-                }}
-                onChange={(res) => {
-                  const array = params.data;
-                  array[index] = res;
-                  setParams({ data: array });
-                }}
-              />
-            </div>;
-          })
-          :
-          <MyEmpty description='暂无物料' />
-      }
+      <Card title='入库物料'>
+        {
+          data.skus.length > 0 ? data.skus.map((item, index) => {
+              return <div key={index} style={{ marginBottom: 16 }}>
+                <Skus
+                  index={index}
+                  params={params.data[index]}
+                  sku={item}
+                  batchNumber={item.batchNumber}
+                  addCanvas={(res) => {
+                    addCanvas(res);
+                  }}
+                  fontSize={fontSize}
+                  search={(res) => {
+                    ref.current.search(res);
+                  }}
+                  onChange={(res) => {
+                    const array = params.data;
+                    array[index] = res;
+                    setParams({ data: array });
+                  }}
+                />
+              </div>;
+            })
+            :
+            <MyEmpty description='暂无物料' />
+        }
+      </Card>
     </div>
 
 
@@ -390,12 +350,14 @@ const FreeInstock = (props) => {
         setVisible(res);
       }}
       onChange={(res) => {
-        setData({ ...data, skus: [...data.skus, {
+        setData({
+          ...data, skus: [...data.skus, {
             skuId: res.value,
             skuResult: res.label,
             batch: res.batch,
-            batchNumber:res.batchNumber,
-          }] });
+            batchNumber: res.batchNumber,
+          }],
+        });
       }}
     />
 
@@ -467,7 +429,7 @@ const FreeInstock = (props) => {
 
         const inkindIds = await printAllCode();
 
-        if (inkindIds.length > 0){
+        if (inkindIds.length > 0) {
           instockRun({
             data: {
               positionsId: data.postionId,
@@ -475,9 +437,9 @@ const FreeInstock = (props) => {
               storeHouseId: data.storehouse.value,
             },
           });
-        }else {
+        } else {
           Toast.show({
-            content:'请选择实物！'
+            content: '请选择实物！',
           });
         }
 
@@ -486,10 +448,10 @@ const FreeInstock = (props) => {
     />
 
     {
-      (loading || instockLoading || detailLoading || CodeLoading) && <MyLoading />
+      (instockLoading || detailLoading || CodeLoading) && <MyLoading />
     }
 
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(FreeInstock);
+export default connect(({ qrCode }) => ({ qrCode }))(PositionFreeInstock);

@@ -354,16 +354,17 @@ const Subtasks = ({ id }) => {
           {
             data.details ?
               data.details.map((items, index) => {
+                const batch = items.skuResult ? items.skuResult.batch : 0;
                 return <List.Item
                   key={index}
                   extra={<Space>
-                    <>{items.remaining}/{items.batch ? Math.ceil(items.number * items.percentum) : items.number}</>
+                    <>{items.remaining}/{batch ? Math.ceil(items.number * items.percentum) : items.number}</>
                     {data.permission && status !== -1
                     &&
                     <Space>
                       <LinkButton onClick={() => {
                         setItmes(items);
-                        if (items.batch && (items.remaining === Math.ceil(items.number * items.percentum))){
+                        if (batch && (items.remaining === Math.ceil(items.number * items.percentum))){
                           Toast.show({
                             content:'该物料已经全部质检完成！',
                             position: 'bottom',
@@ -377,7 +378,7 @@ const Subtasks = ({ id }) => {
                         disabled={
                           items.remaining === items.number
                           ||
-                          items.inkindId && (items.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
+                          items.inkindId && (batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
                         }
                         onClick={async () => {
                           await autoBind({
@@ -412,7 +413,7 @@ const Subtasks = ({ id }) => {
                       /
                       <>总数：{items.number}</>
                       /
-                      {items.batch ? '抽检' + (items.percentum * 100) + '%' : '固定检查'}
+                      {items.skuResult && batch ? '抽检' + (items.percentum * 100) + '%' : '固定检查'}
                     </Space>
                   </div>
                 </List.Item>;
@@ -477,7 +478,7 @@ const Subtasks = ({ id }) => {
             position: 'bottom',
           });
         }else {
-          if (!items.inkindId && (items.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])){
+          if (!items.inkindId && (items.skuResult && items.skuResult.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])){
             codeBind(codeId, items);
           }else {
             Toast.show({

@@ -1,41 +1,58 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Card, Dialog, FloatingBubble, List, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, List, SearchBar, Space, Tabs, Toast } from 'antd-mobile';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
-import { useBoolean, useDebounceEffect, useSetState } from 'ahooks';
-import { ScanOutlined } from '@ant-design/icons';
+import { useBoolean, useSetState } from 'ahooks';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
-import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
 import PrintCode from '../../../components/PrintCode';
 import { batchBind } from '../components/Url';
-import SkuResultSkuJsons from '../../Sku/components/SkuResult_skuJsons';
-import { AddOutline } from 'antd-mobile-icons';
 import MyEmpty from '../../../components/MyEmpty';
-import Skus from '../PositionFreeInstock/components/Skus';
 import Search from '../PositionFreeInstock/components/Search';
-import AddSku from '../PositionFreeInstock/components/AddSku';
 import TreeSelectSee from '../../../components/TreeSelectSee';
+import Number from '../../../components/Number';
+import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 
 const fontSize = 18;
 
-const FreeInstock = (props) => {
 
-  const [params, setParams] = useSetState({ data: [] });
+const SkuFreeInstock = ({ scanData }) => {
 
   const { loading: storehousepostionLoading, data: storehouseposition } = useRequest(storehousePositionsTreeView);
 
-  const [state, { setTrue, setFalse }] = useBoolean();
+  const [data, setData] = useSetState({
+    skus: {},
+    positions: [
+      // {
+      //   positionId: null,
+      //   batchNumber: 1,
+      //   disabled:false,
+      //   skuItems: [
+      //     {
+      //       inkindId: null,
+      //       number: null,
+      //     },
+      //   ],
+      //   stotrhouse: {
+      //     value: null,
+      //     lebel: null,
+      //   },
+      // },
+    ],
+  });
 
   const getSkuData = (type) => {
     const skus = [];
-    params.data.map((item) => {
-      return item.map((item) => {
-        return skus.push(item);
+    data.positions.map((item) => {
+      return item.skuItems.map((item) => {
+        return skus.push({
+          ...item,
+          number: data.skus.batch ? item.number : 1,
+        });
       });
     });
     switch (type) {
@@ -52,51 +69,60 @@ const FreeInstock = (props) => {
       case 'skuItems':
         // 没有生成实物的物料
         return skus.filter((item) => {
-          return !item.inkindId && (item.brandId && item.customerId && item.number);
+          return !item.inkindId && item.number > 0;
         }).map((item) => {
           return {
             source: 'item',
-            brandId: item.brandId,
-            customerId: item.customerId,
-            id: item.skuId,
+            brandId: data.skus.brandId,
+            customerId: data.skus.customerId,
+            id: data.skus.skuId,
             number: item.number,
             inkindType: '自由入库',
           };
         });
-      case 'errorNumber':
-        // 数量是否有问题
-        const skuNumbers = skus.filter((item) => {
+      case 'successNumber':
+        const successNumber = skus.filter((item) => {
           return item.number > 0;
         });
-        return skuNumbers.length !== skus.length;
-      case 'brandOrCustomer':
-        // 品牌或者供应商是否有问题
-        return skus.filter((item) => {
-          return !item.brandId || !item.customerId;
-        }).length > 0;
+        return successNumber.length > 0;
       default:
         return null;
     }
   };
 
-  const [data, setData] = useSetState({
-    skus: [],
-    postionId: null,
-    storehouse: {},
-  });
+  const skuReult = (sku) => {
+    return {
+      batch: sku.batch === 1,
+      skuId: sku.skuId,
+      name: sku.spuResult.spuClassificationResult && sku.spuResult.spuClassificationResult.name,
+      skuName: sku.spuResult.name,
+      detail: sku.skuJsons && sku.skuJsons.length > 0 && sku.skuJsons[0].values.attributeValues &&
+        <>
+          ({
+          sku.skuJsons.map((items, index) => {
+            return (
+              <span key={index}>{items.attribute.attribute}：{items.values.attributeValues}</span>
+            );
+          })
+        })
+        </>,
+    };
+  };
+
+  useEffect(() => {
+    if (scanData) {
+      setData({
+        ...data, skus: skuReult(scanData),
+      });
+      getPositionsRun({
+        data: {
+          skuId: scanData.skuId,
+        },
+      });
+    }
+  }, [scanData]);
 
   const ref = useRef();
-  const treeRef = useRef();
-
-  const codeId = props.qrCode && props.qrCode.codeId;
-
-  const [visible, setVisible] = useState();
-
-  const clearCode = () => {
-    props.dispatch({
-      type: 'qrCode/clearCode',
-    });
-  };
 
   const { loading: CodeLoading, run: CodeRun } = useRequest(
     batchBind,
@@ -113,93 +139,29 @@ const FreeInstock = (props) => {
     {
       manual: true,
       onSuccess: (res) => {
-        if (res.length === 0){
+        if (res.length === 0) {
           return Dialog.alert({
-            content:'此物料没绑定库位！'
+            content: '此物料没绑定库位！',
           });
         }
-        if (res.length === 1) {
-          setData({
-            ...data,
-            storehouse: {
-              label: res[0].storehouseResult.name,
-              value: res[0].storehouseResult.storehouseId,
-            },
-            postionId: res[0].storehousePositionsId,
-          });
-        } else {
-          Dialog.show({
-            title: '请选择库位',
-            closeOnAction: true,
-            onAction:(action)=>{
-              setData({
-                ...data,
-                storehouse: {
-                  label: action.key.storehouseResult.name,
-                  value: action.key.storehouseResult.storehouseId,
-                },
-                postionId: action.key.storehousePositionsId,
-              });
-            },
-            actions: res.map((item)=>{
-              return {
-                text:<>{item.storehouseResult.name} - <TreeSelectSee data={storehouseposition} value={item.storehousePositionsId} /></>,
-                key:item
-              }
-            }),
-          });
-        }
+        setData({
+          ...data,
+          positions: res.map((item, index) => {
+            return {
+              skuItems: [],
+              positionId: item.storehousePositionsId,
+              batchNumber: data.skus.batch ? 1 : 0,
+              name: item.name,
+              storehouse: {
+                label: item.storehouseResult.name,
+                value: item.storehouseResult.storehouseId,
+              },
+            };
+          }),
+        });
       },
     },
   );
-
-  const { loading, run: codeRun } = useRequest({
-    url: '/orCode/backObject',
-    method: 'GET',
-  }, {
-    manual: true,
-    onSuccess: (res) => {
-      switch (res.type) {
-        case 'sku':
-          if (res.result.skuId) {
-            const item = res.result;
-            setData({
-              ...data, skus: [{
-                batch: item.batch === 1,
-                skuId: item.skuId,
-                skuResult: <SkuResultSkuJsons skuResult={item} />,
-              }],
-            });
-            getPositionsRun({
-              data: {
-                skuId: res.result.skuId,
-              },
-            });
-          }
-          clearCode();
-          break;
-        default:
-          Toast.show({
-            content: '请扫物料码！',
-            position: 'bottom',
-          });
-          clearCode();
-          break;
-      }
-    },
-  });
-
-  useDebounceEffect(() => {
-    if (codeId && codeId !== '') {
-      codeRun({
-        params: {
-          id: codeId,
-        },
-      });
-    }
-  }, [codeId], {
-    wait: 0,
-  });
 
 
   const addCanvas = async (inkindIds) => {
@@ -221,29 +183,40 @@ const FreeInstock = (props) => {
 
 
   const clear = () => {
-    setFalse();
     setData({
-      skus: [],
-      postionId: null,
-      storehouse: {},
+      skus: {},
+      positions: [],
+    });
+  };
+
+  const next = () => {
+    setData({
+      ...data,
+      positions: data.positions.map((item) => {
+        return {
+          ...item,
+          batchNumber: data.skus.batch ? 1 : 0,
+          skuItems: [],
+        };
+      }),
     });
   };
 
   const { loading: instockLoading, run: instockRun } = useRequest({
-    url: '/instockOrder/freeInstock',
+    url: '/instockOrder/freeInStockByPositions',
     method: 'POST',
   }, {
     manual: true,
     onSuccess: () => {
       Dialog.show({
         title: '入库成功',
-        content: '是否保留此页面？',
+        content: '是否继续入库？',
         closeOnAction: true,
         onAction: (action) => {
-          if (action.key === 'no') {
-            clear();
+          if (action.key === 'ok') {
+            next();
           } else {
-            setTrue();
+            clear();
           }
         },
         actions: [
@@ -254,7 +227,7 @@ const FreeInstock = (props) => {
             },
             {
               key: 'no',
-              text: '继续入库',
+              text: '否',
             },
           ],
         ],
@@ -271,32 +244,45 @@ const FreeInstock = (props) => {
     return <Search ref={ref} onChange={async (value) => {
       switch (value.type) {
         case 'sku':
+          const item = value.item;
           setData({
-            ...data, skus: [{
-              batch: value.batch,
-              skuId: value.value,
-              skuResult: value.label,
-            }],
-          });
+              ...data, skus: skuReult(item),
+            },
+          );
           getPositionsRun({
             data: {
               skuId: value.value,
             },
           });
           break;
-        case 'storehouse':
-          treeRef.current.run({
-            params: {
-              ids: value.value,
+        case 'brand':
+          setData({
+              ...data,
+              skus: {
+                ...data.skus,
+                brandId: value.value,
+                brandName: value.label,
+              },
             },
-          });
-          setData({ ...data, storehouse: value });
+          );
+          break;
+        case 'supply':
+          setData({
+              ...data,
+              skus: {
+                ...data.skus,
+                customerId: value.value,
+                customerName: value.label,
+              },
+            },
+          );
           break;
         default:
           break;
       }
-    }} />
-  }
+    }}
+    />;
+  };
 
   const printAllCode = async () => {
     const inkindIds = getSkuData('inkind');
@@ -314,212 +300,324 @@ const FreeInstock = (props) => {
 
     const printCodes = [...inkindIds, ...printInkinds];
 
-    let i = 0;
-    const array = params.data.map((item) => {
-      return item.map((value) => {
-        if (!value.inkindId && value.brandId && value.customerId && value.number) {
-          i++;
-          return {
-            ...value,
-            inkindId: printInkinds[i - 1],
-          };
-        } else {
-          return value;
-        }
+    if (printInkinds.length > 0) {
+      let i = 0;
+      const array = data.positions.map((item) => {
+        return {
+          ...item,
+          skuItems: item.skuItems.map((value) => {
+            const number = data.skus.batch ? value.number : 1;
+            if (!value.inkindId && number > 0) {
+              i++;
+              return {
+                ...value,
+                inkindId: printInkinds[i - 1],
+              };
+            } else {
+              return value;
+            }
+          }),
+        };
       });
-    });
-    setParams({ data: array });
-    return printCodes;
+      setData({ ...data, positions: array });
+      return { inkindIds: printCodes, positions: array };
+    }
+
+    return { inkindIds: printCodes, positions: data.positions };
   };
 
-  if (!data.postionId) {
-    return <MyEmpty
-      description={<span style={{fontSize}}>
-        请扫描物料，
-        <LinkButton title='手动选择' style={{fontSize}} onClick={() => {
-          ref.current.search({ type: 'sku'});
-        }}
-        />
-        {searchComponemts()}
-      </span>}
-    />;
+  const listItems = (batchNumber, skuItems, index,batch) => {
+    const arrays = [];
+    for (let i = 0; i < batchNumber; i++) {
+      const item = skuItems[i] || { number: !data.skus.batch && 1 };
+      arrays.push(<List.Item
+        key={i}
+        extra={
+          <LinkButton title={item.inkindId ? '打印二维码' : '生成二维码'} onClick={async () => {
+            if (!data.skus.brandId || !data.skus.customerId) {
+              return Toast.show({
+                content: '请完善物料信息！',
+                position: 'bottom',
+              });
+            }
+            if (item.inkindId) {
+              if (IsDev() || !getHeader()) {
+                addCanvas([item.inkindId]);
+              }
+              return;
+            }
+            if (item.number > 0) {
+              const res = await CodeRun({
+                data: {
+                  codeRequests:[{
+                    source: 'item',
+                    brandId: data.skus.brandId,
+                    customerId: data.skus.customerId,
+                    id: data.skus.skuId,
+                    number: item.number,
+                    inkindType: '自由入库',
+                  }],
+                },
+              })
+              if (res && res.length > 0){
+                if (IsDev() || !getHeader()) {
+                  addCanvas([res[0].inkindId]);
+                }
+
+                const array = data.positions;
+                array[index].skuItems[i] = { ...item, inkindId: res[0].inkindId };
+                setData({ ...data, positions: array });
+              }
+
+            } else {
+              Toast.show({
+                content: '数量不能小于0!',
+                position: 'bottom',
+              });
+            }
+          }} />
+        }
+      >
+        <Space align='center'>
+          {!batch && <LinkButton
+            onClick={() => {
+              const array = data.positions;
+              array[index].batchNumber = array[index].batchNumber - 1;
+              array[index].skuItems.splice(i, 1);
+              setData({ ...data, positions: array });
+            }}
+            disabled={item.inkindId}
+            title={
+              <DeleteOutline />
+            } />}
+          <div style={{ marginRight: 32 }}>
+            第{i + 1}
+            {
+              data.skus.batch ? '批' : '个'
+            }
+          </div>
+          {data.skus.batch && <Number
+            placeholder='入库数量'
+            color={item.number > 0 ? 'blue' : 'red'}
+            width={100}
+            disabled={item.inkindId}
+            value={item.number}
+            onChange={(value) => {
+              const array = data.positions;
+              array[index].skuItems[i] = { ...skuItems[i], number: value };
+              setData({ ...data, positions: array });
+            }} />}
+        </Space>
+      </List.Item>);
+    }
+    return arrays;
+  };
+
+  const disabled = (id) => {
+    let skuItemId = null;
+    data.positions.map((item)=>{
+      return item.skuItems.map((value)=>{
+        if (value.number > 0){
+          skuItemId = item.positionId
+        }
+        return null;
+      })
+    })
+    return skuItemId && skuItemId !== id;
   }
+
 
   return <>
     <Card
-      title='库位信息'
+      title='入库物料'
       extra={<LinkButton title='清除' onClick={() => {
         clear();
       }} />}
     >
+      <SearchBar placeholder='搜索物料' onFocus={() => {
+        ref.current.search({ type: 'sku' });
+      }} />
       <List
         style={{
           '--border-top': 'none',
           '--border-bottom': 'none',
         }}
       >
-        <List.Item title='仓库'>
-          {data.storehouse.label}
+        <List.Item>
+          <div style={{ fontSize }}>名称：{data.skus.name || '无'}</div>
         </List.Item>
-        <List.Item title='库位' extra={getHeader() && <LinkButton
-          title={<ScanOutlined />} onClick={() => {
-          props.dispatch({
-            type: 'qrCode/wxCpScan',
-            payload: {
-              action: 'freeInstock',
-            },
-          });
-        }} />}>
-          <MyCascader
-            arrow={false}
-            ref={treeRef}
-            fontStyle={{ fontSize }}
-            branch={!data.storehouse.value}
-            title='选择库位'
-            value={data.postionId}
-            api={storehousePositionsTreeView}
-          />
+        <List.Item>
+          <div style={{ fontSize }}>型号：{data.skus.skuName || '无'}</div>
+        </List.Item>
+        <List.Item>
+          <div style={{ fontSize }}>物料描述：{data.skus.detail || '无'}</div>
+        </List.Item>
+        <List.Item>
+          <Space>
+            <div style={{ fontSize }}>品牌：</div>
+            <LinkButton
+              style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.skus.brandName && 'red' }}
+              onClick={() => {
+                ref.current.search({
+                  type: 'brand',
+                  params: {
+                    skuId: data.skus.skuId,
+                    nameSource: '品牌',
+                    name: '',
+                  },
+                });
+              }}
+              title={
+                data.skus.brandName || '选择品牌'
+              }
+            />
+          </Space>
+        </List.Item>
+        <List.Item>
+          <Space>
+            <div style={{ fontSize }}>供应商：</div>
+            <LinkButton
+              style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.skus.customerName && 'red' }}
+              onClick={() => {
+                ref.current.search({
+                  type: 'supply',
+                  params: {
+                    skuId: data.skus.skuId,
+                    brandId: data.skus.brandId,
+                    nameSource: '供应商',
+                    name: '',
+                  },
+                });
+              }}
+              title={
+                data.skus.customerName || '选择供应商'
+              }
+            />
+          </Space>
+
         </List.Item>
       </List>
     </Card>
 
+    <Card
+      style={{ marginTop: 16 }}
+      title='可入库位'
+    >{
+      data.positions.length > 0
+        ?
+        <Tabs
+
+        >
+          {data.positions.map((item, index) => {
+            return <Tabs.Tab
+              title={item.name}
+              key={item.positionId}
+              disabled={disabled(item.positionId)}
+            >
+              <List>
+                <List.Item title='仓库位置'>
+                  <div style={{ fontSize }}>
+                    {item.storehouse && item.storehouse.label}
+                    &nbsp;&nbsp;/&nbsp;&nbsp;
+                    <TreeSelectSee
+                      data={storehouseposition}
+                      value={item.positionId}
+                    />
+                  </div>
+                </List.Item>
+                {!data.skus.batch && <List.Item title='入库数量'>
+                  <Number
+                    value={item.batchNumber}
+                    onChange={(value) => {
+                      const items = [];
+                      const array = data.positions;
+                      for (let i = 0; i < value; i++) {
+                        items.push({number:1});
+                      }
+                      array[index] = { ...item, batchNumber: value,skuItems:items };
+                      setData({ ...data, positions: array });
+                    }} />
+                </List.Item>}
+                {listItems(item.batchNumber, item.skuItems, index,data.skus.batch)}
+              </List>
+            </Tabs.Tab>;
+          })}
+        </Tabs>
+        :
+        <MyEmpty description='暂无' />
+    }
+    </Card>
+
     {searchComponemts()}
 
-    <div style={{ padding: '16px 0 10vh 0' }}>
-      {
-        data.skus.length > 0 ? data.skus.map((item, index) => {
-            return <div key={index} style={{ marginBottom: 16 }}>
-              <Skus
-                index={index}
-                params={params.data[index]}
-                sku={item}
-                batchNumber={item.batchNumber}
-                addCanvas={(res) => {
-                  addCanvas(res);
-                }}
-                fontSize={fontSize}
-                onChange={(res) => {
-                  const array = params.data;
-                  array[index] = res;
-                  setParams({ data: array });
-                }}
-              />
-            </div>;
-          })
-          :
-          <MyEmpty description='暂无物料' />
-      }
-    </div>
-
-    <AddSku
-      data={data.skus}
-      visible={visible}
-      setVisible={(res) => {
-        setVisible(res);
-      }}
-      onChange={(res) => {
-        setData({
-          ...data, skus: [...data.skus, {
-            skuId: res.value,
-            skuResult: res.label,
-            batch: res.batch,
-            batchNumber: res.batchNumber,
-          }],
-        });
-      }}
-    />
-
-    <div
-      style={{
-        textAlign: 'center',
-      }}
-    >
-      <FloatingBubble
-        style={{
-          '--initial-position-bottom': '10vh',
-          '--initial-position-right': '24px',
-        }}
-        onClick={() => {
-          if (data.skus.length > 0) {
-            setVisible(true);
-          } else {
-
-            if (!data.postionId) {
-              return Toast.show({
-                content: '请选择库位！',
-                position: 'bottom',
-              });
-            }
-
-            Dialog.alert({
-              content: '当前库位下没有物料，请绑定物料！',
-              closeOnAction: true,
-              onAction: (action) => {
-                if (action.key === 'ok') {
-
-                } else {
-
-                }
-              },
-              actions: [
-                [
-                  {
-                    key: 'ok',
-                    text: '是',
-                  },
-                  {
-                    key: 'no',
-                    text: '否',
-                  },
-                ],
-              ],
-            });
-
-          }
-        }}
-      >
-        <AddOutline fontSize={32} />
-      </FloatingBubble>
-    </div>
+    <div style={{ height: '10vh' }} />
 
     <BottomButton
-      only={state}
-      disabled
-      text='已入库'
       leftText='批量打印'
-      leftDisabled={data.skus.length === 0 || getSkuData('skus').length === 0 || (getSkuData('inkind').length === 0 && getSkuData('skuItems').length === 0)}
+      leftDisabled={
+        !data.skus.skuId
+        ||
+        !data.skus.brandId
+        ||
+        !data.skus.customerId
+      }
       leftOnClick={async () => {
-        const inkindIds = await printAllCode();
-        addCanvas(inkindIds);
-      }}
-      rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0 || getSkuData('brandOrCustomer')}
-      rightOnClick={async () => {
-
-        const inkindIds = await printAllCode();
-
-        if (inkindIds.length > 0) {
-          instockRun({
-            data: {
-              positionsId: data.postionId,
-              inkindIds: inkindIds,
-              storeHouseId: data.storehouse.value,
-            },
-          });
-        } else {
-          Toast.show({
-            content: '请选择实物！',
+        const { inkindIds } = await printAllCode();
+        if (inkindIds.length === 0) {
+          return Toast.show({
+            content: '没有可以打印的实物！',
+            position: 'bottom',
           });
         }
+        addCanvas(inkindIds);
+      }}
+      rightDisabled={
+        !data.skus.skuId
+        ||
+        !data.skus.brandId
+        ||
+        !data.skus.customerId
+        ||
+        !getSkuData('successNumber')
+      }
+      rightOnClick={async () => {
 
+        const { positions } = await printAllCode();
+
+        const inStocks = [];
+        positions.map((item) => {
+          return item.skuItems.map(value => {
+            if (value.inkindId) {
+              inStocks.push({
+                inkind: value.inkindId,
+                positionsId: item.positionId,
+                storeHouseId: item.storehouse && item.storehouse.value,
+              });
+            }
+            return null;
+          });
+        });
+
+        if (inStocks.length > 0){
+          instockRun({
+            data: {
+              inStocks: inStocks,
+            },
+          });
+        }else {
+          Toast.show({
+            content:'没有可以入库的实物！'
+          });
+        }
       }}
       rightText='入库'
     />
 
     {
-      (storehousepostionLoading || loading || instockLoading || CodeLoading || getPositionsing) && <MyLoading />
+      (storehousepostionLoading || instockLoading || CodeLoading || getPositionsing) && <MyLoading />
     }
 
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(FreeInstock);
+export default connect(({ qrCode }) => ({ qrCode }))(SkuFreeInstock);

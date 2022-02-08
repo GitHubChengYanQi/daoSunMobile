@@ -21,10 +21,12 @@ const BottomButton = (
       width: '100%',
       paddingBottom: 0,
       position: 'fixed',
-      bottom: 16,
+      bottom: 0,
+      left:0,
       backgroundColor: '#fff',
+      boxShadow: 'rgb(24, 69, 181,0.1) 0px 0px 10px',
     }}>
-    <div style={{ padding: '0 8px' }}>
+    <div style={{ padding: 8 }}>
       {only ?
         <Button
           disabled={disabled}

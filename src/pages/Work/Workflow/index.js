@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Steps, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { FormOutlined } from '@ant-design/icons';
+import { AuditOutlined, FormOutlined } from '@ant-design/icons';
 import { useDebounceEffect } from 'ahooks';
 import QualityTask from './components/QualityTask';
 import { Avatar, Skeleton } from 'antd';
@@ -22,7 +22,6 @@ const Workflow = (props) => {
   const [comments, setComments] = useState(false);
 
   const [imgs, setImgs] = useState([]);
-
 
   const [userIds, setUserIds] = useState([]);
 
@@ -113,7 +112,6 @@ const Workflow = (props) => {
     },
   );
 
-
   useDebounceEffect(() => {
     setDetail(null);
     if (query.id) {
@@ -153,11 +151,14 @@ const Workflow = (props) => {
     />;
 
   const status = (step, stepStatus) => {
+    const fontSize = 24;
     switch (step.auditType) {
       case 'start':
-        return <Icon type='icon-caigou_faqiren' style={{ fontSize: 24 }} />;
+        return <Icon type='icon-caigou_faqiren' style={{ fontSize }} />;
       case 'send':
-        return <Icon type='icon-caigou_chaosong' style={{ fontSize: 24 }} />;
+        return <Icon type='icon-caigou_chaosong' style={{ fontSize }} />;
+      case 'route':
+        return <AuditOutlined style={{fontSize}} />;
       case 'process':
         switch (step.auditRule.type) {
           case 'audit':
@@ -165,21 +166,21 @@ const Workflow = (props) => {
               case -1:
                 switch (stepStatus) {
                   case 'process':
-                    return <Icon type='icon-shenhe' style={{ fontSize: 24 }} />;
+                    return <Icon type='icon-shenhe' style={{ fontSize }} />;
                   case 'wait':
-                    return <Icon type='icon-caigou_weishenpi1' style={{ fontSize: 24 }} />;
+                    return <Icon type='icon-caigou_weishenpi1' style={{ fontSize }} />;
                   default:
                     return;
                 }
               case 0:
-                return <Icon type='icon-caigou_shenpibutongguo1' style={{ fontSize: 24 }} />;
+                return <Icon type='icon-caigou_shenpibutongguo1' style={{ fontSize }} />;
               case 1:
-                return <Icon type='icon-caigou_shenpitongguo1' style={{ fontSize: 24 }} />;
+                return <Icon type='icon-caigou_shenpitongguo1' style={{ fontSize }} />;
               default:
                 return null;
             }
           default:
-            return <Icon type='icon-caigou_dongzuo' style={{ fontSize: 24 }} />;
+            return <Icon type='icon-caigou_dongzuo' style={{ fontSize }} />;
         }
       default:
         break;
@@ -242,6 +243,7 @@ const Workflow = (props) => {
   };
 
   const steps = (step, next) => {
+    const minHeight = 60;
     let stepStatus;
     switch (step.logResult && step.logResult.status) {
       case -1:
@@ -263,6 +265,7 @@ const Workflow = (props) => {
       case 'start':
         return <div>
           <Steps.Step
+            style={{minHeight}}
             status={stepStatus}
             description={<Space align='center'>
               <Avatar
@@ -277,12 +280,13 @@ const Workflow = (props) => {
       case 'route':
         return <div>
           <Steps.Step
+            style={{minHeight}}
             status={stepStatus}
             description={
               <div style={{ maxWidth: '100vw', overflowX: 'auto' }}>
                 <Space>
                   {step.conditionNodeList.map((items, index) => {
-                    return allStep(items.childNode, items.logResult.status === -1, index);
+                    return allStep(items.childNode, next, index);
                   })}
                 </Space>
               </div>
@@ -294,6 +298,7 @@ const Workflow = (props) => {
       case 'process':
         return <div>
           <Steps.Step
+            style={{minHeight}}
             status={stepStatus}
             title={processType(step.auditRule.type)}
             description={rules(step.auditRule)}
@@ -411,8 +416,6 @@ const Workflow = (props) => {
             setUserIds(userIds);
           }}
           getImgs={(imgs) => {
-            if (imgs && imgs.length > 0) {
-            }
             const imgIds = imgs.map((items) => {
               return items.id;
             });

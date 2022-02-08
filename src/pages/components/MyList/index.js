@@ -7,20 +7,20 @@ let pages = 1;
 let limit = 10;
 let contents = [];
 
-const MyList = ({children,getData,data,api,select},ref) => {
+const MyList = ({ children, getData, data, api, select }, ref) => {
 
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(true);
 
-  const [error,setError] = useState(true);
+  const [error, setError] = useState(true);
 
-  const { loading,run } = useRequest({
+  const { loading, run } = useRequest({
     ...api,
     params: {
       limit: limit,
       page: pages,
     },
   }, {
-    debounceInterval: 500,
+    debounceInterval: 1000,
     onSuccess: (res) => {
       if (res && res.length > 0) {
         res.map((items) => {
@@ -35,18 +35,18 @@ const MyList = ({children,getData,data,api,select},ref) => {
         }
       }
     },
-    onError:()=>{
+    onError: () => {
       setError(false);
-    }
+    },
   });
 
   const refresh = () => {
     pages = 1;
     contents = [];
     typeof getData === 'function' && getData([]);
-  }
+  };
 
-  useImperativeHandle(ref,()=>({
+  useImperativeHandle(ref, () => ({
     refresh,
   }));
 
@@ -57,22 +57,25 @@ const MyList = ({children,getData,data,api,select},ref) => {
 
   if (loading && pages === 1) {
     return (
-      <div style={{ padding: 50, textAlign: 'center',backgroundColor:'#fff' }}>
+      <div style={{ padding: 50, textAlign: 'center', backgroundColor: '#fff' }}>
         <Spin spinning={true} size='large' />
       </div>
     );
   }
-
   return <>
     {children}
-    {error && data && <InfiniteScroll loadMore={() => {
-      return run({
-        data:{
-          ...select
-        }
-      });
-    }} hasMore={hasMore} />}
-  </>
+    {error && data && <InfiniteScroll
+      threshold={0}
+      loadMore={async () => {
+        return await run({
+          data: {
+            ...select,
+          },
+        });
+      }}
+      hasMore={hasMore}
+    />}
+  </>;
 };
 
 export default React.forwardRef(MyList);

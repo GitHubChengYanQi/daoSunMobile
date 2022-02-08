@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Collapse, Dialog,  List, SafeArea, Space } from 'antd-mobile';
+import { Button, Checkbox, Collapse, Dialog, List, SafeArea, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import style from './index.css';
 import { useDebounceEffect } from 'ahooks';
@@ -158,6 +158,9 @@ const DispatchTask = ({ taskDetail }) => {
                     disabled={items.remaining <= 0}
                     value={items}>
                     <List.Item
+                      title={<div style={{color:'#000'}}>
+                        {sku(items)}
+                      </div>}
                       extra={
                         <Space style={{ marginRight: 8 }}>
                           <span>{items.remaining} / {items.number}</span>
@@ -167,14 +170,11 @@ const DispatchTask = ({ taskDetail }) => {
                         </Space>
                       }
                       description={
-                        <>
-                          {items.brand && items.brand.brandName}
-                          <br />
-                          {items.qualityPlanResult && items.qualityPlanResult.planName+'  /  '}{items.batch ? `抽检${items.percentum}%` : '固定检查'}
-                        </>
+                        <div>{items.qualityPlanResult && (items.qualityPlanResult.planName + '  /  ' + (items.skuResult && items.skuResult.batch ? `抽检 ${(items.percentum || 1) * 100}%` : '固定检查'))}</div>
                       }
                     >
-                      {sku(items)}
+                      <div>品牌：{items.brand && items.brand.brandName}</div>
+                      <div>供应商：{items.customerResult && items.customerResult.customerName}</div>
                     </List.Item>
                   </Checkbox>
                 </div>;
