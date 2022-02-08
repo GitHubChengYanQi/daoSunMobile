@@ -43,28 +43,35 @@ const Quality = (props) => {
   return <>
     <Collapse defaultActiveKey={['1']}>
       <Collapse.Panel key='1' title={<>质检任务信息</>}>
-        {
-          data.parentId ?
-            <>
-              <List.Item>指派人：{data.createName}</List.Item>
-              <List.Item>指派时间：{data.createTime}</List.Item>
-              <List.Item>质检人员：{data.names && data.names.toString()}</List.Item>
-              <List.Item>质检地点：{data.address ? JSON.parse(data.address).address : '无'}</List.Item>
-              <List.Item>质检时间：{data.time || '无'}</List.Item>
-              <List.Item>联系人：{data.person || '无'}</List.Item>
-              <List.Item>联系方式：{data.phone || '无'}</List.Item>
-              <List.Item>备注：{data.note || '无'}</List.Item>
-            </>
+        <List
+          style={{
+            '--border-top':'none',
+            '--border-bottom':'none',
+          }}
+        >
+          {
+            data.parentId ?
+              <>
+                <List.Item>指派人：{data.createName}</List.Item>
+                <List.Item>指派时间：{data.createTime}</List.Item>
+                <List.Item>质检人员：{data.names && data.names.toString()}</List.Item>
+                <List.Item>质检地点：{data.address ? JSON.parse(data.address).address : '无'}</List.Item>
+                <List.Item>质检时间：{data.time || '无'}</List.Item>
+                <List.Item>联系人：{data.person || '无'}</List.Item>
+                <List.Item>联系方式：{data.phone || '无'}</List.Item>
+                <List.Item>备注：{data.note || '无'}</List.Item>
+              </>
 
-            :
-            <>
-              <List.Item>质检编码：{data.coding}</List.Item>
-              <List.Item>质检类型：{data.type}</List.Item>
-              <List.Item>负责人：{data.userName || '无'}</List.Item>
-              <List.Item>创建时间：{data.createTime}</List.Item>
-              <List.Item>备注：{data.remark || '无'}</List.Item>
-            </>
-        }
+              :
+              <>
+                <List.Item>质检编码：{data.coding}</List.Item>
+                <List.Item>质检类型：{data.type}</List.Item>
+                <List.Item>负责人：{data.userName || '无'}</List.Item>
+                <List.Item>创建时间：{data.createTime}</List.Item>
+                <List.Item>备注：{data.remark || '无'}</List.Item>
+              </>
+          }
+        </List>
       </Collapse.Panel>
     </Collapse>
     {

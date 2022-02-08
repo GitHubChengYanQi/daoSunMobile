@@ -1,19 +1,18 @@
-import React, { useImperativeHandle } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { request } from '../../../util/Request';
-import { connect } from 'dva';
 
-const testCodeId = '1470279322124427265';
-
-const ScanCodeBind = React.forwardRef((
+const ScanCodeBind = (
   {
-    onBind,// 绑定
+    onBind, // 绑定
     onCodeId, // 已绑定
+    action,
     ...props
   }, ref) => {
 
+  const [item, setItem] = useState();
 
   // 判断二维码状态
-  const code = async (codeId) => {
+  const code = async (codeId, backObject, items) => {
 
     const isBind = await request(
       {
@@ -27,32 +26,32 @@ const ScanCodeBind = React.forwardRef((
     // 判断是否是未绑定过的码
     if (isBind) {
       //如果已绑定
-      typeof onCodeId === 'function' && onCodeId(codeId);
+      typeof onCodeId === 'function' && onCodeId(codeId, backObject, items);
     } else {
-      typeof onBind === 'function' && onBind(codeId);
+      //如果未绑定
+      typeof onBind === 'function' && onBind(codeId, backObject, items);
     }
+    setItem(null);
   };
-
-  // 开启扫码
-  const scan = async (items) => {
-    if (items) {
-      if (process.env.NODE_ENV === 'development') {
-        code(testCodeId, items);
-      } else {
-       await props.dispatch({
-          type: 'qrCode/wxCpScan',
-        });
-        if (props.qrCode.code){
-          code(props.qrCode.code)
-        }
-      }
-    }
-  };
-
 
   const scanCode = (items) => {
-    scan(items);
+    setItem(items);
+    if (items) {
+      props.dispatch({
+        type: 'qrCode/wxCpScan',
+        payload: {
+          action,
+        },
+      });
+
+    }
   };
+
+  useEffect(() => {
+    if (props.qrCode.codeId && item) {
+      code(props.qrCode.codeId, props.qrCode.backObject, item);
+    }
+  }, [props.qrCode.codeId]);
 
   useImperativeHandle(ref, () => ({
     scanCode,
@@ -60,5 +59,6 @@ const ScanCodeBind = React.forwardRef((
 
   return <></>;
 
-});
-export default connect(({ qrCode }) => ({ qrCode }))(ScanCodeBind);
+};
+
+export default React.forwardRef(ScanCodeBind);

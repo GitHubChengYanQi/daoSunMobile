@@ -122,6 +122,9 @@ const Auth = (props) => {
       case '/Scan/Inventory':
         action = 'inventory';
         break;
+      case '/Work/Quality':
+        action = 'quality';
+        break;
       default:
         break;
     }
@@ -131,7 +134,7 @@ const Auth = (props) => {
         action,
       },
     });
-    if (props.qrCode && props.qrCode.codeId){
+    if (props.qrCode && props.qrCode.codeId) {
       props.dispatch({
         type: 'qrCode/clearCode',
       });
@@ -163,25 +166,25 @@ const Auth = (props) => {
           });
         }
       } else {
-        if (code.length === 19){
+        if (code.length === 19) {
           codeId = code;
-        }else {
+        } else {
           Dialog.alert({
-            content:'请扫正确二维码！'
+            content: '请扫正确二维码！',
           });
         }
 
       }
-      if (codeId !== ''){
+      if (codeId !== '') {
         props.dispatch({
           type: 'qrCode/appAction',
           payload: {
             code: codeId,
           },
         });
-      }else {
+      } else {
         Dialog.alert({
-          content:'请扫正确二维码！'
+          content: '请扫正确二维码！',
         });
       }
     };
@@ -202,26 +205,26 @@ const Auth = (props) => {
   if (loading) {
     return <Skeleton loading />;
   }
-  // if (process.env.NODE_ENV === 'development')
-  //   return <>
-  //     <Button onClick={() => {
-  //       // const code = '1486169638786392066' // sku 单
-  //        const code = '1486169788325912578' // sku 批
-  //       // const code = '1485405524538183681'; // 库位
-  //       // const code = '1470279322627743745'; // 实物
-  //       // const code = '1474546242691313666'; //入库
-  //       props.dispatch({
-  //         type: 'qrCode/appAction',
-  //         payload: {
-  //           code,
-  //         },
-  //       });
-  //     }}>扫码</Button>
-  //     {
-  //       isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
-  //     }
-  //   </>;
-  // else
+  if (process.env.NODE_ENV === 'development')
+    return <>
+      <Button onClick={() => {
+        // const code = '1486169638786392066' // sku 单
+        //  const code = '1486169788325912578' // sku 批
+        // const code = '1485405524538183681'; // 库位
+        const code = '1490853135920771074'; // 实物
+        // const code = '1474546242691313666'; //入库
+        props.dispatch({
+          type: 'qrCode/appAction',
+          payload: {
+            code,
+          },
+        });
+      }}>扫码</Button>
+      {
+        isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />
+      }
+    </>;
+  else
     return isLogin ? (type ? (userInfo.userId ? <Login /> : <Sms />) : props.children) : <Login />;
 
 };

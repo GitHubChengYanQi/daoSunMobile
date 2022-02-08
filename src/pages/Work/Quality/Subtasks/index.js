@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { request, useRequest } from '../../../../util/Request';
 import {
   Button,
@@ -13,7 +13,6 @@ import {
   Toast,
 } from 'antd-mobile';
 import { history } from 'umi';
-import ScanCodeBind from '../../../Scan/ScanCodeBind';
 import CreateInstock from '../CreateInstock';
 import { useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
@@ -22,10 +21,34 @@ import { qualityTaskDetailEdit } from '../DispatchTask/components/URL';
 import { PlayCircleOutlined, ScanOutlined } from '@ant-design/icons';
 import LinkButton from '../../../components/LinkButton';
 import SkuResult from '../../../Scan/Sku/components/SkuResult';
+import { connect } from 'dva';
+import GoToQualityTask from '../GoToQualityTask';
+import { getHeader } from '../../../components/GetHeader';
+import IsDev from '../../../../components/IsDev';
+import ScanCodeBind from '../../../Scan/ScanCodeBind';
 
-const Subtasks = ({ id }) => {
+const Subtasks = (props) => {
+
+  const { id, qrCode } = props;
 
   const ref = useRef();
+
+  const clearCode = () => {
+    props.dispatch({
+      type: 'qrCode/clearCode',
+    });
+  };
+
+  const createInstockRef = useRef();
+
+  const goToQualityRef = useRef();
+
+  useEffect(() => {
+    if (getHeader() && qrCode.codeId) {
+      goToQualityRef.current.goToQualityTask(qrCode.codeId);
+      clearCode();
+    }
+  }, [qrCode.codeId]);
 
   // 当前状态 【-1：驳回,0:新建,1：执行完成，2：入库操作,3:入库完成】
   const [status, setStatus] = useState();
@@ -33,8 +56,6 @@ const Subtasks = ({ id }) => {
   const [visible, setVisible] = useState(false);
 
   const [note, setNote] = useState();
-
-  const [items, setItmes] = useState({});
 
   // 当前所有实物
   const [qrCodeIds, setQrCodeIds] = useState([]);
@@ -200,7 +221,7 @@ const Subtasks = ({ id }) => {
         break;
       case 2:
         // 入库操作
-        ref.current.setVisible(true);
+        createInstockRef.current.setVisible(true);
         break;
       case 3:
         // 上报入库完成
@@ -234,7 +255,7 @@ const Subtasks = ({ id }) => {
   };
 
   if (loading) {
-    return <Skeleton loading={loading} />;
+    return <Skeleton style={{ height: '100vh' }} loading={loading} />;
   }
 
   if (!data) {
@@ -294,6 +315,7 @@ const Subtasks = ({ id }) => {
               codeId: codeId,
               source: 'item',
               brandId: items.brandId,
+              customerId:items.customerId,
               id: items.skuId,
               number: 1,
               inkindType: '质检',
@@ -357,42 +379,47 @@ const Subtasks = ({ id }) => {
                 const batch = items.skuResult ? items.skuResult.batch : 0;
                 return <List.Item
                   key={index}
-                  extra={<Space>
+                  extra={<Space align='center'>
                     <>{items.remaining}/{batch ? Math.ceil(items.number * items.percentum) : items.number}</>
                     {data.permission && status !== -1
                     &&
                     <Space>
-                      <LinkButton onClick={() => {
-                        setItmes(items);
-                        if (batch && (items.remaining === Math.ceil(items.number * items.percentum))){
-                          Toast.show({
-                            content:'该物料已经全部质检完成！',
-                            position: 'bottom',
-                          });
-                        }else {
-                          ref.current.scanCode(items);
-                        }
-                      }}><ScanOutlined /></LinkButton>
+                      {(getHeader() || IsDev()) &&
+                      <LinkButton
+                        style={{ fontSize: 24 }}
+                        onClick={() => {
+                          if (batch && (items.remaining === Math.ceil(items.number * items.percentum))) {
+                            Toast.show({
+                              content: '该物料已经全部质检完成！',
+                              position: 'bottom',
+                            });
+                          } else {
+                            ref.current.scanCode(items);
+                          }
+                        }} title={<ScanOutlined />} />}
                       {/* 自动绑定 */}
                       <LinkButton
+                        style={{ fontSize: 24 }}
                         disabled={
                           items.remaining === items.number
                           ||
                           items.inkindId && (batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
                         }
                         onClick={async () => {
-                          await autoBind({
+                          const inkind = await autoBind({
                             data: {
                               sourceId: items.qualityTaskDetailId,
                               source: 'item',
                               brandId: items.brandId,
+                              customerId: items.customerId,
                               id: items.skuId,
                               number: 1,
                               inkindType: '质检',
                             },
-                          }).then((res) => {
-                            bindCode(res, items);
                           });
+                          if (inkind) {
+                            bindCode(inkind.codeId, items);
+                          }
                         }} title={<PlayCircleOutlined />} />
                     </Space>}
                   </Space>}>
@@ -425,9 +452,9 @@ const Subtasks = ({ id }) => {
       </Collapse.Panel>
     </Collapse>
 
-    <CreateInstock qualityDeatlis={data.details} ref={ref} onSuccess={() => {
+    <CreateInstock qualityDeatlis={data.details} ref={createInstockRef} onSuccess={() => {
       refresh();
-      ref.current.setVisible(false);
+      createInstockRef.current.setVisible(false);
     }} />
 
     <Dialog
@@ -469,50 +496,59 @@ const Subtasks = ({ id }) => {
     />
 
     <ScanCodeBind
+      {...props}
       ref={ref}
-      onBind={(codeId)=>{
+      action='quality'
+      onBind={(codeId, items) => {
         //如果未绑定，提示用户绑定
-        if (items.remaining === items.number){
+        if (items.remaining === items.number) {
           Toast.show({
-            content:'已经全部质检完成！，不能继续绑定空码啦！',
+            content: '已经全部质检完成！，不能继续绑定空码啦！',
             position: 'bottom',
           });
-        }else {
-          if (!items.inkindId && (items.skuResult && items.skuResult.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])){
+        } else {
+          if (!items.inkindId && (items.skuResult && items.skuResult.batch ? items.inkindId : items.inkindId.split(',')[items.remaining])) {
             codeBind(codeId, items);
-          }else {
+          } else {
             Toast.show({
-              content:'请先完成当前质检！',
+              content: '请先完成当前质检！',
               position: 'bottom',
             });
           }
         }
+        clearCode();
       }}
-      onCodeId={(codeId) => {
+      onCodeId={(codeId, backObject, items) => {
         // 已经绑定过的码
-        const ids = items.inkindId.split(',');
+        const ids = items.inkindId ? `${items.inkindId}`.split(',') : [];
 
-        const inkindId = ids.filter((value) => {
-          return value === codeId;
-        });
-
-        if (inkindId.length > 0) {
-          history.push({
-            pathname: '/Work/Quality/QualityTask',
-            state: {
-              items,
-              codeId,
-            },
-          });
-        } else {
+        if (backObject && backObject.type === 'item') {
+          const inkindId = ids.includes(`${codeId}`);
+          if (inkindId) {
+            history.push({
+              pathname: '/Work/Quality/QualityTask',
+              state: {
+                items,
+                codeId,
+              },
+            });
+          } else {
+            Toast.show({
+              content: '二维码已绑定其他物料，请重新选择!',
+              position: 'bottom',
+            });
+          }
+        }else {
           Toast.show({
-            content: '二维码已绑定其他物料，请重新选择!',
+            content: '请扫物料码！',
             position: 'bottom',
           });
         }
 
+        clearCode();
       }} />
 
+    <GoToQualityTask ref={goToQualityRef} type='item' source='质检' codeIds={qrCodeIds} />
 
     <div
       hidden={status === undefined || !data.permission}
@@ -545,4 +581,4 @@ const Subtasks = ({ id }) => {
 
 };
 
-export default Subtasks;
+export default connect(({ qrCode }) => ({ qrCode }))(Subtasks);

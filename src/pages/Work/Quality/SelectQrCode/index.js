@@ -1,14 +1,19 @@
-import React from 'react';
-import { Card, List, SearchBar } from 'antd-mobile';
-import { request, useRequest } from '../../../../util/Request';
+import React, { useRef } from 'react';
+import { Card, Dialog, List, SearchBar } from 'antd-mobile';
+import { useRequest } from '../../../../util/Request';
 import { Spin } from 'antd';
 import { history } from 'umi';
 import LinkButton from '../../../components/LinkButton';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
+import GoToQualityTask from '../GoToQualityTask';
 
 const SelectQrCode = (props) => {
 
   const state = props.location.state;
   const codeIds = state && state.qrCodeIds;
+
+  const ref = useRef();
 
   const { loading, data, run } = useRequest({
     url: '/orCode/list?limit=10',
@@ -17,43 +22,9 @@ const SelectQrCode = (props) => {
     manual: true,
   });
 
-  const inkindType = (codeId, data) => {
-    switch (data.source) {
-      case '质检':
-        history.push({
-          pathname: '/Work/Quality/QualityTask',
-          state: {
-            items: {
-              ...data.taskDetail,
-              skuResult: data.skuResult,
-              brand: data.brand,
-            },
-            codeId,
-          },
-        });
-        break;
-      default:
-        break;
-    }
-  };
-
-  const codeType = (codeId, res) => {
-    switch (res.type) {
-      case 'item':
-        inkindType(codeId, res.inkindResult);
-        break;
-      case 'instock':
-      case 'outstock':
-      case 'storehousePositions':
-      case 'spu':
-      case 'storehouse':
-      case 'stock':
-        history.push(`/OrCode?id=${codeId}`);
-        break;
-      default:
-        break;
-    }
-  };
+  if (!codeIds) {
+    return <MyEmpty />;
+  }
 
   return <Card title='查找二维码' extra={<LinkButton title='返回' onClick={() => history.goBack()} />}>
     <SearchBar
@@ -85,22 +56,11 @@ const SelectQrCode = (props) => {
           <List>
             {
               data.map((items, index) => {
-                const ids = codeIds && codeIds.filter((value) => {
-                  return items.orCodeId === value;
-                });
-                if (ids && ids.length > 0) {
+                if (codeIds && codeIds.includes(items.orCodeId)) {
                   return <List.Item
-                    // extra={codeTypeName(items.type)}
                     key={index}
                     onClick={async () => {
-                      const res = await request({
-                        url: '/orCode/backObject',
-                        method: 'GET',
-                        params: {
-                          id: items.orCodeId,
-                        },
-                      });
-                      codeType(items.orCodeId, res);
+                      ref.current.goToQualityTask(items.orCodeId);
                     }}>{items.orCodeId}</List.Item>;
                 } else {
                   return null;
@@ -109,6 +69,7 @@ const SelectQrCode = (props) => {
               })
             }
           </List>)}
+    <GoToQualityTask ref={ref} />
   </Card>;
 };
 

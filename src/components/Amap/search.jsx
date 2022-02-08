@@ -112,8 +112,7 @@ const AmapSearch = ({ __ele__, __map__, onChange, center }, ref) => {
       setCitys(res);
     });
 
-  }, [center, run]);
-
+  }, []);
 
   return (
     <div

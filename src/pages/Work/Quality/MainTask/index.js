@@ -60,7 +60,7 @@ const MainTask = ({ id }) => {
             data.childTasks.map((items, index) => {
               return <List.Item
                 key={index}
-                title={<>指派人：{items.user && items.user.name} &nbsp;&nbsp; {items.createTime}</>}
+                title={<>指派人：{items.user && items.user.name} &nbsp;&nbsp; <em style={{fontSize:10}}>{items.createTime}</em></>}
                 description={items.state > 0 ?
                   <>地点：{items.address && JSON.parse(items.address).address}</>
                   :

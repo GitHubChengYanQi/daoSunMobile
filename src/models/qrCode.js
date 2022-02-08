@@ -51,9 +51,9 @@ export default {
       console.log('wxCpScan');
       if (process.env.ENV === 'test') {
         // let code = '1476356885154385921'; // 入库
-        let code = '1479266552251695105'; // 库位
+        // let code = '1479266552251695105'; // 库位
         // let code = '1475358083438198786'; // 出库
-        // let code = '1470279322074095617'; // 实物
+        let code = '1490853135920771074'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -215,10 +215,12 @@ export default {
           case 'freeInstock':
           case 'freeOutstock':
           case 'inventory':
+          case 'quality':
             // 自由入库
             // 自由出库
             // 盘点
-            yield put({ type: 'scanCodeState', payload: { codeId } });
+            // 质检任务
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res } });
             break;
           case 'scanStorehousePositon':
             // 扫描库位
@@ -265,6 +267,7 @@ export default {
         case 'freeInstock':
         case 'freeOutstock':
         case 'inventory':
+        case 'quality':
           yield put({ type: 'scanCodeState', payload: { codeId } });
           break;
         default:

@@ -25,11 +25,11 @@ import { CheckOutlined, CloseOutlined, QrcodeOutlined } from '@ant-design/icons'
 import { useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuResult from '../../../Scan/Sku/components/SkuResult';
+import { MyLoading } from '../../../components/MyLoading';
 
 const QualityTask = (props) => {
 
   const state = props.location.state;
-  console.log(state);
 
   const items = state && state.items;
 
@@ -624,6 +624,8 @@ const QualityTask = (props) => {
         <SafeArea position='bottom' />
       </div>
     </Card>
+
+    {(loading || nextLoading || batchLoading || completeLoading) && <MyLoading />}
   </div>;
 };
 
