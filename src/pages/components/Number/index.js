@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Input, NumberKeyboard} from 'antd-mobile';
+import React, { useEffect, useState } from 'react';
+import { Button, Input, NumberKeyboard } from 'antd-mobile';
 import style from './index.css';
 
 const Number = (
@@ -11,6 +11,7 @@ const Number = (
     disabled,
     width,
     color,
+    show,
     onChange = () => {
     },
   },
@@ -19,6 +20,12 @@ const Number = (
   const valueString = `${value ? value : value === 0 ? 0 : ''}`;
 
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    if (show) {
+      setVisible(true);
+    }
+  }, [show]);
 
   const inputColor = () => {
     switch (color) {

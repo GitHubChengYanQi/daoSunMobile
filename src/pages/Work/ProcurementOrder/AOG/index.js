@@ -111,8 +111,8 @@ const AOG = (props) => {
     <Dialog
       visible={visible}
       title='到货数量'
-      content={<Number value={number} onChange={setNumber} />}
-      onAction={(action) => {
+      content={<div style={{textAlign:'center'}}><Number center show={visible} value={number} onChange={setNumber} color='blue' /></div>}
+      onAction={() => {
         const array = details.data.map((item) => {
           if (item.orderDetailId === visible.orderDetailId) {
             return { ...item, theNumber: number };
