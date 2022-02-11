@@ -22,9 +22,7 @@ const Number = (
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (show) {
-      setVisible(true);
-    }
+    setVisible(show);
   }, [show]);
 
   const inputColor = () => {

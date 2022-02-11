@@ -158,7 +158,7 @@ const Workflow = (props) => {
       case 'send':
         return <Icon type='icon-caigou_chaosong' style={{ fontSize }} />;
       case 'route':
-        return <AuditOutlined style={{fontSize}} />;
+        return <AuditOutlined style={{ fontSize }} />;
       case 'process':
         switch (step.auditRule.type) {
           case 'audit':
@@ -188,10 +188,12 @@ const Workflow = (props) => {
   };
 
   const module = (value) => {
+    console.log(value, detail);
     switch (value) {
       case 'quality_task':
         return <QualityTask detail={detail.object} />;
       case 'purchase':
+      case 'purchaseAsk':
         return <PurchaseAsk detail={detail.object} />;
       default:
         break;
@@ -265,7 +267,7 @@ const Workflow = (props) => {
       case 'start':
         return <div>
           <Steps.Step
-            style={{minHeight}}
+            style={{ minHeight }}
             status={stepStatus}
             description={<Space align='center'>
               <Avatar
@@ -280,7 +282,7 @@ const Workflow = (props) => {
       case 'route':
         return <div>
           <Steps.Step
-            style={{minHeight}}
+            style={{ minHeight }}
             status={stepStatus}
             description={
               <div style={{ maxWidth: '100vw', overflowX: 'auto' }}>
@@ -298,7 +300,7 @@ const Workflow = (props) => {
       case 'process':
         return <div>
           <Steps.Step
-            style={{minHeight}}
+            style={{ minHeight }}
             status={stepStatus}
             title={processType(step.auditRule.type)}
             description={rules(step.auditRule)}

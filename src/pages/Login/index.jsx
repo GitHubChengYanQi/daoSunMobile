@@ -6,6 +6,7 @@ import React from 'react';
 import logo from '../../assets/logo.png';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import style from './index.css';
+import { getHeader } from '../components/GetHeader';
 
 export const Username = (props) => {
   return <Space style={{ width: '100%' }}>
@@ -54,7 +55,7 @@ const Login = () => {
       <div style={{ textAlign: 'center', padding: 24 }}>
         <Space direction='vertical'>
           <img src={logo} width='20%' alt='' />
-          <h2 style={{fontWeight:'bolder'}}>道昕智造</h2>
+          <h2 style={{ fontWeight: 'bolder' }}>道昕智造</h2>
         </Space>
       </div>
       <Form
@@ -67,7 +68,8 @@ const Login = () => {
         }}
         layout='horizontal'
         footer={
-          <Button size='large' block type='submit' style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
+          <Button size='large' block type='submit'
+                  style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
             登录
           </Button>
         }

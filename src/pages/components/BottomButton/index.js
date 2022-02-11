@@ -3,6 +3,7 @@ import { Button, SafeArea } from 'antd-mobile';
 
 const BottomButton = (
   {
+    loading,
     leftText,
     leftDisabled,
     leftOnClick,
@@ -29,6 +30,7 @@ const BottomButton = (
     <div style={{ padding: 8 }}>
       {only ?
         <Button
+          loading={loading}
           disabled={disabled}
           style={{ '--border-radius': '50px', width: '100%' }}
           color='primary'
