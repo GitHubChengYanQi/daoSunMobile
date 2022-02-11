@@ -28,6 +28,7 @@ const Auth = (props) => {
   const userInfo = GetUserInfo().userInfo;
 
   const type = userInfo && userInfo.hasOwnProperty('type');
+  alert(type);
 
   const Url = () => {
     const search = new URLSearchParams(window.location.search);
