@@ -57,7 +57,7 @@ const Auth = (props) => {
       });
       if (token) {
         cookie.set('cheng-token', token);
-        window.location.href = Url();
+        window.location.reload();
       } else {
         login();
       }
@@ -216,7 +216,7 @@ const Auth = (props) => {
   //     }
   //   </>;
   // else
-    return isLogin ? ((!getHeader() || type) ? props.children : (userInfo.userId ? <Login /> : <Sms />)) : <Login />;
+    return isLogin ? ((!getHeader() || type) ? props.children : ((userInfo && userInfo.userId) ? <Login /> : <Sms />)) : <Login />;
 
 };
 
