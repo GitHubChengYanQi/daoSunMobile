@@ -28,7 +28,6 @@ const Auth = (props) => {
   const userInfo = GetUserInfo().userInfo;
 
   const type = userInfo && userInfo.hasOwnProperty('type');
-  alert(type);
 
   const Url = () => {
     const search = new URLSearchParams(window.location.search);
@@ -217,7 +216,15 @@ const Auth = (props) => {
   //     }
   //   </>;
   // else
-    return isLogin ? ((!getHeader() || type) ? props.children : ((userInfo && userInfo.userId) ? <Login /> : <Sms />)) : <Login />;
+  if (isLogin) {
+    if (!getHeader() || type) {
+      return (userInfo && userInfo.userId) ? <Login /> : <Sms />;
+    }
+
+    return props.children;
+  } else {
+    return <Login />;
+  }
 
 };
 
