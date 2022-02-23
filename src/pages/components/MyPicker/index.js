@@ -4,7 +4,7 @@ import { ListItem, Picker, Stripe } from 'weui-react-v2';
 import { useDebounceEffect } from 'ahooks';
 
 
-const MyPicker = ({ api,value,onChange,option,disabled }) => {
+const MyPicker = ({ api,value,onChange=()=>{},option,disabled }) => {
 
   useDebounceEffect(()=>{
     !option && run({});

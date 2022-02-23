@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Search } from 'antd-mobile';
+import { Button, SearchBar } from 'antd-mobile';
 import { ActionSheet, Flex, FlexItem, List, ListItem } from 'weui-react-v2';
 import { PhoneOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
@@ -31,12 +31,12 @@ const Distribution = () => {
   return (
     <>
       <div style={{ backgroundColor: '#fff', padding: 8 }}>
-        <Search style={{ backgroundColor: '#fff', border: 'solid 1px #eee', borderRadius: 100 }}
-                   placeholder='搜索项目'
-                   maxLength={8} />
+        <SearchBar
+          placeholder='搜索项目'
+          maxLength={8} />
         <div style={{ marginTop: 8 }} className={styles.sea}>
-          <Button key='a' style={{width:'50%',borderRight:'none'}} size='small'>排序</Button>
-          <Button key='b' style={{width:'50%'}} size='small'>
+          <Button key='a' style={{ width: '50%', borderRight: 'none' }} size='small'>排序</Button>
+          <Button key='b' style={{ width: '50%' }} size='small'>
             筛选
           </Button>
         </div>
@@ -82,9 +82,9 @@ const Distribution = () => {
         </ListItem>
         <ListItem
           thumb={<Avatar icon={<UserOutlined />} />}
-                  extra={<PhoneOutlined onClick={() => {
-                    Phones();
-                  }} />}>
+          extra={<PhoneOutlined onClick={() => {
+            Phones();
+          }} />}>
           <div style={{ display: 'inline-block' }}>
             content
             <br />

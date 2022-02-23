@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { stockDetailsList } from '../../../Scan/Url';
 import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
@@ -35,11 +35,7 @@ const StockDetails = (props) => {
 
   return <>
     <MyList
-      select={
-        {
-          storehousePositionsId: ids.storehousePositionsId,
-        }
-      }
+      params={{storehousePositionsId: ids.storehousePositionsId}}
       api={stockDetailsList}
       data={datas}
       getData={(value) => {

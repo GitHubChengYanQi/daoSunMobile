@@ -7,9 +7,11 @@ let pages = 1;
 let limit = 10;
 let contents = [];
 
-const MyList = ({ children, getData, data, api, select }, ref) => {
+const MyList = ({ children, getData, data, api,params:paramsData }, ref) => {
 
   const [hasMore, setHasMore] = useState(true);
+
+  const [params,setParams] = useState(paramsData);
 
   const [error, setError] = useState(true);
 
@@ -40,14 +42,17 @@ const MyList = ({ children, getData, data, api, select }, ref) => {
     },
   });
 
-  const refresh = () => {
+  const submit = (value) => {
     pages = 1;
     contents = [];
-    typeof getData === 'function' && getData([]);
+    setParams(value);
+    run({
+      data:value
+    });
   };
 
   useImperativeHandle(ref, () => ({
-    refresh,
+    submit,
   }));
 
   useEffect(() => {
@@ -69,7 +74,7 @@ const MyList = ({ children, getData, data, api, select }, ref) => {
       loadMore={async () => {
         return await run({
           data: {
-            ...select,
+            ...params,
           },
         });
       }}

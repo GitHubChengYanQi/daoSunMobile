@@ -146,6 +146,7 @@ const Work = () => {
         {
           GridStyle(
             <>
+              {GridContent('icon-cangkuguanli', '采购申请管理', '/Work/purchaseAsk')}
               {GridContent('icon-cangkuguanli', '采购单管理', '/Work/ProcurementOrder')}
             </>,
           )

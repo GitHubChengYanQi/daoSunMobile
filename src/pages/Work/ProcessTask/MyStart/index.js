@@ -42,8 +42,7 @@ const MyStart = () => {
   };
 
 
-  const [data, setData] = useSetState({});
-
+  const [data, setData] = useSetState({data:[]});
 
   const status = (value) => {
     switch (value) {
@@ -77,7 +76,7 @@ const MyStart = () => {
               columns={1}
               options={[{ label: '质检任务', value: 'quality_task' }, { label: '采购申请', value: 'purchase' }]}
               onChange={(arr, extend) => {
-                ref.current.refresh();
+                ref.current.submit({ ...select, type: arr[0] });
                 setTaskType(extend.items[0]);
                 setSelect({ ...select, type: arr[0] });
               }}
@@ -88,7 +87,7 @@ const MyStart = () => {
               columns={1}
               options={[{ label: '进行中', value: 0 }, { label: '已通过', value: 1 }, { label: '已拒绝', value: 2 }]}
               onChange={(arr, extend) => {
-                ref.current.refresh();
+                ref.current.submit({ ...select, status: arr[0] });
                 setTaskStatus(extend.items[0]);
                 setSelect({ ...select, status: arr[0] });
               }}
@@ -103,8 +102,7 @@ const MyStart = () => {
         url: '/activitiProcessTask/list',
         method: 'POST',
       }}
-      select={select}
-      data={data}
+      data={data.data}
       getData={(value) => {
         setData({ data: value });
       }}>

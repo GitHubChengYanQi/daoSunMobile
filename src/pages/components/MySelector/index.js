@@ -1,17 +1,26 @@
 import { Selector } from 'antd-mobile';
 import React from 'react';
+import { useRequest } from '../../../util/Request';
 
 
-const MySelector = ({api,onChange,value}) => {
+const MySelector = ({ options, onChange=()=>{}, value, api,multiple,style,columns }) => {
 
+  const { data } = useRequest(api, { manual: !api });
 
   return (
     <Selector
-      style={{ '--checked-color': '#ffe2e5' }}
-      options={api || []}
-      multiple={false}
-      onChange={(value)=>{
-        typeof onChange === 'function' && onChange(value[0]);
+      style={style}
+      columns={columns || 1}
+      value={Array.isArray(value) ? value : [value]}
+      options={options || data}
+      multiple={multiple}
+      onChange={(value,extend) => {
+        if (multiple){
+          onChange(value,extend.items);
+        }else {
+          onChange(value[0],extend.items[0]);
+        }
+
       }}
     />
   );

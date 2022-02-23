@@ -22,8 +22,12 @@ const Screening = ({ select }) => {
     <>
       <List>
         <ListItem>
-          <Card headStyle={{ border: 'none' }} title={<div style={{ textAlign: 'center' }}>客户状态</div>}
-                bodyStyle={{ padding: 0 }} bordered={false}>
+          <Card
+            headStyle={{ border: 'none' }}
+            title={<div style={{ textAlign: 'center' }}>客户状态</div>}
+            bodyStyle={{ padding: 0 }}
+            bordered={false}
+          >
             <Selector
               columns={2}
               options={[{

@@ -66,7 +66,7 @@ const DataAdd = () => {
             />
           </FormItem>
           <FormItem label="资料分类" name="dataclassId" rules={[{ required: false, message: '该字段是必填字段！' }]}>
-          <MySelector api={dataClassification} />
+          <MySelector options={dataClassification} />
           </FormItem>
         </Card>
         <div style={{"text-align":'center'}} >

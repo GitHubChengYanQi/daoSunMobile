@@ -8,13 +8,11 @@ import LinkButton from '../../components/LinkButton';
 
 const ProcurementOrder = () => {
 
-  const ref = useRef();
 
   const [data, setData] = useSetState({});
 
   return <Card title='采购单列表' extra={<LinkButton title='返回' onClick={()=>{history.goBack()}} />}>
     <MyList
-      ref={ref}
       api={procurementOrderList}
       data={data}
       getData={(value) => {
