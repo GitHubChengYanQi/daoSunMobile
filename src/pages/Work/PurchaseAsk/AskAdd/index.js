@@ -33,18 +33,18 @@ const AskAdd = () => {
       ref={ref}
       onFinish={(value) => {
 
-        if (!value.purchaseListingParams && value.purchaseListingParams.length === 0) {
+        if (!value.purchaseListings && value.purchaseListings.length === 0) {
           return Toast.show({
             content: '物料、申请数量为必填项！',
             position: 'bottom',
           });
         }
 
-        const required = value.purchaseListingParams.filter((items) => {
+        const required = value.purchaseListings.filter((items) => {
           return !items.skuId || !items.applyNumber;
         });
 
-        const skuBrands = value.purchaseListingParams.map((items) => {
+        const skuBrands = value.purchaseListings.map((items) => {
           return `${items.skuId}${items.brandId}`;
         });
 
@@ -115,7 +115,7 @@ const AskAdd = () => {
       </Form.Item>
 
       <Form.Item
-        name='purchaseListingParams'
+        name='purchaseListings'
         label='采购清单'
       >
         <AddSku />
