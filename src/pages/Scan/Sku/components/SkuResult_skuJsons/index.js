@@ -7,9 +7,9 @@ const SkuResultSkuJsons = ({ skuResult }) => {
     return null;
 
   return <>
-    {skuResult.spuResult.spuClassificationResult && skuResult.spuResult.spuClassificationResult.name}
-    &nbsp;/&nbsp;
     {skuResult.spuResult.name}
+    &nbsp;/&nbsp;
+    {skuResult.skuName}
     {skuResult.specifications && <> &nbsp;/&nbsp; {skuResult.specifications}</>}
   </>;
 };

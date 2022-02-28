@@ -38,7 +38,7 @@ const Sms = () => {
             setSms({ ...sms, phone: value });
           }} />
         </List.Item>
-        <List.Item prefix='短信验证码' extra={
+        <List.Item prefix='验证码' extra={
           <SendCode
             onCaptcha={() => {
               run(

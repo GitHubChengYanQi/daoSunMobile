@@ -7,9 +7,9 @@ const BackSkus = ({ record }) => {
   }
 
   return <>
-    {record.spuResult.spuClassificationResult && record.spuResult.spuClassificationResult.name}
-    &nbsp;/&nbsp;
     {record.spuResult.name}
+    &nbsp;/&nbsp;
+    {record.skuName}
     {record.specifications && <> &nbsp;/&nbsp; {record.specifications}</>}
   </>;
 };

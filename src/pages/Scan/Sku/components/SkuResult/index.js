@@ -1,5 +1,4 @@
 import React from 'react';
-import {Empty} from 'antd';
 
 const SkuResult = ({skuResult}) => {
 
@@ -8,9 +7,9 @@ const SkuResult = ({skuResult}) => {
 
 
   return <>
-    {skuResult.spuResult.spuClassificationResult.name}
-    &nbsp;/&nbsp;
     {skuResult.spuResult.name}
+    &nbsp;/&nbsp;
+    {skuResult.skuName}
     {skuResult.specifications && <> &nbsp;/&nbsp; {skuResult.specifications}</>}
   </>;
 };
