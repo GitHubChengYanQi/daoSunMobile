@@ -94,8 +94,8 @@ const SkuFreeInstock = ({ scanData }) => {
     return {
       batch: sku.batch === 1,
       skuId: sku.skuId,
-      name: sku.spuResult.spuClassificationResult && sku.spuResult.spuClassificationResult.name,
-      skuName: sku.spuResult.name,
+      name: sku.spuResult && sku.spuResult.name,
+      skuName: sku.skuName,
       detail: sku.skuJsons && sku.skuJsons.length > 0 && sku.skuJsons[0].values.attributeValues &&
         <>
           ({
