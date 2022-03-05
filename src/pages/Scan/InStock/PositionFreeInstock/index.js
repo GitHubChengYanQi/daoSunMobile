@@ -265,6 +265,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
             },
           });
         }} />}>
+
           <MyCascader
             arrow={false}
             ref={treeRef}

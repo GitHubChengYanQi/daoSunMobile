@@ -21,8 +21,6 @@ const fontSize = 24;
 
 const AppInstock = (props) => {
 
-  const treeRef = useRef();
-
   const [canvas, setCanvas] = useState([]);
 
   // 显示绑定操作
@@ -355,7 +353,6 @@ const AppInstock = (props) => {
              poputTitle='选择库位'
              title={<Typography.Link underline>点击选择或扫描库位</Typography.Link>}
              value={storehousePositionsId}
-             ref={treeRef}
              textType='link'
              api={storehousePositionsTreeView}
              defaultParams={

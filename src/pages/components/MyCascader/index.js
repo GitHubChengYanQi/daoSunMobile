@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Cascader } from 'antd-mobile';
+import { Button, Cascader } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
@@ -40,18 +40,24 @@ const MyCascader = (
     textType,
   }, ref) => {
 
-  const { data,run } = useRequest(api, {
+  const { data, run } = useRequest(api, {
     defaultParams,
   });
 
-  const [visible, setVisible] = useState();
+  const dataSourcedChildren = (data) => {
+    if ((!Array.isArray(data) || data.length === 0)) {
+      return null;
+    }
 
-  const show = () => {
-    setVisible(true);
+    return data.map((item) => {
+      return {
+        ...item,
+        children: dataSourcedChildren(item.children),
+      };
+    });
   };
 
   useImperativeHandle(ref, () => ({
-    show,
     run,
   }));
 
@@ -78,7 +84,6 @@ const MyCascader = (
 
 
   const change = (value) => {
-    setVisible(false);
     const result = value ? value[value.length - 1] : value;
     typeof onChange === 'function' && onChange(result);
   };
@@ -86,24 +91,18 @@ const MyCascader = (
 
   return (
     <>
-      <Cascader
-        className={style.content}
-        style={{height:'100vh'}}
-        options={data || []}
-        visible={!branch && visible}
-        onCancel={() => {
-          typeof clear === 'function' && clear();
-          setVisible(false);
-        }}
-        value={valueArray.map((items) => {
-          return items.value;
-        })}
-        onConfirm={(value) => {
+      <ListItem arrow={arrow} style={{ padding: 0, border: 'none', width: '100vw' }} onClick={async () => {
+        const value = await Cascader.prompt({
+          options: dataSourcedChildren(data),
+          placeholder: '请选择',
+          value:valueArray.map((items) => {
+              return items.value;
+            })
+        });
+
+        if (value && value.length > 0) {
           change(value);
-        }}
-      />
-      <ListItem arrow={arrow} style={{ padding: 0, border: 'none',width:'100vw' }} onClick={() => {
-        setVisible(true);
+        }
       }}>
         {!branch ?
           <>
@@ -111,7 +110,8 @@ const MyCascader = (
               switch (textType) {
                 case 'link':
                   return (
-                    <Typography.Link style={fontStyle} key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+                    <Typography.Link style={fontStyle}
+                                     key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
                   );
                 default:
                   return (
