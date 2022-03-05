@@ -10,6 +10,6 @@
   color: black;
 }
 
-.center :global .adm-input {
+.center :global .adm-input > input {
   text-align: center;
 }

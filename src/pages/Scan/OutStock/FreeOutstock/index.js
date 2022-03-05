@@ -79,7 +79,6 @@ const FreeOutstock = (props) => {
               width={100}
               value={item.outNumber}
               onChange={(value) => {
-
                 if (item.number >= value && value > 0) {
                   setInkindIds({ data: [...inkindIds.data, item.inkindId] });
                 } else {
