@@ -15,7 +15,7 @@ import MyEmpty from '../../../components/MyEmpty';
 import Search from '../PositionFreeInstock/components/Search';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import Number from '../../../components/Number';
-import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
+import { AddOutline, DeleteOutline, SearchOutline } from 'antd-mobile-icons';
 
 const fontSize = 18;
 
@@ -326,7 +326,7 @@ const SkuFreeInstock = ({ scanData }) => {
     return { inkindIds: printCodes, positions: data.positions };
   };
 
-  const listItems = (batchNumber, skuItems, index,batch) => {
+  const listItems = (batchNumber, skuItems, index, batch) => {
     const arrays = [];
     for (let i = 0; i < batchNumber; i++) {
       const item = skuItems[i] || { number: !data.skus.batch && 1 };
@@ -349,7 +349,7 @@ const SkuFreeInstock = ({ scanData }) => {
             if (item.number > 0) {
               const res = await CodeRun({
                 data: {
-                  codeRequests:[{
+                  codeRequests: [{
                     source: 'item',
                     brandId: data.skus.brandId,
                     customerId: data.skus.customerId,
@@ -358,8 +358,8 @@ const SkuFreeInstock = ({ scanData }) => {
                     inkindType: '自由入库',
                   }],
                 },
-              })
-              if (res && res.length > 0){
+              });
+              if (res && res.length > 0) {
                 if (IsDev() || !getHeader()) {
                   addCanvas([res[0].inkindId]);
                 }
@@ -415,16 +415,16 @@ const SkuFreeInstock = ({ scanData }) => {
 
   const disabled = (id) => {
     let skuItemId = null;
-    data.positions.map((item)=>{
-      return item.skuItems.map((value)=>{
-        if (value.number > 0){
-          skuItemId = item.positionId
+    data.positions.map((item) => {
+      return item.skuItems.map((value) => {
+        if (value.number > 0) {
+          skuItemId = item.positionId;
         }
         return null;
-      })
-    })
+      });
+    });
     return skuItemId && skuItemId !== id;
-  }
+  };
 
 
   return <>
@@ -434,9 +434,9 @@ const SkuFreeInstock = ({ scanData }) => {
         clear();
       }} />}
     >
-      <SearchBar placeholder='搜索物料' onFocus={() => {
+      <Button style={{ width: '100%' }} onClick={() => {
         ref.current.search({ type: 'sku' });
-      }} />
+      }}><Space><SearchOutline />搜索物料</Space></Button>
       <List
         style={{
           '--border-top': 'none',
@@ -532,13 +532,13 @@ const SkuFreeInstock = ({ scanData }) => {
                       const items = [];
                       const array = data.positions;
                       for (let i = 0; i < value; i++) {
-                        items.push({number:1});
+                        items.push({ number: 1 });
                       }
-                      array[index] = { ...item, batchNumber: value,skuItems:items };
+                      array[index] = { ...item, batchNumber: value, skuItems: items };
                       setData({ ...data, positions: array });
                     }} />
                 </List.Item>}
-                {listItems(item.batchNumber, item.skuItems, index,data.skus.batch)}
+                {listItems(item.batchNumber, item.skuItems, index, data.skus.batch)}
               </List>
             </Tabs.Tab>;
           })}
@@ -598,15 +598,15 @@ const SkuFreeInstock = ({ scanData }) => {
           });
         });
 
-        if (inStocks.length > 0){
+        if (inStocks.length > 0) {
           instockRun({
             data: {
               inStocks: inStocks,
             },
           });
-        }else {
+        } else {
           Toast.show({
-            content:'没有可以入库的实物！'
+            content: '没有可以入库的实物！',
           });
         }
       }}

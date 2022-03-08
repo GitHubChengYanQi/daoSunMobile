@@ -67,7 +67,7 @@ const InStock = (props) => {
   const [instockNumber, setInstockNumber] = useState(0);
 
   const getSkuResult = (items) => {
-    return <BackSkus record={items} />
+    return <BackSkus record={items} />;
   };
 
   const showRef = useRef();
@@ -137,7 +137,6 @@ const InStock = (props) => {
 
   if (!data)
     return <MyEmpty />;
-
 
   return (
     <>
@@ -231,7 +230,7 @@ const InStock = (props) => {
                                   backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
-                                  if (IsDev() ? false : getHeader()) {
+                                  if (getHeader()) {
                                     await setBatch(true);
                                     await setItems(items);
                                     await setInstockNumber(items.number);

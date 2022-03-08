@@ -5,7 +5,7 @@ import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
 import TreeSelectSee from '../../components/TreeSelectSee';
 import { WhiteSpace } from 'weui-react-v2';
-import { useDebounceEffect } from 'ahooks';
+import { useBoolean, useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../components/MyEmpty';
 import { MyLoading } from '../../components/MyLoading';
 import { getHeader } from '../../components/GetHeader';
@@ -50,9 +50,7 @@ const OutStock = (props) => {
 
   const [items, setItems] = useState();
 
-  const [stockDetails, setStockDetails] = useState();
-
-  const { data: storehouseposition } = useRequest(storehousePositionsTreeView);
+  const [positionShow, { toggle }] = useBoolean();
 
 
   const next = (items) => {
@@ -106,10 +104,11 @@ const OutStock = (props) => {
   const getSkuResult = (items, br) => {
     if (!items)
       return null;
-    return <BackSkus record={items} />
+    return <BackSkus record={items} />;
   };
 
   const outstockContent = (items) => {
+
     const stockNumber = outstockAction && outstockAction.stockDetails && outstockAction.stockDetails.number;
     const maxNumber = stockNumber < itemNumber ? stockNumber : itemNumber;
 
@@ -136,6 +135,15 @@ const OutStock = (props) => {
         />
       </Space>}
     </>;
+  };
+
+  const positionResult = (data) => {
+
+    if (!data.supper) {
+      return data.name;
+    }
+
+    return positionResult(data.supper) + '-' + data.name;
   };
 
   if (loading)
@@ -223,7 +231,7 @@ const OutStock = (props) => {
                         backgroundColor: '#1845B5',
                       }}
                       onClick={async () => {
-                        if (!IsDev() && getHeader()) {
+                        if (IsDev() || getHeader()) {
                           setItems(items);
                           setItemNumber(items.number);
                           //调用扫码
@@ -260,51 +268,24 @@ const OutStock = (props) => {
                       </Space>
                     </Button>}
                   >
-                    <Space direction='vertical' style={{ padding: 8 }}>
+                    <Space direction='vertical' style={{ padding: 8,width:'100%' }}>
                       {getSkuResult(items)}
                       {items.brandResult && items.brandResult.brandName}
-                      {
-                        stockDetails && stockDetails.index && stockDetails.index === `${index}`
-                        &&
-                        <Space direction='vertical'>
-                          {
-                            stockDetails.stockDetails && stockDetails.stockDetails.map((items, index) => {
-                              if (items.number > 0) {
-                                return <div key={index}>
-                                  {data.storehouseResult && data.storehouseResult.name} -
-                                  <TreeSelectSee data={storehouseposition} value={items.storehousePositionsId} />
-                                  &nbsp;&nbsp;× {items.number}
-                                </div>;
-                              } else {
-                                return null;
-                              }
-                            })
-                          }
 
-                        </Space>
-                      }
+                      {positionShow && items.positionsResults.map((item, index) => {
+                        return <div key={index}>
+                          {positionResult(item)}  <div style={{float:'right'}}>×{item.number}</div>
+                        </div>;
+                      })}
+
                       <Button
                         color='primary'
                         fill='none'
                         style={{ padding: 0 }}
-                        onClick={async () => {
-                          const details = await request({
-                            url: '/stockDetails/list',
-                            method: 'POST',
-                            data: {
-                              skuId: items.skuId,
-                              storehouseId: data && data.storehouseId,
-                              brandId: items.brandId,
-                            },
-                          });
-                          if (stockDetails && stockDetails.index && stockDetails.index === `${index}`) {
-                            setStockDetails(false);
-                          } else {
-                            setStockDetails({ index: `${index}`, stockDetails: details });
-                          }
+                        onClick={() => {
+                          toggle();
                         }}
-                      >{stockDetails && stockDetails.index && stockDetails.index === `${index}` ? <>
-                        收起库位</> : <>查看库位</>}</Button>
+                      >{positionShow ? '收起库位' : '查看库位'}</Button>
                     </Space>
                   </List.Item>;
                 } else {

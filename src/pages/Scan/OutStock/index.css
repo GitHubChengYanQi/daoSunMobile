@@ -3,9 +3,21 @@
 }
 
 .outstockOrderList :global .adm-list-item-content {
-  padding: 8px
+  padding: 0
+}
+
+.outstockOrderList :global .adm-list-item-content-main {
+  padding: 8px 0;
+}
+
+.outstocklistingList :global .adm-list-item-content-main {
+  padding: 0
 }
 
 .outstocklistingList :global .adm-list-item-content {
   padding: 0;
+}
+
+.outstocklistingList :global .adm-list-body {
+  background-color: #f4f4f4;
 }

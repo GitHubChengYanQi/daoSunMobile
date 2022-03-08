@@ -9,3 +9,12 @@
 .instockListingList :global .adm-list-item-content {
   padding: 0;
 }
+
+.instockListingList :global .adm-list-item-content-main {
+  padding: 0;
+}
+
+.instockListingList :global .adm-list-body {
+  background-color: #f4f4f4;
+}
+
