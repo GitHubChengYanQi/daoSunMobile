@@ -37,6 +37,7 @@ const MyPopup = (
   return <>
     <Popup
       visible={visible}
+      destroyOnClose
       onMaskClick={() => {
         close();
       }}

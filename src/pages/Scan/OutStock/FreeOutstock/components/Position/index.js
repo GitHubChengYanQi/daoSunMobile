@@ -1,23 +1,23 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Card, List, Selector, Toast } from 'antd-mobile';
-import BottomButton from '../../../components/BottomButton';
-import { getHeader } from '../../../components/GetHeader';
-import { stockDetailsList, storehousePositionsTreeView } from '../../Url';
-import { useRequest } from '../../../../util/Request';
-import { useDebounceEffect, useSetState } from 'ahooks';
+import BottomButton from '../../../../../components/BottomButton';
+import { getHeader } from '../../../../../components/GetHeader';
+import { stockDetailsList, storehousePositionsTreeView } from '../../../../Url';
+import { useRequest } from '../../../../../../util/Request';
+import { useSetState } from 'ahooks';
 import { connect } from 'dva';
-import { MyLoading } from '../../../components/MyLoading';
+import { MyLoading } from '../../../../../components/MyLoading';
 import { ScanOutlined } from '@ant-design/icons';
-import LinkButton from '../../../components/LinkButton';
-import Number from '../../../components/Number';
-import MyCascader from '../../../components/MyCascader';
-import BackSkus from '../../Sku/components/BackSkus';
-import MyEmpty from '../../../components/MyEmpty';
-import Search from '../../InStock/PositionFreeInstock/components/Search';
+import LinkButton from '../../../../../components/LinkButton';
+import Number from '../../../../../components/Number';
+import MyCascader from '../../../../../components/MyCascader';
+import BackSkus from '../../../../Sku/components/BackSkus';
+import MyEmpty from '../../../../../components/MyEmpty';
+import Search from '../../../../InStock/PositionFreeInstock/components/Search';
 
 const fontSize = 18;
 
-const FreeOutstock = (props) => {
+const Position = ({scnaData,...props}) => {
 
   const [inkindIds, setInkindIds] = useSetState({ data: [] });
 
@@ -98,22 +98,6 @@ const FreeOutstock = (props) => {
     };
   });
 
-  // useEffect(() => {
-  //   detailRun({
-  //     data: {
-  //       storehousePositionsId: '1480351037381472258',
-  //     },
-  //   });
-  // }, []);
-
-  const codeId = props.qrCode && props.qrCode.codeId;
-
-  const clearCode = () => {
-    props.dispatch({
-      type: 'qrCode/clearCode',
-    });
-  };
-
   const clear = () => {
     setInkindIds({ data: [] });
     setData({
@@ -153,63 +137,39 @@ const FreeOutstock = (props) => {
     },
   });
 
-
-  const { loading, run: codeRun } = useRequest({
-    url: '/orCode/backObject',
-    method: 'GET',
-  }, {
-    manual: true,
-    onSuccess: (res) => {
-      switch (res.type) {
-        case 'storehousePositions':
-          if (res.result && res.result.storehouseResult) {
-            setData({
-              ...data,
-              storehouse: {
-                label: res.result.storehouseResult.name,
-                value: res.result.storehouseResult.storehouseId,
-              },
-              positionId: res.result.storehousePositionsId,
-            });
-          }
-          detailRun({
-            data: {
-              storehousePositionsId: res.result.storehousePositionsId,
-            },
-          });
-          clearCode();
-          break;
-        default:
-          Toast.show({
-            content: '请扫库位码！',
-            position: 'bottom',
-          });
-          clearCode();
-          break;
+  useEffect(()=>{
+    if (scnaData){
+      if (scnaData && scnaData.storehouseResult) {
+        setData({
+          ...data,
+          storehouse: {
+            label: scnaData.storehouseResult.name,
+            value: scnaData.storehouseResult.storehouseId,
+          },
+          positionId: scnaData.storehousePositionsId,
+        });
       }
-      clearCode();
-    },
-    onError: () => {
-      clearCode();
-    },
-  });
-
-  useDebounceEffect(() => {
-    if (codeId) {
-      codeRun({
-        params: {
-          id: codeId,
+      detailRun({
+        data: {
+          storehousePositionsId: scnaData.storehousePositionsId,
         },
       });
     }
-  }, [codeId], {
-    wait: 0,
-  });
+  },[scnaData])
 
 
   return <>
     <Card
       title='库位信息'
+      extra={getHeader() && <LinkButton
+        title={<ScanOutlined />} onClick={() => {
+        props.dispatch({
+          type: 'qrCode/wxCpScan',
+          payload: {
+            action: 'freeOutstock',
+          },
+        });
+      }} />}
     >
       <List
         style={{
@@ -226,19 +186,11 @@ const FreeOutstock = (props) => {
             ref.current.search({ type: 'storehouse' });
           }} />
         </List.Item>
-        <List.Item title='库位' extra={getHeader() && <LinkButton
-          title={<ScanOutlined />} onClick={() => {
-          props.dispatch({
-            type: 'qrCode/wxCpScan',
-            payload: {
-              action: 'freeOutstock',
-            },
-          });
-        }} />}>
+        <List.Item title='库位'>
           <MyCascader
             arrow={false}
             ref={treeRef}
-            branch={!data.storehouse.value}
+            disabled={!data.storehouse.value}
             poputTitle='选择库位'
             branchText='请选择仓库或直接扫码选择库位'
             textType='link'
@@ -335,8 +287,8 @@ const FreeOutstock = (props) => {
       text='出库'
     />
 
-    {(loading || outstockLoading || detailLoading) && <MyLoading />}
+    {(outstockLoading || detailLoading) && <MyLoading />}
 
   </>;
 };
-export default connect(({ qrCode }) => ({ qrCode }))(FreeOutstock);
+export default connect(({ qrCode }) => ({ qrCode }))(Position);

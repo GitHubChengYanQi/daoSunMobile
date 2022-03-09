@@ -33,7 +33,7 @@ const MyCascader = (
     onChange,
     title,
     clear,
-    branch,
+    disabled,
     branchText,
     fontStyle,
     onOk,
@@ -91,20 +91,25 @@ const MyCascader = (
 
   return (
     <>
-      <ListItem arrow={arrow} style={{ padding: 0, border: 'none', width: '100vw' }} onClick={async () => {
+      <div style={{ padding: 0, border: 'none', width: '100vw' }} onClick={async () => {
+        if (disabled) {
+          return;
+        }
         const value = await Cascader.prompt({
-          options: dataSourcedChildren(data),
+          options: dataSourcedChildren(data) || [],
           placeholder: '请选择',
-          value:valueArray.map((items) => {
-              return items.value;
-            })
+          value: valueArray.map((items) => {
+            return items.value;
+          }),
         });
 
         if (value && value.length > 0) {
           change(value);
         }
       }}>
-        {!branch ?
+        {disabled ? <>
+            {branchText}
+          </> :
           <>
             {valueArray.length > 0 ? valueArray.map((items, index) => {
               switch (textType) {
@@ -120,11 +125,8 @@ const MyCascader = (
               }
 
             }) : (title || '请选择')}
-          </>
-          :
-          <>{branchText}</>
-        }
-      </ListItem>
+          </>}
+      </div>
     </>
   );
 };

@@ -12,6 +12,10 @@ const Number = (
     width,
     color,
     show,
+    confirmText,
+    customKey,
+    onConfirm = () => {
+    },
     onChange = () => {
     },
   },
@@ -44,19 +48,28 @@ const Number = (
     <Button
       disabled={disabled}
       className={center && style.center}
-      style={{ padding: 0, border: 'none', width: width || 200, ...buttonStyle }}
+      style={{ padding: 4, border: 'none','--border-radius':0,borderBottom:'solid 1px rgb(190 184 184)', width: width || 200, ...buttonStyle }}
       onClick={() => setVisible(true)}>
       <Input className={inputColor()} placeholder={placeholder || '请输入'} value={valueString} readOnly />
     </Button>
     <NumberKeyboard
       closeOnConfirm
-      confirmText='确定'
+      customKey={customKey || '取消'}
+      confirmText={confirmText || '确定'}
+      onConfirm={() => {
+        onConfirm();
+        setVisible(false);
+      }}
       visible={visible}
       onClose={() => {
         setVisible(false);
       }}
       onInput={(string) => {
-        onChange(parseInt(valueString + string));
+        if (string === (customKey || '取消')){
+          setVisible(false);
+        }else {
+          onChange(parseInt(valueString + string));
+        }
       }}
       onDelete={() => {
         if (valueString.length === 1) {

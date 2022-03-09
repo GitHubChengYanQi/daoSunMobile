@@ -1,11 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, Dialog, List, SearchBar, Space, Tabs, Toast } from 'antd-mobile';
+import React, { useEffect, useRef } from 'react';
+import { Button, Card, Dialog, List, Space, Tabs, Toast } from 'antd-mobile';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
 import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
-import { useBoolean, useSetState } from 'ahooks';
+import { useSetState } from 'ahooks';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import IsDev from '../../../../components/IsDev';
@@ -15,7 +15,7 @@ import MyEmpty from '../../../components/MyEmpty';
 import Search from '../PositionFreeInstock/components/Search';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import Number from '../../../components/Number';
-import { AddOutline, DeleteOutline, SearchOutline } from 'antd-mobile-icons';
+import { DeleteOutline, SearchOutline } from 'antd-mobile-icons';
 
 const fontSize = 18;
 
@@ -620,4 +620,4 @@ const SkuFreeInstock = ({ scanData }) => {
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(SkuFreeInstock);
+export default SkuFreeInstock;

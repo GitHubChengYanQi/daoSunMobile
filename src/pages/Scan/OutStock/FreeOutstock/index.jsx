@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Tabs, Toast } from 'antd-mobile';
-import { connect } from 'dva';
+import style from '../../InStock/FreeInstock/index.css';
+import Position from './components/Position';
 import { useRequest } from '../../../../util/Request';
+import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../../components/MyLoading';
-import PositionFreeInstock from '../PositionFreeInstock';
-import SkuFreeInstock from '../SkuFreeInstock';
-import style from './index.css';
+import Sku from './components/Sku';
 
-const FreeInstock = (props) => {
+const FreeOutstock = (props) => {
 
   const [key, setKey] = useState('sku');
 
@@ -31,12 +31,6 @@ const FreeInstock = (props) => {
         case 'storehousePositions':
           setKey('position');
           setScnaData(res.result);
-          clearCode();
-          break;
-        case 'sku':
-          setKey('sku');
-          setScnaData(res.result);
-          clearCode();
           break;
         default:
           Toast.show({
@@ -46,41 +40,46 @@ const FreeInstock = (props) => {
           clearCode();
           break;
       }
+      clearCode();
+    },
+    onError: () => {
+      clearCode();
     },
   });
 
-
-  useEffect(() => {
-    if (codeId && codeId !== '') {
+  useDebounceEffect(() => {
+    if (codeId) {
       codeRun({
         params: {
           id: codeId,
         },
       });
     }
-  }, [codeId]);
+  }, [codeId], {
+    wait: 0,
+  });
 
-  return <div>
+
+  return <>
     <Tabs
       className={style.tab}
       activeKey={key}
       onChange={(key) => {
-        setScnaData(null);
         setKey(key);
       }}
     >
-      <Tabs.Tab title='按物料入库' key='sku'>
-        <SkuFreeInstock scanData={scnaData} />
+      <Tabs.Tab title='按物料出库' key='sku'>
+        <Sku />
       </Tabs.Tab>
-      <Tabs.Tab title='按库位入库' key='position'>
-        <PositionFreeInstock scanData={scnaData} />
+      <Tabs.Tab title='按库位出库' key='position'>
+        <Position scnaData={scnaData} />
       </Tabs.Tab>
     </Tabs>
 
     {
       loading && <MyLoading />
     }
-  </div>;
+  </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(FreeInstock);
+export default FreeOutstock;

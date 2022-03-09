@@ -161,7 +161,7 @@ const ItemInventory = (
             <MyCascader
               arrow={false}
               ref={treeRef}
-              branch={!storehouse.value}
+              disabled={!storehouse.value}
               poputTitle='选择库位'
               branchText='请先选择仓库'
               textType='link'

@@ -270,7 +270,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
             arrow={false}
             ref={treeRef}
             fontStyle={{ fontSize }}
-            branch={!data.storehouse.value}
+            disabled={!data.storehouse.value}
             poputTitle='选择库位'
             branchText='请选择仓库或直接扫码选择库位'
             textType='link'
@@ -455,4 +455,4 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(PositionFreeInstock);
+export default PositionFreeInstock;

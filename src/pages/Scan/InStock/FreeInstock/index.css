@@ -1,3 +1,6 @@
 .tab :global .adm-tabs-header {
   background-color: white;
 }
+.tab :global .adm-tabs-content {
+  background-color: white;
+}
