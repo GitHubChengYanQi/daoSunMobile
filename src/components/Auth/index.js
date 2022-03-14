@@ -16,8 +16,11 @@ import {
   Toast,
 } from 'antd-mobile';
 import IsDev from '../IsDev';
+import VConsole from 'vconsole';
 
 const Auth = (props) => {
+
+  new VConsole();
 
   // https://dasheng-soft.picp.vip
 
