@@ -25,6 +25,9 @@ const print = (array, index) => {
               p {
               margin: 0;
               }
+              h1,h2,h3,h4,h5,h6 {
+               margin: 0;
+              }
 </style>
           </head>
           <body>
@@ -33,7 +36,7 @@ const print = (array, index) => {
         </html>
 `;
   });
-  console.log(canvas);
+  console.log(canvas[index]);
   window.Android && window.Android.nPrint(canvas[index]);
   if (IsDev()) {
     Toast.clear();
