@@ -10,10 +10,17 @@ import Report from './Report';
 import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.css';
+import * as VConsole from 'vconsole';
 
 const iconSize = getHeader() ? 30 : 40;
 
 const Index = (props) => {
+
+  const userInfo = props.userInfo;
+
+  if (userInfo && userInfo.name === '程彦祺') {
+    new VConsole();
+  }
 
   const nav =
     props.history.location.pathname.split('/')[1] !== 'OrCode'
