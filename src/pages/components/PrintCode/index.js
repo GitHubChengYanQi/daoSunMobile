@@ -21,6 +21,11 @@ const print = (array, index) => {
                  name='viewport'
                  content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no'
               />
+              <style>
+              p {
+              margin: 0;
+              }
+</style>
           </head>
           <body>
             <div style='max-width:384px;max-height: 230px;overflow-y: hidden'>${items}</div>
@@ -28,8 +33,9 @@ const print = (array, index) => {
         </html>
 `;
   });
+  console.log(canvas);
   window.Android && window.Android.nPrint(canvas[index]);
-  if (IsDev()){
+  if (IsDev()) {
     Toast.clear();
   }
 };
