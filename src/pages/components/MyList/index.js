@@ -22,7 +22,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
       page: pages,
     },
   }, {
-    debounceInterval: 300,
+    // debounceInterval: 300,
     onSuccess: (res) => {
       if (res && res.length > 0) {
         typeof getData === 'function' && getData(res);

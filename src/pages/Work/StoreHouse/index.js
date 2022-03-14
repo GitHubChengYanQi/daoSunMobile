@@ -5,21 +5,17 @@ import { List } from 'antd-mobile';
 import MyList from '../../components/MyList';
 import { history } from 'umi';
 import { useSetState } from 'ahooks';
-import { useRequest } from '../../../util/Request';
 
 const StoreHouse = () => {
 
   const [datas, setDatas] = useSetState({ data: [] });
-
-  const { data } = useRequest(storeHouseList);
-  console.log(data);
 
   return <>
     <MyNavBar title='仓库管理' />
 
     <MyList
       api={storeHouseList}
-      data={datas}
+      data={datas.data}
       getData={(value) => {
         setDatas({ data: value });
       }}>
