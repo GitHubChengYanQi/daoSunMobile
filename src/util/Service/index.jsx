@@ -7,9 +7,9 @@ const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'http://192.168.1.229'
+  // 'http://192.168.1.229'
   // 'https://api.daoxin.gf2025.com'
-  // 'https://api.hh.gf2025.com'
+  'https://api.hh.gf2025.com'
   :
   process.env.api;
 
@@ -43,21 +43,21 @@ ajaxService.interceptors.response.use((response) => {
         confirmText: '重新登录',
         onConfirm: async () => {
           cookie.remove('cheng-token');
-          if (process.env.NODE_ENV === 'development') {
-            const res = await request(
-              {
-                url: '/login/wxCp',
-                method: 'POST',
-                data: {
-                  username: 'cheng',
-                  password: '2683941980',
-                },
-              },
-            );
-            if (res.data) {
-              await cookie.set('cheng-token', res.data);
-            }
-          }
+          // if (process.env.NODE_ENV === 'development') {
+          //   const res = await request(
+          //     {
+          //       url: '/login/wxCp',
+          //       method: 'POST',
+          //       data: {
+          //         username: 'cheng',
+          //         password: '2683941980',
+          //       },
+          //     },
+          //   );
+          //   if (res.data) {
+          //     await cookie.set('cheng-token', res.data);
+          //   }
+          // }
           window.location.reload();
         },
       });

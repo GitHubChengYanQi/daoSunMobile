@@ -16,15 +16,12 @@ import {
   Toast,
 } from 'antd-mobile';
 import IsDev from '../IsDev';
-import VConsole from 'vconsole';
 
 const Auth = (props) => {
 
-  new VConsole();
-
   // https://dasheng-soft.picp.vip
 
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false);
 
   const location = useLocation();
 
@@ -228,6 +225,7 @@ const Auth = (props) => {
     }
     return props.children;
   } else {
+    console.log('login');
     return <Login />;
   }
 

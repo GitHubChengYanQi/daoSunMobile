@@ -6,7 +6,6 @@ import React from 'react';
 import logo from '../../assets/logo.png';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import style from './index.css';
-import { getHeader } from '../components/GetHeader';
 import { connect } from 'dva';
 
 export const Username = (props) => {

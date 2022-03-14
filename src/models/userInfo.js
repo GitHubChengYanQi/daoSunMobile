@@ -6,7 +6,6 @@ export default {
   reducers: {
     //改变state
     setUserInfo(state, { payload }) {
-      console.log('state', payload);
       return { ...state, ...payload };
     },
   },
