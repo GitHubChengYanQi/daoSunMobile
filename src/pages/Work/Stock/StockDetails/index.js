@@ -9,6 +9,7 @@ import { request } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
 import BackSkus from '../../../Scan/Sku/components/BackSkus';
 import PrintCode from '../../../components/PrintCode';
+import MyNavBar from '../../../components/MyNavBar';
 
 const StockDetails = (props) => {
 
@@ -34,6 +35,7 @@ const StockDetails = (props) => {
   };
 
   return <>
+    <MyNavBar title='库存信息' />
     <MyList
       params={{storehousePositionsId: ids.storehousePositionsId}}
       api={stockDetailsList}

@@ -12,6 +12,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   const [pages, setPage] = useState(1);
 
   const [params, setParams] = useState(paramsData);
+  console.log(params);
 
   const [error, setError] = useState(true);
 
@@ -20,6 +21,9 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
     params: {
       limit: limit,
       page: pages,
+    },
+    data: {
+      ...params,
     },
   }, {
     // debounceInterval: 300,

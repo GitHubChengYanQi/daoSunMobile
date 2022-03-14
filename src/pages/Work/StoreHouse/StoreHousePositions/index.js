@@ -8,6 +8,7 @@ import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import { AppstoreOutline } from 'antd-mobile-icons';
 import PrintCode from '../../../components/PrintCode';
+import MyNavBar from '../../../components/MyNavBar';
 
 const StoreHousePositions = (props) => {
 
@@ -94,6 +95,7 @@ const StoreHousePositions = (props) => {
   };
 
   return <>
+    <MyNavBar title='库位信息' />
     {storehousePositions(data)}
   </>;
 };
