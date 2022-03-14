@@ -139,7 +139,7 @@ const Auth = (props) => {
   });
 
 
-  useDebounceEffect(() => {
+  useEffect(() => {
     if (!IsDev() && getHeader()) {
       wxTicket({
         params: {
@@ -181,9 +181,7 @@ const Auth = (props) => {
         });
       }
     };
-  }, [], {
-    wait: 0,
-  });
+  }, [])
 
   useEffect(() => {
     setIsLogin(token);
@@ -220,6 +218,11 @@ const Auth = (props) => {
     if (getHeader() && type) {
       return (userInfo && userInfo.userId) ? <Login /> : <Sms />;
     }
+    if (!props.userInfo){
+      props.dispatch({
+        type: 'userInfo/getUserInfo',
+      });
+    }
     return props.children;
   } else {
     return <Login />;
@@ -227,4 +230,4 @@ const Auth = (props) => {
 
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(Auth);
+export default connect(({ qrCode,userInfo }) => ({ qrCode,userInfo }))(Auth);

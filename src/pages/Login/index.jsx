@@ -7,6 +7,7 @@ import logo from '../../assets/logo.png';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import style from './index.css';
 import { getHeader } from '../components/GetHeader';
+import { connect } from 'dva';
 
 export const Username = (props) => {
   return <Space style={{ width: '100%' }}>
@@ -33,7 +34,7 @@ export const Password = (props) => {
   </Space>;
 };
 
-const Login = () => {
+const Login = (props) => {
 
   const { run } = useRequest(
     {
@@ -45,6 +46,9 @@ const Login = () => {
         if (res) {
           await cookie.set('cheng-token', res);
           await history.push('/');
+          props.dispatch({
+            type: 'userInfo/getUserInfo',
+          });
         }
       },
     },
@@ -95,4 +99,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default connect(({ qrCode }) => ({ qrCode }))(Login);

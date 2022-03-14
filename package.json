@@ -37,7 +37,7 @@
     "react-router-dom": "^5.3.0",
     "react-sticky": "^6.0.3",
     "safe-area-insets": "^1.4.1",
-    "vconsole": "^3.9.5"
+    "vconsole": "^3.12.1"
   },
   "devDependencies": {
     "@antv/f2-canvas": "^1.0.5",
