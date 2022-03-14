@@ -1,12 +1,9 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { Spin } from 'weui-react-v2';
 import { InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
 
-// let pages = 1;
 let limit = 10;
-let contents = [];
 
 const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
@@ -25,13 +22,10 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
       page: pages,
     },
   }, {
-    debounceInterval: 1000,
+    debounceInterval: 300,
     onSuccess: (res) => {
       if (res && res.length > 0) {
-        res.map((items) => {
-          return contents.push(items);
-        });
-        typeof getData === 'function' && getData(contents);
+        typeof getData === 'function' && getData(res);
         setPage(pages + 1);
       } else {
         setHasMore(false);
@@ -47,7 +41,6 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
   const submit = (value) => {
     setPage(1);
-    contents = [];
     setParams(value);
     run({
       data: value,
@@ -57,10 +50,6 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   useImperativeHandle(ref, () => ({
     submit,
   }));
-
-  useEffect(() => {
-    contents = [];
-  }, []);
 
   if (loading && pages === 1) {
     return <MyLoading />;

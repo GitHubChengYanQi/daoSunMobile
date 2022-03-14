@@ -2,17 +2,17 @@ import React from 'react';
 import { storeHouseList } from '../Quality/Url';
 import MyNavBar from '../../components/MyNavBar';
 import { List } from 'antd-mobile';
-import MyEmpty from '../../components/MyEmpty';
 import MyList from '../../components/MyList';
 import { history } from 'umi';
 import { useSetState } from 'ahooks';
+import { useRequest } from '../../../util/Request';
 
 const StoreHouse = () => {
 
-  const [datas,setDatas] = useSetState({data:[]});
+  const [datas, setDatas] = useSetState({ data: [] });
 
-  if (!datas)
-    return <MyEmpty height='100vh' />
+  const { data } = useRequest(storeHouseList);
+  console.log(data);
 
   return <>
     <MyNavBar title='仓库管理' />
@@ -40,7 +40,7 @@ const StoreHouse = () => {
       </List>
     </MyList>
 
-  </>
+  </>;
 };
 
 export default StoreHouse;
