@@ -2,7 +2,7 @@ import Home from './Home';
 import { SafeArea, TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import { getHeader } from './components/GetHeader';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Notice from './Notice';
 import OrCode from './OrCode';
 import Work from './Work';
@@ -18,7 +18,7 @@ const Index = (props) => {
 
   const userInfo = props.userInfo;
 
-  if (userInfo && userInfo.name === '程彦祺') {
+  if (!IsDev() && userInfo && userInfo.name === '程彦祺') {
     new VConsole();
   }
 
@@ -58,6 +58,14 @@ const Index = (props) => {
         return <></>;
     }
   };
+
+  useEffect(() => {
+    if (!props.userInfo) {
+      props.dispatch({
+        type: 'userInfo/getUserInfo',
+      });
+    }
+  }, []);
 
 
   return (
@@ -123,4 +131,4 @@ const Index = (props) => {
   );
 };
 
-export default connect(({ userInfo }) => ({ userInfo }))(Index);
+export default connect(({ userInfo, qrCode }) => ({ userInfo, qrCode }))(Index);

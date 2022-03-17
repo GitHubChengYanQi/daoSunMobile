@@ -115,8 +115,9 @@ const MyCascader = (
               switch (textType) {
                 case 'link':
                   return (
-                    <Typography.Link style={fontStyle}
-                                     key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
+                    <Typography.Link
+                      style={fontStyle}
+                      key={index}>{index !== 0 && '-'}{items && items.label}</Typography.Link>
                   );
                 default:
                   return (
