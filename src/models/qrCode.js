@@ -10,6 +10,7 @@ const scan = () => new Promise((resolve, reject) => {
       needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
       scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是条形码（一维码），默认二者都有
       success: (res) => {
+        console.log('wxScanSuccess',res);
         // 回调
         if (res.resultStr.indexOf('https') !== -1) {
           const param = res.resultStr.split('=');
@@ -22,6 +23,7 @@ const scan = () => new Promise((resolve, reject) => {
 
       },
       error: (res) => {
+        console.log('wxScanError',res);
         reject(res);
       },
     });
