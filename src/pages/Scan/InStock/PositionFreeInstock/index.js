@@ -3,7 +3,6 @@ import { Card, Dialog, FloatingBubble, List, Toast } from 'antd-mobile';
 import Search from './components/Search';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
-import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useBoolean, useSetState } from 'ahooks';
@@ -115,7 +114,9 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
       manual: true,
       onSuccess: (res) => {
         setData({
-          ...data, skus: res.skuResults.map((item) => {
+          ...data,
+          postionId:res.storehousePositionsId,
+          skus: res.skuResults.map((item) => {
             return {
               batch: item.batch === 1,
               skuId: item.skuId,
@@ -289,7 +290,6 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
                     storehousePositionsId: value,
                   },
                 });
-                setData({ ...data, postionId: value });
               }
             }}
           />

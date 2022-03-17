@@ -11,7 +11,7 @@ const FreeInstock = (props) => {
 
   const [key, setKey] = useState('sku');
 
-  const [scnaData, setScnaData] = useState();
+  const [scnaData, setScnaData] = useState({});
 
   const codeId = props.qrCode && props.qrCode.codeId;
 
@@ -30,12 +30,12 @@ const FreeInstock = (props) => {
       switch (res.type) {
         case 'storehousePositions':
           setKey('position');
-          setScnaData(res.result);
+          setScnaData(res);
           clearCode();
           break;
         case 'sku':
           setKey('sku');
-          setScnaData(res.result);
+          setScnaData(res);
           clearCode();
           break;
         default:
@@ -65,15 +65,15 @@ const FreeInstock = (props) => {
       className={style.tab}
       activeKey={key}
       onChange={(key) => {
-        setScnaData(null);
+        setScnaData({});
         setKey(key);
       }}
     >
       <Tabs.Tab title='按物料入库' key='sku'>
-        <SkuFreeInstock scanData={scnaData} />
+        <SkuFreeInstock scanData={scnaData.type === 'sku' && scnaData.result} />
       </Tabs.Tab>
       <Tabs.Tab title='按库位入库' key='position'>
-        <PositionFreeInstock scanData={scnaData} />
+        <PositionFreeInstock scanData={scnaData.type === 'storehousePositions' && scnaData.result} />
       </Tabs.Tab>
     </Tabs>
 

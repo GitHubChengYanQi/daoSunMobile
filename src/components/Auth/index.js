@@ -12,6 +12,7 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
+  Button,
   Dialog,
   Toast,
 } from 'antd-mobile';
@@ -199,8 +200,8 @@ const Auth = (props) => {
   //     <Button onClick={() => {
   //       // const code = '1486169638786392066' // sku 单
   //       //  const code = '1486169788325912578' // sku 批
-  //       // const code = '1485405524538183681'; // 库位
-  //       const code = '1490853135920771074'; // 实物
+  //       const code = '1503256869175345153'; // 库位
+  //       // const code = '1490853135920771074'; // 实物
   //       // const code = '1474546242691313666'; //入库
   //       props.dispatch({
   //         type: 'qrCode/appAction',

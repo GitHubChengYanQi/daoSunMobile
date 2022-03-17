@@ -178,10 +178,6 @@ const SkuStockDetail = (
     <Space align='center'>
       出库数量：<Number
       value={outStock.number}
-      confirmText='出库'
-      onConfirm={() => {
-        out();
-      }}
       onChange={(value) => {
         setOutStock({ ...outStock, number: value });
       }} />

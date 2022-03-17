@@ -50,6 +50,7 @@ const Skus = (
       ],
     },
   );
+  console.log(items);
 
   const value = () => {
     const array = [];
@@ -70,6 +71,19 @@ const Skus = (
   useEffect(() => {
     onChange(value());
   }, [skuItem, items]);
+
+  useEffect(() => {
+    setSkuItem({
+      skuId: sku.skuId,
+      skuResult: sku.skuResult,
+      batch: sku.batch,
+      brandId: null,
+      brandName: null,
+      customerId: null,
+      customerName: null,
+      batchNumber: 1,
+    });
+  }, [sku && sku.skuId]);
 
   const listItems = () => {
     const arrays = [];
@@ -96,7 +110,7 @@ const Skus = (
               }
               const res = await CodeRun({
                 data: {
-                  codeRequests:[{
+                  codeRequests: [{
                     source: 'item',
                     brandId: skuItem.brandId,
                     id: skuItem.skuId,
@@ -104,14 +118,14 @@ const Skus = (
                     inkindType: '自由入库',
                   }],
                 },
-              })
-              if (res && res.length > 0){
+              });
+              if (res && res.length > 0) {
                 if (IsDev() || !getHeader()) {
                   addCanvas([res[0].inkindId]);
                 }
                 setItems([]);
                 const arr = params;
-                arr[i] = { ...item, codeId: res.codeId, inkindId: res.inkindId };
+                arr[i] = { ...item, codeId: res[0].codeId, inkindId: res[0].inkindId };
                 setItems({ data: arr });
               }
 
@@ -125,7 +139,7 @@ const Skus = (
         }
       >
         <Space align='center'>
-          <LinkButton
+          {!skuItem.batch && <LinkButton
             onClick={() => {
               const array = params;
               array.splice(i, 1);
@@ -135,7 +149,7 @@ const Skus = (
             disabled={item.inkindId}
             title={
               <DeleteOutline />
-            } />
+            } />}
           <div style={{ marginRight: 32 }}>
             第{i + 1}
             {
@@ -153,25 +167,26 @@ const Skus = (
               arr[i] = { ...arr[i], number: value };
               setItems({ data: arr });
             }} />}
+
         </Space>
       </List.Item>);
     }
     return arrays;
   };
 
-  useEffect(()=>{
-    if (batchNumber){
+  useEffect(() => {
+    if (batchNumber) {
       setSkuItem({ ...skuItem, batchNumber });
     }
-  },[])
+  }, []);
 
   return <>
     <Card
       bodyStyle={{ padding: 0 }}
       title={<span style={{ fontSize }}>{skuItem.skuResult}</span>}
-      extra={<Number
+      extra={!skuItem.batch && <Number
         center
-        placeholder={skuItem.batch ? '批次' : '数量'}
+        placeholder='数量'
         buttonStyle={{
           padding: '0 8px',
           border: 'solid #999999 1px',
@@ -182,7 +197,7 @@ const Skus = (
         width={80}
         value={skuItem.batchNumber}
         onChange={(value) => {
-          if (params.length > 0){
+          if (params.length > 0) {
             setItems({ data: params });
           }
           setSkuItem({ ...skuItem, batchNumber: value });
@@ -237,8 +252,15 @@ const Skus = (
           </List.Item>
         </>
         }
-        <List.Item>
+        <List.Item> <List
+          style={{
+            '--border-top': 'none',
+            '--border-bottom': 'none',
+          }}
+        >
+
           {listItems()}
+        </List>
         </List.Item>
       </List>
     </Card>

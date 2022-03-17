@@ -399,7 +399,7 @@ const SkuFreeInstock = ({ scanData }) => {
           {data.skus.batch && <Number
             placeholder='入库数量'
             color={item.number > 0 ? 'blue' : 'red'}
-            width={100}
+            width={80}
             disabled={item.inkindId}
             value={item.number}
             onChange={(value) => {

@@ -1,13 +1,17 @@
-.red :global .adm-input {
+.red > input {
   color:red;
 }
 
-.blue :global .adm-input {
+.blue > input {
   color:#1677ff;
 }
 
-.black :global .adm-input {
+.black > input {
   color: black;
+}
+
+.eee > input {
+  color: #eee;
 }
 
 .center :global .adm-input > input {
