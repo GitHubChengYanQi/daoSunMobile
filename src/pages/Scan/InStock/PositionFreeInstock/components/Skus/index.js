@@ -6,7 +6,7 @@ import LinkButton from '../../../../../components/LinkButton';
 import IsDev from '../../../../../../components/IsDev';
 import { getHeader } from '../../../../../components/GetHeader';
 import { useRequest } from '../../../../../../util/Request';
-import { DeleteOutline } from 'antd-mobile-icons';
+import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { useSetState } from 'ahooks';
 import { batchBind } from '../../../components/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
@@ -50,7 +50,6 @@ const Skus = (
       ],
     },
   );
-  console.log(items);
 
   const value = () => {
     const array = [];
@@ -139,7 +138,7 @@ const Skus = (
         }
       >
         <Space align='center'>
-          {!skuItem.batch && <LinkButton
+          <LinkButton
             onClick={() => {
               const array = params;
               array.splice(i, 1);
@@ -149,7 +148,7 @@ const Skus = (
             disabled={item.inkindId}
             title={
               <DeleteOutline />
-            } />}
+            } />
           <div style={{ marginRight: 32 }}>
             第{i + 1}
             {
@@ -184,24 +183,34 @@ const Skus = (
     <Card
       bodyStyle={{ padding: 0 }}
       title={<span style={{ fontSize }}>{skuItem.skuResult}</span>}
-      extra={!skuItem.batch && <Number
-        center
-        placeholder='数量'
-        buttonStyle={{
-          padding: '0 8px',
-          border: 'solid #999999 1px',
-          borderRadius: 10,
-          display: 'inline-block',
-        }}
-        color={skuItem.batchNumber > 0 ? 'blue' : 'red'}
-        width={80}
-        value={skuItem.batchNumber}
-        onChange={(value) => {
+      extra={skuItem.batch ?
+        skuItem.batchNumber === 0
+        &&
+        <LinkButton title={ <AddOutline />} onClick={()=>{
           if (params.length > 0) {
             setItems({ data: params });
           }
-          setSkuItem({ ...skuItem, batchNumber: value });
-        }} />}
+          setSkuItem({ ...skuItem, batchNumber: 1 });
+        }} />
+        :
+        <Number
+          center
+          placeholder='数量'
+          buttonStyle={{
+            padding: '0 8px',
+            border: 'solid #999999 1px',
+            borderRadius: 10,
+            display: 'inline-block',
+          }}
+          color={skuItem.batchNumber > 0 ? 'blue' : 'red'}
+          width={80}
+          value={skuItem.batchNumber}
+          onChange={(value) => {
+            if (params.length > 0) {
+              setItems({ data: params });
+            }
+            setSkuItem({ ...skuItem, batchNumber: value });
+          }} />}
     >
       <List
         style={{

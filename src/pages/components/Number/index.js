@@ -34,7 +34,7 @@ const Number = (
   return <div className={center && style.center}>
     <Input
       min={0}
-      value={value}
+      value={value || ''}
       type='number'
       disabled={disabled}
       className={inputColor()}
