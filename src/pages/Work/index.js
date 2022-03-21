@@ -134,6 +134,7 @@ const Work = () => {
         {
           GridStyle(
             <>
+              {GridContent('icon-zhijianrenwuguanli', '生产工单', '/Work/Production')}
               {GridContent('icon-zhijianrenwuguanli', '质检任务管理', () => toast())}
             </>,
           )

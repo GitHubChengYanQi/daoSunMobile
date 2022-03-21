@@ -123,4 +123,4 @@ const Index = (props) => {
   );
 };
 
-export default connect(({ userInfo }) => ({ userInfo }))(Index);
+export default connect(({ userInfo,qrCode }) => ({ userInfo,qrCode }))(Index);
