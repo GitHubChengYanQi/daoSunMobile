@@ -172,18 +172,6 @@ const Inventory = (props) => {
     },
   });
 
-  useEffect(() => {
-    if (loading) {
-      Toast.show({
-        icon: 'loading',
-        duration: 0,
-        content: '加载中…',
-      });
-    } else if (loading === false) {
-      Toast.clear();
-    }
-  }, [loading]);
-
   useDebounceEffect(() => {
     if (codeId) {
       run({

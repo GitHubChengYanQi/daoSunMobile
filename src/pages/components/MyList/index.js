@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
@@ -66,6 +66,10 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
   if (loading && pages === 1) {
     return <MyLoading title='正在拼命加载数据' />;
+  }
+
+  if (!data || data.length === 0) {
+    return <MyEmpty />;
   }
 
   if (!data || data.length === 0) {

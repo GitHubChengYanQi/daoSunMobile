@@ -219,11 +219,6 @@ const Auth = (props) => {
     if (getHeader() && type) {
       return (userInfo && userInfo.userId) ? <Login /> : <Sms />;
     }
-    if (!props.userInfo){
-      props.dispatch({
-        type: 'userInfo/getUserInfo',
-      });
-    }
     return props.children;
   } else {
     console.log('login');

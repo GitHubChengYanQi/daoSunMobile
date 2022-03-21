@@ -117,12 +117,13 @@ const MyTreeSelect = (
       >
         <Card
           title={
-            <><Button color='primary' fill='none' onClick={() => {
-              setVisible(false);
-              typeof clear === 'function' && clear();
-            }}>取消</Button>
+            <>
+              <Button color='primary' fill='none' onClick={() => {
+                setVisible(false);
+                typeof clear === 'function' && clear();
+              }}>取消</Button>
             </>}
-          style={{overflow: 'auto'}}
+          style={{ overflow: 'auto' }}
           extra={
             <>
               {poputTitle || title || '选择'}
