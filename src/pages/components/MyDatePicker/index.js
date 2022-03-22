@@ -8,6 +8,9 @@ const MyDatePicker = (
     precision,
     value,
     width,
+    title,
+    min,
+    max,
     onChange = () => {
     },
     ...props
@@ -41,7 +44,7 @@ const MyDatePicker = (
     <>
       <LinkButton
         style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
-        title={value || '选择日期'}
+        title={value || (title || '选择日期')}
         onClick={() => {
           setVisible(true);
         }} />
@@ -50,6 +53,9 @@ const MyDatePicker = (
         {...props}
         precision={precision || 'day'}
         title='时间选择'
+        value={value && new Date(value)}
+        min={min && new Date(min)}
+        max={max && new Date(max)}
         visible={visible}
         onClose={() => {
           setVisible(false);

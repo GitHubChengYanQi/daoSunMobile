@@ -7,9 +7,7 @@ import { UserIdSelect } from '../../../../Quality/Url';
 
 const SelectUser = ({ value, onChange }) => {
 
-  const [visible, setVisible] = useState(true);
-
-  const [user, setUser] = useState();
+  const [visible, setVisible] = useState(false);
 
   const { loading, data, run } = useRequest(UserIdSelect);
 
@@ -35,11 +33,11 @@ const SelectUser = ({ value, onChange }) => {
       }} />
       <div style={{ maxHeight: 300, overflow: 'auto' }}>
         <Card title='执行者'>
-          {user ? showUser(user.name) : showDefault()}
+          {value ? showUser(value.name) : showDefault()}
         </Card>
         <Card title='所有人'>
-          {!user && <div onClick={() => {
-            setUser(null);
+          {value && <div onClick={() => {
+            onChange(null);
             setVisible(false);
           }}>{showDefault()}
             <Divider style={{ margin: 8 }} />
@@ -50,11 +48,11 @@ const SelectUser = ({ value, onChange }) => {
               <Loading />
               :
               data && data.map((item, index) => {
-                if (user && (item.value === user.id)) {
+                if (value && (item.value === value.id)) {
                   return null;
                 }
                 return <div key={index} onClick={() => {
-                  setUser({ name: item.label, id: item.value });
+                  onChange({ name: item.label, id: item.value });
                   setVisible(false);
                 }}>
                   {showUser(item.label)}
@@ -78,9 +76,10 @@ const SelectUser = ({ value, onChange }) => {
       onVisibleChange={setVisible}
     >
       <Button style={{ padding: 0 }} fill='none' onClick={() => {
+        run();
         setVisible(true);
       }}>
-        {user ? showUser(user.name) : showDefault()}
+        {value ? showUser(value.name) : showDefault()}
       </Button>
     </Popover>
   </>;

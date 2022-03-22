@@ -2,6 +2,7 @@ import React from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import { Form } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
+import StartEndDate from './components/StartEndDate';
 
 const CreateTask = () => {
 
@@ -9,7 +10,6 @@ const CreateTask = () => {
     <MyNavBar title='创建任务' />
 
     <Form
-      layout='horizontal'
       onFinish={(value) => {
         console.log(value);
       }}
@@ -19,6 +19,9 @@ const CreateTask = () => {
       </Form.Item>
       <Form.Item name='userId' label='负责人' rules={[{ required: true }]}>
         <SelectUser />
+      </Form.Item>
+      <Form.Item name='userId' label='执行时间' rules={[{ required: true }]}>
+        <StartEndDate />
       </Form.Item>
     </Form>
   </>;
