@@ -184,7 +184,7 @@ const Inventory = (props) => {
     }
   }, [loading]);
 
-  useDebounceEffect(() => {
+  useEffect(() => {
     if (codeId) {
       run({
         params: {
@@ -192,9 +192,7 @@ const Inventory = (props) => {
         },
       });
     }
-  }, [codeId], {
-    wait: 0,
-  });
+  }, [codeId]);
 
   if (loading || outstockLoading) {
     return <MyLoading
