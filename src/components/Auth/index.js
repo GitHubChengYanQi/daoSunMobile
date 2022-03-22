@@ -144,6 +144,7 @@ const Auth = (props) => {
 
     if (!IsDev() && getHeader()) {
       const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
+      alert(url[0]);
       wxTicket({
         params: {
           url: url[0],
