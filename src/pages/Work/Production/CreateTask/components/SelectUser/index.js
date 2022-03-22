@@ -20,7 +20,9 @@ const SelectUser = ({ value, onChange }) => {
   };
 
   const showDefault = () => {
-    return <Space align='center'> <Avatar size={24} icon={<UserOutlined />} />待认领</Space>;
+    return <Space align='center'>
+      <Avatar size={24}> <span style={{ fontSize: 14 }}><UserOutlined /></span></Avatar>待认领
+    </Space>;
   };
 
   const content = () => {
@@ -36,6 +38,12 @@ const SelectUser = ({ value, onChange }) => {
           {user ? showUser(user.name) : showDefault()}
         </Card>
         <Card title='所有人'>
+          {!user && <div onClick={() => {
+            setUser(null);
+            setVisible(false);
+          }}>{showDefault()}
+            <Divider style={{ margin: 8 }} />
+          </div>}
           {
             loading
               ?
@@ -46,7 +54,7 @@ const SelectUser = ({ value, onChange }) => {
                   return null;
                 }
                 return <div key={index} onClick={() => {
-                  setUser({ name: item.label, id: item.userId });
+                  setUser({ name: item.label, id: item.value });
                   setVisible(false);
                 }}>
                   {showUser(item.label)}
@@ -64,6 +72,7 @@ const SelectUser = ({ value, onChange }) => {
     <Popover
       content={content()}
       trigger='click'
+      destroyOnHide
       placement='bottom'
       visible={visible}
       onVisibleChange={setVisible}
