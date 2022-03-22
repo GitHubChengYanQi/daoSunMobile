@@ -12,8 +12,8 @@ const scan = () => new Promise((resolve, reject) => {
       success: (res) => {
         console.log('wxScanSuccess',res);
         // 回调
-        if (res.resultStr.indexOf('https') !== -1) {
-          const param = res.resultStr.split('=');
+        if (res.resultStr.indexOf('OrCode?id=') !== -1) {
+          const param = res.resultStr.split('OrCode?id=');
           if (param && param[1]) {
             resolve(param[1]);
           }
