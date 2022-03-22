@@ -141,6 +141,11 @@ const Auth = (props) => {
 
 
   useEffect(() => {
+
+    wx.error((res) => {
+      console.log('wxError',res);
+    });
+
     if (!IsDev() && getHeader()) {
       wxTicket({
         params: {
