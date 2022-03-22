@@ -182,7 +182,7 @@ const Auth = (props) => {
         });
       }
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     setIsLogin(token);
@@ -227,4 +227,4 @@ const Auth = (props) => {
 
 };
 
-export default connect(({ qrCode,userInfo }) => ({ qrCode,userInfo }))(Auth);
+export default connect(({ qrCode, userInfo }) => ({ qrCode, userInfo }))(Auth);
