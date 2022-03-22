@@ -8,6 +8,7 @@ import MyNavBar from '../../components/MyNavBar';
 import { getHeader } from '../../components/GetHeader';
 import { ClockCircleOutline, QuestionCircleOutline } from 'antd-mobile-icons';
 import { history } from 'umi';
+import Label from '../../components/Label';
 
 const Production = () => {
 
@@ -48,22 +49,22 @@ const Production = () => {
             </Space>} className={styles.item}>
             <Space direction='vertical'>
               <div>
-                工单编号：{item.coding}
+                <Label>工单编号：</Label>{item.coding}
               </div>
               <div>
-                工单主题：{item.theme}
+                <Label>工单主题：</Label>{item.theme}
               </div>
               <div>
-                执行开始时间：{item.executionTime}
+                <Label>执行开始时间：</Label>{item.executionTime}
               </div>
               <div>
-                执行结束时间：{item.endTime}
+                <Label>执行结束时间：</Label> {item.endTime}
               </div>
               <div>
-                负责人：{item.userResult && item.userResult.name}
+                <Label>负责人：</Label>{item.userResult && item.userResult.name}
               </div>
               <div>
-                备注：{item.remark}
+                <Label>备注：</Label>{item.remark}
               </div>
               <Space>
                 <ClockCircleOutline />{item.createTime}

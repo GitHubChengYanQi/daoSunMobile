@@ -5,7 +5,7 @@ import { getHeader } from '../GetHeader';
 
 const MyNavBar = ({ title }) => {
 
-  return !getHeader() && <div style={{position:'sticky',top:0,zIndex:999}}>
+  return !getHeader() && <div style={{height:45,position:'sticky',top:0,zIndex:999}}>
     <NavBar style={{
       '--border-bottom': '1px #eee solid',
       backgroundColor: '#fff',
