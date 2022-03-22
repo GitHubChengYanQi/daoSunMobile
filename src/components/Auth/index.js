@@ -142,14 +142,11 @@ const Auth = (props) => {
 
   useEffect(() => {
 
-    wx.error((res) => {
-      console.log('wxError',res);
-    });
-
     if (!IsDev() && getHeader()) {
+      const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
       wxTicket({
         params: {
-          url: window.location.protocol + '//' + window.location.host + window.location.pathname,
+          url: url[0],
         },
       });
     }
