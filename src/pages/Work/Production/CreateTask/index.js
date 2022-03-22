@@ -3,6 +3,7 @@ import MyNavBar from '../../../components/MyNavBar';
 import { Form } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
 import StartEndDate from './components/StartEndDate';
+import Users from './components/Users';
 
 const CreateTask = () => {
 
@@ -17,11 +18,14 @@ const CreateTask = () => {
       <Form.Item label='工序名称'>
         工序名称
       </Form.Item>
-      <Form.Item name='userId' label='负责人' rules={[{ required: true }]}>
+      <Form.Item name='userId' label='负责人'>
         <SelectUser />
       </Form.Item>
-      <Form.Item name='userId' label='执行时间' rules={[{ required: true }]}>
+      <Form.Item name='date' label='执行时间' rules={[{ required: true }]}>
         <StartEndDate />
+      </Form.Item>
+      <Form.Item name='userIds' label='成员' rules={[{ required: true }]}>
+        <Users />
       </Form.Item>
     </Form>
   </>;
