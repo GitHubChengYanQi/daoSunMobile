@@ -22,7 +22,7 @@ const Production = () => {
       <MySearchBar extra onChange={(value) => {
         ref.current.submit({ coding: value });
       }} />
-      <CapsuleTabs defaultActiveKey='1' style={{ fontSize: 14, backgroundColor: '#fff' }}>
+      <CapsuleTabs defaultActiveKey='1' style={{ backgroundColor: '#fff' }}>
         <CapsuleTabs.Tab title='全部' key='1' />
         <CapsuleTabs.Tab title='未开始' key='2' />
         <CapsuleTabs.Tab title='执行中' key='3' />

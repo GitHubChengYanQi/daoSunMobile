@@ -1,11 +1,13 @@
 import React from 'react';
 import MyEmpty from '../../../../components/MyEmpty';
-import { Button, Card, ProgressBar, Space } from 'antd-mobile';
+import { Button, Card, List, ProgressBar, Space } from 'antd-mobile';
 import Label from '../../../../components/Label';
 import styles from '../../index.css';
 import { history } from 'umi';
+import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const ShipList = ({ data }) => {
+  console.log(data);
 
   if (!Array.isArray(data) || data.length === 0) {
     return <MyEmpty />;
@@ -17,6 +19,7 @@ const ShipList = ({ data }) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
         const productionStation = setpSetResult.productionStation || {};
+        const setpSetDetails = setpSetResult.setpSetDetails || [];
 
         return <div style={{ margin: 8 }} key={index}>
           <Card
@@ -32,6 +35,14 @@ const ShipList = ({ data }) => {
             </Space>}
           >
             <div style={{ display: 'flex' }}>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1 }}>
+                <div>
+                  卡片数
+                </div>
+                <div>
+                  {item.count}
+                </div>
+              </Space>
               <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
                   计划数
@@ -58,6 +69,16 @@ const ShipList = ({ data }) => {
               </Space>
             </div>
           </Card>
+          <List style={{backgroundColor:'#fff'}} header={<>产出物料</>}>
+            {
+              setpSetDetails.map((item,index) => {
+                return <List.Item key={index} extra={' × '+item.num}>
+                  <SkuResultSkuJsons skuResult={item.skuResult} />
+                </List.Item>;
+              })
+            }
+          </List>
+
           <ProgressBar percent={0} />
           <Button
             onClick={() => {

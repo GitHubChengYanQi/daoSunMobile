@@ -9,6 +9,7 @@ const MyFloatingPanel = (
     startHeight = window.innerHeight * 0.5,
     maxHeight = window.innerHeight - (getHeader() ? 0 : 45),
     backgroundDom,
+    backgroundColor,
   }) => {
 
   const ref = useRef();
@@ -34,7 +35,7 @@ const MyFloatingPanel = (
     </div>
     <FloatingPanel
       ref={ref}
-      className={styles.content}
+      className={!backgroundColor && styles.content}
       anchors={anchors}
     >
       {children}
