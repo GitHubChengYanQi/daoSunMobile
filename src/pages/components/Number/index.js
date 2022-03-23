@@ -11,8 +11,10 @@ const Number = (
     width,
     value,
     color,
+    noBorder,
     onChange = () => {
     },
+    ...props
   },
 ) => {
 
@@ -33,6 +35,7 @@ const Number = (
 
   return <div className={center && style.center}>
     <Input
+      {...props}
       min={0}
       value={value || ''}
       type='number'
@@ -43,8 +46,8 @@ const Number = (
         padding: 4,
         border: 'none',
         '--border-radius': 0,
-        borderBottom: 'solid 1px rgb(190 184 184)',
-        width: width || 200, ...buttonStyle,
+        borderBottom: !noBorder && 'solid 1px rgb(190 184 184)',
+        width: width || '100%', ...buttonStyle,
       }}
       onChange={(string) => {
         if (string === '') {

@@ -6,6 +6,7 @@ import { MyLoading } from '../../../../../components/MyLoading';
 import MyEmpty from '../../../../../components/MyEmpty';
 import MyPopup from '../../../../../components/MyPopup';
 import SkuStockDetail from './components/SkuStockDetail';
+import Label from '../../../../../components/Label';
 
 const Sku = () => {
 
@@ -51,21 +52,16 @@ const Sku = () => {
 
               const content = <Space direction='vertical'>
                 <Space>
-                  <div style={{ width: 70 }}>物料编码:</div>
-                  <strong>{item.standard}</strong>
+                  <Label>物料编码:</Label>{item.standard}
                 </Space>
                 <Space>
-                  <div style={{ width: 70 }}>物料名称:</div>
-                  <strong>{item.spuResult.name}</strong>
+                  <Label>物料名称:</Label>{item.spuResult && item.spuResult.name}
                 </Space>
                 <Space>
-                  <div style={{ width: 70 }}>型号 / 规格:</div>
-                  <strong>{item.skuName} / {item.specifications || '无'}</strong>
+                  <Label>型号 / 规格:</Label>{item.specifications || '无'}
                 </Space>
                 <Space>
-                  <div style={{ width: 70 }}>描述:</div>
-                  <strong>
-                    <Ellipsis
+                  <Label>描述:</Label><Ellipsis
                       style={{ maxWidth: '50vw' }}
                       direction='end'
                       content={item.skuJsons
@@ -80,7 +76,6 @@ const Sku = () => {
                         :
                         '无'
                       } />
-                  </strong>
                 </Space>
               </Space>;
 
