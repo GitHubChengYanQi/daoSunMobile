@@ -70,7 +70,7 @@ const ProductionDetail = (props) => {
       case 'sku':
         return <SkuList data={data.planDetailResults} />;
       case 'ship':
-        return <ShipList data={data.workOrderResults} />;
+        return <ShipList data={data.workOrderResults} id={params.id} />;
       default:
         return <></>;
     }

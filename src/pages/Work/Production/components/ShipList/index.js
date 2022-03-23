@@ -1,8 +1,7 @@
 import React from 'react';
 import MyEmpty from '../../../../components/MyEmpty';
-import { Button, Card, List, Space } from 'antd-mobile';
+import { Button, Card, ProgressBar, Space } from 'antd-mobile';
 import Label from '../../../../components/Label';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import styles from '../../index.css';
 import { history } from 'umi';
 
@@ -18,7 +17,6 @@ const ShipList = ({ data }) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
         const productionStation = setpSetResult.productionStation || {};
-        const setpSetDetails = setpSetResult.setpSetDetails || [];
 
         return <div style={{ margin: 8 }} key={index}>
           <Card
@@ -33,32 +31,41 @@ const ShipList = ({ data }) => {
               </div>
             </Space>}
           >
-
-            <List
-              style={{
-                '--border-top': 'none',
-                '--border-bottom': 'none',
-              }}
-            >
-              {
-                setpSetDetails.map((item, index) => {
-                  return <List.Item key={index} extra={<>× {item.num}</>}>
-                    <Space direction='vertical'>
-                      <SkuResultSkuJsons skuResult={item.skuResult} />
-                    </Space>
-                  </List.Item>;
-                })
-              }
-
-            </List>
+            <div style={{ display: 'flex' }}>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
+                <div>
+                  计划数
+                </div>
+                <div>
+                  {item.count}
+                </div>
+              </Space>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'green' }}>
+                <div>
+                  进行中
+                </div>
+                <div>
+                  0
+                </div>
+              </Space>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'blue' }}>
+                <div>
+                  已完成
+                </div>
+                <div>
+                  0
+                </div>
+              </Space>
+            </div>
           </Card>
+          <ProgressBar percent={0} />
           <Button
             onClick={() => {
-              history.push('/Work/Production/CreateTask');
+              history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${item.count}&shipName=${shipSetpResult.shipSetpName}`);
             }}
-            color='primary'
             style={{
               width: '100%',
+              color: 'var(--adm-color-primary)',
               '--border-radius': '10px',
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
