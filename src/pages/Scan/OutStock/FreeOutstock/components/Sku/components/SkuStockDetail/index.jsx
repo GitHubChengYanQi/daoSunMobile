@@ -22,6 +22,54 @@ const SkuStockDetail = (
 
   const [outStock, setOutStock] = useState({});
 
+  const brandResult = (data) => {
+    const brands = [];
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        const brandIds = brands.map((item) => {
+          return item.value;
+        });
+        if (!brandIds.includes(item.brandId)) {
+          brands.push({
+            value: item.brandId,
+            label: item.brandResult && item.brandResult.brandName,
+          });
+        }
+        return null;
+      });
+    }
+    return brands;
+  };
+
+  const positionSupper = (data) => {
+
+    if (!data.supper) {
+      return data.name;
+    }
+
+    return positionSupper(data.supper) + '-' + data.name;
+  };
+
+  const positionsResult = (data) => {
+    const positions = [];
+    if (Array.isArray(data)) {
+      data.map((item) => {
+        const positionIds = positions.map((item) => {
+          return item.value;
+        });
+        if (!positionIds.includes(item.storehousePositionsId)) {
+          positions.push({
+            value: item.storehousePositionsId,
+            label: (item.storehouseResult && item.storehouseResult.name) + '-' + positionSupper(item.positionsResult),
+          });
+        }
+        return null;
+      });
+    }
+    return positions;
+  };
+
+
   const { loading, data, run } = useRequest(skuStockDetail, {
     manual: true,
     onSuccess: (res) => {
@@ -77,53 +125,6 @@ const SkuStockDetail = (
     return <MyEmpty description='该物料没有库存！' />;
   }
 
-  const brandResult = (data) => {
-    const brands = [];
-    if (Array.isArray(data)) {
-      data.map((item) => {
-        const brandIds = brands.map((item) => {
-          return item.value;
-        });
-        if (!brandIds.includes(item.brandId)) {
-          brands.push({
-            value: item.brandId,
-            label: item.brandResult && item.brandResult.brandName,
-          });
-        }
-        return null;
-      });
-    }
-    return brands;
-  };
-
-  const positionSupper = (data) => {
-
-    if (!data.supper) {
-      return data.name;
-    }
-
-    return positionSupper(data.supper) + '-' + data.name;
-  };
-
-  const positionsResult = (data) => {
-    const positions = [];
-    if (Array.isArray(data)) {
-      data.map((item) => {
-        const positionIds = positions.map((item) => {
-          return item.value;
-        });
-        if (!positionIds.includes(item.storehousePositionsId)) {
-          positions.push({
-            value: item.storehousePositionsId,
-            label: (item.storehouseResult && item.storehouseResult.name) + '-' + positionSupper(item.positionsResult),
-          });
-        }
-        return null;
-      });
-    }
-    return positions;
-  };
-
   const out = () => {
     if (!outStock.positionsId) {
       return Toast.show({
@@ -142,7 +143,7 @@ const SkuStockDetail = (
     });
   };
 
-  return <div style={{ height: '80vh' }}>
+  return <div style={{ height: '80vh',overflow:'auto' }}>
     <Divider>物料信息</Divider>
     <Space direction='vertical'>
       {value.content}
