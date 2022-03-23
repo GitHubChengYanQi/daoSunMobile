@@ -172,7 +172,19 @@ const Inventory = (props) => {
     },
   });
 
-  useDebounceEffect(() => {
+  useEffect(() => {
+    if (loading) {
+      Toast.show({
+        icon: 'loading',
+        duration: 0,
+        content: '加载中…',
+      });
+    } else if (loading === false) {
+      Toast.clear();
+    }
+  }, [loading]);
+
+  useEffect(() => {
     if (codeId) {
       run({
         params: {
@@ -180,9 +192,7 @@ const Inventory = (props) => {
         },
       });
     }
-  }, [codeId], {
-    wait: 0,
-  });
+  }, [codeId]);
 
   if (loading || outstockLoading) {
     return <MyLoading

@@ -7,7 +7,7 @@ const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'http://192.168.1.142'
+  'http://192.168.1.119'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :

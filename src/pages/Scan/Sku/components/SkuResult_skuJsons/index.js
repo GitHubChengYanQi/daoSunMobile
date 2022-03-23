@@ -1,10 +1,23 @@
 import React from 'react';
-import { Empty } from 'antd';
 
-const SkuResultSkuJsons = ({ skuResult }) => {
+const SkuResultSkuJsons = ({skuResult, describe}) => {
 
-  if (!(skuResult && skuResult.spuResult))
-    return null;
+  if (!(skuResult && skuResult.spuResult)) {
+    return '无';
+  }
+
+  if (describe) {
+    return skuResult.skuJsons
+      &&
+      skuResult.skuJsons.length > 0
+      &&
+      skuResult.skuJsons[0].values.attributeValues
+      &&
+      skuResult.skuJsons.map((items) => {
+        return `${items.attribute.attribute}:${items.values.attributeValues}`;
+      }).join(' , ') || '无';
+  }
+
 
   return <>
     {skuResult.spuResult.name}
