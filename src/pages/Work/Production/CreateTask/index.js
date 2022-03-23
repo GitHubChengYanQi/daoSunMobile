@@ -61,9 +61,6 @@ const CreateTask = (props) => {
       <Form.Item name='coding' label='生产编码'>
         <MyCoding module={99} />
       </Form.Item>
-      <Form.Item name='productionTaskName' label='生产名称'>
-        <Input placeholder='请输入生产名称' />
-      </Form.Item>
       <Form.Item label='工序'>
         {params.shipName}
       </Form.Item>

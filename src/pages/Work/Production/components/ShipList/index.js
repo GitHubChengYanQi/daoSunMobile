@@ -45,7 +45,7 @@ const ShipList = ({ data }) => {
               </Space>
               <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
-                  计划数
+                  工单数
                 </div>
                 <div>
                   {item.count}
@@ -71,9 +71,9 @@ const ShipList = ({ data }) => {
           </Card>
           <List style={{backgroundColor:'#fff'}} header={<>产出物料</>}>
             {
-              setpSetDetails.map((item,index) => {
-                return <List.Item key={index} extra={' × '+item.num}>
-                  <SkuResultSkuJsons skuResult={item.skuResult} />
+              setpSetDetails.map((skuItem,index) => {
+                return <List.Item key={index} extra={' × '+(parseInt(skuItem.num) * parseInt(item.count))}>
+                  <SkuResultSkuJsons skuResult={skuItem.skuResult} />
                 </List.Item>;
               })
             }

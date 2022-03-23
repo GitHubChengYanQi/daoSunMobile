@@ -33,9 +33,9 @@ const MyCoding = (
     }
   }, []);
 
-  return <Space direction='vertical' style={{ backgroundColor: '#fff' }}>
-    <Space>
-      <LinkButton onClick={() => {
+  return <div style={{ backgroundColor: '#fff' }}>
+    <div style={{ display: 'flex' }}>
+      <LinkButton style={{ paddingRight:8 }} onClick={() => {
         if (!auto) {
           run({
             params: {
@@ -46,11 +46,13 @@ const MyCoding = (
         onChange(null);
         setAuto(!auto);
       }}>{auto ? '自动生成' : '手动输入'}</LinkButton>
-      {loading ? <Loading /> :
-        <Input value={value || ''}  placeholder='请输入编码' onChange={onChange} />}
-    </Space>
+      <div style={{ flexGrow: 1 }}>
+        {loading ? <Loading /> :
+          <Input value={value || ''} placeholder='请输入编码' onChange={onChange} />}
+      </div>
+    </div>
 
-  </Space>;
+  </div>;
 };
 
 export default MyCoding;

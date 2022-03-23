@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react';
 import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
+import styles from './index.css';
 
 const MyDatePicker = (
   {
@@ -42,7 +43,7 @@ const MyDatePicker = (
 
 
   return (
-    <>
+    <div>
       <LinkButton
         style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
         title={value || (title || '选择日期')}
@@ -89,7 +90,7 @@ const MyDatePicker = (
         }}
         renderLabel={labelRenderer}
       />
-    </>
+    </div>
   );
 };
 
