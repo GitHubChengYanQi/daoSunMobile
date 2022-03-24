@@ -75,13 +75,9 @@ const MyDatePicker = (
               onChange(moment(val).format('YYYY-MM-DD'));
               break;
             case 'hour':
-              onChange(moment(val).format('YYYY-MM-DD h'));
-              break;
             case 'minute':
-              onChange(moment(val).format('YYYY-MM-DD h:mm'));
-              break;
             case 'second':
-              onChange(moment(val).format('YYYY-MM-DD h:mm:ss'));
+              onChange(moment(val).format('YYYY-MM-DD hh:mm:ss'));
               break;
             default:
               onChange(moment(val).format('YYYY-MM-DD'));

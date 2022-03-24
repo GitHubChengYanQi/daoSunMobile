@@ -9,6 +9,7 @@ import MyCoding from '../../../components/MyCoding';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { history } from 'umi';
+import { Data } from '@antv/f2';
 
 const CreateTask = (props) => {
 
@@ -24,13 +25,13 @@ const CreateTask = (props) => {
           onConfirm: () => {
             history.goBack();
           },
-        })
+        });
       },
-      onError:()=>{
+      onError: () => {
         Dialog.alert({
           content: '分派任务失败！',
-        })
-      }
+        });
+      },
     });
 
   const ref = useRef();
@@ -50,6 +51,7 @@ const CreateTask = (props) => {
             workOrderId: params.id,
             ...value,
             productionTime: value.date && value.date[0],
+            endTime: value.date && value.date[1],
             userId: value.userId && value.userId.id,
             userIdList: value.userIdList && value.userIdList.map((item) => {
               return item.id;

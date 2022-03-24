@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import MySearchBar from '../../components/MySearchBar';
 import MyList from '../../components/MyList';
-import { productionTaskList } from '../Production/components/Url';
-import { Card, Space } from 'antd-mobile';
+import { productionTaskEdit, productionTaskList } from '../Production/components/Url';
+import { Card, Dialog, Space, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import styles from '../Production/index.css';
@@ -11,12 +11,36 @@ import MyNavBar from '../../components/MyNavBar';
 import LinkButton from '../../components/LinkButton';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
+import { useRequest } from '../../../util/Request';
+import { connect } from 'dva';
+import { MyLoading } from '../../components/MyLoading';
 
-const ProductionTask = () => {
+const ProductionTask = (props) => {
 
   const [data, setData] = useState([]);
 
+  const { loading, run } = useRequest(productionTaskEdit, {
+    manual: true,
+    onSuccess: (res) => {
+      Toast.show({
+        content: '领取成功！',
+        position: 'bottom',
+      });
+      history.push(`/Work/ProductionTask/Detail?id=${res.productionTaskId}`);
+    },
+    onError: (err) => {
+      Toast.show({
+        content: '领取失败！',
+        position: 'bottom',
+      });
+    },
+  });
+
   const ref = useRef();
+
+  if (loading) {
+    return <MyLoading />;
+  }
 
   const status = (state) => {
     switch (state) {
@@ -49,7 +73,21 @@ const ProductionTask = () => {
         data.map((item, index) => {
           return <Card
             onClick={() => {
-              history.push(`/Work/ProductionTask/Detail?id=${item.productionTaskId}`);
+              if (item.userId) {
+                history.push(`/Work/ProductionTask/Detail?id=${item.productionTaskId}`);
+              } else {
+                Dialog.confirm({
+                  content: '是否领取此任务？',
+                  onConfirm: async () => {
+                    await run({
+                      data: {
+                        productionTaskId: item.productionTaskId,
+                        userId: props.userInfo.id,
+                      },
+                    });
+                  },
+                });
+              }
             }}
             key={index}
             title={<Space align='start'>
@@ -60,10 +98,16 @@ const ProductionTask = () => {
             </Space>} className={styles.item}>
             <Space direction='vertical'>
               <div>
-                <Label>任务名称：</Label>{item.productionTaskName}
-              </div>
-              <div>
-                <Label>工序：</Label>{item.shipSetpId}
+                <Label>工序：</Label>
+                {
+                  item.workOrderResult
+                  &&
+                  item.workOrderResult.setpSetResult
+                  &&
+                  item.workOrderResult.setpSetResult.shipSetpResult
+                  &&
+                  item.workOrderResult.setpSetResult.shipSetpResult.shipSetpName
+                }
               </div>
               <div>
                 <Label>执行数量：</Label> {item.number}
@@ -72,8 +116,11 @@ const ProductionTask = () => {
                 <Label>执行时间：</Label>{item.productionTime}
               </div>
               <div>
+                <Label>结束时间：</Label>{item.endTime}
+              </div>
+              <div>
                 <Label>负责人：</Label>{
-                item.userId
+                item.userResult && item.userResult.name
                 ||
                 <LinkButton>
                   <Space align='center'>
@@ -83,10 +130,12 @@ const ProductionTask = () => {
               }
               </div>
               <div>
-                <Label>成员：</Label>{item.userIds}
+                <Label>成员：</Label>{item.userResults && item.userResults.map((item) => {
+                return item.name;
+              }).join(',')}
               </div>
               <div>
-                <Label>分派人：</Label>{item.remark}
+                <Label>分派人：</Label>{item.createUserResult && item.createUserResult.name}
               </div>
               <div>
                 <Label>分派时间：</Label>{item.createTime}
@@ -98,5 +147,4 @@ const ProductionTask = () => {
     </MyList>
   </>;
 };
-
-export default ProductionTask;
+export default connect(({ userInfo }) => ({ userInfo }))(ProductionTask);

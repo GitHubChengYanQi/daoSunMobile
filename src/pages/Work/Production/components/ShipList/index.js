@@ -7,7 +7,6 @@ import { history } from 'umi';
 import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const ShipList = ({ data }) => {
-  console.log(data);
 
   if (!Array.isArray(data) || data.length === 0) {
     return <MyEmpty />;

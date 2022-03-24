@@ -141,12 +141,12 @@ const Auth = (props) => {
 
   useEffect(() => {
 
-    const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
-    wxTicket({
-      params: {
-        url: url[0],
-      },
-    });
+    // const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
+    // wxTicket({
+    //   params: {
+    //     url: url[0],
+    //   },
+    // });
     if (!IsDev() && getHeader()) {
       const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
       wxTicket({
