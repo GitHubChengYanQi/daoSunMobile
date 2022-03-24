@@ -1,17 +1,39 @@
 import React, { useState } from 'react';
-import { Dialog, List, Space } from 'antd-mobile';
+import { Dialog, List, Space, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import SkuResult_skuJsons from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../../../components/Label';
 import Number from '../../../../../components/Number';
+import { useRequest } from '../../../../../../util/Request';
+import { productionJobBookingAdd } from '../../../../Production/components/Url';
 
 const ReportWork = (
   {
+    productionTaskId,
     visible,
     setVisible = (() => {
     }),
     skuData,
+    onSuccess = () => {
+    },
   }) => {
+
+  const { run } = useRequest(productionJobBookingAdd, {
+    manual: true,
+    onSuccess: () => {
+      Toast.show({
+        content: '报工成功！',
+        position: 'bottom',
+      });
+      onSuccess();
+    },
+    onError: (err) => {
+      Toast.show({
+        content: '报工失败！',
+        position: 'bottom',
+      });
+    },
+  });
 
   const [outSkus, setOutSkus] = useState(skuData || []);
 
@@ -22,6 +44,7 @@ const ReportWork = (
       onAction={(action) => {
         if (action.key === 'ok') {
           console.log({
+            productionTaskId,
             detailParams: outSkus.map((item) => {
               if (item.outNumber) {
                 return {
@@ -31,6 +54,20 @@ const ReportWork = (
               }
               return null;
             }),
+          });
+          run({
+            data: {
+              productionTaskId,
+              detailParams: outSkus.map((item) => {
+                if (item.outNumber) {
+                  return {
+                    skuId: item.skuId,
+                    number: item.outNumber,
+                  };
+                }
+                return null;
+              }),
+            },
           });
         } else {
           setVisible(false);

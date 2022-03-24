@@ -8,6 +8,11 @@ export const productionTaskList = {
   method: 'POST'
 };
 
+export const productionJobBookingAdd = {
+  url: '/productionJobBooking/add',
+  method: 'POST'
+};
+
 
 export const productionTaskEdit = {
   url: '/productionTask/edit',

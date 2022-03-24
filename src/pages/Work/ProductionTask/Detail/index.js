@@ -18,7 +18,7 @@ const Detail = (props) => {
 
   const [visible, setVisible] = useState();
 
-  const { loading, data, run } = useRequest(productionTaskDetail, { manual: true });
+  const { loading, data, run, refresh } = useRequest(productionTaskDetail, { manual: true });
 
   const setpSetResult = data
     &&
@@ -152,12 +152,21 @@ const Detail = (props) => {
       setVisible(true);
     }} />
 
-    <ReportWork skuData={setpSetDetails.map((item) => {
-      return {
-        ...item,
-        maxNumber: item.num * data.number,
-      };
-    })} setVisible={setVisible} visible={visible} />
+    <ReportWork
+      productionTaskId={params.id}
+      skuData={setpSetDetails.map((item) => {
+        return {
+          ...item,
+          maxNumber: item.num * data.number,
+        };
+      })}
+      setVisible={setVisible}
+      visible={visible}
+      onSuccess={() => {
+        setVisible(false);
+        refresh();
+      }}
+    />
 
   </div>;
 };
