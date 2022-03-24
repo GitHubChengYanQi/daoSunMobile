@@ -10,15 +10,19 @@ import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import BottomButton from '../../../components/BottomButton';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyEllipsis from '../../../components/MyEllipsis';
+import ReportWork from './components/ReportWork';
 
 const Detail = (props) => {
   const params = props.location.query;
 
+  const [visible, setVisible] = useState();
+
   const { loading, data, run } = useRequest(productionTaskDetail, { manual: true });
 
-  console.log(data);
-
-  const setpSetResult = data.workOrderResult
+  const setpSetResult = data
+    &&
+    data.workOrderResult
     &&
     data.workOrderResult.setpSetResult
     &&
@@ -107,8 +111,12 @@ const Detail = (props) => {
             {
               setpSetDetails.map((item, index) => {
                 const skuResult = item.skuResult || {};
-                return <List.Item key={index}>
-                  <SkuResult_skuJsons skuResult={skuResult} />
+                return <List.Item key={index} extra={' × ' + item.num * data.number}>
+                  <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                  <div>
+                    <Label>描述：</Label>
+                    <MyEllipsis width='74%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                  </div>
                 </List.Item>;
               })
             }
@@ -140,7 +148,17 @@ const Detail = (props) => {
         </div>
       </MyFloatingPanel>
     </div>
-    <BottomButton only text='产出报工' />
+    <BottomButton only text='产出报工' onClick={() => {
+      setVisible(true);
+    }} />
+
+    <ReportWork skuData={setpSetDetails.map((item) => {
+      return {
+        ...item,
+        maxNumber: item.num * data.number,
+      };
+    })} setVisible={setVisible} visible={visible} />
+
   </div>;
 };
 
