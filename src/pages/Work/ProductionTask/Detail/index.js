@@ -32,7 +32,27 @@ const Detail = (props) => {
 
   const shipSetpResult = setpSetResult.shipSetpResult || {};
 
-  const setpSetDetails = setpSetResult.setpSetDetails || [];
+  const setpSetDetails = setpSetResult.setpSetDetails
+    &&
+    setpSetResult.setpSetDetails.map((skuItems) => {
+      const jobBooking = data.taskDetailResults.filter((item) => {
+        return item.jobBookingDetailCount.skuId = skuItems.skuId;
+      });
+      return {
+        ...skuItems,
+        jobBookNumber: jobBooking
+          &&
+          jobBooking.length === 1
+          &&
+          jobBooking[0].jobBookingDetailCount
+          &&
+          jobBooking[0].jobBookingDetailCount.number
+          ||
+          0,
+      };
+    })
+    ||
+    [];
 
   const [key, setKey] = useState('out');
 
@@ -111,11 +131,20 @@ const Detail = (props) => {
             {
               setpSetDetails.map((item, index) => {
                 const skuResult = item.skuResult || {};
-                return <List.Item key={index} extra={' × ' + item.num * data.number}>
+                return <List.Item key={index}>
                   <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
                   <div>
                     <Label>描述：</Label>
-                    <MyEllipsis width='74%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                    <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                  </div>
+                  <div style={{display:'flex'}}>
+                    <div style={{flexGrow:1,color:'green'}}>
+                      <Label>已报工：</Label>{item.jobBookNumber}
+                    </div>
+                    <div style={{flexGrow:1,color:'var(--adm-color-primary)'}}>
+                      <Label>生产数：</Label>{item.num * data.number}
+                    </div>
+
                   </div>
                 </List.Item>;
               })
@@ -157,7 +186,7 @@ const Detail = (props) => {
       skuData={setpSetDetails.map((item) => {
         return {
           ...item,
-          maxNumber: item.num * data.number,
+          maxNumber: (item.num * data.number) - item.jobBookNumber,
         };
       })}
       setVisible={setVisible}
