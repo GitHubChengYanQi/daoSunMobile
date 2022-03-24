@@ -10,10 +10,10 @@ const scan = () => new Promise((resolve, reject) => {
       needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
       scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是条形码（一维码），默认二者都有
       success: (res) => {
-        console.log('wxScanSuccess',res);
+        console.log('wxScanSuccess',res.resultStr);
         // 回调
-        if (res.resultStr.indexOf('OrCode?id=') !== -1) {
-          const param = res.resultStr.split('OrCode?id=');
+        if (res.resultStr.indexOf('wx.daoxin.gf2025.com/cp') !== -1 || res.resultStr.indexOf('wx.hh.gf2025.com/cp') !== -1) {
+          const param = res.resultStr.split('id=');
           if (param && param[1]) {
             resolve(param[1]);
           }
