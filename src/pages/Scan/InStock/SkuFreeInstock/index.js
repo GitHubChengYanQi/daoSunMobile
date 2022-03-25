@@ -555,10 +555,6 @@ const SkuFreeInstock = ({ scanData }) => {
       leftText='批量打印'
       leftDisabled={
         !data.skus.skuId
-        ||
-        !data.skus.brandId
-        ||
-        !data.skus.customerId
       }
       leftOnClick={async () => {
         const { inkindIds } = await printAllCode();
@@ -572,10 +568,6 @@ const SkuFreeInstock = ({ scanData }) => {
       }}
       rightDisabled={
         !data.skus.skuId
-        ||
-        !data.skus.brandId
-        ||
-        !data.skus.customerId
         ||
         !getSkuData('successNumber')
       }
