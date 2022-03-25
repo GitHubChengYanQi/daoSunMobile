@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Auth from '../components/Auth';
 // import * as VConsole from 'vconsole';
 
@@ -7,6 +7,7 @@ function BasicLayout(props) {
   // const console = new VConsole();
 
   window.scrollTo(0, 0);
+
 
   return (
     <Auth>

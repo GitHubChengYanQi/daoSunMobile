@@ -1,18 +1,9 @@
-import { DotLoading, Toast } from 'antd-mobile';
-import { useEffect } from 'react';
+import { Dialog, DotLoading } from 'antd-mobile';
 
 export const MyLoading = ({ title }) => {
 
-  useEffect(() => {
-    Toast.show({
-      icon: 'loading',
-      duration: 0,
-      content: <>{title || 'Loading'}<DotLoading /></>,
-    });
-    return () => {
-      Toast.clear();
-    };
-  }, []);
-
-  return null;
+  return <Dialog
+    visible
+    content={<div style={{textAlign:'center'}}>{title || '拼命加载中'}<DotLoading /></div>}
+  />;
 };

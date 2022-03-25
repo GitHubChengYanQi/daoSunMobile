@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  ListItem,
-} from 'weui-react-v2';
-import { Affix } from 'antd';
 import { history } from 'umi';
 import { Card, Divider, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
@@ -48,7 +44,7 @@ const Work = () => {
   };
 
   const GridContent = (icon, title, routers) => {
-    return <Grid.Item style={{ width: '20vw', textAlign: 'center' }} onClick={() => {
+    return <Grid.Item style={{ width: '100%', textAlign: 'center' }} onClick={() => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
@@ -59,7 +55,7 @@ const Work = () => {
   };
 
   const GridStyle = (chirlen) => {
-    return <Grid columns={4} style={{ '--gap-vertical': '16px' }}>
+    return <Grid columns={3} style={{ '--gap-vertical': '16px' }}>
       {chirlen}
     </Grid>;
   };
@@ -132,6 +128,7 @@ const Work = () => {
             <>
               {GridContent('icon-zhijianrenwuguanli', '生产工单', '/Work/Production')}
               {GridContent('icon-zhijianrenwuguanli', '生产任务', '/Work/ProductionTask')}
+              {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists')}
               {GridContent('icon-zhijianrenwuguanli', '质检任务管理', () => toast())}
             </>,
           )
@@ -155,6 +152,7 @@ const Work = () => {
           GridStyle(
             <>
               {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
+              {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists?type=all')}
               {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
               {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
               {GridContent('icon-chukuguanli1', '出库管理', '/Work/OutStock')}
