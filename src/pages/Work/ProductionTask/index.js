@@ -87,6 +87,9 @@ const ProductionTask = (props) => {
       case 'get':
         ref.current.submit({ noUser: true, ...data });
         break;
+        case 'in':
+        ref.current.submit({ userIds: props.userInfo.id, ...data });
+        break;
       default:
         break;
     }

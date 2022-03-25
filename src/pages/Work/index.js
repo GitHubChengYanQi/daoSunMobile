@@ -152,7 +152,7 @@ const Work = () => {
           GridStyle(
             <>
               {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
-              {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists')}
+              {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists?type=all')}
               {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
               {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
               {GridContent('icon-chukuguanli1', '出库管理', '/Work/OutStock')}
