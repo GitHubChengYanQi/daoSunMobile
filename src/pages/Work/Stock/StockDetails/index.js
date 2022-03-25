@@ -3,7 +3,6 @@ import { stockDetailsList } from '../../../Scan/Url';
 import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { useSetState } from 'ahooks';
-import MyEmpty from '../../../components/MyEmpty';
 import { getHeader } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
@@ -16,10 +15,6 @@ const StockDetails = (props) => {
   const ids = props.location.query;
 
   const [datas, setDatas] = useSetState({ data: [] });
-
-  if (!datas) {
-    return <MyEmpty height='100vh' />;
-  }
 
   const print = async (inkindId) => {
     if (!getHeader()) {

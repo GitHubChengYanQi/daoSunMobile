@@ -17,7 +17,7 @@ const PurchaseAsk = () => {
       ref.current.open();
     }} />
 
-    <div style={{height:'85vh',overflow:'auto'}}>
+    <div style={{height:'85vh',overflow:'auto',marginTop:16}}>
       <AskList ref={listRef} />
     </div>
 

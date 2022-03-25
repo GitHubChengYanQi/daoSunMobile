@@ -1,4 +1,4 @@
-import { Toast } from 'antd-mobile';
+import { DotLoading, Toast } from 'antd-mobile';
 import { useEffect } from 'react';
 
 export const MyLoading = ({ title }) => {
@@ -7,7 +7,7 @@ export const MyLoading = ({ title }) => {
     Toast.show({
       icon: 'loading',
       duration: 0,
-      content: title || 'Loading...',
+      content: <>{title || 'Loading'}<DotLoading /></>,
     });
     return () => {
       Toast.clear();

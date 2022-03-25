@@ -12,7 +12,6 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
-  Button,
   Dialog,
   Toast,
 } from 'antd-mobile';
@@ -87,12 +86,12 @@ const Auth = (props) => {
     onSuccess: (res) => {
       wx.config({
         beta: true,// 必须这么写，否则wx.invoke调用形式的jsapi会有问题
-        // debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        debug: IsDev(), // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: res.appId, // 必填，企业微信的corpID
         timestamp: res.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.nonceStr, // 必填，生成签名的随机串
         signature: res.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack','invoke'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
       });
     },
   });
@@ -142,6 +141,12 @@ const Auth = (props) => {
 
   useEffect(() => {
 
+    // const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
+    // wxTicket({
+    //   params: {
+    //     url: url[0],
+    //   },
+    // });
     if (!IsDev() && getHeader()) {
       const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
       wxTicket({
@@ -184,7 +189,7 @@ const Auth = (props) => {
         });
       }
     };
-  }, [])
+  }, []);
 
   useEffect(() => {
     setIsLogin(token);
@@ -221,11 +226,6 @@ const Auth = (props) => {
     if (getHeader() && type) {
       return (userInfo && userInfo.userId) ? <Login /> : <Sms />;
     }
-    if (!props.userInfo){
-      props.dispatch({
-        type: 'userInfo/getUserInfo',
-      });
-    }
     return props.children;
   } else {
     console.log('login');
@@ -234,4 +234,4 @@ const Auth = (props) => {
 
 };
 
-export default connect(({ qrCode,userInfo }) => ({ qrCode,userInfo }))(Auth);
+export default connect(({ qrCode, userInfo }) => ({ qrCode, userInfo }))(Auth);

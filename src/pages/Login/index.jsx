@@ -44,7 +44,7 @@ const Login = (props) => {
       onSuccess: async (res) => {
         if (res) {
           await cookie.set('cheng-token', res);
-          await history.push('/');
+          await history.push(cookie.get('url') || '/');
           props.dispatch({
             type: 'userInfo/getUserInfo',
           });

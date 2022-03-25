@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { Button, Card, List, TextArea } from 'antd-mobile';
+import { Button, Card, List, Space, TextArea } from 'antd-mobile';
 import LinkButton from '../../../../components/LinkButton';
 import { DeleteOutlined } from '@ant-design/icons';
 import { useSetState } from 'ahooks';
@@ -72,12 +72,14 @@ const AddSku = (
                   ref.current.search({ type: 'brand', key: index });
                 }} />
               </List.Item>
-              <List.Item>数量：<Number
-                value={items.applyNumber}
-                onChange={(value) => {
-                  addData(index, { applyNumber: value });
-                }}
-              /></List.Item>
+              <List.Item>
+                <Space align='center'>数量：<Number
+                  value={items.applyNumber}
+                  onChange={(value) => {
+                    addData(index, { applyNumber: value });
+                  }}
+                /></Space>
+              </List.Item>
               <List.Item>可用数量：{items.availableNumber}</List.Item>
               <List.Item>交货日期：<MyDatePicker width={200} min={now} value={items.deliveryDate} onChange={(value) => {
                 addData(index, { deliveryDate: value });
