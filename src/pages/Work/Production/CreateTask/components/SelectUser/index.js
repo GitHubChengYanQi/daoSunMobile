@@ -5,7 +5,9 @@ import { UserOutlined } from '@ant-design/icons';
 import MyCheckUser from '../../../../../components/MyCheckUser';
 import { getHeader } from '../../../../../components/GetHeader';
 import { connect } from 'dva';
-const SelectUser = ({ value, onChange,...props }) => {
+import IsDev from '../../../../../../components/IsDev';
+
+const SelectUser = ({ value, onChange, ...props }) => {
 
   const showUser = (name) => {
     return <Space align='center'>
@@ -20,7 +22,7 @@ const SelectUser = ({ value, onChange,...props }) => {
   };
 
   return <>
-    {!getHeader() ?
+    {IsDev() ?
       <Button onClick={() => {
         props.dispatch({
           type: 'qrCode/checkUsers',
