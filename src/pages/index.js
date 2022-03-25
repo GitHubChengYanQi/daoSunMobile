@@ -59,14 +59,6 @@ const Index = (props) => {
     }
   };
 
-  useEffect(() => {
-    if (!props.userInfo.id) {
-      props.dispatch({
-        type: 'userInfo/getUserInfo',
-      });
-    }
-  }, []);
-
 
   return (
     <>

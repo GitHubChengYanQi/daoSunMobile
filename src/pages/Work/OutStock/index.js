@@ -2,7 +2,7 @@ import React from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import MyList from '../../components/MyList';
 import { outstockOrderList } from '../../Scan/Url';
-import { List, Space } from 'antd-mobile';
+import { List, Space, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { useSetState } from 'ahooks';
 import { Badge } from 'antd';
@@ -41,7 +41,9 @@ const OutStock = () => {
               description={item.createTime}
               extra={status(item.state)}
               onClick={()=>{
-                history.push(`/Work/OutStock/OutStockOrder?id=${item.outstockOrderId}`);
+                Toast.show({
+                  content:'暂未开发,敬请期待!'
+                });
               }}
             >
              <Space direction='vertical'>

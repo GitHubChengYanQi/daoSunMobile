@@ -22,16 +22,17 @@ const SelectUser = ({ value, onChange, ...props }) => {
   };
 
   return <>
-    {IsDev() ?
-      <Button onClick={() => {
-        props.dispatch({
-          type: 'qrCode/checkUsers',
-        });
-      }}>选人</Button>
-      :
+    {/*{IsDev() ?*/}
+    {/*  <Button onClick={() => {*/}
+    {/*    props.dispatch({*/}
+    {/*      type: 'qrCode/checkUsers',*/}
+    {/*    });*/}
+    {/*  }}>选人</Button>*/}
+    {/*  :*/}
       <MyCheckUser value={value} onChange={onChange}>
-        {value ? showUser(value.name) : showDefault()}
-      </MyCheckUser>}
+        {value ? showUser(value.name || '') : showDefault()}
+      </MyCheckUser>
+    {/*}*/}
   </>;
 };
 

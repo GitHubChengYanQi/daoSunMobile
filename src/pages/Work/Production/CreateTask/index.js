@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button, Dialog, Form, Input, TextArea } from 'antd-mobile';
+import { Button, Dialog, Form, TextArea } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
 import StartEndDate from './components/StartEndDate';
 import Users from './components/Users';
@@ -9,7 +9,6 @@ import MyCoding from '../../../components/MyCoding';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { history } from 'umi';
-import { Data } from '@antv/f2';
 
 const CreateTask = (props) => {
 
@@ -20,12 +19,26 @@ const CreateTask = (props) => {
     {
       manual: true,
       onSuccess: () => {
-        Dialog.alert({
+        Dialog.show({
           content: '分派任务成功！',
-          onConfirm: () => {
-            history.goBack();
+          closeOnAction: true,
+          onAction:(action)=>{
+            if (action.key === 'back'){
+              history.goBack();
+            }
           },
-        });
+          actions: [[
+              {
+                key: 'back',
+                text: '返回工单',
+              },
+              {
+                key: 'next',
+                text: '继续操作',
+              },
+            ],
+          ],
+        })
       },
       onError: () => {
         Dialog.alert({

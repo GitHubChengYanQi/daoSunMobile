@@ -52,6 +52,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   });
 
   const submit = (value) => {
+    setHasMore(false);
     setPage(1);
     setContents([]);
     setParams(value);

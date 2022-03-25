@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MySearchBar from '../../components/MySearchBar';
 import MyList from '../../components/MyList';
-import { productionTaskEdit, productionTaskList } from '../Production/components/Url';
+import { productionTaskList, productionTaskReceive } from '../Production/components/Url';
 import { CapsuleTabs, Card, Dialog, Space, Tabs, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
@@ -14,20 +14,34 @@ import { UserOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../util/Request';
 import { connect } from 'dva';
 import { MyLoading } from '../../components/MyLoading';
+import SelectUser from '../Production/CreateTask/components/SelectUser';
 
 const ProductionTask = (props) => {
-  console.log(props);
 
   const [data, setData] = useState([]);
 
-  const { loading, run } = useRequest(productionTaskEdit, {
+  const [user, setUser] = useState();
+
+  const [key, setKey] = useState('user');
+
+  const [state, setState] = useState('0');
+
+  const [visible, setVisible] = useState(false);
+
+  const { loading, run } = useRequest(productionTaskReceive, {
     manual: true,
     onSuccess: (res) => {
       Toast.show({
         content: '领取成功！',
         position: 'bottom',
       });
-      history.push(`/Work/ProductionTask/Detail?id=${res.productionTaskId}`);
+      if (key !== 'create') {
+        history.push(`/Work/ProductionTask/Detail?id=${res.productionTaskId}`);
+      } else {
+        ref.current.submit({ createUser: props.userInfo.id });
+        setVisible(false);
+      }
+
     },
     onError: (err) => {
       Toast.show({
@@ -40,10 +54,10 @@ const ProductionTask = (props) => {
   const ref = useRef();
 
   useEffect(() => {
-    if (ref && ref.current) {
+    if (ref && ref.current && props.userInfo.id) {
       ref.current.submit({ userId: props.userInfo.id });
     }
-  }, []);
+  }, [props]);
 
   if (loading) {
     return <MyLoading />;
@@ -53,12 +67,28 @@ const ProductionTask = (props) => {
     switch (state) {
       case 0:
         return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
-      case 1:
+      case 98:
         return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
-      case 2:
+      case 99:
         return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
       default:
         return '';
+    }
+  };
+
+  const type = (value, data) => {
+    switch (value) {
+      case 'user':
+        ref.current.submit({ userId: props.userInfo.id, ...data });
+        break;
+      case 'create':
+        ref.current.submit({ createUser: props.userInfo.id, ...data });
+        break;
+      case 'get':
+        ref.current.submit({ noUser: true, ...data });
+        break;
+      default:
+        break;
     }
   };
 
@@ -67,34 +97,36 @@ const ProductionTask = (props) => {
     <div style={{ position: 'sticky', top: 0, zIndex: 99, backgroundColor: '#fff' }}>
       <MyNavBar title='生产任务' />
       <Tabs
+        activeKey={key}
         onChange={(value) => {
-          switch (value) {
-            case 'user':
-              ref.current.submit({ userId: props.userInfo.id });
-              break;
-            case 'create':
-              ref.current.submit({ createUser: props.userInfo.id });
-              break;
-            case 'get':
-              ref.current.submit({ noUser: true });
-              break;
-            default:
-              break;
-          }
+          setState('0');
+          setKey(value);
+          type(value);
         }}
       >
         <Tabs.Tab title='我执行的' key='user' />
         <Tabs.Tab title='我分派的' key='create' />
+        <Tabs.Tab title='我参与的' key='in' />
         <Tabs.Tab title='待领取的' key='get' />
       </Tabs>
       <MySearchBar extra onChange={(value) => {
         ref.current.submit({ coding: value });
       }} />
-      <CapsuleTabs defaultActiveKey='1'>
-        <CapsuleTabs.Tab title='全部' key='1' />
-        <CapsuleTabs.Tab title='执行中' key='3' />
-        <CapsuleTabs.Tab title='已完成' key='4' />
-      </CapsuleTabs>
+      {key !== 'get' && <CapsuleTabs activeKey={state} onChange={(value) => {
+        setState(value);
+        switch (value) {
+          case 0:
+            type(key);
+            break;
+          default:
+            type(key, { status: value });
+            break;
+        }
+      }}>
+        <CapsuleTabs.Tab title='全部' key='0' />
+        <CapsuleTabs.Tab title='执行中' key='98' />
+        <CapsuleTabs.Tab title='已完成' key='99' />
+      </CapsuleTabs>}
     </div>
     <MyList
       ref={ref}
@@ -109,6 +141,8 @@ const ProductionTask = (props) => {
             onClick={() => {
               if (item.userId) {
                 history.push(`/Work/ProductionTask/Detail?id=${item.productionTaskId}`);
+              } else if (key === 'create') {
+                setVisible(item.productionTaskId);
               } else {
                 Dialog.confirm({
                   content: '是否领取此任务？',
@@ -125,7 +159,7 @@ const ProductionTask = (props) => {
             }}
             key={index}
             title={<Space align='start'>
-              {status(item.userId ? 1 : 0)}
+              {status(item.status)}
               <div>
                 编号：{item.coding}
               </div>
@@ -179,6 +213,39 @@ const ProductionTask = (props) => {
         })
       }
     </MyList>
+
+    <Dialog
+      title='分派任务'
+      visible={visible}
+      content={<div style={{ textAlign: 'center' }}><SelectUser value={user} onChange={setUser} /></div>}
+      onAction={(action) => {
+        if (action.key === 'dispatch') {
+          if (user && user.id) {
+            run({
+              data: {
+                productionTaskId: visible,
+                userId: user.id,
+              },
+            });
+          } else {
+            Toast.show({
+              content: '请选择负责人！',
+              position: 'bottom',
+            });
+          }
+
+        } else {
+          setVisible(false);
+        }
+      }}
+      actions={[[{
+        text: '取消',
+        key: 'close',
+      }, {
+        text: '分派',
+        key: 'dispatch',
+      }]]}
+    />
   </>;
 };
 export default connect(({ userInfo }) => ({ userInfo }))(ProductionTask);

@@ -48,22 +48,13 @@ const ReportWork = (
       title='产出物料'
       onAction={(action) => {
         if (action.key === 'ok') {
-          console.log({
-            productionTaskId,
-            detailParams: outSkus.map((item) => {
-              if (item.outNumber) {
-                return {
-                  skuId: item.skuId,
-                  number: item.outNumber,
-                };
-              }
-              return null;
-            }),
-          });
+          const out = outSkus.filter((item) => {
+            return item.outNumber;
+          })
           run({
             data: {
               productionTaskId,
-              detailParams: outSkus.map((item) => {
+              detailParams: out.map((item) => {
                 if (item.outNumber) {
                   return {
                     skuId: item.skuId,
