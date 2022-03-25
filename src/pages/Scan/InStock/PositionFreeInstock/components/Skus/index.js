@@ -94,12 +94,12 @@ const Skus = (
         key={i}
         extra={
           <LinkButton title={item.inkindId ? '打印二维码' : '生成二维码'} onClick={async () => {
-            if (!skuItem.brandId || !skuItem.skuId || !skuItem.customerId) {
-              return Toast.show({
-                content: '请完善物料信息！',
-                position: 'bottom',
-              });
-            }
+            // if (!skuItem.brandId || !skuItem.skuId || !skuItem.customerId) {
+            //   return Toast.show({
+            //     content: '请完善物料信息！',
+            //     position: 'bottom',
+            //   });
+            // }
             if (item.number > 0) {
               if (item.inkindId) {
                 if (IsDev() || !getHeader()) {
