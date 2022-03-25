@@ -60,7 +60,7 @@ const Index = (props) => {
   };
 
   useEffect(() => {
-    if (!props.userInfo) {
+    if (!props.userInfo.id) {
       props.dispatch({
         type: 'userInfo/getUserInfo',
       });

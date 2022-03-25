@@ -2,7 +2,7 @@ import { request } from '../util/Request';
 
 export default {
   namespace: 'userInfo',
-  state: null,
+  state: {},
   reducers: {
     //改变state
     setUserInfo(state, { payload }) {

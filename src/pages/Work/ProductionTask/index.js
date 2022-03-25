@@ -1,8 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MySearchBar from '../../components/MySearchBar';
 import MyList from '../../components/MyList';
 import { productionTaskEdit, productionTaskList } from '../Production/components/Url';
-import { Card, Dialog, Space, Toast } from 'antd-mobile';
+import { CapsuleTabs, Card, Dialog, Space, Tabs, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import styles from '../Production/index.css';
@@ -16,6 +16,7 @@ import { connect } from 'dva';
 import { MyLoading } from '../../components/MyLoading';
 
 const ProductionTask = (props) => {
+  console.log(props);
 
   const [data, setData] = useState([]);
 
@@ -38,6 +39,12 @@ const ProductionTask = (props) => {
 
   const ref = useRef();
 
+  useEffect(() => {
+    if (ref && ref.current) {
+      ref.current.submit({ userId: props.userInfo.id });
+    }
+  }, []);
+
   if (loading) {
     return <MyLoading />;
   }
@@ -55,12 +62,39 @@ const ProductionTask = (props) => {
     }
   };
 
+
   return <>
-    <div style={{ position: 'sticky', top: 0, zIndex: 99 }}>
+    <div style={{ position: 'sticky', top: 0, zIndex: 99, backgroundColor: '#fff' }}>
       <MyNavBar title='生产任务' />
+      <Tabs
+        onChange={(value) => {
+          switch (value) {
+            case 'user':
+              ref.current.submit({ userId: props.userInfo.id });
+              break;
+            case 'create':
+              ref.current.submit({ createUser: props.userInfo.id });
+              break;
+            case 'get':
+              ref.current.submit({ noUser: true });
+              break;
+            default:
+              break;
+          }
+        }}
+      >
+        <Tabs.Tab title='我执行的' key='user' />
+        <Tabs.Tab title='我分派的' key='create' />
+        <Tabs.Tab title='待领取的' key='get' />
+      </Tabs>
       <MySearchBar extra onChange={(value) => {
         ref.current.submit({ coding: value });
       }} />
+      <CapsuleTabs defaultActiveKey='1'>
+        <CapsuleTabs.Tab title='全部' key='1' />
+        <CapsuleTabs.Tab title='执行中' key='3' />
+        <CapsuleTabs.Tab title='已完成' key='4' />
+      </CapsuleTabs>
     </div>
     <MyList
       ref={ref}

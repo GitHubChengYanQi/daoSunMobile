@@ -8,8 +8,8 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://172.26.187.55'
-  // 'https://api.daoxin.gf2025.com'
+  // 'http://172.26.187.55'
+  'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
   process.env.api;

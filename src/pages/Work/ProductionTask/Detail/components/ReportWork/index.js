@@ -6,6 +6,7 @@ import Label from '../../../../../components/Label';
 import Number from '../../../../../components/Number';
 import { useRequest } from '../../../../../../util/Request';
 import { productionJobBookingAdd } from '../../../../Production/components/Url';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const ReportWork = (
   {
@@ -18,7 +19,7 @@ const ReportWork = (
     },
   }) => {
 
-  const { run } = useRequest(productionJobBookingAdd, {
+  const { loading, run } = useRequest(productionJobBookingAdd, {
     manual: true,
     onSuccess: () => {
       Toast.show({
@@ -36,6 +37,10 @@ const ReportWork = (
   });
 
   const [outSkus, setOutSkus] = useState(skuData || []);
+
+  if (loading) {
+    return <><MyLoading /></>;
+  }
 
   return <>
     <Dialog

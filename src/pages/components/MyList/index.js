@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
