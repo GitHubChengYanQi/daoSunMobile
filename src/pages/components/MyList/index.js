@@ -1,7 +1,8 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { InfiniteScroll } from 'antd-mobile';
+import { DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
+import MyEmpty from '../MyEmpty';
 
 let limit = 10;
 
@@ -11,8 +12,9 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
   const [pages, setPage] = useState(1);
 
+  const [contents, setContents] = useState([]);
+
   const [params, setParams] = useState(paramsData);
-  console.log(params);
 
   const [error, setError] = useState(true);
 
@@ -29,7 +31,12 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
     // debounceInterval: 300,
     onSuccess: (res) => {
       if (res && res.length > 0) {
-        typeof getData === 'function' && getData(res);
+        const array = contents;
+        res.map((items) => {
+          return array.push(items);
+        });
+        setContents(array);
+        typeof getData === 'function' && getData(array);
         setPage(pages + 1);
       } else {
         setHasMore(false);
@@ -45,8 +52,10 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
   const submit = (value) => {
     setPage(1);
+    setContents([]);
     setParams(value);
     run({
+      params: { limit, page: 1 },
       data: value,
     });
   };
@@ -56,12 +65,20 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   }));
 
   if (loading && pages === 1) {
-    return <MyLoading />;
+    return <MyLoading title='正在拼命加载数据' />;
+  }
+
+  if (!data || data.length === 0) {
+    return <MyEmpty />;
+  }
+
+  if (!data || data.length === 0) {
+    return <MyEmpty />;
   }
 
   return <>
     {children}
-    {error && data && <InfiniteScroll
+    {error && <InfiniteScroll
       threshold={0}
       loadMore={async () => {
         return await run({
@@ -71,7 +88,18 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
         });
       }}
       hasMore={hasMore}
-    />}
+    >
+      <>
+        {hasMore ? (
+          <>
+            <span>Loading</span>
+            <DotLoading />
+          </>
+        ) : (
+          <span>--- 我是有底线的 ---</span>
+        )}
+      </>
+    </InfiniteScroll>}
   </>;
 };
 

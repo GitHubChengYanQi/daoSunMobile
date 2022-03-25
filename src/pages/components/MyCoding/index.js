@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Input, Loading, Radio, Space } from 'antd-mobile';
+import { ActionSheet, Input, Loading, Radio, Space } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
+import LinkButton from '../LinkButton';
 
 const MyCoding = (
   {
@@ -10,7 +11,7 @@ const MyCoding = (
     },
   }) => {
 
-  const [state, setState] = useState('auto');
+  const [auto, setAuto] = useState(true);
 
   const { loading, run } = useRequest({
     url: '/codingRules/defaultEncoding',
@@ -32,11 +33,10 @@ const MyCoding = (
     }
   }, []);
 
-  return <Space direction='vertical' style={{ backgroundColor: '#fff' }}>
-    <Radio.Group
-      value={state}
-      onChange={(value) => {
-        if (value === 'auto') {
+  return <div style={{ backgroundColor: '#fff' }}>
+    <div style={{ display: 'flex' }}>
+      <LinkButton style={{ paddingRight:8 }} onClick={() => {
+        if (!auto) {
           run({
             params: {
               type: module,
@@ -44,16 +44,15 @@ const MyCoding = (
           });
         }
         onChange(null);
-        setState(value);
-      }}
-    >
-      <Space>
-        <Radio value='auto'>自动生成</Radio>
-        <Radio value='action'>手动输入</Radio>
-      </Space>
-    </Radio.Group>
-    {loading ? <Loading /> : <Input value={value || ''} placeholder='请输入编码' onChange={onChange} />}
-  </Space>;
+        setAuto(!auto);
+      }}>{auto ? '自动生成' : '手动输入'}</LinkButton>
+      <div style={{ flexGrow: 1 }}>
+        {loading ? <Loading /> :
+          <Input value={value || ''} placeholder='请输入编码' onChange={onChange} />}
+      </div>
+    </div>
+
+  </div>;
 };
 
 export default MyCoding;

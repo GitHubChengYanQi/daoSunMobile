@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { Button, Card, Dialog, List, Space, Tabs, Toast } from 'antd-mobile';
 import { storehousePositionsTreeView } from '../../Url';
 import { request, useRequest } from '../../../../util/Request';
-import { connect } from 'dva';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useSetState } from 'ahooks';

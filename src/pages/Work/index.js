@@ -66,11 +66,7 @@ const Work = () => {
 
   return (
     <div>
-      <Affix offsetTop={0}>
-        <ListItem extra={<div>{user && user.deptName}</div>}>
-          <div>{date().hours}，{user && user.name}</div>
-        </ListItem>
-      </Affix>
+      <div style={{position:'sticky',top:0,backgroundColor:'#fff',padding:8,zIndex:999}}>{date().hours}，{user && user.name}</div>
       <Card title='常用工具'>
         {GridStyle(
           <>
@@ -134,12 +130,13 @@ const Work = () => {
         {
           GridStyle(
             <>
+              {GridContent('icon-zhijianrenwuguanli', '生产工单', '/Work/Production')}
+              {GridContent('icon-zhijianrenwuguanli', '生产任务', '/Work/ProductionTask')}
               {GridContent('icon-zhijianrenwuguanli', '质检任务管理', () => toast())}
             </>,
           )
         }
       </Card>
-
 
 
       <Card title='采购管理'>
@@ -160,7 +157,7 @@ const Work = () => {
               {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
               {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
               {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
-              {GridContent('icon-chukuguanli1', '出库管理', () => toast())}
+              {GridContent('icon-chukuguanli1', '出库管理', '/Work/OutStock')}
               {GridContent('icon-ziyouchuku', '自由出库', '/Scan/OutStock/FreeOutstock')}
               {GridContent('icon-pandian', '盘点', '/Scan/Inventory')}
             </>,
