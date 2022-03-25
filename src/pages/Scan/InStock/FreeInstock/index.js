@@ -60,26 +60,37 @@ const FreeInstock = (props) => {
     }
   }, [codeId]);
 
-  return <div>
-    <Tabs
-      className={style.tab}
-      activeKey={key}
-      onChange={(key) => {
-        setScnaData({});
-        setKey(key);
-      }}
-    >
-      <Tabs.Tab title='按物料入库' key='sku'>
-        <SkuFreeInstock scanData={scnaData.type === 'sku' && scnaData.result} />
-      </Tabs.Tab>
-      <Tabs.Tab title='按库位入库' key='position'>
-        <PositionFreeInstock scanData={scnaData.type === 'storehousePositions' && scnaData.result} />
-      </Tabs.Tab>
-    </Tabs>
+  if (loading) {
+    return <MyLoading />;
+  }
 
-    {
-      loading && <MyLoading />
+  const module = () => {
+    switch (key) {
+      case 'sku':
+        return <SkuFreeInstock scanData={scnaData.type === 'sku' && scnaData.result} />;
+      case 'position':
+        return <PositionFreeInstock scanData={scnaData.type === 'storehousePositions' && scnaData.result} />;
+      default:
+        return <></>;
     }
+  };
+
+  return <div>
+    <div style={{position:'sticky',top:0,zIndex:99,backgroundColor:'#fff'}}>
+      <Tabs
+        className={style.tab}
+        activeKey={key}
+        onChange={(key) => {
+          setScnaData({});
+          setKey(key);
+        }}
+      >
+        <Tabs.Tab title='按物料入库' key='sku' />
+        <Tabs.Tab title='按库位入库' key='position' />
+      </Tabs>
+    </div>
+
+    {module()}
   </div>;
 };
 

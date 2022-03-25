@@ -48,7 +48,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
       case 'skuItems':
         // 没有生成实物的物料
         return skus.filter((item) => {
-          return !item.inkindId && (item.brandId && item.customerId && item.number);
+          return !item.inkindId && item.number;
         }).map((item) => {
           return {
             source: 'item',
@@ -65,11 +65,11 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
           return item.number > 0;
         });
         return skuNumbers.length !== skus.length;
-      case 'brandOrCustomer':
-        // 品牌或者供应商是否有问题
-        return skus.filter((item) => {
-          return !item.brandId || !item.customerId;
-        }).length > 0;
+      // case 'brandOrCustomer':
+      //   // 品牌或者供应商是否有问题
+      //   return skus.filter((item) => {
+      //     return !item.brandId || !item.customerId;
+      //   }).length > 0;
       default:
         return null;
     }
@@ -220,7 +220,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
     let i = 0;
     const array = params.data.map((item) => {
       return item.map((value) => {
-        if (!value.inkindId && value.brandId && value.customerId && value.number) {
+        if (!value.inkindId && value.number) {
           i++;
           return {
             ...value,
@@ -425,7 +425,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
         const inkindIds = await printAllCode();
         addCanvas(inkindIds);
       }}
-      rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0 || getSkuData('brandOrCustomer')}
+      rightDisabled={data.skus.length === 0 || getSkuData('errorNumber') || getSkuData('skus').length === 0}
       rightOnClick={async () => {
 
         const inkindIds = await printAllCode();
