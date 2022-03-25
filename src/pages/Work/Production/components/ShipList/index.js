@@ -39,12 +39,12 @@ const ShipList = ({ data }) => {
                   卡片数
                 </div>
                 <div>
-                  {item.count}
+                  {item.cardNumber}
                 </div>
               </Space>
               <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
-                  工单数
+                  子卡片数
                 </div>
                 <div>
                   {item.count}
@@ -55,7 +55,7 @@ const ShipList = ({ data }) => {
                   进行中
                 </div>
                 <div>
-                  0
+                  {item.toDoNum}
                 </div>
               </Space>
               <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'blue' }}>
@@ -63,7 +63,7 @@ const ShipList = ({ data }) => {
                   已完成
                 </div>
                 <div>
-                  0
+                  {item.completeNum}
                 </div>
               </Space>
             </div>
@@ -78,7 +78,7 @@ const ShipList = ({ data }) => {
             }
           </List>
 
-          <ProgressBar percent={0} />
+          <ProgressBar percent={(item.completeNum / item.count) * 100} />
           <Button
             onClick={() => {
               history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${item.count}&shipName=${shipSetpResult.shipSetpName}`);

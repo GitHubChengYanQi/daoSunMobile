@@ -193,6 +193,13 @@ const Auth = (props) => {
 
   useEffect(() => {
     setIsLogin(token);
+    if (token){
+      if (!props.userInfo.userInfo) {
+        props.dispatch({
+          type: 'userInfo/getUserInfo',
+        });
+      }
+    }
     if (!token && getHeader() && process.env.NODE_ENV !== 'development') {
       loginBycode();
     }

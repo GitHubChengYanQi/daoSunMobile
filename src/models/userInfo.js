@@ -2,7 +2,7 @@ import { request } from '../util/Request';
 
 export default {
   namespace: 'userInfo',
-  state: null,
+  state: {},
   reducers: {
     //改变state
     setUserInfo(state, { payload }) {
@@ -13,6 +13,9 @@ export default {
   effects: {
     // 获取用户信息
     * getUserInfo({ payload }, { call, put }) {
+      yield put({
+        type: 'setUserInfo', payload: { userInfo: true },
+      });
       const userInfo = yield call(() => request(
         {
           url: '/rest/mgr/getMyInfo',

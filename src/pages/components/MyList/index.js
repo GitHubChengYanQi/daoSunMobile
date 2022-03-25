@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
@@ -8,7 +8,7 @@ let limit = 10;
 
 const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
   const [pages, setPage] = useState(1);
 
@@ -38,6 +38,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
         setContents(array);
         typeof getData === 'function' && getData(array);
         setPage(pages + 1);
+        setHasMore(true);
       } else {
         setHasMore(false);
         if (pages === 1) {
@@ -51,6 +52,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   });
 
   const submit = (value) => {
+    setHasMore(false);
     setPage(1);
     setContents([]);
     setParams(value);
@@ -65,7 +67,7 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
   }));
 
   if (loading && pages === 1) {
-    return <MyLoading title='正在拼命加载数据' />;
+    return <MyLoading />;
   }
 
   if (!data || data.length === 0) {
