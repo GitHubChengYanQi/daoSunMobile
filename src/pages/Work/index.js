@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  ListItem,
-} from 'weui-react-v2';
-import { Affix } from 'antd';
 import { history } from 'umi';
 import { Card, Divider, Grid, Space, Toast } from 'antd-mobile';
 import Icon from '../components/Icon';
@@ -48,7 +44,7 @@ const Work = () => {
   };
 
   const GridContent = (icon, title, routers) => {
-    return <Grid.Item style={{ width: '20vw', textAlign: 'center' }} onClick={() => {
+    return <Grid.Item style={{ width: '100%', textAlign: 'center' }} onClick={() => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
@@ -59,7 +55,7 @@ const Work = () => {
   };
 
   const GridStyle = (chirlen) => {
-    return <Grid columns={4} style={{ '--gap-vertical': '16px' }}>
+    return <Grid columns={3} style={{ '--gap-vertical': '16px' }}>
       {chirlen}
     </Grid>;
   };
