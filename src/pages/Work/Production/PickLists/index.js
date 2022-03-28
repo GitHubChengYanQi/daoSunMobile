@@ -86,10 +86,7 @@ const PickLists = (props) => {
         data.map((item, index) => {
           return <Card
             onClick={() => {
-              Toast.show({
-                content: '暂未开通，等两天啊',
-              });
-              // history.push(`/Work/ProductionTask/Detail?id=${item.productionTaskId}`);
+              history.push(`/Work/Production/PickDetail?id=${111}`);
             }}
             key={index}
             title={<Space align='start'>
