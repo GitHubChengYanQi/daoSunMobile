@@ -13,6 +13,7 @@ import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons'
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
+import { getHeader } from '../../../components/GetHeader';
 
 const Detail = (props) => {
   const params = props.location.query;
@@ -88,18 +89,15 @@ const Detail = (props) => {
   const backgroundDom = () => {
 
     return <Card
-      title='基本信息'
+      title={<div> <Label>工序：</Label>{shipSetpResult.shipSetpName}</div>}
       className={styles.mainDiv}
-      style={{ backgroundColor: '#fff', height: 'auto' }}>
+      style={{ backgroundColor: '#fff', }}>
       <Space direction='vertical'>
         <div>
           <Label>任务编码：</Label>{data.coding}
         </div>
         <div>
           <Label>任务状态：</Label>{status(data.status)}
-        </div>
-        <div>
-          <Label>工序：</Label>{shipSetpResult.shipSetpName}
         </div>
         <div>
           <Label>执行数量：</Label> {data.number}
@@ -174,9 +172,13 @@ const Detail = (props) => {
   };
 
   return <div>
-    <MyNavBar title='工单详情' />
+    <MyNavBar title='任务详情' />
     <div>
-      <MyFloatingPanel backgroundColor backgroundDom={backgroundDom()}>
+      <MyFloatingPanel
+        backgroundColor
+        maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+        backgroundDom={backgroundDom()}
+      >
         <Tabs
           activeKey={key}
           style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}

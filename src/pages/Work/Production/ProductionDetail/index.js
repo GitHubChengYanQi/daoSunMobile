@@ -10,6 +10,7 @@ import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import Label from '../../../components/Label';
 import SkuList from '../components/SkuList';
 import ShipList from '../components/ShipList';
+import { getHeader } from '../../../components/GetHeader';
 
 const ProductionDetail = (props) => {
   const params = props.location.query;
@@ -36,15 +37,11 @@ const ProductionDetail = (props) => {
   const backgroundDom = () => {
 
     return <Card
-      title='基本信息'
-      className={styles.mainDiv}
-      style={{ backgroundColor: '#fff', height: 'auto', padding: 16 }}>
+      title={<div><Label>工单主题：</Label>{data.theme}</div>}
+      style={{ backgroundColor: '#fff', }}>
       <Space direction='vertical'>
         <div>
           <Label>工单编号：</Label>{data.coding}
-        </div>
-        <div>
-          <Label>工单主题：</Label>{data.theme}
         </div>
         <div>
           <Label>执行开始时间：</Label>{data.executionTime}
@@ -78,16 +75,18 @@ const ProductionDetail = (props) => {
 
   return <div>
     <MyNavBar title='工单详情' />
-    <MyFloatingPanel backgroundDom={backgroundDom()}>
+    <MyFloatingPanel
+      maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+      backgroundDom={backgroundDom()}>
       <Tabs
         activeKey={key}
-        style={{ position: 'sticky', top: 0, backgroundColor: '#fff',zIndex:999 }}
+        style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
         onChange={setKey}
       >
         <Tabs.Tab title='生产工序' key='ship' />
         <Tabs.Tab title='生产信息' key='sku' />
       </Tabs>
-      <div style={{backgroundColor:'#eee'}}>
+      <div style={{ backgroundColor: '#eee' }}>
         {module()}
       </div>
     </MyFloatingPanel>
