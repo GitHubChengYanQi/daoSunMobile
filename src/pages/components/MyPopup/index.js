@@ -8,6 +8,7 @@ const MyPopup = (
     position,
     component: Component,
     title,
+    destroyOnClose = true,
     onSuccess = () => {
     },
     onClose = () => {
@@ -37,20 +38,22 @@ const MyPopup = (
   return <>
     <Popup
       visible={visible}
-      destroyOnClose
+      destroyOnClose={destroyOnClose}
       onMaskClick={() => {
         close();
       }}
       position={position || 'right'}
     >
       <Card
-        style={{ minWidth: '50vw' }}
+        style={{ minWidth: '50vw',maxHeight:'100vw',overflow:'auto' }}
         title={title || '选择'}
+        headerStyle={{position:'sticky',top:0,backgroundColor:'#fff',zIndex:99}}
         extra={<LinkButton title={<CloseOutline />} onClick={() => {
           close();
         }} />}
       >
         <Component
+          {...props}
           value={value}
           onSuccess={(value) => {
             onSuccess(value);

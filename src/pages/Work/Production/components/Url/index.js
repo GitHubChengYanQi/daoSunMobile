@@ -31,8 +31,59 @@ export const productionPickListsList = {
 };
 
 
+export const productionPickListsDetail = {
+  url: '/productionPickLists/detail',
+  method: 'POST'
+};
+
+export const productionPickListsMergeDetail = {
+  url: '/productionPickLists/mergeDetail',
+  method: 'POST'
+};
+
+
+export const productionPickListsGetByTask = {
+  url: '/productionPickLists/getByTask',
+  method: 'POST'
+};
+
+
+export const productionTaskGetPickCode = {
+  url: '/productionTask/getPickCode',
+  method: 'POST'
+};
+
+
+export const productionPickListsCreateOutOrder = {
+  url: '/productionPickLists/createOutStockOrder',
+  method: 'POST'
+};
+
+
+export const productionPickListsCartAdd = {
+  url: '/productionPickListsCart/add',
+  method: 'POST'
+};
+
+
+  export const productionPickListsCartDelete = {
+  url: '/productionPickListsCart/delete',
+  method: 'POST'
+};
+
+export const productionPickListsCartList = {
+  url: '/productionPickListsCart/list',
+  method: 'POST'
+};
+
+
 export const productionPickListsSelfList = {
   url: '/productionPickLists/selfList',
+  method: 'POST'
+};
+
+export const productionPickListCartGroupByUserList = {
+  url: '/productionPickListsCart/groupByUserList',
   method: 'POST'
 };
 

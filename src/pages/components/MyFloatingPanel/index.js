@@ -25,6 +25,7 @@ const MyFloatingPanel = (
       for (let i = minHeight; i < maxHeight; i++) {
         heights.push(i);
       }
+      console.log(minHeight);
       setAnchors([minHeight, maxHeight,...heights]);
     }
   }, []);

@@ -40,14 +40,17 @@ const Home = () => {
   return (
     <>
 
-      <NoticeBar
-        icon
-        content={
-          <div>
-            <span style={{ fontSize: 24 }}>{time}</span>
-            {xq}
-          </div>
-        } color='default' />
+      <div style={{position:'sticky',top:0,backgroundColor:'#fff',zIndex:99}}>
+        <NoticeBar
+          icon
+          content={
+            <div>
+              <span style={{ fontSize: 24 }}>{time}</span>
+              {xq}
+            </div>
+          } color='default' />
+      </div>
+
 
 
       <Tark />

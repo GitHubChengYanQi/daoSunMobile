@@ -1,20 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useRequest } from '../../../../util/Request';
+import React, { useRef, useState } from 'react';
 import {
   productionPickListsList,
   productionPickListsSelfList,
-  productionTaskList,
-  productionTaskReceive,
 } from '../components/Url';
-import { CapsuleTabs, Card, Dialog, Space, Tabs, Toast } from 'antd-mobile';
+import { CapsuleTabs, Card, Checkbox, Space } from 'antd-mobile';
 import { history } from 'umi';
-import { MyLoading } from '../../../components/MyLoading';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../../components/MyNavBar';
 import MySearchBar from '../../../components/MySearchBar';
 import MyList from '../../../components/MyList';
 import styles from '../index.css';
 import Label from '../../../components/Label';
+import BottomButton from '../../../components/BottomButton';
+import Icon from '../../../components/Icon';
 
 
 const PickLists = (props) => {
@@ -25,6 +23,10 @@ const PickLists = (props) => {
 
   const [state, setState] = useState('0');
 
+  const [merge, setMerge] = useState(false);
+
+  const [ids, setIds] = useState([]);
+
   const ref = useRef();
 
   const status = (state) => {
@@ -33,22 +35,6 @@ const PickLists = (props) => {
         return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
       default:
         return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
-    }
-  };
-
-  const type = (value, data) => {
-    switch (value) {
-      case 'user':
-
-        break;
-      case 'create':
-
-        break;
-      case 'get':
-
-        break;
-      default:
-        break;
     }
   };
 
@@ -82,34 +68,72 @@ const PickLists = (props) => {
       getData={(data) => {
         setData(data.filter(() => true));
       }}>
-      {
-        data.map((item, index) => {
-          return <Card
-            onClick={() => {
-              history.push(`/Work/Production/PickDetail?id=${111}`);
-            }}
-            key={index}
-            title={<Space align='start'>
-              {status(item.status)}
-              <div>
-                {/*编号：{item.coding}*/}
-              </div>
-            </Space>} className={styles.item}>
-            <Space direction='vertical'>
-              <div>
-                <Label>任务编码：</Label>{item.productionTaskResult && item.productionTaskResult.coding}
-              </div>
-              <div>
-                <Label>领料人：</Label>{item.userResult && item.userResult.name}
-              </div>
-              <div>
-                <Label>创建时间：</Label>{item.createTime}
-              </div>
-            </Space>
-          </Card>;
-        })
-      }
+        {
+          data.map((item, index) => {
+            return <Card
+              extra={merge && <Checkbox
+                checked={ids.includes(item.pickListsId)}
+                icon={checked =>
+                  checked ? <Icon type='icon-duoxuanxuanzhong1' /> : <Icon type='icon-a-44-110' />
+                }
+              />}
+              onClick={() => {
+                if (merge) {
+                  if (ids.includes(item.pickListsId)) {
+                    const array = ids.filter((idItem) => {
+                      return idItem !== item.pickListsId;
+                    });
+                    setIds(array);
+                  } else {
+                    setIds([...ids, item.pickListsId]);
+                  }
+                } else if (params.type === 'all') {
+                  history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
+                } else {
+                  history.push(`/Work/Production/Pick?id=${item.sourceId}`);
+                }
+              }}
+              key={index}
+              title={<Space align='start'>
+                {status(item.status)}
+                <div>
+                  {/*编号：{item.coding}*/}
+                </div>
+              </Space>} className={styles.item}>
+              <Space direction='vertical'>
+                <div>
+                  <Label>领料编码：</Label>{item.productionTaskResult && item.productionTaskResult.coding}
+                </div>
+                <div>
+                  <Label>领料人：</Label>{item.userResult && item.userResult.name}
+                </div>
+                <div>
+                  <Label>创建时间：</Label>{item.createTime}
+                </div>
+              </Space>
+            </Card>;
+          })
+        }
     </MyList>
+
+    {params.type === 'all' && <BottomButton
+      only={!merge}
+      text='合并领料'
+      color={merge ? 'primary' : 'default'}
+      onClick={() => {
+        setIds(data.map(item => item.pickListsId));
+        setMerge(true);
+      }}
+      leftText='取消合并'
+      leftOnClick={() => {
+        setMerge(false);
+      }}
+      rightDisabled={ids.length === 0}
+      rightText='合并领料'
+      rightOnClick={() => {
+        history.push(`/Work/Production/PickDetail?ids=${ids.join(',')}`);
+      }}
+    />}
   </>;
 };
 
