@@ -12,6 +12,7 @@ const Work = () => {
 
   const { data: user } = useRequest({ url: '/rest/system/currentUserInfo', method: 'POST' });
 
+
   const date = () => {
     if (hours > 5 && hours < 8) {
       return {
@@ -152,10 +153,9 @@ const Work = () => {
           GridStyle(
             <>
               {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
-              {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists?type=all')}
+              {GridContent('icon-zhijianrenwuguanli', '出库单', '/Work/Production/PickLists?type=all')}
               {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
               {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
-              {GridContent('icon-chukuguanli1', '出库管理', '/Work/OutStock')}
               {GridContent('icon-ziyouchuku', '自由出库', '/Scan/OutStock/FreeOutstock')}
               {GridContent('icon-pandian', '盘点', '/Scan/Inventory')}
             </>,

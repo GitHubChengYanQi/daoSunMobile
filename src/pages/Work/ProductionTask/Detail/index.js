@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionTaskDetail } from '../../Production/components/Url';
+import { productionTaskDetail, productionTaskGetPickCode } from '../../Production/components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Card, List, Space, Tabs } from 'antd-mobile';
+import { Card, Dialog, List, Space, Tabs } from 'antd-mobile';
 import styles from '../../Production/index.css';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
@@ -13,6 +13,8 @@ import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons'
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
+import { getHeader } from '../../../components/GetHeader';
+import Pick from '../../Production/Pick';
 
 const Detail = (props) => {
   const params = props.location.query;
@@ -20,6 +22,17 @@ const Detail = (props) => {
   const [visible, setVisible] = useState();
 
   const { loading, data, run, refresh } = useRequest(productionTaskDetail, { manual: true });
+
+  const { loading: codeLoading, run: getCode } = useRequest(productionTaskGetPickCode, {
+    manual: true,
+    onSuccess: (res) => {
+      Dialog.alert({
+        title: '领料码',
+        content: <div style={{ textAlign: 'center' }}>{res}</div>,
+        confirmText: '确定',
+      });
+    },
+  });
 
   const setpSetResult = data
     &&
@@ -88,18 +101,15 @@ const Detail = (props) => {
   const backgroundDom = () => {
 
     return <Card
-      title='基本信息'
+      title={<div><Label>工序：</Label>{shipSetpResult.shipSetpName}</div>}
       className={styles.mainDiv}
-      style={{ backgroundColor: '#fff', height: 'auto' }}>
+      style={{ backgroundColor: '#fff' }}>
       <Space direction='vertical'>
         <div>
           <Label>任务编码：</Label>{data.coding}
         </div>
         <div>
           <Label>任务状态：</Label>{status(data.status)}
-        </div>
-        <div>
-          <Label>工序：</Label>{shipSetpResult.shipSetpName}
         </div>
         <div>
           <Label>执行数量：</Label> {data.number}
@@ -151,11 +161,11 @@ const Detail = (props) => {
                     <Label>描述：</Label>
                     <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                   </div>
-                  <div style={{display:'flex'}}>
-                    <div style={{flexGrow:1,color:'green'}}>
+                  <div style={{ display: 'flex' }}>
+                    <div style={{ flexGrow: 1, color: 'green' }}>
                       <Label>已报工：</Label>{item.jobBookNumber}
                     </div>
-                    <div style={{flexGrow:1,color:'var(--adm-color-primary)'}}>
+                    <div style={{ flexGrow: 1, color: 'var(--adm-color-primary)' }}>
                       <Label>生产数：</Label>{item.num * data.number}
                     </div>
 
@@ -165,7 +175,7 @@ const Detail = (props) => {
             }
           </List>;
       case 'in':
-        return <MyEmpty />;
+        return <Pick module='task' id={params.id} />;
       case 'use':
         return <MyEmpty />;
       default:
@@ -173,10 +183,25 @@ const Detail = (props) => {
     }
   };
 
+  const bottonText = () => {
+    switch (key) {
+      case 'out':
+        return data.status === 99 ? '已完成' : '产出报工';
+      case 'in':
+        return '获取领料码';
+      default:
+        return '确认';
+    }
+  };
+
   return <div>
-    <MyNavBar title='工单详情' />
+    <MyNavBar title='任务详情' />
     <div>
-      <MyFloatingPanel backgroundColor backgroundDom={backgroundDom()}>
+      <MyFloatingPanel
+        backgroundColor
+        maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+        backgroundDom={backgroundDom()}
+      >
         <Tabs
           activeKey={key}
           style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
@@ -191,9 +216,27 @@ const Detail = (props) => {
         </div>
       </MyFloatingPanel>
     </div>
-    <BottomButton only disabled={data.status === 99} text={data.status === 99 ? '已完成' : '产出报工'} onClick={() => {
-      setVisible(true);
-    }} />
+
+    <BottomButton
+      only
+      disabled={data.status === 99}
+      text={bottonText()}
+      onClick={() => {
+        switch (key) {
+          case 'out':
+            setVisible(true);
+            break;
+          case 'in':
+            getCode({
+              data: {
+                productionTaskId: params.id,
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      }} />
 
     <ReportWork
       productionTaskId={params.id}
@@ -210,6 +253,8 @@ const Detail = (props) => {
         refresh();
       }}
     />
+
+    {codeLoading && <MyLoading />}
 
   </div>;
 };

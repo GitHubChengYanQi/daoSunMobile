@@ -11,6 +11,7 @@ import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.css';
 import * as VConsole from 'vconsole';
+import { useRequest } from '../util/Request';
 
 const iconSize = getHeader() ? 30 : 40;
 
