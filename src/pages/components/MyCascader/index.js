@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, Cascader } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { ListItem } from 'weui-react-v2';
@@ -27,6 +27,7 @@ const MyCascader = (
   {
     api,
     value,
+    options,
     poputTitle,
     arrow = true,
     defaultParams,
@@ -42,7 +43,9 @@ const MyCascader = (
 
   const { data, run } = useRequest(api, {
     defaultParams,
+    manual: !api,
   });
+
 
   const dataSourcedChildren = (data) => {
     if ((!Array.isArray(data) || data.length === 0)) {
@@ -74,7 +77,7 @@ const MyCascader = (
         }
       }
     } else {
-      valueArray = getParentValue($tmpValue, data);
+      valueArray = getParentValue($tmpValue, data || options);
     }
   } else if (Array.isArray(value)) {
     valueArray = value;
@@ -96,7 +99,7 @@ const MyCascader = (
           return;
         }
         const value = await Cascader.prompt({
-          options: dataSourcedChildren(data) || [],
+          options: dataSourcedChildren(data || options) || [],
           placeholder: '请选择',
           value: valueArray.map((items) => {
             return items.value;

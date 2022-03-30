@@ -45,9 +45,9 @@ const MyPopup = (
       position={position || 'right'}
     >
       <Card
-        style={{ minWidth: '50vw',maxHeight:'100vw',overflow:'auto' }}
+        style={{ minWidth: '50vw', height: '50vh', overflow: 'auto' }}
         title={title || '选择'}
-        headerStyle={{position:'sticky',top:0,backgroundColor:'#fff',zIndex:99}}
+        headerStyle={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 99 }}
         extra={<LinkButton title={<CloseOutline />} onClick={() => {
           close();
         }} />}

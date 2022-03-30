@@ -60,7 +60,7 @@ const Carts = (
               <div style={{ display: 'flex', padding: '0 8px' }}>
                 <div style={{ flexGrow: 1 }}>
                   <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                  <div>
+                  <div style={{ display: 'flex',fontSize:'4vw' }}>
                     <Label>描述：</Label>
                     <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                   </div>

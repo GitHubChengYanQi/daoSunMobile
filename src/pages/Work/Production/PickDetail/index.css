@@ -1,0 +1,15 @@
+.list :global .adm-list-body {
+  border: none;
+}
+
+.list a {
+ padding: 0;
+}
+
+.list {
+  margin-top: 8px;
+}
+
+.list :global .adm-list-item-content-main {
+ padding: 4px;
+}

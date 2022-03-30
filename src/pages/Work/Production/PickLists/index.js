@@ -3,7 +3,7 @@ import {
   productionPickListsList,
   productionPickListsSelfList,
 } from '../components/Url';
-import { CapsuleTabs, Card, Checkbox, Space } from 'antd-mobile';
+import { CapsuleTabs, Card, Checkbox, Divider, Space } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../../components/MyNavBar';
@@ -38,6 +38,15 @@ const PickLists = (props) => {
     }
   };
 
+  const source = (source) => {
+    switch (source) {
+      case 'productionTask':
+        return '生产任务';
+      default:
+        return '生产任务';
+    }
+  };
+
 
   return <>
     <div style={{ position: 'sticky', top: 0, zIndex: 99, backgroundColor: '#fff' }}>
@@ -68,41 +77,42 @@ const PickLists = (props) => {
       getData={(data) => {
         setData(data.filter(() => true));
       }}>
-        {
-          data.map((item, index) => {
-            return <Card
-              extra={merge && <Checkbox
-                checked={ids.includes(item.pickListsId)}
-                icon={checked =>
-                  checked ? <Icon type='icon-duoxuanxuanzhong1' /> : <Icon type='icon-a-44-110' />
-                }
-              />}
-              onClick={() => {
-                if (merge) {
-                  if (ids.includes(item.pickListsId)) {
-                    const array = ids.filter((idItem) => {
-                      return idItem !== item.pickListsId;
-                    });
-                    setIds(array);
+      {
+        data.map((item, index) => {
+          return <Card
+            extra={merge && <Checkbox
+              checked={ids.includes(item.pickListsId)}
+              icon={checked =>
+                checked ? <Icon type='icon-duoxuanxuanzhong1' /> : <Icon type='icon-a-44-110' />
+              }
+            />}
+            key={index}
+            title={<Space align='start'>
+              {status(item.status)}
+            </Space>} className={styles.item}>
+            <Space
+              direction='vertical'
+            >
+              <Space
+                direction='vertical'
+                onClick={() => {
+                  if (merge) {
+                    if (ids.includes(item.pickListsId)) {
+                      const array = ids.filter((idItem) => {
+                        return idItem !== item.pickListsId;
+                      });
+                      setIds(array);
+                    } else {
+                      setIds([...ids, item.pickListsId]);
+                    }
+                  } else if (params.type === 'all') {
+                    history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
                   } else {
-                    setIds([...ids, item.pickListsId]);
+                    history.push(`/Work/Production/Pick?id=${item.sourceId}`);
                   }
-                } else if (params.type === 'all') {
-                  history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
-                } else {
-                  history.push(`/Work/Production/Pick?id=${item.sourceId}`);
-                }
-              }}
-              key={index}
-              title={<Space align='start'>
-                {status(item.status)}
+                }}>
                 <div>
-                  {/*编号：{item.coding}*/}
-                </div>
-              </Space>} className={styles.item}>
-              <Space direction='vertical'>
-                <div>
-                  <Label>领料编码：</Label>{item.productionTaskResult && item.productionTaskResult.coding}
+                  <Label>领料编码：</Label>{item.coding}
                 </div>
                 <div>
                   <Label>领料人：</Label>{item.userResult && item.userResult.name}
@@ -111,9 +121,24 @@ const PickLists = (props) => {
                   <Label>创建时间：</Label>{item.createTime}
                 </div>
               </Space>
-            </Card>;
-          })
-        }
+              <Space>
+                <Label>来源：</Label>
+                <div
+                  onClick={() => {
+                    history.push(`/Work/ProductionTask/Detail?id=${item.sourceId}`);
+                  }}
+                  style={{ fontSize: '2vw', color: 'var(--adm-color-primary)',textAlign:'center' }}
+                >
+                  {source(item.source)}
+                  <div style={{ height: 1, backgroundColor: 'var(--adm-color-primary)' }} />
+                  {item.productionTaskResult.coding}
+                </div>
+                <Label>工序：</Label>
+              </Space>
+            </Space>
+          </Card>;
+        })
+      }
     </MyList>
 
     {params.type === 'all' && <BottomButton
