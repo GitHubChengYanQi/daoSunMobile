@@ -1,46 +1,54 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionPickListCartGroupByUserList, productionPickListsCreateOutOrder } from '../components/Url';
+import {
+  productionPickListCartGroupByUserList,
+  productionPickListsCartDelete,
+  productionPickListsSend,
+} from '../components/Url';
 import MyNavBar from '../../../components/MyNavBar';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Card, Checkbox, Collapse, Dialog, List, Space, Toast } from 'antd-mobile';
+import { Card, Checkbox, Collapse, List, SwipeAction, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
-import Number from '../../../components/Number';
 
 const PickOutStock = (props) => {
 
   const params = props.location.query;
 
-  const [visible, setVisible] = useState();
-
-  const [code, setCode] = useState();
-
   const [carts, setCarts] = useState([]);
 
   const { loading, data, run, refresh } = useRequest(productionPickListCartGroupByUserList, { manual: true });
 
-  const { loading: outLoading, run: outstock } = useRequest(productionPickListsCreateOutOrder, {
+  const { loading: pickLoading, run: pickRun } = useRequest(productionPickListsSend, {
     manual: true,
     onSuccess: () => {
-      refresh();
       setCarts([]);
-      setCode(null);
-      setVisible(false);
+      refresh();
       Toast.show({
-        content: '出库成功！',
+        content: '提醒领取成功！',
         position: 'bottom',
       });
     },
     onError: () => {
       Toast.show({
-        content: '出库失败！',
+        content: '提醒领取失败！',
         position: 'bottom',
       });
+    },
+  });
+
+  const { loading:deleteLoading, run:deleteRun } = useRequest(productionPickListsCartDelete, {
+    manual: true,
+    onSuccess: () => {
+      Toast.show({
+        content: '移出成功！',
+        position: 'bottom',
+      });
+      refresh();
     },
   });
 
@@ -58,45 +66,20 @@ const PickOutStock = (props) => {
     return <MyLoading />;
   }
 
-  if (!data) {
-    return <MyEmpty />;
+  if (!data || data.filter((item) => item.cartResults && item.cartResults.length === 0).length === data.length) {
+    return <div>
+      <MyNavBar title='备料详情' />
+      <MyEmpty />
+    </div>;
   }
 
   const getKey = (key) => {
     return carts.map(item => item.key).includes(key);
   };
 
-  const skuChecked = (checked, cartItem, cartResults, userKey, userId) => {
-    const object = {
-      key: cartItem.pickListsCart,
-      skuId: cartItem.skuId,
-      number: cartItem.number,
-      userId,
-      pickListsId: cartItem.pickListsId,
-      storehouseId: cartItem.storehouseId,
-      storehousePositionsId: cartItem.storehousePositionsId,
-    };
-    if (checked) {
-      const array = carts.filter((item) => {
-        return item.userId === userId;
-      });
-      if ((cartResults.filter(item => getKey(item.pickListsCart)).length + 1) === cartResults.length) {
-        setCarts([...array, object, { key: userKey }]);
-      } else {
-        setCarts([...array, object]);
-      }
-
-    } else {
-      const array = carts.filter((item) => {
-        return item.key !== userKey && item.key !== cartItem.pickListsCart;
-      });
-      setCarts(array);
-    }
-  };
-
   return <div style={{ paddingBottom: 16 }}>
-    <div style={{ position: 'sticky', top: 0,backgroundColor:'#fff',zIndex:99 }}>
-      <MyNavBar title='出库详情' />
+    <div style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 99 }}>
+      <MyNavBar title='备料详情' />
     </div>
     <div style={{ marginBottom: 60 }}>
       {
@@ -104,6 +87,9 @@ const PickOutStock = (props) => {
           const userId = item.userId;
           const userKey = `userId${item.userId}`;
           const cartResults = item.cartResults || [];
+          if (cartResults.length === 0) {
+            return null;
+          }
           const productionPickListsResults = [];
           cartResults.map(item => {
             if (!productionPickListsResults.map(item => item.pickListsId).includes(item.pickListsId)) {
@@ -128,6 +114,7 @@ const PickOutStock = (props) => {
                       skuId: cartItem.skuId,
                       userId,
                       number: cartItem.number,
+                      pickListsCart: cartItem.pickListsCart,
                       pickListsId: cartItem.pickListsId,
                       storehouseId: cartItem.storehouseId,
                       storehousePositionsId: cartItem.storehousePositionsId,
@@ -164,34 +151,36 @@ const PickOutStock = (props) => {
                       style={{ padding: 0 }}
                       key={index}
                       arrow={false}
-                      extra={`× ${cartItem.number}`}
-                      onClick={() => {
-                        skuChecked(!getKey(cartItem.pickListsCart), cartItem, cartResults, userKey, userId);
-                      }}
                     >
-                      <div style={{ display: 'flex' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', marginRight: 8 }}>
-                          <Checkbox
-                            checked={getKey(cartItem.pickListsCart)}
-                            icon={checked =>
-                              checked ? <Icon type='icon-duoxuanxuanzhong1' /> : <Icon type='icon-a-44-110' />
-                            }
-                          />
-                        </div>
-                        <div style={{ flexGrow: 1 }}>
-                          <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                          <div>
-                            <Label style={{ fontSize: '4vw' }}>描述：</Label>
-                            <MyEllipsis
-                              width='60%'
-                              smallFont
-                            ><SkuResult_skuJsons
-                              skuResult={skuResult}
-                              describe /></MyEllipsis>
+                      <SwipeAction
+                      rightActions={[
+                        {
+                          key: 'delete',
+                          text: '移出',
+                          color: 'danger',
+                          onClick: () => {
+                            deleteRun({
+                              data: {
+                                pickListsCart: cartItem.pickListsCart,
+                              },
+                            });
+                          },
+                        },
+                      ]}
+                    >
+                        <div style={{ display: 'flex', padding: '0 8px' }}>
+                          <div style={{ flexGrow: 1 }}>
+                            <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                            <div style={{ display: 'flex',fontSize:'4vw' }}>
+                              <Label>描述：</Label>
+                              <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                            </div>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center' }}>
+                            × {cartItem.number}
                           </div>
                         </div>
-                      </div>
-
+                    </SwipeAction>
                     </List.Item>;
                   })
               }
@@ -200,7 +189,7 @@ const PickOutStock = (props) => {
               <Collapse.Panel key='1' title='查看关联领料单'>
                 {productionPickListsResults.map((item, index) => {
                   return <div key={index}>
-                    <Label>领料单编码：</Label>{item.pickListsId}
+                    <Label>领料单编码：</Label>{item.coding}
                   </div>;
                 })}
               </Collapse.Panel>
@@ -210,57 +199,27 @@ const PickOutStock = (props) => {
         })
       }
     </div>
-    <Dialog
-      visible={visible}
-      title='请输入领料码'
-      content={<>
-        <Number onChange={setCode} value={code} />
-      </>}
-      onAction={(action) => {
-        if (action.key === 'ok') {
-          if (!code) {
-            return Toast.show({ content: '请输入领料码!', position: 'bottom' });
-          }
-          const array = carts.filter((item) => {
-            return item.skuId;
-          });
-          outstock({
-            data: {
-              code,
-              pickListsDetailParams: array.map((item) => {
-                return {
-                  ...item,
-                  pickListsCartId: item.key,
-                };
-              }),
-            },
-          });
-        } else {
-          setCode(null);
-          setVisible(false);
-        }
-      }}
-      actions={[[{
-        text: '取消',
-        key: 'close',
-      }, {
-        text: '确定',
-        key: 'ok',
-      }]]}
-    />
 
     <BottomButton
       only
       disabled={carts.filter((item) => {
         return item.skuId;
       }).length === 0}
-      text='出库'
+      text='提醒领取'
       onClick={() => {
-        setVisible(true);
+        const array = carts.filter((item) => {
+          return item.skuId;
+        });
+        pickRun({
+          data: {
+            userIds: array.map(item => item.userId),
+            cartsParams: array,
+          },
+        });
       }}
     />
 
-    {outLoading && <MyLoading />}
+    {(pickLoading || deleteLoading) && <MyLoading />}
 
   </div>;
 };

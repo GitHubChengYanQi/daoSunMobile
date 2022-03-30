@@ -130,6 +130,7 @@ const Work = () => {
               {GridContent('icon-zhijianrenwuguanli', '生产工单', '/Work/Production')}
               {GridContent('icon-zhijianrenwuguanli', '生产任务', '/Work/ProductionTask')}
               {GridContent('icon-zhijianrenwuguanli', '领料管理', '/Work/Production/PickLists')}
+              {GridContent('icon-zhijianrenwuguanli', '我的领料', '/Work/Production/MyCart')}
               {GridContent('icon-zhijianrenwuguanli', '质检任务管理', () => toast())}
             </>,
           )

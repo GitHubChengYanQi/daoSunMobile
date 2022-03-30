@@ -15,13 +15,21 @@ import ReportWork from './components/ReportWork';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import { getHeader } from '../../../components/GetHeader';
 import Pick from '../../Production/Pick';
+import { history } from 'umi';
 
 const Detail = (props) => {
   const params = props.location.query;
 
   const [visible, setVisible] = useState();
 
-  const { loading, data, run, refresh } = useRequest(productionTaskDetail, { manual: true });
+  const [disabled, setDisabled] = useState(true);
+
+  const { loading, data, run, refresh } = useRequest(productionTaskDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      setDisabled(res.status === 99);
+    },
+  });
 
   const { loading: codeLoading, run: getCode } = useRequest(productionTaskGetPickCode, {
     manual: true,
@@ -157,7 +165,7 @@ const Detail = (props) => {
                 const skuResult = item.skuResult || {};
                 return <List.Item key={index}>
                   <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                  <div>
+                  <div style={{ display: 'flex',fontSize:'4vw' }}>
                     <Label>描述：</Label>
                     <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                   </div>
@@ -175,7 +183,7 @@ const Detail = (props) => {
             }
           </List>;
       case 'in':
-        return <Pick module='task' id={params.id} />;
+        return <Pick module='task' id={params.id} getStatus={setDisabled} />;
       case 'use':
         return <MyEmpty />;
       default:
@@ -183,12 +191,35 @@ const Detail = (props) => {
     }
   };
 
-  const bottonText = () => {
+  const bottomBotton = () => {
     switch (key) {
       case 'out':
-        return data.status === 99 ? '已完成' : '产出报工';
+        return <BottomButton
+          only
+          disabled={disabled}
+          text={data.status === 99 ? '已完成' : '产出报工'}
+          right
+          onClick={() => {
+            setVisible(true);
+          }} />;
       case 'in':
-        return '获取领料码';
+        return <BottomButton
+          rightDisabled={disabled}
+          leftText='我的领料'
+          leftOnClick={() => {
+            history.push('/Work/Production/MyCart');
+          }}
+          rightText='确认领取'
+          right
+          rightOnClick={() => {
+
+            // getCode({
+            //   data: {
+            //     productionTaskId: params.id,
+            //   },
+            // });
+
+          }} />;
       default:
         return '确认';
     }
@@ -205,7 +236,19 @@ const Detail = (props) => {
         <Tabs
           activeKey={key}
           style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-          onChange={setKey}
+          onChange={(key) => {
+            switch (key) {
+              case 'out':
+                setDisabled(data.status === 99);
+                break;
+              case 'in':
+                setDisabled(true);
+                break;
+              default:
+                break;
+            }
+            setKey(key);
+          }}
         >
           <Tabs.Tab title='产出明细' key='out' />
           <Tabs.Tab title='投入明细' key='in' />
@@ -217,26 +260,7 @@ const Detail = (props) => {
       </MyFloatingPanel>
     </div>
 
-    <BottomButton
-      only
-      disabled={data.status === 99}
-      text={bottonText()}
-      onClick={() => {
-        switch (key) {
-          case 'out':
-            setVisible(true);
-            break;
-          case 'in':
-            getCode({
-              data: {
-                productionTaskId: params.id,
-              },
-            });
-            break;
-          default:
-            break;
-        }
-      }} />
+    {bottomBotton()}
 
     <ReportWork
       productionTaskId={params.id}
