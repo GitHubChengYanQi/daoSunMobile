@@ -44,6 +44,7 @@ const MyTree = (
       >
         <Tree
           showLine
+          defaultExpandAll
           defaultExpandedKeys={[value]}
           selectedKeys={[value]}
           switcherIcon={<DownOutlined />}

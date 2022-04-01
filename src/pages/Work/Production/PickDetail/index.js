@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import {
   productionPickListsCartAdd,
-  productionPickListsCartList, productionPickListsCreateOutOrder,
-  productionPickListsMergeDetail, productionPickListsSend,
+  productionPickListsCreateOutOrder,
+  productionPickListsMergeDetail,
 } from '../components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
@@ -42,7 +42,44 @@ const PickDetail = (props) => {
 
   const [positions, setPositions] = useState({});
 
-  const getChildren = (data, details, top) => {
+  const getSkuResults = (skuItem, item, array, cart) => {
+    if (array.length === 0) {
+      return null;
+    }
+    let number = 0;
+    let pickLists = [];
+    array.map((item) => {
+      number += item.number;
+      if (pickLists.map(item => item.userId).includes(item.userResult && item.userResult.userId)) {
+        return pickLists = pickLists.map((userItem) => {
+          if (userItem.userId === (item.userResult && item.userResult.userId)) {
+            return {
+              ...userItem,
+              number: item.number + userItem.number,
+              lists: [...userItem.lists, item],
+            };
+          }
+          return userItem;
+        });
+      }
+      return pickLists.push({
+        userId: item.userResult && item.userResult.userId,
+        userResult: item.userResult,
+        number: item.number,
+        lists: [item],
+      });
+    });
+    return {
+      ...skuItem,
+      positionId: item.storehousePositionsId,
+      storehouseId: item.storehouseId,
+      number,
+      pickLists,
+      cart,
+    };
+  };
+
+  const getChildren = (data, details = [], cartResults = [], top) => {
 
     if (!Array.isArray(data)) {
       return null;
@@ -50,46 +87,30 @@ const PickDetail = (props) => {
 
     const skuResults = [];
     const option = data.map((item) => {
+      const carts = [];
+      const detailSkus = [];
+      item.skuResults && item.skuResults.map((skuItem) => {
+        const sku = details.filter(item => skuItem.skuId === item.skuId);
+        const allCarts = cartResults.filter(item => skuItem.skuId === item.skuId);
+        const objectSku = getSkuResults(skuItem, item, sku);
+        const cartResult = getSkuResults(skuItem, item, allCarts, true);
+        if (objectSku) {
+          skuResults.push(objectSku);
+          detailSkus.push(objectSku);
+        }
+        if (cartResult) {
+          carts.push(cartResult);
+          skuResults.push(cartResult);
+        }
+
+        return null;
+      });
       return {
         icon: <CollectMoneyOutline />,
         title: `${item.name} (${item.skuResults ? item.skuResults.length : 0})`,
         key: item.storehousePositionsId,
-        skus: item.skuResults && item.skuResults.map((skuItem) => {
-          const sku = details.filter(item => skuItem.skuId === item.skuId);
-          let number = 0;
-          let pickLists = [];
-          sku.map((item) => {
-            number += item.number;
-            if (pickLists.map(item => item.userId).includes(item.userResult && item.userResult.userId)) {
-              return pickLists = pickLists.map((userItem) => {
-                if (userItem.userId === (item.userResult && item.userResult.userId)) {
-                  return {
-                    ...userItem,
-                    number: item.number + userItem.number,
-                    lists: [...userItem.lists, item],
-                  };
-                }
-                return userItem;
-              });
-            }
-            return pickLists.push({
-              userId: item.userResult && item.userResult.userId,
-              userResult: item.userResult,
-              number: item.number,
-              lists: [item],
-            });
-          });
-          const object = {
-            ...skuItem,
-            positionId: item.storehousePositionsId,
-            storehouseId: item.storehouseId,
-            number,
-            pickLists,
-          };
-          skuResults.push(object);
-          return object;
-        }),
-        children: !top && getChildren(item.storehousePositionsResults, details),
+        skus: [...detailSkus, ...carts],
+        children: !top && getChildren(item.storehousePositionsResults, details, cartResults),
       };
     });
 
@@ -99,7 +120,7 @@ const PickDetail = (props) => {
         title: `全部 (${skuResults.length})`,
         key: 'all',
         skus: skuResults,
-        children: getChildren(data, details),
+        children: getChildren(data, details, cartResults),
       }];
     }
     if (data.length === 0) {
@@ -112,6 +133,7 @@ const PickDetail = (props) => {
     if (extend && Array.isArray(extend.skus)) {
       setSkus(extend.skus.map((item) => {
         return {
+          cart: item.cart,
           skuResult: item,
           skuId: item.skuId,
           number: item.number,
@@ -123,12 +145,34 @@ const PickDetail = (props) => {
     }
   };
 
+  const getChecked = (data, key) => {
+    if (Array.isArray(data)) {
+      const array = data.filter((item) => {
+        return item.key = key;
+      });
+      if (array.length === 1) {
+        return array[0];
+      } else {
+        return getChecked(data.children, key);
+      }
+    } else {
+      return null;
+    }
+  };
+
   const { loading, data, run, refresh } = useRequest(productionPickListsMergeDetail, {
     manual: true,
     onSuccess: (res) => {
-      const allSku = getChildren(res && res.storehousePositionsResults, res && res.detailResults, true) || [];
-      setPositions(allSku[0]);
-      getSkus(allSku[allSku.length - 1]);
+      const allSku = getChildren(res && res.storehousePositionsResults, res && res.detailResults, res && res.cartResults, true) || [];
+      if (positions.key) {
+        const checked = getChecked(allSku, positions.key) || {};
+        setPositions(checked);
+        getSkus(checked);
+      } else {
+        setPositions(allSku[0]);
+        getSkus(allSku[allSku.length - 1]);
+      }
+
     },
   });
 
@@ -149,11 +193,7 @@ const PickDetail = (props) => {
     },
   });
 
-  const options = getChildren(data && data.storehousePositionsResults, data && data.detailResults, true) || [];
-
-  const { loading: cartLoading, data: cartData, run: cartRun, refresh: cartRefresh } = useRequest(
-    productionPickListsCartList,
-    { manual: true });
+  const options = getChildren(data && data.storehousePositionsResults, data && data.detailResults, data && data.cartResults, true) || [];
 
   const { loading: pickLoading, run: pick } = useRequest(productionPickListsCartAdd, {
     manual: true,
@@ -163,7 +203,6 @@ const PickDetail = (props) => {
         position: 'bottom',
       });
       refresh();
-      cartRefresh();
     },
     onError(err) {
       Toast.show({
@@ -176,7 +215,6 @@ const PickDetail = (props) => {
   useEffect(() => {
     if (params.ids && params.ids.split(',')) {
       run({ data: { pickListsIds: params.ids.split(',') } });
-      cartRun({ data: { pickListsIds: params.ids.split(',') } });
     }
   }, []);
 
@@ -317,6 +355,7 @@ const PickDetail = (props) => {
                     </Card>
                     <div>
                       <Button
+                        disabled={item.cart}
                         onClick={() => {
                           pick({
                             data: {
@@ -332,7 +371,7 @@ const PickDetail = (props) => {
                           borderBottomLeftRadius: 10,
                         }}
                       >
-                        备料
+                        {item.cart ? '已备料' : '备料'}
                       </Button>
                       <Button
                         onClick={() => {
@@ -363,20 +402,15 @@ const PickDetail = (props) => {
 
 
     <BottomButton
-      leftText={<Badge content={cartData && cartData.length}><Space style={{ margin: '0 16px' }}><Icon
+      leftText={<Badge content={data.cartResults && data.cartResults.length}><Space style={{ margin: '0 16px' }}><Icon
         type='icon-gouwuchekong' />备料</Space></Badge>}
       rightText={<Space><Icon type='icon-chuku' />完成备料</Space>}
-      rightDisabled={!cartData || cartData.length === 0}
+      rightDisabled={!data.cartResults || data.cartResults.length === 0}
+      leftDisabled={!data.cartResults || data.cartResults.length === 0}
       rightOnClick={() => {
         history.push(`/Work/Production/PickOutStock?ids=${params.ids}`);
       }}
       leftOnClick={() => {
-        if (!cartData || cartData.length === 0) {
-          return Toast.show({
-            content: '清先添加备料！',
-            position: 'bottom',
-          });
-        }
         seeCarts.current.open(true);
       }}
     />
@@ -387,16 +421,15 @@ const PickDetail = (props) => {
       destroyOnClose={false}
       ref={seeCarts}
       component={Carts}
-      data={cartData}
+      data={data.cartResults && data.cartResults}
       position='bottom'
       onSuccess={() => {
         refresh();
-        cartRefresh();
       }}
     />
 
     {
-      (loading || pickLoading || cartLoading || outLoading) && <MyLoading />
+      (loading || pickLoading || outLoading) && <MyLoading />
     }
 
   </div>;
