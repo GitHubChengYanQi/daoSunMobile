@@ -40,10 +40,12 @@ const CreateTask = (props) => {
           ],
         })
       },
-      onError: () => {
-        Dialog.alert({
-          content: '分派任务失败！',
-        });
+      onError: (err) => {
+       if (err && err.message.indexOf('500') !== -1){
+         Dialog.alert({
+           content: '分派任务失败！',
+         });
+       }
       },
     });
 

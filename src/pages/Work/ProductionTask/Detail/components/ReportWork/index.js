@@ -93,7 +93,7 @@ const ReportWork = (
               </div>
               <Space>
                 <Label>产出数量：</Label>
-                <Number value={item.outNumber} max={item.maxNumber} noBorder onChange={(value) => {
+                <Number width={200} value={item.outNumber} max={item.maxNumber} noBorder onChange={(value) => {
                   const array = outSkus.filter(() => true);
                   array[index] = { ...array[index], outNumber: value };
                   setOutSkus(array);
