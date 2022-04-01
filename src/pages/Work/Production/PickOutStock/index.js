@@ -120,10 +120,7 @@ const PickOutStock = (props) => {
                       storehousePositionsId: cartItem.storehousePositionsId,
                     };
                   });
-                  const array = carts.filter((item) => {
-                    return item.userId === userId;
-                  });
-                  setCarts([...array, { key, userId }, ...skus]);
+                  setCarts([...carts, { key, userId }, ...skus]);
                 } else {
                   const array = carts.filter((item) => {
                     return item.key !== key && !cartResults.map(item => item.pickListsCart).includes(item.key);

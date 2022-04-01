@@ -92,49 +92,40 @@ const PickLists = (props) => {
             </Space>} className={styles.item}>
             <Space
               direction='vertical'
-            >
-              <Space
-                direction='vertical'
-                onClick={() => {
-                  if (merge) {
-                    if (ids.includes(item.pickListsId)) {
-                      const array = ids.filter((idItem) => {
-                        return idItem !== item.pickListsId;
-                      });
-                      setIds(array);
-                    } else {
-                      setIds([...ids, item.pickListsId]);
-                    }
-                  } else if (params.type === 'all') {
-                    history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
+              onClick={() => {
+                if (merge) {
+                  if (ids.includes(item.pickListsId)) {
+                    const array = ids.filter((idItem) => {
+                      return idItem !== item.pickListsId;
+                    });
+                    setIds(array);
                   } else {
-                    history.push(`/Work/Production/Pick?id=${item.sourceId}`);
+                    setIds([...ids, item.pickListsId]);
                   }
-                }}>
-                <div>
-                  <Label>领料编码：</Label>{item.coding}
-                </div>
-                <div>
-                  <Label>领料人：</Label>{item.userResult && item.userResult.name}
-                </div>
-                <div>
-                  <Label>创建时间：</Label>{item.createTime}
-                </div>
-              </Space>
-              <Space>
-                <Label>来源：</Label>
-                <div
-                  onClick={() => {
-                    history.push(`/Work/ProductionTask/Detail?id=${item.sourceId}`);
-                  }}
-                  style={{ fontSize: '2vw', color: 'var(--adm-color-primary)',textAlign:'center' }}
-                >
-                  {source(item.source)}
-                  <div style={{ height: 1, backgroundColor: 'var(--adm-color-primary)' }} />
-                  {item.productionTaskResult.coding}
-                </div>
+                } else if (params.type === 'all') {
+                  history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
+                } else {
+                  history.push(`/Work/Production/Pick?id=${item.sourceId}`);
+                }
+              }}>
+              <div>
+                <Label>领料编码：</Label>{item.coding}
+              </div>
+              <div>
+                <Label>领料人：</Label>{item.userResult && item.userResult.name}
+              </div>
+              <div>
+                <Label>创建时间：</Label>{item.createTime}
+              </div>
+              <div>
                 <Label>工序：</Label>
-              </Space>
+                {item.productionTaskResult
+                  &&
+                  item.productionTaskResult.shipSetpResult
+                  &&
+                  item.productionTaskResult.shipSetpResult.shipSetpName
+                }
+              </div>
             </Space>
           </Card>;
         })

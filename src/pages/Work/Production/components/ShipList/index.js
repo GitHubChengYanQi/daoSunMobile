@@ -24,7 +24,7 @@ const ShipList = ({ data }) => {
           <Card
             style={{ borderRadius: 0 }}
             key={index}
-            title={<Space>
+            title={<Space direction='vertical'>
               <div>
                 <Label>工序名称：</Label>{shipSetpResult.shipSetpName}
               </div>

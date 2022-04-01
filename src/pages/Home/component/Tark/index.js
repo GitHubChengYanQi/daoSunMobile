@@ -71,6 +71,9 @@ const Tark = () => {
                           case 'outstockOrder':
                             history.push(`/Scan/OutStock?id=${items.sourceId}`);
                             break;
+                          case 'selfPick':
+                            history.push(`${items.url}`);
+                            break;
                           case 'processTask':
                             history.push(`/Work/Workflow?id=${items.sourceId}`);
                             break;
