@@ -31,17 +31,6 @@ const Detail = (props) => {
     },
   });
 
-  const { loading: codeLoading, run: getCode } = useRequest(productionTaskGetPickCode, {
-    manual: true,
-    onSuccess: (res) => {
-      Dialog.alert({
-        title: '领料码',
-        content: <div style={{ textAlign: 'center' }}>{res}</div>,
-        confirmText: '确定',
-      });
-    },
-  });
-
   const setpSetResult = data
     &&
     data.workOrderResult
@@ -58,7 +47,7 @@ const Detail = (props) => {
     &&
     setpSetResult.setpSetDetails.map((skuItems) => {
       const jobBooking = data.taskDetailResults.filter((item) => {
-        return item.jobBookingDetailCount && (item.jobBookingDetailCount.skuId = skuItems.skuId);
+        return item.jobBookingDetailCount && (item.jobBookingDetailCount.skuId === skuItems.skuId);
       });
       return {
         ...skuItems,
@@ -96,11 +85,11 @@ const Detail = (props) => {
   const status = (state) => {
     switch (state) {
       case 0:
-        return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
+        return <Space style={{ color: '#ffa52a' }}>待领取</Space>;
       case 98:
-        return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
+        return <Space style={{ color: 'blue' }}>执行中</Space>;
       case 99:
-        return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
+        return <Space style={{ color: 'green' }}>已完成</Space>;
       default:
         return '';
     }
@@ -165,7 +154,7 @@ const Detail = (props) => {
                 const skuResult = item.skuResult || {};
                 return <List.Item key={index}>
                   <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                  <div style={{ display: 'flex',fontSize:'4vw' }}>
+                  <div style={{ display: 'flex', fontSize: '4vw' }}>
                     <Label>描述：</Label>
                     <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                   </div>
@@ -269,7 +258,7 @@ const Detail = (props) => {
           ...item,
           maxNumber: (item.num * data.number) - item.jobBookNumber,
         };
-      })}
+      }).filter(item => item.maxNumber > 0)}
       setVisible={setVisible}
       visible={visible}
       onSuccess={() => {
@@ -277,8 +266,6 @@ const Detail = (props) => {
         refresh();
       }}
     />
-
-    {codeLoading && <MyLoading />}
 
   </div>;
 };
