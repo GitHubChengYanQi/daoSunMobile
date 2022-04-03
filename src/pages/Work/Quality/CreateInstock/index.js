@@ -1,10 +1,14 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { Card,  Dialog, List, Loading, Space, Stepper, Toast } from 'antd-mobile';
+import { Card, Dialog, List, Loading, Space, Stepper, Toast } from 'antd-mobile';
 import { codingRulesList, codingRulesListSelect, storeHouseSelect, UserIdSelect } from '../Url';
 import { useRequest } from '../../../../util/Request';
 import MyPicker from '../../../components/MyPicker';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyCoding from '../../../components/MyCoding';
+import SelectUser from '../../Production/CreateTask/components/SelectUser';
+import MyAntPicker from '../../../components/MyAntPicker';
 
-const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
+const CreateInstock = ({ show, qualityDeatlis, onSuccess }, ref) => {
 
   const [visible, setVisible] = useState(false);
 
@@ -38,7 +42,7 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
     },
   });
 
-  const { loading:instockLoading,run } = useRequest(
+  const { loading: instockLoading, run } = useRequest(
     {
       url: '/qualityTask/qualityDetailInstock',
       method: 'POST',
@@ -70,29 +74,27 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
       visible={visible}
       title='创建入库单'
       content={<>
-        <div style={{ marginLeft: '30%' }}>
+        <div>
           <Space direction='vertical'>
             <Space>
               <div>编码:</div>
-              <MyPicker api={codingRulesListSelect} value={coding} onChange={(value) => {
-                setCoding(value);
-              }} />
+              <MyCoding module={1} onChange={setCoding} value={coding} />
             </Space>
             <Space>
               <div>仓库:</div>
-              <MyPicker api={storeHouseSelect} value={storehoust} onChange={(value) => {
+              <MyAntPicker api={storeHouseSelect} value={storehoust} onChange={(value) => {
                 setStorehoust(value);
               }} />
             </Space>
             <Space>
               <div>负责人:</div>
-              <MyPicker api={UserIdSelect} value={user} onChange={(value) => {
+              <SelectUser value={user} onChange={(value) => {
                 setUser(value);
               }} />
             </Space>
           </Space>
         </div>
-        <Card title='入库物料'>
+        <Card title={<div>入库物料</div>}>
           <div style={{ maxheight: '50vh', overflow: 'auto' }}>
             <List>
               {
@@ -100,26 +102,6 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
                   if ((items.number - items.instockNumber) > 0)
                     return <List.Item
                       key={index}
-                      description={
-                        items.skuResult
-                        &&
-                        items.skuResult.list
-                        &&
-                        items.skuResult.list.length > 0
-                        &&
-                        items.skuResult.list[0].attributeValues
-                        &&
-                        <em style={{ color: '#c9c8c8', fontSize: 10 }}>
-                          (
-                          {
-                            items.skuResult.list.map((items, index) => {
-                              return <span key={index}>
-                {items.itemAttributeResult.attribute}：{items.attributeValues}
-                  </span>;
-                            })
-                          }
-                          )
-                        </em>}
                       extra={
                         <Stepper
                           digits={0}
@@ -145,9 +127,7 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
                         />
                       }
                     >
-                      items.skuResult.spuResult && items.skuResult.spuResult.spuClassificationResult && items.skuResult.spuResult.spuClassificationResult.name
-                      &nbsp;/&nbsp;
-                      {items.skuResult && items.skuResult.spuResult && items.skuResult.spuResult.name}
+                      <SkuResultSkuJsons skuResult={items.skuResult} />
                     </List.Item>;
                   else
                     return null;
@@ -155,69 +135,6 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
               }
 
             </List>
-
-
-            {/*<CheckList multiple onChange={(value) => {*/}
-            {/*  setInkindIds(value);*/}
-            {/*}}>*/}
-            {/*  {typeof visible === 'object' && visible.map((items, index) => {*/}
-
-
-            {/*    const qualityDetail = qualityDeatlis.filter((value) => {*/}
-            {/*      const inkindIds = (value.inkindId && value.inkindId !== '') ? value.inkindId.split(',') : [];*/}
-            {/*      const codeIds = inkindIds.filter((value) => {*/}
-            {/*        return value === items.qrcodeId;*/}
-            {/*      });*/}
-            {/*      return codeIds.length > 0;*/}
-            {/*    });*/}
-
-            {/*    if (qualityDetail && qualityDetail[0]) {*/}
-            {/*      return <CheckList.Item value={items.formId} key={index}>*/}
-            {/*        <div>*/}
-            {/*          {qualityDetail[0].skuResult && qualityDetail[0].skuResult.skuName}*/}
-            {/*          &nbsp;/&nbsp;*/}
-            {/*          {qualityDetail[0].skuResult && qualityDetail[0].skuResult.spuResult && qualityDetail[0].skuResult.spuResult.name}*/}
-            {/*          &nbsp;&nbsp;*/}
-            {/*          {*/}
-            {/*            qualityDetail[0].skuResult*/}
-            {/*            &&*/}
-            {/*            qualityDetail[0].skuResult.list*/}
-            {/*            &&*/}
-            {/*            qualityDetail[0].skuResult.list.length > 0*/}
-            {/*            &&*/}
-            {/*            qualityDetail[0].skuResult.list[0].attributeValues*/}
-            {/*            &&*/}
-            {/*            <em style={{ color: '#c9c8c8', fontSize: 10 }}>*/}
-            {/*              (*/}
-            {/*              {*/}
-            {/*                qualityDetail[0].skuResult.list.map((items, index) => {*/}
-            {/*                  return <span key={index}>*/}
-            {/*    {items.itemAttributeResult.attribute}：{items.attributeValues}*/}
-            {/*      </span>;*/}
-            {/*                })*/}
-            {/*              }*/}
-            {/*              )*/}
-            {/*            </em>}*/}
-            {/*        </div>*/}
-            {/*        <div>*/}
-            {/*          {qualityDetail[0].brand && qualityDetail[0].brand.brandName}*/}
-            {/*          &nbsp;&nbsp;  &nbsp;&nbsp;*/}
-            {/*          × {qualityDetail[0].batch ? qualityDetail[0].number : 1}*/}
-            {/*          <div style={{ float: 'right' }}>*/}
-            {/*            {*/}
-            {/*              items.getJudge ?*/}
-            {/*                <Badge text='合格' color='green' />*/}
-            {/*                :*/}
-            {/*                <Badge text='不合格' color='red' />*/}
-            {/*            }*/}
-            {/*          </div>*/}
-            {/*        </div>*/}
-            {/*      </CheckList.Item>;*/}
-            {/*    } else {*/}
-            {/*      return null;*/}
-            {/*    }*/}
-            {/*  })}*/}
-            {/*</CheckList>*/}
           </div>
         </Card>
       </>}
@@ -233,7 +150,7 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
               content: '仓库不能为空！',
               position: 'bottom',
             });
-          else if (!user)
+          else if (!user || !user.id)
             Toast.show({
               content: '负责人不能为空！',
               position: 'bottom',
@@ -245,13 +162,13 @@ const CreateInstock = ({ show, qualityDeatlis,onSuccess }, ref) => {
             });
           else {
             run({
-              data:{
+              data: {
                 coding,
                 storeHouseId: storehoust,
-                userId: user,
-                instockRequest:skus,
-                url:process.env.wxCp + 'OrCode?id=codeId'
-              }
+                userId: user.id,
+                instockRequest: skus,
+                url: process.env.wxCp + 'OrCode?id=codeId',
+              },
             });
           }
 

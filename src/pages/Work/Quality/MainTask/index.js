@@ -54,7 +54,10 @@ const MainTask = ({ id }) => {
     <Collapse defaultActiveKey={['1', '2']}>
       <Collapse.Panel key='1' title={<>子任务信息</>}>
         <List
-          style={{ border: 'none' }}
+          style={{
+            '--border-top':'none',
+            '--border-bottom':'none',
+          }}
         >
           {data.childTasks && data.childTasks.length > 0 ?
             data.childTasks.map((items, index) => {

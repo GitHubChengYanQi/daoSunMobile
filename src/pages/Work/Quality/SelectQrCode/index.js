@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import { Card, Dialog, List, SearchBar } from 'antd-mobile';
+import { Card, List, SearchBar } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import { Spin } from 'antd';
 import { history } from 'umi';
 import LinkButton from '../../../components/LinkButton';
-import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import GoToQualityTask from '../GoToQualityTask';
 
@@ -18,14 +17,11 @@ const SelectQrCode = (props) => {
   const { loading, data, run } = useRequest({
     url: '/orCode/list?limit=10',
     method: 'POST',
-  }, {
-    manual: true,
   });
 
   if (!codeIds) {
     return <MyEmpty />;
   }
-
   return <Card title='查找二维码' extra={<LinkButton title='返回' onClick={() => history.goBack()} />}>
     <SearchBar
       placeholder='请输入二维码'
@@ -58,6 +54,7 @@ const SelectQrCode = (props) => {
               data.map((items, index) => {
                 if (codeIds && codeIds.includes(items.orCodeId)) {
                   return <List.Item
+                    extar={<LinkButton>点击进入</LinkButton>}
                     key={index}
                     onClick={async () => {
                       ref.current.goToQualityTask(items.orCodeId);

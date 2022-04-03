@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, Collapse, Dialog, List, SafeArea, Space } from 'antd-mobile';
+import {  Checkbox, Collapse, Dialog, List, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import style from './index.css';
 import { useDebounceEffect } from 'ahooks';
@@ -10,6 +10,7 @@ import MyEmpty from '../../../components/MyEmpty';
 import LinkButton from '../../../components/LinkButton';
 import { ProfileOutlined } from '@ant-design/icons';
 import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import BottomButton from '../../../components/BottomButton';
 
 
 const DispatchTask = ({ taskDetail }) => {
@@ -127,120 +128,90 @@ const DispatchTask = ({ taskDetail }) => {
   }
 
   return <>
-    <Collapse defaultActiveKey={['1']}>
-      <Collapse.Panel key='1' title={<>指派子任务</>}>
-        <List
-          style={{ border: 'none' }}
-        >
-          <Checkbox.Group
-            value={check}
-            onChange={(value) => {
-              setCheck(value);
-            }}
+    <div>
+      <Collapse defaultActiveKey={['1']}>
+        <Collapse.Panel key='1' title={<>指派子任务</>}>
+          <List
+            style={{
+              '--border-top':'none',
+              '--border-bottom':'none',
+          }}
           >
-            <Space direction='vertical' style={{ width: '100%' }}>
-              {data.map((items, index) => {
-                return <div key={index}>
-                  <Checkbox
-                    icon={(check) => {
-                      if (items.remaining <= 0) {
-                        return <Icon type='icon-fangxingxuanzhongfill' style={{ color: '#dcdcdc' }} />;
-                      } else {
-                        if (check) {
-                          return <Icon type='icon-duoxuanxuanzhong1' />;
+            <Checkbox.Group
+              value={check}
+              onChange={(value) => {
+                setCheck(value);
+              }}
+            >
+              <Space direction='vertical' style={{ width: '100%' }}>
+                {data.map((items, index) => {
+                  return <div key={index}>
+                    <Checkbox
+                      icon={(check) => {
+                        if (items.remaining <= 0) {
+                          return <Icon type='icon-fangxingxuanzhongfill' style={{ color: '#dcdcdc' }} />;
                         } else {
-                          return <Icon type='icon-a-44-110' style={{ color: '#666' }} />;
+                          if (check) {
+                            return <Icon type='icon-duoxuanxuanzhong1' />;
+                          } else {
+                            return <Icon type='icon-a-44-110' style={{ color: '#666' }} />;
+                          }
                         }
-                      }
-                    }}
-                    className={style.checkBox}
-                    style={{ width: '100%', padding: 8 }}
-                    disabled={items.remaining <= 0}
-                    value={items}>
-                    <List.Item
-                      title={<div style={{color:'#000'}}>
-                        {sku(items)}
-                      </div>}
-                      extra={
-                        <Space style={{ marginRight: 8 }}>
-                          <span>{items.remaining} / {items.number}</span>
-                          <LinkButton title={<ProfileOutlined />} onClick={() => {
-                            dispatchDetails(items.qualityTaskDetailId, items);
-                          }} />
-                        </Space>
-                      }
-                      description={
-                        <div>{items.qualityPlanResult && (items.qualityPlanResult.planName + '  /  ' + (items.skuResult && items.skuResult.batch ? `抽检 ${(items.percentum || 1) * 100}%` : '固定检查'))}</div>
-                      }
-                    >
-                      <div>品牌：{items.brand && items.brand.brandName}</div>
-                      <div>供应商：{items.customerResult && items.customerResult.customerName}</div>
-                    </List.Item>
-                  </Checkbox>
-                </div>;
-              })}
-            </Space>
-          </Checkbox.Group>
-        </List>
-      </Collapse.Panel>
-    </Collapse>
-
-    <div
-      hidden={check.length === 0}
-      style={{
-        width: '100%',
-        paddingBottom: 0,
-        position: 'fixed',
-        bottom: 0,
-        backgroundColor: '#fff',
-      }}>
-      <div style={{ padding: '0 8px' }}>
-        <Button
-          style={{
-            padding: 8,
-            width: '50%',
-            borderRadius: 50,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-          }}
-          onClick={() => {
-            history.push({
-              pathname: '/Work/Quality/DispatchTask/EditChildTask',
-              state: {
-                action: 'refuse',
-                detail: { detail: { ...taskDetail }, qualityLising: check },
-              },
-            });
-          }}>
-          驳回
-        </Button>
-        <Button
-          style={{
-            padding: 8,
-            width: '50%',
-            backgroundColor: '#4B8BF5',
-            borderRadius: 50,
-            borderTopLeftRadius: 0,
-            borderBottomLeftRadius: 0,
-          }}
-          color='primary'
-          onClick={() => {
-            history.push({
-              pathname: '/Work/Quality/DispatchTask/EditChildTask',
-              state: {
-                action: 'agree',
-                detail: { detail: { ...taskDetail }, qualityLising: check },
-              },
-            });
-          }}>
-          指派
-        </Button>
-      </div>
-      <div>
-        <SafeArea position='bottom' />
-      </div>
+                      }}
+                      className={style.checkBox}
+                      style={{ width: '100%', padding: 8 }}
+                      disabled={items.remaining <= 0}
+                      value={items}>
+                      <List.Item
+                        title={<div style={{ color: '#000' }}>
+                          {sku(items)}
+                        </div>}
+                        extra={
+                          <Space style={{ marginRight: 8 }}>
+                            <span>{items.remaining} / {items.number}</span>
+                            <LinkButton title={<ProfileOutlined />} onClick={() => {
+                              dispatchDetails(items.qualityTaskDetailId, items);
+                            }} />
+                          </Space>
+                        }
+                        description={
+                          <div>{items.qualityPlanResult && (items.qualityPlanResult.planName + '  /  ' + (items.skuResult && items.skuResult.batch ? `抽检 ${(items.percentum || 1) * 100}%` : '固定检查'))}</div>
+                        }
+                      >
+                        <div>品牌：{items.brand && items.brand.brandName}</div>
+                        <div>供应商：{items.customerResult && items.customerResult.customerName}</div>
+                      </List.Item>
+                    </Checkbox>
+                  </div>;
+                })}
+              </Space>
+            </Checkbox.Group>
+          </List>
+        </Collapse.Panel>
+      </Collapse>
     </div>
-
+    {check.length !== 0 && <BottomButton
+      leftOnClick={() => {
+        history.push({
+          pathname: '/Work/Quality/DispatchTask/EditChildTask',
+          state: {
+            action: 'refuse',
+            detail: { detail: { ...taskDetail }, qualityLising: check },
+          },
+        });
+      }}
+      leftText='驳回'
+      rightOnClick={() => {
+        history.push({
+          pathname: '/Work/Quality/DispatchTask/EditChildTask',
+          state: {
+            action: 'agree',
+            detail: { detail: { ...taskDetail }, qualityLising: check },
+          },
+        });
+      }}
+      rightText='指派'
+    />}
   </>;
 
 };

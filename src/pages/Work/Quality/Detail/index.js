@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Card, Collapse, Ellipsis, Empty,  Space } from 'antd-mobile';
+import { Button, Card, Collapse, Ellipsis, Empty, Space } from 'antd-mobile';
 import { Badge, Col, Row } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined, EyeOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, EyeOutlined, QrcodeOutlined } from '@ant-design/icons';
 import { Gallery } from 'weui-react-v2';
 import { useRequest } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
@@ -27,7 +27,7 @@ const Detail = (props) => {
     if (qualityDetail && qualityDetail.inkindId) {
       run({
         data: {
-          qrcodeIds: state.qualityDetails.inkindId.split(','),
+          qrcodeIds: qualityDetail.inkindId.split(','),
         },
       });
     }
@@ -103,7 +103,7 @@ const Detail = (props) => {
     />;
   }
 
-  return <Card title='质检详情' extra={<LinkButton title='返回' onClick={() => {
+  return <Card title={<div>质检详情</div>} extra={<LinkButton title='返回' onClick={() => {
     history.push(`/Work/Quality?id=${qualityDetail.qualityTaskId}`);
   }} />}>
     {data.length > 0 ? <Collapse accordion>
@@ -113,18 +113,26 @@ const Detail = (props) => {
               return value.dataValues.judge === 0;
             });
             return <Collapse.Panel key={index} title={
-              <Space align='center'>
-                <div style={{width:'70vw'}}>
-                  <SkuResult skuResult={qualityDetail.skuResult} />
-                  <br />
-                  {qualityDetail.brand && qualityDetail.brand.brandName}
+              <div style={{ display: 'flex' }}>
+                <div style={{ flexGrow: 1 }}>
+                  <div>
+                    <SkuResult skuResult={qualityDetail.skuResult} />
+                  </div>
+                  <div>
+                    {qualityDetail.brand && qualityDetail.brand.brandName}
+                  </div>
+                  <Space>
+                    <QrcodeOutlined /> {qualityDetail.inkindId.split(',')[index]}
+                  </Space>
                 </div>
-                <div>{(standar && standar.length > 0)
-                  ?
-                  <Badge text='不合格' color='red' />
-                  :
-                  <Badge text='合格' color='green' />}</div>
-              </Space>
+                <div style={{ width: 60,display:'flex',alignItems:'center' }}>
+                  {(standar && standar.length > 0)
+                    ?
+                    <Badge text='不合格' color='red' />
+                    :
+                    <Badge text='不合格' color='green' />}
+                </div>
+              </div>
             }>
               <Row key={index} gutter={24}>
                 <Col span={4} style={{ padding: 0 }}>
