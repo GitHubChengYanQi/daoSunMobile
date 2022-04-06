@@ -8,8 +8,7 @@ import Number from '../../../components/Number';
 import MyCoding from '../../../components/MyCoding';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { history } from 'umi';
-import Message from '../../../components/Message';
+import { Message } from '../../../components/Message';
 
 const CreateTask = (props) => {
 
@@ -30,7 +29,7 @@ const CreateTask = (props) => {
         );
       },
       onError: (err) => {
-        Message.error();
+       Message.error('创建任务失败!')
       },
     });
 

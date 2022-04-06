@@ -306,7 +306,7 @@ const PickDetail = (props) => {
                   return <div key={index} style={{ margin: 8 }}>
                     <Card style={{ borderRadius: 0 }}>
                       <div style={{ display: 'flex' }}>
-                        <div style={{ flexGrow: 1 }}>
+                        <div style={{ width:'80vw' }}>
                           <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
                           <div style={{ display: 'flex', fontSize: '4vw' }}>
                             <Label>描述：</Label>
