@@ -364,32 +364,16 @@ const PickDetail = (props) => {
                           });
                         }}
                         style={{
-                          width: '50%',
+                          width: '100%',
                           color: 'var(--adm-color-primary)',
                           '--border-radius': '0px',
                           borderLeft: 'none',
                           borderBottomLeftRadius: 10,
-                        }}
-                      >
-                        {item.cart ? '已备料' : '备料'}
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          outstock({
-                            data: {
-                              pickListsDetailParams: objectList,
-                            },
-                          });
-                        }}
-                        style={{
-                          width: '50%',
-                          color: 'var(--adm-color-primary)',
-                          '--border-radius': '0px',
                           borderBottomRightRadius: 10,
                           borderRight: 'none',
                         }}
                       >
-                        出库
+                        {item.cart ? '已备料' : '备料'}
                       </Button>
                     </div>
                   </div>;
@@ -403,8 +387,8 @@ const PickDetail = (props) => {
 
     <BottomButton
       leftText={<Badge content={data.cartResults && data.cartResults.length}><Space style={{ margin: '0 16px' }}><Icon
-        type='icon-gouwuchekong' />备料</Space></Badge>}
-      rightText={<Space><Icon type='icon-chuku' />完成备料</Space>}
+        type='icon-gouwuchekong' />备料明细</Space></Badge>}
+      rightText={<Space><Icon type='icon-chuku' />备料完成</Space>}
       rightDisabled={!data.cartResults || data.cartResults.length === 0}
       leftDisabled={!data.cartResults || data.cartResults.length === 0}
       rightOnClick={() => {
