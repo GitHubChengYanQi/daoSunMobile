@@ -77,7 +77,7 @@ const Carts = (
 
     <BottomButton
       only
-      text={<Space><Icon type='icon-chuku' />出库</Space>}
+      text={<Space><Icon type='icon-chuku' />备料完成</Space>}
       onClick={() => {
         history.push(`/Work/Production/PickOutStock?ids=${ids}`);
       }}
