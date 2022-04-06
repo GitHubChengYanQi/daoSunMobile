@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button, Dialog, Form, TextArea } from 'antd-mobile';
+import { Button,  Form, TextArea } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
 import StartEndDate from './components/StartEndDate';
 import Users from './components/Users';
@@ -22,7 +22,7 @@ const CreateTask = (props) => {
         Message.dialogSuccess(
           '分派任务成功!',
           '返回工单',
-          '继续自检报工',
+          '继续分派任务',
           () => {
 
           },

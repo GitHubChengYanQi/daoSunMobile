@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import {
   productionPickListsCartAdd,
-  productionPickListsCreateOutOrder,
   productionPickListsMergeDetail,
 } from '../components/Url';
 import { MyLoading } from '../../../components/MyLoading';
@@ -31,6 +30,7 @@ import { history } from 'umi';
 import style from './index.css';
 import MyTree from '../../../components/MyTree';
 import { CollectMoneyOutline } from 'antd-mobile-icons';
+import PakoInfate from '../../../components/PakoInfate';
 
 const PickDetail = (props) => {
 
@@ -40,9 +40,11 @@ const PickDetail = (props) => {
 
   const [skus, setSkus] = useState([]);
 
+  const [data, setData] = useState();
+
   const [positions, setPositions] = useState({});
 
-  const getSkuResults = (skuItem, item, array, cart) => {
+  const getSkuResults = (skuId, item, array, cart) => {
     if (array.length === 0) {
       return null;
     }
@@ -70,7 +72,8 @@ const PickDetail = (props) => {
       });
     });
     return {
-      ...skuItem,
+      skuId,
+      skuResult: array[0].skuResult,
       positionId: item.storehousePositionsId,
       storehouseId: item.storehouseId,
       number,
@@ -79,21 +82,27 @@ const PickDetail = (props) => {
     };
   };
 
-  const getChildren = (data, details = [], cartResults = [], top) => {
+  const getChildren = (data, details = [], cartResults = [], top, positionId = []) => {
 
     if (!Array.isArray(data)) {
       return null;
     }
 
     const skuResults = [];
-    const option = data.map((item) => {
+    const option = [];
+
+    data.map((item) => {
+      if (positionId.includes(item.storehousePositionsId)) {
+        return null;
+      }
+      positionId.push(item.storehousePositionsId);
       const carts = [];
       const detailSkus = [];
-      item.skuResults && item.skuResults.map((skuItem) => {
-        const sku = details.filter(item => skuItem.skuId === item.skuId);
-        const allCarts = cartResults.filter(item => skuItem.skuId === item.skuId);
-        const objectSku = getSkuResults(skuItem, item, sku);
-        const cartResult = getSkuResults(skuItem, item, allCarts, true);
+      item.skuIds && item.skuIds.map((skuId) => {
+        const sku = details.filter(item => skuId === item.skuId);
+        const allCarts = cartResults.filter(item => skuId === item.skuId);
+        const objectSku = getSkuResults(skuId, item, sku);
+        const cartResult = getSkuResults(skuId, item, allCarts, true);
         if (objectSku) {
           skuResults.push(objectSku);
           detailSkus.push(objectSku);
@@ -105,13 +114,13 @@ const PickDetail = (props) => {
 
         return null;
       });
-      return {
+      return option.push({
         icon: <CollectMoneyOutline />,
-        title: `${item.name} (${item.skuResults ? item.skuResults.length : 0})`,
+        title: `${item.name} (${item.skuIds ? item.skuIds.length : 0})`,
         key: item.storehousePositionsId,
         skus: [...detailSkus, ...carts],
         children: !top && getChildren(item.storehousePositionsResults, details, cartResults),
-      };
+      });
     });
 
     if (top) {
@@ -131,17 +140,7 @@ const PickDetail = (props) => {
 
   const getSkus = (extend) => {
     if (extend && Array.isArray(extend.skus)) {
-      setSkus(extend.skus.map((item) => {
-        return {
-          cart: item.cart,
-          skuResult: item,
-          skuId: item.skuId,
-          number: item.number,
-          positionId: item.positionId,
-          storehouseId: item.storehouseId,
-          pickLists: item.pickLists,
-        };
-      }));
+      setSkus(extend.skus);
     }
   };
 
@@ -160,9 +159,12 @@ const PickDetail = (props) => {
     }
   };
 
-  const { loading, data, run, refresh } = useRequest(productionPickListsMergeDetail, {
+  const { loading, run, refresh } = useRequest(productionPickListsMergeDetail, {
     manual: true,
-    onSuccess: (res) => {
+    onSuccess: (respone) => {
+      const res = PakoInfate.unzip(respone);
+      console.log(res);
+      setData(res);
       const allSku = getChildren(res && res.storehousePositionsResults, res && res.detailResults, res && res.cartResults, true) || [];
       if (positions.key) {
         const checked = getChecked(allSku, positions.key) || {};
@@ -173,23 +175,6 @@ const PickDetail = (props) => {
         getSkus(allSku[allSku.length - 1]);
       }
 
-    },
-  });
-
-  const { loading: outLoading, run: outstock } = useRequest(productionPickListsCreateOutOrder, {
-    manual: true,
-    onSuccess: () => {
-      refresh();
-      Toast.show({
-        content: '出库成功！',
-        position: 'bottom',
-      });
-    },
-    onError: () => {
-      Toast.show({
-        content: '出库失败！',
-        position: 'bottom',
-      });
     },
   });
 
@@ -299,6 +284,7 @@ const PickDetail = (props) => {
                         pickListsId: listItem.pickListsId,
                         storehouseId: item.storehouseId,
                         storehousePositionsId: item.positionId,
+                        pickListsDetailId: listItem.pickListsDetailId,
                       });
                     });
                   });
@@ -306,7 +292,7 @@ const PickDetail = (props) => {
                   return <div key={index} style={{ margin: 8 }}>
                     <Card style={{ borderRadius: 0 }}>
                       <div style={{ display: 'flex' }}>
-                        <div style={{ width:'80vw' }}>
+                        <div style={{ width: '80vw' }}>
                           <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
                           <div style={{ display: 'flex', fontSize: '4vw' }}>
                             <Label>描述：</Label>
@@ -413,7 +399,7 @@ const PickDetail = (props) => {
     />
 
     {
-      (loading || pickLoading || outLoading) && <MyLoading />
+      (loading || pickLoading) && <MyLoading />
     }
 
   </div>;

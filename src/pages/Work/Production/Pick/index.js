@@ -1,41 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionPickListsGetByTask, productionTaskGetPickCode } from '../components/Url';
+import { productionPickListsGetByTask } from '../components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Button, Card, Dialog, Space } from 'antd-mobile';
+import { Button, Card,  Space } from 'antd-mobile';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyEllipsis from '../../../components/MyEllipsis';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import BottomButton from '../../../components/BottomButton';
+import { history } from 'umi';
 
-const Pick = ({ module, id, getStatus=()=>{}, ...props }) => {
+const Pick = ({ module, id, ...props }) => {
 
   const params = props.location && props.location.query;
 
-  const [disabled, setDisabled] = useState(true);
-
   const { loading, data, run } = useRequest(productionPickListsGetByTask, {
     manual: true,
-    onSuccess: (res) => {
-      const status = res ? res.detailResults.filter((item) => {
-        return item.status === 0;
-      }) : [];
-      getStatus(status.length !== 0);
-      setDisabled(status.length !== 0);
-    },
-  });
-
-  const { loading: codeLoading, run: getCode } = useRequest(productionTaskGetPickCode, {
-    manual: true,
-    onSuccess: (res) => {
-      Dialog.alert({
-        title: '领料码',
-        content: <div style={{ textAlign: 'center' }}>{res}</div>,
-        confirmText: '确定',
-      });
-    },
   });
 
   useEffect(() => {
@@ -120,14 +101,13 @@ const Pick = ({ module, id, getStatus=()=>{}, ...props }) => {
       </Card>
 
     </div>
-    {module !== 'task' && <BottomButton disabled={disabled} only text='确认领取' onClick={() => {
-      // getCode({
-      //   data: {
-      //     productionTaskId: params.id,
-      //   },
-      // });
-    }} />}
-    {codeLoading && <MyLoading />}
+    {module !== 'task' && <BottomButton
+      only
+      text='我的领料'
+      leftOnClick={() => {
+        history.push('/Work/Production/MyCart');
+      }}
+    />}
   </div>;
 };
 
