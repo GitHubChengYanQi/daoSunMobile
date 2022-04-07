@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionTaskDetail, productionTaskGetPickCode } from '../../Production/components/Url';
+import { productionTaskDetail } from '../../Production/components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Card, Dialog, List, Space, Tabs } from 'antd-mobile';
+import { Card,  List, Space, Tabs } from 'antd-mobile';
 import styles from '../../Production/index.css';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
@@ -12,7 +12,6 @@ import BottomButton from '../../../components/BottomButton';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
-import { QuestionCircleOutline } from 'antd-mobile-icons';
 import { getHeader } from '../../../components/GetHeader';
 import Pick from '../../Production/Pick';
 import { history } from 'umi';
@@ -172,7 +171,7 @@ const Detail = (props) => {
             }
           </List>;
       case 'in':
-        return <Pick module='task' id={params.id} getStatus={setDisabled} />;
+        return <Pick module='task' id={params.id} />;
       case 'use':
         return <MyEmpty />;
       default:
@@ -193,22 +192,12 @@ const Detail = (props) => {
           }} />;
       case 'in':
         return <BottomButton
-          rightDisabled={disabled}
-          leftText='我的领料'
+          only
+          text='我的领料'
           leftOnClick={() => {
             history.push('/Work/Production/MyCart');
           }}
-          rightText='确认领取'
-          right
-          rightOnClick={() => {
-
-            // getCode({
-            //   data: {
-            //     productionTaskId: params.id,
-            //   },
-            // });
-
-          }} />;
+        />;
       default:
         return '确认';
     }
@@ -231,7 +220,6 @@ const Detail = (props) => {
                 setDisabled(data.status === 99);
                 break;
               case 'in':
-                setDisabled(true);
                 break;
               default:
                 break;

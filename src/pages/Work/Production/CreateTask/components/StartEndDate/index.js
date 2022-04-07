@@ -6,7 +6,7 @@ const StartEndDate = ({ value = [], onChange }) => {
 
   return <>
     <Space>
-      <MyDatePicker title='开始时间' value={value[0]} precision='minute' onChange={(startDate) => {
+      <MyDatePicker title='开始时间' min={new Date()} value={value[0]} precision='minute' onChange={(startDate) => {
         onChange([startDate]);
       }} />
       —
