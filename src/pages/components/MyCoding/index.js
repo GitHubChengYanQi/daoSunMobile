@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { ActionSheet, Input, Loading, Radio, Space } from 'antd-mobile';
+import {  Input, Loading,  } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import LinkButton from '../LinkButton';
+import styles from './index.css';
 
 const MyCoding = (
   {
     module,
+    inputRight,
     value,
+    hidden,
     onChange = () => {
     },
   }) => {
@@ -35,7 +38,7 @@ const MyCoding = (
 
   return <div style={{ backgroundColor: '#fff' }}>
     <div style={{ display: 'flex' }}>
-      <LinkButton style={{ paddingRight:8 }} onClick={() => {
+      {!hidden && <LinkButton style={{ paddingRight: 8 }} onClick={() => {
         if (!auto) {
           run({
             params: {
@@ -45,10 +48,10 @@ const MyCoding = (
         }
         onChange(null);
         setAuto(!auto);
-      }}>{auto ? '自动生成' : '手动输入'}</LinkButton>
+      }}>{auto ? '自动生成' : '手动输入'}</LinkButton>}
       <div style={{ flexGrow: 1 }}>
         {loading ? <Loading /> :
-          <Input value={value || ''} placeholder='请输入编码' onChange={onChange} />}
+          <Input className={inputRight && styles.inputRight} value={value || ''} placeholder='请输入编码' onChange={onChange} />}
       </div>
     </div>
 

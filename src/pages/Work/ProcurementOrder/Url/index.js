@@ -1,4 +1,28 @@
 
+export const orderList = {
+  url: '/order/list',
+  method: 'POST',
+  rowKey:'orderId'
+};
+
+export const instockOrderList = {
+  url: '/instockOrder/list',
+  method: 'POST',
+  rowKey:'instockOrderId'
+};
+export const instockOrderDetail = {
+  url: '/instockOrder/detail',
+  method: 'POST',
+  rowKey:'instockOrderId'
+};
+
+
+export const orderDetail = {
+  url: '/order/detail',
+  method: 'POST',
+  rowKey:'orderId'
+};
+
 
 export const procurementOrderList = {
   url: '/procurementOrder/list',

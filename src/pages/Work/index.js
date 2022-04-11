@@ -155,7 +155,7 @@ const Work = () => {
             <>
               {GridContent('icon-cangkuguanli', '仓库管理', '/Work/StoreHouse')}
               {GridContent('icon-zhijianrenwuguanli', '出库单', '/Work/Production/PickLists?type=all')}
-              {GridContent('icon-rukuguanli1', '入库管理', () => toast())}
+              {GridContent('icon-rukuguanli1', '入库管理', '/Work/Instock/Orderlist')}
               {GridContent('icon-ziyouruku', '自由入库', '/Scan/InStock/FreeInstock')}
               {GridContent('icon-ziyouchuku', '自由出库', '/Scan/OutStock/FreeOutstock')}
               {GridContent('icon-pandian', '盘点', '/Scan/Inventory')}

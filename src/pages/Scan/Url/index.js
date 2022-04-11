@@ -48,6 +48,17 @@ export const skuList = {
   method: 'POST',
 };
 
+
+export const skuDetail = {
+  url: '/sku/detail',
+  method: 'POST',
+};
+
+export const skuResults = {
+  url: '/sku/resultSkuByIds',
+  method: 'POST',
+};
+
 export const skuStockDetail = {
   url: '/stockDetails/getDetailsBySkuId',
   method: 'POST',

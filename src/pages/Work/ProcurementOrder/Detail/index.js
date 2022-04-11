@@ -1,146 +1,131 @@
-import React from 'react';
-import { procurementOrderDetail, procurementOrderDetailEdit, procurementOrderDetailList } from '../Url';
+import React, { useState } from 'react';
+import { orderDetail } from '../Url';
 import { useRequest } from '../../../../util/Request';
-import { Skeleton } from 'weui-react-v2';
-import { Button, Card, Dialog, List, Space } from 'antd-mobile';
+import { Card, Space, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import BottomButton from '../../../components/BottomButton';
-import { history } from 'umi';
-import { Badge } from 'antd';
-import LinkButton from '../../../components/LinkButton';
 import { MyLoading } from '../../../components/MyLoading';
+import MyNavBar from '../../../components/MyNavBar';
+import Label from '../../../components/Label';
+import MyFloatingPanel from '../../../components/MyFloatingPanel';
+import Skus from './components/Skus';
+import Pays from './components/Pays';
+import { history } from 'umi';
 
 const Detail = (props) => {
 
   const { id } = props.location.query;
 
-  const { loading, data,refresh } = useRequest(procurementOrderDetail, {
+  const [key, setKey] = useState('skus');
+
+  const { loading, data } = useRequest(orderDetail, {
     defaultParams: {
       data: {
-        procurementOrderId: id,
+        orderId: id,
       },
     },
   });
 
-  const { loading: editLoading, run: editRun } = useRequest(procurementOrderDetailEdit, {
-    manual: true,
-    onSuccess:()=>{refresh();}
-  });
+  console.log(data);
 
-  const {
-    loading: detailLoading,
-    data: detailData,
-  } = useRequest(procurementOrderDetailList, { defaultParams: { data: { procurementOrderId: id } } });
-
-  if (loading || detailLoading) {
-    return <Skeleton loading={loading || detailLoading} />;
+  if (loading) {
+    return <MyLoading />;
   }
 
-  if (!id || !data || !detailData) {
+  if (!data) {
     return <MyEmpty />;
   }
-  const status = (value) => {
-    switch (value) {
-      case 0:
-        return <Badge text='审批中' color='yellow' />;
-      case 97:
-        return <Badge text='已拒绝' color='red' />;
-      case 98:
-        return <Badge text='已完成' color='green' />;
-      case 99:
-        return <Badge text='已同意' color='blue' />;
+
+  const backgroundBom = () => {
+    return <>
+      <Card title={<div>基本信息</div>}>
+        <Space direction='vertical'>
+          <div>
+            <Label>采购单号：</Label>{data.coding}
+          </div>
+          <div>
+            <Label>创建时间：</Label>{data.createTime}
+          </div>
+        </Space>
+      </Card>
+      <Card title={<div>甲方信息</div>}>
+        <Space direction='vertical'>
+          <div>
+            <Label>公司：</Label>{data.acustomer && data.acustomer.customerName}
+          </div>
+          <div>
+            <Label>联系人：</Label>{data.acontacts && data.acontacts.contactsName}
+          </div>
+          <div>
+            <Label>电话：</Label>{data.aphone && data.aphone.phoneNumber}
+          </div>
+        </Space>
+      </Card>
+      <Card title={<div>乙方信息</div>}>
+        <Space direction='vertical'>
+          <div>
+            <Label>公司：</Label>{data.bcustomer && data.bcustomer.customerName}
+          </div>
+          <div>
+            <Label>联系人：</Label>{data.bcontacts && data.bcontacts.contactsName}
+          </div>
+          <div>
+            <Label>电话：</Label>{data.bphone && data.bphone.phoneNumber}
+          </div>
+        </Space>
+      </Card>
+    </>;
+  };
+
+  const module = () => {
+    switch (key) {
+      case 'skus':
+        return <Skus skus={data.detailResults} data={data} />;
+      case 'pay':
+        return <Pays pays={data.paymentResult && data.paymentResult.detailResults} payment={data.paymentResult} />;
       default:
-        break;
+        return <MyEmpty />;
     }
   };
 
-  return <Card
-    style={{ height: '100vh' }}
-    bodyStyle={{ maxHeight: '85%', overflowY: 'auto' }}
-    title='采购单详情'
-    extra={<LinkButton title='返回' onClick={() => {
-      history.goBack();
-    }} />}>
-    <Card title='基本信息'>
-      <List
-        style={{
-          '--border-top': 'none',
-          '--border-bottom': 'none',
+  return <>
+    <MyNavBar title='采购单详情' />
+
+    <MyFloatingPanel
+      backgroundDom={backgroundBom()}
+    >
+      <Tabs
+        activeKey={key}
+        style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
+        onChange={(key) => {
+          setKey(key);
         }}
       >
-        <List.Item extra={data.procurementOrderId}>采购单号</List.Item>
-        <List.Item extra={data.user && data.user.name}>创建人</List.Item>
-        <List.Item extra={data.createTime}>创建时间</List.Item>
-        <List.Item extra={status(data.status)}>状态</List.Item>
-      </List>
-    </Card>
-    <Card title='订单信息'>
-      <List
-        style={{
-          '--border-top': 'none',
-          '--border-bottom': 'none',
-        }}
-      >
-        {
-          detailData.map((item, index) => {
-            return <List.Item
-              title={
-                <div style={{ fontSize: 16, color: '#000' }}>
-                  <SkuResultSkuJsons skuResult={item.skuResult} />
-                </div>
-              }
-              key={index}
-              extra={
-                <Button style={{ '--border-radius': '10px', color: '#1845b5' }}>
-                  <Space direction='vertical'>
-                    <div style={{ color: '#000' }}>应到:{item.number}</div>
-                    <div style={{ color: 'green' }}>实到:{item.realizedNumber}</div>
-                  </Space>
-                </Button>
-              }
-              description={<div>单价:{item.money}</div>}
-            >
-              <div>
-                品牌:{item.brandResult && item.brandResult.brandName}
-              </div>
-              <div>
-                供应商:{item.customerResult && item.customerResult.customerName}
-              </div>
-            </List.Item>;
-          })
-        }
-      </List>
-    </Card>
+        <Tabs.Tab title='物料信息' key='skus' />
+        <Tabs.Tab title='付款信息' key='pay' />
+      </Tabs>
+      {module()}
+    </MyFloatingPanel>
 
-    {editLoading && <MyLoading />}
-
-    {data.status === 99 && <BottomButton
-      rightText='确认到货'
-      rightOnClick={() => {
-        history.push({
-          pathname: '/Work/ProcurementOrder/AOG',
-          state: {
-            order: data,
-            details: detailData,
-          },
+    <BottomButton
+      only
+      text='确认到货'
+      disabled={!data.detailResults || data.detailResults.length === 0}
+      onClick={() => {
+        const skus = data.detailResults.map((item) => {
+          return {
+            skuId: item.skuId,
+            number: item.purchaseNumber,
+            brandId: item.brandId,
+            customerId: item.customerId,
+            brandName: item.brandResult && item.brandResult.brandName,
+            customerName: item.customerResult && item.customerResult.customerName,
+          };
         });
+        history.push(`/Work/Instock/CreateInStock?skus=${JSON.stringify(skus)}`);
       }}
-      leftText='完成订单'
-      leftOnClick={() => {
-        Dialog.confirm({
-          title: '确定完成当前订单？',
-          onConfirm: () => {
-            return editRun({
-              params: {
-                Id:id,
-              },
-            });
-          },
-        });
-      }}
-    />}
-  </Card>;
+    />
+  </>;
 };
 
 export default Detail;

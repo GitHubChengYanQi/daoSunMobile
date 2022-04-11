@@ -74,7 +74,6 @@ export default {
   reducers: {
     //改变state
     scanCodeState(state, { payload }) {
-      console.log('state', payload);
       return { ...state, ...payload };
     },
     // 清楚二维码

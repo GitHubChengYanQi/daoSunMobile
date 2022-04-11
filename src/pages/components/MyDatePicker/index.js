@@ -12,6 +12,7 @@ const MyDatePicker = (
     title,
     min,
     max,
+    style,
     onChange = () => {
     },
     ...props
@@ -25,7 +26,7 @@ const MyDatePicker = (
   const labelRenderer = useCallback((type, data) => {
     switch (type) {
       case 'year':
-        return data + '年';
+        return data;
       case 'month':
         return data + '月';
       case 'day':
@@ -45,7 +46,7 @@ const MyDatePicker = (
   return (
     <div>
       <LinkButton
-        style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
+        style={{ color: '#000', width: width || '100%', textAlign: 'left',...style }}
         title={value || (title || '选择日期')}
         onClick={() => {
           setVisible(true);

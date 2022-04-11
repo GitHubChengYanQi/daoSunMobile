@@ -6,6 +6,8 @@ import { CloseOutline } from 'antd-mobile-icons';
 const MyPopup = (
   {
     position,
+    width,
+    height,
     component: Component,
     title,
     destroyOnClose = true,
@@ -45,9 +47,9 @@ const MyPopup = (
       position={position || 'right'}
     >
       <Card
-        style={{ minWidth: '50vw', height: '50vh', overflow: 'auto' }}
-        title={title || '选择'}
-        headerStyle={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 99 }}
+        style={{ minWidth: '50vw', width, height: height || '50vh', overflow: 'auto',padding:0 }}
+        title={<div>{title || '选择'}</div>}
+        headerStyle={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 99,padding:8 }}
         extra={<LinkButton title={<CloseOutline />} onClick={() => {
           close();
         }} />}

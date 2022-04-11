@@ -35,7 +35,7 @@ export const Password = (props) => {
 
 const Login = (props) => {
 
-  const { run } = useRequest(
+  const { loading, run } = useRequest(
     {
       url: '/login/wxCp',
       method: 'POST',
@@ -44,10 +44,10 @@ const Login = (props) => {
       onSuccess: async (res) => {
         if (res) {
           await cookie.set('cheng-token', res);
-          await history.push(cookie.get('url') || '/');
           props.dispatch({
             type: 'userInfo/getUserInfo',
           });
+          window.location.reload();
         }
       },
     },
@@ -71,9 +71,13 @@ const Login = (props) => {
         }}
         layout='horizontal'
         footer={
-          <Button size='large' block type='submit'
-                  style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
-            登录
+          <Button
+            loading={loading}
+            size='large'
+            block
+            type='submit'
+            style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
+            {loading ? '登录中' : '登录'}
           </Button>
         }
       >
