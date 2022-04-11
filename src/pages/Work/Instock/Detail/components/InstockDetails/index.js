@@ -13,7 +13,6 @@ import Number from '../../../../../components/Number';
 const InstockDetails = (
   {
     options = [],
-    details,
     skus,
     setSkus = () => {
     },

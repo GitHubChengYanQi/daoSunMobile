@@ -12,51 +12,86 @@ import MyBottom from '../../../components/MyBottom';
 import MyEmpty from '../../../components/MyEmpty';
 import InstockDetails from './components/InstockDetails';
 import { CollectMoneyOutline } from 'antd-mobile-icons';
+import { productionPickListsMergeDetail } from '../../Production/components/Url';
 
 const Detail = (props) => {
 
   const params = props.location.query;
 
+  //
+
   const [skus, setSkus] = useState([]);
 
   const [positions, setPositions] = useState({});
 
-  let number = 0;
-  let newNumber = 0;
-
-  const getChecked = (data, key) => {
-    if (Array.isArray(data)) {
-      const array = data.filter((item) => {
-        return item.key = key;
-      });
-      if (array.length === 1) {
-        return array[0];
-      } else {
-        return getChecked(data.children, key);
-      }
-    } else {
+  const getSkuResults = (skuId, item, array, cart) => {
+    if (array.length === 0) {
       return null;
     }
+    let number = 0;
+    let pickLists = [];
+    array.map((item) => {
+      number += item.number;
+      if (pickLists.map(item => item.userId).includes(item.userResult && item.userResult.userId)) {
+        return pickLists = pickLists.map((userItem) => {
+          if (userItem.userId === (item.userResult && item.userResult.userId)) {
+            return {
+              ...userItem,
+              number: item.number + userItem.number,
+              lists: [...userItem.lists, item],
+            };
+          }
+          return userItem;
+        });
+      }
+      return pickLists.push({
+        userId: item.userResult && item.userResult.userId,
+        userResult: item.userResult,
+        number: item.number,
+        lists: [item],
+      });
+    });
+    return {
+      skuId,
+      skuResult: array[0].skuResult,
+      positionId: item.storehousePositionsId,
+      storehouseId: item.storehouseId,
+      number,
+      pickLists,
+      cart,
+    };
   };
 
-  const getChildren = (data, details = [], top) => {
+  const getChildren = (data, details = [], top, positionId = []) => {
 
     if (!Array.isArray(data)) {
       return null;
     }
 
     const skuResults = [];
-    const option = data.map((item) => {
+    const option = [];
+
+    data.map((item) => {
+      if (positionId.includes(item.storehousePositionsId)) {
+        return null;
+      }
+      positionId.push(item.storehousePositionsId);
+      let detailSkus = [];
       item.skuIds && item.skuIds.map((skuId) => {
-        return details.filter(item => skuId === item.skuId);
+        const array = details.filter(item => skuId === item.skuId);
+        return array.map((item) => {
+          skuResults.push(item);
+          detailSkus.push(item);
+          return null;
+        });
       });
-      return {
+      return option.push({
         icon: <CollectMoneyOutline />,
-        title: `${item.name} (${item.skuResults ? item.skuResults.length : 0})`,
+        title: `${item.name} (${item.skuIds ? item.skuIds.length : 0})`,
         key: item.storehousePositionsId,
-        // skus: sku,
+        skus: detailSkus,
         children: !top && getChildren(item.storehousePositionsResults, details),
-      };
+      });
     });
 
     if (top) {
@@ -78,31 +113,37 @@ const Detail = (props) => {
     if (extend && Array.isArray(extend.skus)) {
       setSkus(extend.skus.map((item) => {
         return {
-          cart: item.cart,
-          skuResult: item,
-          skuId: item.skuId,
-          number: item.number,
-          positionId: item.positionId,
-          storehouseId: item.storehouseId,
-          pickLists: item.pickLists,
+          ...item,
+          newNumber: item.number,
         };
       }));
     }
   };
 
+  const getChecked = (data, key) => {
+    if (Array.isArray(data)) {
+      const array = data.filter((item) => {
+        return item.key = key;
+      });
+      if (array.length === 1) {
+        return array[0];
+      } else {
+        return getChecked(data.children, key);
+      }
+    } else {
+      return null;
+    }
+  };
+  //
+
+  let number = 0;
+  let newNumber = 0;
+
+
   const { loading, data, run } = useRequest(instockOrderDetail, {
     manual: true,
     onSuccess: (res) => {
-      if (Array.isArray(res.instockListResults)) {
-        setSkus(res.instockListResults.map((item) => {
-          return {
-            ...item,
-            newNumber: item.number,
-          };
-        }));
-      }
-
-      const allSku = getChildren(res && res.bindTreeView, res && res.instockListResults,  true) || [];
+      const allSku = getChildren(res && res.bindTreeView, res && res.instockListResults, true) || [];
       if (positions.key) {
         const checked = getChecked(allSku, positions.key) || {};
         setPositions(checked);
@@ -119,8 +160,6 @@ const Detail = (props) => {
     newNumber += (item.newNumber || 0);
     return null;
   });
-
-  console.log(data);
 
   const [key, setKey] = useState('detail');
 
