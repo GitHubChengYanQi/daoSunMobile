@@ -43,11 +43,9 @@ const MyTree = (
         }} />}
       >
         <Tree
-          showLine
           defaultExpandAll
           defaultExpandedKeys={[value]}
           selectedKeys={[value]}
-          switcherIcon={<DownOutlined />}
           onSelect={(selected, info) => {
             onChange(selected[0]);
             onNode(info.node);

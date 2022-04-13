@@ -15,6 +15,23 @@ const Orderlist = () => {
 
   const [data, setData] = useState([]);
 
+  const orderStatus = (status) => {
+    switch (status) {
+      case 0:
+        return '待入库';
+      case 49:
+        return '异常审批中';
+      case 50:
+        return '异常审批拒绝';
+      case 98:
+        return '进行中';
+      case 99:
+        return '入库完成';
+      default:
+        return '';
+    }
+  };
+
   return <>
     <MyBottom
       leftActuions={<div>待处理：5</div>}
@@ -25,7 +42,7 @@ const Orderlist = () => {
         }}>新建入库申请</Button>
       </Space>}
     >
-      <div style={{ position: 'sticky', top: 0,backgroundColor:'#fff',zIndex:999}}>
+      <div style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}>
         <MyNavBar title='入库单列表' />
         <MySearchBar extra />
       </div>
@@ -53,7 +70,7 @@ const Orderlist = () => {
                     '--background-color': '#fff7e6',
                     '--text-color': '#fca916',
                     '--border-width': '0px',
-                  }}>待入库</Button>
+                  }}>{orderStatus(item.state)}</Button>
               </Space>}
               onClick={() => {
                 history.push(`/Work/Instock/Detail?id=${item.instockOrderId}`);

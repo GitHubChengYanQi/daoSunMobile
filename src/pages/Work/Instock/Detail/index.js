@@ -1,65 +1,83 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { instockOrderDetail } from '../../ProcurementOrder/Url';
+import { checkNumberTrue, instockOrderDetail } from '../../ProcurementOrder/Url';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import { getHeader } from '../../../components/GetHeader';
-import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
+import { Button, Card, Divider, Space, Tabs, Toast } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import Label from '../../../components/Label';
 import styles from '../../Production/index.css';
 import MyBottom from '../../../components/MyBottom';
 import MyEmpty from '../../../components/MyEmpty';
 import InstockDetails from './components/InstockDetails';
-import { CollectMoneyOutline } from 'antd-mobile-icons';
-import { productionPickListsMergeDetail } from '../../Production/components/Url';
+import { history } from 'umi';
 
 const Detail = (props) => {
 
   const params = props.location.query;
 
-  //
-
   const [skus, setSkus] = useState([]);
+
+  // 0：新建 49：审批中 50：拒绝 98：入库中 99：入库完成
+  const [status, setStatus] = useState(0);
+
+  const [details, setDetails] = useState([]);
 
   const [positions, setPositions] = useState({});
 
-  const getSkuResults = (skuId, item, array, cart) => {
-    if (array.length === 0) {
-      return null;
+  const orderStatus = () => {
+    switch (status) {
+      case 0:
+        return {
+          buttonText: '提交核实',
+          buttonDisabled: false,
+          text: '待入库',
+        };
+      case 49:
+        return {
+          buttonText: '异常审核中',
+          buttonDisabled: true,
+          text: '异常审批中',
+        };
+      case 50:
+        return {
+          buttonText: '已拒绝',
+          buttonDisabled: true,
+          text: '异常审批拒绝',
+        };
+      case 98:
+        return {
+          buttonText: '批量入库',
+          buttonDisabled: false,
+          text: '进行中',
+        };
+      case 99:
+        return {
+          buttonText: '入库完成',
+          buttonDisabled: true,
+          text: '入库完成',
+        };
+      default:
+        return {};
     }
-    let number = 0;
-    let pickLists = [];
-    array.map((item) => {
-      number += item.number;
-      if (pickLists.map(item => item.userId).includes(item.userResult && item.userResult.userId)) {
-        return pickLists = pickLists.map((userItem) => {
-          if (userItem.userId === (item.userResult && item.userResult.userId)) {
-            return {
-              ...userItem,
-              number: item.number + userItem.number,
-              lists: [...userItem.lists, item],
-            };
-          }
-          return userItem;
+  };
+
+  const getPosition = (data, skuId, position = {}) => {
+    if (!Array.isArray(data)) {
+      return position;
+    }
+
+    data.map((item) => {
+      if (item.skuIds.includes(skuId)) {
+        return position = getPosition(item.storehousePositionsResults, skuId, {
+          positionId: item.storehousePositionsId, positionName: item.name,
         });
       }
-      return pickLists.push({
-        userId: item.userResult && item.userResult.userId,
-        userResult: item.userResult,
-        number: item.number,
-        lists: [item],
-      });
+      return null;
     });
-    return {
-      skuId,
-      skuResult: array[0].skuResult,
-      positionId: item.storehousePositionsId,
-      storehouseId: item.storehouseId,
-      number,
-      pickLists,
-      cart,
-    };
+
+    return position;
   };
 
   const getChildren = (data, details = [], top, positionId = []) => {
@@ -79,15 +97,24 @@ const Detail = (props) => {
       let detailSkus = [];
       item.skuIds && item.skuIds.map((skuId) => {
         const array = details.filter(item => skuId === item.skuId);
-        return array.map((item) => {
-          skuResults.push(item);
-          detailSkus.push(item);
+        return array.map((skuItem) => {
+          const sku = {
+            skuId: skuItem.skuId,
+            instockListId: skuItem.instockListId,
+            number: skuItem.number,
+            skuResult: skuItem.skuResult,
+            spuResult: skuItem.spuResult,
+            ...getPosition(data, skuItem.skuId),
+          };
+          if (!skuResults.map(item => item.instockListId).includes(skuItem.instockListId)) {
+            skuResults.push(sku);
+            detailSkus.push(sku);
+          }
           return null;
         });
       });
       return option.push({
-        icon: <CollectMoneyOutline />,
-        title: `${item.name} (${item.skuIds ? item.skuIds.length : 0})`,
+        title: `${item.name} (${detailSkus.length})`,
         key: item.storehousePositionsId,
         skus: detailSkus,
         children: !top && getChildren(item.storehousePositionsResults, details),
@@ -95,8 +122,22 @@ const Detail = (props) => {
     });
 
     if (top) {
+
+      details.map((item) => {
+        if (!skuResults.map(item => item.instockListId).includes(item.instockListId)) {
+          const sku = {
+            skuId: item.skuId,
+            instockListId: item.instockListId,
+            number: item.number,
+            skuResult: item.skuResult,
+            spuResult: item.spuResult,
+          };
+          return skuResults.push(sku);
+        }
+        return null;
+      });
+
       return [{
-        icon: <CollectMoneyOutline />,
         title: `全部 (${skuResults.length})`,
         key: 'all',
         skus: skuResults,
@@ -111,12 +152,7 @@ const Detail = (props) => {
 
   const getSkus = (extend) => {
     if (extend && Array.isArray(extend.skus)) {
-      setSkus(extend.skus.map((item) => {
-        return {
-          ...item,
-          newNumber: item.number,
-        };
-      }));
+      setSkus(extend.skus);
     }
   };
 
@@ -134,15 +170,30 @@ const Detail = (props) => {
       return null;
     }
   };
-  //
 
   let number = 0;
   let newNumber = 0;
 
 
-  const { loading, data, run } = useRequest(instockOrderDetail, {
+  const { loading, data, run, refresh } = useRequest(instockOrderDetail, {
     manual: true,
     onSuccess: (res) => {
+      setStatus(res.state);
+      if (Array.isArray(res && res.instockListResults)) {
+        setDetails(res.instockListResults.map((item) => {
+            const positions = getPosition(res && res.bindTreeView, item.skuId);
+            const detail = details.filter(skuItem => skuItem.instockListId === item.instockListId);
+            return detail[0] || {
+              skuId: item.skuId,
+              skuResult: { ...item.skuResult, spuResult: item.spuResult },
+              number: item.number,
+              newNumber: item.number,
+              instockListId: item.instockListId,
+              positions: [{ ...positions, instockNumber: item.number, stockNumber: 0 }],
+            };
+          }),
+        );
+      }
       const allSku = getChildren(res && res.bindTreeView, res && res.instockListResults, true) || [];
       if (positions.key) {
         const checked = getChecked(allSku, positions.key) || {};
@@ -155,7 +206,15 @@ const Detail = (props) => {
     },
   });
 
-  skus.map((item) => {
+  const { loading: checkNumberLoading, run: checkNumberRun } = useRequest(checkNumberTrue, {
+    manual: true,
+    onSuccess: (res) => {
+      refresh();
+      Toast.show({ content: '提报完成！请继续入库' });
+    },
+  });
+
+  details.map((item) => {
     number += (item.number || 0);
     newNumber += (item.newNumber || 0);
     return null;
@@ -169,9 +228,16 @@ const Detail = (props) => {
     }
   }, []);
 
+
+  if (loading || checkNumberLoading) {
+    return <MyLoading />;
+  }
+
   if (!data) {
     return <MyEmpty />;
   }
+
+  const options = getChildren(data.bindTreeView, data.instockListResults, true) || [];
 
   const backgroundDom = () => {
 
@@ -191,7 +257,7 @@ const Detail = (props) => {
               '--background-color': '#fff7e6',
               '--text-color': '#fca916',
               '--border-width': '0px',
-            }}>待入库</Button>
+            }}>{orderStatus().text}</Button>
         </Space>
       </div>}
       bodyStyle={{ padding: 0 }}
@@ -253,7 +319,17 @@ const Detail = (props) => {
   const type = () => {
     switch (key) {
       case 'detail':
-        return <InstockDetails skus={skus} setSkus={setSkus} />;
+        return <InstockDetails
+          status={status}
+          details={details}
+          setDetails={setDetails}
+          getSkus={getSkus}
+          positions={positions}
+          setPositions={setPositions}
+          skus={skus}
+          setSkus={setSkus}
+          options={options}
+        />;
       case 'record':
         return <MyEmpty />;
       case 'log':
@@ -270,8 +346,40 @@ const Detail = (props) => {
         <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
       </div>}
       buttons={<Space>
-        <Button color='primary' fill='outline'>暂停入库</Button>
-        <Button color='primary'>提交并继续入库</Button>
+        <Button
+          color='primary'
+          fill='outline'
+          onClick={() => {
+            history.goBack();
+          }}
+        >暂停入库</Button>
+        <Button
+          disabled={orderStatus().buttonDisabled}
+          color='primary'
+          onClick={() => {
+            switch (status) {
+              case 0:
+                const errors = details.filter(item => item.number !== item.newNumber);
+                if (errors.length > 0) {
+                  history.push({
+                    pathname: '/Work/Instock/Errors',
+                    state: {
+                      details,
+                      id: params.id,
+                    },
+                  });
+                } else {
+                  checkNumberRun({
+                    data: { instockOrderId: params.id, state: 99 },
+                  });
+                }
+                break;
+              case 98:
+                break;
+              default:
+                return {};
+            }
+          }}>{orderStatus().buttonText}</Button>
       </Space>}
     >
       <div>
@@ -298,10 +406,6 @@ const Detail = (props) => {
             </div>
           </MyFloatingPanel>
         </div>
-
-
-        {loading && <MyLoading />}
-
       </div>
     </MyBottom>
 

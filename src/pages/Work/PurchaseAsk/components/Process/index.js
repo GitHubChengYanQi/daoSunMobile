@@ -15,8 +15,6 @@ const Process = (
     auditData,
   }) => {
 
-  console.log(auditData);
-
   const { loading, data, run } = useRequest({
     url: '/activitiSteps/getStepResultByType',
     method: 'GET',
@@ -35,7 +33,7 @@ const Process = (
   }, []);
 
   const status = (step, stepStatus) => {
-    const fontSize = 24;
+    const fontSize = '7vw';
     switch (step.auditType) {
       case 'start':
         return <Icon type='icon-caigou_faqiren' style={{ fontSize }} />;
@@ -102,7 +100,7 @@ const Process = (
             return <Space align='center' key={index}>
               <Avatar
                 style={{ fontSize: 14 }}
-                size={20}
+                size='5vw'
                 shape='square'
                 key={index}
               >{items.substring(0, 1)}</Avatar>
@@ -153,16 +151,17 @@ const Process = (
       case 'start':
         return <div>
           <Steps.Step
-            style={{ minHeight }}
+            style={{ minHeight,fontSize:'5vw' }}
             status={stepStatus}
-            description={createName ? <Space align='center'>
+            description={createName ? <Space align='start'>
               <Avatar
-                size={20}
+                size='5vw'
                 shape='square'
               >{createName.substring(0, 1)}</Avatar>
               {createName}
             </Space> : rules(step.auditRule)}
-            icon={status(step)} />
+            icon={<div>{status(step)}</div>}
+          />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
       case 'route':
@@ -179,7 +178,8 @@ const Process = (
                 </Space>
               </div>
             }
-            icon={status(step)} />
+            icon={<div>{status(step)}</div>}
+          />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
       case 'send':
@@ -190,7 +190,8 @@ const Process = (
             status={stepStatus}
             title={processType(step.auditRule.type)}
             description={rules(step.auditRule)}
-            icon={status(step, stepStatus)} />
+            icon={<div>{status(step,stepStatus)}</div>}
+          />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
       default:

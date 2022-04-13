@@ -16,6 +16,12 @@ export const instockOrderDetail = {
   rowKey:'instockOrderId'
 };
 
+export const checkNumberTrue = {
+  url: '/instockOrder/checkNumberTrue',
+  method: 'POST',
+  rowKey:'instockOrderId'
+};
+
 
 export const orderDetail = {
   url: '/order/detail',
