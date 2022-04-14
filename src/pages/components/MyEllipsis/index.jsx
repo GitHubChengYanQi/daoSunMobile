@@ -6,17 +6,19 @@ const MyEllipsis = (
     value,
     children,
     width,
+    style,
   }) => {
 
-  return <span style={{
+  return <div style={{
     width: width || '90%',
     display:'inline-block',
     textOverflow:'ellipsis',
     overflow:'hidden',
-    whiteSpace: 'nowrap'
+    whiteSpace: 'nowrap',
+    ...style
   }}>
     {value || children}
-  </span>;
+  </div>;
 };
 
 export default MyEllipsis;

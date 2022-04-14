@@ -45,7 +45,9 @@ const MyCheckUser = (
         });
       }} />
       <div style={{ maxHeight: 300, overflow: 'auto' }}>
-        {!all && <Card title='执行者'>
+        {!all && <Card title='执行者' onClick={() => {
+          setVisible(false);
+        }}>
           {value ? showUser(value.name) : showDefault()}
         </Card>}
         <Card title='所有人'>
@@ -61,11 +63,13 @@ const MyCheckUser = (
               <Loading />
               :
               data && data.map((item, index) => {
-                if (all){
-                  if (value.map((item)=>{return item.id}).includes(item.value)) {
+                if (all) {
+                  if (value.map((item) => {
+                    return item.id;
+                  }).includes(item.value)) {
                     return null;
                   }
-                }else {
+                } else {
                   if (value && (item.value === value.id)) {
                     return null;
                   }
@@ -92,7 +96,7 @@ const MyCheckUser = (
       destroyOnHide
       placement='bottom'
       visible={visible}
-      onVisibleChange={setVisible}
+      // onVisibleChange={setVisible}
     >
       <Button style={{ padding: 0 }} fill='none' onClick={() => {
         run();

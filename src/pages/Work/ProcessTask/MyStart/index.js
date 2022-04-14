@@ -1,26 +1,14 @@
-import React, { useRef, useState } from 'react';
-import { Affix } from 'antd';
-import { Dropdown, List, Selector, Tag } from 'antd-mobile';
+import React, { useEffect, useRef, useState } from 'react';
+import { Dropdown, List, Selector, Space, Tag } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { history } from 'umi';
 import { useSetState } from 'ahooks';
-import { useRequest } from '../../../../util/Request';
-import { Skeleton } from 'weui-react-v2';
+import { connect } from 'dva';
+import Label from '../../../components/Label';
 
-const MyStart = () => {
+const MyStart = (props) => {
 
-  const { loading } = useRequest({
-      url: '/rest/system/currentUserInfo',
-      method: 'POST',
-    },
-    {
-      onSuccess: (res) => {
-        setSelect({
-          ...select,
-          createUser: res.userId,
-        });
-      },
-    });
+  const userInfo = props.userInfo;
 
   const ref = useRef();
 
@@ -30,19 +18,32 @@ const MyStart = () => {
 
   const [select, setSelect] = useState({});
 
+  const submit = (data) => {
+    setSelect({
+      ...select,
+      ...data,
+    });
+    ref.current.submit({ ...select, ...data });
+  };
+
+  useEffect(() => {
+    submit({ createUser: userInfo.id });
+  }, [userInfo.id]);
+
+  const [data, setData] = useState([]);
+
   const type = (value) => {
     switch (value) {
       case 'quality_task':
         return '质检任务';
       case 'purchase':
         return '采购申请';
+      case 'instockError':
+        return '入库异常';
       default:
         break;
     }
   };
-
-
-  const [data, setData] = useSetState({data:[]});
 
   const status = (value) => {
     switch (value) {
@@ -63,62 +64,65 @@ const MyStart = () => {
     }
   };
 
-  if (loading)
-    return <Skeleton loading={loading} />;
-
-
   return <>
-    <Affix offsetTop={0}>
-      <div>
-        <Dropdown>
-          <Dropdown.Item key='sorter' title={taskType ? taskType.label : '审批类型'}>
-            <Selector
-              columns={1}
-              options={[{ label: '质检任务', value: 'quality_task' }, { label: '采购申请', value: 'purchase' }]}
-              onChange={(arr, extend) => {
-                ref.current.submit({ ...select, type: arr[0] });
-                setTaskType(extend.items[0]);
-                setSelect({ ...select, type: arr[0] });
-              }}
-            />
-          </Dropdown.Item>
-          <Dropdown.Item key='bizop' title={taskStatus ? taskStatus.label : '审批状态'}>
-            <Selector
-              columns={1}
-              options={[{ label: '进行中', value: 0 }, { label: '已通过', value: 1 }, { label: '已拒绝', value: 2 }]}
-              onChange={(arr, extend) => {
-                ref.current.submit({ ...select, status: arr[0] });
-                setTaskStatus(extend.items[0]);
-                setSelect({ ...select, status: arr[0] });
-              }}
-            />
-          </Dropdown.Item>
-        </Dropdown>
-      </div>
-    </Affix>
+    <div style={{ position: 'sticky', top: 0, zIndex: 999, backgroundColor: '#fff' }}>
+      <Dropdown>
+        <Dropdown.Item key='sorter' title={<div>{taskType ? taskType.label : '审批类型'}</div>}>
+          <Selector
+            columns={1}
+            options={[{ label: '质检任务', value: 'quality_task' }, { label: '采购申请', value: 'purchase' }]}
+            onChange={(arr, extend) => {
+              submit({ type: arr[0] });
+              setTaskType(extend.items[0]);
+            }}
+          />
+        </Dropdown.Item>
+        <Dropdown.Item key='bizop' title={<div>{taskStatus ? taskStatus.label : '审批状态'}</div>}>
+          <Selector
+            columns={1}
+            options={[{ label: '进行中', value: 0 }, { label: '已通过', value: 1 }, { label: '已拒绝', value: 2 }]}
+            onChange={(arr, extend) => {
+              submit({ status: arr[0] });
+              setTaskStatus(extend.items[0]);
+            }}
+          />
+        </Dropdown.Item>
+      </Dropdown>
+    </div>
     <MyList
       ref={ref}
       api={{
         url: '/activitiProcessTask/list',
         method: 'POST',
       }}
-      data={data.data}
+      data={data}
       getData={(value) => {
-        setData({ data: value });
+        setData(value.filter(item => true));
       }}>
       <List>
         {
-          data.data && data.data.map((items, index) => {
+          data && data.map((items, index) => {
             return <List.Item
               key={index}
-              title={type(items.type)}
               extra={status(items.status)}
-              description={items.createTime}
               onClick={() => {
                 history.push(`/Work/Workflow?id=${items.processTaskId}`);
               }}
             >
-              发起人：{items.user && items.user.name}
+              <Space direction='vertical'>
+                <div>
+                  <Label>名称：</Label>{items.taskName}
+                </div>
+                <div>
+                  <Label>发起人：</Label>{items.user && items.user.name}
+                </div>
+                <div>
+                  <Label>类型：</Label>{type(items.type)}
+                </div>
+                <div>
+                  <Label>创建时间：</Label>{items.createTime}
+                </div>
+              </Space>
             </List.Item>;
           })
         }
@@ -127,4 +131,4 @@ const MyStart = () => {
   </>;
 };
 
-export default MyStart;
+export default connect(({ userInfo }) => ({ userInfo }))(MyStart);

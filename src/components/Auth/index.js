@@ -235,7 +235,6 @@ const Auth = (props) => {
     }
     return props.children;
   } else {
-    console.log('login');
     return <Login />;
   }
 
