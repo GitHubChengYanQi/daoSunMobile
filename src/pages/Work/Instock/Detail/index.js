@@ -4,7 +4,7 @@ import { checkNumberTrue, instockOrderDetail } from '../../ProcurementOrder/Url'
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import { getHeader } from '../../../components/GetHeader';
-import { Button, Card, Divider, Space, Tabs, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Space, Tabs, Toast } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import Label from '../../../components/Label';
 import styles from '../../Production/index.css';
@@ -12,6 +12,8 @@ import MyBottom from '../../../components/MyBottom';
 import MyEmpty from '../../../components/MyEmpty';
 import InstockDetails from './components/InstockDetails';
 import { history } from 'umi';
+import InstockActions from './components/InstockActions';
+import { batchBind } from '../../../Scan/InStock/components/Url';
 
 const Detail = (props) => {
 
@@ -206,13 +208,12 @@ const Detail = (props) => {
     },
   });
 
-  const { loading: checkNumberLoading, run: checkNumberRun } = useRequest(checkNumberTrue, {
-    manual: true,
-    onSuccess: (res) => {
-      refresh();
-      Toast.show({ content: '提报完成！请继续入库' });
+  const { loading: CodeLoading, run: CodeRun } = useRequest(
+    batchBind,
+    {
+      manual: true,
     },
-  });
+  );
 
   details.map((item) => {
     number += (item.number || 0);
@@ -229,7 +230,7 @@ const Detail = (props) => {
   }, []);
 
 
-  if (loading || checkNumberLoading) {
+  if (loading) {
     return <MyLoading />;
   }
 
@@ -320,6 +321,7 @@ const Detail = (props) => {
     switch (key) {
       case 'detail':
         return <InstockDetails
+          CodeRun={CodeRun}
           status={status}
           details={details}
           setDetails={setDetails}
@@ -353,33 +355,14 @@ const Detail = (props) => {
             history.goBack();
           }}
         >暂停入库</Button>
-        <Button
-          disabled={orderStatus().buttonDisabled}
-          color='primary'
-          onClick={() => {
-            switch (status) {
-              case 0:
-                const errors = details.filter(item => item.number !== item.newNumber);
-                if (errors.length > 0) {
-                  history.push({
-                    pathname: '/Work/Instock/Errors',
-                    state: {
-                      details,
-                      id: params.id,
-                    },
-                  });
-                } else {
-                  checkNumberRun({
-                    data: { instockOrderId: params.id, state: 99 },
-                  });
-                }
-                break;
-              case 98:
-                break;
-              default:
-                return {};
-            }
-          }}>{orderStatus().buttonText}</Button>
+        <InstockActions
+          refresh={refresh}
+          setDetails={setDetails}
+          status={status}
+          details={details}
+          orderStatus={orderStatus}
+          id={params.id}
+        />
       </Space>}
     >
       <div>
@@ -408,6 +391,8 @@ const Detail = (props) => {
         </div>
       </div>
     </MyBottom>
+
+    {CodeLoading && <MyLoading />}
 
   </>;
 };

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import MyTree from '../../../../../components/MyTree';
 import MyEmpty from '../../../../../components/MyEmpty';
-import { Button, Card, Cascader, Space, Toast } from 'antd-mobile';
+import { Button, Card, Cascader, Space, SwipeAction, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import Label from '../../../../../components/Label';
 import MySearchBar from '../../../../../components/MySearchBar';
@@ -18,6 +18,7 @@ import { MyLoading } from '../../../../../components/MyLoading';
 
 const InstockDetails = (
   {
+    CodeRun,
     status,
     details,
     setDetails = () => {
@@ -101,9 +102,12 @@ const InstockDetails = (
     setDetails(array);
   };
 
-  const setOptionsValue = (data, id, positionsIndex) => {
-    const array = details.map((detailItem) => {
-      if (item.instockListId === id) {
+  const setOptionsValue = (data, id, positionsIndex, newDetails) => {
+
+    const detailsOptions = newDetails || details;
+
+    const array = detailsOptions.map((detailItem) => {
+      if (detailItem.instockListId === id) {
 
         let instockNumber = 0;
 
@@ -119,7 +123,7 @@ const InstockDetails = (
 
         positions.map((item, index) => {
           if (index !== 0) {
-            instockNumber += item.instockNumber;
+            instockNumber += (item.instockNumber || 0);
           }
           return null;
         });
@@ -145,6 +149,59 @@ const InstockDetails = (
     });
 
     setDetails(array);
+  };
+
+  const skuPosition = (detail, positionsItem, index) => {
+    return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8 }}>
+      <Space direction='vertical' style={{ width: '100%' }}>
+        <div style={{ display: 'flex' }}>
+          <Label>
+            {
+              index === 0
+                ?
+                '绑定库位：'
+                :
+                '其他库位：'
+            }
+          </Label>
+          <div>
+            {positionsItem.positionName || '无库位'}
+          </div>
+
+        </div>
+        <div style={{ display: 'flex' }}>
+          <div style={{ flexGrow: 1, display: 'flex' }}>
+            <Label>{status === 98 ? '入库：' : '计划：'}</Label>
+            <Number
+              width={70}
+              disabled={index === 0}
+              value={status === 98 ? positionsItem.instockNumber : detail.number}
+              buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
+              onChange={(value) => {
+                setOptionsValue({ instockNumber: value || 0 }, item.instockListId, index);
+              }}
+            />
+          </div>
+          <div style={{ flexGrow: 1, display: 'flex', padding: '0 4px' }}>
+            <Label>{status === 98 ? '库存：' : '实际：'}</Label>
+            <Number
+              width={70}
+              color={detail.newNumber === detail.number ? 'blue' : 'red'}
+              value={status === 98 ? positionsItem.stockNumber : detail.newNumber}
+              buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
+              onChange={(value) => {
+                if (status === 98) {
+                  setOptionsValue({ stockNumber: value }, item.instockListId, index);
+                  return;
+                }
+                setValue({ newNumber: value }, item.instockListId);
+              }}
+            />
+          </div>
+
+        </div>
+      </Space>
+    </div>;
   };
 
   return <>
@@ -231,56 +288,55 @@ const InstockDetails = (
                     </div>
                     {
                       detail.positions.map((positionsItem, index) => {
-                        return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8 }}>
-                          <Space direction='vertical' style={{ width: '100%' }}>
-                            <div style={{ display: 'flex' }}>
-                              <Label>
-                                {
-                                  index === 0
-                                    ?
-                                    '绑定库位：'
-                                    :
-                                    '其他库位：'
-                                }
-                              </Label>
-                              <div>
-                                {positionsItem.positionName || '无库位'}
-                              </div>
-
-                            </div>
-                            <div style={{ display: 'flex' }}>
-                              <div style={{ flexGrow: 1, display: 'flex' }}>
-                                <Label>{status === 98 ? '入库：' : '计划：'}</Label>
-                                <Number
-                                  width={70}
-                                  disabled={index === 0}
-                                  value={status === 98 ? positionsItem.instockNumber : detail.number}
-                                  buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
-                                  onChange={(value) => {
-                                    setOptionsValue({ instockNumber: value || 0 }, item.instockListId, index);
-                                  }}
-                                />
-                              </div>
-                              <div style={{ flexGrow: 1, display: 'flex', padding: '0 4px' }}>
-                                <Label>{status === 98 ? '库存：' : '实际：'}</Label>
-                                <Number
-                                  width={70}
-                                  color={detail.newNumber === detail.number ? 'blue' : 'red'}
-                                  value={status === 98 ? positionsItem.stockNumber : detail.newNumber}
-                                  buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
-                                  onChange={(value) => {
-                                    if (status === 98) {
-                                      setOptionsValue({ stockNumber: value }, item.instockListId, index);
-                                      return;
+                        if (index === 0) {
+                          if (!positionsItem.positionId && detail.positions.length === 1) {
+                            return <Button
+                              key={index}
+                              onClick={async () => {
+                                await setItem(detail);
+                                await storeHouseRef.current.open(false);
+                              }}
+                              fill='none'
+                              style={{
+                                color: 'var(--adm-color-primary)',
+                                width: '100%',
+                              }}
+                            >
+                              其他库位暂存
+                            </Button>;
+                          }
+                          return <div key={index}>
+                            {positionsItem.positionId && skuPosition(detail, positionsItem, index)}
+                          </div>;
+                        } else {
+                          return <SwipeAction
+                            key={index}
+                            rightActions={[
+                              {
+                                key: 'delete',
+                                text: '删除',
+                                color: 'danger',
+                                onClick: () => {
+                                  const newDetails = details.map((detailItem) => {
+                                    if (detailItem.instockListId === item.instockListId) {
+                                      return {
+                                        ...detailItem,
+                                        positions: detailItem.positions.filter((item, positionIndex) => {
+                                          return positionIndex !== index;
+                                        }),
+                                      };
                                     }
-                                    setValue({ newNumber: value }, item.instockListId);
-                                  }}
-                                />
-                              </div>
+                                    return detailItem;
+                                  });
+                                  setOptionsValue({}, item.instockListId, index, newDetails);
+                                },
+                              },
+                            ]}
+                          >
+                            {skuPosition(detail, positionsItem, index)}
+                          </SwipeAction>;
+                        }
 
-                            </div>
-                          </Space>
-                        </div>;
                       })
                     }
                   </Space>
@@ -288,36 +344,42 @@ const InstockDetails = (
                 {
                   status === 98
                     ?
-                    <div>
-                      <Button
-                        onClick={async () => {
-                          await setItem(detail);
-                          await storeHouseRef.current.open(false);
-                        }}
-                        fill='none'
-                        style={{
-                          color: 'var(--adm-color-primary)',
-                          width: '35%',
-                          '--border-radius': '0px',
-                          borderLeft: 'none',
-                          backgroundColor: '#fff',
-                          borderBottomLeftRadius: 10,
-                        }}
-                      >
-                        其他库位暂存
-                      </Button>
+                    <div
+                      style={{
+                        display: 'flex',
+                        backgroundColor: '#fff',
+                        borderBottomLeftRadius: 10,
+                        borderBottomRightRadius: 10,
+                      }}
+                    >
+                      {
+                        !(
+                          detail.positions.length === 1
+                          &&
+                          !detail.positions[0].positionId
+                        )
+                        &&
+                        <Button
+                          onClick={async () => {
+                            await setItem(detail);
+                            await storeHouseRef.current.open(false);
+                          }}
+                          fill='none'
+                          style={{
+                            color: 'var(--adm-color-primary)',
+                            flexGrow: 1,
+                          }}
+                        >
+                          其他库位暂存
+                        </Button>}
                       <Button
                         onClick={() => {
 
                         }}
                         fill='none'
                         style={{
-                          width: '30%',
                           color: 'var(--adm-color-primary)',
-                          '--border-radius': '0px',
-                          borderLeft: 'none',
-                          backgroundColor: '#fff',
-                          borderRight: 'none',
+                          flexGrow: 1,
                         }}
                       >
                         查看二维码
@@ -329,11 +391,7 @@ const InstockDetails = (
                         fill='none'
                         style={{
                           color: 'var(--adm-color-primary)',
-                          width: '35%',
-                          '--border-radius': '0px',
-                          backgroundColor: '#fff',
-                          borderBottomRightRadius: 10,
-                          borderRight: 'none',
+                          flexGrow: 1,
                         }}
                       >
                         单独入库
