@@ -62,8 +62,8 @@ const Orderlist = () => {
               extra={<Space>
                 {
                   item.urgent
-                  &&
-                  <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 12px' }}>加急</Button>
+                    ?
+                    <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 12px' }}>加急</Button> : null
                 }
                 <Button
                   color='default'
@@ -94,17 +94,17 @@ const Orderlist = () => {
                   <Label>送料时间：</Label>{item.registerTime}
                 </div>
                 <div>
-                  <Label>库管人员：</Label>
+                  <Label>库管人员：</Label>{item.stockUserResult && item.stockUserResult.name}
                 </div>
                 <div style={{ display: 'flex' }}>
                   <div style={{ flexGrow: 1 }}>
-                    <Label>入库物料：</Label>0
+                    <Label>入库物料：</Label>{item.enoughNumber}
                   </div>
                   <div style={{ flexGrow: 1, color: 'green' }}>
-                    已入库：0
+                    已入库：{item.notNumber}
                   </div>
                   <div style={{ flexGrow: 1, color: 'red' }}>
-                    未入库：0
+                    未入库：{item.realNumber}
                   </div>
                 </div>
               </Space>
@@ -113,8 +113,6 @@ const Orderlist = () => {
         }
       </MyList>
     </MyBottom>
-
-
   </>;
 };
 

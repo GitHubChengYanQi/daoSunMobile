@@ -122,7 +122,7 @@ const Detail = (props) => {
             customerName: item.customerResult && item.customerResult.customerName,
           };
         });
-        history.push(`/Work/Instock/CreateInStock?skus=${JSON.stringify(skus)}`);
+        history.push(`/Work/Instock/CreateInStock?skus=${JSON.stringify(skus)}&source=procurementOrder&sourceId${id}`);
       }}
     />
   </>;

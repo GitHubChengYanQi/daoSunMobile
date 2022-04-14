@@ -25,13 +25,16 @@ const CreateInStock = (props) => {
 
   const paramsSkus = params.skus && JSON.parse(params.skus);
 
+  const source = params.source;
+  const sourceId = params.sourceId;
+
   const typeRef = useRef();
 
   const checkSkuRef = useRef();
 
   const [skus, setSkus] = useState([]);
 
-  const [data, setData] = useState({ module: 'purchase' });
+  const [data, setData] = useState({ source,sourceId });
 
   const { loading: skusLoading, run: getSkus } = useRequest(skuResults, {
     manual: true,
@@ -64,7 +67,7 @@ const CreateInStock = (props) => {
 
   const module = (value) => {
     switch (value) {
-      case 'purchase':
+      case 'procurementOrder':
         return '采购单';
       default:
         return '请选择';
@@ -139,7 +142,7 @@ const CreateInStock = (props) => {
             onClick={() => {
               // history.push(`/Word/Instock/CreateInStock/AssociatedTasks?id=${}`);
             }}
-            extra={<div style={{ color: data.module && '#000' }}>{module(data.module)}</div>}
+            extra={<div style={{ color: data.module && '#000' }}>{module(data.source)}</div>}
           >
             关联任务
           </List.Item>

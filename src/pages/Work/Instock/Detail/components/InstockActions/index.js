@@ -47,7 +47,7 @@ const InstockActions = (
               });
             } else {
               checkNumberRun({
-                data: { instockOrderId: id, state: 99 },
+                data: { instockOrderId: id, state: 98 },
               });
             }
             break;

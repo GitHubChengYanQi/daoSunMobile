@@ -126,6 +126,9 @@ const InstockDetails = (
         }) || [];
 
         positions.map((item, index) => {
+          if (!item.positionId) {
+            return null;
+          }
           instockNumber += (item.instockNumber || 0);
           return null;
         });
@@ -180,19 +183,26 @@ const InstockDetails = (
           </div>
           <div style={{ flexGrow: 1, display: 'flex', padding: '0 4px' }}>
             <Label>{status === 98 ? '库存：' : '实际：'}</Label>
-            <Number
-              width={70}
-              color={detail.newNumber === detail.number ? 'blue' : 'red'}
-              value={status === 98 ? positionsItem.stockNumber : detail.newNumber}
-              buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
-              onChange={(value) => {
-                if (status === 98) {
-                  setOptionsValue({ stockNumber: value }, item.instockListId, index);
-                  return;
-                }
-                setValue({ newNumber: value }, item.instockListId);
-              }}
-            />
+            {
+              index === 0
+                ?
+                <Number
+                  width={70}
+                  color={detail.newNumber === detail.number ? 'blue' : 'red'}
+                  value={status === 98 ? positionsItem.stockNumber : detail.newNumber}
+                  buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
+                  onChange={(value) => {
+                    if (status === 98) {
+                      setOptionsValue({ stockNumber: value }, item.instockListId, index);
+                      return;
+                    }
+                    setValue({ newNumber: value }, item.instockListId);
+                  }}
+                />
+                :
+                positionsItem.instockNumber
+            }
+
           </div>
 
         </div>
@@ -225,7 +235,7 @@ const InstockDetails = (
         {
           skus.length === 0
             ?
-            <MyEmpty description='全部领料完成' />
+            <MyEmpty description='全部入库完成' />
             :
             skus.map((item, index) => {
               const skuResult = item.skuResult || {};
@@ -265,77 +275,75 @@ const InstockDetails = (
                     </div>
                   }
                 >
-                  <Space direction='vertical' style={{ width: '100%' }}>
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ flexGrow: 1 }}>
+                  {item.lotNumber
+                    &&
+                    <Space direction='vertical'>
+                      <div>
                         <Label>批号：</Label>{item.lotNumber}
                       </div>
-                      <div style={{ flexGrow: 1 }}>
+                      <div>
                         <Label>序列号：</Label>{item.serialNumber}
                       </div>
-                    </div>
-                    <div style={{ display: 'flex' }}>
-                      <div style={{ flexGrow: 1 }}>
+                      <div>
                         <Label>生产日期：</Label>{item.manufactureDate}
                       </div>
-                      <div style={{ flexGrow: 1 }}>
+                      <div>
                         <Label>有效日期：</Label>{item.effectiveDate}
                       </div>
-                    </div>
-                    {
-                      detail.positions && detail.positions.map((positionsItem, index) => {
-                        if (index === 0) {
-                          if (!positionsItem.positionId && detail.positions && detail.positions.length === 1) {
-                            return <Button
-                              key={index}
-                              onClick={async () => {
-                                await setItem(detail);
-                                await storeHouseRef.current.open(false);
-                              }}
-                              fill='none'
-                              style={{
-                                color: 'var(--adm-color-primary)',
-                                width: '100%',
-                              }}
-                            >
-                              其他库位暂存
-                            </Button>;
-                          }
-                          return <div key={index}>
-                            {positionsItem.positionId && skuPosition(detail, positionsItem, index, item)}
-                          </div>;
-                        } else {
-                          return <SwipeAction
+                    </Space>}
+                  {
+                    detail.positions && detail.positions.map((positionsItem, index) => {
+                      if (index === 0) {
+                        if (!positionsItem.positionId && detail.positions && detail.positions.length === 1 && status === 98) {
+                          return <Button
                             key={index}
-                            rightActions={[
-                              {
-                                key: 'delete',
-                                text: '删除',
-                                color: 'danger',
-                                onClick: () => {
-                                  const newDetails = details.map((detailItem) => {
-                                    if (detailItem.instockListId === item.instockListId) {
-                                      return {
-                                        ...detailItem,
-                                        positions: detailItem.positions.filter((item, positionIndex) => {
-                                          return positionIndex !== index;
-                                        }),
-                                      };
-                                    }
-                                    return detailItem;
-                                  });
-                                  setOptionsValue({}, item.instockListId, index, newDetails);
-                                },
-                              },
-                            ]}
+                            onClick={async () => {
+                              await setItem(detail);
+                              await storeHouseRef.current.open(false);
+                            }}
+                            fill='none'
+                            style={{
+                              color: 'var(--adm-color-primary)',
+                              width: '100%',
+                            }}
                           >
-                            {skuPosition(detail, positionsItem, index, item)}
-                          </SwipeAction>;
+                            其他库位暂存
+                          </Button>;
                         }
+                        return <div key={index}>
+                          {(status === 0 || positionsItem.positionId) && skuPosition(detail, positionsItem, index, item)}
+                        </div>;
+                      } else {
+                        return <SwipeAction
+                          key={index}
+                          rightActions={[
+                            {
+                              key: 'delete',
+                              text: '删除',
+                              color: 'danger',
+                              onClick: () => {
+                                const newDetails = details.map((detailItem) => {
+                                  if (detailItem.instockListId === item.instockListId) {
+                                    return {
+                                      ...detailItem,
+                                      positions: detailItem.positions.filter((item, positionIndex) => {
+                                        return positionIndex !== index;
+                                      }),
+                                    };
+                                  }
+                                  return detailItem;
+                                });
+                                setOptionsValue({}, item.instockListId, index, newDetails);
+                              },
+                            },
+                          ]}
+                        >
+                          {skuPosition(detail, positionsItem, index, item)}
+                        </SwipeAction>;
+                      }
 
-                      })
-                    }
-                  </Space>
+                    })
+                  }
                 </Card>
                 {
                   status === 98

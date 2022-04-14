@@ -80,7 +80,7 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
       </Card>
       <Card style={{ paddingBottom: 70 }} title={<div>入库确认</div>}>
         <MyAntList>
-          <List.Item extra={<MyDatePicker onChange={value => setData({ ...data, date: value })} value={data.date} />}>
+          <List.Item extra={<MyDatePicker onChange={value => setData({ ...data, instockTime: value })} value={data.instockTime} />}>
             入库时间
           </List.Item>
           <List.Item>
@@ -88,8 +88,8 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
             <div>
               <TextArea
                 placeholder='请输入意见...'
-                value={data.remake}
-                onChange={value => setData({ ...data, remake: value })} />
+                value={data.remark}
+                onChange={value => setData({ ...data, remark: value })} />
             </div>
           </List.Item>
         </MyAntList>
@@ -120,7 +120,7 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
                   positionId: item.positionId,
                   skuId: skuItem.skuId,
                   inStockListId: skuItem.instockListId,
-                  stockNumber: item.skockNumber,
+                  stockNumber: item.stockNumber,
                 });
                 return codeRequests.push(codeRequest);
               }
@@ -141,8 +141,6 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
               codeRequests,
             },
           });
-          console.log(codes);
-
 
           const inStocks = positions.map((item, index) => {
             return {
@@ -150,8 +148,6 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
               inkind: codes[index].inkindId,
             };
           });
-
-          console.log(inStocks);
 
           let skuParams = [];
 
@@ -187,6 +183,7 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
 
           instockRun({
             data: {
+              ...data,
               skuParams,
             },
           });

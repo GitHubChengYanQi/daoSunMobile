@@ -15,6 +15,7 @@ import { history } from 'umi';
 import InstockActions from './components/InstockActions';
 import { batchBind } from '../../../Scan/InStock/components/Url';
 import ListByInstockOrder from './components/ListByInstockOrder';
+import MyEllipsis from '../../../components/MyEllipsis';
 
 const Detail = (props) => {
 
@@ -66,6 +67,15 @@ const Detail = (props) => {
     }
   };
 
+  const module = (value) => {
+    switch (value) {
+      case 'procurementOrder':
+        return '采购单';
+      default:
+        return '请选择';
+    }
+  };
+
   const getPosition = (data, skuId, position = {}) => {
     if (!Array.isArray(data)) {
       return position;
@@ -77,7 +87,7 @@ const Detail = (props) => {
         return position = getPosition(item.storehousePositionsResults, skuId, {
           positionId: item.storehousePositionsId,
           positionName: item.name,
-          skockNumber: skus[0].skockNumber,
+          stockNumber: skus[0].stockNumber,
         });
       }
       return null;
@@ -105,6 +115,7 @@ const Detail = (props) => {
         const array = details.filter(item => skuId === item.skuId);
         return array.map((skuItem) => {
           const sku = {
+            ...skuItem,
             skuId: skuItem.skuId,
             instockListId: skuItem.instockListId,
             number: skuItem.realNumber,
@@ -135,6 +146,7 @@ const Detail = (props) => {
             skuId: item.skuId,
             instockListId: item.instockListId,
             number: item.realNumber,
+            ...item,
             skuResult: item.skuResult,
             spuResult: item.spuResult,
           };
@@ -192,13 +204,12 @@ const Detail = (props) => {
             return detail[0] || {
               skuId: item.skuId,
               skuResult: { ...item.skuResult, spuResult: item.spuResult },
-              number: number,
+              number,
               newNumber: number,
               instockListId: item.instockListId,
               positions: [{
                 ...positions,
                 instockNumber: number,
-                stockNumber: item.stockDetails && item.stockDetails.number,
               }],
             };
           }),
@@ -215,6 +226,14 @@ const Detail = (props) => {
       }
     },
   });
+
+  const logResult = data
+    &&
+    data.logResults
+    &&
+    data.logResults[data.logResults.length - 1] || {};
+
+  const logUser = logResult.createUserResult || {};
 
   const { loading: CodeLoading, run: CodeRun } = useRequest(
     batchBind,
@@ -247,6 +266,15 @@ const Detail = (props) => {
   }
 
   const options = getChildren(data.bindTreeView, data.instockListResults, true) || [];
+
+  const source = (value) => {
+    switch (value) {
+      case 'procurementOrder':
+        return '采购单';
+      default:
+        return '请选择';
+    }
+  };
 
   const backgroundDom = () => {
 
@@ -288,52 +316,56 @@ const Detail = (props) => {
             <Label>送料时间：</Label>{data.registerTime}
           </div>
           <div>
-            <Label>库管人员：</Label>{}
+            <Label>库管人员：</Label>{data.stockUserResult && data.stockUserResult.name}
           </div>
           <div style={{ display: 'flex' }}>
             <div style={{ flexGrow: 1 }}>
-              <Label>入库物料：</Label>0
+              <Label>入库物料：</Label>{data.enoughNumber}
             </div>
             <div style={{ flexGrow: 1, color: 'green' }}>
-              已入库：0
+              已入库：{data.notNumber}
             </div>
             <div style={{ flexGrow: 1, color: 'red' }}>
-              未入库：0
+              未入库：{data.realNumber}
             </div>
           </div>
           <Divider style={{ margin: 0 }} />
           <div>
-            <Label>申请人：</Label>{data.userResult && data.userResult.name}
+            <Label>申请人：</Label>{data.createUserResult && data.createUserResult.name}
           </div>
           <div>
             <Label>申请时间：</Label>{data.createTime}
           </div>
           <div>
-            <Label>更新人员：</Label>
+            <Label>更新人员：</Label>{data.updateUserResult && data.updateUserResult.name}
           </div>
           <div>
             <Label>更新时间：</Label>{data.updateTime}
           </div>
           <div>
-            <Label>关联任务：</Label>
+            <Label>关联任务：</Label>{source(data.source)}
           </div>
           <div>
-            <Label>备注说明：</Label>
+            <Label>备注说明：</Label>{data.remake}
           </div>
         </Space>
       </Card>
       <Card title='入库信息' bodyStyle={{ padding: '0 16px' }} headerStyle={{ border: 'none' }}>
-        <Space style={{ width: '100%' }} direction='vertical'>
-          <div>
-            <Label>库管人员：</Label>
-          </div>
-          <div>
-            <Label>入库时间：</Label>
-          </div>
-          <div>
-            <Label>库管意见：</Label>
-          </div>
-        </Space>
+        {logUser.name ? <Space style={{ width: '100%' }} direction='vertical'>
+            <div style={{ display: 'flex' }}>
+              <Label>库管人员：</Label>
+              <MyEllipsis width='60%'>{logUser.name} / {logUser.roleName} / {logUser.deptName}</MyEllipsis>
+            </div>
+            <div>
+              <Label>入库时间：</Label>{logResult.instockTime}
+            </div>
+            <div>
+              <Label>库管意见：</Label>{logResult.remark}
+            </div>
+          </Space>
+          :
+          <div>暂无</div>
+        }
       </Card>
     </Card>;
   };
@@ -370,13 +402,13 @@ const Detail = (props) => {
         <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
       </div>}
       buttons={<Space>
-        <Button
+        {status !== 99 && <Button
           color='primary'
           fill='outline'
           onClick={() => {
             history.goBack();
           }}
-        >暂停入库</Button>
+        >暂停入库</Button>}
         <InstockActions
           refresh={refresh}
           setDetails={setDetails}

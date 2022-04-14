@@ -75,7 +75,7 @@ const MyTimePicker = (
       }}
       value={value ? value.split(':') : []}
       onConfirm={(value) => {
-        onChange(`${value[0] || 0}:${value[1] || 0}:${value[2] || 0}`);
+        onChange(`${value[0] || '00'}:${value[1] || '00'}:${value[2] || '00'}`);
       }}
     />
   </>;

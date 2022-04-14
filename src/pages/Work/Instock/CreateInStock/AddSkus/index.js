@@ -324,11 +324,6 @@ const AddSkus = (
                 setValue({
                   details: [...details, {
                     number: null,
-                    batchNumber: '',
-                    serialNumber: '',
-                    productionTime: null,
-                    youxiaoTime: null,
-                    daohuoTime: null,
                   }],
                 }, index);
               }}
