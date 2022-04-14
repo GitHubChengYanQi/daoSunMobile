@@ -40,6 +40,7 @@ const Errors = (props) => {
 
   const errorDetails = details.filter(item => item.number !== item.newNumber);
   const successDetails = details.filter(item => item.number === item.newNumber);
+  console.log(errorDetails);
 
   return <>
     <MyBottom
@@ -55,6 +56,8 @@ const Errors = (props) => {
                 return {
                   skuId: item.skuId,
                   type: '数量不符',
+                  number: item.number,
+                  instockListId: item.instockListId,
                 };
               }),
             },

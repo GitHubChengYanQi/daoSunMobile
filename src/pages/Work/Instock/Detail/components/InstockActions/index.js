@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { useRequest } from '../../../../../../util/Request';
-import { Button, Dialog, Toast } from 'antd-mobile';
+import { Button, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { checkNumberTrue } from '../../../../ProcurementOrder/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
+import Instock from '../Instock';
 
 const InstockActions = (
   {
@@ -13,42 +14,12 @@ const InstockActions = (
     details,
     status,
     id,
+    CodeRun,
   },
 ) => {
 
-  // 入库
-  const { loading: instockLoading, run: instockRun } = useRequest({
-    url: '/instockOrder/freeInStockByPositions',
-    method: 'POST',
-  }, {
-    manual: true,
-    onSuccess: (res) => {
-      Dialog.show({
-        content: '入库成功！',
-        closeOnAction: true,
-        onAction: (action) => {
-          if (action.key === 'back') {
-            history.goBack();
-          } else {
-            refresh();
-            setDetails([]);
-          }
-        },
-        actions: [[
-          {
-            key: 'back',
-            text: '返回入库列表',
-          },
-          {
-            key: 'next',
-            text: '继续入库',
-          },
-        ],
-        ],
-      });
-    },
-  });
 
+  const ref = useRef();
 
   const { loading: checkNumberLoading, run: checkNumberRun } = useRequest(checkNumberTrue, {
     manual: true,
@@ -81,15 +52,16 @@ const InstockActions = (
             }
             break;
           case 98:
-            console.log(details);
-            
+            ref.current.open(false);
             break;
           default:
             return {};
         }
       }}>{orderStatus().buttonText}</Button>
 
-    {(instockLoading || checkNumberLoading) && <MyLoading />}
+    <Instock details={details} ref={ref} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} />
+
+    {checkNumberLoading && <MyLoading />}
   </>;
 };
 

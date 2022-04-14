@@ -14,6 +14,7 @@ import InstockDetails from './components/InstockDetails';
 import { history } from 'umi';
 import InstockActions from './components/InstockActions';
 import { batchBind } from '../../../Scan/InStock/components/Url';
+import ListByInstockOrder from './components/ListByInstockOrder';
 
 const Detail = (props) => {
 
@@ -71,9 +72,12 @@ const Detail = (props) => {
     }
 
     data.map((item) => {
-      if (item.skuIds.includes(skuId)) {
+      const skus = item.skuResults.filter(item => item.skuId === skuId);
+      if (skus.length > 0) {
         return position = getPosition(item.storehousePositionsResults, skuId, {
-          positionId: item.storehousePositionsId, positionName: item.name,
+          positionId: item.storehousePositionsId,
+          positionName: item.name,
+          skockNumber: skus[0].skockNumber,
         });
       }
       return null;
@@ -103,7 +107,7 @@ const Detail = (props) => {
           const sku = {
             skuId: skuItem.skuId,
             instockListId: skuItem.instockListId,
-            number: skuItem.number,
+            number: skuItem.realNumber,
             skuResult: skuItem.skuResult,
             spuResult: skuItem.spuResult,
             ...getPosition(data, skuItem.skuId),
@@ -130,7 +134,7 @@ const Detail = (props) => {
           const sku = {
             skuId: item.skuId,
             instockListId: item.instockListId,
-            number: item.number,
+            number: item.realNumber,
             skuResult: item.skuResult,
             spuResult: item.spuResult,
           };
@@ -176,7 +180,6 @@ const Detail = (props) => {
   let number = 0;
   let newNumber = 0;
 
-
   const { loading, data, run, refresh } = useRequest(instockOrderDetail, {
     manual: true,
     onSuccess: (res) => {
@@ -185,13 +188,18 @@ const Detail = (props) => {
         setDetails(res.instockListResults.map((item) => {
             const positions = getPosition(res && res.bindTreeView, item.skuId);
             const detail = details.filter(skuItem => skuItem.instockListId === item.instockListId);
+            const number = res.state === 0 ? item.number : item.realNumber;
             return detail[0] || {
               skuId: item.skuId,
               skuResult: { ...item.skuResult, spuResult: item.spuResult },
-              number: item.number,
-              newNumber: item.number,
+              number: number,
+              newNumber: number,
               instockListId: item.instockListId,
-              positions: [{ ...positions, instockNumber: item.number, stockNumber: 0 }],
+              positions: [{
+                ...positions,
+                instockNumber: number,
+                stockNumber: item.stockDetails && item.stockDetails.number,
+              }],
             };
           }),
         );
@@ -248,7 +256,8 @@ const Detail = (props) => {
           入库单 / {data.coding}
         </div>
         <Space>
-          <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 24px' }}>加急</Button>
+          {data.urgent ?
+            <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 24px' }}>加急</Button> : null}
           <Button
             color='default'
             fill='outline'
@@ -267,19 +276,19 @@ const Detail = (props) => {
       <Card title='基本信息' bodyStyle={{ padding: '0 16px' }} headerStyle={{ border: 'none' }}>
         <Space style={{ width: '100%' }} direction='vertical'>
           <div>
-            <Label>入库主题：</Label>
+            <Label>入库主题：</Label>{data.theme}
           </div>
           <div>
-            <Label>入库类型：</Label>
+            <Label>入库类型：</Label>{data.type}
           </div>
           <div>
             <Label>送料人员：</Label>{data.userResult && data.userResult.name}
           </div>
           <div>
-            <Label>送料时间：</Label>
+            <Label>送料时间：</Label>{data.registerTime}
           </div>
           <div>
-            <Label>库管人员：</Label>
+            <Label>库管人员：</Label>{}
           </div>
           <div style={{ display: 'flex' }}>
             <div style={{ flexGrow: 1 }}>
@@ -313,7 +322,19 @@ const Detail = (props) => {
           </div>
         </Space>
       </Card>
-
+      <Card title='入库信息' bodyStyle={{ padding: '0 16px' }} headerStyle={{ border: 'none' }}>
+        <Space style={{ width: '100%' }} direction='vertical'>
+          <div>
+            <Label>库管人员：</Label>
+          </div>
+          <div>
+            <Label>入库时间：</Label>
+          </div>
+          <div>
+            <Label>库管意见：</Label>
+          </div>
+        </Space>
+      </Card>
     </Card>;
   };
 
@@ -331,9 +352,10 @@ const Detail = (props) => {
           skus={skus}
           setSkus={setSkus}
           options={options}
+          refresh={refresh}
         />;
       case 'record':
-        return <MyEmpty />;
+        return <ListByInstockOrder id={params.id} />;
       case 'log':
         return <MyEmpty />;
       default:
@@ -343,7 +365,7 @@ const Detail = (props) => {
 
   return <>
     <MyBottom
-      leftActuions={<div>
+      leftActuions={status === 0 && <div>
         <div>计划 / 实际</div>
         <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
       </div>}
@@ -362,6 +384,7 @@ const Detail = (props) => {
           details={details}
           orderStatus={orderStatus}
           id={params.id}
+          CodeRun={CodeRun}
         />
       </Space>}
     >

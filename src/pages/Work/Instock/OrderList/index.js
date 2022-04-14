@@ -60,7 +60,11 @@ const Orderlist = () => {
               title={<div>{item.createTime}</div>}
               className={styles.item}
               extra={<Space>
-                <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 12px' }}>加急</Button>
+                {
+                  item.urgent
+                  &&
+                  <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 12px' }}>加急</Button>
+                }
                 <Button
                   color='default'
                   fill='outline'
@@ -81,13 +85,13 @@ const Orderlist = () => {
                   <Label>入库单编号：</Label>{item.coding}
                 </div>
                 <div>
-                  <Label>入库类型：</Label>
+                  <Label>入库类型：</Label>{item.type}
                 </div>
                 <div>
                   <Label>送料人员：</Label>{item.userResult && item.userResult.name}
                 </div>
                 <div>
-                  <Label>送料时间：</Label>
+                  <Label>送料时间：</Label>{item.registerTime}
                 </div>
                 <div>
                   <Label>库管人员：</Label>

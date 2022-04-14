@@ -13,14 +13,10 @@ const Type = (
 
   return <>
     <List style={{ '--border-top': 'none', '--border-bottom': 'none' }}>
-      <List.Item style={{ textAlign: 'center' }}>
-        <LinkButton>新增入库类型</LinkButton>
-      </List.Item>
       <List.Item
         arrow={false}
         extra={<Space align='center'>
           {value === '直接入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
-          <LinkButton>编辑</LinkButton>
         </Space>}
       >
         <div onClick={() => {
@@ -32,7 +28,7 @@ const Type = (
       <List.Item
         extra={<Space>
           {value === '采购入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
-          <LinkButton>编辑</LinkButton>
+          {/*<LinkButton>编辑</LinkButton>*/}
         </Space>}
       >
         <div onClick={() => {
@@ -45,7 +41,7 @@ const Type = (
         arrow={false}
         extra={<Space>
           {value === '质检入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
-          <LinkButton>编辑</LinkButton>
+          {/*<LinkButton>编辑</LinkButton>*/}
         </Space>}
       >
         <div onClick={() => {

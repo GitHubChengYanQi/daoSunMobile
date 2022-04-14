@@ -76,7 +76,9 @@ const CreateInStock = (props) => {
       leftActuions={<div>合计：{skus.length}</div>}
       buttons={<Space>
         <Button>扫码添加物料</Button>
-        <Button disabled={skus.length === 0} color='primary' onClick={() => {
+        <Button
+          disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}
+          color='primary' onClick={() => {
           const instockRequest = [];
           skus.map((item) => {
             if (item.details && item.details.length > 0) {
@@ -101,7 +103,17 @@ const CreateInStock = (props) => {
             }
             return null;
           });
-          instock({ data: { ...data, userId: data.user && data.user.id, instockRequest } });
+          instock({
+            data: {
+              ...data,
+              userId: data.user && data.user.id,
+              stockUserId: data.stockUser && data.stockUser.id,
+              instockRequest,
+              enclosure: data.enclosure && data.enclosure.map(item => item.id),
+              registerTime: data.date && `${data.date} ${data.time}`,
+              time: null,
+            },
+          });
         }}>提交申请</Button>
       </Space>}
     >
@@ -170,19 +182,18 @@ const CreateInStock = (props) => {
             具体时间
           </List.Item>
           <List.Item
-            onClick={() => {
-
-            }}
-            extra={<div>请选择</div>}
+            extra={<div><SelectUser value={data.stockUser} onChange={(user) => {
+              setData({ ...data, stockUser: user });
+            }} /></div>}
           >
             库管人员
           </List.Item>
           <List.Item extra={
             <Radio.Group
               defaultValue={0}
-              value={data.jinji}
+              value={data.urgent}
               onChange={val => {
-                setData({ ...data, jinji: val });
+                setData({ ...data, urgent: val });
               }}
             >
               <Space>
@@ -209,14 +220,14 @@ const CreateInStock = (props) => {
                 </div>
               }
               onChange={(url, id, name) => {
-                const file = data.file || [];
-                setData({ ...data, file: [...file, { url, id, name }] });
+                const enclosure = data.enclosure || [];
+                setData({ ...data, enclosure: [...enclosure, { url, id, name }] });
               }}
               onRemove={(name) => {
-                const file = data.file && data.file.filter((item) => {
+                const enclosure = data.enclosure && data.enclosure.filter((item) => {
                   return item.name !== name;
                 });
-                setData({ ...data, file });
+                setData({ ...data, enclosure });
               }}
             />
           </List.Item>

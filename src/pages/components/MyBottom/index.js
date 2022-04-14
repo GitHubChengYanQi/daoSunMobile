@@ -12,7 +12,7 @@ const MyBottom = ({ children, leftActuions, buttons }) => {
   }, []);
 
   return <div>
-    <div style={{ minHeight: `calc(100vh - ${bottomHeight}px)` }}>
+    <div style={{ minHeight: `100vh` }}>
       {children}
     </div>
     <div id='bottom' style={{

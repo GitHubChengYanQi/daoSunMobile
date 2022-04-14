@@ -11,10 +11,10 @@ import MyPopup from '../../../../../components/MyPopup';
 import Number from '../../../../../components/Number';
 import MySelector from '../../../../../components/MySelector';
 import { storeHouseSelect } from '../../../../Quality/Url';
-import MyCascader from '../../../../../components/MyCascader';
 import { useRequest } from '../../../../../../util/Request';
 import { storehousePositionsTreeView } from '../../../../../Scan/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
+import Instock from '../Instock';
 
 const InstockDetails = (
   {
@@ -28,13 +28,18 @@ const InstockDetails = (
     getSkus,
     positions,
     setPositions,
+    refresh,
   }) => {
 
   const detailRef = useRef();
 
+  const ref = useRef();
+
   const storeHouseRef = useRef();
 
   const [item, setItem] = useState({});
+
+  const [detail, setDetail] = useState({});
 
   const dataSourcedChildren = (data) => {
     if ((!Array.isArray(data) || data.length === 0)) {
@@ -51,14 +56,14 @@ const InstockDetails = (
 
   const getPositionsName = (data, id, name) => {
     if (!Array.isArray(data)) {
-      return '';
+      return name;
     }
 
     data.map((item) => {
       if (item.key === id) {
         return name = item.title;
       }
-      return getPositionsName(item.children, id, name);
+      return name = getPositionsName(item.children, id, name);
     });
 
     return name;
@@ -103,7 +108,6 @@ const InstockDetails = (
   };
 
   const setOptionsValue = (data, id, positionsIndex, newDetails) => {
-
     const detailsOptions = newDetails || details;
 
     const array = detailsOptions.map((detailItem) => {
@@ -111,7 +115,7 @@ const InstockDetails = (
 
         let instockNumber = 0;
 
-        const positions = detailItem.positions.map((item, index) => {
+        const positions = detailItem.positions && detailItem.positions.map((item, index) => {
           if (index === positionsIndex) {
             return {
               ...item,
@@ -119,12 +123,10 @@ const InstockDetails = (
             };
           }
           return item;
-        });
+        }) || [];
 
         positions.map((item, index) => {
-          if (index !== 0) {
-            instockNumber += (item.instockNumber || 0);
-          }
+          instockNumber += (item.instockNumber || 0);
           return null;
         });
 
@@ -135,13 +137,7 @@ const InstockDetails = (
 
         return {
           ...detailItem,
-          positions: positions.map((item, index) => {
-            if (index === 0) {
-              return { ...item, instockNumber: detailItem.number - instockNumber };
-            } else {
-              return item;
-            }
-          }),
+          positions,
         };
       } else {
         return detailItem;
@@ -151,7 +147,7 @@ const InstockDetails = (
     setDetails(array);
   };
 
-  const skuPosition = (detail, positionsItem, index) => {
+  const skuPosition = (detail, positionsItem, index, item) => {
     return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8 }}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
@@ -174,7 +170,7 @@ const InstockDetails = (
             <Label>{status === 98 ? '入库：' : '计划：'}</Label>
             <Number
               width={70}
-              disabled={index === 0}
+              disabled={status === 0}
               value={status === 98 ? positionsItem.instockNumber : detail.number}
               buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
               onChange={(value) => {
@@ -272,24 +268,24 @@ const InstockDetails = (
                   <Space direction='vertical' style={{ width: '100%' }}>
                     <div style={{ display: 'flex' }}>
                       <div style={{ flexGrow: 1 }}>
-                        <Label>批号：</Label>123
+                        <Label>批号：</Label>{item.lotNumber}
                       </div>
                       <div style={{ flexGrow: 1 }}>
-                        <Label>序列号：</Label>123
+                        <Label>序列号：</Label>{item.serialNumber}
                       </div>
                     </div>
                     <div style={{ display: 'flex' }}>
                       <div style={{ flexGrow: 1 }}>
-                        <Label>生产日期：</Label>123
+                        <Label>生产日期：</Label>{item.manufactureDate}
                       </div>
                       <div style={{ flexGrow: 1 }}>
-                        <Label>有效日期：</Label>123
+                        <Label>有效日期：</Label>{item.effectiveDate}
                       </div>
                     </div>
                     {
-                      detail.positions.map((positionsItem, index) => {
+                      detail.positions && detail.positions.map((positionsItem, index) => {
                         if (index === 0) {
-                          if (!positionsItem.positionId && detail.positions.length === 1) {
+                          if (!positionsItem.positionId && detail.positions && detail.positions.length === 1) {
                             return <Button
                               key={index}
                               onClick={async () => {
@@ -306,7 +302,7 @@ const InstockDetails = (
                             </Button>;
                           }
                           return <div key={index}>
-                            {positionsItem.positionId && skuPosition(detail, positionsItem, index)}
+                            {positionsItem.positionId && skuPosition(detail, positionsItem, index, item)}
                           </div>;
                         } else {
                           return <SwipeAction
@@ -333,7 +329,7 @@ const InstockDetails = (
                               },
                             ]}
                           >
-                            {skuPosition(detail, positionsItem, index)}
+                            {skuPosition(detail, positionsItem, index, item)}
                           </SwipeAction>;
                         }
 
@@ -354,6 +350,8 @@ const InstockDetails = (
                     >
                       {
                         !(
+                          detail.positions
+                          &&
                           detail.positions.length === 1
                           &&
                           !detail.positions[0].positionId
@@ -385,8 +383,16 @@ const InstockDetails = (
                         查看二维码
                       </Button>
                       <Button
+                        disabled={
+                          detail.positions
+                          &&
+                          detail.positions.length === 1
+                          &&
+                          !detail.positions[0].positionId
+                        }
                         onClick={() => {
-
+                          setDetail(detail);
+                          ref.current.open(false);
                         }}
                         fill='none'
                         style={{
@@ -454,6 +460,8 @@ const InstockDetails = (
       ref={detailRef}
       component={Detail}
     />
+
+    <Instock details={[detail]} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} ref={ref} />
 
     <MyPopup title='选择仓库' position='bottom' ref={storeHouseRef}>
       <MySelector

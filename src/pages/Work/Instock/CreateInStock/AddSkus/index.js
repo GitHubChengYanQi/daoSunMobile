@@ -228,14 +228,14 @@ const AddSkus = (
                           <Input
                             placeholder='请输入物料批号'
                             className={style.inputRight}
-                            value={detailsItem.batchNumber}
+                            value={detailsItem.lotNumber}
                             style={{
                               border: 'solid 1px  rgb(190 184 184)',
                               backgroundColor: '#fff',
                               padding: '4px 8px',
                             }}
                             onChange={(value) => {
-                              setDetailValue({ batchNumber: value }, index, detailIndex);
+                              setDetailValue({ lotNumber: value }, index, detailIndex);
                             }}
                           />
                         </div>
@@ -260,10 +260,10 @@ const AddSkus = (
                       </List.Item>
                       <List.Item
                         extra={<MyDatePicker
-                          value={detailsItem.productionTime}
+                          value={detailsItem.manufactureDate}
                           precision='second'
                           onChange={(value) => {
-                            setDetailValue({ productionTime: value }, index, detailIndex);
+                            setDetailValue({ manufactureDate: value }, index, detailIndex);
                           }} />}
                       >
                         <div style={{ display: 'flex' }}>
@@ -272,10 +272,10 @@ const AddSkus = (
                       </List.Item>
                       <List.Item
                         extra={<MyDatePicker
-                          value={detailsItem.youxiaoTime}
+                          value={detailsItem.effectiveDate}
                           precision='second'
                           onChange={(value) => {
-                            setDetailValue({ youxiaoTime: value }, index, detailIndex);
+                            setDetailValue({ effectiveDate: value }, index, detailIndex);
                           }} />}
                       >
                         <div style={{ display: 'flex' }}>
@@ -284,10 +284,10 @@ const AddSkus = (
                       </List.Item>
                       <List.Item
                         extra={<MyDatePicker
-                          value={detailsItem.daohuoTime}
+                          value={detailsItem.receivedDate}
                           precision='second'
                           onChange={(value) => {
-                            setDetailValue({ daohuoTime: value }, index, detailIndex);
+                            setDetailValue({ receivedDate: value }, index, detailIndex);
                           }} />}
                       >
                         <div style={{ display: 'flex' }}>
