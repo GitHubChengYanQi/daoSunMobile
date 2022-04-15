@@ -127,7 +127,7 @@ const Errors = (props) => {
             return <Space
               direction='vertical'
               key={index}
-              style={{ backgroundColor: '#f9f9f9', padding: 16, maxWidth: '100%', borderRadius: 10, marginBottom: 8 }}
+              style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
             >
               <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
               <div style={{ display: 'flex' }}>
