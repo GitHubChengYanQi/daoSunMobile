@@ -49,7 +49,7 @@ const ListByInstockOrder = ({ id }) => {
             </Space>
           </Space>}
         >
-          <table border={1} className={styles.table}>
+          <table style={{width:'100%'}} border={1} className={styles.table}>
             <tbody>
             <tr>
               <td>
