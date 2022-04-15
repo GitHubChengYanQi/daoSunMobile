@@ -100,7 +100,7 @@ const AddSkus = (
                     {skuResult.standard} / {spuResult.name}
                   </MyEllipsis>
                   <div style={{ display: 'flex' }}>
-                    <div style={{ minWidth: 150 }}>
+                    <div style={{ minWidth: 110 }}>
                       <Label>型号 / 规格 ：</Label>
                     </div>
                     <MyEllipsis width='47%'>
@@ -308,9 +308,10 @@ const AddSkus = (
                 const array = skus.filter((item, skuIdnex) => skuIdnex !== index);
                 setSkus(array);
               }}
+              color='primary'
               style={{
                 width: '50%',
-                color: 'var(--adm-color-primary)',
+                // color: 'var(--adm-color-primary)',
                 '--border-radius': '0px',
                 borderLeft: 'none',
                 borderRight: 'none',
@@ -327,9 +328,10 @@ const AddSkus = (
                   }],
                 }, index);
               }}
+              color='primary'
               style={{
                 width: '50%',
-                color: 'var(--adm-color-primary)',
+                // color: 'var(--adm-color-primary)',
                 '--border-radius': '0px',
                 borderBottomRightRadius: 10,
                 borderRight: 'none',

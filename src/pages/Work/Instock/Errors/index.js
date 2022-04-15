@@ -111,9 +111,7 @@ const Errors = (props) => {
           }
         </MyAntList>
       </Card>
-      <Card title={<div>审批流程</div>}>
-        <Process type='instockError' />
-      </Card>
+      <Process type='instockError' card />
     </MyBottom>
 
     {loading && <MyLoading />}

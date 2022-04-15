@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRequest } from '../../../../../util/Request';
-import { Space, Steps } from 'antd-mobile';
+import { Card, Space, Steps } from 'antd-mobile';
 import { Avatar } from 'antd';
 import Icon from '../../../../components/Icon';
 import { AuditOutlined } from '@ant-design/icons';
@@ -13,6 +13,7 @@ const Process = (
     type,
     createName,
     auditData,
+    card,
   }) => {
 
   const { loading, data, run } = useRequest({
@@ -151,7 +152,7 @@ const Process = (
       case 'start':
         return <div>
           <Steps.Step
-            style={{ minHeight,fontSize:'5vw' }}
+            style={{ minHeight, fontSize: '5vw' }}
             status={stepStatus}
             description={createName ? <Space align='start'>
               <Avatar
@@ -190,7 +191,7 @@ const Process = (
             status={stepStatus}
             title={processType(step.auditRule.type)}
             description={rules(step.auditRule)}
-            icon={<div>{status(step,stepStatus)}</div>}
+            icon={<div>{status(step, stepStatus)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
@@ -215,7 +216,13 @@ const Process = (
 
 
   return <>
-    {allStep(auditData || data, true, 0)}
+    {card ?
+      <Card title={<div>审批流程</div>}>
+        {allStep(auditData || data, true, 0)}
+      </Card>
+      :
+      allStep(auditData || data, true, 0)
+    }
   </>;
 
 };

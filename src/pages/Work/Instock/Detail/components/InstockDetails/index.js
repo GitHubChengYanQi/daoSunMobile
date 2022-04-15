@@ -421,12 +421,12 @@ const InstockDetails = (
 
                             }}
                             color='danger'
-                            fill='none'
+                            // fill='none'
                             style={{
                               width: '100%',
                               '--border-radius': '0px',
                               borderLeft: 'none',
-                              backgroundColor: '#fff',
+                              // backgroundColor: '#fff',
                               borderBottomLeftRadius: 10,
                               borderBottomRightRadius: 10,
                               borderRight: 'none',
@@ -439,12 +439,13 @@ const InstockDetails = (
                             onClick={() => {
 
                             }}
+                            color='primary'
                             style={{
                               width: '100%',
-                              color: 'var(--adm-color-primary)',
+                              // color: 'var(--adm-color-primary)',
                               '--border-radius': '0px',
                               borderLeft: 'none',
-                              backgroundColor: '#fff',
+                              // backgroundColor: '#fff',
                               borderBottomLeftRadius: 10,
                               borderBottomRightRadius: 10,
                               borderRight: 'none',

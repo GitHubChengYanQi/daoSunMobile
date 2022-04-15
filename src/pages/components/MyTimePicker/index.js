@@ -62,7 +62,7 @@ const MyTimePicker = (
   return <>
     <LinkButton
       style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
-      title={value && `${value.split(':')[0]}时${value.split(':')[1]}分${value.split(':')[2]}秒` || '选择时间'}
+      title={<div>{value && `${value.split(':')[0]}时${value.split(':')[1]}分${value.split(':')[2]}秒` || '选择时间'}</div>}
       onClick={() => {
         setVisible(true);
       }} />

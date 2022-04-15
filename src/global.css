@@ -6,6 +6,10 @@ div {
   font-size: 5vw;
 }
 
+input {
+  font-size: 5vw !important;
+}
+
 body {
   margin: 0;
 }
@@ -15,7 +19,7 @@ body {
 }
 
 :global .weui-popup-content {
-  position:fixed !important;
+  position: fixed !important;
 }
 
 
