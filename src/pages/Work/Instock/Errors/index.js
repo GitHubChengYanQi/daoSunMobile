@@ -10,6 +10,9 @@ import Process from '../../PurchaseAsk/components/Process';
 import { useRequest } from '../../../../util/Request';
 import { history } from 'umi';
 import { MyLoading } from '../../../components/MyLoading';
+import LinkButton from '../../../components/LinkButton';
+import UpLoadImg from '../../../components/Upload';
+import MyEllipsis from '../../../components/MyEllipsis';
 
 const Errors = (props) => {
 
@@ -19,7 +22,9 @@ const Errors = (props) => {
 
   const id = state && state.id;
 
-  const [remake, setRemake] = useState('');
+  const [remark, setRemark] = useState('');
+
+  const [enclosure, setEnclosure] = useState([]);
 
   const { loading, run } = useRequest({
     url: '/anomaly/add',
@@ -40,7 +45,6 @@ const Errors = (props) => {
 
   const errorDetails = details.filter(item => item.number !== item.newNumber);
   const successDetails = details.filter(item => item.number === item.newNumber);
-  console.log(errorDetails);
 
   return <>
     <MyBottom
@@ -51,12 +55,14 @@ const Errors = (props) => {
             data: {
               anomalyType: 'InstockError',
               formId: id,
-              remake,
+              remark,
+              enclosure: enclosure.map(item => item.id).join(','),
               detailParams: errorDetails.map((item) => {
                 return {
                   skuId: item.skuId,
                   type: '数量不符',
-                  number: item.number,
+                  planNumber: item.number,
+                  realNumber: item.newNumber,
                   instockListId: item.instockListId,
                 };
               }),
@@ -66,51 +72,75 @@ const Errors = (props) => {
       </Space>}
     >
       <MyNavBar title='提报入库异常' />
-      <Card title={<div>数量异常明细</div>}>
-        <MyAntList>
-          {
-            errorDetails.map((item, index) => {
-              return <List.Item key={index}>
-                <div>
-                  <SkuResultSkuJsons skuResult={item.skuResult} />
-                </div>
-                <div style={{ display: 'flex' }}>
-                  <div style={{ flexGrow: 1 }}>
-                    <Label>计划待入库：</Label>{item.number}
-                  </div>
-                  <div style={{ flexGrow: 1 }}>
-                    <Label>实际待入库：</Label>{item.newNumber}
-                  </div>
-                </div>
-              </List.Item>;
-            })
-          }
-        </MyAntList>
+      <Card style={{ boxShadow: 'rgb(109 110 112 / 49%) 0px 0px 5px', margin: '8px 0' }} title={<div>数量异常明细</div>}>
+        {errorDetails.map((item, index) => {
+          return <Space
+            direction='vertical'
+            key={index}
+            style={{ backgroundColor: '#f9f9f9', padding: 16, maxWidth: '100%', borderRadius: 10, marginBottom: 8 }}
+          >
+            <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
+            <div style={{ display: 'flex' }}>
+              <div style={{ flexGrow: 1 }}>
+                <Label>计划待入库：</Label>{item.number}
+              </div>
+              <div style={{ flexGrow: 1 }}>
+                <Label>实际待入库：</Label>{item.newNumber}
+              </div>
+            </div>
+          </Space>;
+        })}
       </Card>
       <Card title={<div>异常描述</div>}>
-        <TextArea placeholder='请输入异常描述。。。' value={remake} onChange={setRemake} />
+        <TextArea placeholder='请输入描述信息。。。' value={remark} onChange={setRemark} />
       </Card>
-      <Card title={<div>数量正常明细</div>}>
-        <MyAntList>
-          {
-            successDetails.map((item, index) => {
-              return <List.Item key={index}>
-                <div>
-                  <SkuResultSkuJsons skuResult={item.skuResult} />
-                </div>
-                <div style={{ display: 'flex' }}>
-                  <div style={{ flexGrow: 1 }}>
-                    <Label>计划待入库：</Label>{item.number}
-                  </div>
-                  <div style={{ flexGrow: 1 }}>
-                    <Label>实际待入库：</Label>{item.newNumber}
-                  </div>
-                </div>
-              </List.Item>;
-            })
+      <Card title={<div>
+        <UpLoadImg
+          maxCount={5}
+          showUploadList
+          type='text'
+          button={
+            <div style={{ display: 'flex', width: '90vw' }}>
+              <div style={{ flexGrow: 1 }}>
+                附件 {enclosure.length || 0} / 5 格式：JPG.PDF
+              </div>
+              <div>
+                <LinkButton>上传附件</LinkButton>
+              </div>
+            </div>
           }
-        </MyAntList>
+          onChange={(url, id, name) => {
+            setEnclosure([...enclosure, { url, id, name }]);
+          }}
+          onRemove={(name) => {
+            const array = enclosure.filter((item) => {
+              return item.name !== name;
+            });
+            setEnclosure(array);
+          }}
+        />
+      </div>}>
       </Card>
+      {successDetails.length > 0 &&
+        <Card style={{ boxShadow: 'rgb(109 110 112 / 49%) 0px 0px 5px', margin: '8px 0' }} title={<div>数量正常明细</div>}>
+          {successDetails.map((item, index) => {
+            return <Space
+              direction='vertical'
+              key={index}
+              style={{ backgroundColor: '#f9f9f9', padding: 16, maxWidth: '100%', borderRadius: 10, marginBottom: 8 }}
+            >
+              <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
+              <div style={{ display: 'flex' }}>
+                <div style={{ flexGrow: 1 }}>
+                  <Label>计划待入库：</Label>{item.number}
+                </div>
+                <div style={{ flexGrow: 1 }}>
+                  <Label>实际待入库：</Label>{item.newNumber}
+                </div>
+              </div>
+            </Space>;
+          })}
+        </Card>}
       <Process type='instockError' card />
     </MyBottom>
 

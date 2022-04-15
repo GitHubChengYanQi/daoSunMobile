@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { checkNumberTrue, instockOrderDetail } from '../../ProcurementOrder/Url';
+import { instockOrderDetail } from '../../ProcurementOrder/Url';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import { getHeader } from '../../../components/GetHeader';
-import { Button, Card, Dialog, Divider, Space, Tabs, Toast } from 'antd-mobile';
+import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import Label from '../../../components/Label';
 import styles from '../../Production/index.css';
@@ -16,6 +16,9 @@ import InstockActions from './components/InstockActions';
 import { batchBind } from '../../../Scan/InStock/components/Url';
 import ListByInstockOrder from './components/ListByInstockOrder';
 import MyEllipsis from '../../../components/MyEllipsis';
+import { Avatar } from 'antd';
+import { DownFill } from 'antd-mobile-icons';
+import { useBoolean } from 'ahooks';
 
 const Detail = (props) => {
 
@@ -32,7 +35,19 @@ const Detail = (props) => {
 
   const orderStatus = () => {
     switch (status) {
+      case -1:
+        return {
+          buttonText: '已拒绝',
+          buttonDisabled: true,
+          text: '已拒绝',
+        };
       case 0:
+        return {
+          buttonText: '审批中',
+          buttonDisabled: true,
+          text: '审批中',
+        };
+      case 1:
         return {
           buttonText: '提交核实',
           buttonDisabled: false,
@@ -250,6 +265,8 @@ const Detail = (props) => {
 
   const [key, setKey] = useState('detail');
 
+  const [state, { toggle }] = useBoolean();
+
   useEffect(() => {
     if (params.id) {
       run({ data: { instockOrderId: params.id } });
@@ -278,79 +295,98 @@ const Detail = (props) => {
 
   const backgroundDom = () => {
 
-    return <Card
-      title={<div>
-        <div>
-          入库单 / {data.coding}
-        </div>
-        <Space>
-          {data.urgent ?
-            <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 24px' }}>加急</Button> : null}
-          <Button
-            color='default'
-            fill='outline'
-            style={{
-              '--border-radius': '50px',
-              padding: '4px 12px',
-              '--background-color': '#fff7e6',
-              '--text-color': '#fca916',
-              '--border-width': '0px',
-            }}>{orderStatus().text}</Button>
-        </Space>
-      </div>}
-      bodyStyle={{ padding: 0 }}
-      className={styles.mainDiv}
-      style={{ backgroundColor: '#fff' }}>
-      <Card title='基本信息' bodyStyle={{ padding: '0 16px' }} headerStyle={{ border: 'none' }}>
-        <Space style={{ width: '100%' }} direction='vertical'>
-          <div>
-            <Label>入库主题：</Label>{data.theme}
-          </div>
-          <div>
-            <Label>入库类型：</Label>{data.type}
-          </div>
-          <div>
-            <Label>送料人员：</Label>{data.userResult && data.userResult.name}
-          </div>
-          <div>
-            <Label>送料时间：</Label>{data.registerTime}
-          </div>
-          <div>
-            <Label>库管人员：</Label>{data.stockUserResult && data.stockUserResult.name}
-          </div>
-          <div style={{ display: 'flex' }}>
-            <div style={{ flexGrow: 1 }}>
-              <Label>入库物料：</Label>{data.enoughNumber}
+    return <div style={{ backgroundColor: '#f9f9f9' }}>
+      <Card
+        title={<div style={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar shape='square' size={56}>入</Avatar>
+          <div style={{ marginLeft: 16 }}>
+            <div>
+              入库单 / {data.coding}
             </div>
-            <div style={{ flexGrow: 1, color: 'green' }}>
-              已入库：{data.notNumber}
+            <Space>
+              {data.urgent ?
+                <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 24px' }}>加急</Button> : null}
+              <Button
+                color='default'
+                fill='outline'
+                style={{
+                  '--border-radius': '50px',
+                  padding: '4px 12px',
+                  '--background-color': '#fff7e6',
+                  '--text-color': '#fca916',
+                  '--border-width': '0px',
+                }}>{orderStatus().text}</Button>
+            </Space>
+          </div>
+        </div>}
+        bodyStyle={{ padding: 0 }}
+        className={styles.mainDiv}
+        style={{ backgroundColor: '#f9f9f9', border: 'solid 1px rgb(206 200 200)',paddingBottom:8 }}
+        extra={<div style={{ paddingRight: 16 }} onClick={() => {
+          toggle();
+        }}><DownFill /></div>}
+      >
+        {!state && <Card
+          style={{ backgroundColor: '#f9f9f9' }}
+          title={<div>基本信息</div>}
+          bodyStyle={{ padding: '0 16px' }}
+          headerStyle={{ border: 'none' }}
+        >
+          <Space style={{ width: '100%' }} direction='vertical'>
+            <div>
+              <Label>入库主题：</Label>{data.theme}
             </div>
-            <div style={{ flexGrow: 1, color: 'red' }}>
-              未入库：{data.realNumber}
+            <div>
+              <Label>入库类型：</Label>{data.type}
             </div>
-          </div>
-          <Divider style={{ margin: 0 }} />
-          <div>
-            <Label>申请人：</Label>{data.createUserResult && data.createUserResult.name}
-          </div>
-          <div>
-            <Label>申请时间：</Label>{data.createTime}
-          </div>
-          <div>
-            <Label>更新人员：</Label>{data.updateUserResult && data.updateUserResult.name}
-          </div>
-          <div>
-            <Label>更新时间：</Label>{data.updateTime}
-          </div>
-          <div>
-            <Label>关联任务：</Label>{source(data.source)}
-          </div>
-          <div>
-            <Label>备注说明：</Label>{data.remake}
-          </div>
-        </Space>
+            <div>
+              <Label>送料人员：</Label>{data.userResult && data.userResult.name}
+            </div>
+            <div>
+              <Label>送料时间：</Label>{data.registerTime}
+            </div>
+            <div>
+              <Label>库管人员：</Label>{data.stockUserResult && data.stockUserResult.name}
+            </div>
+            <div style={{ display: 'flex' }}>
+              <div style={{ flexGrow: 1 }}>
+                <Label>入库物料：</Label>{data.enoughNumber}
+              </div>
+              <div style={{ flexGrow: 1, color: 'green' }}>
+                已入库：{data.notNumber}
+              </div>
+              <div style={{ flexGrow: 1, color: 'red' }}>
+                未入库：{data.realNumber}
+              </div>
+            </div>
+            <Divider style={{ margin: 0 }} />
+            <div>
+              <Label>申请人：</Label>{data.createUserResult && data.createUserResult.name}
+            </div>
+            <div>
+              <Label>申请时间：</Label>{data.createTime}
+            </div>
+            <div>
+              <Label>更新人员：</Label>{data.updateUserResult && data.updateUserResult.name}
+            </div>
+            <div>
+              <Label>更新时间：</Label>{data.updateTime}
+            </div>
+            <div>
+              <Label>关联任务：</Label>{source(data.source)}
+            </div>
+            <div>
+              <Label>备注说明：</Label>{data.remake}
+            </div>
+          </Space>
+        </Card>}
       </Card>
-      <Card title='入库信息' bodyStyle={{ padding: '0 16px' }} headerStyle={{ border: 'none' }}>
+      <Card
+        title={<div>入库信息</div>}
+        style={{ backgroundColor: '#f9f9f9' }}
+        bodyStyle={{ padding: 8, backgroundColor: '#fff',border:'solid 1px rgb(206 200 200)',borderRadius:10 }}
+        headerStyle={{ border: 'none' }}
+      >
         {logUser.name ? <Space style={{ width: '100%' }} direction='vertical'>
             <div style={{ display: 'flex' }}>
               <Label>库管人员：</Label>
@@ -367,13 +403,14 @@ const Detail = (props) => {
           <div>暂无</div>
         }
       </Card>
-    </Card>;
+    </div>;
   };
 
   const type = () => {
     switch (key) {
       case 'detail':
         return <InstockDetails
+          CodeLoading={CodeLoading}
           CodeRun={CodeRun}
           status={status}
           details={details}
@@ -397,7 +434,7 @@ const Detail = (props) => {
 
   return <>
     <MyBottom
-      leftActuions={status === 0 && <div>
+      leftActuions={status === 1 && <div>
         <div>计划 / 实际</div>
         <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
       </div>}
@@ -417,6 +454,7 @@ const Detail = (props) => {
           orderStatus={orderStatus}
           id={params.id}
           CodeRun={CodeRun}
+          CodeLoading={CodeLoading}
         />
       </Space>}
     >
@@ -435,9 +473,9 @@ const Detail = (props) => {
                 setKey(key);
               }}
             >
-              <Tabs.Tab title='入库明细' key='detail' />
-              <Tabs.Tab title='入库记录' key='record' />
-              <Tabs.Tab title='动态日志' key='log' />
+              <Tabs.Tab title={<div>入库明细</div>} key='detail' />
+              <Tabs.Tab title={<div>入库记录</div>} key='record' />
+              <Tabs.Tab title={<div>动态日志</div>} key='log' />
             </Tabs>
             <div style={{ backgroundColor: '#eee' }}>
               {type()}
@@ -446,8 +484,6 @@ const Detail = (props) => {
         </div>
       </div>
     </MyBottom>
-
-    {CodeLoading && <MyLoading />}
 
   </>;
 };

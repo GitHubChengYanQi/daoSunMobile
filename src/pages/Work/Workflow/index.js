@@ -11,6 +11,7 @@ import BottomButton from '../../components/BottomButton';
 import ImgUpload from '../../components/Upload/ImgUpload';
 import Icon from '../../components/Icon';
 import Process from '../PurchaseAsk/components/Process';
+import InstockError from './components/InstockError';
 
 const Workflow = (props) => {
 
@@ -143,11 +144,12 @@ const Workflow = (props) => {
       case 'purchase':
       case 'purchaseAsk':
         return <PurchaseAsk detail={detail.object} />;
+      case 'instockError':
+        return <InstockError id={detail.formId} />;
       default:
         break;
     }
   };
-
 
 
   return <div style={{
@@ -157,7 +159,7 @@ const Workflow = (props) => {
     overflowX: 'hidden',
   }}>
     <Card
-      title={detail.taskName}
+      title={<div>{detail.taskName}</div>}
       bodyStyle={{ padding: 0 }}
     >
 
@@ -182,16 +184,16 @@ const Workflow = (props) => {
               return <List.Item
                 key={index}
                 title={items.user &&
-                <Space align='center'>
-                  <Avatar
-                    shape='square'
-                    size={24}
-                    style={{ fontSize: 14 }}>
-                    {items.user.name.substring(0, 1)}
-                  </Avatar>
-                  {items.user.name}
-                  {items.createTime}
-                </Space>}
+                  <Space align='center'>
+                    <Avatar
+                      shape='square'
+                      size={24}
+                      style={{ fontSize: 14 }}>
+                      {items.user.name.substring(0, 1)}
+                    </Avatar>
+                    {items.user.name}
+                    {items.createTime}
+                  </Space>}
                 description={items.photoId && <div style={{ marginLeft: 32 }}><ImgUpload
                   disabled
                   length={5}

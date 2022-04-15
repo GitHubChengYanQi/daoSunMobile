@@ -17,7 +17,11 @@ const Orderlist = () => {
 
   const orderStatus = (status) => {
     switch (status) {
+      case -1:
+        return '已拒绝';
       case 0:
+        return '审批中';
+      case 1:
         return '待入库';
       case 49:
         return '异常审批中';

@@ -15,6 +15,7 @@ const InstockActions = (
     status,
     id,
     CodeRun,
+    CodeLoading,
   },
 ) => {
 
@@ -35,7 +36,7 @@ const InstockActions = (
       color='primary'
       onClick={() => {
         switch (status) {
-          case 0:
+          case 1:
             const errors = details.filter(item => item.number !== item.newNumber);
             if (errors.length > 0) {
               history.push({
@@ -59,7 +60,14 @@ const InstockActions = (
         }
       }}>{orderStatus().buttonText}</Button>
 
-    <Instock details={details} ref={ref} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} />
+    <Instock
+      CodeLoading={CodeLoading}
+      details={details}
+      ref={ref}
+      setDetails={setDetails}
+      refresh={refresh}
+      CodeRun={CodeRun}
+    />
 
     {checkNumberLoading && <MyLoading />}
   </>;
