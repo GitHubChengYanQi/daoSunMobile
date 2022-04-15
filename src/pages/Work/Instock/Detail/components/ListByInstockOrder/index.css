@@ -1,5 +1,5 @@
 
-
-.table > tr > td {
-  padding:8px;
+.table > tbody > tr > td {
+  padding: 8px;
+  font-size: 4vw;
 }

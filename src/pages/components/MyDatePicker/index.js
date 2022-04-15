@@ -47,7 +47,7 @@ const MyDatePicker = (
     <div>
       <LinkButton
         style={{ color: '#000', width: width || '100%', textAlign: 'left',...style }}
-        title={value || (title || '选择日期')}
+        title={<div>{value || (title || '选择日期')}</div>}
         onClick={() => {
           setVisible(true);
         }} />
