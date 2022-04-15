@@ -9,7 +9,7 @@ import { history } from 'umi';
 import BottomButton from '../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../components/MyLoading';
 
-const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
+const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) => {
 
   const [data, setData] = useState({});
 
@@ -80,7 +80,8 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
       </Card>
       <Card style={{ paddingBottom: 70 }} title={<div>入库确认</div>}>
         <MyAntList>
-          <List.Item extra={<MyDatePicker onChange={value => setData({ ...data, instockTime: value })} value={data.instockTime} />}>
+          <List.Item extra={<MyDatePicker onChange={value => setData({ ...data, instockTime: value })}
+                                          value={data.instockTime} />}>
             入库时间
           </List.Item>
           <List.Item>
@@ -191,9 +192,9 @@ const Instock = ({ details, setDetails, refresh, CodeRun }, ref) => {
         leftText='取消'
         rightText='确认'
       />
-    </MyPopup>
 
-    {instockLoading && <MyLoading />}
+      {(instockLoading || CodeLoading) && <MyLoading />}
+    </MyPopup>
   </>;
 };
 

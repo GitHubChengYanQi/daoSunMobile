@@ -29,6 +29,7 @@ const InstockDetails = (
     positions,
     setPositions,
     refresh,
+    CodeLoading,
   }) => {
 
   const detailRef = useRef();
@@ -151,7 +152,7 @@ const InstockDetails = (
   };
 
   const skuPosition = (detail, positionsItem, index, item) => {
-    return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8 }}>
+    return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8,borderRadius:10,marginBottom:8 }}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <Label>
@@ -172,8 +173,8 @@ const InstockDetails = (
           <div style={{ flexGrow: 1, display: 'flex' }}>
             <Label>{status === 98 ? '入库：' : '计划：'}</Label>
             <Number
-              width={70}
-              disabled={status === 0}
+              width={100}
+              disabled={status === 1}
               value={status === 98 ? positionsItem.instockNumber : detail.number}
               buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
               onChange={(value) => {
@@ -187,7 +188,7 @@ const InstockDetails = (
               index === 0
                 ?
                 <Number
-                  width={70}
+                  width={100}
                   color={detail.newNumber === detail.number ? 'blue' : 'red'}
                   value={status === 98 ? positionsItem.stockNumber : detail.newNumber}
                   buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
@@ -231,7 +232,7 @@ const InstockDetails = (
             {positions.title && positions.title.split('(')[0] || '请选择库位'}
           </MyTree>
         </div>}
-      <div style={{ backgroundColor: '#eee', padding: '16px 0', paddingBottom: 100 }}>
+      <div style={{padding: '16px 0', paddingBottom: 100 }}>
         {
           skus.length === 0
             ?
@@ -241,7 +242,12 @@ const InstockDetails = (
               const skuResult = item.skuResult || {};
               const spuResult = item.spuResult || {};
               const detail = getDetails(item.instockListId);
-              return <div key={index} style={{ margin: 8 }}>
+              return <div
+                key={index}
+                style={{
+                  margin: 8,borderRadius:10,overflow:'hidden',
+                  boxShadow: 'rgb(76 77 79 / 49%) 0px 0px 5px',
+              }}>
                 <Card
                   extra={<LinkButton onClick={() => {
                     detailRef.current.open(item.skuId);
@@ -303,6 +309,7 @@ const InstockDetails = (
                             }}
                             fill='none'
                             style={{
+                              padding:8,
                               color: 'var(--adm-color-primary)',
                               width: '100%',
                             }}
@@ -311,7 +318,7 @@ const InstockDetails = (
                           </Button>;
                         }
                         return <div key={index}>
-                          {(status === 0 || positionsItem.positionId) && skuPosition(detail, positionsItem, index, item)}
+                          {(status === 1 || positionsItem.positionId) && skuPosition(detail, positionsItem, index, item)}
                         </div>;
                       } else {
                         return <SwipeAction
@@ -370,9 +377,10 @@ const InstockDetails = (
                             await setItem(detail);
                             await storeHouseRef.current.open(false);
                           }}
-                          fill='none'
+                          color='primary'
                           style={{
-                            color: 'var(--adm-color-primary)',
+                            // color: 'var(--adm-color-primary)',
+                            '--border-radius':0,
                             flexGrow: 1,
                           }}
                         >
@@ -382,9 +390,10 @@ const InstockDetails = (
                         onClick={() => {
 
                         }}
-                        fill='none'
+                        color='primary'
                         style={{
-                          color: 'var(--adm-color-primary)',
+                          // color: 'var(--adm-color-primary)',
+                          '--border-radius':0,
                           flexGrow: 1,
                         }}
                       >
@@ -402,9 +411,10 @@ const InstockDetails = (
                           setDetail(detail);
                           ref.current.open(false);
                         }}
-                        fill='none'
+                        color='primary'
                         style={{
-                          color: 'var(--adm-color-primary)',
+                          // color: 'var(--adm-color-primary)',
+                          '--border-radius':0,
                           flexGrow: 1,
                         }}
                       >
@@ -470,7 +480,7 @@ const InstockDetails = (
       component={Detail}
     />
 
-    <Instock details={[detail]} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} ref={ref} />
+    <Instock CodeLoading={CodeLoading} details={[detail]} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} ref={ref} />
 
     <MyPopup title='选择仓库' position='bottom' ref={storeHouseRef}>
       <MySelector
@@ -483,9 +493,8 @@ const InstockDetails = (
           });
         }}
       />
+      {loading && <MyLoading />}
     </MyPopup>
-
-    {loading && <MyLoading />}
 
   </>;
 };

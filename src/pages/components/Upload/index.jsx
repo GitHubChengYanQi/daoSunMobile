@@ -6,7 +6,7 @@ import { Toast } from 'antd-mobile';
 
 
 const UpLoadImg = (props) => {
-  const { value, onChange, disabled,onRemove, showUploadList, button, maxCount, type, imageType } = props;
+  const { value, onChange,fileList, disabled,onRemove, showUploadList, button, maxCount, type, imageType } = props;
   const [loading, setLoading] = useState(false); // loading 状态
   const [imageUrl, setImageUrl] = useState(''); // 图片地址
   const [oss, setOss] = useState({}); // OSS上传所需参数
@@ -59,6 +59,7 @@ const UpLoadImg = (props) => {
     // name 为发送到后台的文件名
     <div>
       <Upload
+        fileList={fileList}
         disabled={disabled}
         maxCount={maxCount || 1}
         listType={type || 'picture-card'}
