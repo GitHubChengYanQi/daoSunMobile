@@ -39,7 +39,7 @@ const InstockActions = (
           case 1:
             const errors = details.filter(item => item.number !== item.newNumber);
             if (errors.length > 0) {
-              history.push({
+              history.replace({
                 pathname: '/Work/Instock/Errors',
                 state: {
                   details,

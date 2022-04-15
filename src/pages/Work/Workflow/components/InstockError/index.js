@@ -7,7 +7,6 @@ import MyEmpty from '../../../../components/MyEmpty';
 import MyEllipsis from '../../../../components/MyEllipsis';
 import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import UpLoadImg from '../../../../components/Upload';
-import LinkButton from '../../../../components/LinkButton';
 
 const InstockError = ({ id }) => {
 
@@ -20,7 +19,7 @@ const InstockError = ({ id }) => {
     if (id) {
       run({
         data: {
-          formId: '1514604948591800321',
+          formId: id,
         },
       });
     }

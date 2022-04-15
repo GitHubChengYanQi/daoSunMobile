@@ -215,7 +215,7 @@ const Detail = (props) => {
         setDetails(res.instockListResults.map((item) => {
             const positions = getPosition(res && res.bindTreeView, item.skuId);
             const detail = details.filter(skuItem => skuItem.instockListId === item.instockListId);
-            const number = res.state === 0 ? item.number : item.realNumber;
+            const number = item.realNumber;
             return detail[0] || {
               skuId: item.skuId,
               skuResult: { ...item.skuResult, spuResult: item.spuResult },
@@ -321,7 +321,7 @@ const Detail = (props) => {
         </div>}
         bodyStyle={{ padding: 0 }}
         className={styles.mainDiv}
-        style={{ backgroundColor: '#f9f9f9', border: 'solid 1px rgb(206 200 200)',paddingBottom:8 }}
+        style={{ backgroundColor: '#f9f9f9', border: 'solid 1px rgb(206 200 200)', paddingBottom: 8 }}
         extra={<div style={{ paddingRight: 16 }} onClick={() => {
           toggle();
         }}><DownFill /></div>}
@@ -384,7 +384,7 @@ const Detail = (props) => {
       <Card
         title={<div>入库信息</div>}
         style={{ backgroundColor: '#f9f9f9' }}
-        bodyStyle={{ padding: 8, backgroundColor: '#fff',border:'solid 1px rgb(206 200 200)',borderRadius:10 }}
+        bodyStyle={{ padding: 8, backgroundColor: '#fff', border: 'solid 1px rgb(206 200 200)', borderRadius: 10 }}
         headerStyle={{ border: 'none' }}
       >
         {logUser.name ? <Space style={{ width: '100%' }} direction='vertical'>
