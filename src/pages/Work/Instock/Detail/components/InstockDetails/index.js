@@ -32,6 +32,27 @@ const InstockDetails = (
     CodeLoading,
   }) => {
 
+  const statusText = () => {
+    switch (status) {
+      case -1:
+        return '已拒绝';
+      case 0:
+        return '审批中';
+      case 1:
+        return '待入库';
+      case 49:
+        return '异常审批中';
+      case 50:
+        return '异常审批拒绝';
+      case 98:
+        return '进行中';
+      case 99:
+        return '已完成';
+      default:
+        return '审批中';
+    }
+  }
+
   const detailRef = useRef();
 
   const ref = useRef();
@@ -152,7 +173,7 @@ const InstockDetails = (
   };
 
   const skuPosition = (detail, positionsItem, index, item) => {
-    return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8,borderRadius:10,marginBottom:8 }}>
+    return <div key={index} style={{ backgroundColor: '#f9f9f9', padding: 8, borderRadius: 10, marginBottom: 8 }}>
       <Space direction='vertical' style={{ width: '100%' }}>
         <div style={{ display: 'flex' }}>
           <Label>
@@ -232,7 +253,7 @@ const InstockDetails = (
             {positions.title && positions.title.split('(')[0] || '请选择库位'}
           </MyTree>
         </div>}
-      <div style={{padding: '16px 0', paddingBottom: 100 }}>
+      <div style={{ padding: '16px 0', paddingBottom: 100 }}>
         {
           skus.length === 0
             ?
@@ -245,9 +266,9 @@ const InstockDetails = (
               return <div
                 key={index}
                 style={{
-                  margin: 8,borderRadius:10,overflow:'hidden',
+                  margin: 8, borderRadius: 10, overflow: 'hidden',
                   boxShadow: 'rgb(76 77 79 / 49%) 0px 0px 5px',
-              }}>
+                }}>
                 <Card
                   extra={<LinkButton onClick={() => {
                     detailRef.current.open(item.skuId);
@@ -309,7 +330,7 @@ const InstockDetails = (
                             }}
                             fill='none'
                             style={{
-                              padding:8,
+                              padding: 8,
                               color: 'var(--adm-color-primary)',
                               width: '100%',
                             }}
@@ -318,7 +339,7 @@ const InstockDetails = (
                           </Button>;
                         }
                         return <div key={index}>
-                          {(status === 1 || positionsItem.positionId) && skuPosition(detail, positionsItem, index, item)}
+                          {(status !== 98 || positionsItem.positionId) && skuPosition(detail, positionsItem, index, item)}
                         </div>;
                       } else {
                         return <SwipeAction
@@ -380,7 +401,7 @@ const InstockDetails = (
                           color='primary'
                           style={{
                             // color: 'var(--adm-color-primary)',
-                            '--border-radius':0,
+                            '--border-radius': 0,
                             flexGrow: 1,
                           }}
                         >
@@ -393,7 +414,7 @@ const InstockDetails = (
                         color='primary'
                         style={{
                           // color: 'var(--adm-color-primary)',
-                          '--border-radius':0,
+                          '--border-radius': 0,
                           flexGrow: 1,
                         }}
                       >
@@ -414,7 +435,7 @@ const InstockDetails = (
                         color='primary'
                         style={{
                           // color: 'var(--adm-color-primary)',
-                          '--border-radius':0,
+                          '--border-radius': 0,
                           flexGrow: 1,
                         }}
                       >
@@ -422,15 +443,60 @@ const InstockDetails = (
                       </Button>
                     </div>
                     :
-                    <div>
-                      {
-                        detail.newNumber !== detail.number
-                          ?
+                  <div>
+                    {
+                      status === 1
+                      ?
+                        <div>
+                          {
+                            detail.newNumber !== detail.number
+                              ?
+                              <Button
+                                onClick={() => {
+
+                                }}
+                                color='danger'
+                                // fill='none'
+                                style={{
+                                  width: '100%',
+                                  '--border-radius': '0px',
+                                  borderLeft: 'none',
+                                  // backgroundColor: '#fff',
+                                  borderBottomLeftRadius: 10,
+                                  borderBottomRightRadius: 10,
+                                  borderRight: 'none',
+                                }}
+                              >
+                                核实异常
+                              </Button>
+                              :
+                              <Button
+                                onClick={() => {
+
+                                }}
+                                color='primary'
+                                style={{
+                                  width: '100%',
+                                  // color: 'var(--adm-color-primary)',
+                                  '--border-radius': '0px',
+                                  borderLeft: 'none',
+                                  // backgroundColor: '#fff',
+                                  borderBottomLeftRadius: 10,
+                                  borderBottomRightRadius: 10,
+                                  borderRight: 'none',
+                                }}
+                              >
+                                核实正常
+                              </Button>
+                          }
+                        </div>
+                        :
+                        <div>
                           <Button
                             onClick={() => {
 
                             }}
-                            color='danger'
+                            color='primary'
                             // fill='none'
                             style={{
                               width: '100%',
@@ -442,29 +508,11 @@ const InstockDetails = (
                               borderRight: 'none',
                             }}
                           >
-                            核实异常
+                            {statusText()}
                           </Button>
-                          :
-                          <Button
-                            onClick={() => {
-
-                            }}
-                            color='primary'
-                            style={{
-                              width: '100%',
-                              // color: 'var(--adm-color-primary)',
-                              '--border-radius': '0px',
-                              borderLeft: 'none',
-                              // backgroundColor: '#fff',
-                              borderBottomLeftRadius: 10,
-                              borderBottomRightRadius: 10,
-                              borderRight: 'none',
-                            }}
-                          >
-                            核实正常
-                          </Button>
-                      }
-                    </div>
+                        </div>
+                    }
+                  </div>
                 }
               </div>;
             })
@@ -480,7 +528,8 @@ const InstockDetails = (
       component={Detail}
     />
 
-    <Instock CodeLoading={CodeLoading} details={[detail]} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun} ref={ref} />
+    <Instock CodeLoading={CodeLoading} details={[detail]} setDetails={setDetails} refresh={refresh} CodeRun={CodeRun}
+             ref={ref} />
 
     <MyPopup title='选择仓库' position='bottom' ref={storeHouseRef}>
       <MySelector
