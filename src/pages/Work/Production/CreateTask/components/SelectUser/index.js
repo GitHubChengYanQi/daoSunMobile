@@ -1,11 +1,9 @@
 import React from 'react';
-import { Button, Space } from 'antd-mobile';
+import { Space } from 'antd-mobile';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import MyCheckUser from '../../../../../components/MyCheckUser';
-import { getHeader } from '../../../../../components/GetHeader';
 import { connect } from 'dva';
-import IsDev from '../../../../../../components/IsDev';
 
 const SelectUser = ({ value, onChange, ...props }) => {
 
@@ -29,9 +27,9 @@ const SelectUser = ({ value, onChange, ...props }) => {
     {/*    });*/}
     {/*  }}>选人</Button>*/}
     {/*  :*/}
-      <MyCheckUser value={value} onChange={onChange}>
-        {value ? showUser(value.name || '') : showDefault()}
-      </MyCheckUser>
+    <MyCheckUser value={value} onChange={onChange}>
+      {value ? showUser(value.name || '') : showDefault()}
+    </MyCheckUser>
     {/*}*/}
   </>;
 };
