@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
-import styles from './index.css';
 
 const MyDatePicker = (
   {
@@ -70,18 +69,18 @@ const MyDatePicker = (
               onChange(moment(val).format('YYYY'));
               break;
             case 'month':
-              onChange(moment(val).format('YYYY-MM'));
+              onChange(moment(val).format('YYYY/MM'));
               break;
             case 'day':
-              onChange(moment(val).format('YYYY-MM-DD'));
+              onChange(moment(val).format('YYYY/MM/DD'));
               break;
             case 'hour':
             case 'minute':
             case 'second':
-              onChange(moment(val).format('YYYY-MM-DD hh:mm:ss'));
+              onChange(moment(val).format('YYYY/MM/DD hh:mm:ss'));
               break;
             default:
-              onChange(moment(val).format('YYYY-MM-DD'));
+              onChange(moment(val).format('YYYY/MM/DD'));
               break;
           }
         }}

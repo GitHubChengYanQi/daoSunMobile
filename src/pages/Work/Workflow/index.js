@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Steps, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { AuditOutlined, FormOutlined } from '@ant-design/icons';
@@ -114,7 +114,7 @@ const Workflow = (props) => {
     },
   );
 
-  useDebounceEffect(() => {
+  useEffect(() => {
     setDetail(null);
     if (query.id) {
       run({
@@ -123,9 +123,7 @@ const Workflow = (props) => {
         },
       });
     }
-  }, [], {
-    wait: 0,
-  });
+  }, []);
 
   if (detailLoading)
     return <Skeleton loading={detailLoading} />;
@@ -184,16 +182,16 @@ const Workflow = (props) => {
               return <List.Item
                 key={index}
                 title={items.user &&
-                  <Space align='center'>
-                    <Avatar
-                      shape='square'
-                      size={24}
-                      style={{ fontSize: 14 }}>
-                      {items.user.name.substring(0, 1)}
-                    </Avatar>
-                    {items.user.name}
-                    {items.createTime}
-                  </Space>}
+                <Space align='center'>
+                  <Avatar
+                    shape='square'
+                    size={24}
+                    style={{ fontSize: 14 }}>
+                    {items.user.name.substring(0, 1)}
+                  </Avatar>
+                  {items.user.name}
+                  {items.createTime}
+                </Space>}
                 description={items.photoId && <div style={{ marginLeft: 32 }}><ImgUpload
                   disabled
                   length={5}
@@ -232,7 +230,7 @@ const Workflow = (props) => {
     />}
 
 
-    {/*审批同意或拒绝*/}
+    {/* 审批同意或拒绝 */}
     <Dialog
       visible={visible || comments}
       title={comments ? '添加评论' : `是否${visible === 'agree' ? '同意' : '拒绝'}审批`}

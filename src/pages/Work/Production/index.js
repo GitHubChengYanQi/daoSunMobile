@@ -23,10 +23,10 @@ const Production = () => {
         ref.current.submit({ coding: value });
       }} />
       <CapsuleTabs defaultActiveKey='1' style={{ backgroundColor: '#fff' }}>
-        <CapsuleTabs.Tab title='全部' key='1' />
-        <CapsuleTabs.Tab title='未开始' key='2' />
-        <CapsuleTabs.Tab title='执行中' key='3' />
-        <CapsuleTabs.Tab title='已结束' key='4' />
+        <CapsuleTabs.Tab title={<div>全部</div>} key='1' />
+        <CapsuleTabs.Tab title={<div>未开始</div>} key='2' />
+        <CapsuleTabs.Tab title={<div>执行中</div>} key='3' />
+        <CapsuleTabs.Tab title={<div>已结束</div>} key='4' />
       </CapsuleTabs>
     </div>
     <MyList
