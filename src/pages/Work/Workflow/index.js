@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Steps, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { AuditOutlined, FormOutlined } from '@ant-design/icons';
@@ -11,6 +11,7 @@ import BottomButton from '../../components/BottomButton';
 import ImgUpload from '../../components/Upload/ImgUpload';
 import Icon from '../../components/Icon';
 import Process from '../PurchaseAsk/components/Process';
+import InstockError from './components/InstockError';
 
 const Workflow = (props) => {
 
@@ -113,7 +114,7 @@ const Workflow = (props) => {
     },
   );
 
-  useDebounceEffect(() => {
+  useEffect(() => {
     setDetail(null);
     if (query.id) {
       run({
@@ -122,9 +123,7 @@ const Workflow = (props) => {
         },
       });
     }
-  }, [], {
-    wait: 0,
-  });
+  }, []);
 
   if (detailLoading)
     return <Skeleton loading={detailLoading} />;
@@ -143,11 +142,12 @@ const Workflow = (props) => {
       case 'purchase':
       case 'purchaseAsk':
         return <PurchaseAsk detail={detail.object} />;
+      case 'instockError':
+        return <InstockError id={detail.formId} />;
       default:
         break;
     }
   };
-
 
 
   return <div style={{
@@ -157,7 +157,7 @@ const Workflow = (props) => {
     overflowX: 'hidden',
   }}>
     <Card
-      title={detail.taskName}
+      title={<div>{detail.taskName}</div>}
       bodyStyle={{ padding: 0 }}
     >
 
@@ -230,7 +230,7 @@ const Workflow = (props) => {
     />}
 
 
-    {/*审批同意或拒绝*/}
+    {/* 审批同意或拒绝 */}
     <Dialog
       visible={visible || comments}
       title={comments ? '添加评论' : `是否${visible === 'agree' ? '同意' : '拒绝'}审批`}

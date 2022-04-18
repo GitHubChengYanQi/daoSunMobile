@@ -40,10 +40,12 @@ const CreateTask = (props) => {
           ],
         })
       },
-      onError: () => {
-        Dialog.alert({
-          content: '分派任务失败！',
-        });
+      onError: (err) => {
+       if (err && err.message.indexOf('500') !== -1){
+         Dialog.alert({
+           content: '分派任务失败！',
+         });
+       }
       },
     });
 
@@ -82,10 +84,10 @@ const CreateTask = (props) => {
       <Form.Item name='userId' label='负责人'>
         <SelectUser />
       </Form.Item>
-      <Form.Item name='date' label='执行时间' rules={[{ required: true }]}>
+      <Form.Item name='date' label='执行时间'>
         <StartEndDate />
       </Form.Item>
-      <Form.Item name='userIdList' label='成员' rules={[{ required: true, message: '请选择成员！' }]}>
+      <Form.Item name='userIdList' label='成员'>
         <Users />
       </Form.Item>
       <Form.Item name='number' label='生产数量' rules={[{ required: true, message: '请输入生产数量！' }]}>

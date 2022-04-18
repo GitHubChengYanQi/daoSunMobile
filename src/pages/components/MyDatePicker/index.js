@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
-import styles from './index.css';
 
 const MyDatePicker = (
   {
@@ -12,6 +11,7 @@ const MyDatePicker = (
     title,
     min,
     max,
+    style,
     onChange = () => {
     },
     ...props
@@ -25,7 +25,7 @@ const MyDatePicker = (
   const labelRenderer = useCallback((type, data) => {
     switch (type) {
       case 'year':
-        return data + '年';
+        return data;
       case 'month':
         return data + '月';
       case 'day':
@@ -45,8 +45,8 @@ const MyDatePicker = (
   return (
     <div>
       <LinkButton
-        style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
-        title={value || (title || '选择日期')}
+        style={{ color: '#000', width: width || '100%', textAlign: 'left',...style }}
+        title={<div>{value || (title || '选择日期')}</div>}
         onClick={() => {
           setVisible(true);
         }} />
@@ -69,18 +69,18 @@ const MyDatePicker = (
               onChange(moment(val).format('YYYY'));
               break;
             case 'month':
-              onChange(moment(val).format('YYYY-MM'));
+              onChange(moment(val).format('YYYY/MM'));
               break;
             case 'day':
-              onChange(moment(val).format('YYYY-MM-DD'));
+              onChange(moment(val).format('YYYY/MM/DD'));
               break;
             case 'hour':
             case 'minute':
             case 'second':
-              onChange(moment(val).format('YYYY-MM-DD hh:mm:ss'));
+              onChange(moment(val).format('YYYY/MM/DD hh:mm:ss'));
               break;
             default:
-              onChange(moment(val).format('YYYY-MM-DD'));
+              onChange(moment(val).format('YYYY/MM/DD'));
               break;
           }
         }}

@@ -1,225 +1,436 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionTaskDetail } from '../components/Url';
+import {
+  productionPickListsCartAdd,
+  productionPickListsCreateOutOrder,
+  productionPickListsMergeDetail,
+} from '../components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Badge, Button, Card, List, Space, Tabs } from 'antd-mobile';
-import { QuestionCircleOutline } from 'antd-mobile-icons';
+import {
+  Badge,
+  Button,
+  Card,
+  Collapse,
+  Divider,
+  List,
+  Space,
+  Toast,
+} from 'antd-mobile';
 import Label from '../../../components/Label';
-import styles from '../index.css';
-import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import { getHeader } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
-import ReportWork from '../../ProductionTask/Detail/components/ReportWork';
 import Icon from '../../../components/Icon';
-import { Col, Row } from 'antd';
+import MyEllipsis from '../../../components/MyEllipsis';
+import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import Carts from './components/Carts';
+import MyPopup from '../../../components/MyPopup';
 import { history } from 'umi';
+import style from './index.css';
+import MyTree from '../../../components/MyTree';
+import { CollectMoneyOutline } from 'antd-mobile-icons';
 
 const PickDetail = (props) => {
 
   const params = props.location.query;
 
-  const [visible, setVisible] = useState();
+  const seeCarts = useRef();
 
-  const { loading, data, run, refresh } = useRequest(productionTaskDetail, { manual: true });
+  const [skus, setSkus] = useState([]);
 
-  const [key, setKey] = useState('out');
+  const [positions, setPositions] = useState({});
 
-  useEffect(() => {
-    if (params.id) {
-      run({ data: { productionTaskId: params.id } });
+  const getSkuResults = (skuItem, item, array, cart) => {
+    if (array.length === 0) {
+      return null;
     }
-  }, []);
+    let number = 0;
+    let pickLists = [];
+    array.map((item) => {
+      number += item.number;
+      if (pickLists.map(item => item.userId).includes(item.userResult && item.userResult.userId)) {
+        return pickLists = pickLists.map((userItem) => {
+          if (userItem.userId === (item.userResult && item.userResult.userId)) {
+            return {
+              ...userItem,
+              number: item.number + userItem.number,
+              lists: [...userItem.lists, item],
+            };
+          }
+          return userItem;
+        });
+      }
+      return pickLists.push({
+        userId: item.userResult && item.userResult.userId,
+        userResult: item.userResult,
+        number: item.number,
+        lists: [item],
+      });
+    });
+    return {
+      ...skuItem,
+      positionId: item.storehousePositionsId,
+      storehouseId: item.storehouseId,
+      number,
+      pickLists,
+      cart,
+    };
+  };
 
+  const getChildren = (data, details = [], cartResults = [], top) => {
 
-  if (loading) {
-    return <MyLoading />;
-  }
+    if (!Array.isArray(data)) {
+      return null;
+    }
 
-  if (!data) {
-    return <MyEmpty />;
-  }
+    const skuResults = [];
+    const option = data.map((item) => {
+      const carts = [];
+      const detailSkus = [];
+      item.skuResults && item.skuResults.map((skuItem) => {
+        const sku = details.filter(item => skuItem.skuId === item.skuId);
+        const allCarts = cartResults.filter(item => skuItem.skuId === item.skuId);
+        const objectSku = getSkuResults(skuItem, item, sku);
+        const cartResult = getSkuResults(skuItem, item, allCarts, true);
+        if (objectSku) {
+          skuResults.push(objectSku);
+          detailSkus.push(objectSku);
+        }
+        if (cartResult) {
+          carts.push(cartResult);
+          skuResults.push(cartResult);
+        }
 
-  const status = (state) => {
-    switch (state) {
-      case 0:
-        return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
-      case 98:
-        return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
-      case 99:
-        return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
-      default:
-        return '';
+        return null;
+      });
+      return {
+        icon: <CollectMoneyOutline />,
+        title: `${item.name} (${item.skuResults ? item.skuResults.length : 0})`,
+        key: item.storehousePositionsId,
+        skus: [...detailSkus, ...carts],
+        children: !top && getChildren(item.storehousePositionsResults, details, cartResults),
+      };
+    });
+
+    if (top) {
+      return [{
+        icon: <CollectMoneyOutline />,
+        title: `全部 (${skuResults.length})`,
+        key: 'all',
+        skus: skuResults,
+        children: getChildren(data, details, cartResults),
+      }];
+    }
+    if (data.length === 0) {
+      return null;
+    }
+    return option;
+  };
+
+  const getSkus = (extend) => {
+    if (extend && Array.isArray(extend.skus)) {
+      setSkus(extend.skus.map((item) => {
+        return {
+          cart: item.cart,
+          skuResult: item,
+          skuId: item.skuId,
+          number: item.number,
+          positionId: item.positionId,
+          storehouseId: item.storehouseId,
+          pickLists: item.pickLists,
+        };
+      }));
     }
   };
 
+  const getChecked = (data, key) => {
+    if (Array.isArray(data)) {
+      const array = data.filter((item) => {
+        return item.key = key;
+      });
+      if (array.length === 1) {
+        return array[0];
+      } else {
+        return getChecked(data.children, key);
+      }
+    } else {
+      return null;
+    }
+  };
+
+  const { loading, data, run, refresh } = useRequest(productionPickListsMergeDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      const allSku = getChildren(res && res.storehousePositionsResults, res && res.detailResults, res && res.cartResults, true) || [];
+      if (positions.key) {
+        const checked = getChecked(allSku, positions.key) || {};
+        setPositions(checked);
+        getSkus(checked);
+      } else {
+        setPositions(allSku[0]);
+        getSkus(allSku[allSku.length - 1]);
+      }
+
+    },
+  });
+
+  const { loading: outLoading, run: outstock } = useRequest(productionPickListsCreateOutOrder, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+      Toast.show({
+        content: '出库成功！',
+        position: 'bottom',
+      });
+    },
+    onError: () => {
+      Toast.show({
+        content: '出库失败！',
+        position: 'bottom',
+      });
+    },
+  });
+
+  const options = getChildren(data && data.storehousePositionsResults, data && data.detailResults, data && data.cartResults, true) || [];
+
+  const { loading: pickLoading, run: pick } = useRequest(productionPickListsCartAdd, {
+    manual: true,
+    onSuccess: () => {
+      Toast.show({
+        content: '备料成功！',
+        position: 'bottom',
+      });
+      refresh();
+    },
+    onError(err) {
+      Toast.show({
+        content: '备料失败！',
+        position: 'bottom',
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (params.ids && params.ids.split(',')) {
+      run({ data: { pickListsIds: params.ids.split(',') } });
+    }
+  }, []);
+
+  if (!data) {
+    if (loading) {
+      return <MyLoading />;
+    }
+    return <MyEmpty />;
+  }
+
+
   const backgroundDom = () => {
 
+    const list = data && data.productionTaskResults || [];
+
     return <Card
-      title={<div><Label>领料单号：</Label>{'无'}</div>}
       style={{ backgroundColor: '#fff' }}>
-      <Space direction='vertical'>
-        <div>
-          <Label>任务状态：</Label>{status(data.status)}
-        </div>
-        <div>
-          <Label>任务编码：</Label>{data.productionTaskResult && data.productionTaskResult.coding}
-        </div>
-        <div>
-          <Label>领料人：</Label>{data.userResult && data.userResult.name}
-        </div>
-        <div>
-          <Label>创建时间：</Label>{data.createTime}
-        </div>
-      </Space>
+      <List
+        style={{
+          '--border-top': 'none',
+          '--border-bottom': 'none',
+        }}
+      >
+        {
+          list.map((item, index) => {
+            return <div key={index}><Space direction='vertical' key={index}>
+              <div>
+                <Label>编码：</Label>{item.coding}
+              </div>
+              <div>
+                <Label>创建时间：</Label>{item.createTime}
+              </div>
+            </Space>
+              <Divider />
+            </div>;
+          })
+        }
+      </List>
     </Card>;
   };
 
   return <div>
-    <MyNavBar title='任务详情' />
+    <MyNavBar title='领料详情' />
     <div>
       <MyFloatingPanel
-        maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+        backgroundColor
+        maxHeight={window.innerHeight - (getHeader() ? 0 : 45)}
         backgroundDom={backgroundDom()}
       >
-        <div style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999, textAlign: 'center' }}>
-          库位
-        </div>
-        <div style={{ backgroundColor: '#eee' }}>
-          <div style={{ margin: 8 }}>
-            <Card style={{borderRadius:0}}>
-              <Row gutter={24}>
-                <Col span={18}>
-                  物料
-                </Col>
-                <Col span={6}>
-                  × 数量
-                </Col>
-              </Row>
-
-            </Card>
-            <div>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomLeftRadius: 10,
-                }}
-              >
-                备料
-              </Button>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomRightRadius: 10,
-                }}
-              >
-                出库
-              </Button>
-          </div>
-          </div>
-          <div style={{ margin: 8 }}>
-            <Card style={{borderRadius:0}}>
-              <Row gutter={24}>
-                <Col span={18}>
-                  物料
-                </Col>
-                <Col span={6}>
-                  × 数量
-                </Col>
-              </Row>
-
-            </Card>
-            <div>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomLeftRadius: 10,
-                }}
-              >
-                备料
-              </Button>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomRightRadius: 10,
-                }}
-              >
-                出库
-              </Button>
-            </div>
-          </div>
-          <div style={{ margin: 8 }}>
-            <Card style={{borderRadius:0}}>
-              <Row gutter={24}>
-                <Col span={18}>
-                  物料
-                </Col>
-                <Col span={6}>
-                  × 数量
-                </Col>
-              </Row>
-
-            </Card>
-            <div>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomLeftRadius: 10,
-                }}
-              >
-                备料
-              </Button>
-              <Button
-                onClick={() => {
-
-                }}
-                style={{
-                  width: '50%',
-                  color: 'var(--adm-color-primary)',
-                  '--border-radius': '0px',
-                  borderBottomRightRadius: 10,
-                }}
-              >
-                出库
-              </Button>
-            </div>
+        <div>
+          {options.length !== 0 &&
+            <div
+              style={{
+                position: 'sticky',
+                top: 0,
+                backgroundColor: '#fff',
+                zIndex: 999,
+                textAlign: 'center',
+                marginBottom: 16,
+              }}>
+              <MyTree options={options} value={positions.key} onNode={(value) => {
+                setPositions(value);
+                getSkus(value);
+              }}>
+                {positions.title && positions.title.split('(')[0] || '请选择库位'}
+              </MyTree>
+            </div>}
+          <div style={{ backgroundColor: '#eee', padding: '16px 0', paddingBottom: 60 }}>
+            {
+              skus.length === 0
+                ?
+                <MyEmpty description='全部领料完成' />
+                :
+                skus.map((item, index) => {
+                  const objectList = [];
+                  item.pickLists.map((pickItem) => {
+                    return pickItem.lists.map((listItem) => {
+                      return objectList.push({
+                        skuId: item.skuId,
+                        userId: pickItem.userResult && pickItem.userResult.userId,
+                        number: listItem.number,
+                        pickListsId: listItem.pickListsId,
+                        storehouseId: item.storehouseId,
+                        storehousePositionsId: item.positionId,
+                      });
+                    });
+                  });
+                  const skuResult = item.skuResult || {};
+                  return <div key={index} style={{ margin: 8 }}>
+                    <Card style={{ borderRadius: 0 }}>
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ flexGrow: 1 }}>
+                          <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                          <div style={{ display: 'flex', fontSize: '4vw' }}>
+                            <Label>描述：</Label>
+                            <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                          </div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                          × {item.number}
+                        </div>
+                      </div>
+                      <Collapse className={style.list}>
+                        <Collapse.Panel style={{ border: 'none' }} key='1'
+                                        title={<div style={{ fontSize: '4vw' }}>查看关联领料单</div>}>
+                          <Collapse className={style.list}>
+                            {
+                              item.pickLists.map((item, index) => {
+                                return <Collapse.Panel
+                                  style={{ border: 'none' }}
+                                  key={index}
+                                  title={<div style={{ color: '#000', fontSize: '4vw' }}>
+                                    <Label>领料人：</Label>{item.userResult && item.userResult.name}
+                                    <span style={{ float: 'right' }}>数量：{item.number}</span>
+                                  </div>}
+                                >
+                                  <div style={{ paddingLeft: 8 }}>
+                                    {
+                                      item.lists.map((item, index) => {
+                                        return <div key={index} style={{ color: '#000', fontSize: '4vw' }}>
+                                          <Label>领料单：</Label>{item.pickListsCoding}
+                                          <span style={{ float: 'right' }}>
+                                            <Label>数量：</Label>
+                                            <span style={{ minWidth: 20, display: 'inline-block' }}>
+                                              {item.number}
+                                            </span>
+                                          </span>
+                                        </div>;
+                                      })
+                                    }
+                                  </div>
+                                </Collapse.Panel>;
+                              })
+                            }
+                          </Collapse>
+                        </Collapse.Panel>
+                      </Collapse>
+                    </Card>
+                    <div>
+                      <Button
+                        disabled={item.cart}
+                        onClick={() => {
+                          pick({
+                            data: {
+                              productionPickListsCartParams: objectList,
+                            },
+                          });
+                        }}
+                        style={{
+                          width: '50%',
+                          color: 'var(--adm-color-primary)',
+                          '--border-radius': '0px',
+                          borderLeft: 'none',
+                          borderBottomLeftRadius: 10,
+                        }}
+                      >
+                        {item.cart ? '已备料' : '备料'}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          outstock({
+                            data: {
+                              pickListsDetailParams: objectList,
+                            },
+                          });
+                        }}
+                        style={{
+                          width: '50%',
+                          color: 'var(--adm-color-primary)',
+                          '--border-radius': '0px',
+                          borderBottomRightRadius: 10,
+                          borderRight: 'none',
+                        }}
+                      >
+                        出库
+                      </Button>
+                    </div>
+                  </div>;
+                })
+            }
           </div>
         </div>
       </MyFloatingPanel>
     </div>
 
+
     <BottomButton
-      leftText={<Badge content='5'><Space style={{margin:'0 16px'}}><Icon type='icon-gouwuchekong' />备料</Space></Badge>}
-      rightText={<Space><Icon type='icon-chuku' />出库</Space>}
+      leftText={<Badge content={data.cartResults && data.cartResults.length}><Space style={{ margin: '0 16px' }}><Icon
+        type='icon-gouwuchekong' />备料</Space></Badge>}
+      rightText={<Space><Icon type='icon-chuku' />完成备料</Space>}
+      rightDisabled={!data.cartResults || data.cartResults.length === 0}
+      leftDisabled={!data.cartResults || data.cartResults.length === 0}
+      rightOnClick={() => {
+        history.push(`/Work/Production/PickOutStock?ids=${params.ids}`);
+      }}
+      leftOnClick={() => {
+        seeCarts.current.open(true);
+      }}
     />
+
+    <MyPopup
+      ids={params.ids}
+      title='备料详情'
+      destroyOnClose={false}
+      ref={seeCarts}
+      component={Carts}
+      data={data.cartResults && data.cartResults}
+      position='bottom'
+      onSuccess={() => {
+        refresh();
+      }}
+    />
+
+    {
+      (loading || pickLoading || outLoading) && <MyLoading />
+    }
 
   </div>;
 };

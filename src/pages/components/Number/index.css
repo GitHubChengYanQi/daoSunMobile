@@ -1,9 +1,9 @@
 .red > input {
-  color:red;
+  color: red;
 }
 
 .blue > input {
-  color:#1677ff;
+  color: #1677ff;
 }
 
 .black > input {
@@ -16,4 +16,8 @@
 
 .center :global .adm-input > input {
   text-align: center;
+}
+
+.inputRight > input {
+  text-align: right;
 }

@@ -6,13 +6,19 @@ const MyEllipsis = (
     value,
     children,
     width,
+    style,
   }) => {
 
-  return <Typography.Paragraph
-    ellipsis={{ rows: 1, tooltip: true }}
-    style={{ width: width || '90%', margin: 0,display:'inline-block' }}>
+  return <div style={{
+    width: width || '90%',
+    display:'inline-block',
+    textOverflow:'ellipsis',
+    overflow:'hidden',
+    whiteSpace: 'nowrap',
+    ...style
+  }}>
     {value || children}
-  </Typography.Paragraph>;
+  </div>;
 };
 
 export default MyEllipsis;

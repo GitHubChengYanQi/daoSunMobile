@@ -12,6 +12,7 @@ const Number = (
     value,
     color,
     noBorder,
+    inputRight,
     onChange = () => {
     },
     ...props
@@ -40,10 +41,10 @@ const Number = (
       value={value || ''}
       type='number'
       disabled={disabled}
-      className={inputColor()}
+      className={`${inputColor()} ${inputRight && style.inputRight}`}
       placeholder={placeholder || '请输入'}
       style={{
-        padding: 4,
+        padding: '4px 8px',
         border: 'none',
         '--border-radius': 0,
         borderBottom: !noBorder && 'solid 1px rgb(190 184 184)',

@@ -4,7 +4,6 @@ import { useRequest } from '../../../../util/Request';
 import { Card, Space, Tabs } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import styles from '../index.css';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import Label from '../../../components/Label';

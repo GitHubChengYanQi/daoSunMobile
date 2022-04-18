@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { SafeArea, TabBar } from 'antd-mobile';
 import { AuditOutlined, SendOutlined, UpCircleOutlined } from '@ant-design/icons';
 import MyStart from './MyStart';
+import MyAudit from './MyAudit';
+import MySend from './MySend';
 
 
 const ProcessTask = () => {
@@ -16,10 +18,12 @@ const ProcessTask = () => {
         </>;
       case 'audit':
         return <>
-
+          <MyAudit />
         </>;
       case 'send':
-        return <>3</>;
+        return <>
+          <MySend />
+        </>;
       default:
         break;
     }

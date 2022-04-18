@@ -8,8 +8,8 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://172.26.187.55'
-  // 'https://api.daoxin.gf2025.com'
+  // 'http://172.26.187.178'
+  'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
   process.env.api;
@@ -43,7 +43,6 @@ ajaxService.interceptors.response.use((response) => {
         content: '您已登录超时，请重新登录。',
         confirmText: '重新登录',
         onConfirm: async () => {
-          cookie.set('url', window.location.hash.replace('#',''));
           cookie.remove('cheng-token');
           // if (process.env.NODE_ENV === 'development') {
           //   const res = await request(

@@ -19,7 +19,7 @@ const MyFloatingPanel = (
   useEffect(() => {
     if (document.getElementById('backgroundDom')) {
       const height = document.getElementById('backgroundDom').clientHeight;
-      const minHeight = getHeader() ? window.innerHeight - height : window.innerHeight - height - 45;
+      let minHeight = getHeader() ? window.innerHeight - height : window.innerHeight - height - 45;
       ref.current.setHeight(minHeight);
       const heights = [];
       for (let i = minHeight; i < maxHeight; i++) {
@@ -30,7 +30,7 @@ const MyFloatingPanel = (
   }, []);
 
   return <>
-    <div id='backgroundDom'>
+    <div id='backgroundDom' style={{maxHeight:'80vh',overflowY:'auto'}}>
       {backgroundDom}
     </div>
     <FloatingPanel

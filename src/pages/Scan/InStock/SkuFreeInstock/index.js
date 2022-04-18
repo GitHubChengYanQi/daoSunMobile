@@ -592,7 +592,7 @@ const SkuFreeInstock = ({ scanData }) => {
         if (inStocks.length > 0) {
           instockRun({
             data: {
-              inStocks: inStocks,
+              inStocks,
             },
           });
         } else {

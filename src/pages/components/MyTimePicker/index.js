@@ -16,10 +16,14 @@ const MyTimePicker = (
   const hour = () => {
     const hours = [];
     for (let i = 1; i <= 24; i++) {
-      hours.push({
+      const hour = i < 10 ? {
+        label: `${i}时`,
+        value: `0${i}`,
+      } : {
         label: `${i}时`,
         value: `${i}`,
-      });
+      };
+      hours.push(hour);
     }
     return hours;
   };
@@ -27,10 +31,14 @@ const MyTimePicker = (
   const minute = () => {
     const minutes = [];
     for (let i = 0; i < 60; i++) {
-      minutes.push({
+      const minute = i < 10 ? {
+        label: `${i}分`,
+        value: `0${i}`,
+      } : {
         label: `${i}分`,
         value: `${i}`,
-      });
+      };
+      minutes.push(minute);
     }
     return minutes;
   };
@@ -38,10 +46,14 @@ const MyTimePicker = (
   const second = () => {
     const seconds = [];
     for (let i = 0; i < 60; i++) {
-      seconds.push({
+      const second = i < 10 ? {
+        label: `${i}秒`,
+        value: `0${i}`,
+      } : {
         label: `${i}秒`,
         value: `${i}`,
-      });
+      };
+      seconds.push(second);
     }
     return seconds;
   };
@@ -50,7 +62,7 @@ const MyTimePicker = (
   return <>
     <LinkButton
       style={{ color: '#000', width: width || '100%', textAlign: 'left' }}
-      title={value && `${value.split(':')[0]}时${value.split(':')[1]}分${value.split(':')[2]}秒` || '选择时间'}
+      title={<div>{value && `${value.split(':')[0]}时${value.split(':')[1]}分${value.split(':')[2]}秒` || '选择时间'}</div>}
       onClick={() => {
         setVisible(true);
       }} />
@@ -63,7 +75,7 @@ const MyTimePicker = (
       }}
       value={value ? value.split(':') : []}
       onConfirm={(value) => {
-        onChange(`${value[0]}:${value[1]}:${value[2]}`);
+        onChange(`${value[0] || '00'}:${value[1] || '00'}:${value[2] || '00'}`);
       }}
     />
   </>;
