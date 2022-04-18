@@ -6,6 +6,7 @@ import Label from '../../../../../components/Label';
 import Number from '../../../../../components/Number';
 import { useRequest } from '../../../../../../util/Request';
 import { productionJobBookingAdd } from '../../../../Production/components/Url';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const ReportWork = (
   {
@@ -18,7 +19,7 @@ const ReportWork = (
     },
   }) => {
 
-  const { run } = useRequest(productionJobBookingAdd, {
+  const { loading, run } = useRequest(productionJobBookingAdd, {
     manual: true,
     onSuccess: () => {
       Toast.show({
@@ -37,28 +38,23 @@ const ReportWork = (
 
   const [outSkus, setOutSkus] = useState(skuData || []);
 
+  if (loading) {
+    return <><MyLoading /></>;
+  }
+
   return <>
     <Dialog
       visible={visible}
       title='产出物料'
       onAction={(action) => {
         if (action.key === 'ok') {
-          console.log({
-            productionTaskId,
-            detailParams: outSkus.map((item) => {
-              if (item.outNumber) {
-                return {
-                  skuId: item.skuId,
-                  number: item.outNumber,
-                };
-              }
-              return null;
-            }),
-          });
+          const out = outSkus.filter((item) => {
+            return item.outNumber;
+          })
           run({
             data: {
               productionTaskId,
-              detailParams: outSkus.map((item) => {
+              detailParams: out.map((item) => {
                 if (item.outNumber) {
                   return {
                     skuId: item.skuId,

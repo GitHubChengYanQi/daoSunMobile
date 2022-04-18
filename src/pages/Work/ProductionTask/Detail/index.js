@@ -12,6 +12,8 @@ import BottomButton from '../../../components/BottomButton';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
+import { QuestionCircleOutline } from 'antd-mobile-icons';
+import { getHeader } from '../../../components/GetHeader';
 
 const Detail = (props) => {
   const params = props.location.query;
@@ -36,7 +38,7 @@ const Detail = (props) => {
     &&
     setpSetResult.setpSetDetails.map((skuItems) => {
       const jobBooking = data.taskDetailResults.filter((item) => {
-        return item.jobBookingDetailCount.skuId = skuItems.skuId;
+        return item.jobBookingDetailCount && (item.jobBookingDetailCount.skuId = skuItems.skuId);
       });
       return {
         ...skuItems,
@@ -71,21 +73,31 @@ const Detail = (props) => {
     return <MyEmpty />;
   }
 
+  const status = (state) => {
+    switch (state) {
+      case 0:
+        return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
+      case 98:
+        return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
+      case 99:
+        return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
+      default:
+        return '';
+    }
+  };
+
   const backgroundDom = () => {
 
     return <Card
-      title='基本信息'
+      title={<div> <Label>工序：</Label>{shipSetpResult.shipSetpName}</div>}
       className={styles.mainDiv}
-      style={{ backgroundColor: '#fff', height: 'auto' }}>
+      style={{ backgroundColor: '#fff', }}>
       <Space direction='vertical'>
         <div>
           <Label>任务编码：</Label>{data.coding}
         </div>
         <div>
-          <Label>任务状态：</Label>{data.status}
-        </div>
-        <div>
-          <Label>工序：</Label>{shipSetpResult.shipSetpName}
+          <Label>任务状态：</Label>{status(data.status)}
         </div>
         <div>
           <Label>执行数量：</Label> {data.number}
@@ -160,9 +172,13 @@ const Detail = (props) => {
   };
 
   return <div>
-    <MyNavBar title='工单详情' />
+    <MyNavBar title='任务详情' />
     <div>
-      <MyFloatingPanel backgroundColor backgroundDom={backgroundDom()}>
+      <MyFloatingPanel
+        backgroundColor
+        maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+        backgroundDom={backgroundDom()}
+      >
         <Tabs
           activeKey={key}
           style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
@@ -177,7 +193,7 @@ const Detail = (props) => {
         </div>
       </MyFloatingPanel>
     </div>
-    <BottomButton only text='产出报工' onClick={() => {
+    <BottomButton only disabled={data.status === 99} text={data.status === 99 ? '已完成' : '产出报工'} onClick={() => {
       setVisible(true);
     }} />
 

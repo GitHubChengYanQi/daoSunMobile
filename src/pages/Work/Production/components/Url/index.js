@@ -19,6 +19,23 @@ export const productionTaskEdit = {
   method: 'POST'
 };
 
+
+export const productionTaskReceive = {
+  url: '/productionTask/receive',
+  method: 'POST'
+};
+
+export const productionPickListsList = {
+  url: '/productionPickLists/list',
+  method: 'POST'
+};
+
+
+export const productionPickListsSelfList = {
+  url: '/productionPickLists/selfList',
+  method: 'POST'
+};
+
 export const productionPlanDetail = {
   url: '/productionPlan/detail',
   method: 'POST'
