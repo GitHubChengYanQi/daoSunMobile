@@ -7,6 +7,8 @@ import Number from '../../../../../components/Number';
 import { useRequest } from '../../../../../../util/Request';
 import { productionJobBookingAdd } from '../../../../Production/components/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
+import LinkButton from '../../../../../components/LinkButton';
+import { history } from 'umi';
 
 const ReportWork = (
   {
@@ -14,7 +16,7 @@ const ReportWork = (
     visible,
     setVisible = (() => {
     }),
-    skuData,
+    skuData=[],
     onSuccess = () => {
     },
   }) => {
@@ -50,7 +52,7 @@ const ReportWork = (
         if (action.key === 'ok') {
           const out = outSkus.filter((item) => {
             return item.outNumber;
-          })
+          });
           run({
             data: {
               productionTaskId,
@@ -87,18 +89,30 @@ const ReportWork = (
             const skuResult = item.skuResult || {};
             return <List.Item key={index}>
               <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-              <div>
+              <div style={{ display: 'flex', fontSize: '4vw' }}>
                 <Label>描述：</Label>
-                <MyEllipsis width='74%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
               </div>
-              <Space>
-                <Label>产出数量：</Label>
-                <Number width={200} value={item.outNumber} max={item.maxNumber} noBorder onChange={(value) => {
-                  const array = outSkus.filter(() => true);
-                  array[index] = { ...array[index], outNumber: value };
-                  setOutSkus(array);
-                }} />
-              </Space>
+              {
+                item.myQualityId
+                  ?
+                  <div style={{ padding: '8px 0' }}>
+                    <LinkButton onClick={() => {
+                      history.push(
+                        `/Work/Quality/QualityTask?productionTaskId=${productionTaskId}&skuId=${item.skuId}&qualityId=${item.myQualityId}&module=production`
+                      )
+                    }}>请点击进行自检</LinkButton>
+                  </div>
+                  :
+                  <Space>
+                    <Label>产出数量：</Label>
+                    <Number width={200} value={item.outNumber} max={item.maxNumber} noBorder onChange={(value) => {
+                      const array = outSkus.filter(() => true);
+                      array[index] = { ...array[index], outNumber: value };
+                      setOutSkus(array);
+                    }} />
+                  </Space>
+              }
             </List.Item>;
           })
         }

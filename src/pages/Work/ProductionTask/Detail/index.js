@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { productionTaskDetail, productionTaskGetPickCode } from '../../Production/components/Url';
+import { productionTaskDetail } from '../../Production/components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Card, Dialog, List, Space, Tabs } from 'antd-mobile';
+import { Card,  List, Space, Tabs } from 'antd-mobile';
 import styles from '../../Production/index.css';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
@@ -12,7 +12,6 @@ import BottomButton from '../../../components/BottomButton';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
-import { QuestionCircleOutline } from 'antd-mobile-icons';
 import { getHeader } from '../../../components/GetHeader';
 import Pick from '../../Production/Pick';
 import { history } from 'umi';
@@ -28,17 +27,6 @@ const Detail = (props) => {
     manual: true,
     onSuccess: (res) => {
       setDisabled(res.status === 99);
-    },
-  });
-
-  const { loading: codeLoading, run: getCode } = useRequest(productionTaskGetPickCode, {
-    manual: true,
-    onSuccess: (res) => {
-      Dialog.alert({
-        title: '领料码',
-        content: <div style={{ textAlign: 'center' }}>{res}</div>,
-        confirmText: '确定',
-      });
     },
   });
 
@@ -58,7 +46,7 @@ const Detail = (props) => {
     &&
     setpSetResult.setpSetDetails.map((skuItems) => {
       const jobBooking = data.taskDetailResults.filter((item) => {
-        return item.jobBookingDetailCount && (item.jobBookingDetailCount.skuId = skuItems.skuId);
+        return item.jobBookingDetailCount && (item.jobBookingDetailCount.skuId === skuItems.skuId);
       });
       return {
         ...skuItems,
@@ -96,11 +84,11 @@ const Detail = (props) => {
   const status = (state) => {
     switch (state) {
       case 0:
-        return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
+        return <Space style={{ color: '#ffa52a' }}>待领取</Space>;
       case 98:
-        return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
+        return <Space style={{ color: 'blue' }}>执行中</Space>;
       case 99:
-        return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
+        return <Space style={{ color: 'green' }}>已完成</Space>;
       default:
         return '';
     }
@@ -165,7 +153,7 @@ const Detail = (props) => {
                 const skuResult = item.skuResult || {};
                 return <List.Item key={index}>
                   <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                  <div style={{ display: 'flex',fontSize:'4vw' }}>
+                  <div style={{ display: 'flex', fontSize: '4vw' }}>
                     <Label>描述：</Label>
                     <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                   </div>
@@ -183,7 +171,7 @@ const Detail = (props) => {
             }
           </List>;
       case 'in':
-        return <Pick module='task' id={params.id} getStatus={setDisabled} />;
+        return <Pick module='task' id={params.id} />;
       case 'use':
         return <MyEmpty />;
       default:
@@ -204,22 +192,12 @@ const Detail = (props) => {
           }} />;
       case 'in':
         return <BottomButton
-          rightDisabled={disabled}
-          leftText='我的领料'
+          only
+          text='我的领料'
           leftOnClick={() => {
             history.push('/Work/Production/MyCart');
           }}
-          rightText='确认领取'
-          right
-          rightOnClick={() => {
-
-            // getCode({
-            //   data: {
-            //     productionTaskId: params.id,
-            //   },
-            // });
-
-          }} />;
+        />;
       default:
         return '确认';
     }
@@ -242,7 +220,6 @@ const Detail = (props) => {
                 setDisabled(data.status === 99);
                 break;
               case 'in':
-                setDisabled(true);
                 break;
               default:
                 break;
@@ -269,7 +246,7 @@ const Detail = (props) => {
           ...item,
           maxNumber: (item.num * data.number) - item.jobBookNumber,
         };
-      })}
+      }).filter(item => item.maxNumber > 0)}
       setVisible={setVisible}
       visible={visible}
       onSuccess={() => {
@@ -277,8 +254,6 @@ const Detail = (props) => {
         refresh();
       }}
     />
-
-    {codeLoading && <MyLoading />}
 
   </div>;
 };

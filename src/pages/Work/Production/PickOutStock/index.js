@@ -21,13 +21,15 @@ const PickOutStock = (props) => {
 
   const [carts, setCarts] = useState([]);
 
-  const { loading, data, run, refresh } = useRequest(productionPickListCartGroupByUserList, { manual: true });
+  const { loading, data, run, refresh } = useRequest(productionPickListCartGroupByUserList,
+    {
+      manual: true,
+    });
 
   const { loading: pickLoading, run: pickRun } = useRequest(productionPickListsSend, {
     manual: true,
     onSuccess: () => {
       setCarts([]);
-      refresh();
       Toast.show({
         content: '提醒领取成功！',
         position: 'bottom',
@@ -41,7 +43,7 @@ const PickOutStock = (props) => {
     },
   });
 
-  const { loading:deleteLoading, run:deleteRun } = useRequest(productionPickListsCartDelete, {
+  const { loading: deleteLoading, run: deleteRun } = useRequest(productionPickListsCartDelete, {
     manual: true,
     onSuccess: () => {
       Toast.show({
@@ -58,6 +60,31 @@ const PickOutStock = (props) => {
         data: {
           pickListsIds: params.ids.split(','),
         },
+      }).then((res)=>{
+        const cartsParams = [];
+        const userIds = [];
+        res.map((item) => {
+          userIds.push(item.userId);
+          return item.cartResults && item.cartResults.map((cartItem) => {
+            return cartsParams.push({
+              key: cartItem.pickListsCart,
+              skuId: cartItem.skuId,
+              number: cartItem.number,
+              pickListsCart: cartItem.pickListsCart,
+              pickListsId: cartItem.pickListsId,
+              storehouseId: cartItem.storehouseId,
+              storehousePositionsId: cartItem.storehousePositionsId,
+            });
+          });
+        });
+        if (userIds.length > 0 && cartsParams.length > 0) {
+          pickRun({
+            data: {
+              userIds,
+              cartsParams,
+            },
+          });
+        }
       });
     }
   }, []);
@@ -150,25 +177,25 @@ const PickOutStock = (props) => {
                       arrow={false}
                     >
                       <SwipeAction
-                      rightActions={[
-                        {
-                          key: 'delete',
-                          text: '移出',
-                          color: 'danger',
-                          onClick: () => {
-                            deleteRun({
-                              data: {
-                                pickListsCart: cartItem.pickListsCart,
-                              },
-                            });
+                        rightActions={[
+                          {
+                            key: 'delete',
+                            text: '移出',
+                            color: 'danger',
+                            onClick: () => {
+                              deleteRun({
+                                data: {
+                                  pickListsCart: cartItem.pickListsCart,
+                                },
+                              });
+                            },
                           },
-                        },
-                      ]}
-                    >
+                        ]}
+                      >
                         <div style={{ display: 'flex', padding: '0 8px' }}>
                           <div style={{ flexGrow: 1 }}>
                             <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
-                            <div style={{ display: 'flex',fontSize:'4vw' }}>
+                            <div style={{ display: 'flex', fontSize: '4vw' }}>
                               <Label>描述：</Label>
                               <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
                             </div>
@@ -177,7 +204,7 @@ const PickOutStock = (props) => {
                             × {cartItem.number}
                           </div>
                         </div>
-                    </SwipeAction>
+                      </SwipeAction>
                     </List.Item>;
                   })
               }
@@ -202,7 +229,7 @@ const PickOutStock = (props) => {
       disabled={carts.filter((item) => {
         return item.skuId;
       }).length === 0}
-      text='提醒领取'
+      text='再次提醒领取'
       onClick={() => {
         const array = carts.filter((item) => {
           return item.skuId;

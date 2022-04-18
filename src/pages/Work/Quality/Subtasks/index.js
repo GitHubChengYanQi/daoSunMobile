@@ -26,6 +26,7 @@ import GoToQualityTask from '../GoToQualityTask';
 import { getHeader } from '../../../components/GetHeader';
 import IsDev from '../../../../components/IsDev';
 import ScanCodeBind from '../../../Scan/ScanCodeBind';
+import BottomButton from '../../../components/BottomButton';
 
 const Subtasks = (props) => {
 
@@ -315,7 +316,7 @@ const Subtasks = (props) => {
               codeId: codeId,
               source: 'item',
               brandId: items.brandId,
-              customerId:items.customerId,
+              customerId: items.customerId,
               id: items.skuId,
               number: 1,
               inkindType: '质检',
@@ -349,7 +350,7 @@ const Subtasks = (props) => {
     });
   };
 
-  return <>
+  return <div style={{paddingBottom:60}}>
     <Collapse defaultActiveKey={['0', '1']}>
       <Collapse.Panel key='0' title='查找二维码'>
         <SearchBar
@@ -371,7 +372,10 @@ const Subtasks = (props) => {
       </Collapse.Panel>
       <Collapse.Panel key='1' title={<>任务列表</>}>
         <List
-          style={{ border: 'none' }}
+          style={{
+            '--border-top':'none',
+            '--border-bottom':'none',
+          }}
         >
           {
             data.details ?
@@ -382,46 +386,46 @@ const Subtasks = (props) => {
                   extra={<Space align='center'>
                     <>{items.remaining}/{batch ? Math.ceil(items.number * items.percentum) : items.number}</>
                     {data.permission && status !== -1
-                    &&
-                    <Space>
-                      {(getHeader() || IsDev()) &&
-                      <LinkButton
-                        style={{ fontSize: 24 }}
-                        onClick={() => {
-                          if (batch && (items.remaining === Math.ceil(items.number * items.percentum))) {
-                            Toast.show({
-                              content: '该物料已经全部质检完成！',
-                              position: 'bottom',
+                      &&
+                      <Space>
+                        {(getHeader() || IsDev()) &&
+                          <LinkButton
+                            style={{ fontSize: 24 }}
+                            onClick={() => {
+                              if (batch && (items.remaining === Math.ceil(items.number * items.percentum))) {
+                                Toast.show({
+                                  content: '该物料已经全部质检完成！',
+                                  position: 'bottom',
+                                });
+                              } else {
+                                ref.current.scanCode(items);
+                              }
+                            }} title={<ScanOutlined />} />}
+                        {/* 自动绑定 */}
+                        <LinkButton
+                          style={{ fontSize: 24 }}
+                          disabled={
+                            items.remaining === items.number
+                            ||
+                            items.inkindId && (batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
+                          }
+                          onClick={async () => {
+                            const inkind = await autoBind({
+                              data: {
+                                sourceId: items.qualityTaskDetailId,
+                                source: 'item',
+                                brandId: items.brandId,
+                                customerId: items.customerId,
+                                id: items.skuId,
+                                number: 1,
+                                inkindType: '质检',
+                              },
                             });
-                          } else {
-                            ref.current.scanCode(items);
-                          }
-                        }} title={<ScanOutlined />} />}
-                      {/* 自动绑定 */}
-                      <LinkButton
-                        style={{ fontSize: 24 }}
-                        disabled={
-                          items.remaining === items.number
-                          ||
-                          items.inkindId && (batch ? items.inkindId : items.inkindId.split(',')[items.remaining])
-                        }
-                        onClick={async () => {
-                          const inkind = await autoBind({
-                            data: {
-                              sourceId: items.qualityTaskDetailId,
-                              source: 'item',
-                              brandId: items.brandId,
-                              customerId: items.customerId,
-                              id: items.skuId,
-                              number: 1,
-                              inkindType: '质检',
-                            },
-                          });
-                          if (inkind) {
-                            bindCode(inkind.codeId, items);
-                          }
-                        }} title={<PlayCircleOutlined />} />
-                    </Space>}
+                            if (inkind) {
+                              bindCode(inkind.codeId, items);
+                            }
+                          }} title={<PlayCircleOutlined />} />
+                      </Space>}
                   </Space>}>
                   <div onClick={() => {
                     history.push({
@@ -538,7 +542,7 @@ const Subtasks = (props) => {
               position: 'bottom',
             });
           }
-        }else {
+        } else {
           Toast.show({
             content: '请扫物料码！',
             position: 'bottom',
@@ -550,34 +554,18 @@ const Subtasks = (props) => {
 
     <GoToQualityTask ref={goToQualityRef} type='item' source='质检' codeIds={qrCodeIds} />
 
-    <div
-      hidden={status === undefined || !data.permission}
-      style={{
-        width: '100%',
-        paddingBottom: 0,
-        padding: '0 8px',
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        backgroundColor: '#fff',
-      }}>
-      <Button
-        loading={childTaskStateLoading}
-        style={{
-          width: '100%',
-          borderRadius: 50,
-        }}
-        disabled={status === -1 || (status > 0 && !data.isNext)}
-        color={status > 0 ? 'primary' : 'default'}
-        onClick={async () => {
-          bottomButtonClick();
-        }}
-      >
-        {bottomButtonText()}
-      </Button>
-      <SafeArea position='bottom' />
-    </div>
-  </>;
+
+    {!(status === undefined || !data.permission) && <BottomButton
+      only
+      disabled={status === -1 || (status > 0 && !data.isNext)}
+      loading={childTaskStateLoading}
+      text={bottomButtonText()}
+      onClick={() => {
+        bottomButtonClick();
+      }}
+      color={status > 0 ? 'primary' : 'default'}
+    />}
+  </div>;
 
 };
 

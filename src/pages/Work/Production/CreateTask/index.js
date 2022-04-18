@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button, Dialog, Form, TextArea } from 'antd-mobile';
+import { Button,  Form, TextArea } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
 import StartEndDate from './components/StartEndDate';
 import Users from './components/Users';
@@ -8,7 +8,7 @@ import Number from '../../../components/Number';
 import MyCoding from '../../../components/MyCoding';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { history } from 'umi';
+import { Message } from '../../../components/Message';
 
 const CreateTask = (props) => {
 
@@ -19,33 +19,17 @@ const CreateTask = (props) => {
     {
       manual: true,
       onSuccess: () => {
-        Dialog.show({
-          content: '分派任务成功！',
-          closeOnAction: true,
-          onAction:(action)=>{
-            if (action.key === 'back'){
-              history.goBack();
-            }
+        Message.dialogSuccess(
+          '分派任务成功!',
+          '返回工单',
+          '继续分派任务',
+          () => {
+
           },
-          actions: [[
-              {
-                key: 'back',
-                text: '返回工单',
-              },
-              {
-                key: 'next',
-                text: '继续操作',
-              },
-            ],
-          ],
-        })
+        );
       },
       onError: (err) => {
-       if (err && err.message.indexOf('500') !== -1){
-         Dialog.alert({
-           content: '分派任务失败！',
-         });
-       }
+       Message.error('创建任务失败!')
       },
     });
 

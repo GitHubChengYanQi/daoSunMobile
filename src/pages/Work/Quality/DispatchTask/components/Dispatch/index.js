@@ -6,6 +6,7 @@ import { useRequest } from '../../../../../../util/Request';
 import MyTreeSelect from '../../../../../components/MyTreeSelect';
 import { history } from 'umi';
 import Amap from '../../../../../../components/Amap';
+import MyDatePicker from '../../../../../components/MyDatePicker';
 
 const { Item: FormItem } = Form;
 
@@ -134,8 +135,8 @@ const Dispatch = ({ detail, onSuccess }, ref) => {
 
           await run({
             data: {
-              state:1,
-              parentId:detail.detail.qualityTaskId,
+              state: 1,
+              parentId: detail.detail.qualityTaskId,
               ...values,
               userIds: values.userIds.toString(),
               details: detail.qualityLising,
@@ -159,9 +160,7 @@ const Dispatch = ({ detail, onSuccess }, ref) => {
             <Amap title='选择地点' />
           </FormItem>
           <FormItem name='time' label='时间'>
-            <DatePicker placeholder='请选择' defaultValue={null} useDefaultFormat={false} separator=''>
-              <ListItem style={{ padding: 0 }} arrow={true} />
-            </DatePicker>
+            <MyDatePicker precision='second' />
           </FormItem>
           <FormItem name='person' label='联系人'>
             <Input placeholder='输入联系人' />

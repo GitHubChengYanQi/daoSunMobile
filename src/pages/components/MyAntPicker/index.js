@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Picker } from 'antd-mobile';
 import LinkButton from '../LinkButton';
+import { useRequest } from '../../../util/Request';
 
 const MyAntPicker = (
   {
     options,
     onChange = () => {
     },
+    api,
     value,
     title,
   }) => {
@@ -14,6 +16,8 @@ const MyAntPicker = (
   const [visible, setVisible] = useState(false);
 
   const [show, setShow] = useState({});
+
+  const { data } = useRequest(api, { manual: !api });
 
   return <>
     <LinkButton
@@ -23,7 +27,7 @@ const MyAntPicker = (
         setVisible(true);
       }} />
     <Picker
-      columns={[options || []]}
+      columns={[data || options || []]}
       visible={visible}
       onClose={() => {
         setVisible(false);
