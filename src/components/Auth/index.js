@@ -16,13 +16,13 @@ import {
   Toast,
 } from 'antd-mobile';
 import IsDev from '../IsDev';
-import VConsole from 'vconsole';
 
 const Auth = (props) => {
 
-  // https://dasheng-soft.picp.vip
-
-  // new VConsole();
+  // const url = '1499935493219717122'
+  // const search = new URLSearchParams(url.split('?')[1]);
+  // const id = search.get('id');
+  // console.log(id);
 
   const [isLogin, setIsLogin] = useState(false);
 

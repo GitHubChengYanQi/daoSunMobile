@@ -8,9 +8,9 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  // 'http://172.26.187.178'
+  'http://192.168.1.113'
   // 'https://api.daoxin.gf2025.com'
-  'https://api.hh.gf2025.com'
+  // 'https://api.hh.gf2025.com'
   :
   process.env.api;
 
@@ -38,31 +38,8 @@ ajaxService.interceptors.response.use((response) => {
   const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
   if (errCode !== 0) {
     if (errCode === 1502) {
-      Dialog.confirm({
-        title: '提示',
-        content: '您已登录超时，请重新登录。',
-        confirmText: '重新登录',
-        onConfirm: async () => {
-          cookie.remove('cheng-token');
-          // if (process.env.NODE_ENV === 'development') {
-          //   const res = await request(
-          //     {
-          //       url: '/login/wxCp',
-          //       method: 'POST',
-          //       data: {
-          //         username: 'cheng',
-          //         password: '2683941980',
-          //       },
-          //     },
-          //   );
-          //   if (res.data) {
-          //     await cookie.set('cheng-token', res.data);
-          //   }
-          // }
-          window.location.reload();
-        },
-      });
-      throw new Error(response.message);
+      cookie.remove('cheng-token');
+      window.location.reload();
     } else if (response.message.indexOf('JSON') !== -1) {
       Dialog.alert({
         content: '输入格式错误！！！',
