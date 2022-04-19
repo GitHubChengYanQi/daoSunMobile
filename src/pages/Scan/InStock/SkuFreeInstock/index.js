@@ -44,13 +44,15 @@ const SkuFreeInstock = ({ scanData }) => {
     ],
   });
 
+  const batch = data.skus.batch;
+
   const getSkuData = (type) => {
     const skus = [];
     data.positions.map((item) => {
       return item.skuItems.map((item) => {
         return skus.push({
           ...item,
-          number: data.skus.batch ? item.number : 1,
+          number: batch ? item.number : 1,
         });
       });
     });
@@ -149,7 +151,7 @@ const SkuFreeInstock = ({ scanData }) => {
             return {
               skuItems: [],
               positionId: item.storehousePositionsId,
-              batchNumber: data.skus.batch ? 1 : 0,
+              batchNumber: batch ? 1 : 0,
               name: item.name,
               storehouse: {
                 label: item.storehouseResult.name,
@@ -194,7 +196,7 @@ const SkuFreeInstock = ({ scanData }) => {
       positions: data.positions.map((item) => {
         return {
           ...item,
-          batchNumber: data.skus.batch ? 1 : 0,
+          batchNumber: batch ? 1 : 0,
           skuItems: [],
         };
       }),
@@ -244,6 +246,7 @@ const SkuFreeInstock = ({ scanData }) => {
       switch (value.type) {
         case 'sku':
           const item = value.item;
+          console.log(item);
           setData({
               ...data, skus: skuReult(item),
             },
@@ -305,7 +308,7 @@ const SkuFreeInstock = ({ scanData }) => {
         return {
           ...item,
           skuItems: item.skuItems.map((value) => {
-            const number = data.skus.batch ? value.number : 1;
+            const number = batch ? value.number : 1;
             if (!value.inkindId && number > 0) {
               i++;
               return {
@@ -328,7 +331,7 @@ const SkuFreeInstock = ({ scanData }) => {
   const listItems = (batchNumber, skuItems, index, batch) => {
     const arrays = [];
     for (let i = 0; i < batchNumber; i++) {
-      const item = skuItems[i] || { number: !data.skus.batch && 1 };
+      const item = skuItems[i] || { number: !batch && 1 };
       arrays.push(<List.Item
         key={i}
         extra={
@@ -392,13 +395,13 @@ const SkuFreeInstock = ({ scanData }) => {
           <div style={{ marginRight: 32 }}>
             第{i + 1}
             {
-              data.skus.batch ? '批' : '个'
+              batch ? '批' : '个'
             }
           </div>
-          {data.skus.batch && <Number
+          {batch && <Number
             placeholder='入库数量'
             color={item.number > 0 ? 'blue' : 'red'}
-            width={80}
+            width={100}
             disabled={item.inkindId}
             value={item.number}
             onChange={(value) => {
@@ -524,7 +527,7 @@ const SkuFreeInstock = ({ scanData }) => {
                     />
                   </div>
                 </List.Item>
-                {!data.skus.batch && <List.Item title='入库数量'>
+                {!batch && <List.Item title='入库数量'>
                   <Number
                     value={item.batchNumber}
                     onChange={(value) => {
@@ -537,7 +540,7 @@ const SkuFreeInstock = ({ scanData }) => {
                       setData({ ...data, positions: array });
                     }} />
                 </List.Item>}
-                {listItems(item.batchNumber, item.skuItems, index, data.skus.batch)}
+                {listItems(item.batchNumber, item.skuItems, index, batch)}
               </List>
             </Tabs.Tab>;
           })}
