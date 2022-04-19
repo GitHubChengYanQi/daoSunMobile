@@ -10,16 +10,14 @@ const scan = () => new Promise((resolve, reject) => {
       needResult: 1, // 默认为0，扫描结果由企业微信处理，1则直接返回扫描结果，
       scanType: ['qrCode', 'barCode'], // 可以指定扫二维码还是条形码（一维码），默认二者都有
       success: (res) => {
-        console.log('wxScanSuccess',res.resultStr);
+        console.log('wxScanSuccess', res.resultStr);
         // 回调
-        if (res.resultStr.indexOf('wx.daoxin.gf2025.com/cp') !== -1 || res.resultStr.indexOf('wx.hh.gf2025.com/cp') !== -1) {
-          const param = res.resultStr.split('id=');
-          if (param && param[1]) {
-            resolve(param[1]);
-          }
-        } else {
-          resolve(res.resultStr);
-        }
+
+        const url = res.resultStr;
+        const search = new URLSearchParams(url.split('?')[1]);
+        const id = search.get('id');
+
+        resolve(id || res.resultStr);
 
       },
       error: (res) => {
@@ -33,39 +31,35 @@ const scan = () => new Promise((resolve, reject) => {
 const checkUsers = () => new Promise((resolve, reject) => {
   console.log('checkUsers');
   wx.ready(() => {
-    wx.invoke("selectEnterpriseContact", {
-        "fromDepartmentId": 0,// 必填，表示打开的通讯录从指定的部门开始展示，-1表示自己所在部门开始, 0表示从最上层开始
-        "mode": "multi",// 必填，选择模式，single表示单选，multi表示多选
-        "type": ["department", "user"],// 必填，选择限制类型，指定department、user中的一个或者多个
-        "selectedDepartmentIds": ["2","3"],// 非必填，已选部门ID列表。用于多次选人时可重入，single模式下请勿填入多个id
-        "selectedUserIds": ["lisi","lisi2"]// 非必填，已选用户ID列表。用于多次选人时可重入，single模式下请勿填入多个id
-      },function(res){
-        if (res.err_msg === "selectEnterpriseContact:ok")
-        {
-          if(typeof res.result == 'string')
-          {
-            res.result = JSON.parse(res.result) //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
+    wx.invoke('selectEnterpriseContact', {
+        'fromDepartmentId': 0,// 必填，表示打开的通讯录从指定的部门开始展示，-1表示自己所在部门开始, 0表示从最上层开始
+        'mode': 'multi',// 必填，选择模式，single表示单选，multi表示多选
+        'type': ['department', 'user'],// 必填，选择限制类型，指定department、user中的一个或者多个
+        'selectedDepartmentIds': ['2', '3'],// 非必填，已选部门ID列表。用于多次选人时可重入，single模式下请勿填入多个id
+        'selectedUserIds': ['lisi', 'lisi2'],// 非必填，已选用户ID列表。用于多次选人时可重入，single模式下请勿填入多个id
+      }, function(res) {
+        if (res.err_msg === 'selectEnterpriseContact:ok') {
+          if (typeof res.result == 'string') {
+            res.result = JSON.parse(res.result); //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
           }
 
           var selectedDepartmentList = res.result.departmentList;// 已选的部门列表
-          for (var i = 0; i < selectedDepartmentList.length; i++)
-          {
+          for (var i = 0; i < selectedDepartmentList.length; i++) {
             var department = selectedDepartmentList[i];
             var departmentId = department.id;// 已选的单个部门ID
             var departemntName = department.name;// 已选的单个部门名称
           }
           var selectedUserList = res.result.userList; // 已选的成员列表
-          for (var i = 0; i < selectedUserList.length; i++)
-          {
+          for (var i = 0; i < selectedUserList.length; i++) {
             var user = selectedUserList[i];
             var userId = user.id; // 已选的单个成员ID
             var userName = user.name;// 已选的单个成员名称
-            var userAvatar= user.avatar;// 已选的单个成员头像
+            var userAvatar = user.avatar;// 已选的单个成员头像
           }
         }
-      }
+      },
     );
-  })
+  });
 });
 
 export default {
