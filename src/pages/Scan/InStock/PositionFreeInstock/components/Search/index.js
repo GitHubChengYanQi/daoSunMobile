@@ -19,7 +19,7 @@ const Search = ({ onChange, ...props }, ref) => {
   const [params, setParams] = useState();
 
   const { loading: skuLoading, run: skuRun } = useRequest({
-    url: '/sku/list?limit=10',
+    url: '/sku/list?limit=30',
     method: 'POST',
   }, {
     manual: true,
@@ -164,7 +164,7 @@ const Search = ({ onChange, ...props }, ref) => {
   };
 
   const object = (items) => {
-    return <SkuResultSkuJsons skuResult={items} />
+    return <SkuResultSkuJsons skuResult={items} />;
   };
 
   return <div>
@@ -174,12 +174,12 @@ const Search = ({ onChange, ...props }, ref) => {
       onMaskClick={() => {
         setVisible(false);
       }}
-      bodyStyle={{ minHeight: '100vh' }}
+      bodyStyle={{ minHeight: '100vh', }}
     >
       <div style={{ padding: 16 }}>
-        <Space direction='vertical' style={{ width: '100%' }}>
+        <div style={{position:'sticky',top:0,zIndex:'999',backgroundColor:'#fff'}}>
           <SearchBar
-            style={{ height: '10vh' }}
+            style={{margin:8}}
             placeholder='请输入内容'
             showCancelButton={() => true}
             onCancel={() => {
@@ -189,6 +189,8 @@ const Search = ({ onChange, ...props }, ref) => {
               searchType(value);
             }}
           />
+        </div>
+        <div style={{maxHeight:'80vh',overflowY:'auto'}}>
           <List>
             {
               skuLoading || skuBindLoading || storehouseLoading || itemsLoading
@@ -209,7 +211,7 @@ const Search = ({ onChange, ...props }, ref) => {
                             label: object(items),
                             value: items.skuId,
                             batch: items.batch === 1,
-                            item:items,
+                            item: items,
                             key,
                           });
                         }}
@@ -290,7 +292,8 @@ const Search = ({ onChange, ...props }, ref) => {
                 })
             }
           </List>
-        </Space>
+        </div>
+
       </div>
     </Popup>
   </div>;

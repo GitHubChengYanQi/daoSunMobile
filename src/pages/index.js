@@ -2,7 +2,7 @@ import Home from './Home';
 import { SafeArea, TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import { getHeader } from './components/GetHeader';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Notice from './Notice';
 import OrCode from './OrCode';
 import Work from './Work';
@@ -11,7 +11,6 @@ import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.css';
 import * as VConsole from 'vconsole';
-import { useRequest } from '../util/Request';
 
 const iconSize = getHeader() ? 30 : 40;
 

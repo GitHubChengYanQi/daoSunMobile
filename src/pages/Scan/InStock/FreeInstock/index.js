@@ -85,8 +85,8 @@ const FreeInstock = (props) => {
           setKey(key);
         }}
       >
-        <Tabs.Tab title='按物料入库' key='sku' />
-        <Tabs.Tab title='按库位入库' key='position' />
+        <Tabs.Tab title={<div>按物料入库</div>} key='sku' />
+        <Tabs.Tab title={<div>按库位入库</div>} key='position' />
       </Tabs>
     </div>
 
