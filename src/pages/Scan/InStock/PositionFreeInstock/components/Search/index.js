@@ -177,9 +177,8 @@ const Search = ({ onChange, ...props }, ref) => {
       bodyStyle={{ minHeight: '100vh', }}
     >
       <div style={{ padding: 16 }}>
-        <div style={{position:'sticky',top:0,zIndex:'999',backgroundColor:'#fff'}}>
+        <div style={{position:'sticky',top:0,zIndex:'999',backgroundColor:'#fff',padding:'16px 8px'}}>
           <SearchBar
-            style={{margin:8}}
             placeholder='请输入内容'
             showCancelButton={() => true}
             onCancel={() => {

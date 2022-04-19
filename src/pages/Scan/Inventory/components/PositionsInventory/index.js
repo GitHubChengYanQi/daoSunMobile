@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Card, Checkbox, List, Space, Toast } from 'antd-mobile';
 import Icon from '../../../../components/Icon';
 import style from '../../../../Work/Quality/DispatchTask/index.css';
-import TreeSelectSee from '../../../../components/TreeSelectSee';
 import BottomButton from '../../../../components/BottomButton';
 import LinkButton from '../../../../components/LinkButton';
 import { useRequest } from '../../../../../util/Request';
@@ -11,6 +10,7 @@ import MyEmpty from '../../../../components/MyEmpty';
 import SkuResult from '../../../Sku/components/SkuResult';
 import SkuResultSkuJsons from '../../../Sku/components/SkuResult_skuJsons';
 import Number from '../../../../components/Number';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const PositionsInventory = (
   {
@@ -20,13 +20,12 @@ const PositionsInventory = (
     codeId,
     clearCode,
     setType,
-    storehouseposition,
   },
 ) => {
 
   const [check, setCheck] = useState([]);
 
-  const { run } = useRequest({
+  const { loading, run } = useRequest({
     url: '/inventory/inventory',
     method: 'POST',
   }, {
@@ -56,7 +55,7 @@ const PositionsInventory = (
     if (list)
       return <SkuResult skuResult={skuResult} />;
     else
-      return <SkuResultSkuJsons skuResult={skuResult} />
+      return <SkuResultSkuJsons skuResult={skuResult} />;
   };
 
   const [inkinds, setInkinds] = useSetState({ data: [] });
@@ -87,25 +86,32 @@ const PositionsInventory = (
   }, [item]);
 
   useEffect(() => {
-    const list = data.detailsResults ? data.detailsResults.map((items) => {
-      if (items.inkindResult && items.inkindResult.skuResult && items.inkindResult.brandResult) {
+    const list = [];
+    data.detailsResults && data.detailsResults.map((items) => {
+      if (items.inkindResult && items.inkindResult.skuResult) {
         const batch = items.inkindResult.skuResult.batch === 1;
-        return {
+        return list.push({
           sku: getSku(items.inkindResult && items.inkindResult.skuResult),
           brand: items.inkindResult.brandResult.brandName,
           inkindId: items.inkindId,
           number: batch ? items.number || 1 : 1,
           batch,
           codeId: items.qrCodeId,
-        };
+        });
       } else {
         return null;
       }
 
-    }) : [];
-    setCheck(list.map((items) => {
-      return items.inkindId;
-    }));
+    });
+
+    const newCheck = [];
+    list.map((items) => {
+      if (items) {
+        newCheck.push(items.inkindId);
+      }
+      return items;
+    });
+    setCheck(newCheck);
     setInkinds({ data: list });
   }, []);
 
@@ -113,11 +119,7 @@ const PositionsInventory = (
     <Card title={
       <Space direction='vertical'>
         <div>
-          {data.storehouseResult && data.storehouseResult.name}
-          -
-          <TreeSelectSee
-            data={storehouseposition}
-            value={data.storehousePositionsId} />
+          {data && data.name}
         </div>
         <em style={{ fontSize: 10, color: '#c0bebe' }}>
           可以扫描不在库存的物料码进入此库位
@@ -139,6 +141,9 @@ const PositionsInventory = (
             <Space direction='vertical' style={{ width: '100%' }}>
               {
                 inkinds.data.map((items, index) => {
+                  if (!items) {
+                    return <div key={index} />;
+                  }
                   return <Space key={index} align='center'>
                     <div style={{ width: '70vw' }}>
                       <Checkbox
@@ -168,7 +173,7 @@ const PositionsInventory = (
                         center
                         disabled={!items.batch}
                         buttonStyle={{
-                          padding:'0 8px',
+                          padding: '0 8px',
                           border: 'solid #999999 1px',
                           borderRadius: 10,
                           display: 'inline-block',
@@ -191,6 +196,9 @@ const PositionsInventory = (
           <MyEmpty />
       }
     </Card>
+
+    {loading && <MyLoading />}
+
     {inkinds.data.length > 0 && <BottomButton
       text='确认库存'
       only

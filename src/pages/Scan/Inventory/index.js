@@ -3,7 +3,6 @@ import { getHeader } from '../../components/GetHeader';
 import { Space, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { connect } from 'dva';
-import { useDebounceEffect } from 'ahooks';
 import { MyLoading } from '../../components/MyLoading';
 import MyEmpty from '../../components/MyEmpty';
 import LinkButton from '../../components/LinkButton';
@@ -70,10 +69,10 @@ const Inventory = (props) => {
                   break;
                 case 'positions':
 
-                  if (state){
+                  if (state) {
                     setType(res.type);
                     setData(res.object);
-                  }else {
+                  } else {
                     setPosition({
                       storehouse: {
                         label: res.object.storehouseResult.name,
@@ -172,17 +171,6 @@ const Inventory = (props) => {
     },
   });
 
-  useEffect(() => {
-    if (loading) {
-      Toast.show({
-        icon: 'loading',
-        duration: 0,
-        content: '加载中…',
-      });
-    } else if (loading === false) {
-      Toast.clear();
-    }
-  }, [loading]);
 
   useEffect(() => {
     if (codeId) {

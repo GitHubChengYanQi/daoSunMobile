@@ -29,7 +29,7 @@ const SkuStockDetail = (
         const brandIds = brands.map((item) => {
           return item.value;
         });
-        if (!brandIds.includes(item.brandId)) {
+        if (!brandIds.includes(item.brandId) && item.brandId) {
           brands.push({
             value: item.brandId,
             label: item.brandResult && item.brandResult.brandName,
@@ -106,13 +106,13 @@ const SkuStockDetail = (
       onSuccess();
       Toast.show({
         content: '出库成功！',
-        position:'bottom'
+        position: 'bottom',
       });
     },
     onError: () => {
       Toast.show({
         content: '出库失败！',
-        position:'bottom'
+        position: 'bottom',
       });
     },
   });
@@ -143,18 +143,16 @@ const SkuStockDetail = (
     });
   };
 
-  return <div style={{ height: '80vh',overflow:'auto' }}>
+  return <div style={{ padding: 16, marginBottom: 100 }}>
     <Divider>物料信息</Divider>
-    <Space direction='vertical'>
+    <Space direction='vertical' style={{ width: '100%' }}>
       {value.content}
       <Space>
-        <div style={{ width: 70 }}>
-          库存数：
-        </div>
+        库存数：
         <strong>{number}</strong>
       </Space>
     </Space>
-    <Divider>品牌信息</Divider>
+    {brandResult(data).length > 0 && <Divider>品牌信息</Divider>}
     {
       <Selector
         columns={1}
