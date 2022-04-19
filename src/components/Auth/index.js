@@ -19,11 +19,6 @@ import IsDev from '../IsDev';
 
 const Auth = (props) => {
 
-  // const url = '1499935493219717122'
-  // const search = new URLSearchParams(url.split('?')[1]);
-  // const id = search.get('id');
-  // console.log(id);
-
   const [isLogin, setIsLogin] = useState(false);
 
   const location = useLocation();
