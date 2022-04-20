@@ -13,7 +13,6 @@ import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
   Dialog,
-  Toast,
 } from 'antd-mobile';
 import IsDev from '../IsDev';
 
@@ -89,7 +88,7 @@ const Auth = (props) => {
         timestamp: res.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.nonceStr, // 必填，生成签名的随机串
         signature: res.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack','invoke'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack', 'invoke'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
       });
     },
   });
@@ -146,7 +145,7 @@ const Auth = (props) => {
     //   },
     // });
     if (!IsDev() && getHeader()) {
-      const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#')
+      const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#');
       wxTicket({
         params: {
           url: url[0],
@@ -154,25 +153,17 @@ const Auth = (props) => {
       });
     }
     window.receive = (code) => {
+      const search = new URLSearchParams(code.split('?')[1]);
+      const id = search.get('id');
       let codeId = '';
-      if (code.indexOf('wx.daoxin.gf2025.com/cp') !== -1 || code.indexOf('wx.hh.gf2025.com/cp') !== -1) {
-        const param = code.split('=');
-        if (param && param[1]) {
-          codeId = param[1];
-        } else {
-          Toast.show({
-            content: '请扫正确的码！',
-          });
-        }
+      if (id && id.length === 19) {
+        codeId = id;
+      } else if (code && code.length === 19) {
+        codeId = code;
       } else {
-        if (code.length === 19) {
-          codeId = code;
-        } else {
-          Dialog.alert({
-            content: '请扫正确二维码！',
-          });
-        }
-
+        Dialog.alert({
+          content: '请扫正确二维码！',
+        });
       }
       if (codeId !== '') {
         props.dispatch({
@@ -181,17 +172,13 @@ const Auth = (props) => {
             code: codeId,
           },
         });
-      } else {
-        Dialog.alert({
-          content: '请扫正确二维码！',
-        });
       }
     };
   }, []);
 
   useEffect(() => {
     setIsLogin(token);
-    if (token){
+    if (token) {
       if (!props.userInfo.userInfo) {
         props.dispatch({
           type: 'userInfo/getUserInfo',

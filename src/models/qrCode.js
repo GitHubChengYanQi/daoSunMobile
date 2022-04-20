@@ -1,7 +1,7 @@
 import wx from 'populee-weixin-js-sdk';
 import { request } from '../util/Request';
 import { history } from 'umi';
-import { Toast } from 'antd-mobile';
+import { Dialog, Toast } from 'antd-mobile';
 
 const scan = () => new Promise((resolve, reject) => {
   wx.ready(() => {
@@ -13,12 +13,19 @@ const scan = () => new Promise((resolve, reject) => {
         console.log('wxScanSuccess', res.resultStr);
         // 回调
 
-        const url = res.resultStr;
-        const search = new URLSearchParams(url.split('?')[1]);
+        const resultStr = res.resultStr;
+        const search = new URLSearchParams(resultStr.split('?')[1]);
         const id = search.get('id');
 
-        resolve(id || res.resultStr);
-
+        if (id && id.length === 19) {
+          resolve(id);
+        } else if (resultStr && resultStr.length === 19) {
+          resolve(resultStr);
+        } else {
+          Dialog.alert({
+            content: '请扫正确二维码！',
+          });
+        }
       },
       error: (res) => {
         console.log('wxScanError', res);
