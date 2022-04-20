@@ -47,6 +47,9 @@ const Login = (props) => {
           props.dispatch({
             type: 'userInfo/getUserInfo',
           });
+          if (window.location.href.indexOf('Login') !== -1){
+            return history.push('/')
+          }
           window.location.reload();
         }
       },
