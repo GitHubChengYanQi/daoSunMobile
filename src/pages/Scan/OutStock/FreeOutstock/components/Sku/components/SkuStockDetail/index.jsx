@@ -7,6 +7,7 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../components/BottomButton';
 import { Space } from 'antd';
 import Number from '../../../../../../../components/Number';
+import Label from '../../../../../../../components/Label';
 
 const SkuStockDetail = (
   {
@@ -17,9 +18,6 @@ const SkuStockDetail = (
     },
   },
 ) => {
-
-  let number = 0;
-
   const [outStock, setOutStock] = useState({});
 
   const brandResult = (data) => {
@@ -73,9 +71,17 @@ const SkuStockDetail = (
   const { loading, data, run } = useRequest(skuStockDetail, {
     manual: true,
     onSuccess: (res) => {
-      let outstock = {};
+      if (!Array.isArray(res)) {
+        return;
+      }
+      let stockNumber = 0;
+      res.map((item) => {
+        return stockNumber += item.number;
+      });
+
+      let outstock = { stockNumber };
       if (positionsResult(res).length === 1) {
-        outstock = { positionsId: positionsResult(res)[0].value };
+        outstock = { ...outstock, positionsId: positionsResult(res)[0].value };
       }
 
       if (brandResult(res).length === 1) {
@@ -83,10 +89,6 @@ const SkuStockDetail = (
       }
       setOutStock(outstock);
     },
-  });
-
-  data && data.map((item) => {
-    return number += item.number;
   });
 
   useEffect(() => {
@@ -121,8 +123,8 @@ const SkuStockDetail = (
     return <MyLoading />;
   }
 
-  if (!data) {
-    return <MyEmpty description='该物料没有库存！' />;
+  if (!data || data.length === 0) {
+    return <MyEmpty description={<div>该物料没有库存！</div>} />;
   }
 
   const out = () => {
@@ -143,14 +145,25 @@ const SkuStockDetail = (
     });
   };
 
+  const getStockNumber = (outStock) => {
+    let num = 0;
+    data.map((item) => {
+      if (
+        (outStock.positionsId ? (item.storehousePositionsId === outStock.positionsId) : true)
+        &&
+        (outStock.brandId ? (item.brandId === outStock.brandId) : true)
+      ) {
+        num += item.number;
+      }
+      return null;
+    });
+    return num;
+  };
+
   return <div style={{ padding: 16, marginBottom: 100 }}>
     <Divider>物料信息</Divider>
     <Space direction='vertical' style={{ width: '100%' }}>
       {value.content}
-      <Space>
-        库存数：
-        <strong>{number}</strong>
-      </Space>
     </Space>
     {brandResult(data).length > 0 && <Divider>品牌信息</Divider>}
     {
@@ -159,7 +172,8 @@ const SkuStockDetail = (
         value={[outStock.brandId]}
         options={brandResult(data)}
         onChange={(arr, extend) => {
-          setOutStock({ ...outStock, brandId: arr[0] });
+          const data = { ...outStock, brandId: arr[0] };
+          setOutStock({ ...data, stockNumber: getStockNumber(data) });
         }} />
     }
     <Divider>库位信息</Divider>
@@ -169,17 +183,31 @@ const SkuStockDetail = (
         value={[outStock.positionsId]}
         options={positionsResult(data)}
         onChange={(arr, extend) => {
-          setOutStock({ ...outStock, positionsId: arr[0] });
+          const data = { ...outStock, positionsId: arr[0] };
+          setOutStock({ ...data, stockNumber: getStockNumber(data) });
         }}
       />
     }
     <Divider>库位信息</Divider>
-    <Space align='center'>
-      出库数量：<Number
-      value={outStock.number}
-      onChange={(value) => {
-        setOutStock({ ...outStock, number: value });
-      }} />
+    <Space align='center' direction='vertical'>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Label style={{ minWidth: 100 }}>出库数量：</Label>
+        <Number
+          value={outStock.number}
+          center
+          onChange={(value) => {
+            setOutStock({ ...outStock, number: value });
+          }} />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <Label style={{ minWidth: 100 }}>库存数：</Label>
+        <Number
+          center
+          value={outStock.stockNumber}
+          onChange={(value) => {
+            setOutStock({ ...outStock, stockNumber: value });
+          }} />
+      </div>
     </Space>
 
     <BottomButton
