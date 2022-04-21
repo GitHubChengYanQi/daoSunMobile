@@ -13,7 +13,6 @@ const Process = (
     type,
     createName,
     auditData,
-    card,
   }) => {
 
   const { loading, data, run } = useRequest({
@@ -37,7 +36,7 @@ const Process = (
     const fontSize = '7vw';
     switch (step.auditType) {
       case 'start':
-        return <Icon type='icon-caigou_faqiren' style={{ fontSize }} />;
+        return <Icon type='icon-caigou_faqiren' style={{ fontSize:'6vw' }} />;
       case 'send':
         return <Icon type='icon-caigou_chaosong' style={{ fontSize }} />;
       case 'route':
@@ -115,15 +114,16 @@ const Process = (
   };
 
   const processType = (value) => {
+    const style = { paddingLeft: 8 };
     switch (value) {
       case 'quality_dispatch':
-        return <>指派任务</>;
+        return <div style={style}>指派任务</div>;
       case 'quality_perform':
-        return <>执行任务</>;
+        return <div style={style}>执行任务</div>;
       case 'quality_complete':
-        return <>完成任务</>;
+        return <div style={style}>完成任务</div>;
       case 'purchase_complete':
-        return <>采购完成</>;
+        return <div style={style}>采购完成</div>;
       default:
         break;
     }
@@ -216,13 +216,9 @@ const Process = (
 
 
   return <>
-    {card ?
-      <Card title={<div>审批流程</div>}>
-        {allStep(auditData || data, true, 0)}
-      </Card>
-      :
-      allStep(auditData || data, true, 0)
-    }
+    <Card title={<div>审批流程</div>}>
+      {allStep(auditData || data, true, 0)}
+    </Card>
   </>;
 
 };

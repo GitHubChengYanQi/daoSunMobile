@@ -22,14 +22,7 @@ import Process from '../../PurchaseAsk/components/Process';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 
-const CreateInStock = (props) => {
-
-  const params = props.location.query;
-
-  const paramsSkus = params.skus && JSON.parse(params.skus);
-
-  const source = params.source;
-  const sourceId = params.sourceId;
+const CreateInStock = ({paramsSkus,source,sourceId}) => {
 
   const typeRef = useRef();
 
@@ -259,7 +252,7 @@ const CreateInStock = (props) => {
         </List>
       </Card>
 
-      <Card title={<div>入库明细</div>} style={{ marginTop: 16 }} extra={<LinkButton onClick={() => {
+      <Card title={<div>入库明细</div>} style={{ margin: '16px 0' }} extra={<LinkButton onClick={() => {
         setSkus([]);
       }}>全部清除</LinkButton>}>
         <Button color='primary' fill='outline' style={{ width: '100%' }} onClick={() => {

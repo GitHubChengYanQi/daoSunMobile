@@ -20,9 +20,11 @@ import { Avatar } from 'antd';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 
-const Detail = (props) => {
+const Detail = ({ process, id, ...props }) => {
 
-  const params = props.location.query;
+  const params = props.location ? props.location.query : {};
+
+  const instockId = id || params.id;
 
   const [skus, setSkus] = useState([]);
 
@@ -268,8 +270,8 @@ const Detail = (props) => {
   const [state, { toggle }] = useBoolean();
 
   useEffect(() => {
-    if (params.id) {
-      run({ data: { instockOrderId: params.id } });
+    if (instockId) {
+      run({ data: { instockOrderId: instockId } });
     }
   }, []);
 
@@ -295,7 +297,7 @@ const Detail = (props) => {
 
   const backgroundDom = () => {
 
-    return <div style={{ backgroundColor: '#f9f9f9' }}>
+    return <div style={{ backgroundColor: '#f9f9f9', paddingBottom: 100 }}>
       <Card
         title={<div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar shape='square' size={56}>入</Avatar>
@@ -350,13 +352,19 @@ const Detail = (props) => {
             </div>
             <div style={{ display: 'flex' }}>
               <div style={{ flexGrow: 1 }}>
-                <Label>入库物料：</Label>{data.enoughNumber}
+                <Space direction='vertical'>
+                  <Label>入库物料</Label>{data.enoughNumber}
+                </Space>
               </div>
               <div style={{ flexGrow: 1, color: 'green' }}>
-                已入库：{data.notNumber}
+                <Space direction='vertical'>
+                  已入库{data.notNumber}
+                </Space>
               </div>
               <div style={{ flexGrow: 1, color: 'red' }}>
-                未入库：{data.realNumber}
+                <Space direction='vertical'>
+                  未入库{data.realNumber}
+                </Space>
               </div>
             </div>
             <Divider style={{ margin: 0 }} />
@@ -403,6 +411,7 @@ const Detail = (props) => {
           <div>暂无</div>
         }
       </Card>
+      {process}
     </div>;
   };
 
@@ -424,7 +433,7 @@ const Detail = (props) => {
           refresh={refresh}
         />;
       case 'record':
-        return <ListByInstockOrder id={params.id} />;
+        return <ListByInstockOrder id={instockId} />;
       case 'log':
         return <MyEmpty />;
       default:
@@ -438,6 +447,7 @@ const Detail = (props) => {
         <div>计划 / 实际</div>
         <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
       </div>}
+      noBottom={status === 0}
       buttons={<Space>
         {status !== 99 && <Button
           color='primary'
@@ -452,14 +462,14 @@ const Detail = (props) => {
           status={status}
           details={details}
           orderStatus={orderStatus}
-          id={params.id}
+          id={instockId}
           CodeRun={CodeRun}
           CodeLoading={CodeLoading}
         />
       </Space>}
     >
       <div>
-        <MyNavBar title='入库单详情' />
+        {!id && <MyNavBar title='入库单详情' />}
         <div>
           <MyFloatingPanel
             backgroundColor
