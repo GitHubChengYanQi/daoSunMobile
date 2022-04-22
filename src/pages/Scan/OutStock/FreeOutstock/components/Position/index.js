@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Card, List, Selector, Toast } from 'antd-mobile';
+import { Card, List, Selector, Space, Toast } from 'antd-mobile';
 import BottomButton from '../../../../../components/BottomButton';
 import { getHeader } from '../../../../../components/GetHeader';
 import { stockDetailsList, storehousePositionsTreeView } from '../../../../Url';
@@ -14,10 +14,11 @@ import MyCascader from '../../../../../components/MyCascader';
 import BackSkus from '../../../../Sku/components/BackSkus';
 import MyEmpty from '../../../../../components/MyEmpty';
 import Search from '../../../../InStock/PositionFreeInstock/components/Search';
+import Label from '../../../../../components/Label';
 
 const fontSize = 18;
 
-const Position = ({scnaData,...props}) => {
+const Position = ({ scnaData, ...props }) => {
 
   const [inkindIds, setInkindIds] = useSetState({ data: [] });
 
@@ -36,10 +37,10 @@ const Position = ({scnaData,...props}) => {
       label: <Card
         key={index}
         bodyStyle={{ padding: 0 }}
-        title={<div style={{ fontSize,textAlign:'left',display:'inline-block'}}><BackSkus record={item} /> </div>}
+        title={<div style={{ fontSize, textAlign: 'left', display: 'inline-block' }}><BackSkus record={item} /></div>}
         extra={<div
           style={{
-            minWidth:80,
+            minWidth: 80,
             padding: 8,
             border: 'solid #999999 1px',
             borderRadius: 10,
@@ -54,22 +55,22 @@ const Position = ({scnaData,...props}) => {
             '--border-top': 'none',
           }}
         >
-          <List.Item
-            title='供应商'
+          {item.customerResult && <List.Item
+            title={<div>供应商</div>}
             style={{ padding: 0 }}
           >
             <span style={{ fontSize }}>
-              {item.customerResult && item.customerResult.customerName}
+              {item.customerResult.customerName}
             </span>
-          </List.Item>
-          <List.Item
-            title='品牌'
+          </List.Item>}
+          {item.brandResult && <List.Item
+            title={<div>品牌</div>}
             style={{ padding: 0 }}
           >
-            <span style={{ fontSize }}>{item.brandResult && item.brandResult.brandName}</span>
-          </List.Item>
+            <span style={{ fontSize }}>{item.brandResult.brandName}</span>
+          </List.Item>}
           <List.Item
-            title='出库数量'
+            title={<div>出库数量</div>}
             style={{ padding: 0 }}
           >
             <Number
@@ -137,8 +138,8 @@ const Position = ({scnaData,...props}) => {
     },
   });
 
-  useEffect(()=>{
-    if (scnaData){
+  useEffect(() => {
+    if (scnaData) {
       if (scnaData && scnaData.storehouseResult) {
         setData({
           ...data,
@@ -155,12 +156,12 @@ const Position = ({scnaData,...props}) => {
         },
       });
     }
-  },[scnaData])
+  }, [scnaData]);
 
 
   return <>
     <Card
-      title='库位信息'
+      title={<div>库位信息</div>}
       extra={getHeader() && <LinkButton
         title={<ScanOutlined />} onClick={() => {
         props.dispatch({
@@ -177,42 +178,52 @@ const Position = ({scnaData,...props}) => {
           '--border-bottom': 'none',
         }}
       >
-        <List.Item title='仓库'>
-          <LinkButton
-            style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.storehouse.value && 'red' }}
-            title={
-              data.storehouse.label || '请选择仓库'
-            } onClick={() => {
-            ref.current.search({ type: 'storehouse' });
-          }} />
+        <List.Item>
+          <div style={{ display: 'flex' }}>
+            <Label>
+              仓库：
+            </Label>
+            <LinkButton
+              style={{ flexGrow: 1, fontSize, textAlign: 'left', color: !data.storehouse.value && 'red' }}
+              title={
+                data.storehouse.label || '请选择仓库'
+              } onClick={() => {
+              ref.current.search({ type: 'storehouse' });
+            }} />
+          </div>
         </List.Item>
-        <List.Item title='库位'>
-          <MyCascader
-            arrow={false}
-            ref={treeRef}
-            disabled={!data.storehouse.value}
-            poputTitle='选择库位'
-            branchText='请选择仓库或直接扫码选择库位'
-            textType='link'
-            title={
-              <LinkButton
-                style={{ width: '100vw', fontSize, textAlign: 'left', color: !data.postionId && 'red' }}
-                title='选择库位'
-              />
-            }
-            value={data.positionId}
-            api={storehousePositionsTreeView}
-            onChange={(value) => {
-              if (value && value !== data.positionId) {
-                detailRun({
-                  data: {
-                    storehousePositionsId: value,
-                  },
-                });
-                setData({ ...data, positionId: value });
+        <List.Item>
+          <div style={{ display: 'flex' }}>
+            <Label style={{minWidth:60}}>
+              库位：
+            </Label>
+            <MyCascader
+              arrow={false}
+              ref={treeRef}
+              disabled={!data.storehouse.value}
+              poputTitle='选择库位'
+              branchText='请选择仓库或直接扫码选择库位'
+              textType='link'
+              title={
+                <LinkButton
+                  style={{ flexGrow: 1, fontSize, textAlign: 'left', color: !data.postionId && 'red' }}
+                  title='选择库位'
+                />
               }
-            }}
-          />
+              value={data.positionId}
+              api={storehousePositionsTreeView}
+              onChange={(value) => {
+                if (value && value !== data.positionId) {
+                  detailRun({
+                    data: {
+                      storehousePositionsId: value,
+                    },
+                  });
+                  setData({ ...data, positionId: value });
+                }
+              }}
+            />
+          </div>
         </List.Item>
       </List>
     </Card>

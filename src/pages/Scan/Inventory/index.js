@@ -174,6 +174,7 @@ const Inventory = (props) => {
 
   useEffect(() => {
     if (codeId) {
+      setData(null);
       run({
         params: {
           id: codeId,

@@ -24,23 +24,26 @@ const Sku = () => {
   );
 
   return <div style={{ backgroundColor: '#fff' }}>
-    <SearchBar
-      placeholder='请输入内容'
-      value={searchValue}
-      showCancelButton={() => true}
-      onCancel={() => {
+    <div style={{ position: 'sticky', top: 0, zIndex: 999 }}>
+      <SearchBar
+        placeholder='请输入内容'
+        value={searchValue}
+        showCancelButton={() => true}
+        onCancel={() => {
 
-      }}
-      onChange={(value) => {
-        setSearchValue(value);
-        run({
-          data: { skuName: value },
-          params: { page: 1, limit: 5 },
-        });
-      }}
-    />
+        }}
+        onChange={(value) => {
+          setSearchValue(value);
+          run({
+            data: { skuName: value },
+            params: { page: 1, limit: 5 },
+          });
+        }}
+      />
+    </div>
 
-    <Card title='物料列表'>
+
+    <Card>
       <List
         style={{
           '--border-top': 'none',
@@ -49,7 +52,6 @@ const Sku = () => {
       >
         {
           (!loading && data && data.length > 0) ? data.map((item, index) => {
-
               const content = <Space direction='vertical'>
                 <Space>
                   <Label>物料编码:</Label>{item.standard}
@@ -62,20 +64,20 @@ const Sku = () => {
                 </Space>
                 <Space>
                   <Label>描述:</Label><Ellipsis
-                      style={{ maxWidth: '50vw' }}
-                      direction='end'
-                      content={item.skuJsons
-                      &&
-                      item.skuJsons.length > 0
-                      &&
-                      item.skuJsons[0].values.attributeValues
-                        ?
-                        item.skuJsons.map((items) => {
-                          return `${items.attribute.attribute} : ${items.values.attributeValues}`;
-                        }).toString()
-                        :
-                        '无'
-                      } />
+                  style={{ maxWidth: '50vw' }}
+                  direction='end'
+                  content={item.skuJsons
+                  &&
+                  item.skuJsons.length > 0
+                  &&
+                  item.skuJsons[0].values.attributeValues
+                    ?
+                    item.skuJsons.map((items) => {
+                      return `${items.attribute.attribute} : ${items.values.attributeValues}`;
+                    }).toString()
+                    :
+                    '无'
+                  } />
                 </Space>
               </Space>;
 
