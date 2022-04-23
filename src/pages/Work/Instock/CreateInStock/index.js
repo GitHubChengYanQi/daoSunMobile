@@ -79,6 +79,14 @@ const CreateInStock = (props) => {
     }
   };
 
+  const onCheck = (value) => {
+    const array = value.map((item) => {
+      const sku = skus.filter(skuItem => skuItem.skuId === item.skuId);
+      return sku[0] || { skuId: item.skuId, skuResult: item };
+    });
+    setSkus(array);
+  };
+
   return <>
     <MyBottom
       leftActuions={<div>合计：{skus.length}</div>}
@@ -290,19 +298,10 @@ const CreateInStock = (props) => {
       component={CheckSkus}
       ref={checkSkuRef}
       onCheck={(value) => {
-        const array = [];
-        value.map((item) => {
-          const sku = skus.filter(skuItem => skuItem.skuId === item.skuId);
-          return sku[0] || { skuId: item.skuId, skuResult: item };
-        });
-        setSkus(array);
+        onCheck(value);
       }}
       onChange={(value) => {
-        const array = value.map((item) => {
-          const sku = skus.filter(skuItem => skuItem.skuId === item.skuId);
-          return sku[0] || { skuId: item.skuId, skuResult: item };
-        });
-        setSkus(array);
+        onCheck(value);
         checkSkuRef.current.close();
       }}
     />
