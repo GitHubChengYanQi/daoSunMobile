@@ -196,7 +196,7 @@ const InstockDetails = (
             <Number
               width={100}
               disabled={status === 1}
-              value={status === 98 ? positionsItem.instockNumber : detail.number}
+              value={status === 98 ? positionsItem.instockNumber : detail.instockNumber}
               buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
               onChange={(value) => {
                 setOptionsValue({ instockNumber: value || 0 }, item.instockListId, index);

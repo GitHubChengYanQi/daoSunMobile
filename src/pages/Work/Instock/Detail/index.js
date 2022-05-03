@@ -221,6 +221,7 @@ const Detail = (props) => {
               skuResult: { ...item.skuResult, spuResult: item.spuResult },
               number,
               newNumber: number,
+              instockNumber: item.instockNumber,
               instockListId: item.instockListId,
               positions: [{
                 ...positions,

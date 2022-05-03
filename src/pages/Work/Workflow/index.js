@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Steps, Toast } from 'antd-mobile';
+import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { AuditOutlined, FormOutlined } from '@ant-design/icons';
-import { useDebounceEffect } from 'ahooks';
+import { FormOutlined } from '@ant-design/icons';
 import QualityTask from './components/QualityTask';
 import { Avatar, Skeleton } from 'antd';
 import PurchaseAsk from './components/PurchaseAsk';
 import MentionsNote from '../../components/MentionsNote';
 import BottomButton from '../../components/BottomButton';
 import ImgUpload from '../../components/Upload/ImgUpload';
-import Icon from '../../components/Icon';
 import Process from '../PurchaseAsk/components/Process';
 import InstockError from './components/InstockError';
 
