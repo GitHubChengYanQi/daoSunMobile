@@ -51,16 +51,18 @@ const MyStart = (props) => {
         return <Tag color='primary' fill='outline'>
           进行中
         </Tag>;
-      case 1:
+      case 0:
         return <Tag color='#87d068' fill='outline'>
           已通过
         </Tag>;
-      case 0:
+      case 2:
         return <Tag color='#ff6430' fill='outline'>
           已拒绝
         </Tag>;
       default:
-        break;
+        return <Tag color='primary' fill='outline'>
+          进行中
+        </Tag>
     }
   };
 

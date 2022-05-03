@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const MyBottom = ({ children, leftActuions, buttons }) => {
+const MyBottom = ({ children, leftActuions, buttons,noBottom }) => {
 
   const [bottomHeight, seBottomHeight] = useState(0);
 
@@ -15,7 +15,7 @@ const MyBottom = ({ children, leftActuions, buttons }) => {
     <div style={{ minHeight: `100vh` }}>
       {children}
     </div>
-    <div id='bottom' style={{
+    <div hidden={noBottom} id='bottom' style={{
       position: 'sticky',
       bottom: 0,
       zIndex: 999,

@@ -42,7 +42,7 @@ const Orderlist = () => {
       buttons={<Space>
         <Button>合并入库</Button>
         <Button color='primary' onClick={() => {
-          history.push('/Work/Instock/CreateInStock');
+          history.push(`/Work/Workflow?type=createInstock`);
         }}>新建入库申请</Button>
       </Space>}
     >
