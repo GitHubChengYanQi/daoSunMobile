@@ -105,7 +105,7 @@ const PickLists = (props) => {
                 } else if (params.type === 'all') {
                   history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
                 } else {
-                  history.push(`/Work/Production/Pick?id=${item.sourceId}`);
+                  history.push(`/Work/Production/Pick?id=${item.productionTaskResult && item.productionTaskResult.productionTaskId}`);
                 }
               }}>
               <div>
