@@ -1,12 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Dialog, Divider, Empty, List, Loading, Space, Toast } from 'antd-mobile';
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Card, Space } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { FormOutlined } from '@ant-design/icons';
 import QualityTask from './components/QualityTask';
 import PurchaseAsk from './components/PurchaseAsk';
-import MentionsNote from '../../components/MentionsNote';
-import BottomButton from '../../components/BottomButton';
-import ImgUpload from '../../components/Upload/ImgUpload';
 import Process from '../PurchaseAsk/components/Process';
 import InstockError from './components/InstockError';
 import Audit from './components/Audit';
@@ -15,6 +11,7 @@ import { MyLoading } from '../../components/MyLoading';
 import CreateInStock from '../Instock/CreateInStock';
 import AskAdd from '../PurchaseAsk/AskAdd';
 import Detail from '../Instock/Detail';
+import MyBottom from '../../components/MyBottom';
 
 const Workflow = (props) => {
 
@@ -23,6 +20,10 @@ const Workflow = (props) => {
   const [detail, setDetail] = useState({});
 
   const [audit, setAudit] = useState([]);
+
+  const [moduleObject, setModuleObject] = useState({});
+
+  const createRef = useRef();
 
   // 审批详情接口
   const { loading: detailLoading, run, refresh } = useRequest(
@@ -63,7 +64,12 @@ const Workflow = (props) => {
     switch (value) {
       case 'createInstock':
         return <>
-          <CreateInStock source={query.source} sourceId={query.sourceId} paramsSkus={query.skus} />
+          <CreateInStock
+            source={query.source}
+            sourceId={query.sourceId}
+            paramsSkus={query.skus}
+            ref={createRef}
+          />
         </>;
       case 'purchaseAsk':
         return <>
@@ -95,9 +101,47 @@ const Workflow = (props) => {
     }
   };
 
+  const createModuleButtom = (left) => {
+    switch (query.type) {
+      case 'createInstock':
+        const skus = moduleObject.skus;
+        if (left) {
+          return <div>合计：{skus.length}</div>;
+        }
+        return <Space>
+          <Button>扫码添加物料</Button>
+          <Button
+            disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}
+            color='primary'
+            onClick={() => {
+              createRef.current.submit();
+            }}>提交申请</Button>
+        </Space>;
+      case 'purchaseAsk':
+        return <></>;
+      default:
+        break;
+    }
+  };
+
+
   if (query.type) {
     return <>
-      {createModule(query.type)}
+      {/*<MyBottom*/}
+      {/*  leftActuions={createModuleLeftActions()}*/}
+      {/*  buttons={<Space>*/}
+      {/*    <Button>扫码添加物料</Button>*/}
+      {/*    <Button*/}
+      {/*      disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}*/}
+      {/*      color='primary'*/}
+      {/*      onClick={() => {*/}
+      {/*        createRef.current.submit();*/}
+      {/*      }}>提交申请</Button>*/}
+      {/*  </Space>}*/}
+      {/*>*/}
+      {/*  {createModule(query.type)}*/}
+      {/*  <Process type='createInstock' card />*/}
+      {/*</MyBottom>*/}
     </>;
   }
 

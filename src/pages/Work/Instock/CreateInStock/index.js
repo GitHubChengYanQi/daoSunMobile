@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { skuResults } from '../../../Scan/Url';
 import MyNavBar from '../../../components/MyNavBar';
@@ -22,7 +22,7 @@ import Process from '../../PurchaseAsk/components/Process';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 
-const CreateInStock = ({paramsSkus,source,sourceId}) => {
+const CreateInStock = ({ paramsSkus, source, sourceId }, ref) => {
 
   const typeRef = useRef();
 
@@ -57,6 +57,48 @@ const CreateInStock = ({paramsSkus,source,sourceId}) => {
     },
   });
 
+  const submit = () => {
+    const instockRequest = [];
+    skus.map((item) => {
+      if (item.details && item.details.length > 0) {
+        item.details.map((detailItem) => {
+          if (detailItem.number > 0) {
+            instockRequest.push({
+              skuId: item.skuId,
+              brandId: item.brandId,
+              customerId: item.customerId,
+              ...detailItem,
+            });
+          }
+          return null;
+        });
+      } else {
+        instockRequest.push({
+          skuId: item.skuId,
+          brandId: item.brandId,
+          customerId: item.customerId,
+          number: item.number,
+        });
+      }
+      return null;
+    });
+    instock({
+      data: {
+        ...data,
+        userId: data.user && data.user.id,
+        stockUserId: data.stockUser && data.stockUser.id,
+        instockRequest,
+        enclosure: data.enclosure && data.enclosure.map(item => item.id),
+        registerTime: data.date && `${data.date} ${data.time}`,
+        time: null,
+      },
+    });
+  }
+
+  useImperativeHandle(ref, () => ({
+    submit
+  }));
+
   useEffect(() => {
     if (Array.isArray(paramsSkus)) {
       getSkus({ data: { skuIds: paramsSkus.map(item => item.skuId) } });
@@ -87,42 +129,9 @@ const CreateInStock = ({paramsSkus,source,sourceId}) => {
         <Button>扫码添加物料</Button>
         <Button
           disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}
-          color='primary' onClick={() => {
-          const instockRequest = [];
-          skus.map((item) => {
-            if (item.details && item.details.length > 0) {
-              item.details.map((detailItem) => {
-                if (detailItem.number > 0) {
-                  instockRequest.push({
-                    skuId: item.skuId,
-                    brandId: item.brandId,
-                    customerId: item.customerId,
-                    ...detailItem,
-                  });
-                }
-                return null;
-              });
-            } else {
-              instockRequest.push({
-                skuId: item.skuId,
-                brandId: item.brandId,
-                customerId: item.customerId,
-                number: item.number,
-              });
-            }
-            return null;
-          });
-          instock({
-            data: {
-              ...data,
-              userId: data.user && data.user.id,
-              stockUserId: data.stockUser && data.stockUser.id,
-              instockRequest,
-              enclosure: data.enclosure && data.enclosure.map(item => item.id),
-              registerTime: data.date && `${data.date} ${data.time}`,
-              time: null,
-            },
-          });
+          color='primary'
+          onClick={() => {
+
         }}>提交申请</Button>
       </Space>}
     >
@@ -303,4 +312,4 @@ const CreateInStock = ({paramsSkus,source,sourceId}) => {
   </>;
 };
 
-export default CreateInStock;
+export default React.forwardRef(CreateInStock);
