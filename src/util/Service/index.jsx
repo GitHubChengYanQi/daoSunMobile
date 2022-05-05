@@ -69,7 +69,7 @@ ajaxService.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   // if (error.errCode !== 0) {
-  throw new Error(error.message);
+  // throw new Error(error.message);
   // }
   // return error;
 });

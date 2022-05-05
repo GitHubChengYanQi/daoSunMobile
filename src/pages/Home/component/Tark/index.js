@@ -5,6 +5,7 @@ import { useRequest } from '../../../../util/Request';
 import { Col, Row } from 'antd';
 import { history } from 'umi';
 import style from './index.css';
+import MyEllipsis from '../../../components/MyEllipsis';
 
 
 const Tark = () => {
@@ -84,11 +85,11 @@ const Tark = () => {
                             break;
                         }
                       }}
-                      title={<>{items.title} <em style={{ fontSize: 12, color: '#c7c5c5' }}>{items.time}</em></>}
+                      title={<div>{items.title} <em style={{ fontSize: 12, color: '#c7c5c5' }}>{items.time}</em></div>}
                       style={{ borderLeft: `#${color} 2px solid` }}
                       key={index}
                     >
-                      {items.content}
+                      <MyEllipsis>{items.content}</MyEllipsis>
                     </List.Item>
                   );
                 } else {

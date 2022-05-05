@@ -81,7 +81,7 @@ const Orderlist = () => {
                   }}>{orderStatus(item.state)}</Button>
               </Space>}
               onClick={() => {
-                history.push(`/Work/Instock/Detail?id=${item.instockOrderId}`);
+                history.push(`/Work/Workflow?type=createInstock&formId=${item.instockOrderId}`);
               }}
             >
               <Space direction='vertical' style={{ width: '100%' }}>

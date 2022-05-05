@@ -29,7 +29,7 @@ const CreateTask = (props) => {
         );
       },
       onError: (err) => {
-       Message.error('创建任务失败!')
+       Message.toast('创建任务失败!')
       },
     });
 

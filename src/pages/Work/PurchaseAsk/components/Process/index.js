@@ -23,7 +23,7 @@ const Process = (
   });
 
   useEffect(() => {
-    if (type) {
+    if (!auditData && type) {
       run({
         params: {
           type,
@@ -33,10 +33,10 @@ const Process = (
   }, []);
 
   const status = (step, stepStatus) => {
-    const fontSize = '7vw';
+    const fontSize = '8vw';
     switch (step.auditType) {
       case 'start':
-        return <Icon type='icon-caigou_faqiren' style={{ fontSize:'6vw' }} />;
+        return <Icon type='icon-caigou_faqiren' style={{ fontSize }} />;
       case 'send':
         return <Icon type='icon-caigou_chaosong' style={{ fontSize }} />;
       case 'route':

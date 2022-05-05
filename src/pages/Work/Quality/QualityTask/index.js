@@ -107,7 +107,7 @@ const QualityTask = (props) => {
       );
     },
     onError: (res) => {
-      Message.error('自检失败！');
+      Message.toast('自检失败！');
     },
   });
 

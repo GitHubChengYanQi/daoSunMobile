@@ -16,6 +16,7 @@ import {
   Dialog,
 } from 'antd-mobile';
 import IsDev from '../IsDev';
+import { request } from '../../util/Service';
 
 const Auth = (props) => {
 
@@ -94,7 +95,7 @@ const Auth = (props) => {
     },
   });
 
-  useDebounceEffect(() => {
+  useEffect(() => {
 
     let action = '';
     switch (location.pathname) {
@@ -132,9 +133,7 @@ const Auth = (props) => {
     }
   }, [
     location.pathname,
-  ], {
-    wait: 0,
-  });
+  ]);
 
 
   useEffect(() => {
@@ -177,16 +176,20 @@ const Auth = (props) => {
     };
   }, []);
 
+  const refreshToken = async () => {
+    const res = await request({ url: '/rest/refreshToken', method: 'GET' });
+    if (res) {
+      cookie.set('cheng-token', res.data);
+    }
+  };
+
   useEffect(() => {
     setIsLogin(token);
-    if (token) {
-      if (!props.userInfo.userInfo) {
-        props.dispatch({
-          type: 'userInfo/getUserInfo',
-        });
-      }
-    }
-    if (!token && getHeader() && process.env.NODE_ENV !== 'development') {
+    if (token && !props.userInfo.userInfo) {
+      props.dispatch({
+        type: 'userInfo/getUserInfo',
+      });
+    } else if (getHeader() && process.env.NODE_ENV !== 'development') {
       loginBycode();
     }
   }, [token]);

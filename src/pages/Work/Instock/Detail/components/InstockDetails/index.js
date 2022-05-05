@@ -238,7 +238,7 @@ const InstockDetails = (
         <div
           style={{
             position: 'sticky',
-            top: 0,
+            top: 48,
             backgroundColor: '#fff',
             zIndex: 999,
             textAlign: 'center',
@@ -253,7 +253,7 @@ const InstockDetails = (
             {positions.title && positions.title.split('(')[0] || '请选择库位'}
           </MyTree>
         </div>}
-      <div style={{ padding: '16px 0', paddingBottom: 100 }}>
+      <div style={{ padding: '16px 0' }}>
         {
           skus.length === 0
             ?

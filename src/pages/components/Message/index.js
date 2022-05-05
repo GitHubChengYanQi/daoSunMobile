@@ -1,7 +1,7 @@
 import { Dialog, Toast } from 'antd-mobile';
 import { history } from 'umi';
 
-const success = (title) => {
+const toast = (title) => {
   Toast.show({
     content: title || '成功！',
     position: 'bottom',
@@ -34,16 +34,9 @@ const dialogSuccess = (title, leftText, rightText, next = () => {
   });
 };
 
-const error = (title) => {
-  Toast.show({
-    content: title || '失败！',
-    position: 'bottom',
-  });
-};
 
 export const Message = {
-  success,
-  error,
+  toast,
   dialogSuccess,
 };
 

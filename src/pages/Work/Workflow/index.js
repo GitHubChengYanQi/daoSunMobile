@@ -1,25 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button, Card, Space } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import QualityTask from './components/QualityTask';
 import PurchaseAsk from './components/PurchaseAsk';
 import Process from '../PurchaseAsk/components/Process';
 import InstockError from './components/InstockError';
-import Audit from './components/Audit';
 import MyEmpty from '../../components/MyEmpty';
 import { MyLoading } from '../../components/MyLoading';
-import CreateInStock from '../Instock/CreateInStock';
 import AskAdd from '../PurchaseAsk/AskAdd';
 import Detail from '../Instock/Detail';
 import MyBottom from '../../components/MyBottom';
+import { CreateInstock, CreateInstockBottom } from './components/Instock';
+import Comments from './components/Comments';
+
+const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
 const Workflow = (props) => {
 
   const query = props.location.query;
 
-  const [detail, setDetail] = useState({});
+  const isCreate = !query.formId && !query.id && query.type;
 
-  const [audit, setAudit] = useState([]);
+  const [detail, setDetail] = useState({});
 
   const [moduleObject, setModuleObject] = useState({});
 
@@ -35,48 +36,49 @@ const Workflow = (props) => {
       manual: true,
       onSuccess: (res) => {
         if (res) {
-          // 所有配置
-          setAudit(res.stepsResult);
           // 详细数据
           setDetail(res);
         }
-
       },
     },
   );
 
-  useEffect(() => {
-    setDetail(null);
+  const { run: getTaskIdRun } = useRequest(getTaskIdApi, { manual: true });
+
+  const getTaskId = async () => {
+    let taskId;
     if (query.id) {
+      taskId = query.id;
+    } else if (query.formId && query.type) {
+      taskId = await getTaskIdRun({ params: { formId: query.formId, type: query.type } });
+    }
+    if (taskId) {
       run({
         params: {
-          taskId: query.id,
+          taskId: taskId,
         },
       });
     }
-  }, []);
+  };
 
-  if (detailLoading) {
-    return <MyLoading />;
-  }
+  useEffect(() => {
+    getTaskId();
+  }, []);
 
   const createModule = (value) => {
     switch (value) {
       case 'createInstock':
-        return <>
-          <CreateInStock
-            source={query.source}
-            sourceId={query.sourceId}
-            paramsSkus={query.skus}
-            ref={createRef}
-          />
-        </>;
+        return <CreateInstock
+          setModuleObject={setModuleObject}
+          query={query}
+          createRef={createRef}
+        />;
       case 'purchaseAsk':
         return <>
           <AskAdd />
         </>;
       default:
-        break;
+        return <MyEmpty />;
     }
   };
 
@@ -90,12 +92,7 @@ const Workflow = (props) => {
       case 'instockError':
         return <InstockError id={detail.formId} />;
       case 'createInstock':
-        return <Detail id={detail.formId} process={
-          <div>
-            <Process auditData={audit} createName={detail.createName} />
-            <Audit detail={detail} id={query.id} refresh={refresh} />
-          </div>
-        } />;
+        return <Detail id={detail.formId} />;
       default:
         break;
     }
@@ -104,19 +101,15 @@ const Workflow = (props) => {
   const createModuleButtom = (left) => {
     switch (query.type) {
       case 'createInstock':
-        const skus = moduleObject.skus;
-        if (left) {
-          return <div>合计：{skus.length}</div>;
-        }
-        return <Space>
-          <Button>扫码添加物料</Button>
-          <Button
-            disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}
-            color='primary'
-            onClick={() => {
-              createRef.current.submit();
-            }}>提交申请</Button>
-        </Space>;
+        return <CreateInstockBottom
+          createRef={createRef}
+          left={left}
+          moduleObject={moduleObject}
+          isCreate={isCreate}
+          id={detail.processTaskId}
+          detail={detail}
+          refresh={refresh}
+        />;
       case 'purchaseAsk':
         return <></>;
       default:
@@ -124,41 +117,18 @@ const Workflow = (props) => {
     }
   };
 
+  return <>
+    <MyBottom
+      leftActuions={createModuleButtom(true)}
+      buttons={createModuleButtom()}
+    >
+      {isCreate ? createModule(query.type) : module(query.type)}
+      <Process type={query.type} auditData={detail.stepsResult} createName={detail.createName} card />
+      {!isCreate && <Comments detail={detail} id={detail.processTaskId} refresh={refresh} />}
+    </MyBottom>
 
-  if (query.type) {
-    return <>
-      {/*<MyBottom*/}
-      {/*  leftActuions={createModuleLeftActions()}*/}
-      {/*  buttons={<Space>*/}
-      {/*    <Button>扫码添加物料</Button>*/}
-      {/*    <Button*/}
-      {/*      disabled={skus.length === 0 || skus.filter(item => item.number > 0).length !== skus.length}*/}
-      {/*      color='primary'*/}
-      {/*      onClick={() => {*/}
-      {/*        createRef.current.submit();*/}
-      {/*      }}>提交申请</Button>*/}
-      {/*  </Space>}*/}
-      {/*>*/}
-      {/*  {createModule(query.type)}*/}
-      {/*  <Process type='createInstock' card />*/}
-      {/*</MyBottom>*/}
-    </>;
-  }
-
-  if (detail) {
-    return <div style={{
-      backgroundColor: '#fff',
-    }}>
-      <Card
-        title={<div>{detail.taskName}</div>}
-        bodyStyle={{ padding: 0 }}
-      >
-        {module(detail && detail.type)}
-      </Card>
-    </div>;
-  } else {
-    return <MyEmpty />;
-  }
+    {detailLoading && <MyLoading />}
+  </>;
 
 
 };

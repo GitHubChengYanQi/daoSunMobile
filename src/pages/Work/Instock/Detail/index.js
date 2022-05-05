@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { instockOrderDetail } from '../../ProcurementOrder/Url';
 import MyNavBar from '../../../components/MyNavBar';
-import MyFloatingPanel from '../../../components/MyFloatingPanel';
-import { getHeader } from '../../../components/GetHeader';
 import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import Label from '../../../components/Label';
@@ -20,11 +18,9 @@ import { Avatar } from 'antd';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 
-const Detail = ({ process, id, ...props }) => {
+const Detail = ({ id }) => {
 
-  const params = props.location ? props.location.query : {};
-
-  const instockId = id || params.id;
+  const instockId = id;
 
   const [skus, setSkus] = useState([]);
 
@@ -274,7 +270,7 @@ const Detail = ({ process, id, ...props }) => {
     if (instockId) {
       run({ data: { instockOrderId: instockId } });
     }
-  }, []);
+  }, [instockId]);
 
 
   if (loading) {
@@ -298,7 +294,7 @@ const Detail = ({ process, id, ...props }) => {
 
   const backgroundDom = () => {
 
-    return <div style={{ backgroundColor: '#f9f9f9', paddingBottom: 100 }}>
+    return <div style={{ backgroundColor: '#f9f9f9' }}>
       <Card
         title={<div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar shape='square' size={56}>入</Avatar>
@@ -351,19 +347,20 @@ const Detail = ({ process, id, ...props }) => {
             <div>
               <Label>库管人员：</Label>{data.stockUserResult && data.stockUserResult.name}
             </div>
+            <Divider style={{ margin: 0 }} />
             <div style={{ display: 'flex' }}>
               <div style={{ flexGrow: 1 }}>
-                <Space direction='vertical'>
+                <Space direction='vertical' align='center'>
                   <Label>入库物料</Label>{data.enoughNumber}
                 </Space>
               </div>
               <div style={{ flexGrow: 1, color: 'green' }}>
-                <Space direction='vertical'>
+                <Space direction='vertical' align='center'>
                   已入库{data.notNumber}
                 </Space>
               </div>
               <div style={{ flexGrow: 1, color: 'red' }}>
-                <Space direction='vertical'>
+                <Space direction='vertical' align='center'>
                   未入库{data.realNumber}
                 </Space>
               </div>
@@ -412,7 +409,6 @@ const Detail = ({ process, id, ...props }) => {
           <div>暂无</div>
         }
       </Card>
-      {process}
     </div>;
   };
 
@@ -472,26 +468,21 @@ const Detail = ({ process, id, ...props }) => {
       <div>
         {!id && <MyNavBar title='入库单详情' />}
         <div>
-          <MyFloatingPanel
-            backgroundColor
-            maxHeight={window.innerHeight - (getHeader() ? 80 : 130)}
-            backgroundDom={backgroundDom()}
+          {backgroundDom()}
+          <Tabs
+            activeKey={key}
+            style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999,marginTop:18 }}
+            onChange={(key) => {
+              setKey(key);
+            }}
           >
-            <Tabs
-              activeKey={key}
-              style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-              onChange={(key) => {
-                setKey(key);
-              }}
-            >
-              <Tabs.Tab title={<div>入库明细</div>} key='detail' />
-              <Tabs.Tab title={<div>入库记录</div>} key='record' />
-              <Tabs.Tab title={<div>动态日志</div>} key='log' />
-            </Tabs>
-            <div style={{ backgroundColor: '#eee' }}>
-              {type()}
-            </div>
-          </MyFloatingPanel>
+            <Tabs.Tab title={<div>入库明细</div>} key='detail' />
+            <Tabs.Tab title={<div>入库记录</div>} key='record' />
+            <Tabs.Tab title={<div>动态日志</div>} key='log' />
+          </Tabs>
+          <div style={{ backgroundColor: '#eee' }}>
+            {type()}
+          </div>
         </div>
       </div>
     </MyBottom>
