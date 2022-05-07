@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import GetUserInfo from '../../pages/GetUserInfo';
-import { useDebounceEffect } from 'ahooks';
 import { useState } from 'react';
 import { Skeleton } from 'weui-react-v2';
 import Login from '../../pages/Login';
@@ -12,7 +11,6 @@ import { getHeader } from '../../pages/components/GetHeader';
 import { connect } from 'dva';
 import { useLocation } from 'umi';
 import {
-  Button,
   Dialog,
 } from 'antd-mobile';
 import IsDev from '../IsDev';

@@ -103,7 +103,7 @@ const AskList = ({ ...props }, ref) => {
     <BottomButton
       only
       onClick={() => {
-        history.push('/Work/Workflow?type=purchaseAsk');
+        history.push('/Receipts/ReceiptsCreate?type=purchaseAsk');
       }}
       text='创建申请'
     />

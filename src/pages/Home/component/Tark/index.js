@@ -79,7 +79,7 @@ const Tark = () => {
                             history.push(`${items.url}`);
                             break;
                           case 'processTask':
-                            history.push(`/Work/Workflow?id=${items.sourceId}`);
+                            history.push(`/Receipts/ReceiptsDetail?id=${items.sourceId}`);
                             break;
                           default:
                             break;

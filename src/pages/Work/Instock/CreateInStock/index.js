@@ -12,17 +12,17 @@ import MyDatePicker from '../../../components/MyDatePicker';
 import MyTimePicker from '../../../components/MyTimePicker';
 import CheckSkus from '../../Sku/CheckSkus';
 import AddSkus from './AddSkus';
-import MyBottom from '../../../components/MyBottom';
 import SelectUser from '../../Production/CreateTask/components/SelectUser';
 import { instockOrderAdd } from '../Url';
 import { MyLoading } from '../../../components/MyLoading';
 import { history } from 'umi';
 import style from '../../../components/Number/index.css';
-import Process from '../../PurchaseAsk/components/Process';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
+import { Message } from '../../../components/Message';
+import { ReceiptsEnums } from '../../../Receipts';
 
-const CreateInStock = ({ paramsSkus, source, sourceId, setModuleObject }, ref) => {
+const CreateInStock = ({ paramsSkus, source, sourceId, setModuleObject, setType }, ref) => {
 
   const typeRef = useRef();
 
@@ -87,6 +87,9 @@ const CreateInStock = ({ paramsSkus, source, sourceId, setModuleObject }, ref) =
       }
       return null;
     });
+    if (!data.type) {
+      return Message.toast('请选择入库类型！');
+    }
     instock({
       data: {
         ...data,
@@ -274,6 +277,16 @@ const CreateInStock = ({ paramsSkus, source, sourceId, setModuleObject }, ref) =
 
     <MyPopup
       onSuccess={(value) => {
+        switch (value) {
+          case '采购入库':
+            setType(ReceiptsEnums.purchaseInstock);
+            break;
+          case '生产入库':
+            setType(ReceiptsEnums.productionInstock);
+            break;
+          default:
+            break;
+        }
         setData({ ...data, type: value });
         typeRef.current.close();
       }}

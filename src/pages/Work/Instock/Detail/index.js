@@ -1,93 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { instockOrderDetail } from '../../ProcurementOrder/Url';
-import MyNavBar from '../../../components/MyNavBar';
-import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
+import { checkNumberTrue, instockOrderDetail } from '../../ProcurementOrder/Url';
 import { MyLoading } from '../../../components/MyLoading';
-import Label from '../../../components/Label';
-import styles from '../../Production/index.css';
-import MyBottom from '../../../components/MyBottom';
 import MyEmpty from '../../../components/MyEmpty';
-import InstockDetails from './components/InstockDetails';
 import { history } from 'umi';
-import InstockActions from './components/InstockActions';
 import { batchBind } from '../../../Scan/InStock/components/Url';
+import { Message } from '../../../components/Message';
+import InstockDetails from './components/InstockDetails';
 import ListByInstockOrder from './components/ListByInstockOrder';
-import MyEllipsis from '../../../components/MyEllipsis';
-import { Avatar } from 'antd';
-import { DownFill } from 'antd-mobile-icons';
-import { useBoolean } from 'ahooks';
+import Show from './components/Show';
+import Instock from './components/Instock';
+import { ReceiptsEnums } from '../../../Receipts';
 
-const Detail = ({ id }) => {
+const Detail = ({ id, setModuleObject, moduleObject, currentNode = [], processRefresh }, ref) => {
 
-  const instockId = id;
+  const instockRef = useRef();
 
   const [skus, setSkus] = useState([]);
 
-  // 0：新建 49：审批中 50：拒绝 98：入库中 99：入库完成
-  const [status, setStatus] = useState(0);
+  const actions = [];
+  currentNode.map((item) => {
+    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
+      return item.logResult.actionResults.map((item) => {
+        return actions.push({ action: item.action, actionId: item.documentsActionId });
+      });
+    }
+    return null;
+  });
+
+  const [key, setKey] = useState('detail');
 
   const [details, setDetails] = useState([]);
 
   const [positions, setPositions] = useState({});
-
-  const orderStatus = () => {
-    switch (status) {
-      case -1:
-        return {
-          buttonText: '已拒绝',
-          buttonDisabled: true,
-          text: '已拒绝',
-        };
-      case 0:
-        return {
-          buttonText: '审批中',
-          buttonDisabled: true,
-          text: '审批中',
-        };
-      case 1:
-        return {
-          buttonText: '提交核实',
-          buttonDisabled: false,
-          text: '待入库',
-        };
-      case 49:
-        return {
-          buttonText: '异常审核中',
-          buttonDisabled: true,
-          text: '异常审批中',
-        };
-      case 50:
-        return {
-          buttonText: '已拒绝',
-          buttonDisabled: true,
-          text: '异常审批拒绝',
-        };
-      case 98:
-        return {
-          buttonText: '批量入库',
-          buttonDisabled: false,
-          text: '进行中',
-        };
-      case 99:
-        return {
-          buttonText: '入库完成',
-          buttonDisabled: true,
-          text: '入库完成',
-        };
-      default:
-        return {};
-    }
-  };
-
-  const module = (value) => {
-    switch (value) {
-      case 'procurementOrder':
-        return '采购单';
-      default:
-        return '请选择';
-    }
-  };
 
   const getPosition = (data, skuId, position = {}) => {
     if (!Array.isArray(data)) {
@@ -202,32 +147,40 @@ const Detail = ({ id }) => {
     }
   };
 
-  let number = 0;
-  let newNumber = 0;
+  const detailsChange = (array) => {
+    let number = 0;
+    let newNumber = 0;
+    array.map((item) => {
+      number += (item.number || 0);
+      newNumber += (item.newNumber || 0);
+      return null;
+    });
+    setDetails(array);
+    setModuleObject({ ...moduleObject, number, newNumber });
+  };
 
   const { loading, data, run, refresh } = useRequest(instockOrderDetail, {
     manual: true,
     onSuccess: (res) => {
-      setStatus(res.state);
       if (Array.isArray(res && res.instockListResults)) {
-        setDetails(res.instockListResults.map((item) => {
-            const positions = getPosition(res && res.bindTreeView, item.skuId);
-            const detail = details.filter(skuItem => skuItem.instockListId === item.instockListId);
-            const number = item.realNumber;
-            return detail[0] || {
-              skuId: item.skuId,
-              skuResult: { ...item.skuResult, spuResult: item.spuResult },
-              number,
-              newNumber: number,
-              instockNumber: item.instockNumber,
-              instockListId: item.instockListId,
-              positions: [{
-                ...positions,
-                instockNumber: number,
-              }],
-            };
-          }),
-        );
+        const instockList = res.instockListResults.map((item) => {
+          const positions = getPosition(res && res.bindTreeView, item.skuId);
+          const detail = details.filter(skuItem => skuItem.instockListId === item.instockListId);
+          const number = item.realNumber;
+          return detail[0] || {
+            skuId: item.skuId,
+            skuResult: { ...item.skuResult, spuResult: item.spuResult },
+            number,
+            newNumber: number,
+            instockNumber: item.instockNumber,
+            instockListId: item.instockListId,
+            positions: [{
+              ...positions,
+              instockNumber: number,
+            }],
+          };
+        });
+        detailsChange(instockList);
       }
       const allSku = getChildren(res && res.bindTreeView, res && res.instockListResults, true) || [];
       if (positions.key) {
@@ -241,14 +194,6 @@ const Detail = ({ id }) => {
     },
   });
 
-  const logResult = data
-    &&
-    data.logResults
-    &&
-    data.logResults[data.logResults.length - 1] || {};
-
-  const logUser = logResult.createUserResult || {};
-
   const { loading: CodeLoading, run: CodeRun } = useRequest(
     batchBind,
     {
@@ -256,21 +201,46 @@ const Detail = ({ id }) => {
     },
   );
 
-  details.map((item) => {
-    number += (item.number || 0);
-    newNumber += (item.newNumber || 0);
-    return null;
+  const { loading: checkNumberLoading, run: checkNumberRun } = useRequest(checkNumberTrue, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+      processRefresh();
+      Message.toast('提报完成,请继续入库!');
+    },
   });
 
-  const [key, setKey] = useState('detail');
-
-  const [state, { toggle }] = useBoolean();
-
   useEffect(() => {
-    if (instockId) {
-      run({ data: { instockOrderId: instockId } });
+    if (id) {
+      run({ data: { instockOrderId: id } });
     }
-  }, [instockId]);
+  }, [id]);
+
+  const errorAction = (actionId) => {
+    const errors = details.filter(item => item.number !== item.newNumber);
+    if (errors.length > 0) {
+      history.push({
+        pathname: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockError}`,
+        state: {
+          details,
+          id,
+        },
+      });
+    } else {
+      checkNumberRun({
+        data: { instockOrderId: id, state: 98, actionId },
+      });
+    }
+  };
+
+  const instockAction = ({ array, actionId }) => {
+    instockRef.current.instock({ details: array || details, actionId });
+  };
+
+  useImperativeHandle(ref, () => ({
+    errorAction,
+    instockAction,
+  }));
 
 
   if (loading) {
@@ -283,144 +253,14 @@ const Detail = ({ id }) => {
 
   const options = getChildren(data.bindTreeView, data.instockListResults, true) || [];
 
-  const source = (value) => {
-    switch (value) {
-      case 'procurementOrder':
-        return '采购单';
-      default:
-        return '请选择';
-    }
-  };
-
-  const backgroundDom = () => {
-
-    return <div style={{ backgroundColor: '#f9f9f9' }}>
-      <Card
-        title={<div style={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar shape='square' size={56}>入</Avatar>
-          <div style={{ marginLeft: 16 }}>
-            <div>
-              入库单 / {data.coding}
-            </div>
-            <Space>
-              {data.urgent ?
-                <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 24px' }}>加急</Button> : null}
-              <Button
-                color='default'
-                fill='outline'
-                style={{
-                  '--border-radius': '50px',
-                  padding: '4px 12px',
-                  '--background-color': '#fff7e6',
-                  '--text-color': '#fca916',
-                  '--border-width': '0px',
-                }}>{orderStatus().text}</Button>
-            </Space>
-          </div>
-        </div>}
-        bodyStyle={{ padding: 0 }}
-        className={styles.mainDiv}
-        style={{ backgroundColor: '#f9f9f9', border: 'solid 1px rgb(206 200 200)', paddingBottom: 8 }}
-        extra={<div style={{ paddingRight: 16 }} onClick={() => {
-          toggle();
-        }}><DownFill /></div>}
-      >
-        {!state && <Card
-          style={{ backgroundColor: '#f9f9f9' }}
-          title={<div>基本信息</div>}
-          bodyStyle={{ padding: '0 16px' }}
-          headerStyle={{ border: 'none' }}
-        >
-          <Space style={{ width: '100%' }} direction='vertical'>
-            <div>
-              <Label>入库主题：</Label>{data.theme}
-            </div>
-            <div>
-              <Label>入库类型：</Label>{data.type}
-            </div>
-            <div>
-              <Label>送料人员：</Label>{data.userResult && data.userResult.name}
-            </div>
-            <div>
-              <Label>送料时间：</Label>{data.registerTime}
-            </div>
-            <div>
-              <Label>库管人员：</Label>{data.stockUserResult && data.stockUserResult.name}
-            </div>
-            <Divider style={{ margin: 0 }} />
-            <div style={{ display: 'flex' }}>
-              <div style={{ flexGrow: 1 }}>
-                <Space direction='vertical' align='center'>
-                  <Label>入库物料</Label>{data.enoughNumber}
-                </Space>
-              </div>
-              <div style={{ flexGrow: 1, color: 'green' }}>
-                <Space direction='vertical' align='center'>
-                  已入库{data.notNumber}
-                </Space>
-              </div>
-              <div style={{ flexGrow: 1, color: 'red' }}>
-                <Space direction='vertical' align='center'>
-                  未入库{data.realNumber}
-                </Space>
-              </div>
-            </div>
-            <Divider style={{ margin: 0 }} />
-            <div>
-              <Label>申请人：</Label>{data.createUserResult && data.createUserResult.name}
-            </div>
-            <div>
-              <Label>申请时间：</Label>{data.createTime}
-            </div>
-            <div>
-              <Label>更新人员：</Label>{data.updateUserResult && data.updateUserResult.name}
-            </div>
-            <div>
-              <Label>更新时间：</Label>{data.updateTime}
-            </div>
-            <div>
-              <Label>关联任务：</Label>{source(data.source)}
-            </div>
-            <div>
-              <Label>备注说明：</Label>{data.remake}
-            </div>
-          </Space>
-        </Card>}
-      </Card>
-      <Card
-        title={<div>入库信息</div>}
-        style={{ backgroundColor: '#f9f9f9' }}
-        bodyStyle={{ padding: 8, backgroundColor: '#fff', border: 'solid 1px rgb(206 200 200)', borderRadius: 10 }}
-        headerStyle={{ border: 'none' }}
-      >
-        {logUser.name ? <Space style={{ width: '100%' }} direction='vertical'>
-            <div style={{ display: 'flex' }}>
-              <Label>库管人员：</Label>
-              <MyEllipsis width='60%'>{logUser.name} / {logUser.roleName} / {logUser.deptName}</MyEllipsis>
-            </div>
-            <div>
-              <Label>入库时间：</Label>{logResult.instockTime}
-            </div>
-            <div>
-              <Label>库管意见：</Label>{logResult.remark}
-            </div>
-          </Space>
-          :
-          <div>暂无</div>
-        }
-      </Card>
-    </div>;
-  };
-
   const type = () => {
     switch (key) {
       case 'detail':
         return <InstockDetails
           CodeLoading={CodeLoading}
           CodeRun={CodeRun}
-          status={status}
           details={details}
-          setDetails={setDetails}
+          setDetails={detailsChange}
           getSkus={getSkus}
           positions={positions}
           setPositions={setPositions}
@@ -428,9 +268,12 @@ const Detail = ({ id }) => {
           setSkus={setSkus}
           options={options}
           refresh={refresh}
+          instockAction={instockAction}
+          data={data}
+          actions={actions}
         />;
       case 'record':
-        return <ListByInstockOrder id={instockId} />;
+        return <ListByInstockOrder id={id} />;
       case 'log':
         return <MyEmpty />;
       default:
@@ -438,56 +281,24 @@ const Detail = ({ id }) => {
     }
   };
 
-  return <>
-    <MyBottom
-      leftActuions={status === 1 && <div>
-        <div>计划 / 实际</div>
-        <div>{number} / <span style={{ color: number === newNumber ? 'blue' : 'red' }}>{newNumber}</span></div>
-      </div>}
-      noBottom={status === 0}
-      buttons={<Space>
-        {status !== 99 && <Button
-          color='primary'
-          fill='outline'
-          onClick={() => {
-            history.goBack();
-          }}
-        >暂停入库</Button>}
-        <InstockActions
-          refresh={refresh}
-          setDetails={setDetails}
-          status={status}
-          details={details}
-          orderStatus={orderStatus}
-          id={instockId}
-          CodeRun={CodeRun}
-          CodeLoading={CodeLoading}
-        />
-      </Space>}
-    >
-      <div>
-        {!id && <MyNavBar title='入库单详情' />}
-        <div>
-          {backgroundDom()}
-          <Tabs
-            activeKey={key}
-            style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999,marginTop:18 }}
-            onChange={(key) => {
-              setKey(key);
-            }}
-          >
-            <Tabs.Tab title={<div>入库明细</div>} key='detail' />
-            <Tabs.Tab title={<div>入库记录</div>} key='record' />
-            <Tabs.Tab title={<div>动态日志</div>} key='log' />
-          </Tabs>
-          <div style={{ backgroundColor: '#eee' }}>
-            {type()}
-          </div>
-        </div>
-      </div>
-    </MyBottom>
 
+  return <>
+
+    <Show data={data} type={type()} typeKey={key} setKey={setKey} />
+
+    <Instock
+      instockOrderId={id}
+      CodeLoading={CodeLoading}
+      ref={instockRef}
+      refresh={refresh}
+      CodeRun={CodeRun}
+      setDetail={detailsChange}
+      processRefresh={processRefresh}
+    />
+
+    {checkNumberLoading && <MyLoading />}
   </>;
+
 };
 
-export default Detail;
+export default React.forwardRef(Detail);

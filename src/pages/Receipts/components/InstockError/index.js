@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Card, Divider, Space } from 'antd-mobile';
-import Label from '../../../../components/Label';
-import { useRequest } from '../../../../../util/Request';
-import { MyLoading } from '../../../../components/MyLoading';
-import MyEmpty from '../../../../components/MyEmpty';
-import MyEllipsis from '../../../../components/MyEllipsis';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
-import UpLoadImg from '../../../../components/Upload';
+import { useRequest } from '../../../../util/Request';
+import Label from '../../../components/Label';
+import MyEllipsis from '../../../components/MyEllipsis';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import UpLoadImg from '../../../components/Upload';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
 
 const InstockError = ({ id }) => {
 

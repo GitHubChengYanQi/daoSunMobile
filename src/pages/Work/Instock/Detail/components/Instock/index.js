@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useRef, useState } from 'react';
 import MyPopup from '../../../../../components/MyPopup';
 import { Card, Dialog, List, TextArea } from 'antd-mobile';
 import MyAntList from '../../../../../components/MyAntList';
@@ -8,10 +8,25 @@ import { useRequest } from '../../../../../../util/Request';
 import { history } from 'umi';
 import BottomButton from '../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../components/MyLoading';
+import MyEmpty from '../../../../../components/MyEmpty';
 
-const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) => {
+const Instock = ({ refresh, CodeRun, CodeLoading, setDetail, instockOrderId, processRefresh }, ref) => {
 
   const [data, setData] = useState({});
+
+  const [details, setDetails] = useState([]);
+
+  const [actionId, setActionId] = useState();
+
+  const refPopup = useRef();
+
+  const instock = ({ details, actionId }) => {
+    setActionId(actionId);
+    setDetails(details);
+    refPopup.current.open(false);
+  };
+
+  useImperativeHandle(ref, () => ({ instock }));
 
   // 入库
   const { loading: instockLoading, run: instockRun } = useRequest({
@@ -28,13 +43,16 @@ const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) =>
             history.goBack();
           } else {
             refresh();
-            setDetails([]);
+            setDetail([]);
+            if (res) {
+              processRefresh();
+            }
           }
         },
         actions: [[
           {
             key: 'back',
-            text: '返回入库列表',
+            text: '返回',
           },
           {
             key: 'next',
@@ -46,13 +64,17 @@ const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) =>
     },
   });
 
+  const skuDetails = details.filter(item => {
+    return !(item.positions && item.positions.length === 1 && (!item.positions[0] || !item.positions[0].positionId));
+  });
 
   return <>
-    <MyPopup position='bottom' title='入库确认' ref={ref}>
-      <Card title={<div>入库明细</div>}>
+    <MyPopup position='bottom' title='入库确认' ref={refPopup}>
+      <Card title={<div style={{ fontWeight: 400 }}>入库明细</div>}>
         <MyAntList>
+          {skuDetails.length === 0 && <MyEmpty />}
           {
-            details.map((item, index) => {
+            skuDetails.map((item, index) => {
               if (item.positions && item.positions.length === 1 && (!item.positions[0] || !item.positions[0].positionId)) {
                 return null;
               }
@@ -78,10 +100,12 @@ const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) =>
           }
         </MyAntList>
       </Card>
-      <Card style={{ paddingBottom: 70 }} title={<div>入库确认</div>}>
+      <Card style={{ paddingBottom: 70 }} title={<div style={{ fontWeight: 400 }}>入库确认</div>}>
         <MyAntList>
-          <List.Item extra={<MyDatePicker onChange={value => setData({ ...data, instockTime: value })}
-                                          value={data.instockTime} />}>
+          <List.Item
+            extra={<MyDatePicker
+              onChange={value => setData({ ...data, instockTime: value })}
+              value={data.instockTime} />}>
             入库时间
           </List.Item>
           <List.Item>
@@ -179,16 +203,18 @@ const Instock = ({ details, setDetails, refresh, CodeRun, CodeLoading }, ref) =>
               });
             }
             return null;
-
           });
 
           instockRun({
             data: {
+              instockOrderId,
+              actionId,
               ...data,
               skuParams,
             },
           });
         }}
+        rightDisabled={skuDetails.length === 0}
         leftText='取消'
         rightText='确认'
       />

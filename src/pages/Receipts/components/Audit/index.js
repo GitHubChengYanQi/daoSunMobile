@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Space, Toast } from 'antd-mobile';
-import MentionsNote from '../../../../components/MentionsNote';
-import { useRequest } from '../../../../../util/Request';
+import { useRequest } from '../../../../util/Request';
+import MentionsNote from '../../../components/MentionsNote';
 
 const Audit = ({ detail = {}, id, refresh }) => {
 
@@ -14,13 +14,6 @@ const Audit = ({ detail = {}, id, refresh }) => {
   const [userIds, setUserIds] = useState([]);
 
   const [note, setNote] = useState('');
-
-  const clearState = () => {
-    setVisible(false);
-    setNote('');
-    setUserIds([]);
-    setImgs([]);
-  };
 
   // 执行审批接口
   const { loading, run: processLogRun } = useRequest(
@@ -36,14 +29,12 @@ const Audit = ({ detail = {}, id, refresh }) => {
           content: '审批完成！',
           position: 'bottom',
         });
-        clearState();
       },
       onError: () => {
         Toast.show({
           content: '审批失败！',
           position: 'bottom',
         });
-        clearState();
       },
     },
   );

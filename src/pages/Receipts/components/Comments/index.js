@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import BottomButton from '../../../../components/BottomButton';
 import { Button, Card, Dialog, List, Loading, Space, Toast } from 'antd-mobile';
-import MentionsNote from '../../../../components/MentionsNote';
-import { useRequest } from '../../../../../util/Request';
 import { FormOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
-import ImgUpload from '../../../../components/Upload/ImgUpload';
-import { Message } from '../../../../components/Message';
+import MyAntList from '../../../components/MyAntList';
+import MentionsNote from '../../../components/MentionsNote';
+import { Message } from '../../../components/Message';
+import ImgUpload from '../../../components/Upload/ImgUpload';
+import { useRequest } from '../../../../util/Request';
 
 const Comments = ({ detail = {}, id, refresh }) => {
 
@@ -57,7 +57,7 @@ const Comments = ({ detail = {}, id, refresh }) => {
       <Card title={`评论(${detail.remarks.length})`} extra={<FormOutlined onClick={() => {
         setVisible(true);
       }} />}>
-        <List>
+        <MyAntList>
           {
             detail.remarks.map((items, index) => {
               return <List.Item
@@ -86,7 +86,7 @@ const Comments = ({ detail = {}, id, refresh }) => {
               </List.Item>;
             })
           }
-        </List>
+        </MyAntList>
       </Card> :
       <div style={{ padding: 16 }}>
         <Button

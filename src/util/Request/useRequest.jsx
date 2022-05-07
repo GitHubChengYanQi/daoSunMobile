@@ -9,6 +9,9 @@ const useRequest = (config, options) => {
   };
 
   const formatResult = (response) => {
+    if (!response) {
+      return {};
+    }
     if (typeof response.data === 'undefined') {
       return response;
     }
@@ -19,7 +22,7 @@ const useRequest = (config, options) => {
     requestMethod: (params) => {
       return ajaxService({
         ...config,
-        ...params
+        ...params,
       });
     },
     onError: (result) => {

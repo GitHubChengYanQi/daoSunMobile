@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "start": "cross-env UMI_ENV=test umi dev",
+    "ren": "cross-env UMI_ENV=ren umi dev",
     "build": "cross-env UMI_ENV=daoxin umi build",
     "buildZjzc": "cross-env UMI_ENV=zjzc umi build",
     "buildHunHe": "cross-env UMI_ENV=hunhe umi build",
@@ -23,6 +24,7 @@
     "array-tree-filter": "^2.1.0",
     "crypto-js": "^4.1.1",
     "dva": "^2.6.0-beta.6",
+    "enc": "^0.4.0",
     "eslint-plugin-react-hooks": "^4.3.0",
     "html-react-parser": "^1.4.0",
     "html2canvas": "^1.3.3",

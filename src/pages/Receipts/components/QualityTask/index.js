@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Card, Divider, List, Popup, } from 'antd-mobile';
-import MyEmpty from '../../../../components/MyEmpty';
-import { useRequest } from '../../../../../util/Request';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { useRequest } from '../../../../util/Request';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyEmpty from '../../../components/MyEmpty';
 
 const QualityTask = ({ detail }) => {
 

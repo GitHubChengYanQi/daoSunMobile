@@ -122,7 +122,7 @@ const Detail = (props) => {
             customerName: item.customerResult && item.customerResult.customerName,
           };
         });
-        history.push(`/Work/Workflow?type=createInstock&skus=${JSON.stringify(skus)}&source=procurementOrder&sourceId${id}`);
+        history.push(`/Receipts/ReceiptsCreate?type=createInstock&skus=${JSON.stringify(skus)}&source=procurementOrder&sourceId${id}`);
       }}
     />
   </>;

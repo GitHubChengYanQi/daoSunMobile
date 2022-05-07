@@ -5,7 +5,6 @@ import { Avatar } from 'antd';
 import Icon from '../../../../components/Icon';
 import { AuditOutlined } from '@ant-design/icons';
 import { Skeleton } from 'weui-react-v2';
-import MyEmpty from '../../../../components/MyEmpty';
 import style from './index.css';
 
 const Process = (
@@ -30,17 +29,18 @@ const Process = (
         },
       });
     }
-  }, []);
+  }, [type]);
 
   const status = (step, stepStatus) => {
     const fontSize = '8vw';
+    const color = stepStatus === 'success' && 'green';
     switch (step.auditType) {
       case 'start':
-        return <Icon type='icon-caigou_faqiren' style={{ fontSize }} />;
+        return <Icon type='icon-caigou_faqiren' style={{ fontSize, color }} />;
       case 'send':
-        return <Icon type='icon-caigou_chaosong' style={{ fontSize }} />;
+        return <Icon type='icon-caigou_chaosong' style={{ fontSize, color }} />;
       case 'route':
-        return <AuditOutlined style={{ fontSize }} />;
+        return <AuditOutlined style={{ fontSize, color }} />;
       case 'process':
         switch (step.auditRule.type) {
           case 'audit':
@@ -57,12 +57,12 @@ const Process = (
               case 0:
                 return <Icon type='icon-caigou_shenpibutongguo1' style={{ fontSize }} />;
               case 1:
-                return <Icon type='icon-caigou_shenpitongguo1' style={{ fontSize }} />;
+                return <Icon type='icon-caigou_shenpitongguo1' style={{ fontSize, color }} />;
               default:
                 return <Icon type='icon-caigou_weishenpi1' style={{ fontSize }} />;
             }
           default:
-            return <Icon type='icon-caigou_dongzuo' style={{ fontSize }} />;
+            return <Icon type='icon-caigou_dongzuo' style={{ fontSize, color }} />;
         }
       default:
         break;
@@ -143,7 +143,7 @@ const Process = (
         stepStatus = 'error';
         break;
       case 1:
-        stepStatus = 'process';
+        stepStatus = 'success';
         break;
       default:
         break;
@@ -161,7 +161,7 @@ const Process = (
               >{createName.substring(0, 1)}</Avatar>
               {createName}
             </Space> : rules(step.auditRule)}
-            icon={<div>{status(step)}</div>}
+            icon={<div>{status(step, stepStatus)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
@@ -179,7 +179,7 @@ const Process = (
                 </Space>
               </div>
             }
-            icon={<div>{status(step)}</div>}
+            icon={<div>{status(step, stepStatus)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1)}
         </div>;
@@ -211,7 +211,7 @@ const Process = (
   }
 
   if (!(auditData || data)) {
-    return <MyEmpty description='暂无审批' />;
+    return <></>;
   }
 
 

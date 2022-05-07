@@ -108,7 +108,7 @@ const MyStart = (props) => {
               key={index}
               extra={status(items.status)}
               onClick={() => {
-                history.push(`/Work/Workflow?id=${items.processTaskId}`);
+                history.push(`/Receipts/ReceiptsDetail?id=${items.processTaskId}`);
               }}
             >
               <Space direction='vertical'>

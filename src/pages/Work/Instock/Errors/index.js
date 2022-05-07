@@ -1,26 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button, Card, List, Space, TextArea, Toast } from 'antd-mobile';
-import MyAntList from '../../../components/MyAntList';
+import { Button, Card, Space, TextArea, Toast } from 'antd-mobile';
 import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import MyBottom from '../../../components/MyBottom';
-import Process from '../../PurchaseAsk/components/Process';
 import { useRequest } from '../../../../util/Request';
 import { history } from 'umi';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import UpLoadImg from '../../../components/Upload';
 import MyEllipsis from '../../../components/MyEllipsis';
+import { ReceiptsEnums } from '../../../Receipts';
 
-const Errors = (props) => {
+const Errors = ({ state = {}, setType }) => {
 
-  const state = props.location.state;
+  const details = state.details;
 
-  const details = state && state.details;
-
-  const id = state && state.id;
+  const id = state.id;
 
   const [remark, setRemark] = useState('');
 
@@ -35,9 +32,13 @@ const Errors = (props) => {
       Toast.show({
         content: '提交成功！',
       });
-      history.push(`/Work/Instock/Detail?id=${id}`);
+      history.goBack();
     },
   });
+
+  useEffect(() => {
+    setType(ReceiptsEnums.verifyError);
+  }, []);
 
   if (!details || !Array.isArray(details) || !id) {
     return <MyEmpty />;
@@ -122,26 +123,25 @@ const Errors = (props) => {
       </div>}>
       </Card>
       {successDetails.length > 0 &&
-        <Card style={{ boxShadow: 'rgb(109 110 112 / 49%) 0px 0px 5px', margin: '8px 0' }} title={<div>数量正常明细</div>}>
-          {successDetails.map((item, index) => {
-            return <Space
-              direction='vertical'
-              key={index}
-              style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
-            >
-              <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
-              <div style={{ display: 'flex' }}>
-                <div style={{ flexGrow: 1 }}>
-                  <Label>计划待入库：</Label>{item.number}
-                </div>
-                <div style={{ flexGrow: 1 }}>
-                  <Label>实际待入库：</Label>{item.newNumber}
-                </div>
+      <Card style={{ boxShadow: 'rgb(109 110 112 / 49%) 0px 0px 5px', margin: '8px 0' }} title={<div>数量正常明细</div>}>
+        {successDetails.map((item, index) => {
+          return <Space
+            direction='vertical'
+            key={index}
+            style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
+          >
+            <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
+            <div style={{ display: 'flex' }}>
+              <div style={{ flexGrow: 1 }}>
+                <Label>计划待入库：</Label>{item.number}
               </div>
-            </Space>;
-          })}
-        </Card>}
-      <Process type='instockError' card />
+              <div style={{ flexGrow: 1 }}>
+                <Label>实际待入库：</Label>{item.newNumber}
+              </div>
+            </div>
+          </Space>;
+        })}
+      </Card>}
     </MyBottom>
 
     {loading && <MyLoading />}
