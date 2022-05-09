@@ -1,6 +1,5 @@
 import { useLocation } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyBottom from '../../components/MyBottom';
 import Process from '../../Work/PurchaseAsk/components/Process';
@@ -11,6 +10,7 @@ import InstockError from '../components/InstockError';
 import Detail from '../../Work/Instock/Detail';
 import Comments from '../components/Comments';
 import { ReceiptsEnums } from '../index';
+import { useRequest } from '../../../util/Request';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
