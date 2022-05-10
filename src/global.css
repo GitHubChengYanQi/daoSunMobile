@@ -2,16 +2,9 @@ html, body, #root {
   height: 100%;
 }
 
-div {
-  font-size: 5vw;
-}
-
-input {
-  font-size: 5vw !important;
-}
-
 body {
   margin: 0;
+  background-color: #E1EBF6
 }
 
 :global .am-badge-text {
@@ -21,6 +14,16 @@ body {
 :global .weui-popup-content {
   position: fixed !important;
 }
+
+.adm-button-primary {
+  --color: #2680EB;
+}
+
+:root {
+  --adm-color-primary:#2680EB;
+}
+
+
 
 
 

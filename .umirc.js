@@ -9,19 +9,6 @@ export default {
     // '@primary-color': '#CDDC39',
   },
 
-  extraPostCSSPlugins: [
-    pxtoviewport({
-      viewportWidth: 750,
-      viewportHeight: 4925,
-      unitPrecision: 5,
-      viewportUnit: 'vw',
-      selectorBlackList: [],
-      minPixelValue: 1,
-      mediaQuery: false,
-      exclude: [/dumi/, /ant/],
-    }),
-  ],
-
   publicPath: process.env.ENV === 'test' ? '/' : '/cp/',
   history: { type: 'hash' },
 
@@ -30,7 +17,6 @@ export default {
   dynamicImport: {
     loading: '@/Loading',
   },
-  title: '道昕云',
   dll: false,
 
   // routes: {

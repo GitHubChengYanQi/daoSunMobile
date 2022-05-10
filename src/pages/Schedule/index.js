@@ -1,9 +1,9 @@
 import { Brief, Panel, PanelItem } from 'weui-react-v2';
 import React from 'react';
 import { Badge, Calendar } from 'antd';
-import styles from '@/pages/Home/index.css';
 import { ExclamationCircleOutlined, QqOutlined } from '@ant-design/icons';
 import { Collapse, Tabs } from 'antd-mobile';
+import styles from '../Home/index.less';
 
 
 const Schedule = () => {
@@ -68,15 +68,15 @@ const Schedule = () => {
     ) : null;
   }
 
- const Date = () => {
-   return (
-     <Collapse>
-       <Collapse.Panel key='1' title='日历'>
-         <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
-       </Collapse.Panel>
-     </Collapse>
-   );
- }
+  const Date = () => {
+    return (
+      <Collapse>
+        <Collapse.Panel key='1' title='日历'>
+          <Calendar dateCellRender={dateCellRender} monthCellRender={monthCellRender} />
+        </Collapse.Panel>
+      </Collapse>
+    );
+  };
   return (
     <>
       <Tabs>

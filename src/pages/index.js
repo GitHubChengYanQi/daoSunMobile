@@ -11,14 +11,15 @@ import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.css';
 import * as VConsole from 'vconsole';
+import { useModel } from '../.umi/plugin-model/useModel';
 
 const iconSize = getHeader() ? 30 : 40;
 
 const Index = (props) => {
 
-  const userInfo = props.userInfo;
+  const { initialState } = useModel('@@initialState');
 
-  if (!IsDev() && userInfo && userInfo.name === '程彦祺') {
+  if (!IsDev() && initialState.name === '程彦祺') {
     new VConsole();
   }
 
@@ -80,37 +81,35 @@ const Index = (props) => {
             setModule(value);
           }}>
           <TabBar.Item
-            title='首页'
+            title='任务'
+            key='/Notice'
+            icon={(check) => {
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
+            }}
+          />
+          <TabBar.Item
+            title='消息'
+            key='/OrCode'
+            icon={(check) => {
+              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
+            }}
+          />
+          <TabBar.Item
+            title={module === '/Home' ? '扫码' : '首页'}
             key='/Home'
             icon={(check) => {
               return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-shouye-xuanzhong' : 'icon-shouye2'} />;
             }}
           />
           <TabBar.Item
-            title='通知'
-            key='/Notice'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
-            }}
-          />
-          {(getHeader() || IsDev()) &&
-          <TabBar.Item
-            title='扫码'
-            key='/OrCode'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
-            }}
-          />
-          }
-          <TabBar.Item
-            title='工作'
+            title='报表'
             key='/Work'
             icon={(check) => {
               return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-gongzuo-xuanzhong' : 'icon-gongzuo'} />;
             }}
           />
           <TabBar.Item
-            title='报表'
+            title='我的'
             key='/Report'
             icon={(check) => {
               return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-baobiao-xuanzhong' : 'icon-baobiao'} />;
@@ -123,4 +122,4 @@ const Index = (props) => {
   );
 };
 
-export default connect(({ userInfo, qrCode }) => ({ userInfo, qrCode }))(Index);
+export default connect(({ qrCode }) => ({ qrCode }))(Index);
