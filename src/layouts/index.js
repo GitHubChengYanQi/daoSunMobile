@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'umi';
 import { connect } from 'dva';
 import { Dialog } from 'antd-mobile';
+import styles from './index.less';
+import * as VConsole from 'vconsole';
 
 // import * as VConsole from 'vconsole';
 
@@ -78,11 +80,12 @@ const BasicLayout = (props) => {
   useEffect(() => {
     receive();
     qrCodeAction();
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no,viewport-fit=cover');
   }, [location.pathname]);
 
   return (
     // <Auth>
-    <div style={{paddingBottom:'10vh'}}>
+    <div className={styles.safeArea}>
       {props.children}
     </div>
     // </Auth>

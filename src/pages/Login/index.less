@@ -11,6 +11,10 @@
   margin: 0;
 }
 
+.form {
+  margin-bottom: 27px;
+}
+
 .login {
   padding: 53px 20px;
   background-image: url("../../assets/login.png");
@@ -36,6 +40,14 @@
   font-weight: normal;
   letter-spacing: 0;
   color: #333333;
+  display: flex;
+  flex-direction: column;
+
+  span {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999999;
+  }
 }
 
 .formDiv {
@@ -46,23 +58,16 @@
   border-radius: 8px;
 }
 
-.form :global .adm-list-body {
-  background-color: rgba(0, 0, 0, 0);
-}
-
-.form :global .adm-list-item-content-main {
-  padding: 18px 0;
-}
-
-.form :global .adm-list {
-  --padding-left: 0 !important;
-  --padding-right: 0 !important;
-  --border-top: none;
-}
 
 .account {
   display: flex;
   align-items: center;
+  padding: 16px 7px;
+  border-bottom: 1px solid #D9D9D9;
+
+  :global .anticon {
+    font-size: 18px;
+  }
 }
 
 .accountInput {
@@ -82,10 +87,6 @@
   color: #999999;
 }
 
-.form :global .adm-form-footer {
-  padding: 0;
-  margin-top: 27px;
-}
 
 .foterAction {
   display: flex;
@@ -125,5 +126,17 @@
   padding: 0 64px;
   border-color: #D9D9D9;
   margin: 0;
+}
+
+.sendCode {
+  background-color: rgba(0, 0, 0, 0);
+  border: none;
+}
+
+.sendCode {
+  &:disabled {
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+  }
 }
 

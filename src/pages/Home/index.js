@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
 import { Logo } from '../Logo';
-import { Avatar, Card, Grid } from 'antd-mobile';
+import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
 import DataShow from './component/DatsShow';
 import { Badge } from 'antd';
@@ -22,7 +22,7 @@ const Home = () => {
     <div className={style.enterprise}>
       <div className={style.enterpriseLeft}>
         <div className={style.logo}>
-          <img src={Logo().logo2} width='87' height={87} alt='' />
+          <img src={Logo().logo2} width={46} height={46} alt='' />
         </div>
         <div className={style.enterpriseTitle}>
         <span className={style.enterpriseName}>
@@ -33,8 +33,8 @@ const Home = () => {
        </span>
         </div>
       </div>
-      <div className={style.avatar}>
-        <Avatar src={avatar} />
+      <div>
+        <img src={avatar} width={46} height={46} />
       </div>
     </div>
     <Card

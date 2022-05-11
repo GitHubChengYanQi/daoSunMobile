@@ -8,7 +8,7 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.143'
+  'http://192.168.1.119'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -39,7 +39,7 @@ ajaxService.interceptors.response.use((response) => {
   if (errCode !== 0) {
     if (errCode === 1502) {
       cookie.remove('cheng-token');
-      cookie.set('currentUrl',window.location.hash);
+      cookie.set('currentUrl', window.location.hash);
       // window.location.reload();
     } else if (response.message.indexOf('JSON') !== -1) {
       Dialog.alert({
@@ -63,7 +63,10 @@ ajaxService.interceptors.response.use((response) => {
     } else if (response.errCode !== 200) {
       Dialog.alert({
         content: response.message,
+        closeOnMaskClick: true,
+        confirmText: '确认',
       });
+
     }
     throw new Error(response.message);
   }

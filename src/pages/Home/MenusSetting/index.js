@@ -10,6 +10,7 @@ import { Handle } from '../../components/DndKit/Item';
 import { useModel } from '../../../.umi/plugin-model/useModel';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
+import MyNavBar from '../../components/MyNavBar';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
@@ -90,122 +91,125 @@ const MenusSetting = () => {
     }} /> : null;
   };
 
-  return <div className={style.menuSetting}>
-    <Card
-      className={style.card}
-      title={<div className={style.cardTitle}>常用功能</div>}
-      extra={<LinkButton
-        className={style.menuSys}
-        onClick={() => {
-          if (menuSys) {
-            const details = commonlyMenus.map((item, index) => {
-              return {
-                ...item,
-                sort: index,
-              };
-            });
-            addRun({
-              data: { details },
-            });
-            return;
+  return <div>
+    <MyNavBar title='所有功能' />
+    <div className={style.menuSetting}>
+      <Card
+        className={style.card}
+        title={<div className={style.cardTitle}>常用功能</div>}
+        extra={<LinkButton
+          className={style.menuSys}
+          onClick={() => {
+            if (menuSys) {
+              const details = commonlyMenus.map((item, index) => {
+                return {
+                  ...item,
+                  sort: index,
+                };
+              });
+              addRun({
+                data: { details },
+              });
+              return;
+            }
+            toggle();
+          }}
+        >
+          {
+            !menuSys
+              ?
+              <>
+                管理<SetOutline style={{ marginLeft: 5 }} />
+              </>
+              :
+              '保存'
           }
-          toggle();
-        }}
+        </LinkButton>}
+        bodyClassName={(show || menuSys) ? style.commonlyOpen : style.cardBody}
+        headerClassName={style.cardHeader}
       >
         {
-          !menuSys
+          (show || menuSys)
             ?
-            <>
-              管理<SetOutline style={{ marginLeft: 5 }} />
-            </>
+            <Sortable
+              refresh={refresh}
+              handle={!menuSys}
+              style={{ display: 'block' }}
+              definedItem={Item}
+              Container={(props) => {
+                if (props.children.length === 0) {
+                  return <div style={{ padding: '16px 21px' }}>请添加应用</div>;
+                }
+                return <Grid columns={4} gap={0}>
+                  {props.children.map((item, index) => {
+                    return <Grid.Item className={style.menus} key={index}>
+                      {item}
+                    </Grid.Item>;
+                  })}
+                </Grid>;
+              }}
+              liBorder
+              items={commonlyMenus.map(item => {
+                return { key: item.code, ...item };
+              })}
+              onDragEnd={(value) => {
+                setCommonlyMenus(value);
+              }}
+            />
             :
-            '保存'
-        }
-      </LinkButton>}
-      bodyClassName={(show || menuSys) ? style.commonlyOpen : style.cardBody}
-      headerClassName={style.cardHeader}
-    >
-      {
-        (show || menuSys)
-          ?
-          <Sortable
-            refresh={refresh}
-            handle={!menuSys}
-            style={{ display: 'block' }}
-            definedItem={Item}
-            Container={(props) => {
-              if (props.children.length === 0) {
-                return <div style={{ padding: '16px 21px' }}>请添加应用</div>;
-              }
-              return <Grid columns={4} gap={0}>
-                {props.children.map((item, index) => {
-                  return <Grid.Item className={style.menus} key={index}>
-                    {item}
-                  </Grid.Item>;
-                })}
-              </Grid>;
-            }}
-            liBorder
-            items={commonlyMenus.map(item => {
-              return { key: item.code, ...item };
-            })}
-            onDragEnd={(value) => {
-              setCommonlyMenus(value);
-            }}
-          />
-          :
-          <div className={style.commonlyClose} onClick={() => {
-            showToggle();
-          }}>
-            <div className={style.commonlyLeft}>
-              已收起{commonlyMenus.length}个应用
+            <div className={style.commonlyClose} onClick={() => {
+              showToggle();
+            }}>
+              <div className={style.commonlyLeft}>
+                已收起{commonlyMenus.length}个应用
+              </div>
+              <div className={style.commonlyRight}>
+                {
+                  commonlyMenus.map((item, index) => {
+                    if (index < 5) {
+                      return <Menus code={item.code} key={index} onlyIcon />;
+                    }
+                    return null;
+                  })
+                }
+                <DownOutline className={style.commonlyIcon} />
+              </div>
             </div>
-            <div className={style.commonlyRight}>
+        }
+      </Card>
+
+
+      {
+        sysMenus.map((item, index) => {
+          const subMenus = item.subMenus || [];
+          return <Card
+            key={index}
+            className={style.card}
+            title={<div className={style.cardTitle}>
+              {item.name}
+              {addButton(item.id, item.name)}
+            </div>}
+            bodyClassName={style.menuCardBody}
+            headerClassName={style.cardHeader}
+          >
+            <Grid columns={4} gap={0}>
               {
-                commonlyMenus.map((item, index) => {
-                  if (index < 5) {
-                    return <Menus code={item.code} key={index} onlyIcon />;
-                  }
-                  return null;
+                subMenus.map((item, index) => {
+                  return <Grid.Item className={style.menus} key={index}>
+                    <Badge content={addButton(item.code, item.name)} color='var(--adm-color-primary)'>
+                      {menus(item)}
+                    </Badge>
+                  </Grid.Item>;
                 })
               }
-              <DownOutline className={style.commonlyIcon} />
-            </div>
-          </div>
+            </Grid>
+          </Card>;
+        })
       }
-    </Card>
 
-
-    {
-      sysMenus.map((item, index) => {
-        const subMenus = item.subMenus || [];
-        return <Card
-          key={index}
-          className={style.card}
-          title={<div className={style.cardTitle}>
-            {item.name}
-            {addButton(item.id, item.name)}
-          </div>}
-          bodyClassName={style.menuCardBody}
-          headerClassName={style.cardHeader}
-        >
-          <Grid columns={4} gap={0}>
-            {
-              subMenus.map((item, index) => {
-                return <Grid.Item className={style.menus} key={index}>
-                  <Badge content={addButton(item.code, item.name)} color='var(--adm-color-primary)'>
-                    {menus(item)}
-                  </Badge>
-                </Grid.Item>;
-              })
-            }
-          </Grid>
-        </Card>;
-      })
-    }
-
-    {(detailLoading || addLoading) && <MyLoading />}
-  </div>;
+      {(detailLoading || addLoading) && <MyLoading />}
+    </div>
+  </div>
 };
 
 export default MenusSetting;
