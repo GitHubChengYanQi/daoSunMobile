@@ -1,4 +1,4 @@
-import { Button, Checkbox, Toast } from 'antd-mobile';
+import { Button, Checkbox, Dialog, Toast } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
 import React from 'react';
 import { history } from 'umi';
@@ -9,7 +9,7 @@ import { Logo } from '../Logo';
 import { Form } from '@formily/antd';
 import { Field } from '@formily/react';
 import Icon from '../components/Icon';
-import { createForm, onFieldReact } from '@formily/core';
+import { createForm } from '@formily/core';
 import { Code, Phone } from './components/Field';
 
 
@@ -28,17 +28,15 @@ const Sms = () => {
     },
   });
 
-  const form = createForm({
-    effects() {
-      onFieldReact('code', (field) => {
-        // field.query('phone').get('value');
-        field.data = {aa:11}
-      });
-    },
-  });
+  const form = createForm();
 
   const submit = () => {
     form.submit((values) => {
+      if (!values.phone){
+        return Dialog.alert({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true, });
+      }else if (!values.code) {
+        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true, });
+      }
       run({ data: values });
     });
   };
@@ -89,49 +87,6 @@ const Sms = () => {
       </div>
     </div>
   </div>;
-
-  // (
-  //
-  //   <Card title='首次登录请输入手机号'>
-  //     <List
-  //       style={{
-  //         '--prefix-width': '6em',
-  //       }}
-  //     >
-  //       <List.Item prefix='手机号'>
-  //         <Input placeholder='请输入手机号' clearable onChange={(value) => {
-  //           setSms({ ...sms, phone: value });
-  //         }} />
-  //       </List.Item>
-  //       <List.Item prefix='验证码' extra={
-  //         <SendCode
-  //           onCaptcha={() => {
-  //             run(
-  //               {
-  //                 data: {
-  //                   phone: sms && sms.phone,
-  //                 },
-  //               },
-  //             );
-  //             return true;
-  //           }}
-  //         />}>
-  //         <Input placeholder='请输入验证码' clearable onChange={(value) => {
-  //           setSms({ ...sms, code: value });
-  //         }} />
-  //       </List.Item>
-  //       <List.Item>
-  //         <Button color='primary' style={{ width: '100%' }} onClick={() => {
-  //           login({
-  //             data: {
-  //               ...sms,
-  //             },
-  //           });
-  //         }}>登录</Button>
-  //       </List.Item>
-  //     </List>
-  //   </Card>
-  // );
 };
 
 export default Sms;

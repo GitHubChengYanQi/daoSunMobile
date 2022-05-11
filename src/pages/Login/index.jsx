@@ -62,7 +62,7 @@ export const VerificationCode = (props) => {
       placeholder='请输入验证码'
       {...props}
     />
-    <img onClick={codeChange} src={`${process.env.api}/kaptcha?${count}`} height='24px' />
+    <img onClick={codeChange} src={`${process.env.api}/kaptcha?${count}`} height='24px' alt='' />
   </div>;
 };
 
@@ -71,6 +71,8 @@ const Login = () => {
   const form = createForm();
 
   const { initialState, refresh } = useModel('@@initialState');
+
+  const kaptchaOpen = initialState.kaptchaOpen;
 
   const { loading, run } = useRequest(
     {
@@ -89,11 +91,11 @@ const Login = () => {
 
   const submit = () => {
     form.submit((values) => {
-      if (initialState && !values.kaptchaOpen) {
-        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true, });
+      if (kaptchaOpen && !values.kaptchaOpen) {
+        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true });
       }
       if (!values.username || !values.password) {
-        return Dialog.alert({ content: '请输入正确的账户或密码!', confirmText: '重新输入', closeOnMaskClick: true, });
+        return Dialog.alert({ content: '请输入正确的账户或密码!', confirmText: '重新输入', closeOnMaskClick: true });
       }
       run(
         {
@@ -103,54 +105,52 @@ const Login = () => {
     });
   };
 
-  return (
-    <div className={style.login}>
-      <div className={style.formDiv}>
-        <div style={{ textAlign: 'center' }} className={style.logo}>
-          <img src={Logo().logo1} width='87' height={87} alt='' />
-        </div>
-        <div className={style.enterpriseName}>{process.env.enterpriseName}</div>
+  return <div className={style.login}>
+    <div className={style.formDiv}>
+      <div style={{ textAlign: 'center' }} className={style.logo}>
+        <img src={Logo().logo1} width='87' height={87} alt='' />
+      </div>
+      <div className={style.enterpriseName}>{process.env.enterpriseName}</div>
 
-        <Form
-          className={style.form}
-          form={form}
-          layout='vertical'
-          feedbackLayout='terse'
-        >
-          <Field name='username' component={[Username]} />
-          <Field name='password' component={[Password]} />
-          <Field hidden={!initialState} name='kaptchaOpen' component={[VerificationCode]} />
-        </Form>
+      <Form
+        className={style.form}
+        form={form}
+        layout='vertical'
+        feedbackLayout='terse'
+      >
+        <Field name='username' component={[Username]} />
+        <Field name='password' component={[Password]} />
+        <Field hidden={!kaptchaOpen} name='kaptchaOpen' component={[VerificationCode]} />
+      </Form>
 
-        <div hidden className={style.foterAction}>
-          <div className={style.privacy}>
-            《隐私政策》
-          </div>
-          <div style={{ flexGrow: 1 }} />
-          <div className={style.remember}>
-            <Checkbox icon={(checked) => {
-              return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
-            }}>记住密码</Checkbox>
-          </div>
+      <div hidden className={style.foterAction}>
+        <div className={style.privacy}>
+          《隐私政策》
         </div>
-        <Button
-          className={style.submit}
-          color='primary'
-          loading={loading}
-          size='large'
-          block
-          type='submit'
-          onClick={submit}
-        >
-          {loading ? '登录中' : '立即登录'}
-        </Button>
-        <Divider className={style.password} style={{ margin: 0 }}>忘记登录密码</Divider>
-        <div className={style.technical}>
-          本系统由<a>道昕网络</a>提供技术支持
+        <div style={{ flexGrow: 1 }} />
+        <div className={style.remember}>
+          <Checkbox icon={(checked) => {
+            return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
+          }}>记住密码</Checkbox>
         </div>
       </div>
+      <Button
+        className={style.submit}
+        color='primary'
+        loading={loading}
+        size='large'
+        block
+        type='submit'
+        onClick={submit}
+      >
+        {loading ? '登录中' : '立即登录'}
+      </Button>
+      <Divider className={style.password} style={{ margin: 0 }}>忘记登录密码</Divider>
+      <div className={style.technical}>
+        本系统由<a>道昕网络</a>提供技术支持
+      </div>
     </div>
-  );
+  </div>;
 };
 
 export default connect(({ qrCode }) => ({ qrCode }))(Login);

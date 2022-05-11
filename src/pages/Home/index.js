@@ -7,14 +7,14 @@ import DataShow from './component/DatsShow';
 import { Badge } from 'antd';
 import { useRequest } from '../../util/Request';
 import Menus from './component/Menus';
-import { history } from 'umi';
-import avatar from '../../assets/avatar.png'
+import avatar from '../../assets/avatar.png';
+import { MyLoading } from '../components/MyLoading';
 
 const menusDetailApi = { url: '/mobelTableView/detail', method: 'GET' };
 
 const Home = () => {
 
-  const { data } = useRequest(menusDetailApi);
+  const { loading, data } = useRequest(menusDetailApi);
 
   const menus = data && data.details || [];
 
@@ -34,7 +34,7 @@ const Home = () => {
         </div>
       </div>
       <div>
-        <img src={avatar} width={46} height={46} />
+        <img src={avatar} width={46} height={46} alt='' />
       </div>
     </div>
     <Card
@@ -62,6 +62,7 @@ const Home = () => {
     </Card>
     <Card
       className={style.dataCard}
+      style={{marginBottom:0}}
       title={<div className={style.cardTitle}>常用功能</div>}
       bodyClassName={style.manuCardBody}
       headerClassName={style.cardHeader}
@@ -74,13 +75,14 @@ const Home = () => {
             </Grid.Item>;
           })
         }
-        <Grid.Item className={style.menus} onClick={() => {
-          history.push('/Home/MenusSetting');
-        }}>
+        <Grid.Item className={style.menus}>
           <Menus fontSize={50} />
         </Grid.Item>
       </Grid>
     </Card>
+
+
+    {loading && <MyLoading />}
   </div>;
 };
 

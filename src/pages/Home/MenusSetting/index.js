@@ -44,14 +44,16 @@ const MenusSetting = () => {
 
   const sysMenus = initialState.menus || [];
 
+  console.log(sysMenus);
+
   const menus = (item) => {
     return <Menus
       textOverflow={70}
       module={module}
       code={item.code}
       name={item.name}
+      disabled={menuSys}
       fontSize={40}
-      menuSys={menuSys}
     />;
   };
 
@@ -182,6 +184,28 @@ const MenusSetting = () => {
       {
         sysMenus.map((item, index) => {
           const subMenus = item.subMenus || [];
+          const otherMenus = [];
+          switch (item.id) {
+            case 'ERP':
+              otherMenus.push({ name: '自由入库', code: 'freeInstock' });
+              otherMenus.push({ name: '自由出库', code: 'freeOutStock' });
+              break;
+            case 'production':
+              otherMenus.push({ name: '生产任务', code: 'productionTask' });
+              otherMenus.push({ name: '领料管理', code: 'pickLists' });
+              otherMenus.push({ name: '我的领料', code: 'myCart' });
+              break;
+            case 'REPAIR':
+              otherMenus.push({ name: '工单管理', code: 'Repair' });
+              otherMenus.push({ name: '创建报修', code: 'CreateRepair' });
+              break;
+            case 'BASE_SYSTEM':
+              otherMenus.push({ name: '退出登录', code: 'LogOut' });
+              break;
+            default:
+              break;
+          }
+
           return <Card
             key={index}
             className={style.card}
@@ -194,7 +218,7 @@ const MenusSetting = () => {
           >
             <Grid columns={4} gap={0}>
               {
-                subMenus.map((item, index) => {
+                subMenus.concat(otherMenus).map((item, index) => {
                   return <Grid.Item className={style.menus} key={index}>
                     <Badge content={addButton(item.code, item.name)} color='var(--adm-color-primary)'>
                       {menus(item)}
@@ -209,7 +233,7 @@ const MenusSetting = () => {
 
       {(detailLoading || addLoading) && <MyLoading />}
     </div>
-  </div>
+  </div>;
 };
 
 export default MenusSetting;

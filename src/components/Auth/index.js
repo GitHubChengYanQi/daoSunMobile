@@ -60,7 +60,7 @@ export const loginBycode = async () => {
     });
     if (token) {
       cookie.set('cheng-token', token);
-      window.location.reload();
+      // window.location.reload();
     } else {
       login();
     }

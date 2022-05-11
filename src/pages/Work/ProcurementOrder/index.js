@@ -1,15 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MyList from '../../components/MyList';
 import { Card,Space } from 'antd-mobile';
-import { history } from 'umi';
+import { history, useLocation } from 'umi';
 import { orderList } from './Url';
 import MyNavBar from '../../components/MyNavBar';
 import Label from '../../components/Label';
 import styles from '../Production/index.css';
 
-const ProcurementOrder = () => {
+const Order = () => {
 
   const ref = useRef();
+
+  const params = useLocation();
+  console.log(params);
 
   const [data, setData] = useState([]);
 
@@ -61,4 +64,4 @@ const ProcurementOrder = () => {
   </>;
 };
 
-export default ProcurementOrder;
+export default Order;

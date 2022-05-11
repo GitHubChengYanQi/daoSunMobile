@@ -11,6 +11,7 @@ import { connect } from 'dva';
 import style from './index.less';
 import * as VConsole from 'vconsole';
 import { useModel } from '../.umi/plugin-model/useModel';
+import MyEmpty from './components/MyEmpty';
 
 const iconSize = 20;
 
@@ -46,16 +47,10 @@ const Index = (props) => {
     switch (module) {
       case '/Home':
         return <Home {...props} />;
-      case '/Notice':
-        return <Notice {...props} />;
-      case '/OrCode':
-        return <OrCode {...props} />;
       case '/Work':
         return <Work {...props} />;
-      case '/Report':
-        return <Report {...props} />;
       default:
-        return <></>;
+        return <MyEmpty height='100%' />;
     }
   };
 
@@ -70,6 +65,11 @@ const Index = (props) => {
         safeArea
         activeKey={module}
         onChange={(value) => {
+          if (module === '/Home' && value === '/Home') {
+            props.dispatch({
+              type: 'qrCode/wxCpScan',
+            });
+          }
           route(value);
           setModule(value);
         }}>
@@ -80,7 +80,7 @@ const Index = (props) => {
         />
         <TabBar.Item
           title='消息'
-          key='/OrCode'
+          key='/Message'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />}
         />
         <TabBar.Item

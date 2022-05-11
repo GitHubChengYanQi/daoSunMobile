@@ -58,7 +58,7 @@ const DataShow = () => {
 
   return (
     <>
-      <canvas id='myChart' height={200} style={{margin:'-35px',marginLeft:'-6px'}}/>
+      <canvas id='myChart' height={200} style={{margin:'-35px',marginRight:'-50%'}}/>
     </>
   );
 };
