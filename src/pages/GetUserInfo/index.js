@@ -16,7 +16,7 @@ const GetUserInfo = () => {
   }
 
   try {
-    const [,data] = token.split('.');
+    const [, data] = token.split('.');
 
     const base = Base64.parse(data);
 
@@ -26,17 +26,17 @@ const GetUserInfo = () => {
      * token 过期就返回空
      */
     if (moment().format('X') > userInfo.exp) {
-      return {}
+      return {};
     }
     return {
       token,
-      userInfo
-    }
+      userInfo,
+    };
 
-  }catch (e) {
-    console.error(e)
-    return {}
+  } catch (e) {
+    console.error(e);
+    return {};
   }
 
-}
+};
 export default GetUserInfo;

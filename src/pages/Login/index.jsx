@@ -1,41 +1,85 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { history } from 'umi';
-import { Button, Form, Input, Space } from 'antd-mobile';
-import React from 'react';
-import logo from '../../assets/logo.png';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import style from './index.css';
+import { Button, Checkbox, Dialog, Divider, Input, Toast } from 'antd-mobile';
+import React, { useRef, useState } from 'react';
+import style from './index.less';
 import { connect } from 'dva';
+import { useModel } from 'umi';
+import Icon from '../components/Icon';
+import { useBoolean } from 'ahooks';
+import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
+import { Logo } from '../Logo';
+import { Field } from '@formily/react';
+import { createForm } from '@formily/core';
+import { Form } from '@formily/antd';
+import { MyLoading } from '../components/MyLoading';
+import { Message } from '../components/Message';
+import MyDialog from '../components/MyDialog';
+
 
 export const Username = (props) => {
-  return <Space style={{ width: '100%' }}>
-    <UserOutlined />
+  return <div className={style.account}>
+    <Icon type='icon-zhanghao' />
     <Input
-      style={{ width: '80vw' }}
+      className={style.accountInput}
       name='account'
-      placeholder='手机号/邮箱/账号'
+      placeholder='请输入手机号/邮箱/账号'
       autoComplete='off'
       {...props}
     />
-  </Space>;
+  </div>;
 };
 
 export const Password = (props) => {
-  return <Space>
-    <LockOutlined />
+
+  const [showPassword, { toggle }] = useBoolean(true);
+
+  return <div className={style.account}>
+    <Icon type='icon-a-lianji1' />
     <Input
-      style={{ width: '80vw' }}
-      type='password'
-      placeholder='请填写最低长度为6位的密码'
+      className={style.accountInput}
+      type={showPassword ? 'password' : 'text'}
+      placeholder='请输入密码'
       {...props}
     />
-  </Space>;
+    <Button onClick={() => {
+      toggle();
+    }} fill='none' style={{ padding: 0,color:'rgb(126 123 123)' }}>
+      {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
+    </Button>
+  </div>;
 };
 
-const Login = (props) => {
+export const VerificationCode = ({ count, codeChange, ...props }) => {
 
-  const { loading, run } = useRequest(
+  return <div className={style.account}>
+    <Icon type='icon-yanzhengma' />
+    <Input
+      className={style.accountInput}
+      placeholder='请输入验证码'
+      {...props}
+    />
+    <img onClick={codeChange} src={`${process.env.api}/kaptcha?${count}`} height='24px' alt='' />
+  </div>;
+};
+
+const form = createForm();
+
+const Login = () => {
+
+  const dialogRef = useRef();
+
+  const { initialState, refresh,loading  } = useModel('@@initialState');
+
+  const [count, setCount] = useState(0);
+
+  const codeChange = () => {
+    setCount(parseInt(Math.random() * 10, 10));
+  };
+
+  const kaptchaOpen = initialState.kaptchaOpen;
+
+  const { loading:loginLoading, run } = useRequest(
     {
       url: '/login/wxCp',
       method: 'POST',
@@ -43,66 +87,91 @@ const Login = (props) => {
       manual: true,
       onSuccess: async (res) => {
         if (res) {
-          await cookie.set('cheng-token', res);
-          props.dispatch({
-            type: 'userInfo/getUserInfo',
-          });
-          if (window.location.href.indexOf('Login') !== -1){
-            return history.push('/')
-          }
-          window.location.reload();
+          cookie.set('cheng-token', res);
+          refresh();
         }
+      },
+      onError: () => {
+        Toast.show({ content: '登录失败！', position: 'bottom' });
+        codeChange();
       },
     },
   );
 
-  return (
-    <div className={style.login} style={{ backgroundColor: '#fff', height: '100vh' }}>
-      <div style={{ textAlign: 'center', padding: 24 }}>
-        <Space direction='vertical'>
-          <img src={logo} width='20%' alt='' />
-          <h2 style={{ fontWeight: 'bolder' }}>道昕智造</h2>
-        </Space>
+  const submit = () => {
+    form.submit((values) => {
+      if (kaptchaOpen === 'true' && !values.kaptchaOpen) {
+        return dialogRef.current.open('验证码不能为空');
+      }
+      if (!values.username) {
+        return dialogRef.current.open('账号不能为空');
+      }else if (!values.password){
+        return dialogRef.current.open('密码不能为空');
+      }
+      return run(
+        {
+          data: { ...values },
+        },
+      );
+    });
+  };
+
+  return <div className={style.login}>
+    <div className={style.formDiv}>
+      <div style={{ textAlign: 'center' }} className={style.logo}>
+        <img src={Logo.LoginLogo()} width='87' height={87} alt='' />
       </div>
+      <div className={style.enterpriseName}>欢迎使用{initialState.systemName}</div>
+
       <Form
-        onFinish={(values) => {
-          run(
-            {
-              data: { ...values },
-            },
-          );
-        }}
-        layout='horizontal'
-        footer={
-          <Button
-            loading={loading}
-            size='large'
-            block
-            type='submit'
-            style={{ backgroundColor: '#1845B5', color: '#fff', '--border-radius': '20px' }}>
-            {loading ? '登录中' : '登录'}
-          </Button>
-        }
+        className={style.form}
+        form={form}
+        layout='vertical'
+        feedbackLayout='terse'
       >
-        <Form.Item name='username' rules={[{ required: true, message: '请填写：手机号/邮箱/账号' }]}>
-          <Username />
-        </Form.Item>
-        <Form.Item name='password' rules={[
-          { required: true, message: '请填写密码' },
-          () => ({
-            validator(rule, value) {
-              if (!value || value.length >= 6) {
-                return Promise.resolve();
-              }
-              return Promise.reject(new Error('密码长度不应低于6位!'));
-            },
-          }),
-        ]}>
-          <Password />
-        </Form.Item>
+        <Field name='username' component={[Username]} />
+        <Field name='password' component={[Password]} />
+        <Field hidden={kaptchaOpen === 'false'} name='kaptchaOpen' component={[VerificationCode, { count, codeChange }]} />
       </Form>
+
+      <div hidden className={style.foterAction}>
+        <div className={style.privacy}>
+          《隐私政策》
+        </div>
+        <div style={{ flexGrow: 1 }} />
+        <div className={style.remember}>
+          <Checkbox icon={(checked) => {
+            return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
+          }}>记住密码</Checkbox>
+        </div>
+      </div>
+      <Button
+        className={style.submit}
+        color='primary'
+        loading={loading}
+        size='large'
+        block
+        type='submit'
+        onClick={submit}
+      >
+        {loading ? '登录中' : '立即登录'}
+      </Button>
+      <Divider className={style.password} style={{ margin: 0 }}>
+        <div onClick={()=>{
+          dialogRef.current.open('请联系管理员!');
+        }}>
+          忘记登录密码
+        </div>
+      </Divider>
+      <div className={style.technical}>
+        本系统由<a>道昕网络</a>提供技术支持
+      </div>
     </div>
-  );
+
+    <MyDialog ref={dialogRef} />
+
+    {(loading || loginLoading) && <MyLoading />}
+  </div>;
 };
 
 export default connect(({ qrCode }) => ({ qrCode }))(Login);

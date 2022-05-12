@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { instockOrderDetail } from '../../ProcurementOrder/Url';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import { getHeader } from '../../../components/GetHeader';
@@ -19,6 +18,7 @@ import MyEllipsis from '../../../components/MyEllipsis';
 import { Avatar } from 'antd';
 import { DownFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
+import { instockOrderDetail } from '../../Order/Url';
 
 const Detail = (props) => {
 

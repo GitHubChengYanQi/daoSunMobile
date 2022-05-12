@@ -12,11 +12,15 @@ import LinkButton from '../../components/LinkButton';
 import { Avatar } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../util/Request';
-import { connect } from 'dva';
 import { MyLoading } from '../../components/MyLoading';
 import SelectUser from '../Production/CreateTask/components/SelectUser';
+import { useModel } from 'umi';
 
-const ProductionTask = (props) => {
+const ProductionTask = () => {
+
+  const { initialState } = useModel('@@initialState');
+
+  const userInfo = initialState.userInfo || {}
 
   const [data, setData] = useState([]);
 
@@ -38,7 +42,7 @@ const ProductionTask = (props) => {
       if (key !== 'create') {
         history.push(`/Work/ProductionTask/Detail?id=${res.productionTaskId}`);
       } else {
-        ref.current.submit({ createUser: props.userInfo.id });
+        ref.current.submit({ createUser: userInfo.id });
         setVisible(false);
       }
 
@@ -54,10 +58,10 @@ const ProductionTask = (props) => {
   const ref = useRef();
 
   useEffect(() => {
-    if (ref && ref.current && props.userInfo.id) {
-      ref.current.submit({ userId: props.userInfo.id });
+    if (ref && ref.current && userInfo.id) {
+      ref.current.submit({ userId: userInfo.id });
     }
-  }, [props]);
+  }, []);
 
   if (loading) {
     return <MyLoading />;
@@ -79,16 +83,16 @@ const ProductionTask = (props) => {
   const type = (value, data) => {
     switch (value) {
       case 'user':
-        ref.current.submit({ userId: props.userInfo.id, ...data });
+        ref.current.submit({ userId: userInfo.id, ...data });
         break;
       case 'create':
-        ref.current.submit({ createUser: props.userInfo.id, ...data });
+        ref.current.submit({ createUser: userInfo.id, ...data });
         break;
       case 'get':
         ref.current.submit({ noUser: true, ...data });
         break;
         case 'in':
-        ref.current.submit({ userIds: props.userInfo.id, ...data });
+        ref.current.submit({ userIds: userInfo.id, ...data });
         break;
       default:
         break;
@@ -153,7 +157,7 @@ const ProductionTask = (props) => {
                     await run({
                       data: {
                         productionTaskId: item.productionTaskId,
-                        userId: props.userInfo.id,
+                        userId: userInfo.id,
                       },
                     });
                   },
@@ -251,4 +255,4 @@ const ProductionTask = (props) => {
     />
   </>;
 };
-export default connect(({ userInfo }) => ({ userInfo }))(ProductionTask);
+export default ProductionTask;

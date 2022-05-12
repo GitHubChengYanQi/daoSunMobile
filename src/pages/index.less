@@ -1,0 +1,60 @@
+
+.pageIndex {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+
+  .content {
+    flex-grow: 1;
+    overflow: auto;
+    height: calc(100% - 70px);
+  }
+}
+
+.normal {
+  font-family: Georgia, sans-serif;
+  margin-top: 4em;
+}
+
+.welcome {
+  height: 512px;
+  background: url(../assets/yay.jpg) no-repeat center 0;
+  background-size: 512px 512px;
+}
+
+.list {
+  font-size: 1.2em;
+  margin: 1.8em 0 0;
+  list-style: none;
+  line-height: 1.5em;
+}
+
+.list code {
+  background: #f7f7f7;
+}
+
+.tabBarItem {
+  font-family: PingFang SC Regular, sans-serif;
+  height: 70px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+
+  :global .adm-tab-bar-wrap {
+    height: 100%;
+  }
+
+  :global .adm-tab-bar-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  :global .adm-tab-bar-item-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0;
+    margin-top: 8px;
+  }
+}

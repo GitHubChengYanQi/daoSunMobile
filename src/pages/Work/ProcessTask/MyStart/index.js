@@ -2,13 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Dropdown, List, Selector, Space, Tag } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { history } from 'umi';
-import { useSetState } from 'ahooks';
-import { connect } from 'dva';
 import Label from '../../../components/Label';
+import { useModel } from 'umi';
 
 const MyStart = (props) => {
 
-  const userInfo = props.userInfo;
+  const { initialState } = useModel('@@initialState');
+
+  const userInfo = initialState.userInfo || {};
 
   const ref = useRef();
 
@@ -131,4 +132,4 @@ const MyStart = (props) => {
   </>;
 };
 
-export default connect(({ userInfo }) => ({ userInfo }))(MyStart);
+export default MyStart;

@@ -1,21 +1,28 @@
 import React, { useEffect, useRef, useState } from 'react';
 import MyList from '../../components/MyList';
-import { Card,Space } from 'antd-mobile';
-import { history } from 'umi';
+import { Card, Space } from 'antd-mobile';
+import { history, useLocation } from 'umi';
 import { orderList } from './Url';
 import MyNavBar from '../../components/MyNavBar';
 import Label from '../../components/Label';
 import styles from '../Production/index.css';
+import MyEmpty from '../../components/MyEmpty';
 
-const ProcurementOrder = () => {
+const Order = () => {
 
   const ref = useRef();
+
+  const { query } = useLocation();
 
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    ref.current.submit({ type: 1 });
+    ref.current && ref.current.submit({ type: query && query.type });
   }, []);
+
+  if (!query.type) {
+    return <MyEmpty height='100%' />;
+  }
 
   return <>
     <div style={{ position: 'sticky', top: 0 }}>
@@ -34,7 +41,7 @@ const ProcurementOrder = () => {
             key={index}
             className={styles.item}
             onClick={() => {
-              history.push(`/Work/ProcurementOrder/Detail?id=${item.orderId}`);
+              history.push(`/Work/Order/Detail?id=${item.orderId}`);
             }}
           >
             <Space direction='vertical'>
@@ -61,4 +68,4 @@ const ProcurementOrder = () => {
   </>;
 };
 
-export default ProcurementOrder;
+export default Order;
