@@ -7,7 +7,7 @@ import { useBoolean } from 'ahooks';
 import LinkButton from '../../components/LinkButton';
 import { Sortable } from '../../components/DndKit/Sortable';
 import { Handle } from '../../components/DndKit/Item';
-import { useModel } from '../../../.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
