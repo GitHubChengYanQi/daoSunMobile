@@ -2,13 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Dropdown, List, Selector, Space, Tag } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { history } from 'umi';
-import { connect } from 'dva';
 import Label from '../../../components/Label';
-import { useModel } from '../../../../.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 
 const MyStart = (props) => {
 
   const { initialState } = useModel('@@initialState');
+  console.log(initialState);
 
   const ref = useRef();
 

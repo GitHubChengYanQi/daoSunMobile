@@ -2,15 +2,13 @@ import Home from './Home';
 import { TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import React, { useState } from 'react';
-import Notice from './Notice';
 import OrCode from './OrCode';
 import Work from './Work';
-import Report from './Report';
 import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.less';
 import * as VConsole from 'vconsole';
-import { useModel } from '../.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 import MyEmpty from './components/MyEmpty';
 
 const iconSize = 20;

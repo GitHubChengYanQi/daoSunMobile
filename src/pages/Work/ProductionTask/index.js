@@ -14,7 +14,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import SelectUser from '../Production/CreateTask/components/SelectUser';
-import { useModel } from '../../../.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 
 const ProductionTask = () => {
 

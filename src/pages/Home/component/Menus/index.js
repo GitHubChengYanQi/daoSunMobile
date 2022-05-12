@@ -103,6 +103,8 @@ const Menus = (
       return MenusStyle({ icon: 'icon-gengduo', url: '/CreateRepair' });
     case 'LogOut':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Login' });
+    case 'action':
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/ProcessTask' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }

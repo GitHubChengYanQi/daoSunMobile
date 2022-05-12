@@ -4,7 +4,7 @@ import { Button, Checkbox, Dialog, Divider, Input } from 'antd-mobile';
 import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { connect } from 'dva';
-import { useModel } from '../../.umi/plugin-model/useModel';
+import { useModel } from 'umi';
 import Icon from '../components/Icon';
 import { useBoolean } from 'ahooks';
 import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
