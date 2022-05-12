@@ -1,6 +1,6 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { Button, Checkbox, Dialog, Divider, Input } from 'antd-mobile';
+import { Button, Checkbox, Dialog, Divider, Input, Toast } from 'antd-mobile';
 import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { connect } from 'dva';
@@ -12,6 +12,7 @@ import { Logo } from '../Logo';
 import { Field } from '@formily/react';
 import { createForm } from '@formily/core';
 import { Form } from '@formily/antd';
+import { MyLoading } from '../components/MyLoading';
 
 
 export const Username = (props) => {
@@ -60,9 +61,9 @@ export const VerificationCode = ({ count, codeChange, ...props }) => {
   </div>;
 };
 
-const Login = () => {
+const form = createForm();
 
-  const form = createForm();
+const Login = () => {
 
   const { initialState, refresh } = useModel('@@initialState');
 
@@ -83,10 +84,11 @@ const Login = () => {
       onSuccess: async (res) => {
         if (res) {
           cookie.set('cheng-token', res);
-          await refresh();
+          refresh();
         }
       },
       onError: () => {
+        Toast.show({ content: '登录失败！', position: 'bottom' });
         codeChange();
       },
     },
@@ -100,7 +102,7 @@ const Login = () => {
       if (!values.username || !values.password) {
         return Dialog.alert({ content: '请输入正确的账户或密码!', confirmText: '重新输入', closeOnMaskClick: true });
       }
-      run(
+      return run(
         {
           data: { ...values },
         },
@@ -153,6 +155,8 @@ const Login = () => {
         本系统由<a>道昕网络</a>提供技术支持
       </div>
     </div>
+
+    {loading && <MyLoading />}
   </div>;
 };
 

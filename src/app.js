@@ -47,6 +47,7 @@ export async function getInitialState() {
       return { kaptchaOpen: res.kaptchaOpen };
     }
   } else {
+    console.log(type);
     // token存在
     if (getHeader() && type) {
       // 是企业微信登录并且type存在
@@ -60,13 +61,16 @@ export async function getInitialState() {
     } else {
       // type不存在
       await wxTicket();
-      const currentUrl = cookie.get('currentUrl');
 
-      if (currentUrl) {
-        history.replace(currentUrl.replace('#', ''));
+      const currentUrl = cookie.get('currentUrl');
+      const url = currentUrl && currentUrl.replace('#', '');
+      if (url && url !== '/Login') {
+        history.replace(url);
+        cookie.remove('currentUrl');
       } else if (window.location.href.indexOf('Login') !== -1) {
         history.replace('/');
       }
+
       return await getUserInfo();
     }
   }
