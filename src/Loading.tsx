@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { Skeleton } from 'weui-react-v2';
+import { MyLoading } from './pages/components/MyLoading';
 
-export default ()=>{
-  return <Skeleton loading={true} />
+export default () => {
+  return <MyLoading skeleton />;
 }

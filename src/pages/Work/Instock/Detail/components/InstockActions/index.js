@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import { useRequest } from '../../../../../../util/Request';
 import { Button, Toast } from 'antd-mobile';
 import { history } from 'umi';
-import { checkNumberTrue } from '../../../../ProcurementOrder/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
 import Instock from '../Instock';
+import { checkNumberTrue } from '../../../../Order/Url';
 
 const InstockActions = (
   {

@@ -1,10 +1,42 @@
-import { Dialog, DotLoading } from 'antd-mobile';
+import { Dialog } from 'antd-mobile';
+import style from './index.less';
+import { Logo } from '../../Logo';
+import React from 'react';
 
-export const MyLoading = ({ title }) => {
+export const MyLoading = ({ skeleton }) => {
+
+  const Loading = () => {
+    return <div>
+      <div className={style.loading}>
+        <div className={style.loader}>
+          <svg className={style.circular} viewBox='25 25 50 50'>
+            <circle className={style.path} cx='50' cy='50' r='20' fill='none' strokeWidth='1' strokeMiterlimit='10' />
+          </svg>
+        </div>
+        <div className={style.loadingLogo}>
+          <img src={Logo().logo2} width={46} height={46} alt='' />
+        </div>
+      </div>
+      <div>
+        浑河工业
+      </div>
+      <div>
+        HUNTS INDUSTRY
+      </div>
+    </div>;
+  };
+
+  if (skeleton) {
+    return <div className={style.skeleton}>
+      {Loading()}
+    </div>;
+  }
+
 
   return <Dialog
+    className={style.dialog}
     visible
-    style={{zIndex:10001}}
-    content={<div style={{textAlign:'center'}}>{title || '拼命加载中'}<DotLoading /></div>}
+    style={{ zIndex: 10001 }}
+    content={Loading()}
   />;
 };

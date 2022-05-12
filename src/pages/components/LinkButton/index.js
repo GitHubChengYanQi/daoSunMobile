@@ -1,9 +1,10 @@
 import React from 'react';
 import { Button } from 'antd-mobile';
 
-const LinkButton = ({ children, title, style, onClick, color, disabled }) => {
+const LinkButton = ({ children, title, style, onClick, color, disabled,className }) => {
 
   return <Button
+    className={className}
     color={color || 'primary'}
     disabled={disabled}
     fill='none'

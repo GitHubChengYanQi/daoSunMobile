@@ -1,7 +1,6 @@
 import Home from './Home';
-import { SafeArea, TabBar } from 'antd-mobile';
+import { TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
-import { getHeader } from './components/GetHeader';
 import React, { useState } from 'react';
 import Notice from './Notice';
 import OrCode from './OrCode';
@@ -9,16 +8,18 @@ import Work from './Work';
 import Report from './Report';
 import IsDev from '../components/IsDev';
 import { connect } from 'dva';
-import style from './index.css';
+import style from './index.less';
 import * as VConsole from 'vconsole';
+import { useModel } from '../.umi/plugin-model/useModel';
+import MyEmpty from './components/MyEmpty';
 
-const iconSize = getHeader() ? 30 : 40;
+const iconSize = 20;
 
 const Index = (props) => {
 
-  const userInfo = props.userInfo;
+  const { initialState } = useModel('@@initialState');
 
-  if (!IsDev() && userInfo && userInfo.name === '程彦祺') {
+  if (!IsDev() && initialState.name === '程彦祺') {
     new VConsole();
   }
 
@@ -46,81 +47,63 @@ const Index = (props) => {
     switch (module) {
       case '/Home':
         return <Home {...props} />;
-      case '/Notice':
-        return <Notice {...props} />;
-      case '/OrCode':
-        return <OrCode {...props} />;
       case '/Work':
         return <Work {...props} />;
-      case '/Report':
-        return <Report {...props} />;
       default:
-        return <></>;
+        return <MyEmpty height='100%' />;
     }
   };
 
 
   return (
-    <>
-      {content()}
-      {nav && <div style={{
-        position: 'fixed',
-        bottom: 0,
-        width: '100%',
-        zIndex: 999,
-        backgroundColor: '#fff',
-        boxShadow: 'rgb(24, 69, 181,0.1) 0px 0px 10px',
-      }}>
-        <TabBar
-          className={style.tabBarItem}
-          safeArea
-          activeKey={module}
-          onChange={(value) => {
-            route(value);
-            setModule(value);
-          }}>
-          <TabBar.Item
-            title='首页'
-            key='/Home'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-shouye-xuanzhong' : 'icon-shouye2'} />;
-            }}
-          />
-          <TabBar.Item
-            title='通知'
-            key='/Notice'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-tongzhi-xuanzhong' : 'icon-tongzhi'} />;
-            }}
-          />
-          {(getHeader() || IsDev()) &&
-          <TabBar.Item
-            title='扫码'
-            key='/OrCode'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-saoma-xuanzhong' : 'icon-saoma'} />;
-            }}
-          />
+    <div className={style.pageIndex}>
+      <div className={style.content}>
+        {content()}
+      </div>
+      {nav && <TabBar
+        className={style.tabBarItem}
+        safeArea
+        activeKey={module}
+        onChange={(value) => {
+          if (module === '/Home' && value === '/Home') {
+            props.dispatch({
+              type: 'qrCode/wxCpScan',
+            });
           }
-          <TabBar.Item
-            title='工作'
-            key='/Work'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-gongzuo-xuanzhong' : 'icon-gongzuo'} />;
-            }}
-          />
-          <TabBar.Item
-            title='报表'
-            key='/Report'
-            icon={(check) => {
-              return <Icon style={{ fontSize: iconSize }} type={check ? 'icon-baobiao-xuanzhong' : 'icon-baobiao'} />;
-            }}
-          />
-        </TabBar>
-        <SafeArea position='bottom' />
-      </div>}
-    </>
+          route(value);
+          setModule(value);
+        }}>
+        <TabBar.Item
+          title='任务'
+          key='/Notice'
+          icon={<Icon style={{ fontSize: iconSize }} type='icon-renwu1' />}
+        />
+        <TabBar.Item
+          title='消息'
+          key='/Message'
+          icon={<Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />}
+        />
+        <TabBar.Item
+          title={module === '/Home' ? '扫码' : '首页'}
+          key='/Home'
+          icon={<Icon
+            style={{ fontSize: iconSize }}
+            type={module === '/Home' ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
+          />}
+        />
+        <TabBar.Item
+          title='报表'
+          key='/Work'
+          icon={<Icon style={{ fontSize: iconSize }} type='icon-baobiao1' />}
+        />
+        <TabBar.Item
+          title='我的'
+          key='/Report'
+          icon={<Icon style={{ fontSize: iconSize }} type='icon-wode' />}
+        />
+      </TabBar>}
+    </div>
   );
 };
 
-export default connect(({ userInfo, qrCode }) => ({ userInfo, qrCode }))(Index);
+export default connect(({ qrCode }) => ({ qrCode }))(Index);
