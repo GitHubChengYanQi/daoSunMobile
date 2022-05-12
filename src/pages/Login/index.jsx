@@ -107,8 +107,10 @@ const Login = () => {
           closeOnMaskClick: true,
         });
       }
-      if (!values.username || !values.password) {
-        return dialogRef.current.open('请输入账户或密码!');
+      if (!values.username) {
+        return dialogRef.current.open('账号不能为空');
+      }else if (!values.password){
+        return dialogRef.current.open('密码不能为空');
       }
       return run(
         {

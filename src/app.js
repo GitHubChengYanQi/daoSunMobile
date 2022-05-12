@@ -70,7 +70,7 @@ export async function getInitialState() {
 
       const currentUrl = cookie.get('currentUrl');
       const url = currentUrl && currentUrl.replace('#', '');
-      if (url && url !== '/Login') {
+      if (url && (url !== '/Login')) {
         history.replace(url);
         cookie.remove('currentUrl');
       } else if (window.location.href.indexOf('Login') !== -1) {
