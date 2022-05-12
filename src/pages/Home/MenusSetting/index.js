@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Badge, Card, Grid, Toast } from 'antd-mobile';
 import Menus from '../component/Menus';
@@ -11,12 +11,18 @@ import { useModel } from 'umi';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
+import { connect } from 'dva';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
-const menusDetailApi = { url: '/mobelTableView/detail', method: 'GET' };
 
-const MenusSetting = () => {
+const MenusSetting = (props) => {
+
+  const { initialState, setInitialState } = useModel('@@initialState');
+
+  const userInfo = initialState.userInfo || {};
+
+  const userMenus = props.data.userMenus;
 
   const [commonlyMenus, setCommonlyMenus] = useState([]);
 
@@ -30,21 +36,29 @@ const MenusSetting = () => {
     manual: true,
     onSuccess: () => {
       toggle();
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
       Toast.show({ content: '保存成功！', position: 'bottom' });
     },
   });
 
-  const { loading: detailLoading } = useRequest(menusDetailApi, {
-    onSuccess: (res) => {
-      setCommonlyMenus(res.details || []);
-    },
-  });
-
-  const { initialState } = useModel('@@initialState');
-
-  const userInfo = initialState.userInfo || {};
 
   const sysMenus = userInfo.menus || [];
+
+  useEffect(() => {
+    if (userMenus) {
+      setCommonlyMenus(userMenus || []);
+    }
+  }, [userMenus]);
+
+  useEffect(() => {
+    if (!userMenus) {
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
+    }
+  }, []);
 
   const menus = (item) => {
     return <Menus
@@ -89,8 +103,8 @@ const MenusSetting = () => {
   const addButton = (code, name) => {
     const commonly = commonlyMenus.map(item => item.code);
     return (menuSys && !commonly.includes(code)) ? <AddOutline onClick={() => {
-      if (commonlyMenus.length >= 8){
-        return Toast.show({content:'最多添加8个常用功能！'});
+      if (commonlyMenus.length >= 8) {
+        return Toast.show({ content: '最多添加8个常用功能！' });
       }
       addAction({ code, name });
     }} /> : null;
@@ -251,9 +265,9 @@ const MenusSetting = () => {
         </Grid>
       </Card>
 
-      {(detailLoading || addLoading) && <MyLoading />}
+      {addLoading && <MyLoading />}
     </div>
   </div>;
 };
 
-export default MenusSetting;
+export default connect(({ data }) => ({ data }))(MenusSetting);

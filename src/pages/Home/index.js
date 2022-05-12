@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import style from './index.less';
 import { Logo } from '../Logo';
 import { Card, Grid } from 'antd-mobile';
@@ -8,22 +8,31 @@ import { Badge } from 'antd';
 import Menus from './component/Menus';
 import avatar from '../../assets/avatar.png';
 import { useModel } from 'umi';
+import { connect } from 'dva';
 
-const Home = () => {
+const Home = (props) => {
 
-  const { initialState  } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
-  const menus = initialState.userMenus || [];
+  const userMenus = props.data && props.data.userMenus;
+
+  useEffect(() => {
+    if (!userMenus) {
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
+    }
+  }, []);
 
   return <div className={style.home}>
     <div className={style.enterprise}>
       <div className={style.enterpriseLeft}>
         <div className={style.logo}>
-          <img src={Logo().logo2} width={46} height={46} alt='' />
+          <img src={Logo.HomeLogo()} width={46} height={46} alt='' />
         </div>
         <div className={style.enterpriseTitle}>
         <span className={style.enterpriseName}>
-          {process.env.enterpriseName}
+          {initialState.enterpriseName || '企业名称'}
         </span>
           <span className={style.enterpriseDescribe}>
           因为信任，所以简单
@@ -59,14 +68,14 @@ const Home = () => {
     </Card>
     <Card
       className={style.dataCard}
-      style={{marginBottom:0}}
+      style={{ marginBottom: 0 }}
       title={<div className={style.cardTitle}>常用功能</div>}
       bodyClassName={style.manuCardBody}
       headerClassName={style.cardHeader}
     >
       <Grid columns={3} gap={0}>
         {
-          menus.map((item, index) => {
+          (userMenus || []).map((item, index) => {
             return <Grid.Item className={style.menus} key={index}>
               <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
             </Grid.Item>;
@@ -80,4 +89,4 @@ const Home = () => {
   </div>;
 };
 
-export default Home;
+export default connect(({ data }) => ({ data }))(Home);

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'umi';
+import { useLocation, useModel } from 'umi';
 import { connect } from 'dva';
 import { Dialog } from 'antd-mobile';
 import styles from './index.less';
@@ -10,6 +10,8 @@ import * as VConsole from 'vconsole';
 const BasicLayout = (props) => {
 
   // const console = new VConsole();
+
+  const { initialState } = useModel('@@initialState');
 
   window.scrollTo(0, 0);
 
@@ -78,10 +80,13 @@ const BasicLayout = (props) => {
   };
 
   useEffect(() => {
-    receive();
     qrCodeAction();
-    window.document.title = process.env.title
   }, [location.pathname]);
+
+  useEffect(() => {
+    receive();
+    window.document.title = initialState.systemName || '系统名称';
+  }, []);
 
   return (
     // <Auth>

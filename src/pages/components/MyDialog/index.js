@@ -18,6 +18,7 @@ const MyDialog = ({ ...porps }, ref) => {
   }));
 
   return <Dialog
+    closeOnMaskClick
     className={style.dialog}
     visible={visible}
     content={
