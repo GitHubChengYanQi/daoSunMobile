@@ -12,7 +12,7 @@ export const Logo = () => {
     case 'daoxin':
       return {
         logo1:huntsLogo,
-        logo2:huntsLogo,
+        logo2:hunts2Logo,
       };
     case 'hunhe':
       return {

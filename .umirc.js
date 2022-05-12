@@ -13,6 +13,9 @@ export default {
   publicPath: process.env.ENV === 'test' ? '/' : '/cp/',
   history: { type: 'hash' },
 
+  hash:true,
+
+
   antd: false,
   dva: {},
   dynamicImport: {
