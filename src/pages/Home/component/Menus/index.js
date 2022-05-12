@@ -72,7 +72,7 @@ const Menus = (
     case 'outstockApply':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/OutstockApply' });
     case 'SalesOrder':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=0' });
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=2' });
     case 'stock':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/StoreHouse' });
     case 'instock':

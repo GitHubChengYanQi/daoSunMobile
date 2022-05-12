@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import MyList from '../../../components/MyList';
-import { instockOrderList } from '../../ProcurementOrder/Url';
 import { Button, Card, Space } from 'antd-mobile';
 import { history } from 'umi';
 import styles from '../../Production/index.css';
 import Label from '../../../components/Label';
 import MySearchBar from '../../../components/MySearchBar';
 import MyBottom from '../../../components/MyBottom';
+import { instockOrderList } from '../../Order/Url';
 
 const Orderlist = () => {
 
