@@ -238,7 +238,7 @@ const InstockDetails = (
         <div
           style={{
             position: 'sticky',
-            top: 0,
+            top: 47,
             backgroundColor: '#fff',
             zIndex: 999,
             textAlign: 'center',

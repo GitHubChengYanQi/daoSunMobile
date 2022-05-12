@@ -295,7 +295,7 @@ const Detail = (props) => {
 
   const backgroundDom = () => {
 
-    return <div style={{ backgroundColor: '#f9f9f9' }}>
+    return <div style={{ backgroundColor: '#f9f9f9',marginBottom:16 }}>
       <Card
         title={<div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar shape='square' size={56}>入</Avatar>
@@ -460,27 +460,20 @@ const Detail = (props) => {
     >
       <div>
         <MyNavBar title='入库单详情' />
-        <div>
-          <MyFloatingPanel
-            backgroundColor
-            maxHeight={window.innerHeight - (getHeader() ? 80 : 130)}
-            backgroundDom={backgroundDom()}
-          >
-            <Tabs
-              activeKey={key}
-              style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-              onChange={(key) => {
-                setKey(key);
-              }}
-            >
-              <Tabs.Tab title={<div>入库明细</div>} key='detail' />
-              <Tabs.Tab title={<div>入库记录</div>} key='record' />
-              <Tabs.Tab title={<div>动态日志</div>} key='log' />
-            </Tabs>
-            <div style={{ backgroundColor: '#eee' }}>
-              {type()}
-            </div>
-          </MyFloatingPanel>
+        {backgroundDom()}
+        <Tabs
+          activeKey={key}
+          style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
+          onChange={(key) => {
+            setKey(key);
+          }}
+        >
+          <Tabs.Tab title={<div>入库明细</div>} key='detail' />
+          <Tabs.Tab title={<div>入库记录</div>} key='record' />
+          <Tabs.Tab title={<div>动态日志</div>} key='log' />
+        </Tabs>
+        <div style={{ backgroundColor: '#eee' }}>
+          {type()}
         </div>
       </div>
     </MyBottom>
