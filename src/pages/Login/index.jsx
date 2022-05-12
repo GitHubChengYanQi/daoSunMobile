@@ -123,7 +123,7 @@ const Login = () => {
       <div style={{ textAlign: 'center' }} className={style.logo}>
         <img src={Logo().logo1} width='87' height={87} alt='' />
       </div>
-      <div className={style.enterpriseName}>{process.env.enterpriseName}</div>
+      <div className={style.enterpriseName}>{process.env.welcome}</div>
 
       <Form
         className={style.form}

@@ -18,10 +18,10 @@ export const MyLoading = ({ skeleton }) => {
         </div>
       </div>
       <div className={style.center}>
-        浑河工业
+        {process.env.enterpriseName}
       </div>
       <div className={style.center}>
-        HUNTS INDUSTRY
+        {process.env.englishName}
       </div>
     </div>;
   };

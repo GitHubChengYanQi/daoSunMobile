@@ -47,7 +47,7 @@ const Sms = () => {
         <img src={Logo().logo1} width='87' height={87} alt='' />
       </div>
       <div className={style.enterpriseName}>
-        {process.env.enterpriseName}
+        {process.env.welcome}
         <span>首次登录请输入手机号进行绑定</span>
       </div>
       <Form

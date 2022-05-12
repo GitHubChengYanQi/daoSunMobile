@@ -1,5 +1,6 @@
 import huntsLogo from '../../assets/huntsLogo.png';
 import hunts2Logo from '../../assets/hunts2Logo.png';
+import daoxin from '../../assets/img.png';
 
 export const Logo = () => {
   switch (process.env.ENV) {
@@ -11,7 +12,7 @@ export const Logo = () => {
     case 'daoxin':
       return {
         logo1:huntsLogo,
-        logo2:hunts2Logo,
+        logo2:huntsLogo,
       };
     case 'hunhe':
       return {

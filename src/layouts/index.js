@@ -80,6 +80,7 @@ const BasicLayout = (props) => {
   useEffect(() => {
     receive();
     qrCodeAction();
+    window.document.title = process.env.title
   }, [location.pathname]);
 
   return (

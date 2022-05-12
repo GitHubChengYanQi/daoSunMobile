@@ -23,7 +23,7 @@ const Home = () => {
         </div>
         <div className={style.enterpriseTitle}>
         <span className={style.enterpriseName}>
-          浑河工业
+          {process.env.enterpriseName}
         </span>
           <span className={style.enterpriseDescribe}>
           因为信任，所以简单
