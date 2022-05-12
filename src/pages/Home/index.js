@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import style from './index.less';
 import { Logo } from '../Logo';
 import { Card, Grid } from 'antd-mobile';
@@ -8,12 +8,21 @@ import { Badge } from 'antd';
 import Menus from './component/Menus';
 import avatar from '../../assets/avatar.png';
 import { useModel } from 'umi';
+import { connect } from 'dva';
 
-const Home = () => {
+const Home = (props) => {
 
   const { initialState } = useModel('@@initialState');
 
-  const menus = initialState.userMenus || [];
+  const userMenus = props.data && props.data.userMenus;
+
+  useEffect(() => {
+    if (!userMenus) {
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
+    }
+  }, []);
 
   return <div className={style.home}>
     <div className={style.enterprise}>
@@ -66,7 +75,7 @@ const Home = () => {
     >
       <Grid columns={3} gap={0}>
         {
-          menus.map((item, index) => {
+          (userMenus || []).map((item, index) => {
             return <Grid.Item className={style.menus} key={index}>
               <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
             </Grid.Item>;
@@ -80,4 +89,4 @@ const Home = () => {
   </div>;
 };
 
-export default Home;
+export default connect(({ data }) => ({ data }))(Home);

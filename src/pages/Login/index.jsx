@@ -100,7 +100,7 @@ const Login = () => {
 
   const submit = () => {
     form.submit((values) => {
-      if (kaptchaOpen && !values.kaptchaOpen) {
+      if (kaptchaOpen === 'true' && !values.kaptchaOpen) {
         return dialogRef.current.open('验证码不能为空');
       }
       if (!values.username) {

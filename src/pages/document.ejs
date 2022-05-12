@@ -2,11 +2,24 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Your App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <title>加载中，请稍等...</title>
+
+</head>
+<body>
+<div id="root">
     <style>
+
+      html,body,#root {
+        height:100%
+      }
 
       .start {
         text-align: center;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
 
       .loading {
@@ -88,15 +101,17 @@
         }
       }
     </style>
-</head>
-<body>
-<div id="root">
     <div class='start'>
-        <div class='loading'>
-            <div class='loader'>
-                <svg class='circular' viewBox='25 25 50 50'>
-                    <circle class='path' cx='50' cy='50' r='20' fill='none' stroke-width='1' stroke-miterlimit='10' />
-                </svg>
+        <div>
+            <div class='loading'>
+                <div class='loader'>
+                    <svg class='circular' viewBox='25 25 50 50'>
+                        <circle class='path' cx='50' cy='50' r='20' fill='none' stroke-width='1' stroke-miterlimit='10' />
+                    </svg>
+                </div>
+            </div>
+            <div>
+                正在加载个人数据，请稍后...
             </div>
         </div>
     </div>

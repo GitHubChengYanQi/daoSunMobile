@@ -84,9 +84,6 @@ const BasicLayout = (props) => {
   }, [location.pathname]);
 
   useEffect(() => {
-    // props.dispatch({
-    //   type: 'data/getUserMenus',
-    // });
     receive();
     window.document.title = initialState.systemName || '系统名称';
   }, []);
@@ -100,4 +97,4 @@ const BasicLayout = (props) => {
   );
 };
 
-export default connect(({ qrCode, data }) => ({ qrCode, data }))(BasicLayout);
+export default connect(({ qrCode }) => ({ qrCode }))(BasicLayout);

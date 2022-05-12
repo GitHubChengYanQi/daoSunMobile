@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Badge, Card, Grid, Toast } from 'antd-mobile';
 import Menus from '../component/Menus';
@@ -11,17 +11,20 @@ import { useModel } from 'umi';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
+import { connect } from 'dva';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
 
-const MenusSetting = () => {
+const MenusSetting = (props) => {
 
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const userInfo = initialState.userInfo || {};
 
-  const [commonlyMenus, setCommonlyMenus] = useState(initialState.userMenus || []);
+  const userMenus = props.data.userMenus;
+
+  const [commonlyMenus, setCommonlyMenus] = useState([]);
 
   const [show, { toggle: showToggle }] = useBoolean();
 
@@ -33,13 +36,29 @@ const MenusSetting = () => {
     manual: true,
     onSuccess: () => {
       toggle();
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
       Toast.show({ content: '保存成功！', position: 'bottom' });
-      setInitialState({ ...initialState, userMenus: commonlyMenus });
     },
   });
 
 
   const sysMenus = userInfo.menus || [];
+
+  useEffect(() => {
+    if (userMenus) {
+      setCommonlyMenus(userMenus || []);
+    }
+  }, [userMenus]);
+
+  useEffect(() => {
+    if (!userMenus) {
+      props.dispatch({
+        type: 'data/getUserMenus',
+      });
+    }
+  }, []);
 
   const menus = (item) => {
     return <Menus
@@ -251,4 +270,4 @@ const MenusSetting = () => {
   </div>;
 };
 
-export default MenusSetting;
+export default connect(({ data }) => ({ data }))(MenusSetting);
