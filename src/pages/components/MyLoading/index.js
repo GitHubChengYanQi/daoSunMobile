@@ -17,10 +17,10 @@ export const MyLoading = ({ skeleton }) => {
           <img src={Logo().logo2} width={46} height={46} alt='' />
         </div>
       </div>
-      <div>
+      <div className={style.center}>
         浑河工业
       </div>
-      <div>
+      <div className={style.center}>
         HUNTS INDUSTRY
       </div>
     </div>;
