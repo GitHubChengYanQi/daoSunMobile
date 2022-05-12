@@ -1,7 +1,7 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { Button, Checkbox, Dialog, Divider, Input } from 'antd-mobile';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { connect } from 'dva';
 import { useModel } from '../../.umi/plugin-model/useModel';
@@ -47,13 +47,7 @@ export const Password = (props) => {
   </div>;
 };
 
-export const VerificationCode = (props) => {
-
-  const [count, setCount] = useState(0);
-
-  const codeChange = () => {
-    setCount(parseInt(Math.random() * 10, 10));
-  };
+export const VerificationCode = ({ count, codeChange, ...props }) => {
 
   return <div className={style.account}>
     <Icon type='icon-yanzhengma' />
@@ -72,6 +66,12 @@ const Login = () => {
 
   const { initialState, refresh } = useModel('@@initialState');
 
+  const [count, setCount] = useState(0);
+
+  const codeChange = () => {
+    setCount(parseInt(Math.random() * 10, 10));
+  };
+
   const kaptchaOpen = initialState.kaptchaOpen;
 
   const { loading, run } = useRequest(
@@ -85,6 +85,9 @@ const Login = () => {
           cookie.set('cheng-token', res);
           await refresh();
         }
+      },
+      onError: () => {
+        codeChange();
       },
     },
   );
@@ -120,7 +123,7 @@ const Login = () => {
       >
         <Field name='username' component={[Username]} />
         <Field name='password' component={[Password]} />
-        <Field hidden={!kaptchaOpen} name='kaptchaOpen' component={[VerificationCode]} />
+        <Field hidden={!kaptchaOpen} name='kaptchaOpen' component={[VerificationCode, { count, codeChange }]} />
       </Form>
 
       <div hidden className={style.foterAction}>
