@@ -44,7 +44,7 @@ export const Password = (props) => {
     />
     <Button onClick={() => {
       toggle();
-    }} fill='none' style={{ padding: 0 }}>
+    }} fill='none' style={{ padding: 0,color:'rgb(126 123 123)' }}>
       {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
     </Button>
   </div>;
@@ -160,7 +160,7 @@ const Login = () => {
       </Button>
       <Divider className={style.password} style={{ margin: 0 }}>
         <div onClick={()=>{
-          dialogRef.current.open('请联系管理员！');
+          dialogRef.current.open('请联系管理员!');
         }}>
           忘记登录密码
         </div>
