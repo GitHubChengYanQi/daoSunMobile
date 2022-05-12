@@ -8,8 +8,12 @@ const success = (title) => {
   });
 };
 
-const dialogSuccess = (title, leftText, rightText, next = () => {
-}) => {
+const dialogSuccess = (
+  title,
+  leftText,
+  rightText,
+  next = () => {
+  }) => {
   Dialog.show({
     content: title || '成功！',
     closeOnAction: true,
@@ -40,6 +44,7 @@ const error = (title) => {
     position: 'bottom',
   });
 };
+
 
 export const Message = {
   success,

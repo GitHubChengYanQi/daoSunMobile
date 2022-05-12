@@ -3,23 +3,14 @@ import { TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import React, { useState } from 'react';
 import OrCode from './OrCode';
-import Work from './Work';
-import IsDev from '../components/IsDev';
 import { connect } from 'dva';
 import style from './index.less';
-import * as VConsole from 'vconsole';
-import { useModel } from 'umi';
 import MyEmpty from './components/MyEmpty';
 
 const iconSize = 20;
 
 const Index = (props) => {
 
-  const { initialState } = useModel('@@initialState');
-
-  if (!IsDev() && initialState.name === '程彦祺') {
-    new VConsole();
-  }
 
   const nav =
     props.history.location.pathname.split('/')[1] !== 'OrCode'
@@ -45,8 +36,6 @@ const Index = (props) => {
     switch (module) {
       case '/Home':
         return <Home {...props} />;
-      case '/Work':
-        return <Work {...props} />;
       default:
         return <MyEmpty height='100%' />;
     }

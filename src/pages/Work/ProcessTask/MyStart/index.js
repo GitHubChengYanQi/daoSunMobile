@@ -8,7 +8,8 @@ import { useModel } from 'umi';
 const MyStart = (props) => {
 
   const { initialState } = useModel('@@initialState');
-  console.log(initialState);
+
+  const userInfo = initialState.userInfo || {};
 
   const ref = useRef();
 
@@ -27,8 +28,8 @@ const MyStart = (props) => {
   };
 
   useEffect(() => {
-    submit({ createUser: initialState.id });
-  }, [initialState.id]);
+    submit({ createUser: userInfo.id });
+  }, [userInfo.id]);
 
   const [data, setData] = useState([]);
 

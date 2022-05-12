@@ -2,10 +2,11 @@ import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
 import { getHeader } from './pages/components/GetHeader';
 import { history } from 'umi';
-import { getUserInfo, loginBycode, wxTicket } from './components/Auth';
+import { getUserInfo, getUserMenus, loginBycode, wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
-import * as VConsole from 'vconsole';
+import IsDev from './components/IsDev';
+import VConsole from 'vconsole';
 
 export const dva = {
   config: {
@@ -47,7 +48,6 @@ export async function getInitialState() {
       return { kaptchaOpen: res.kaptchaOpen };
     }
   } else {
-    console.log(type);
     // token存在
     if (getHeader() && type) {
       // 是企业微信登录并且type存在
@@ -61,6 +61,12 @@ export async function getInitialState() {
     } else {
       // type不存在
       await wxTicket();
+      const userInfo = await getUserInfo();
+      const userMenus = await getUserMenus();
+
+      if (!IsDev() && userInfo.name === '程彦祺') {
+        new VConsole();
+      }
 
       const currentUrl = cookie.get('currentUrl');
       const url = currentUrl && currentUrl.replace('#', '');
@@ -71,7 +77,10 @@ export async function getInitialState() {
         history.replace('/');
       }
 
-      return await getUserInfo();
+      return {
+        userInfo,
+        userMenus,
+      };
     }
   }
   return {};

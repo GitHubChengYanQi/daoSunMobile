@@ -1,31 +1,38 @@
-import React from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { Dialog } from 'antd-mobile';
 import style from './index.less';
-import { Logo } from '../../Logo';
 
-const MyDialog = ({ visible }) => {
+const MyDialog = ({ ...porps }, ref) => {
 
-  const Loading = () => {
-    return <div className={style.loading}>
-      <div className={style.loader}>
-        <svg className={style.circular} viewBox='25 25 50 50'>
-          <circle className={style.path} cx='50' cy='50' r='20' fill='none' strokeWidth='2' strokeMiterlimit='10' />
-        </svg>
-      </div>
-      <div className={style.loadingLogo}>
-        <img src={Logo().logo2} width={46} height={46} alt='' />
-      </div>
-    </div>;
+  const [visible, setVisible] = useState(false);
+
+  const [title, setTitle] = useState();
+
+  const open = (title) => {
+    setTitle(title);
+    setVisible(true);
   };
 
+  useImperativeHandle(ref, () => ({
+    open,
+  }));
+
   return <Dialog
+    className={style.dialog}
     visible={visible}
     content={
-      <div style={{ textAlign: 'center' }}>
-        {Loading()}
+      <div className={style.title}>
+        {title}
       </div>
     }
+    onAction={() => {
+      setVisible(false);
+    }}
+    actions={[[{
+      text: <div className={style.button}>确定</div>,
+      key: 'ok',
+    }]]}
   />;
 };
 
-export default MyDialog;
+export default React.forwardRef(MyDialog);

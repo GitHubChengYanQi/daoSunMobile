@@ -5,18 +5,15 @@ import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
 import DataShow from './component/DatsShow';
 import { Badge } from 'antd';
-import { useRequest } from '../../util/Request';
 import Menus from './component/Menus';
 import avatar from '../../assets/avatar.png';
-import { MyLoading } from '../components/MyLoading';
-
-const menusDetailApi = { url: '/mobelTableView/detail', method: 'GET' };
+import { useModel } from 'umi';
 
 const Home = () => {
 
-  const { loading, data } = useRequest(menusDetailApi);
+  const { initialState  } = useModel('@@initialState');
 
-  const menus = data && data.details || [];
+  const menus = initialState.userMenus || [];
 
   return <div className={style.home}>
     <div className={style.enterprise}>
@@ -45,7 +42,7 @@ const Home = () => {
       headerClassName={style.cardHeader}
     >
       <div className={style.dataShowLeft}>
-        <span>总资产：<span className={style.red}>￥-10232.00</span></span>
+        <span>总资产：<span className={style.red}>￥10232.00</span></span>
         <Badge color='#F04864' text={<span className={style.dataValue}><span>账户余额</span><span
           className={style.fontSize12}>￥7256.36</span></span>} />
         <Badge color='#1890FF' text={<span className={style.dataValue}><span>库存总额</span><span
@@ -80,9 +77,6 @@ const Home = () => {
         </Grid.Item>
       </Grid>
     </Card>
-
-
-    {loading && <MyLoading />}
   </div>;
 };
 

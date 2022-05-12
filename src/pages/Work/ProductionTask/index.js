@@ -20,6 +20,8 @@ const ProductionTask = () => {
 
   const { initialState } = useModel('@@initialState');
 
+  const userInfo = initialState.userInfo || {}
+
   const [data, setData] = useState([]);
 
   const [user, setUser] = useState();
@@ -40,7 +42,7 @@ const ProductionTask = () => {
       if (key !== 'create') {
         history.push(`/Work/ProductionTask/Detail?id=${res.productionTaskId}`);
       } else {
-        ref.current.submit({ createUser: initialState.id });
+        ref.current.submit({ createUser: userInfo.id });
         setVisible(false);
       }
 
@@ -56,8 +58,8 @@ const ProductionTask = () => {
   const ref = useRef();
 
   useEffect(() => {
-    if (ref && ref.current && initialState.id) {
-      ref.current.submit({ userId: initialState.id });
+    if (ref && ref.current && userInfo.id) {
+      ref.current.submit({ userId: userInfo.id });
     }
   }, []);
 
@@ -81,16 +83,16 @@ const ProductionTask = () => {
   const type = (value, data) => {
     switch (value) {
       case 'user':
-        ref.current.submit({ userId: initialState.id, ...data });
+        ref.current.submit({ userId: userInfo.id, ...data });
         break;
       case 'create':
-        ref.current.submit({ createUser: initialState.id, ...data });
+        ref.current.submit({ createUser: userInfo.id, ...data });
         break;
       case 'get':
         ref.current.submit({ noUser: true, ...data });
         break;
         case 'in':
-        ref.current.submit({ userIds: initialState.id, ...data });
+        ref.current.submit({ userIds: userInfo.id, ...data });
         break;
       default:
         break;
@@ -155,7 +157,7 @@ const ProductionTask = () => {
                     await run({
                       data: {
                         productionTaskId: item.productionTaskId,
-                        userId: initialState.id,
+                        userId: userInfo.id,
                       },
                     });
                   },

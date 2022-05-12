@@ -42,7 +42,9 @@ const MenusSetting = () => {
 
   const { initialState } = useModel('@@initialState');
 
-  const sysMenus = initialState.menus || [];
+  const userInfo = initialState.userInfo || {};
+
+  const sysMenus = userInfo.menus || [];
 
   const menus = (item) => {
     return <Menus
@@ -87,6 +89,9 @@ const MenusSetting = () => {
   const addButton = (code, name) => {
     const commonly = commonlyMenus.map(item => item.code);
     return (menuSys && !commonly.includes(code)) ? <AddOutline onClick={() => {
+      if (commonlyMenus.length >= 8){
+        return Toast.show({content:'最多添加8个常用功能！'});
+      }
       addAction({ code, name });
     }} /> : null;
   };

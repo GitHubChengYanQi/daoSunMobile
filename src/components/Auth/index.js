@@ -90,3 +90,9 @@ export const getUserInfo = async () => {
     customerId: customer.customerId,
   };
 };
+
+export const getUserMenus = async () => {
+  const userMenus = await request({ url: '/mobelTableView/detail', method: 'GET' });
+
+  return userMenus && userMenus.details || [];
+};

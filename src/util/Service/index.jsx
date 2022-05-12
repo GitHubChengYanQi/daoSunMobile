@@ -40,10 +40,10 @@ ajaxService.interceptors.response.use((response) => {
     if (errCode === 1502) {
       cookie.remove('cheng-token');
       cookie.set('currentUrl', window.location.hash);
-      // window.location.reload();
+      window.location.reload();
     } else if (response.message.indexOf('JSON') !== -1) {
       Dialog.alert({
-        content: '输入格式错误！！！',
+        content: '输入格式错误！',
       });
     } else if (response.errCode === 402) {
       Dialog.confirm({

@@ -6,7 +6,7 @@ import React from 'react';
 export const MyLoading = ({ skeleton }) => {
 
   const Loading = () => {
-    return <div>
+    return <div className={style.center}>
       <div className={style.loading}>
         <div className={style.loader}>
           <svg className={style.circular} viewBox='25 25 50 50'>

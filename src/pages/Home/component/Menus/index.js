@@ -74,17 +74,17 @@ const Menus = (
     case 'SalesOrder':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=2' });
     case 'stock':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/StoreHouse' });
+      return MenusStyle({ icon: 'icon-kucunguanli1', url: '/Work/StoreHouse' });
     case 'instock':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Instock/Orderlist' });
+      return MenusStyle({ icon: 'icon-rukuguanli2', url: '/Work/Instock/Orderlist' });
     case 'outstock':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production/PickLists?type=all' });
+      return MenusStyle({ icon: 'icon-chukuguanli2', url: '/Work/Production/PickLists?type=all' });
     case 'freeInstock':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Scan/InStock/FreeInstock' });
     case 'freeOutStock':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Scan/OutStock/FreeOutstock' });
     case 'inventory':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Scan/Inventory' });
+      return MenusStyle({ icon: 'icon-pandianguanli', url: '/Scan/Inventory' });
     case 'productionPlan':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production' });
     case 'productionTask':
@@ -94,13 +94,13 @@ const Menus = (
     case 'myCart':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production/MyCart' });
     case 'purchase_ask':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/purchaseAsk' });
+      return MenusStyle({ icon: 'icon-caigoushenqingguanli', url: '/Work/purchaseAsk' });
     case 'procurementOrder':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=1' });
+      return MenusStyle({ icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' });
     case 'Repair':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Repair' });
     case 'CreateRepair':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/CreateRepair' });
+      return MenusStyle({ icon: 'icon-chuangjianbaoxiu2', url: '/CreateRepair' });
     case 'LogOut':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Login' });
     case 'action':

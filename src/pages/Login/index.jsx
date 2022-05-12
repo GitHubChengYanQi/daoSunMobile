@@ -1,7 +1,7 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import { Button, Checkbox, Dialog, Divider, Input, Toast } from 'antd-mobile';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from './index.less';
 import { connect } from 'dva';
 import { useModel } from 'umi';
@@ -13,6 +13,8 @@ import { Field } from '@formily/react';
 import { createForm } from '@formily/core';
 import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
+import { Message } from '../components/Message';
+import MyDialog from '../components/MyDialog';
 
 
 export const Username = (props) => {
@@ -65,7 +67,9 @@ const form = createForm();
 
 const Login = () => {
 
-  const { initialState, refresh } = useModel('@@initialState');
+  const dialogRef = useRef();
+
+  const { initialState, refresh,loading  } = useModel('@@initialState');
 
   const [count, setCount] = useState(0);
 
@@ -75,7 +79,7 @@ const Login = () => {
 
   const kaptchaOpen = initialState.kaptchaOpen;
 
-  const { loading, run } = useRequest(
+  const { loading:loginLoading, run } = useRequest(
     {
       url: '/login/wxCp',
       method: 'POST',
@@ -97,10 +101,14 @@ const Login = () => {
   const submit = () => {
     form.submit((values) => {
       if (kaptchaOpen && !values.kaptchaOpen) {
-        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true });
+        return Dialog.alert({
+          content: <div className={style.fontSize14}>请输入验证码!</div>,
+          confirmText: <div className={style.fontSize14}>重新输入</div>,
+          closeOnMaskClick: true,
+        });
       }
       if (!values.username || !values.password) {
-        return Dialog.alert({ content: '请输入正确的账户或密码!', confirmText: '重新输入', closeOnMaskClick: true });
+        return dialogRef.current.open('请输入账户或密码!');
       }
       return run(
         {
@@ -150,13 +158,21 @@ const Login = () => {
       >
         {loading ? '登录中' : '立即登录'}
       </Button>
-      <Divider className={style.password} style={{ margin: 0 }}>忘记登录密码</Divider>
+      <Divider className={style.password} style={{ margin: 0 }}>
+        <div onClick={()=>{
+          dialogRef.current.open('请联系管理员！');
+        }}>
+          忘记登录密码
+        </div>
+      </Divider>
       <div className={style.technical}>
         本系统由<a>道昕网络</a>提供技术支持
       </div>
     </div>
 
-    {loading && <MyLoading />}
+    <MyDialog ref={dialogRef} />
+
+    {(loading || loginLoading) && <MyLoading />}
   </div>;
 };
 
