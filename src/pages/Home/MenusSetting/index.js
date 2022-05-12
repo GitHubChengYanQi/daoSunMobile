@@ -44,8 +44,6 @@ const MenusSetting = () => {
 
   const sysMenus = initialState.menus || [];
 
-  console.log(sysMenus);
-
   const menus = (item) => {
     return <Menus
       textOverflow={70}
@@ -230,6 +228,23 @@ const MenusSetting = () => {
           </Card>;
         })
       }
+
+      <Card
+        className={style.card}
+        title={<div className={style.cardTitle}>
+          登录设置
+        </div>}
+        bodyClassName={style.menuCardBody}
+        headerClassName={style.cardHeader}
+      >
+        <Grid columns={4} gap={0}>
+          <Grid.Item className={style.menus}>
+            <Badge content={addButton('LogOut', '退出登录')} color='var(--adm-color-primary)'>
+              {menus({ code: 'LogOut', name: '退出登录' })}
+            </Badge>
+          </Grid.Item>
+        </Grid>
+      </Card>
 
       {(detailLoading || addLoading) && <MyLoading />}
     </div>
