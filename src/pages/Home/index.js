@@ -11,7 +11,7 @@ import { useModel } from 'umi';
 
 const Home = () => {
 
-  const { initialState  } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
   const menus = initialState.userMenus || [];
 
@@ -19,11 +19,11 @@ const Home = () => {
     <div className={style.enterprise}>
       <div className={style.enterpriseLeft}>
         <div className={style.logo}>
-          <img src={Logo().logo2} width={46} height={46} alt='' />
+          <img src={Logo.HomeLogo()} width={46} height={46} alt='' />
         </div>
         <div className={style.enterpriseTitle}>
         <span className={style.enterpriseName}>
-          {process.env.enterpriseName}
+          {initialState.enterpriseName || '企业名称'}
         </span>
           <span className={style.enterpriseDescribe}>
           因为信任，所以简单
@@ -59,7 +59,7 @@ const Home = () => {
     </Card>
     <Card
       className={style.dataCard}
-      style={{marginBottom:0}}
+      style={{ marginBottom: 0 }}
       title={<div className={style.cardTitle}>常用功能</div>}
       bodyClassName={style.manuCardBody}
       headerClassName={style.cardHeader}

@@ -14,11 +14,14 @@ import MyNavBar from '../../components/MyNavBar';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
-const menusDetailApi = { url: '/mobelTableView/detail', method: 'GET' };
 
 const MenusSetting = () => {
 
-  const [commonlyMenus, setCommonlyMenus] = useState([]);
+  const { initialState, setInitialState } = useModel('@@initialState');
+
+  const userInfo = initialState.userInfo || {};
+
+  const [commonlyMenus, setCommonlyMenus] = useState(initialState.userMenus || []);
 
   const [show, { toggle: showToggle }] = useBoolean();
 
@@ -31,18 +34,10 @@ const MenusSetting = () => {
     onSuccess: () => {
       toggle();
       Toast.show({ content: '保存成功！', position: 'bottom' });
+      setInitialState({ ...initialState, userMenus: commonlyMenus });
     },
   });
 
-  const { loading: detailLoading } = useRequest(menusDetailApi, {
-    onSuccess: (res) => {
-      setCommonlyMenus(res.details || []);
-    },
-  });
-
-  const { initialState } = useModel('@@initialState');
-
-  const userInfo = initialState.userInfo || {};
 
   const sysMenus = userInfo.menus || [];
 
@@ -89,8 +84,8 @@ const MenusSetting = () => {
   const addButton = (code, name) => {
     const commonly = commonlyMenus.map(item => item.code);
     return (menuSys && !commonly.includes(code)) ? <AddOutline onClick={() => {
-      if (commonlyMenus.length >= 8){
-        return Toast.show({content:'最多添加8个常用功能！'});
+      if (commonlyMenus.length >= 8) {
+        return Toast.show({ content: '最多添加8个常用功能！' });
       }
       addAction({ code, name });
     }} /> : null;
@@ -251,7 +246,7 @@ const MenusSetting = () => {
         </Grid>
       </Card>
 
-      {(detailLoading || addLoading) && <MyLoading />}
+      {addLoading && <MyLoading />}
     </div>
   </div>;
 };

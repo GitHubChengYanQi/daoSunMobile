@@ -101,11 +101,7 @@ const Login = () => {
   const submit = () => {
     form.submit((values) => {
       if (kaptchaOpen && !values.kaptchaOpen) {
-        return Dialog.alert({
-          content: <div className={style.fontSize14}>请输入验证码!</div>,
-          confirmText: <div className={style.fontSize14}>重新输入</div>,
-          closeOnMaskClick: true,
-        });
+        return dialogRef.current.open('验证码不能为空');
       }
       if (!values.username) {
         return dialogRef.current.open('账号不能为空');
@@ -123,9 +119,9 @@ const Login = () => {
   return <div className={style.login}>
     <div className={style.formDiv}>
       <div style={{ textAlign: 'center' }} className={style.logo}>
-        <img src={Logo().logo1} width='87' height={87} alt='' />
+        <img src={Logo.LoginLogo()} width='87' height={87} alt='' />
       </div>
-      <div className={style.enterpriseName}>{process.env.welcome}</div>
+      <div className={style.enterpriseName}>欢迎使用{initialState.systemName}</div>
 
       <Form
         className={style.form}
@@ -135,7 +131,7 @@ const Login = () => {
       >
         <Field name='username' component={[Username]} />
         <Field name='password' component={[Password]} />
-        <Field hidden={!kaptchaOpen} name='kaptchaOpen' component={[VerificationCode, { count, codeChange }]} />
+        <Field hidden={kaptchaOpen === 'false'} name='kaptchaOpen' component={[VerificationCode, { count, codeChange }]} />
       </Form>
 
       <div hidden className={style.foterAction}>

@@ -44,7 +44,7 @@ const Sms = () => {
   return <div className={style.login}>
     <div className={style.formDiv}>
       <div style={{ textAlign: 'center' }} className={style.logo}>
-        <img src={Logo().logo1} width='87' height={87} alt='' />
+        <img src={Logo.LoginLogo()} width='87' height={87} alt='' />
       </div>
       <div className={style.enterpriseName}>
         {process.env.welcome}

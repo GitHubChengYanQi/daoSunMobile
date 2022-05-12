@@ -45,16 +45,15 @@ export async function getInitialState() {
     } else {
       // 不是企业微信直接走login
       history.push('/Login');
-      return { kaptchaOpen: res.kaptchaOpen };
+      return res || {};
     }
   } else {
     // token存在
     if (getHeader() && type) {
       // 是企业微信登录并且type存在
       if (userInfo.userId) {
-        const res = await VerificationCodeOpen();
         history.push('/Login');
-        return { kaptchaOpen: res.kaptchaOpen };
+        return res || {};
       } else {
         history.push('/Sms');
       }
@@ -78,6 +77,7 @@ export async function getInitialState() {
       }
 
       return {
+        ...res,
         userInfo,
         userMenus,
       };

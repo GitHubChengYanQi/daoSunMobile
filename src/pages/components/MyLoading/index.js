@@ -2,8 +2,11 @@ import { Dialog } from 'antd-mobile';
 import style from './index.less';
 import { Logo } from '../../Logo';
 import React from 'react';
+import { useModel } from 'umi';
 
 export const MyLoading = ({ skeleton }) => {
+
+  const { initialState } = useModel('@@initialState');
 
   const Loading = () => {
     return <div className={style.center}>
@@ -14,14 +17,14 @@ export const MyLoading = ({ skeleton }) => {
           </svg>
         </div>
         <div className={style.loadingLogo}>
-          <img src={Logo().logo2} width={46} height={46} alt='' />
+          <img src={Logo.HomeLogo()} width={46} height={46} alt='' />
         </div>
       </div>
       <div className={style.center}>
-        {process.env.enterpriseName}
+        {initialState.enterpriseName}
       </div>
       <div className={style.center}>
-        {process.env.englishName}
+        {initialState.englishName}
       </div>
     </div>;
   };
