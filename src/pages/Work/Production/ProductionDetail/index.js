@@ -9,7 +9,7 @@ import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import Label from '../../../components/Label';
 import SkuList from '../components/SkuList';
 import ShipList from '../components/ShipList';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 
 const ProductionDetail = (props) => {
   const params = props.location.query;
@@ -75,7 +75,7 @@ const ProductionDetail = (props) => {
   return <div>
     <MyNavBar title='工单详情' />
     <MyFloatingPanel
-      maxHeight={window.innerHeight - (getHeader() ? 52 : 97)}
+      maxHeight={window.innerHeight - (isQiyeWeixin() ? 52 : 97)}
       backgroundDom={backgroundDom()}>
       <Tabs
         activeKey={key}

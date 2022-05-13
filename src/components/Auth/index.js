@@ -1,12 +1,12 @@
 import IsDev from '../IsDev';
-import { getHeader } from '../../pages/components/GetHeader';
 import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
+import { isQiyeWeixin } from '../../pages/components/GetHeader';
 
 
 export const wxTicket = async () => {
-  if (!IsDev() && getHeader()) {
+  if (!IsDev() && isQiyeWeixin()) {
     const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#');
     const res = await request({
       url: '/api/ticket',
@@ -60,13 +60,12 @@ export const loginBycode = async () => {
     });
     if (token) {
       cookie.set('cheng-token', token);
-      // window.location.reload();
-    } else {
-      login();
+      window.location.href = Url();
+      return;
     }
-  } else {
-    login();
   }
+  login();
+
 };
 
 export const getUserInfo = async () => {
@@ -76,15 +75,21 @@ export const getUserInfo = async () => {
       method: 'POST',
     },
   );
+
+  return userInfo || {};
+};
+
+export const userCustomer = async () => {
   const customer = await request(
     {
       url: '/customer/detail',
       method: 'POST',
     },
   );
-
+  if (!customer) {
+    return {};
+  }
   return {
-    ...userInfo,
     abbreviation: customer.abbreviation,
     customerName: customer.customerName,
     customerId: customer.customerId,

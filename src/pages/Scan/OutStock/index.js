@@ -8,7 +8,7 @@ import { WhiteSpace } from 'weui-react-v2';
 import { useBoolean, useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../components/MyEmpty';
 import { MyLoading } from '../../components/MyLoading';
-import { getHeader } from '../../components/GetHeader';
+import { isQiyeWeixin } from '../../components/GetHeader';
 import { connect } from 'dva';
 import { history } from 'umi';
 import IsDev from '../../../components/IsDev';
@@ -154,7 +154,7 @@ const OutStock = (props) => {
 
   return (
     <>
-      {!getHeader() && <MyNavBar title='出库' />}
+      {!isQiyeWeixin() && <MyNavBar title='出库' />}
       <div style={{ padding: 16 }} className={style.outstock}>
         <Card
           style={{ backgroundColor: '#f4f4f4', borderRadius: 10 }}
@@ -231,7 +231,7 @@ const OutStock = (props) => {
                         backgroundColor: '#1845B5',
                       }}
                       onClick={async () => {
-                        if (IsDev() || getHeader()) {
+                        if (IsDev() || isQiyeWeixin()) {
                           setItems(items);
                           setItemNumber(items.number);
                           //调用扫码

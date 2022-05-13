@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FloatingPanel } from 'antd-mobile';
-import { getHeader } from '../GetHeader';
+import { isQiyeWeixin } from '../GetHeader';
 import styles from './index.css';
 
 const MyFloatingPanel = (
   {
     children,
     startHeight = window.innerHeight * 0.5,
-    maxHeight = window.innerHeight - (getHeader() ? 0 : 45),
+    maxHeight = window.innerHeight - (isQiyeWeixin() ? 0 : 45),
     backgroundDom,
     backgroundColor,
   }) => {
@@ -19,7 +19,7 @@ const MyFloatingPanel = (
   useEffect(() => {
     if (document.getElementById('backgroundDom')) {
       const height = document.getElementById('backgroundDom').clientHeight;
-      let minHeight = getHeader() ? window.innerHeight - height : window.innerHeight - height - 45;
+      let minHeight = isQiyeWeixin() ? window.innerHeight - height : window.innerHeight - height - 45;
       ref.current.setHeight(minHeight);
       const heights = [];
       for (let i = minHeight; i < maxHeight; i++) {

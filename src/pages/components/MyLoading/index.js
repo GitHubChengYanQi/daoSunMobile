@@ -1,12 +1,22 @@
 import { Dialog } from 'antd-mobile';
 import style from './index.less';
-import { Logo } from '../../Logo';
-import React from 'react';
+import React, { useState } from 'react';
 import { useModel } from 'umi';
 
-export const MyLoading = ({ skeleton }) => {
+export const MyLoading = ({ skeleton, title }) => {
 
   const { initialState } = useModel('@@initialState');
+
+  const state = initialState || {};
+
+  const [loadingTitle, setLoadingTitle] = useState(title);
+
+  // 当前网速较慢，正在努力加载...
+
+  setTimeout(() => {
+    setLoadingTitle('当前网速较慢，正在努力加载...');
+  }, 3000);
+
 
   const Loading = () => {
     return <div className={style.center}>
@@ -17,14 +27,11 @@ export const MyLoading = ({ skeleton }) => {
           </svg>
         </div>
         <div className={style.loadingLogo}>
-          <img src={Logo.HomeLogo()} width={46} height={46} alt='' />
+          {state.homeLogo && <img src={state.homeLogo} width={46} height={46} alt='' />}
         </div>
       </div>
-      <div className={style.center}>
-        {initialState.enterpriseName}
-      </div>
-      <div className={style.center}>
-        {initialState.englishName}
+      <div className={style.loadingTitle}>
+        {loadingTitle}
       </div>
     </div>;
   };

@@ -1,11 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavBar } from 'antd-mobile';
-import { history } from 'umi';
-import { getHeader } from '../GetHeader';
+import { history, useModel } from 'umi';
+import { isQiyeWeixin } from '../GetHeader';
 
 const MyNavBar = ({ title }) => {
 
-  return !getHeader() && <div style={{height:45,position:'sticky',top:0,zIndex:999}}>
+  const { initialState } = useModel('@@initialState');
+
+  const state = initialState || {};
+
+  useEffect(() => {
+    window.document.title = title || state.systemName || '';
+  }, []);
+
+  return !isQiyeWeixin() && <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
     <NavBar style={{
       '--border-bottom': '1px #eee solid',
       backgroundColor: '#fff',

@@ -14,12 +14,17 @@ export const LoginLogo = () => {
 
 export const HomeLogo = () => {
   const { initialState } = useModel('@@initialState');
-  switch (initialState.logo) {
-    case 'hunts':
-      return hunts2Logo;
-    default:
-      return hunts2Logo;
+  if(initialState){
+    switch (initialState.logo) {
+      case 'hunts':
+        return hunts2Logo;
+      default:
+        return hunts2Logo;
+    }
+  }else{
+    return null;
   }
+
 };
 
 export const Logo = {

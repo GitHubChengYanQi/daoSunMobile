@@ -86,25 +86,49 @@ const Menus = (
     case 'inventory':
       return MenusStyle({ icon: 'icon-pandianguanli', url: '/Scan/Inventory' });
     case 'productionPlan':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production' });
+      return MenusStyle({ icon: 'icon-shengchanjihua', url: '/Work/Production' });
     case 'productionTask':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/ProductionTask' });
     case 'pickLists':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production/PickLists' });
     case 'myCart':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Production/MyCart' });
+      return MenusStyle({ icon: 'icon-wodelingliao', url: '/Work/Production/MyCart' });
     case 'purchase_ask':
       return MenusStyle({ icon: 'icon-caigoushenqingguanli', url: '/Work/purchaseAsk' });
     case 'procurementOrder':
       return MenusStyle({ icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' });
     case 'Repair':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Repair' });
+      return MenusStyle({ icon: 'icon-gongdanguanli2', url: '/Repair' });
     case 'CreateRepair':
       return MenusStyle({ icon: 'icon-chuangjianbaoxiu2', url: '/CreateRepair' });
     case 'LogOut':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Login' });
+      return MenusStyle({ icon: 'icon-tuichudenglu', url: '/Login' });
     case 'action':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/ProcessTask' });
+    case 'EXCEL_PROCESS':
+      return MenusStyle({ icon: 'icon-excelbiao' });
+    case 'data_source':
+      return MenusStyle({ icon: 'icon-shujurongqi' });
+    case 'demos_show':
+      return MenusStyle({ icon: 'icon-gaojizujian' });
+    case 'wxuserInfo':
+      return MenusStyle({ icon: 'icon-weixinbangding' });
+    case 'dashboard':
+      return MenusStyle({ icon: 'icon-zhukongmianban' });
+    case 'console2':
+      return MenusStyle({ icon: 'icon-tongjibaobiao' });
+    case 'system':
+      return MenusStyle({ icon: 'icon-xitongguanli1' });
+    case 'dev_tools':
+      return MenusStyle({ icon: 'icon-kaifaguanli' });
+    case 'dasc':
+      return MenusStyle({ icon: 'icon-wofaqide' });
+    case 'MySend':
+      return MenusStyle({ icon: 'icon-wodechaosong' });
+    case 'audit':
+      return MenusStyle({ icon: 'icon-woshenhede' });
+    case 'MyAudit':
+      return MenusStyle({ icon: 'icon-weishenhede' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }

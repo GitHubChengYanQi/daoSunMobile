@@ -7,7 +7,7 @@ import { request, useRequest } from '../../../util/Request';
 import TreeSelectSee from '../../components/TreeSelectSee';
 import MyEmpty from '../../components/MyEmpty';
 import { connect } from 'dva';
-import { getHeader } from '../../components/GetHeader';
+import { isQiyeWeixin } from '../../components/GetHeader';
 import { history } from 'umi';
 import CodeBind from '../CodeBind';
 import { MyLoading } from '../../components/MyLoading';
@@ -140,7 +140,7 @@ const InStock = (props) => {
 
   return (
     <>
-      {!getHeader() && <MyNavBar title='入库' />}
+      {!isQiyeWeixin() && <MyNavBar title='入库' />}
       <div style={{ padding: 16 }} className={style.instock}>
         <Card
           style={{ backgroundColor: '#f4f4f4' }}
@@ -230,7 +230,7 @@ const InStock = (props) => {
                                   backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
-                                  if (getHeader()) {
+                                  if (isQiyeWeixin()) {
                                     await setBatch(true);
                                     await setItems(items);
                                     await setInstockNumber(items.number);
@@ -281,7 +281,7 @@ const InStock = (props) => {
                                   backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
-                                  if (IsDev() ? false : getHeader()) {
+                                  if (IsDev() ? false : isQiyeWeixin()) {
                                     await setItems(items);
                                     await setBatch(false);
                                     await setInstockNumber(1);

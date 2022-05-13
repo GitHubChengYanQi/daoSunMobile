@@ -1,11 +1,10 @@
 import { Button, Checkbox, Dialog, Toast } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
 import React from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import cookie from 'js-cookie';
 import GetUserInfo from '../GetUserInfo';
 import style from '../Login/index.less';
-import { Logo } from '../Logo';
 import { Form } from '@formily/antd';
 import { Field } from '@formily/react';
 import Icon from '../components/Icon';
@@ -14,6 +13,10 @@ import { Code, Phone } from './components/Field';
 
 
 const Sms = () => {
+
+  const { initialState  } = useModel('@@initialState');
+
+  const state = initialState || {}
 
   const { loading, run } = useRequest({ url: '/login/phone', method: 'POST' }, {
     manual: true, onSuccess: (res) => {
@@ -44,7 +47,7 @@ const Sms = () => {
   return <div className={style.login}>
     <div className={style.formDiv}>
       <div style={{ textAlign: 'center' }} className={style.logo}>
-        <img src={Logo.LoginLogo()} width='87' height={87} alt='' />
+        {state.loginLogo && <img src={state.loginLogo} width='87' height={87} alt='' />}
       </div>
       <div className={style.enterpriseName}>
         {process.env.welcome}

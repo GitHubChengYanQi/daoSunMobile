@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useLocation, useModel } from 'umi';
 import { connect } from 'dva';
-import { Dialog } from 'antd-mobile';
+import { Dialog, ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
-import * as VConsole from 'vconsole';
+import { MyLoading } from '../pages/components/MyLoading';
 
-// import * as VConsole from 'vconsole';
 
 const BasicLayout = (props) => {
 
-  // const console = new VConsole();
 
-  const { initialState } = useModel('@@initialState');
+  const { initialState, loading } = useModel('@@initialState');
+
+  const state = initialState || {};
 
   window.scrollTo(0, 0);
 
@@ -85,16 +85,30 @@ const BasicLayout = (props) => {
 
   useEffect(() => {
     receive();
-    window.document.title = initialState.systemName || '系统名称';
   }, []);
 
-  return (
-    // <Auth>
-    <div className={styles.safeArea}>
-      {props.children}
-    </div>
-    // </Auth>
-  );
+
+  if (loading) {
+    return <MyLoading skeleton title='正在初始化个人信息,请稍后...' />;
+  }
+
+  if (state.isQiYeWeiXin) {
+    return <MyLoading skeleton title='企业微信登录中...' />;
+  }
+
+  if (state.init === true) {
+    return (
+      <div className={styles.safeArea}>
+        {props.children}
+      </div>
+    );
+  } else {
+    return <div>
+      <ErrorBlock fullPage title='系统初始化失败' />
+    </div>;
+  }
+
+
 };
 
 export default connect(({ qrCode }) => ({ qrCode }))(BasicLayout);

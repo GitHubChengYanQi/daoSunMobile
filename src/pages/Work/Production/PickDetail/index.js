@@ -19,7 +19,7 @@ import {
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
 import MyEllipsis from '../../../components/MyEllipsis';
@@ -246,7 +246,7 @@ const PickDetail = (props) => {
     <div>
       <MyFloatingPanel
         backgroundColor
-        maxHeight={window.innerHeight - (getHeader() ? 0 : 45)}
+        maxHeight={window.innerHeight - (isQiyeWeixin() ? 0 : 45)}
         backgroundDom={backgroundDom()}
       >
         <div>

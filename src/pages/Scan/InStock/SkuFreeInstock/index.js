@@ -5,7 +5,7 @@ import { request, useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useSetState } from 'ahooks';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import IsDev from '../../../../components/IsDev';
 import PrintCode from '../../../components/PrintCode';
@@ -166,7 +166,7 @@ const SkuFreeInstock = ({ scanData }) => {
 
 
   const addCanvas = async (inkindIds) => {
-    if (IsDev() || !getHeader()) {
+    if (IsDev() || !isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/details',
         method: 'POST',
@@ -343,7 +343,7 @@ const SkuFreeInstock = ({ scanData }) => {
             //   });
             // }
             if (item.inkindId) {
-              if (IsDev() || !getHeader()) {
+              if (IsDev() || !isQiyeWeixin()) {
                 addCanvas([item.inkindId]);
               }
               return;
@@ -362,7 +362,7 @@ const SkuFreeInstock = ({ scanData }) => {
                 },
               });
               if (res && res.length > 0) {
-                if (IsDev() || !getHeader()) {
+                if (IsDev() || !isQiyeWeixin()) {
                   addCanvas([res[0].inkindId]);
                 }
 

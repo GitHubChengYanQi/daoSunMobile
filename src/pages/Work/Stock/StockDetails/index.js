@@ -3,7 +3,7 @@ import { stockDetailsList } from '../../../Scan/Url';
 import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { useSetState } from 'ahooks';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
 import BackSkus from '../../../Scan/Sku/components/BackSkus';
@@ -17,7 +17,7 @@ const StockDetails = (props) => {
   const [datas, setDatas] = useSetState({ data: [] });
 
   const print = async (inkindId) => {
-    if (!getHeader()) {
+    if (!isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/detail',
         method: 'POST',
