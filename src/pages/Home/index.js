@@ -1,18 +1,21 @@
 import React, { useEffect } from 'react';
 import style from './index.less';
-import { Logo } from '../Logo';
 import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
 import DataShow from './component/DatsShow';
-import { Badge } from 'antd';
+import { Avatar, Badge } from 'antd';
 import Menus from './component/Menus';
-import avatar from '../../assets/avatar.png';
 import { useModel } from 'umi';
 import { connect } from 'dva';
+import DefaultMenus from './component/DefaultMenus';
 
 const Home = (props) => {
 
   const { initialState } = useModel('@@initialState');
+
+  const state = initialState || {};
+
+  const userInfo = state.userInfo || {};
 
   const userMenus = props.data && props.data.userMenus;
 
@@ -22,17 +25,19 @@ const Home = (props) => {
         type: 'data/getUserMenus',
       });
     }
+    window.document.title = '首页';
   }, []);
+
 
   return <div className={style.home}>
     <div className={style.enterprise}>
       <div className={style.enterpriseLeft}>
         <div className={style.logo}>
-          <img src={Logo.HomeLogo()} width={46} height={46} alt='' />
+          {state.homeLogo && <img src={state.homeLogo} width={46} height={46} alt='' />}
         </div>
         <div className={style.enterpriseTitle}>
         <span className={style.enterpriseName}>
-          {initialState.enterpriseName || '企业名称'}
+          {state.enterpriseName || '企业名称'}
         </span>
           <span className={style.enterpriseDescribe}>
           因为信任，所以简单
@@ -40,7 +45,8 @@ const Home = (props) => {
         </div>
       </div>
       <div>
-        <img src={avatar} width={46} height={46} alt='' />
+        <Avatar style={{ backgroundColor: '#98BFEB' }} size={46}
+                src={userInfo.avatar}>{userInfo.name && userInfo.name.substring(0, 1)}</Avatar>
       </div>
     </div>
     <Card
@@ -51,7 +57,7 @@ const Home = (props) => {
       headerClassName={style.cardHeader}
     >
       <div className={style.dataShowLeft}>
-        <span>总资产：<span className={style.red}>￥10232.00</span></span>
+        <span>总资产：<span className={style.red}>￥1023200.00</span></span>
         <Badge color='#F04864' text={<span className={style.dataValue}><span>账户余额</span><span
           className={style.fontSize12}>￥7256.36</span></span>} />
         <Badge color='#1890FF' text={<span className={style.dataValue}><span>库存总额</span><span
@@ -75,11 +81,15 @@ const Home = (props) => {
     >
       <Grid columns={3} gap={0}>
         {
-          (userMenus || []).map((item, index) => {
-            return <Grid.Item className={style.menus} key={index}>
-              <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
-            </Grid.Item>;
-          })
+          (Array.isArray(userMenus) && userMenus.length > 0)
+            ?
+            userMenus.map((item, index) => {
+              return <Grid.Item className={style.menus} key={index}>
+                <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
+              </Grid.Item>;
+            })
+            :
+            <DefaultMenus fontSize={50} />
         }
         <Grid.Item className={style.menus}>
           <Menus fontSize={50} />

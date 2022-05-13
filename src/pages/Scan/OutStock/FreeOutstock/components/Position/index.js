@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Card, List, Selector, Space, Toast } from 'antd-mobile';
 import BottomButton from '../../../../../components/BottomButton';
-import { getHeader } from '../../../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../../../components/GetHeader';
 import { stockDetailsList, storehousePositionsTreeView } from '../../../../Url';
 import { useRequest } from '../../../../../../util/Request';
 import { useSetState } from 'ahooks';
@@ -162,7 +162,7 @@ const Position = ({ scnaData, ...props }) => {
   return <>
     <Card
       title={<div>库位信息</div>}
-      extra={getHeader() && <LinkButton
+      extra={isQiyeWeixin() && <LinkButton
         title={<ScanOutlined />} onClick={() => {
         props.dispatch({
           type: 'qrCode/wxCpScan',

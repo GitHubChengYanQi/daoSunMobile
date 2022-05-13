@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getHeader } from '../../components/GetHeader';
+import { isQiyeWeixin } from '../../components/GetHeader';
 import { Space, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { connect } from 'dva';
@@ -195,7 +195,7 @@ const Inventory = (props) => {
         请扫描物料或库位
       </span>
       {
-        getHeader() && <LinkButton onClick={() => {
+        isQiyeWeixin() && <LinkButton onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',
             payload: {

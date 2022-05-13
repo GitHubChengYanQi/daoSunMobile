@@ -1,5 +1,5 @@
 
-import { getHeader } from '../components/GetHeader';
+import { isQiyeWeixin } from '../components/GetHeader';
 import { connect } from 'dva';
 
 const Scan = (props) => {
@@ -8,7 +8,7 @@ const Scan = (props) => {
 
   };
 
-    if (getHeader()) {
+    if (isQiyeWeixin()) {
       getScan();
     } else {
       window.Android.onScan();

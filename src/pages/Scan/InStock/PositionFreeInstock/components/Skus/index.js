@@ -4,7 +4,7 @@ import Search from '../Search';
 import Number from '../../../../../components/Number';
 import LinkButton from '../../../../../components/LinkButton';
 import IsDev from '../../../../../../components/IsDev';
-import { getHeader } from '../../../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../../../components/GetHeader';
 import { useRequest } from '../../../../../../util/Request';
 import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { useSetState } from 'ahooks';
@@ -102,7 +102,7 @@ const Skus = (
             // }
             if (item.number > 0) {
               if (item.inkindId) {
-                if (IsDev() || !getHeader()) {
+                if (IsDev() || !isQiyeWeixin()) {
                   addCanvas([item.inkindId]);
                 }
                 return;
@@ -119,7 +119,7 @@ const Skus = (
                 },
               });
               if (res && res.length > 0) {
-                if (IsDev() || !getHeader()) {
+                if (IsDev() || !isQiyeWeixin()) {
                   addCanvas([res[0].inkindId]);
                 }
                 setItems([]);

@@ -1,14 +1,14 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
-import { getHeader } from '../../pages/components/GetHeader';
+import { history } from 'umi';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.229'
+  'https://lqscyq.xicp.fun'
+  // 'http://192.168.1.143'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -36,53 +36,60 @@ ajaxService.interceptors.response.use((response) => {
   }
   response = response.data;
   const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
-  if (errCode !== 0) {
-    if (errCode === 1502) {
-      cookie.remove('cheng-token');
-      cookie.set('currentUrl', window.location.hash);
-      window.location.reload();
-    } else if (response.message.indexOf('JSON') !== -1) {
-      Dialog.alert({
-        content: '输入格式错误！',
-      });
-    } else if (response.errCode === 402) {
-      Dialog.confirm({
-        title: '提示',
-        content: '认证失败！，请重新登录。',
-        confirmText: '重新登录',
-        onConfirm: () => {
-          try {
-            // GotoLogin();
-            cookie.remove('cheng-token');
-            window.location.reload();
-          } catch (e) {
-            window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
-          }
-        },
-      });
-    } else if (response.errCode !== 200) {
-      Dialog.alert({
-        content: response.message,
-        closeOnMaskClick: true,
-        confirmText: '确认',
-      });
-
-    }
-    throw new Error(response.message);
+  if (errCode === 1502) {
+    cookie.remove('cheng-token');
+    history.push({
+      pathname: '/Login',
+      query: {
+        backUrl: window.location.href,
+      },
+    });
+    throw new Error("loginTimeout");
+  } else if (response.errCode === 402) {
+    Dialog.confirm({
+      title: '提示',
+      content: '认证失败！，请重新登录。',
+      confirmText: '重新登录',
+      onConfirm: () => {
+        try {
+          // GotoLogin();
+          cookie.remove('cheng-token');
+          window.location.reload();
+        } catch (e) {
+          window.location.href = `/#/login?backUrl=${encodeURIComponent(window.location.href)}`;
+        }
+      },
+    });
   }
   return response;
 }, (error) => {
-  // if (error.errCode !== 0) {
-  throw new Error(error.message);
-  // }
-  // return error;
+  console.log(error.response)
+  return error;
 });
+
+export const request = async (config) => {
+  return new Promise((resolve,reject) => {
+    ajaxService(config).then((response) => {
+      resolve(response);
+    }).catch((e) => {
+      if(e.message === 'loginTimeout'){
+        reject();
+      }else{
+        resolve({
+          errCode:0,
+          message:"系统错误，请联系管理员"
+        });
+      }
+
+    });
+  });
+};
 
 const requestService = () => {
   return {
-    ajaxService,
+    request,
+    ajaxService: request,
   };
 };
 
-export const request = ajaxService;
 export default requestService;

@@ -5,7 +5,7 @@ import Icon from '../components/Icon';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import moment from 'moment';
-import { getHeader } from '../components/GetHeader';
+import { isQiyeWeixin } from '../components/GetHeader';
 
 const Work = () => {
   const hours = moment().hours();
@@ -49,7 +49,7 @@ const Work = () => {
       typeof routers === 'string' ? history.push(routers) : routers();
     }}>
       <Space direction='vertical' justify='center' align='center'>
-        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: getHeader() ? 40 : 50 }} /> : icon}
+        {typeof icon === 'string' ? <Icon type={icon} style={{ fontSize: isQiyeWeixin() ? 40 : 50 }} /> : icon}
         {title}
       </Space>
     </Grid.Item>;

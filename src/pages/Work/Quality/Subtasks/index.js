@@ -23,7 +23,7 @@ import LinkButton from '../../../components/LinkButton';
 import SkuResult from '../../../Scan/Sku/components/SkuResult';
 import { connect } from 'dva';
 import GoToQualityTask from '../GoToQualityTask';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 import IsDev from '../../../../components/IsDev';
 import ScanCodeBind from '../../../Scan/ScanCodeBind';
 import BottomButton from '../../../components/BottomButton';
@@ -45,7 +45,7 @@ const Subtasks = (props) => {
   const goToQualityRef = useRef();
 
   useEffect(() => {
-    if (getHeader() && qrCode.codeId) {
+    if (isQiyeWeixin() && qrCode.codeId) {
       goToQualityRef.current.goToQualityTask(qrCode.codeId);
       clearCode();
     }
@@ -388,7 +388,7 @@ const Subtasks = (props) => {
                     {data.permission && status !== -1
                       &&
                       <Space>
-                        {(getHeader() || IsDev()) &&
+                        {(isQiyeWeixin() || IsDev()) &&
                           <LinkButton
                             style={{ fontSize: 24 }}
                             onClick={() => {

@@ -7,7 +7,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useBoolean, useSetState } from 'ahooks';
 import { ScanOutlined } from '@ant-design/icons';
-import { getHeader } from '../../../components/GetHeader';
+import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
@@ -137,7 +137,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
 
 
   const addCanvas = async (inkindIds) => {
-    if (IsDev() || !getHeader()) {
+    if (IsDev() || !isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/details',
         method: 'POST',
@@ -257,7 +257,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
             ref.current.search({ type: 'storehouse' });
           }} />
         </List.Item>
-        <List.Item title='库位' extra={getHeader() && <LinkButton
+        <List.Item title='库位' extra={isQiyeWeixin() && <LinkButton
           title={<ScanOutlined />} onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',

@@ -18,7 +18,7 @@ const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
 
 const MenusSetting = (props) => {
 
-  const { initialState, setInitialState } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
   const userInfo = initialState.userInfo || {};
 
@@ -47,8 +47,17 @@ const MenusSetting = (props) => {
   const sysMenus = userInfo.menus || [];
 
   useEffect(() => {
-    if (userMenus) {
-      setCommonlyMenus(userMenus || []);
+    if (Array.isArray(userMenus) && userMenus.length > 0) {
+      setCommonlyMenus(userMenus);
+    } else {
+      const defaultMenus = [];
+      sysMenus.map((item, index) => {
+        if (index >= 8) {
+          return null;
+        }
+        return defaultMenus.push({ code: item.id, name: item.name });
+      });
+      setCommonlyMenus(defaultMenus);
     }
   }, [userMenus]);
 
@@ -67,7 +76,7 @@ const MenusSetting = (props) => {
       code={item.code}
       name={item.name}
       disabled={menuSys}
-      fontSize={40}
+      fontSize={34}
     />;
   };
 
@@ -77,7 +86,11 @@ const MenusSetting = (props) => {
   };
 
   const remove = async (code) => {
-    await setCommonlyMenus(commonlyMenus.filter(item => item.code !== code));
+    const newMenus = commonlyMenus.filter(item => item.code !== code);
+    if (newMenus.length === 0){
+      return Toast.show({ content: '最少保留1个常用功能！' });
+    }
+    await setCommonlyMenus(newMenus);
     sortToggle();
   };
 
@@ -215,9 +228,6 @@ const MenusSetting = (props) => {
             case 'REPAIR':
               otherMenus.push({ name: '工单管理', code: 'Repair' });
               otherMenus.push({ name: '创建报修', code: 'CreateRepair' });
-              break;
-            case 'BASE_SYSTEM':
-              otherMenus.push({ name: '退出登录', code: 'LogOut' });
               break;
             default:
               break;

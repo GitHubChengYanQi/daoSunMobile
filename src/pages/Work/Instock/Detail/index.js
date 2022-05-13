@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import MyNavBar from '../../../components/MyNavBar';
-import MyFloatingPanel from '../../../components/MyFloatingPanel';
-import { getHeader } from '../../../components/GetHeader';
 import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import Label from '../../../components/Label';

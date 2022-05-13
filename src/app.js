@@ -1,8 +1,8 @@
 import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
-import { getHeader } from './pages/components/GetHeader';
+import { isQiyeWeixin } from './pages/components/GetHeader';
 import { history } from 'umi';
-import { getUserInfo, getUserMenus, loginBycode, wxTicket } from './components/Auth';
+import { getUserInfo, loginBycode, userCustomer, wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
@@ -17,71 +17,68 @@ export const dva = {
   },
 };
 
-const VerificationCodeOpen = async () => {
-  return await request({ url: '/getKaptchaOpen', method: 'GET' });
-};
 
 export async function getInitialState() {
 
   const token = GetUserInfo().token;
 
-  if (token) {
+  const userInfo = GetUserInfo().userInfo || {};
+  const type = userInfo.hasOwnProperty('type');
+
+  if (token && !type) {
     const res = await request({ url: '/rest/refreshToken', method: 'GET' });
     if (res) {
       cookie.set('cheng-token', res);
     }
   }
+  const publicInfo = await request({ url: '/getPublicInfo', method: 'GET' });
 
-  const userInfo = GetUserInfo().userInfo || {};
-  const type = userInfo.hasOwnProperty('type');
-
-  const res = await VerificationCodeOpen();
+  if (!publicInfo) {
+    return { init: false };
+  }
 
   if (!token) {
     // token不存在
-    if (getHeader() && process.env.NODE_ENV !== 'development') {
+    if (isQiyeWeixin()) {
       // 是企业微信走byCode
       loginBycode();
+      return { isQiYeWeiXin: true };
     } else {
       // 不是企业微信直接走login
       history.push('/Login');
-      return res || {};
+      return { ...publicInfo, init: true };
     }
   } else {
     // token存在
-    if (getHeader() && type) {
+    if (isQiyeWeixin() && type) {
       // 是企业微信登录并且type存在
       if (userInfo.userId) {
         history.push('/Login');
-        return res || {};
       } else {
         history.push('/Sms');
       }
+      return { ...publicInfo, init: true };
     } else {
-      // type不存在
+
       await wxTicket();
       const userInfo = await getUserInfo();
-      const userMenus = await getUserMenus();
+      const customer = await userCustomer();
 
+      // type不存在
       if (!IsDev() && userInfo.name === '程彦祺') {
         new VConsole();
       }
 
-      const currentUrl = cookie.get('currentUrl');
-      const url = currentUrl && currentUrl.replace('#', '');
-      if (url && (url !== '/Login')) {
-        history.replace(url);
-        cookie.remove('currentUrl');
-      } else if (window.location.href.indexOf('Login') !== -1) {
-        history.replace('/');
+      if (history.location.pathname === '/Login'){
+        history.push('/')
       }
 
       return {
-        ...res,
+        ...publicInfo,
+        init: true,
         userInfo,
-        userMenus,
+        customer,
       };
     }
   }
-  return {};
 }

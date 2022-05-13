@@ -1,19 +1,17 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { Button, Checkbox, Dialog, Divider, Input, Toast } from 'antd-mobile';
-import React, { useRef, useState } from 'react';
+import { Button, Checkbox, Divider, Input, Toast } from 'antd-mobile';
+import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import { connect } from 'dva';
-import { useModel } from 'umi';
+import { useLocation, useModel } from 'umi';
 import Icon from '../components/Icon';
 import { useBoolean } from 'ahooks';
 import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
-import { Logo } from '../Logo';
 import { Field } from '@formily/react';
 import { createForm } from '@formily/core';
 import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
-import { Message } from '../components/Message';
 import MyDialog from '../components/MyDialog';
 
 
@@ -44,7 +42,7 @@ export const Password = (props) => {
     />
     <Button onClick={() => {
       toggle();
-    }} fill='none' style={{ padding: 0,color:'rgb(126 123 123)' }}>
+    }} fill='none' style={{ padding: 0, color: 'rgb(126 123 123)' }}>
       {showPassword ? <EyeOutline /> : <EyeInvisibleOutline />}
     </Button>
   </div>;
@@ -69,7 +67,11 @@ const Login = () => {
 
   const dialogRef = useRef();
 
-  const { initialState, refresh,loading  } = useModel('@@initialState');
+  const { query } = useLocation();
+
+  const { initialState, refresh, loading } = useModel('@@initialState');
+
+  const state = initialState || {};
 
   const [count, setCount] = useState(0);
 
@@ -77,18 +79,23 @@ const Login = () => {
     setCount(parseInt(Math.random() * 10, 10));
   };
 
-  const kaptchaOpen = initialState.kaptchaOpen;
+  const kaptchaOpen = state.kaptchaOpen;
 
-  const { loading:loginLoading, run } = useRequest(
+  const { loading: loginLoading, run } = useRequest(
     {
       url: '/login/wxCp',
       method: 'POST',
     }, {
       manual: true,
       onSuccess: async (res) => {
+        Toast.show({ content: '登录成功！', position: 'bottom' });
         if (res) {
           cookie.set('cheng-token', res);
-          refresh();
+          if (query.backUrl){
+            window.location.href = query.backUrl
+          }else {
+            refresh();
+          }
         }
       },
       onError: () => {
@@ -105,7 +112,7 @@ const Login = () => {
       }
       if (!values.username) {
         return dialogRef.current.open('账号不能为空');
-      }else if (!values.password){
+      } else if (!values.password) {
         return dialogRef.current.open('密码不能为空');
       }
       return run(
@@ -116,10 +123,14 @@ const Login = () => {
     });
   };
 
+  useEffect(() => {
+    window.document.title = '登录';
+  }, []);
+
   return <div className={style.login}>
     <div className={style.formDiv}>
       <div style={{ textAlign: 'center' }} className={style.logo}>
-        <img src={Logo.LoginLogo()} width='87' height={87} alt='' />
+        {state.loginLogo && <img src={state.loginLogo} width='87' height={87} alt='' />}
       </div>
       <div className={style.enterpriseName}>欢迎使用{initialState.systemName}</div>
 
@@ -131,7 +142,11 @@ const Login = () => {
       >
         <Field name='username' component={[Username]} />
         <Field name='password' component={[Password]} />
-        <Field hidden={kaptchaOpen === 'false'} name='kaptchaOpen' component={[VerificationCode, { count, codeChange }]} />
+        <Field
+          hidden={kaptchaOpen !== true}
+          name='kaptchaOpen'
+          component={[VerificationCode, { count, codeChange }]}
+        />
       </Form>
 
       <div hidden className={style.foterAction}>
@@ -157,7 +172,7 @@ const Login = () => {
         {loading ? '登录中' : '立即登录'}
       </Button>
       <Divider className={style.password} style={{ margin: 0 }}>
-        <div onClick={()=>{
+        <div onClick={() => {
           dialogRef.current.open('请联系管理员!');
         }}>
           忘记登录密码
