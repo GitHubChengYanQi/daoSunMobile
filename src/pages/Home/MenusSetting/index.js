@@ -12,6 +12,7 @@ import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
 import { connect } from 'dva';
+import DefaultMenus from '../component/DefaultMenus';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
@@ -47,18 +48,7 @@ const MenusSetting = (props) => {
   const sysMenus = userInfo.menus || [];
 
   useEffect(() => {
-    if (Array.isArray(userMenus) && userMenus.length > 0) {
-      setCommonlyMenus(userMenus);
-    } else {
-      const defaultMenus = [];
-      sysMenus.map((item, index) => {
-        if (index >= 8) {
-          return null;
-        }
-        return defaultMenus.push({ code: item.id, name: item.name });
-      });
-      setCommonlyMenus(defaultMenus);
-    }
+    setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
   }, [userMenus]);
 
   useEffect(() => {
@@ -87,7 +77,7 @@ const MenusSetting = (props) => {
 
   const remove = async (code) => {
     const newMenus = commonlyMenus.filter(item => item.code !== code);
-    if (newMenus.length === 0){
+    if (newMenus.length === 0) {
       return Toast.show({ content: '最少保留1个常用功能！' });
     }
     await setCommonlyMenus(newMenus);

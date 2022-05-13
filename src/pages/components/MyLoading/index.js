@@ -2,6 +2,7 @@ import { Dialog } from 'antd-mobile';
 import style from './index.less';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
+import { useDebounceEffect } from 'ahooks';
 
 export const MyLoading = ({ skeleton, title }) => {
 
@@ -13,9 +14,11 @@ export const MyLoading = ({ skeleton, title }) => {
 
   // 当前网速较慢，正在努力加载...
 
-  setTimeout(() => {
+  useDebounceEffect(() => {
     setLoadingTitle('当前网速较慢，正在努力加载...');
-  }, 3000);
+  }, [],{
+    wait:3000,
+  });
 
 
   const Loading = () => {

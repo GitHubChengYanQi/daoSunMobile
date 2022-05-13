@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
@@ -18,6 +18,14 @@ const Home = (props) => {
   const userInfo = state.userInfo || {};
 
   const userMenus = props.data && props.data.userMenus;
+
+  const sysMenus = userInfo.menus || [];
+
+  const [commonlyMenus, setCommonlyMenus] = useState([]);
+
+  useEffect(() => {
+    setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
+  }, [userMenus]);
 
   useEffect(() => {
     if (!userMenus) {
@@ -45,8 +53,10 @@ const Home = (props) => {
         </div>
       </div>
       <div>
-        <Avatar style={{ backgroundColor: '#98BFEB' }} size={46}
-                src={userInfo.avatar}>{userInfo.name && userInfo.name.substring(0, 1)}</Avatar>
+        <Avatar
+          style={{ backgroundColor: '#98BFEB' }}
+          size={46}
+          src={userInfo.avatar}>{userInfo.name && userInfo.name.substring(0, 1)}</Avatar>
       </div>
     </div>
     <Card
@@ -81,15 +91,12 @@ const Home = (props) => {
     >
       <Grid columns={3} gap={0}>
         {
-          (Array.isArray(userMenus) && userMenus.length > 0)
-            ?
-            userMenus.map((item, index) => {
-              return <Grid.Item className={style.menus} key={index}>
-                <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
-              </Grid.Item>;
-            })
-            :
-            <DefaultMenus fontSize={50} />
+
+          commonlyMenus.map((item, index) => {
+            return <Grid.Item className={style.menus} key={index}>
+              <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
+            </Grid.Item>;
+          })
         }
         <Grid.Item className={style.menus}>
           <Menus fontSize={50} />
