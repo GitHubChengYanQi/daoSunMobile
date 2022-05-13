@@ -3,6 +3,7 @@ import Icon from '../../../components/Icon';
 import { Space, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { history } from 'umi';
+import cookie from 'js-cookie';
 
 const Menus = (
   {
@@ -26,9 +27,9 @@ const Menus = (
         if (disabled) {
           return;
         }
-        // if (url === 'LogOut'){
-        //
-        // }
+        if (code === 'LogOut') {
+          // cookie.remove('cheng-token');
+        }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
         }

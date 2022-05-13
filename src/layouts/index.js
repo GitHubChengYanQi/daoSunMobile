@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { useLocation, useModel } from 'umi';
+import { history, useLocation, useModel } from 'umi';
 import { connect } from 'dva';
 import { Dialog, ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
+import { loginBycode } from '../components/Auth';
+import GetUserInfo from '../pages/GetUserInfo';
+import { isQiyeWeixin } from '../pages/components/GetHeader';
 
 
 const BasicLayout = (props) => {
@@ -14,8 +17,6 @@ const BasicLayout = (props) => {
   const state = initialState || {};
 
   window.scrollTo(0, 0);
-
-  const location = useLocation();
 
   const receive = () => {
     window.receive = (code) => {
@@ -44,7 +45,7 @@ const BasicLayout = (props) => {
 
   const qrCodeAction = () => {
     let action = '';
-    switch (location.pathname) {
+    switch (history.location.pathname) {
       case '/Scan/InStock/AppInstock':
         action = 'instock';
         break;
@@ -81,7 +82,15 @@ const BasicLayout = (props) => {
 
   useEffect(() => {
     qrCodeAction();
-  }, [location.pathname]);
+    if (!GetUserInfo().token) {
+      if (isQiyeWeixin()) {
+        loginBycode();
+      } else {
+        history.push('/Login');
+      }
+
+    }
+  }, [history.location.pathname]);
 
   useEffect(() => {
     receive();
