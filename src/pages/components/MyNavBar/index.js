@@ -10,7 +10,7 @@ const MyNavBar = ({ title }) => {
   const state = initialState || {};
 
   useEffect(() => {
-    window.document.title = title || state.systemName || '';
+    window.document.title = state.systemName ? `${title}-${state.systemName}` : title;
   }, []);
 
   return !isQiyeWeixin() && <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>

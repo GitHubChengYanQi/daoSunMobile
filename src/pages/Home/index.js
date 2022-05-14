@@ -33,7 +33,7 @@ const Home = (props) => {
         type: 'data/getUserMenus',
       });
     }
-    window.document.title = '首页';
+    window.document.title = state.systemName ? `首页-${state.systemName}` : '首页';
   }, []);
 
 

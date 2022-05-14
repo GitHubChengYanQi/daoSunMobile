@@ -4,6 +4,7 @@ import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
 import { isQiyeWeixin } from '../../pages/components/GetHeader';
 import { history } from 'umi';
+import GetUserInfo from '../../pages/GetUserInfo';
 
 
 export const wxTicket = async () => {
@@ -30,7 +31,7 @@ export const wxTicket = async () => {
   }
 };
 
-const Url = () => {
+const wxUrl = () => {
   const search = new URLSearchParams(window.location.search);
   search.delete('code');
   search.delete('state');
@@ -42,10 +43,12 @@ const login = async () => {
     url: '/login/oauth/wxCp',
     method: 'GET',
     params: {
-      url: Url(),
+      url: wxUrl(),
     },
   });
-  window.location.href = data && data.url;
+  if (data) {
+    window.location.href = data && data.url;
+  }
 };
 
 export const loginBycode = async () => {
@@ -61,7 +64,7 @@ export const loginBycode = async () => {
     });
     if (token) {
       cookie.set('cheng-token', token);
-      window.location.href = Url();
+      window.location.href = wxUrl();
       return;
     }
   }

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { history, useLocation, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import { connect } from 'dva';
 import { Dialog, ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
@@ -12,7 +12,7 @@ import { isQiyeWeixin } from '../pages/components/GetHeader';
 const BasicLayout = (props) => {
 
 
-  const { initialState, loading } = useModel('@@initialState');
+  const { initialState, loading, refresh } = useModel('@@initialState');
 
   const state = initialState || {};
 
@@ -82,13 +82,16 @@ const BasicLayout = (props) => {
 
   useEffect(() => {
     qrCodeAction();
-    if (!GetUserInfo().token && history.location.pathname !== '/Login' && history.location.pathname !== '/Sms') {
+    console.log(history.location.pathname);
+    if (!GetUserInfo().token) {
+      if (history.location.pathname === '/Login' || history.location.pathname === '/Sms'){
+        return;
+      }
       if (isQiyeWeixin()) {
         loginBycode();
       } else {
         history.push('/Login');
       }
-
     }
   }, [history.location.pathname]);
 

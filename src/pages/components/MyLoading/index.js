@@ -15,11 +15,12 @@ export const MyLoading = ({ skeleton, title }) => {
   // 当前网速较慢，正在努力加载...
 
   useDebounceEffect(() => {
-    setLoadingTitle('当前网速较慢，正在努力加载...');
+    // setLoadingTitle('当前网速较慢，正在努力加载...');
   }, [],{
     wait:3000,
   });
 
+  // alert(333);
 
   const Loading = () => {
     return <div className={style.center}>

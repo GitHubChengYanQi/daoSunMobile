@@ -46,7 +46,7 @@ const MenusSetting = (props) => {
 
   const sysMenus = userInfo.menus || [];
 
-  console.log(sysMenus);
+  // console.log(sysMenus);
 
   useEffect(() => {
     setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
