@@ -91,7 +91,6 @@ const Home = (props) => {
     >
       <Grid columns={3} gap={0}>
         {
-
           commonlyMenus.map((item, index) => {
             return <Grid.Item className={style.menus} key={index}>
               <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
@@ -103,6 +102,7 @@ const Home = (props) => {
         </Grid.Item>
       </Grid>
     </Card>
+    <div style={{ height: 16 }} />
   </div>;
 };
 

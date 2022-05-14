@@ -82,7 +82,7 @@ const BasicLayout = (props) => {
 
   useEffect(() => {
     qrCodeAction();
-    if (!GetUserInfo().token) {
+    if (!GetUserInfo().token && history.location.pathname !== '/Login' && history.location.pathname !== '/Sms') {
       if (isQiyeWeixin()) {
         loginBycode();
       } else {

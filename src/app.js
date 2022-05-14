@@ -2,7 +2,7 @@ import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
 import { isQiyeWeixin } from './pages/components/GetHeader';
 import { history } from 'umi';
-import { getUserInfo, loginBycode, userCustomer, wxTicket } from './components/Auth';
+import { getUserInfo, goToLogin, loginBycode, userCustomer, wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
@@ -39,7 +39,7 @@ export async function getInitialState() {
 
   if (!token) {
     // token不存在
-    if (isQiyeWeixin()) {
+    if (isQiyeWeixin() && process.env.ENV !== 'test') {
       // 是企业微信走byCode
       loginBycode();
       return { isQiYeWeiXin: true };
@@ -69,8 +69,8 @@ export async function getInitialState() {
         new VConsole();
       }
 
-      if (history.location.pathname === '/Login'){
-        history.push('/')
+      if (history.location.pathname === '/Login') {
+        history.push('/');
       }
 
       return {

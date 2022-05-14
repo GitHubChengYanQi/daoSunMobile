@@ -1,14 +1,14 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
-import { history } from 'umi';
+import { goToLogin } from '../../components/Auth';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'https://lqscyq.xicp.fun'
-  // 'http://192.168.1.143'
+  // 'https://lqscyq.xicp.fun'
+  'http://192.168.1.119'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -38,12 +38,7 @@ ajaxService.interceptors.response.use((response) => {
   const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
   if (errCode === 1502) {
     cookie.remove('cheng-token');
-    history.push({
-      pathname: '/Login',
-      query: {
-        backUrl: window.location.href,
-      },
-    });
+    goToLogin();
     throw new Error("loginTimeout");
   } else if (response.errCode === 402) {
     Dialog.confirm({

@@ -3,6 +3,7 @@ import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
 import { isQiyeWeixin } from '../../pages/components/GetHeader';
+import { history } from 'umi';
 
 
 export const wxTicket = async () => {
@@ -100,4 +101,17 @@ export const getUserMenus = async () => {
   const userMenus = await request({ url: '/mobelTableView/detail', method: 'GET' });
 
   return userMenus && userMenus.details || [];
+};
+
+export const goToLogin = () => {
+  const backUrl = window.location.href;
+  // const search = new URLSearchParams(window.location.search);
+  // console.log(search);
+  // console.log(`/${login}/g`.test(backUrl));
+  history.push({
+    pathname: '/Login',
+    query: {
+      backUrl,
+    },
+  });
 };
