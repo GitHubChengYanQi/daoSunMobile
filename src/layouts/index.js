@@ -4,7 +4,7 @@ import { connect } from 'dva';
 import { Dialog, ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
-import { loginBycode } from '../components/Auth';
+import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
 import { isQiyeWeixin } from '../pages/components/GetHeader';
 
@@ -12,7 +12,7 @@ import { isQiyeWeixin } from '../pages/components/GetHeader';
 const BasicLayout = (props) => {
 
 
-  const { initialState, loading, refresh } = useModel('@@initialState');
+  const { initialState, loading } = useModel('@@initialState');
 
   const state = initialState || {};
 
@@ -80,11 +80,17 @@ const BasicLayout = (props) => {
     }
   };
 
+  setInterval(() => {
+
+    if (GetUserInfo().token && history.location.pathname.indexOf('wxLogin') !== -1) {
+      window.location.href = wxUrl(false);
+    }
+  }, 1000);
+
   useEffect(() => {
     qrCodeAction();
-    console.log(history.location.pathname);
     if (!GetUserInfo().token) {
-      if (history.location.pathname === '/Login' || history.location.pathname === '/Sms'){
+      if (history.location.pathname === '/Login' || history.location.pathname === '/Sms') {
         return;
       }
       if (isQiyeWeixin()) {

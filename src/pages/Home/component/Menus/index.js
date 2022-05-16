@@ -68,11 +68,11 @@ const Menus = (
     case 'business':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Business' });
     case 'competitor':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Competitor' });
+      return MenusStyle({ icon: 'icon-jingzhengduishou2', url: '/Work/Competitor' });
     case 'contract':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Contract' });
     case 'contacts':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Customer?contacts' });
+      return MenusStyle({ icon: 'icon-lianxiren2', url: '/Work/Customer?contacts' });
     case 'outstockApply':
       return MenusStyle({ icon: 'icon-fahuoshenqing1', url: '/Work/OutstockApply' });
     case 'SalesOrder':
@@ -141,6 +141,14 @@ const Menus = (
       return MenusStyle({ icon: 'icon-tuijianshangpin' });
     case 'repair':
       return MenusStyle({ icon: 'icon-shouhouguanli' });
+    case 'speechcraft':
+      return MenusStyle({ icon: 'icon-huashuguanli' });
+    case 'businessTrack':
+      return MenusStyle({ icon: 'icon-genjinguanli' });
+    case 'data':
+      return MenusStyle({ icon: 'icon-xinxiguanli' });
+    case 'competitorQuote':
+      return MenusStyle({ icon: 'icon-baojiaguanli2' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }
