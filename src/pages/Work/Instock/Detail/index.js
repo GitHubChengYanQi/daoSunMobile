@@ -218,10 +218,20 @@ const Detail = ({ id, setModuleObject, moduleObject, currentNode = [], processRe
 
   const errorAction = (actionId) => {
     const errors = details.filter(item => item.number !== item.newNumber);
+    history.push({
+      pathname: '/Receipts/ReceiptsCreate',
+      query: {
+        type: ReceiptsEnums.instockError,
+      },
+      state: {
+        details,
+        id,
+      },
+    });
+    return;
     if (errors.length > 0) {
       history.push({
         pathname: `/ReceiptsCreate?type=${ReceiptsEnums.instockError}`,
-        // pathname: '/Work/Stock/DtockDetails',
         state: {
           details,
           id,

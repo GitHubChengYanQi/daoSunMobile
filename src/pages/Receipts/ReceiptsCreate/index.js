@@ -4,7 +4,7 @@ import AskAdd from '../../Work/PurchaseAsk/AskAdd';
 import Errors from '../../Work/Instock/Errors';
 import MyEmpty from '../../components/MyEmpty';
 import MyBottom from '../../components/MyBottom';
-import { CreateInstock, CreateInstockBottom } from '../components/Instock';
+import { CreateInstock, CreateInstockBottom, InstockError } from '../components/Instock';
 import Process from '../../Work/PurchaseAsk/components/Process';
 import { ReceiptsEnums } from '../index';
 
@@ -34,7 +34,13 @@ const ReceiptsCreate = () => {
       case 'purchaseAsk':
         return <AskAdd />;
       case ReceiptsEnums.instockError:
-        return <Errors params={query.params} state={state} setType={setType} />;
+        return <Errors
+          params={query.params}
+          setModuleObject={setModuleObject}
+          state={state}
+          setType={setType}
+          ref={createRef}
+        />;
       default:
         return <MyEmpty />;
     }
@@ -44,6 +50,12 @@ const ReceiptsCreate = () => {
     switch (query.type) {
       case ReceiptsEnums.instockOrder:
         return <CreateInstockBottom
+          createRef={createRef}
+          left={left}
+          moduleObject={moduleObject}
+        />;
+      case ReceiptsEnums.instockError:
+        return <InstockError
           createRef={createRef}
           left={left}
           moduleObject={moduleObject}

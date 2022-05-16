@@ -2,6 +2,7 @@ import React from 'react';
 import { Button, Space } from 'antd-mobile';
 import Audit from '../Audit';
 import CreateInStock from '../../../Work/Instock/CreateInStock';
+import Label from '../../../components/Label';
 
 export const CreateInstock = (
   {
@@ -117,4 +118,27 @@ export const InstockDetailBottom = (
   };
 
   return buttons();
+};
+
+export const InstockError = (
+  {
+    left,
+    createRef,
+    moduleObject = {},
+  }) => {
+
+  const errorDetails = moduleObject.errorDetails || [];
+
+  if (left) {
+    return <div><Label>异常物料：</Label>{errorDetails.length}</div>;
+  }
+
+  return <Space>
+    <Button
+      disabled={errorDetails.length === 0}
+      color='primary'
+      onClick={() => {
+        createRef.current.submitAnomaly();
+      }}>提交并暂停入库</Button>
+  </Space>;
 };
