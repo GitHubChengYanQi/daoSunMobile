@@ -8,20 +8,27 @@ import style from '../Login/index.less';
 import { Form } from '@formily/antd';
 import { Field } from '@formily/react';
 import Icon from '../components/Icon';
-import { createForm } from '@formily/core';
+import { createForm, onFieldReact } from '@formily/core';
 import { Code, Phone } from './components/Field';
 
+const form = createForm({
+  effects: () => {
+    onFieldReact('code', (field) => {
+      field.setComponentProps({ phone: field.query('phone').get('value') });
+    });
+  },
+});
 
 const Sms = () => {
 
-  const { initialState  } = useModel('@@initialState');
+  const { initialState } = useModel('@@initialState');
 
-  const state = initialState || {}
+  const state = initialState || {};
 
   const { loading, run } = useRequest({ url: '/login/phone', method: 'POST' }, {
     manual: true, onSuccess: (res) => {
       if (res) {
-        Toast.show({content:'手机号绑定成功！'});
+        Toast.show({ content: '手机号绑定成功！' });
         cookie.set('cheng-token', res);
         const userInfo = GetUserInfo().userInfo;
         if (userInfo && userInfo.userId) {
@@ -31,14 +38,12 @@ const Sms = () => {
     },
   });
 
-  const form = createForm();
-
   const submit = () => {
     form.submit((values) => {
-      if (!values.phone){
-        return Dialog.alert({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true, });
-      }else if (!values.code) {
-        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true, });
+      if (!values.phone) {
+        return Dialog.alert({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true });
+      } else if (!values.code) {
+        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true });
       }
       run({ data: values });
     });
