@@ -19,7 +19,7 @@ export const dva = {
 
 
 export async function getInitialState() {
-
+  // new VConsole();
   const token = GetUserInfo().token;
 
   const userInfo = GetUserInfo().userInfo || {};
@@ -69,8 +69,8 @@ export async function getInitialState() {
         new VConsole();
       }
 
-      if (history.location.pathname === '/Login'){
-        history.push('/')
+      if (history.location.pathname === '/Login') {
+        history.push('/');
       }
 
       return {

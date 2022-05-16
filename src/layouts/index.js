@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { history, useLocation, useModel } from 'umi';
+import { history, useModel } from 'umi';
 import { connect } from 'dva';
 import { Dialog, ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
-import { loginBycode } from '../components/Auth';
+import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
 import { isQiyeWeixin } from '../pages/components/GetHeader';
 
@@ -80,15 +80,24 @@ const BasicLayout = (props) => {
     }
   };
 
+  setInterval(() => {
+
+    if (GetUserInfo().token && history.location.pathname.indexOf('wxLogin') !== -1) {
+      window.location.href = wxUrl(false);
+    }
+  }, 1000);
+
   useEffect(() => {
     qrCodeAction();
     if (!GetUserInfo().token) {
+      if (history.location.pathname === '/Login' || history.location.pathname === '/Sms') {
+        return;
+      }
       if (isQiyeWeixin()) {
         loginBycode();
       } else {
         history.push('/Login');
       }
-
     }
   }, [history.location.pathname]);
 

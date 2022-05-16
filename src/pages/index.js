@@ -2,22 +2,14 @@ import Home from './Home';
 import { TabBar } from 'antd-mobile';
 import Icon from './components/Icon';
 import React, { useState } from 'react';
-import OrCode from './OrCode';
 import { connect } from 'dva';
 import style from './index.less';
 import MyEmpty from './components/MyEmpty';
+import { isQiyeWeixin } from './components/GetHeader';
 
 const iconSize = 20;
 
 const Index = (props) => {
-
-
-  const nav =
-    props.history.location.pathname.split('/')[1] !== 'OrCode'
-    &&
-    props.history.location.pathname.split('/')[1] !== 'Login'
-    &&
-    props.history.location.pathname.split('/').length <= 2;
 
   const routes = props.qrCode && props.qrCode.route;
 
@@ -47,12 +39,12 @@ const Index = (props) => {
       <div className={style.content}>
         {content()}
       </div>
-      {nav && <TabBar
+      <TabBar
         className={style.tabBarItem}
         safeArea
         activeKey={module}
         onChange={(value) => {
-          if (module === '/Home' && value === '/Home') {
+          if (module === '/Home' && value === '/Home' && isQiyeWeixin()) {
             props.dispatch({
               type: 'qrCode/wxCpScan',
             });
@@ -71,11 +63,11 @@ const Index = (props) => {
           icon={<Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />}
         />
         <TabBar.Item
-          title={module === '/Home' ? '扫码' : '首页'}
+          title={(module === '/Home' && isQiyeWeixin()) ? '扫码' : '首页'}
           key='/Home'
           icon={<Icon
             style={{ fontSize: iconSize }}
-            type={module === '/Home' ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
+            type={(module === '/Home' && isQiyeWeixin()) ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
           />}
         />
         <TabBar.Item
@@ -88,7 +80,7 @@ const Index = (props) => {
           key='/Report'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-wode' />}
         />
-      </TabBar>}
+      </TabBar>
     </div>
   );
 };

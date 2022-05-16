@@ -44,8 +44,9 @@ const MenusSetting = (props) => {
     },
   });
 
-
   const sysMenus = userInfo.menus || [];
+
+  // console.log(sysMenus);
 
   useEffect(() => {
     setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
@@ -59,12 +60,13 @@ const MenusSetting = (props) => {
     }
   }, []);
 
-  const menus = (item) => {
+  const menus = (item, shake) => {
     return <Menus
       textOverflow={70}
       module={module}
       code={item.code}
       name={item.name}
+      shake={shake}
       disabled={menuSys}
       fontSize={34}
     />;
@@ -91,12 +93,31 @@ const MenusSetting = (props) => {
     if (!menuSys) {
       return menus(item);
     }
-    return <div>
-      <Badge content={<MinusOutline onClick={() => {
-        remove(item.code);
-      }} />}>
+
+    let shake = '';
+
+    switch (index % 3) {
+      case 0:
+        shake = style.shake0;
+        break;
+      case 1:
+        shake = style.shake1;
+        break;
+      case 2:
+        shake = style.shake2;
+        break;
+      default:
+        break;
+    }
+
+    return <div className={shake}>
+      <Badge className={style.badge} content={<div className={style.removeContent}>
+        <MinusOutline onClick={() => {
+          remove(item.code);
+        }} />
+      </div>}>
         <Handle {...other} >
-          {menus(item)}
+          {menus(item, true)}
         </Handle>
       </Badge>
 
@@ -105,12 +126,15 @@ const MenusSetting = (props) => {
 
   const addButton = (code, name) => {
     const commonly = commonlyMenus.map(item => item.code);
-    return (menuSys && !commonly.includes(code)) ? <AddOutline onClick={() => {
-      if (commonlyMenus.length >= 8) {
-        return Toast.show({ content: '最多添加8个常用功能！' });
-      }
-      addAction({ code, name });
-    }} /> : null;
+    return (menuSys && !commonly.includes(code)) ?
+      <div className={style.addContent}>
+        <AddOutline onClick={() => {
+          if (commonlyMenus.length >= 8) {
+            return Toast.show({ content: '最多添加8个常用功能！' });
+          }
+          addAction({ code, name });
+        }} />
+      </div> : null;
   };
 
   return <div>
@@ -237,7 +261,7 @@ const MenusSetting = (props) => {
               {
                 subMenus.concat(otherMenus).map((item, index) => {
                   return <Grid.Item className={style.menus} key={index}>
-                    <Badge content={addButton(item.code, item.name)} color='var(--adm-color-primary)'>
+                    <Badge className={style.badge} content={addButton(item.code, item.name)}>
                       {menus(item)}
                     </Badge>
                   </Grid.Item>;
@@ -258,7 +282,7 @@ const MenusSetting = (props) => {
       >
         <Grid columns={4} gap={0}>
           <Grid.Item className={style.menus}>
-            <Badge content={addButton('LogOut', '退出登录')} color='var(--adm-color-primary)'>
+            <Badge className={style.badge} content={addButton('LogOut', '退出登录')} color='var(--adm-color-primary)'>
               {menus({ code: 'LogOut', name: '退出登录' })}
             </Badge>
           </Grid.Item>

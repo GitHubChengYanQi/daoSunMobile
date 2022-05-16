@@ -3,6 +3,7 @@ import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
 import { isQiyeWeixin } from '../../pages/components/GetHeader';
+import { history } from 'umi';
 
 
 export const wxTicket = async () => {
@@ -29,11 +30,16 @@ export const wxTicket = async () => {
   }
 };
 
-const Url = () => {
+export const wxUrl = (wxLogin) => {
   const search = new URLSearchParams(window.location.search);
   search.delete('code');
   search.delete('state');
-  return window.location.protocol + '//' + window.location.host + window.location.pathname + search.toString() + window.location.hash;
+  const url = window.location.protocol + '//' + window.location.host + window.location.pathname + search.toString() + window.location.hash;
+  if (wxLogin) {
+    return url.replace('#/','#/wxLogin/');
+  } else {
+    return url.replace('wxLogin/', '');
+  }
 };
 
 const login = async () => {
@@ -41,10 +47,12 @@ const login = async () => {
     url: '/login/oauth/wxCp',
     method: 'GET',
     params: {
-      url: Url(),
+      url: wxUrl(true),
     },
   });
-  window.location.href = data && data.url;
+  if (data) {
+    window.location.href = data && data.url;
+  }
 };
 
 export const loginBycode = async () => {
@@ -60,7 +68,7 @@ export const loginBycode = async () => {
     });
     if (token) {
       cookie.set('cheng-token', token);
-      window.location.href = Url();
+      window.location.href = wxUrl(false);
       return;
     }
   }
@@ -100,4 +108,17 @@ export const getUserMenus = async () => {
   const userMenus = await request({ url: '/mobelTableView/detail', method: 'GET' });
 
   return userMenus && userMenus.details || [];
+};
+
+export const goToLogin = () => {
+  const backUrl = window.location.href;
+  // const search = new URLSearchParams(window.location.search);
+  // console.log(search);
+  // console.log(`/${login}/g`.test(backUrl));
+  history.push({
+    pathname: '/Login',
+    query: {
+      backUrl,
+    },
+  });
 };

@@ -20,6 +20,7 @@ export const MyLoading = ({ skeleton, title }) => {
     wait:3000,
   });
 
+  // alert(333);
 
   const Loading = () => {
     return <div className={style.center}>

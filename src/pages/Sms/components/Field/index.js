@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from '../../../Login/index.less';
 import Icon from '../../../components/Icon';
 import { Dialog, Input, Toast } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import SendCode from '@jiumao/rc-send-code';
-import { observer, useForm, useFormEffects } from '@formily/react';
-import { onFieldReact } from '@formily/core';
 
 export const Phone = (props) => {
 
@@ -19,21 +17,13 @@ export const Phone = (props) => {
   </div>;
 };
 
-export const Code = (props) => {
-
-  const [phone, setPhone] = useState();
-
-  useFormEffects(() => {
-    onFieldReact('code', (field) => {
-      setPhone(field.query('phone').get('value'));
-    });
-  });
+export const Code = ({ phone, ...props }) => {
 
   const { run } = useRequest({ url: '/sms/sendCode', method: 'POST' }, {
     manual: true,
-    onSuccess:()=>{
-      Toast.show({content:'验证码已发送!'});
-    }
+    onSuccess: () => {
+      Toast.show({ content: '验证码已发送!' });
+    },
   });
 
   return <div className={style.account}>
@@ -44,6 +34,7 @@ export const Code = (props) => {
       {...props}
     />
     <SendCode
+      disabled={!phone}
       className={style.sendCode}
       onCaptcha={() => {
         if (!phone) {

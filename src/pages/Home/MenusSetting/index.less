@@ -27,6 +27,7 @@
     letter-spacing: 0;
     color: #333333;
     margin-right: 5px;
+    display: flex;
   }
 
   .cardHeader {
@@ -55,7 +56,7 @@
       .commonlyRight {
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 5px;
 
         .commonlyIcon {
           font-size: 12px;
@@ -84,6 +85,99 @@
     }
   }
 }
+
+.badge {
+  background-color: rgba(0, 0, 0, 0);
+  right: 8px;
+
+  :global .adm-badge-content {
+    padding: 20px;
+  }
+
+  .removeContent {
+    background-color: #bdbaba;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .addContent {
+    background-color: var(--adm-color-primary);
+    width: 20px;
+    height: 20px;
+    display: flex;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+}
+
+.shake0 {
+  animation: shake0 1s infinite both;
+}
+
+.shake1 {
+  animation: shake1 1s infinite both;
+}
+
+.shake2 {
+  animation: shake2 1s infinite both;
+}
+
+@keyframes shake0 {
+
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-1px);
+  }
+
+  20%, 40%, 60%, 80% {
+    transform: translateY(1px);
+  }
+
+}
+
+@keyframes shake1 {
+
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(1px);
+  }
+
+  20%, 40%, 60%, 80% {
+    transform: translateY(-1px);
+  }
+
+}
+
+
+@keyframes shake2 {
+
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateY(1px);
+  }
+
+  20%, 40%, 60%, 80% {
+    transform: translateX(-1px);
+  }
+
+}
+
 
 
 

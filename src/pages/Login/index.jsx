@@ -88,14 +88,16 @@ const Login = () => {
     }, {
       manual: true,
       onSuccess: async (res) => {
-        Toast.show({ content: '登录成功！', position: 'bottom' });
         if (res) {
+          Toast.show({ content: '登录成功！', position: 'bottom' });
           cookie.set('cheng-token', res);
-          if (query.backUrl){
-            window.location.href = query.backUrl
-          }else {
+          if (query.backUrl) {
+            window.location.href = query.backUrl;
+          } else {
             refresh();
           }
+        } else {
+          Toast.show({ content: '登录失败！', position: 'bottom' });
         }
       },
       onError: () => {
@@ -124,7 +126,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    window.document.title = '登录';
+    window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
   }, []);
 
   return <div className={style.login}>
@@ -132,7 +134,7 @@ const Login = () => {
       <div style={{ textAlign: 'center' }} className={style.logo}>
         {state.loginLogo && <img src={state.loginLogo} width='87' height={87} alt='' />}
       </div>
-      <div className={style.enterpriseName}>欢迎使用{initialState.systemName}</div>
+      <div className={style.enterpriseName}>欢迎使用{state.systemName}</div>
 
       <Form
         className={style.form}

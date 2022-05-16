@@ -28,7 +28,7 @@ const Menus = (
           return;
         }
         if (code === 'LogOut') {
-          // cookie.remove('cheng-token');
+          cookie.remove('cheng-token');
         }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
@@ -58,7 +58,7 @@ const Menus = (
     case 'CRM':
       return MenusStyle({ icon: 'icon-crmguanli' });
     case 'process':
-      return MenusStyle({ icon: 'icon-shenpi2' });
+      return MenusStyle({ icon: 'icon-liuchengguanli' });
     case 'task':
       return MenusStyle({ icon: 'icon-renwu' });
     case 'message':
@@ -68,13 +68,13 @@ const Menus = (
     case 'business':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Business' });
     case 'competitor':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Competitor' });
+      return MenusStyle({ icon: 'icon-jingzhengduishou2', url: '/Work/Competitor' });
     case 'contract':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Contract' });
     case 'contacts':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Customer?contacts' });
+      return MenusStyle({ icon: 'icon-lianxiren2', url: '/Work/Customer?contacts' });
     case 'outstockApply':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/OutstockApply' });
+      return MenusStyle({ icon: 'icon-fahuoshenqing1', url: '/Work/OutstockApply' });
     case 'SalesOrder':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=2' });
     case 'stock':
@@ -108,7 +108,7 @@ const Menus = (
     case 'LogOut':
       return MenusStyle({ icon: 'icon-tuichudenglu', url: '/Login' });
     case 'action':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/ProcessTask' });
+      return MenusStyle({ icon: 'icon-shenpiguanli', url: '/Work/ProcessTask' });
     case 'EXCEL_PROCESS':
       return MenusStyle({ icon: 'icon-excelbiao' });
     case 'data_source':
@@ -133,6 +133,22 @@ const Menus = (
       return MenusStyle({ icon: 'icon-woshenhede' });
     case 'MyAudit':
       return MenusStyle({ icon: 'icon-weishenhede' });
+    case 'banner':
+      return MenusStyle({ icon: 'icon-lunbotuguanli' });
+    case 'navigation':
+      return MenusStyle({ icon: 'icon-daohangguanli' });
+    case 'goods':
+      return MenusStyle({ icon: 'icon-tuijianshangpin' });
+    case 'repair':
+      return MenusStyle({ icon: 'icon-shouhouguanli' });
+    case 'speechcraft':
+      return MenusStyle({ icon: 'icon-huashuguanli' });
+    case 'businessTrack':
+      return MenusStyle({ icon: 'icon-genjinguanli' });
+    case 'data':
+      return MenusStyle({ icon: 'icon-xinxiguanli' });
+    case 'competitorQuote':
+      return MenusStyle({ icon: 'icon-baojiaguanli2' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }

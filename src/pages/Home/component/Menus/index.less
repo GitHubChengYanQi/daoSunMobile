@@ -1,0 +1,46 @@
+.shake {
+  -webkit-animation-duration: 1s;
+
+  animation-duration: 1s;
+
+  animation-iteration-count: infinite;
+
+  -webkit-animation-fill-mode: both;
+
+  animation-fill-mode: both;
+
+  animation-name: shake;
+
+}
+
+@-webkit-keyframes shake {
+
+  0%, 100% {
+    -webkit-transform: translateX(0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translateX(-3px);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translateY(3px);
+  }
+
+}
+
+@keyframes shake {
+
+  0%, 100% {
+    transform: translateX(0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-10px);
+  }
+
+  20%, 40%, 60%, 80% {
+    transform: translateX(10px);
+  }
+
+}
