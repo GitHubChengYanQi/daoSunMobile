@@ -64,19 +64,19 @@ const Menus = (
     case 'message':
       return MenusStyle({ icon: 'icon-xiaoxi1' });
     case 'customer':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Customer' });
+      return MenusStyle({ icon: 'icon-kehuguanli', url: '/Work/Customer' });
     case 'business':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Business' });
+      return MenusStyle({ icon: 'icon-xiangmuguanli', url: '/Work/Business' });
     case 'competitor':
       return MenusStyle({ icon: 'icon-jingzhengduishou2', url: '/Work/Competitor' });
     case 'contract':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Contract' });
+      return MenusStyle({ icon: 'icon-hetongguanli', url: '/Work/Contract' });
     case 'contacts':
       return MenusStyle({ icon: 'icon-lianxiren2', url: '/Work/Customer?contacts' });
     case 'outstockApply':
       return MenusStyle({ icon: 'icon-fahuoshenqing1', url: '/Work/OutstockApply' });
     case 'SalesOrder':
-      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Order?type=2' });
+      return MenusStyle({ icon: 'icon-xiaoshoudingdan', url: '/Work/Order?type=2' });
     case 'stock':
       return MenusStyle({ icon: 'icon-kucunguanli1', url: '/Work/StoreHouse' });
     case 'instock':
@@ -149,6 +149,24 @@ const Menus = (
       return MenusStyle({ icon: 'icon-xinxiguanli' });
     case 'competitorQuote':
       return MenusStyle({ icon: 'icon-baojiaguanli2' });
+    case 'daoxinPortalClass':
+      return MenusStyle({ icon: 'icon-fenleiliebiao' });
+    case 'tool':
+      return MenusStyle({ icon: 'icon-gongjuguanli' });
+    case 'qrCode':
+      return MenusStyle({ icon: 'icon-erweimaguanli' });
+    case 'qualityCheck':
+      return MenusStyle({ icon: 'icon-zhijianguanli' });
+    case 'SPUS':
+      return MenusStyle({ icon: 'icon-chanpinguanli' });
+    case 'sop':
+      return MenusStyle({ icon: 'icon-zuoyezhidao' });
+    case 'parts':
+      return MenusStyle({ icon: 'icon-wuliaoqingdan' });
+    case 'sku':
+      return MenusStyle({ icon: 'icon-jichuwuliao' });
+    case 'createUser':
+      return MenusStyle({ icon: 'icon-kehuliebiao2' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }
