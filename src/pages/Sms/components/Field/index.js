@@ -4,11 +4,12 @@ import Icon from '../../../components/Icon';
 import { Dialog, Input, Toast } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import SendCode from '@jiumao/rc-send-code';
+import { PhoneOutlined } from '@ant-design/icons';
 
 export const Phone = (props) => {
 
   return <div className={style.account}>
-    <Icon type='icon-a-lianji1' />
+    <PhoneOutlined style={{color:'var(--adm-color-primary)'}} />
     <Input
       className={style.accountInput}
       placeholder='请输入手机号'
@@ -27,7 +28,7 @@ export const Code = ({ phone, ...props }) => {
   });
 
   return <div className={style.account}>
-    <Icon type='icon-a-lianji1' />
+    <Icon type='icon-yanzhengma' />
     <Input
       className={style.accountInput}
       placeholder='请输入验证码'
