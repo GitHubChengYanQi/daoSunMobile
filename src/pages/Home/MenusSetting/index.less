@@ -118,65 +118,124 @@
 }
 
 .shake0 {
-  animation: shake0 1s infinite both;
+  animation: shake0 0.5s infinite both;
 }
 
 .shake1 {
-  animation: shake1 1s infinite both;
+  animation: shake1 0.5s infinite both;
 }
 
 .shake2 {
-  animation: shake2 1s infinite both;
+  animation: shake2 0.5s infinite both;
+}
+
+.shake3 {
+  animation: shake3 0.5s infinite both;
+}
+
+.shake4 {
+  animation: shake4 0.5s infinite both;
+}
+
+.shake5 {
+  animation: shake5 0.5s infinite both;
 }
 
 @keyframes shake0 {
-
-  0%, 100% {
-    transform: translateX(0);
+  20% {
+    transform: rotate(-2deg);
   }
-
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-1px);
+  40% {
+    transform: rotate(2deg);
   }
-
-  20%, 40%, 60%, 80% {
-    transform: translateY(1px);
+  60% {
+    transform: rotate(-1deg);
+  }
+  80% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
   }
 
 }
 
 @keyframes shake1 {
 
-  0%, 100% {
-    transform: translateX(0);
+  20% {
+    transform: rotate(2deg);
   }
-
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(1px);
+  40% {
+    transform: rotate(-2deg);
   }
-
-  20%, 40%, 60%, 80% {
-    transform: translateY(-1px);
+  60% {
+    transform: rotate(1deg);
   }
-
+  80% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
 
 
 @keyframes shake2 {
-
-  0%, 100% {
-    transform: translateX(0);
+  10% {
+    transform: rotate(2deg);
   }
-
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateY(1px);
+  30% {
+    transform: rotate(-2deg);
   }
-
-  20%, 40%, 60%, 80% {
-    transform: translateX(-1px);
+  50% {
+    transform: rotate(1deg);
   }
-
+  70% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
 }
+
+
+@keyframes shake3 {
+  10% {
+    transform: rotate(-2deg);
+  }
+  30% {
+    transform: rotate(2deg);
+  }
+  50% {
+    transform: rotate(-1deg);
+  }
+  70% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes shake4 {
+  30% {
+    transform: rotate(-2deg);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  70% {
+    transform: rotate(-1deg);
+  }
+  90% {
+    transform: rotate(1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+
 
 
 
