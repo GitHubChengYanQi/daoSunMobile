@@ -49,7 +49,6 @@ const Supply = (
   };
 
   const like = (string) => {
-    setSearchValue(string);
     if (overLength) {
       return Select({ customerName: string });
     }
@@ -92,9 +91,11 @@ const Supply = (
     >
       <MySearch
         className={style.searchBar}
-        onChange={(value) => {
+        onSearch={(value) => {
           like(value);
         }}
+        onChange={setSearchValue}
+        value={searchValue}
         onClear={like}
       />
       {loading ? <MyLoading skeleton /> : <Selector

@@ -16,14 +16,15 @@ const MySearch = (
     placeholder,
     icon,
     className,
+    onSearch = () => {
+    },
+    value,
     onChange = () => {
     },
     onClear = () => {
     },
     historyType,
   }) => {
-
-  const [value, setValue] = useState();
 
   const [visible, setVisible] = useState(false);
 
@@ -94,8 +95,8 @@ const MySearch = (
             arrow={false}
             key={index}
             onClick={() => {
-              setValue(item.text);
               onChange(item.text);
+              onSearch(item.text);
             }}>
             <div style={{ fontSize: 12 }}>
               <ClockCircleOutline /> {item.text}
@@ -123,10 +124,13 @@ const MySearch = (
             className={style.searchBar}
             placeholder={placeholder || '请输入搜索内容'}
             onChange={(value) => {
-              setValue(value);
+              onChange(value);
               like(value);
             }}
-            onClear={onClear}
+            onClear={() => {
+              onChange('');
+              onClear();
+            }}
             onFocus={() => setVisible(true)}
             onBlur={() => {
               setTimeout(() => {
@@ -137,13 +141,13 @@ const MySearch = (
         </div>
 
         {
-          value
+         (visible || value)
             ?
             <LinkButton className={style.submit} onClick={() => {
               {
                 historyType && run({ data: { record: value, formType: historyType } });
               }
-              onChange(value);
+              onSearch(value);
             }}>搜索</LinkButton>
             :
             <div hidden={!icon} className={style.icon}>

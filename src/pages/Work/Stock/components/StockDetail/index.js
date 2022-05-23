@@ -37,6 +37,8 @@ const StockDetail = ({ setOverflow }) => {
 
   const [params, setParams] = useState({ stockView: true });
 
+  const [skuName, setSkuName] = useState('');
+
   const spuClassId = Array.isArray(params.spuClassIds) && params.spuClassIds[0];
 
   const [screen, { setFalse, setTrue }] = useBoolean();
@@ -86,16 +88,18 @@ const StockDetail = ({ setOverflow }) => {
   }, [screen]);
 
 
-  return <div style={{height:'100%'}}>
+  return <div style={{ height: '100%' }}>
     <div id='top'>
       <div hidden={screen} className={style.search}>
         <MySearch
           historyType='stock'
           icon={<BellOutline style={{ fontSize: 20 }} />}
           placeholder='请输入关键词搜索'
-          onChange={(value) => {
+          onSearch={(value) => {
             submit({ ...params, skuName: value });
           }}
+          onChange={setSkuName}
+          value={skuName}
           onClear={() => {
             submit({ ...params, skuName: null });
           }}
