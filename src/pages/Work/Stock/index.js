@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { Button, TabBar } from 'antd-mobile';
+import { TabBar } from 'antd-mobile';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
 import StockDetail from './components/StockDetail';
 import MyNavBar from '../../components/MyNavBar';
+import { ToolUtil } from '../../components/ToolUtil';
 
 const Stock = () => {
 
   const [key, setkey] = useState('stock');
 
-  const [overflow,setOverflow] = useState('auto');
+  const [overflow, setOverflow] = useState('auto');
 
   const content = () => {
     switch (key) {
@@ -24,7 +25,10 @@ const Stock = () => {
 
   return <div className={style.pageIndex}>
     <MyNavBar title='库存管理' />
-    <div className={style.content} style={{overflow}}>
+    <div
+      className={style.content}
+      style={{ height: ToolUtil.isQiyeWeixin() ? 'calc(100% - 70px)' : 'calc(100% - 70px - 45px)' }}
+    >
       {content()}
     </div>
     <TabBar
