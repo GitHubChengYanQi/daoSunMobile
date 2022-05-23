@@ -49,7 +49,6 @@ const Brand = (
   };
 
   const like = (value) => {
-    setSearchValue(value);
     if (overLength) {
       return Select({ brandName: value });
     }
@@ -91,9 +90,11 @@ const Brand = (
     >
       <MySearch
         className={style.searchBar}
-        onChange={(value) => {
+        onSearch={(value) => {
           like(value);
         }}
+        onChange={setSearchValue}
+        value={searchValue}
         onClear={like}
       />
       {loading ? <MyLoading skeleton /> : <Selector
