@@ -2,27 +2,22 @@
   display: flex;
   margin: 13px 0;
 
-  .steps {
-    :global .ant-steps-item-icon {
-      width: 28px;
-      height: 28px;
-      font-size: 14px;
-      line-height: 28px;
-    }
+  .stepIcon {
+    border-radius: 100%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-    :global .ant-steps-icon {
-      color: var(--adm-color-primary) !important;
-    }
+  .stepOtherIcon {
+    border: solid 1px #E1EBF6;
+  }
 
-    :global .ant-steps-item-process {
-      :global .ant-steps-icon {
-        color: #fff !important;
-      }
-    }
-
-    :global .ant-steps-item {
-      padding: 0;
-    }
+  .stepCurrentIcon {
+    background-color: var(--adm-color-primary);
+    color: #fff;
   }
 
   .upBom {

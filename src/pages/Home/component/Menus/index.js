@@ -4,6 +4,7 @@ import { Space, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { history } from 'umi';
 import cookie from 'js-cookie';
+import { connect } from 'dva';
 
 const Menus = (
   {
@@ -13,6 +14,7 @@ const Menus = (
     onlyIcon,
     textOverflow,
     disabled,
+    ...props
   }) => {
 
   const MenusStyle = ({ icon, title, url }) => {
@@ -29,6 +31,9 @@ const Menus = (
         }
         if (code === 'LogOut') {
           cookie.remove('cheng-token');
+          props.dispatch({
+            type: 'data/clearState',
+          });
         }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
@@ -174,4 +179,5 @@ const Menus = (
   }
 };
 
-export default Menus;
+
+export default connect(({ data }) => ({ data }))(Menus);

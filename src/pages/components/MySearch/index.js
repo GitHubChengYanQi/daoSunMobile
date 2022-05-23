@@ -62,7 +62,6 @@ const MySearch = (
 
   const [historys, setHistorys] = useState(actions || []);
 
-
   useEffect(() => {
     const searchBar = document.getElementById('searchBar') || {};
     setHistoryWidth(searchBar.clientWidth);
@@ -131,7 +130,7 @@ const MySearch = (
             onFocus={() => setVisible(true)}
             onBlur={() => {
               setTimeout(() => {
-                setVisible(false);
+                // setVisible(false);
               }, 0);
             }}
           />
