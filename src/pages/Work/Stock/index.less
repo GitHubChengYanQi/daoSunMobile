@@ -1,0 +1,68 @@
+
+.pageIndex {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+
+  .content {
+    flex-grow: 1;
+    height: calc(100% - 70px);
+  }
+}
+
+.tabBarItem {
+  font-family: PingFang SC Regular, sans-serif;
+  height: 70px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+
+  :global .adm-tab-bar-wrap {
+    height: 100%;
+  }
+
+  :global .adm-tab-bar-item {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  :global .adm-tab-bar-item-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: 0;
+    margin-top: 8px;
+  }
+
+  :global .adm-tab-bar-wrap {
+    overflow: visible;
+  }
+
+  .scan {
+    position: relative;
+
+    :global .adm-tab-bar-item-icon {
+      height: auto;
+      margin: 0;
+    }
+
+    :global .adm-badge-wrap {
+      position: absolute;
+      top: -26px;
+      background-color: #fff;
+      height: 79px;
+      width: 79px;
+      border-radius: 50%;
+      box-shadow: 0px -4px 10px 0px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        font-size: 30px;
+      }
+    }
+
+  }
+}

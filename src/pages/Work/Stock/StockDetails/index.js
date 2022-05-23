@@ -1,14 +1,14 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { stockDetailsList } from '../../../Scan/Url';
 import { Button, List, Space } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { useSetState } from 'ahooks';
-import { isQiyeWeixin } from '../../../components/GetHeader';
 import { request } from '../../../../util/Request';
 import LinkButton from '../../../components/LinkButton';
 import BackSkus from '../../../Scan/Sku/components/BackSkus';
 import PrintCode from '../../../components/PrintCode';
 import MyNavBar from '../../../components/MyNavBar';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const StockDetails = (props) => {
 
@@ -17,7 +17,7 @@ const StockDetails = (props) => {
   const [datas, setDatas] = useSetState({ data: [] });
 
   const print = async (inkindId) => {
-    if (!isQiyeWeixin()) {
+    if (!ToolUtil.isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/detail',
         method: 'POST',

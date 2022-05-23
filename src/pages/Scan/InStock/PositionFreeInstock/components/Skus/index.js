@@ -4,12 +4,12 @@ import Search from '../Search';
 import Number from '../../../../../components/Number';
 import LinkButton from '../../../../../components/LinkButton';
 import IsDev from '../../../../../../components/IsDev';
-import { isQiyeWeixin } from '../../../../../components/GetHeader';
 import { useRequest } from '../../../../../../util/Request';
 import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { useSetState } from 'ahooks';
 import { batchBind } from '../../../components/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../components/ToolUtil';
 
 const Skus = (
   {
@@ -102,7 +102,7 @@ const Skus = (
             // }
             if (item.number > 0) {
               if (item.inkindId) {
-                if (IsDev() || !isQiyeWeixin()) {
+                if (IsDev() || !ToolUtil.isQiyeWeixin()) {
                   addCanvas([item.inkindId]);
                 }
                 return;
@@ -119,7 +119,7 @@ const Skus = (
                 },
               });
               if (res && res.length > 0) {
-                if (IsDev() || !isQiyeWeixin()) {
+                if (IsDev() || !ToolUtil.isQiyeWeixin()) {
                   addCanvas([res[0].inkindId]);
                 }
                 setItems([]);

@@ -7,7 +7,6 @@ import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useBoolean, useSetState } from 'ahooks';
 import { ScanOutlined } from '@ant-design/icons';
-import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
@@ -18,6 +17,7 @@ import Skus from './components/Skus';
 import AddSku from './components/AddSku';
 import { AddOutline } from 'antd-mobile-icons';
 import MyEmpty from '../../../components/MyEmpty';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const fontSize = 18;
 
@@ -137,7 +137,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
 
 
   const addCanvas = async (inkindIds) => {
-    if (IsDev() || !isQiyeWeixin()) {
+    if (IsDev() || !ToolUtil.isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/details',
         method: 'POST',
@@ -257,7 +257,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
             ref.current.search({ type: 'storehouse' });
           }} />
         </List.Item>
-        <List.Item title='库位' extra={isQiyeWeixin() && <LinkButton
+        <List.Item title='库位' extra={ToolUtil.isQiyeWeixin() && <LinkButton
           title={<ScanOutlined />} onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',

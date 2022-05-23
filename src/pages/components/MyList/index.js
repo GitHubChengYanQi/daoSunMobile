@@ -1,12 +1,22 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { DotLoading, InfiniteScroll } from 'antd-mobile';
+import { Button, DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
 import MyEmpty from '../MyEmpty';
 
 let limit = 10;
 
-const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
+const MyList = (
+  {
+    children,
+    getData = () => {
+    },
+    data,
+    api,
+    params: paramsData,
+    response = () => {
+    },
+  }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
 
@@ -28,21 +38,23 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
       ...params,
     },
   }, {
-    // debounceInterval: 300,
+    response: true,
     onSuccess: (res) => {
-      if (res && res.length > 0) {
+      const resData = res.data || [];
+      response(res);
+      if (resData.length > 0) {
         const array = contents;
-        res.map((items) => {
+        resData.map((items) => {
           return array.push(items);
         });
         setContents(array);
-        typeof getData === 'function' && getData(array);
+        getData(array.filter(() => true));
         setPage(pages + 1);
         setHasMore(true);
       } else {
         setHasMore(false);
         if (pages === 1) {
-          typeof getData === 'function' && getData([]);
+          getData([]);
         }
       }
     },
@@ -51,12 +63,12 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
     },
   });
 
-  const submit = (value) => {
+  const submit = async (value) => {
     setHasMore(false);
     setPage(1);
     setContents([]);
     setParams(value);
-    run({
+    await run({
       params: { limit, page: 1 },
       data: value,
     });
@@ -66,20 +78,14 @@ const MyList = ({ children, getData, data, api, params: paramsData }, ref) => {
     submit,
   }));
 
-  if (loading && pages === 1) {
-    return <MyLoading />;
-  }
-
-  if (!data || data.length === 0) {
-    return <MyEmpty />;
-  }
-
-  if (!data || data.length === 0) {
-    return <MyEmpty />;
+  if (!loading && (!data || data.length === 0)) {
+    return <MyEmpty height='100%' />;
   }
 
   return <>
     {children}
+    {loading && pages === 1 && <MyLoading />}
+
     {error && <InfiniteScroll
       threshold={0}
       loadMore={async () => {

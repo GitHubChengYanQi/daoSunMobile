@@ -78,7 +78,9 @@ const Menus = (
     case 'SalesOrder':
       return MenusStyle({ icon: 'icon-xiaoshoudingdan', url: '/Work/Order?type=2' });
     case 'stock':
-      return MenusStyle({ icon: 'icon-kucunguanli1', url: '/Work/StoreHouse' });
+      return MenusStyle({ icon: 'icon-kucunguanli1', url: '/Work/Stock' });
+    case 'storeHouse':
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/StoreHouse' });
     case 'instock':
       return MenusStyle({ icon: 'icon-rukuguanli2', url: '/Work/Instock/Orderlist' });
     case 'outstock':

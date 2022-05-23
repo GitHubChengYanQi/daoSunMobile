@@ -1,7 +1,7 @@
 import { useRequest as ahooksRequest } from 'ahooks';
 import Service from '../Service';
 
-const useRequest = (config, options) => {
+const useRequest = (config, options = {}) => {
   const { ajaxService } = Service();
 
   const requestService = (params) => {
@@ -11,6 +11,8 @@ const useRequest = (config, options) => {
   const formatResult = (response) => {
     if (typeof response.data === 'undefined') {
       return response;
+    } else if (options.response) {
+      return response;
     }
     return response.data;
   };
@@ -19,7 +21,7 @@ const useRequest = (config, options) => {
     requestMethod: (params) => {
       return ajaxService({
         ...config,
-        ...params
+        ...params,
       });
     },
     onError: (result) => {

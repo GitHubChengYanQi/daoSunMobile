@@ -2,13 +2,15 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
 import { goToLogin } from '../../components/Auth';
+import { history } from 'umi';
+import { ToolUtil } from '../../pages/components/ToolUtil';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'https://lqscyq.xicp.fun'
-  // 'http://192.168.1.119'
+  // 'https://lqscyq.xicp.fun'
+  'http://192.168.1.119'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -39,7 +41,16 @@ ajaxService.interceptors.response.use((response) => {
   if (errCode !== 0) {
     if (errCode === 1502) {
       cookie.remove('cheng-token');
-      goToLogin();
+
+      const backUrl = window.location.href;
+      if (!ToolUtil.queryString('login', backUrl)) {
+        history.push({
+          pathname: '/Login',
+          query: {
+            backUrl,
+          },
+        });
+      }
     } else if (response.errCode !== 200) {
       Dialog.alert({
         content: response.message,
@@ -51,7 +62,7 @@ ajaxService.interceptors.response.use((response) => {
   }
   return response;
 }, (error) => {
-  console.log(error.response);
+  // console.log(error.response);
   return error;
 });
 

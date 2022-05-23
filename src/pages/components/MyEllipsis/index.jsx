@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography } from 'antd';
+import styles from './index.css'
 
 const MyEllipsis = (
   {
@@ -9,12 +9,10 @@ const MyEllipsis = (
     style,
   }) => {
 
-  return <div style={{
+  return <div
+    className={styles.ellipsis}
+    style={{
     width: width || '90%',
-    display:'inline-block',
-    textOverflow:'ellipsis',
-    overflow:'hidden',
-    whiteSpace: 'nowrap',
     ...style
   }}>
     {value || children}

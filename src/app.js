@@ -1,12 +1,12 @@
 import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
-import { isQiyeWeixin } from './pages/components/GetHeader';
 import { history } from 'umi';
 import { getUserInfo, loginBycode, userCustomer, wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
 import VConsole from 'vconsole';
+import { ToolUtil } from './pages/components/ToolUtil';
 
 export const dva = {
   config: {
@@ -39,7 +39,7 @@ export async function getInitialState() {
 
   if (!token) {
     // token不存在
-    if (isQiyeWeixin()) {
+    if (ToolUtil.isQiyeWeixin() && process.env.ENV !== 'test') {
       // 是企业微信走byCode
       loginBycode();
       return { isQiYeWeiXin: true };
@@ -50,7 +50,7 @@ export async function getInitialState() {
     }
   } else {
     // token存在
-    if (isQiyeWeixin() && type) {
+    if (ToolUtil.isQiyeWeixin() && type) {
       // 是企业微信登录并且type存在
       if (userInfo.userId) {
         history.push('/Login');

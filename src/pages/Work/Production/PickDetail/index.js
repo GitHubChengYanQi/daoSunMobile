@@ -19,7 +19,6 @@ import {
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
-import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
 import MyEllipsis from '../../../components/MyEllipsis';
@@ -30,7 +29,7 @@ import { history } from 'umi';
 import style from './index.css';
 import MyTree from '../../../components/MyTree';
 import { CollectMoneyOutline } from 'antd-mobile-icons';
-import PakoInfate from '../../../components/PakoInfate';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const PickDetail = (props) => {
 
@@ -162,7 +161,7 @@ const PickDetail = (props) => {
   const { loading, run, refresh } = useRequest(productionPickListsMergeDetail, {
     manual: true,
     onSuccess: (respone) => {
-      const res = PakoInfate.unzip(respone);
+      const res = ToolUtil.unzip(respone);
       console.log(res);
       setData(res);
       const allSku = getChildren(res && res.storehousePositionsResults, res && res.detailResults, res && res.cartResults, true) || [];
@@ -246,7 +245,7 @@ const PickDetail = (props) => {
     <div>
       <MyFloatingPanel
         backgroundColor
-        maxHeight={window.innerHeight - (isQiyeWeixin() ? 0 : 45)}
+        maxHeight={window.innerHeight - (ToolUtil.isQiyeWeixin() ? 0 : 45)}
         backgroundDom={backgroundDom()}
       >
         <div>

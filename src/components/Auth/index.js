@@ -2,12 +2,11 @@ import IsDev from '../IsDev';
 import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
-import { isQiyeWeixin } from '../../pages/components/GetHeader';
-import { history } from 'umi';
+import { ToolUtil } from '../../pages/components/ToolUtil';
 
 
 export const wxTicket = async () => {
-  if (!IsDev() && isQiyeWeixin()) {
+  if (!IsDev() && ToolUtil.isQiyeWeixin()) {
     const url = (window.location.protocol + '//' + window.location.host + window.location.pathname).split('#');
     const res = await request({
       url: '/api/ticket',
@@ -111,14 +110,5 @@ export const getUserMenus = async () => {
 };
 
 export const goToLogin = () => {
-  const backUrl = window.location.href;
-  // const search = new URLSearchParams(window.location.search);
-  // console.log(search);
-  // console.log(`/${login}/g`.test(backUrl));
-  history.push({
-    pathname: '/Login',
-    query: {
-      backUrl,
-    },
-  });
+
 };

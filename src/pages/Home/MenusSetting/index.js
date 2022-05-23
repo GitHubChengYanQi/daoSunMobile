@@ -46,7 +46,7 @@ const MenusSetting = (props) => {
 
   const sysMenus = userInfo.menus || [];
 
-  console.log(sysMenus);
+  // console.log(sysMenus);
 
   useEffect(() => {
     setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
@@ -96,7 +96,7 @@ const MenusSetting = (props) => {
 
     let shake = '';
 
-    switch (index % 3) {
+    switch (index % 5) {
       case 0:
         shake = style.shake0;
         break;
@@ -105,6 +105,12 @@ const MenusSetting = (props) => {
         break;
       case 2:
         shake = style.shake2;
+        break;
+      case 3:
+        shake = style.shake3;
+        break;
+      case 4:
+        shake = style.shake4;
         break;
       default:
         break;
@@ -231,6 +237,7 @@ const MenusSetting = (props) => {
           const otherMenus = [];
           switch (item.id) {
             case 'ERP':
+              otherMenus.push({ name: '仓库管理', code: 'storeHouse' });
               otherMenus.push({ name: '自由入库', code: 'freeInstock' });
               otherMenus.push({ name: '自由出库', code: 'freeOutStock' });
               break;

@@ -5,7 +5,9 @@ import React, { useState } from 'react';
 import { connect } from 'dva';
 import style from './index.less';
 import MyEmpty from './components/MyEmpty';
-import { isQiyeWeixin } from './components/GetHeader';
+import { ToolUtil } from './components/ToolUtil';
+import { request, useRequest } from '../util/Request';
+import { brandList, supplyList } from './Work/Stock/components/StockDetail/components/Screen/components/Url';
 
 const iconSize = 20;
 
@@ -33,7 +35,6 @@ const Index = (props) => {
     }
   };
 
-
   return (
     <div className={style.pageIndex}>
       <div className={style.content}>
@@ -44,7 +45,7 @@ const Index = (props) => {
         safeArea
         activeKey={module}
         onChange={(value) => {
-          if (module === '/Home' && value === '/Home' && isQiyeWeixin()) {
+          if (module === '/Home' && value === '/Home' && ToolUtil.isQiyeWeixin()) {
             props.dispatch({
               type: 'qrCode/wxCpScan',
             });
@@ -63,11 +64,11 @@ const Index = (props) => {
           icon={<Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />}
         />
         <TabBar.Item
-          title={(module === '/Home' && isQiyeWeixin()) ? '扫码' : '首页'}
+          title={(module === '/Home' && ToolUtil.isQiyeWeixin()) ? '扫码' : '首页'}
           key='/Home'
           icon={<Icon
             style={{ fontSize: iconSize }}
-            type={(module === '/Home' && isQiyeWeixin()) ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
+            type={(module === '/Home' && ToolUtil.isQiyeWeixin()) ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
           />}
         />
         <TabBar.Item

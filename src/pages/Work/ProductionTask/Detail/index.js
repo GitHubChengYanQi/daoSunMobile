@@ -12,9 +12,9 @@ import BottomButton from '../../../components/BottomButton';
 import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
-import { isQiyeWeixin } from '../../../components/GetHeader';
 import Pick from '../../Production/Pick';
 import { history } from 'umi';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const Detail = (props) => {
   const params = props.location.query;
@@ -208,7 +208,7 @@ const Detail = (props) => {
     <div>
       <MyFloatingPanel
         backgroundColor
-        maxHeight={window.innerHeight - (isQiyeWeixin() ? 52 : 97)}
+        maxHeight={window.innerHeight - (ToolUtil.isQiyeWeixin() ? 52 : 97)}
         backgroundDom={backgroundDom()}
       >
         <Tabs

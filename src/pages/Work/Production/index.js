@@ -5,10 +5,10 @@ import styles from './index.css';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
 import MyNavBar from '../../components/MyNavBar';
-import { isQiyeWeixin } from '../../components/GetHeader';
 import { ClockCircleOutline, QuestionCircleOutline } from 'antd-mobile-icons';
 import { history } from 'umi';
 import Label from '../../components/Label';
+import { ToolUtil } from '../../components/ToolUtil';
 
 const Production = () => {
 
@@ -18,7 +18,7 @@ const Production = () => {
 
   return <div className={styles.mainDiv}>
     <MyNavBar title='生产工单列表' />
-    <div style={{ position: 'sticky', top: isQiyeWeixin() ? 0 : 45, zIndex: 999 }}>
+    <div style={{ position: 'sticky', top: ToolUtil.isQiyeWeixin() ? 0 : 45, zIndex: 999 }}>
       <MySearchBar extra onChange={(value) => {
         ref.current.submit({ coding: value });
       }} />

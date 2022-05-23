@@ -6,7 +6,7 @@ import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
-import { isQiyeWeixin } from '../pages/components/GetHeader';
+import { ToolUtil } from '../pages/components/ToolUtil';
 
 
 const BasicLayout = (props) => {
@@ -80,20 +80,22 @@ const BasicLayout = (props) => {
     }
   };
 
+
   setInterval(() => {
 
-    if (GetUserInfo().token && history.location.pathname.indexOf('wxLogin') !== -1) {
+    if (GetUserInfo().token && ToolUtil.queryString('wxLogin', history.location.pathname)) {
       window.location.href = wxUrl(false);
     }
+
   }, 1000);
 
   useEffect(() => {
     qrCodeAction();
     if (!GetUserInfo().token) {
-      if (history.location.pathname === '/Login' || history.location.pathname === '/Sms') {
+      if (ToolUtil.queryString('Login', history.location.pathname) || ToolUtil.queryString('Sms', history.location.pathname)) {
         return;
       }
-      if (isQiyeWeixin()) {
+      if (ToolUtil.isQiyeWeixin()) {
         loginBycode();
       } else {
         history.push('/Login');
