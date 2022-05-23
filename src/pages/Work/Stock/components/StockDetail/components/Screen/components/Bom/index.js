@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Checkbox, List, Radio } from 'antd-mobile';
-import { Steps } from 'antd';
+import { Card, Checkbox, List, Radio, Steps } from 'antd-mobile';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import style from './index.less';
 import Icon from '../../../../../../../../components/Icon';
@@ -9,6 +8,7 @@ import MyEllipsis from '../../../../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { backDetails } from '../Url';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 const Bom = (
   {
@@ -88,10 +88,27 @@ const Bom = (
       </div>
 
       <div className={style.bomSteps}>
-        <Steps className={style.steps}>
+        <Steps
+          current={1}
+          style={{
+            '--title-font-size': '14px',
+            '--description-font-size': '15px',
+            '--indicator-margin-right': '12px',
+            '--icon-size': '14px',
+          }}
+        >
           {
             boms.map((item, index) => {
-              return <Steps.Step key={index} status={index === boms.length - 1 ? 'process' : 'wait'} />;
+              return <Steps.Step
+                key={index}
+                icon={<div
+                  className={ToolUtil.classNames(
+                    style.stepIcon,
+                    index === boms.length - 1 ? style.stepCurrentIcon : style.stepOtherIcon
+                  )}
+                >{index + 1}</div>}
+                status='process'
+              />;
             })
           }
         </Steps>
