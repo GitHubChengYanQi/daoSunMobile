@@ -78,13 +78,20 @@ const MyList = (
     submit,
   }));
 
+  if (loading && pages === 1) {
+    return <>
+      <MyLoading />
+      <MyEmpty height='100%' description='正在加载数据...' />
+    </>;
+  }
+
   if (!loading && (!data || data.length === 0)) {
     return <MyEmpty height='100%' />;
   }
 
   return <>
+
     {children}
-    {loading && pages === 1 && <MyLoading />}
 
     {error && <InfiniteScroll
       threshold={0}
