@@ -67,6 +67,10 @@ const Bom = (
           }}
           onChange={() => {
             setType('Present');
+            if (value){
+              onChange(value, 'Present');
+            }
+
           }}
         >
           子级物料
@@ -81,6 +85,9 @@ const Bom = (
           }}
           onChange={() => {
             setType('All');
+            if (value){
+              onChange(value, 'All');
+            }
           }}
         >
           基础物料
