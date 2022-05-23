@@ -48,7 +48,7 @@ const Screen = (
   const brandIds = ToolUtil.isArray(params.brandIds);
   const statusIds = ToolUtil.isArray(params.statusIds);
   const partsSkuId = params.partsSkuId;
-  const storehousePositionsIds = ToolUtil.isArray(params.storehousePositionsIds);
+  const storehousePositionsId = params.storehousePositionsId;
 
   const { run: handleScroll } = useThrottleFn(
     () => {
@@ -163,10 +163,10 @@ const Screen = (
           options={getOptions(item.key)}
           title={item.title}
           refresh={refresh}
-          onChange={(storehousePositionsIds) => {
-            paramsOnChange({ ...params, storehousePositionsIds });
+          onChange={(storehousePositionsId) => {
+            paramsOnChange({ ...params, storehousePositionsId });
           }}
-          value={params.storehousePositionsIds}
+          value={params.storehousePositionsId}
         />;
       case 'bom':
         return <Bom
@@ -222,7 +222,7 @@ const Screen = (
                 screened = partsSkuId;
                 break;
               case 'position':
-                screened = storehousePositionsIds.length > 0;
+                screened = storehousePositionsId;
                 break;
               default:
                 return <></>;

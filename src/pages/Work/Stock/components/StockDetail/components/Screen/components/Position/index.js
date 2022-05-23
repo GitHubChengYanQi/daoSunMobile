@@ -8,7 +8,7 @@ const Position = (
   {
     options,
     title,
-    value = [],
+    value,
     onChange = () => {
     },
     refresh,
@@ -17,12 +17,12 @@ const Position = (
   const [openKey, setOpenKey] = useState([]);
 
   useEffect(() => {
-    if (refresh && value.length === 0) {
+    if (refresh && !value) {
       setOpenKey(options.map(item => item.key));
     }
   }, [refresh]);
 
-  if (options.length === 0 && value.length === 0) {
+  if (options.length === 0 && !value) {
     return <></>;
   }
 
@@ -75,15 +75,15 @@ const Position = (
           </div>
           <div className={style.checked}>
             <Checkbox
-              checked={value.includes(item.key)}
+              checked={value === item.key}
               icon={(checked) => {
                 return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
               }}
               onChange={(checked) => {
                 if (!checked) {
-                  onChange([]);
+                  onChange(null);
                 } else {
-                  onChange([item.key]);
+                  onChange(item.key);
                 }
               }}
             />

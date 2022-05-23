@@ -9,6 +9,7 @@ import { ToolUtil } from '../ToolUtil';
 
 const historyList = { url: '/queryLog/list', method: 'POST' };
 const historyAdd = { url: '/queryLog/add', method: 'POST' };
+const historyDelete = { url: '/queryLog/deleteBatch', method: 'POST' };
 
 const MySearch = (
   {
@@ -39,7 +40,14 @@ const MySearch = (
       like(value);
     },
   });
+
   const { run } = useRequest(historyAdd, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+    },
+  });
+  const { run: deleteRun } = useRequest(historyDelete, {
     manual: true,
     onSuccess: () => {
       refresh();
@@ -75,7 +83,9 @@ const MySearch = (
     return <Card
       title='历史记录'
       headerStyle={{ fontSize: 14, padding: '8px 0' }}
-      extra={<LinkButton><DeleteOutline /></LinkButton>}
+      extra={<LinkButton onClick={() => {
+        deleteRun({ data: { formType: historyType } });
+      }}><DeleteOutline /></LinkButton>}
       style={{ padding: 0 }}
       bodyStyle={{ padding: 0 }}
     >

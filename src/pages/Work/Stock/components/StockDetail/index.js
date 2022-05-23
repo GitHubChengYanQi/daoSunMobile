@@ -62,7 +62,6 @@ const StockDetail = ({ setOverflow }) => {
     await listRef.current.submit({
       ...newParams,
     });
-    setOverflow('auto');
   };
 
   const search = (oldArray, newArray, screened, overLength) => {
@@ -152,8 +151,8 @@ const StockDetail = ({ setOverflow }) => {
               const partsSkuId = params.partsSkuId;
               return setBoms(search(boms, array, partsSkuId));
             case 'position':
-              const storehousePositionsIds = params.storehousePositionsIds || [];
-              return setPsoition(search(position, array, storehousePositionsIds.length > 0));
+              const storehousePositionsId = params.storehousePositionsId;
+              return setPsoition(search(position, array, storehousePositionsId));
             case 'status':
               const statusIds = params.statusIds || [];
               return setStates(search(states, array, statusIds.length));
@@ -234,6 +233,7 @@ const StockDetail = ({ setOverflow }) => {
         submit({ ...params, ...value });
       }}
       onClear={() => {
+        setOverflow('auto');
         setSkuClass([]);
         setSupplys([]);
         setBrands([]);
