@@ -38,18 +38,17 @@
     color: var(--adm-color-primary);
   }
 
-
 }
 
 .skuClass {
-  //position: sticky;
-  //top: calc(75px + 45px);
   z-index: 1;
-  background-color: var(--body--background--color);
-
   --title-font-size: 14px;
   height: 34px;
   line-height: 34px;
+
+  :global .adm-tabs-header {
+    border: none;
+  }
 
   :global .adm-tabs-tab {
     span {

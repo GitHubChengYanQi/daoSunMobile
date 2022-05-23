@@ -130,7 +130,7 @@ const MySearch = (
             onFocus={() => setVisible(true)}
             onBlur={() => {
               setTimeout(() => {
-                // setVisible(false);
+                setVisible(false);
               }, 0);
             }}
           />
