@@ -12,15 +12,12 @@ export const MyLoading = ({ skeleton, title }) => {
 
   const [loadingTitle, setLoadingTitle] = useState(title);
 
-  // 当前网速较慢，正在努力加载...
 
   useDebounceEffect(() => {
     setLoadingTitle('当前网速较慢，正在努力加载...');
   }, [],{
     wait:3000,
   });
-
-  // alert(333);
 
   const Loading = () => {
     return <div className={style.center}>
@@ -35,7 +32,14 @@ export const MyLoading = ({ skeleton, title }) => {
         </div>
       </div>
       <div className={style.loadingTitle}>
-        {loadingTitle}
+        {loadingTitle || <div>
+          <div>
+            {state.enterpriseName}
+          </div>
+          <div>
+            {state.englishName}
+          </div>
+        </div>}
       </div>
     </div>;
   };

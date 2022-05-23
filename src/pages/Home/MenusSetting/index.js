@@ -237,6 +237,7 @@ const MenusSetting = (props) => {
           const otherMenus = [];
           switch (item.id) {
             case 'ERP':
+              otherMenus.push({ name: '仓库管理', code: 'storeHouse' });
               otherMenus.push({ name: '自由入库', code: 'freeInstock' });
               otherMenus.push({ name: '自由出库', code: 'freeOutStock' });
               break;

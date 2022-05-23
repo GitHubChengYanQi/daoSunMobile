@@ -1,6 +1,6 @@
 
-import { isQiyeWeixin } from '../components/GetHeader';
 import { connect } from 'dva';
+import { ToolUtil } from '../components/ToolUtil';
 
 const Scan = (props) => {
 
@@ -8,7 +8,7 @@ const Scan = (props) => {
 
   };
 
-    if (isQiyeWeixin()) {
+    if (ToolUtil.isQiyeWeixin()) {
       getScan();
     } else {
       window.Android.onScan();

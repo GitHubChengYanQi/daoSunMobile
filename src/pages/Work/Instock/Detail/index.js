@@ -293,7 +293,7 @@ const Detail = (props) => {
 
   const backgroundDom = () => {
 
-    return <div style={{ backgroundColor: '#f9f9f9',marginBottom:16 }}>
+    return <div style={{ backgroundColor: '#f9f9f9',paddingBottom:16 }}>
       <Card
         title={<div style={{ display: 'flex', alignItems: 'center' }}>
           <Avatar shape='square' size={56}>入</Avatar>

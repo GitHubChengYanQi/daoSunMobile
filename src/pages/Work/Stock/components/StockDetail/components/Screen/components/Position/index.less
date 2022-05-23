@@ -1,0 +1,38 @@
+
+.positions {
+
+  .positionItem {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    border-bottom: solid 1px #F5F5F5;
+    padding: 8px 0;
+    font-size: 12px;
+
+    .open {
+      color: var(--adm-color-primary);
+    }
+
+    .name {
+      flex-grow: 1;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .checked {
+      min-width: 50px;
+      text-align: center;
+
+      :global .adm-checkbox {
+        --icon-size: 11px;
+        --font-size: 11px;
+      }
+
+      :global .adm-checkbox-custom-icon {
+        line-height: 11px;
+      }
+    }
+  }
+}
+

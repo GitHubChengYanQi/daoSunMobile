@@ -7,7 +7,6 @@ import { request, useRequest } from '../../../util/Request';
 import TreeSelectSee from '../../components/TreeSelectSee';
 import MyEmpty from '../../components/MyEmpty';
 import { connect } from 'dva';
-import { isQiyeWeixin } from '../../components/GetHeader';
 import { history } from 'umi';
 import CodeBind from '../CodeBind';
 import { MyLoading } from '../../components/MyLoading';
@@ -16,6 +15,7 @@ import IsDev from '../../../components/IsDev';
 import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
 import BackSkus from '../Sku/components/BackSkus';
+import { ToolUtil } from '../../components/ToolUtil';
 
 
 const InStock = (props) => {
@@ -140,7 +140,7 @@ const InStock = (props) => {
 
   return (
     <>
-      {!isQiyeWeixin() && <MyNavBar title='入库' />}
+      {!ToolUtil.isQiyeWeixin() && <MyNavBar title='入库' />}
       <div style={{ padding: 16 }} className={style.instock}>
         <Card
           style={{ backgroundColor: '#f4f4f4' }}
@@ -230,7 +230,7 @@ const InStock = (props) => {
                                   backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
-                                  if (isQiyeWeixin()) {
+                                  if (ToolUtil.isQiyeWeixin()) {
                                     await setBatch(true);
                                     await setItems(items);
                                     await setInstockNumber(items.number);
@@ -281,7 +281,7 @@ const InStock = (props) => {
                                   backgroundColor: '#1845B5',
                                 }}
                                 onClick={async () => {
-                                  if (IsDev() ? false : isQiyeWeixin()) {
+                                  if (IsDev() ? false : ToolUtil.isQiyeWeixin()) {
                                     await setItems(items);
                                     await setBatch(false);
                                     await setInstockNumber(1);

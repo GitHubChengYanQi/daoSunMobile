@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { isQiyeWeixin } from '../../components/GetHeader';
 import { Space, Toast } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
 import { connect } from 'dva';
@@ -10,6 +9,7 @@ import { ScanOutlined } from '@ant-design/icons';
 import ItemInventory from './components/ItemInventory';
 import PositionsInventory from './components/PositionsInventory';
 import { storehousePositionsTreeView } from '../Url';
+import { ToolUtil } from '../../components/ToolUtil';
 
 const Inventory = (props) => {
 
@@ -195,7 +195,7 @@ const Inventory = (props) => {
         请扫描物料或库位
       </span>
       {
-        isQiyeWeixin() && <LinkButton onClick={() => {
+        ToolUtil.isQiyeWeixin() && <LinkButton onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',
             payload: {

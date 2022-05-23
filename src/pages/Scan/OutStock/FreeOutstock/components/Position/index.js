@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Card, List, Selector, Space, Toast } from 'antd-mobile';
 import BottomButton from '../../../../../components/BottomButton';
-import { isQiyeWeixin } from '../../../../../components/GetHeader';
 import { stockDetailsList, storehousePositionsTreeView } from '../../../../Url';
 import { useRequest } from '../../../../../../util/Request';
 import { useSetState } from 'ahooks';
@@ -15,6 +14,7 @@ import BackSkus from '../../../../Sku/components/BackSkus';
 import MyEmpty from '../../../../../components/MyEmpty';
 import Search from '../../../../InStock/PositionFreeInstock/components/Search';
 import Label from '../../../../../components/Label';
+import { ToolUtil } from '../../../../../components/ToolUtil';
 
 const fontSize = 18;
 
@@ -162,7 +162,7 @@ const Position = ({ scnaData, ...props }) => {
   return <>
     <Card
       title={<div>库位信息</div>}
-      extra={isQiyeWeixin() && <LinkButton
+      extra={ToolUtil.isQiyeWeixin() && <LinkButton
         title={<ScanOutlined />} onClick={() => {
         props.dispatch({
           type: 'qrCode/wxCpScan',

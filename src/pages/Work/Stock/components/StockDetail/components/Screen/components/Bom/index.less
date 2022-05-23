@@ -1,0 +1,64 @@
+.bomSteps {
+  display: flex;
+  margin: 13px 0;
+
+  .steps {
+    :global .ant-steps-item-icon {
+      width: 28px;
+      height: 28px;
+      font-size: 14px;
+      line-height: 28px;
+    }
+
+    :global .ant-steps-icon {
+      color: var(--adm-color-primary) !important;
+    }
+
+    :global .ant-steps-item-process {
+      :global .ant-steps-icon {
+        color: #fff !important;
+      }
+    }
+
+    :global .ant-steps-item {
+      padding: 0;
+    }
+  }
+
+  .upBom {
+    font-size: 12px;
+    min-width: 50px;
+  }
+}
+
+.bomType {
+  display: flex;
+  gap: 14px;
+}
+
+.bomItem {
+  :global .adm-list-item-content-main {
+    max-width: 90%;
+  }
+
+  .listItem {
+    font-size: 12px;
+
+    :global .adm-checkbox {
+      --icon-size: 12px;
+      max-width: 100%;
+    }
+
+    :global .adm-checkbox-custom-icon {
+      display: flex;
+    }
+
+    :global .adm-checkbox-content {
+      font-size: 12px;
+      max-width: 100%;
+      display: flex;
+    }
+  }
+}
+
+

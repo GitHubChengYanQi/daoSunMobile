@@ -1,10 +1,12 @@
 html, body, #root {
   height: 100%;
+  overflow: hidden;
 }
 
 body {
   margin: 0;
-  background-color: #E1EBF6
+  background-color: #E1EBF6;
+  --body--background--color: #E1EBF6;
 }
 
 :global .am-badge-text {
@@ -20,7 +22,7 @@ body {
 }
 
 :root {
-  --adm-color-primary:#2680EB;
+  --adm-color-primary: #2680EB;
 }
 
 

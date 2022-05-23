@@ -5,7 +5,6 @@ import { request, useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import LinkButton from '../../../components/LinkButton';
 import { useSetState } from 'ahooks';
-import { isQiyeWeixin } from '../../../components/GetHeader';
 import BottomButton from '../../../components/BottomButton';
 import IsDev from '../../../../components/IsDev';
 import PrintCode from '../../../components/PrintCode';
@@ -15,6 +14,7 @@ import Search from '../PositionFreeInstock/components/Search';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import Number from '../../../components/Number';
 import { DeleteOutline, SearchOutline } from 'antd-mobile-icons';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const fontSize = 18;
 
@@ -166,7 +166,7 @@ const SkuFreeInstock = ({ scanData }) => {
 
 
   const addCanvas = async (inkindIds) => {
-    if (IsDev() || !isQiyeWeixin()) {
+    if (IsDev() || !ToolUtil.isQiyeWeixin()) {
       const templete = await request({
         url: '/inkind/details',
         method: 'POST',
@@ -343,7 +343,7 @@ const SkuFreeInstock = ({ scanData }) => {
             //   });
             // }
             if (item.inkindId) {
-              if (IsDev() || !isQiyeWeixin()) {
+              if (IsDev() || !ToolUtil.isQiyeWeixin()) {
                 addCanvas([item.inkindId]);
               }
               return;
@@ -362,7 +362,7 @@ const SkuFreeInstock = ({ scanData }) => {
                 },
               });
               if (res && res.length > 0) {
-                if (IsDev() || !isQiyeWeixin()) {
+                if (IsDev() || !ToolUtil.isQiyeWeixin()) {
                   addCanvas([res[0].inkindId]);
                 }
 
