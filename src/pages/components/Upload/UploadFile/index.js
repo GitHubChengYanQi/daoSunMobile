@@ -50,20 +50,14 @@ const UploadFile = () => {
     manual: true,
   });
 
-  const getBase64FromImageURL = (url) => {
-    var canvas = document.createElement('canvas'),
-      ctx = canvas.getContext('2d'),
-      img = new Image();
-    img.crossOrigin = 'Anonymous';
-    img.onload = function() {
-      canvas.height = img.height;
-      canvas.width = img.width;
-      ctx.drawImage(img, 0, 0);
-      var base64URL = canvas.toDataURL('image/png');
-      console.log(base64URL);
-      canvas = null;
-    };
-    img.src = url;
+  const uploadImage = (localId) => {
+    wx.uploadImage({
+      localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+      isShowProgressTips: 1, // 默认为1，显示进度提示
+      success: function(res) {
+        console.log(res.serverId); // 返回图片的服务器端ID
+      },
+    });
   };
 
 
@@ -107,9 +101,10 @@ const UploadFile = () => {
           console.log(res);
           setLoading(true);
           const localIds = res.localIds; // 返回选定照片的本地ID列表，
+          uploadImage(localIds[0]);
           const u = navigator.userAgent;
           const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-          if (isiOS) {
+          if (false && isiOS) {
             wx.getLocalImgData({
               localId: localIds[0], // 图片的localID
               success: (res) => {
@@ -118,7 +113,6 @@ const UploadFile = () => {
             });
           } else {
             console.log(localIds[0]);
-            getBase64FromImageURL(localIds[0]);
           }
         },
       });
@@ -183,9 +177,9 @@ const UploadFile = () => {
         const fileDom = document.getElementById('file');
         switch (action.key) {
           case 'img':
-            fileDom.setAttribute('accept', 'image/*');
-            fileDom.removeAttribute('capture');
-            // chooseImage('album');
+            // fileDom.setAttribute('accept', 'image/*');
+            // fileDom.removeAttribute('capture');
+            chooseImage('album');
             break;
           case 'photo':
             fileDom.setAttribute('accept', 'image/*');
