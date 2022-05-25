@@ -35,11 +35,15 @@ const Stock = () => {
       className={style.tabBarItem}
       safeArea
       activeKey={key}
-      onChange={setkey}>
+      onChange={(key) => {
+        if (key !== 'scan') {
+          setkey(key);
+        }
+      }}>
       <TabBar.Item
         title='仓储'
         key='stock'
-        icon={<Icon type='icon-renwu1' />}
+        icon={<Icon type='icon-cangchu' />}
       />
       <TabBar.Item
         title='任务'
@@ -61,7 +65,7 @@ const Stock = () => {
       <TabBar.Item
         title='动态'
         key='dynamic'
-        icon={<Icon type='icon-wode' />}
+        icon={<Icon type='icon-dongtai' />}
       />
     </TabBar>
   </div>;
