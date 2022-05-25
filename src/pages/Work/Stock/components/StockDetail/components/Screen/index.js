@@ -184,7 +184,8 @@ const Screen = (
   };
 
   return <>
-    <div hidden={!screen} className={style.screenDiv} style={{ top: !ToolUtil.isQiyeWeixin() ? 90 : 45 }}>
+    <div hidden={!screen} className={style.screenDiv} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+      <div className={style.top} style={{ height: ToolUtil.isQiyeWeixin() ? 45 : 90 }} onClick={onClose} />
       <div className={style.content}>
         <SideBar
           className={style.sideBar}

@@ -107,8 +107,7 @@ const MyList = (
       <>
         {hasMore ? (
           <>
-            <span>Loading</span>
-            <DotLoading />
+            <MyLoading skeleton />
           </>
         ) : (
           <span>--- 我是有底线的 ---</span>

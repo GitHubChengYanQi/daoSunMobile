@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { useDebounceEffect } from 'ahooks';
 
-export const MyLoading = ({ skeleton, title }) => {
+export const MyLoading = ({ skeleton, title, noLoadingTitle }) => {
 
   const { initialState } = useModel('@@initialState');
 
@@ -14,9 +14,11 @@ export const MyLoading = ({ skeleton, title }) => {
 
 
   useDebounceEffect(() => {
-    setLoadingTitle('当前网速较慢，正在努力加载...');
-  }, [],{
-    wait:3000,
+    if (!noLoadingTitle) {
+      setLoadingTitle('当前网速较慢，正在努力加载...');
+    }
+  }, [], {
+    wait: 3000,
   });
 
   const Loading = () => {
