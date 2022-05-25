@@ -28,9 +28,9 @@ const BottomButton = (
       bottom: 0,
       left: 0,
       backgroundColor: '#fff',
-      boxShadow: 'rgb(24, 69, 181,0.1) 0px 0px 10px',
+      boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.3)',
     }}>
-    <div style={{ padding: 8 }}>
+    <div style={{ padding: '10px 12px' }}>
       {only ?
         <Button
           loading={loading}
@@ -44,9 +44,12 @@ const BottomButton = (
         :
         <>
           <Button
+            color='primary'
+            fill='outline'
             disabled={leftDisabled}
             style={{
-              padding: 8,
+              padding: '10px 0',
+              fontSize: 14,
               width: '50%',
               borderRadius: 50,
               borderTopRightRadius: 0,
@@ -60,7 +63,8 @@ const BottomButton = (
           <Button
             disabled={rightDisabled}
             style={{
-              padding: 8,
+              padding: '10px 0',
+              fontSize: 14,
               width: '50%',
               backgroundColor: '#4B8BF5',
               borderRadius: 50,

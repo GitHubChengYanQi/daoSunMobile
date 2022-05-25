@@ -1,0 +1,34 @@
+.screen {
+  background-color: #fff;
+  padding: 12px;
+  border-top: solid 1px #F5F5F5;
+  display: flex;
+
+  .stockNumber {
+    color: #666666;
+    flex-grow: 1;
+
+    span {
+      color: #257BDE;
+    }
+  }
+
+  .screenButton {
+    color: #000000;
+
+    svg {
+      font-size: 13px;
+    }
+  }
+
+  .checked {
+    color: var(--adm-color-primary);
+  }
+
+}
+
+.tab {
+  :global .adm-tabs-header {
+    border-bottom: none;
+  }
+}

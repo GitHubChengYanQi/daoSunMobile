@@ -174,6 +174,8 @@ const Menus = (
       return MenusStyle({ icon: 'icon-jichuwuliao' });
     case 'createUser':
       return MenusStyle({ icon: 'icon-kehuliebiao2' });
+    case 'instockAsk':
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Instock/InstockAsk' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }

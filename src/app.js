@@ -65,7 +65,7 @@ export async function getInitialState() {
       const customer = await userCustomer();
 
       // type不存在
-      if (!IsDev() && userInfo.name === '程彦祺') {
+      if (true || !IsDev() && userInfo.name === '程彦祺') {
         new VConsole();
       }
 

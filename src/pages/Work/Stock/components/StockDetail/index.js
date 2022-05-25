@@ -13,11 +13,9 @@ import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import { BellOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../components/ToolUtil';
+import SkuItem from '../../../Sku/SkuItem';
 
-const StockDetail = ({ setOverflow }) => {
-
-  const { initialState } = useModel('@@initialState');
-  const state = initialState || {};
+const StockDetail = ({}) => {
 
   const listRef = useRef();
 
@@ -93,7 +91,7 @@ const StockDetail = ({ setOverflow }) => {
       <div hidden={screen} className={style.search}>
         <MySearch
           historyType='stock'
-          icon={<BellOutline style={{ fontSize: 20 }} />}
+          extraIcon={<BellOutline style={{ fontSize: 20 }} />}
           placeholder='请输入关键词搜索'
           onSearch={(value) => {
             submit({ ...params, skuName: value });
@@ -108,16 +106,15 @@ const StockDetail = ({ setOverflow }) => {
       <div className={style.screen}>
         <div className={style.stockNumber}>库存总数：<span>{stockNumber}</span></div>
         <div className={style.blank} />
-        <div className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
-             onClick={() => {
-               if (screen) {
-                 setOverflow('auto');
-                 setFalse();
-               } else {
-                 setOverflow('hidden');
-                 setTrue();
-               }
-             }}>
+        <div
+          className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
+          onClick={() => {
+            if (screen) {
+              setFalse();
+            } else {
+              setTrue();
+            }
+          }}>
           筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
         </div>
       </div>
@@ -144,7 +141,7 @@ const StockDetail = ({ setOverflow }) => {
         response={(res) => {
           setStockNumber(res.count || 0);
           if (!res.count || res.count === 0) {
-            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 5000 });
+            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 3000 });
           }
           const resSearch = res.search || [];
           let overs = {};
@@ -186,48 +183,24 @@ const StockDetail = ({ setOverflow }) => {
           {
             skuData.map((item, index) => {
 
-              const positionsResult = item.positionsResult || [];
+              const positions = item.positionsResult || [];
 
               const spuResult = item.spuResult || {};
               const unit = spuResult.unitResult || {};
 
-              const imgUrl = Array.isArray(item.imgUrls) && item.imgUrls[0];
-
               return <List.Item key={index}>
-                <div className={style.skuList}>
-                  <div className={style.img}>
-                    <img src={imgUrl || state.loginLogo} width={74} height={74} alt='' />
-                    <div className={style.number}>{item.stockNumber}{unit.unitName}</div>
-                  </div>
-                  <div className={style.sku}>
-                    <MyEllipsis width='100%'><SkuResultSkuJsons skuResult={item} /></MyEllipsis>
-                    <div className={style.describe}>
-                      <MyEllipsis width='100%'>
-                        {
-                          item.skuJsons
-                          &&
-                          item.skuJsons.length > 0
-                          &&
-                          item.skuJsons[0].values.attributeValues
-                          &&
-                          item.skuJsons.map((items) => {
-                            return `${items.values.attributeValues}`;
-                          }).join('/') || '--'
-                        }
-                      </MyEllipsis>
-                    </div>
-                    {positionsResult.length > 0 && <div className={style.positions}>
-                      <MyEllipsis width='100%'>
-                        {
-                          positionsResult.map((item) => {
-                            return positionResult(item);
-                          }).join(' / ')
-                        }
-                      </MyEllipsis>
-                    </div>}
-                  </div>
-                </div>
-
+                <SkuItem
+                  number={item.stockNumber}
+                  unitName={unit.unitName}
+                  skuResult={item}
+                  otherData={positions.length > 0 && <MyEllipsis width='100%'>
+                    {
+                      positions.map((item) => {
+                        return positionResult(item);
+                      }).join(' / ')
+                    }
+                  </MyEllipsis>}
+                />
               </List.Item>;
             })
           }
@@ -244,7 +217,6 @@ const StockDetail = ({ setOverflow }) => {
       params={params}
       search={{ skuClass, supplys, brands, states, position, boms }}
       onClose={() => {
-        setOverflow('auto');
         setFalse();
       }}
       onChange={(value) => {
@@ -252,7 +224,6 @@ const StockDetail = ({ setOverflow }) => {
         submit({ ...params, ...value });
       }}
       onClear={() => {
-        setOverflow('auto');
         setSkuClass([]);
         setSupplys([]);
         setBrands([]);

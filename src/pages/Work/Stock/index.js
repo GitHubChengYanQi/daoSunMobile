@@ -11,12 +11,10 @@ const Stock = () => {
 
   const [key, setkey] = useState('stock');
 
-  const [overflow, setOverflow] = useState('auto');
-
   const content = () => {
     switch (key) {
       case 'stock':
-        return <StockDetail setOverflow={setOverflow} />;
+        return <StockDetail />;
       default:
         return <MyEmpty height='100%' />;
     }

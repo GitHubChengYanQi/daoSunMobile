@@ -14,7 +14,8 @@ const historyDelete = { url: '/queryLog/deleteBatch', method: 'POST' };
 const MySearch = (
   {
     placeholder,
-    icon,
+    searchIcon,
+    extraIcon,
     className,
     onSearch = () => {
     },
@@ -119,6 +120,7 @@ const MySearch = (
       <div className={style.search}>
         <div id='searchBar' className={style.searchBar}>
           <SearchBar
+            icon={searchIcon}
             clearable
             value={value}
             className={style.searchBar}
@@ -150,8 +152,8 @@ const MySearch = (
               onSearch(value);
             }}>搜索</LinkButton>
             :
-            <div hidden={!icon} className={style.icon}>
-              {icon}
+            <div hidden={!extraIcon} className={style.icon}>
+              {extraIcon}
             </div>
         }
       </div>

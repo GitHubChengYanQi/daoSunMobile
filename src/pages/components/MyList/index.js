@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { Button, DotLoading, InfiniteScroll } from 'antd-mobile';
+import { DotLoading, InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
 import MyEmpty from '../MyEmpty';
 

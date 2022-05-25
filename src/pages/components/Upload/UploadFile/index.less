@@ -1,0 +1,46 @@
+
+.imgs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  .img {
+    width: 60px;
+    height: 60px;
+    border-radius: 3px;
+    background: #F5F5F5;
+    overflow: hidden;
+    position: relative;
+
+    .remove {
+      width: 17px;
+      height: 17px;
+      color: #fff;
+      background: url("../../../../assets/remove.png") 100%;
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: flex;
+      justify-content: right;
+      padding: 2px;
+
+      svg {
+        font-size: 8px;
+        font-weight: bold;
+      }
+    }
+  }
+
+}
+
+
+.action {
+  :global .adm-button-block {
+    padding: 20px 0;
+  }
+}
+
+.space {
+  height: 8px;
+  background: #F5F5F5;
+}
