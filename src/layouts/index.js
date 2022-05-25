@@ -119,11 +119,7 @@ const BasicLayout = (props) => {
   if (state.init === true) {
     return (
       <div className={styles.safeArea}>
-        {/*<MyLoading skeleton />*/}
         {props.children}
-        <div className={styles.logo}>
-          <MyLoading skeleton noLoadingTitle />
-        </div>
       </div>
     );
   } else {

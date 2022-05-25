@@ -3,8 +3,18 @@ import style from './index.less';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { useDebounceEffect } from 'ahooks';
+import { ToolUtil } from '../ToolUtil';
 
-export const MyLoading = ({ skeleton, title, noLoadingTitle }) => {
+export const MyLoading = (
+  {
+    skeleton,
+    title,
+    noLoadingTitle,
+    loaderWidth,
+    imgWidth = 46,
+    downLoading,
+  },
+) => {
 
   const { initialState } = useModel('@@initialState');
 
@@ -22,15 +32,18 @@ export const MyLoading = ({ skeleton, title, noLoadingTitle }) => {
   });
 
   const Loading = () => {
-    return <div className={style.center}>
+    return <div className={ToolUtil.classNames(style.center, downLoading ? style.downLoading : '')}>
       <div className={style.loading}>
-        <div className={style.loader}>
+        <div className={style.loader} style={{ width: loaderWidth || 100 }}>
           <svg className={style.circular} viewBox='25 25 50 50'>
             <circle className={style.path} cx='50' cy='50' r='20' fill='none' strokeWidth='1' strokeMiterlimit='10' />
           </svg>
         </div>
-        <div className={style.loadingLogo}>
-          {state.homeLogo && <img src={state.homeLogo} width={46} height={46} alt='' />}
+        <div
+          className={style.loadingLogo}
+          style={{ top: `calc(50% - ${imgWidth / 2}px)`, left: `calc(50% - ${imgWidth / 2}px)` }}
+        >
+          {state.homeLogo && <img src={state.homeLogo} width={imgWidth} height={imgWidth} alt='' />}
         </div>
       </div>
       <div className={style.loadingTitle}>

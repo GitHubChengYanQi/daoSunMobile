@@ -107,7 +107,7 @@ const MyList = (
       <>
         {hasMore ? (
           <>
-            <MyLoading skeleton />
+            <MyLoading imgWidth={20} loaderWidth={40} skeleton downLoading title='努力加载中...' noLoadingTitle />
           </>
         ) : (
           <span>--- 我是有底线的 ---</span>

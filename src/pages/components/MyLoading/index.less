@@ -46,6 +46,12 @@
   text-align: center;
 }
 
+.downLoading {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
 .loading {
   position: relative;
   display: inline-block;
@@ -54,7 +60,6 @@
   .loader {
     position: relative;
     margin: 0 auto;
-    width: 100px;
 
     &:before {
       content: '';
@@ -87,8 +92,6 @@
 
   .loadingLogo {
     position: absolute;
-    top: calc(50% - 23px);
-    left: calc(50% - 23px);
   }
 }
 
