@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TabBar } from 'antd-mobile';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
@@ -6,17 +6,16 @@ import style from './index.less';
 import StockDetail from './components/StockDetail';
 import MyNavBar from '../../components/MyNavBar';
 import { ToolUtil } from '../../components/ToolUtil';
+import { useScroll } from 'ahooks';
 
 const Stock = () => {
 
   const [key, setkey] = useState('stock');
 
-  const [overflow, setOverflow] = useState('auto');
-
   const content = () => {
     switch (key) {
       case 'stock':
-        return <StockDetail setOverflow={setOverflow} />;
+        return <StockDetail />;
       default:
         return <MyEmpty height='100%' />;
     }

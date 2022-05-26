@@ -14,7 +14,7 @@ import { useBoolean } from 'ahooks';
 import { BellOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../components/ToolUtil';
 
-const StockDetail = ({ setOverflow }) => {
+const StockDetail = () => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -80,7 +80,7 @@ const StockDetail = ({ setOverflow }) => {
 
 
   return <>
-    <div className={style.search}>
+    <div className={style.search} hidden={screen}>
       <MySearch
         historyType='stock'
         icon={<BellOutline style={{ fontSize: 20 }} />}
@@ -100,11 +100,9 @@ const StockDetail = ({ setOverflow }) => {
       id='screen'
       onClick={() => {
         if (screen) {
-          setOverflow('auto');
           setFalse();
         } else {
           document.getElementById('screen').scrollIntoView();
-          setOverflow('hidden');
           setTrue();
         }
       }}
@@ -237,7 +235,6 @@ const StockDetail = ({ setOverflow }) => {
       params={params}
       search={{ skuClass, supplys, brands, states, position, boms }}
       onClose={() => {
-        setOverflow('auto');
         setFalse();
       }}
       onChange={(value) => {
@@ -245,7 +242,6 @@ const StockDetail = ({ setOverflow }) => {
         submit({ ...params, ...value });
       }}
       onClear={() => {
-        setOverflow('auto');
         setSkuClass([]);
         setSupplys([]);
         setBrands([]);
