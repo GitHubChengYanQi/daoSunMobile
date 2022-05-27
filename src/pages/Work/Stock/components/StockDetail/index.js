@@ -80,7 +80,7 @@ const StockDetail = () => {
 
 
   return <>
-    <div className={style.search} hidden={screen}>
+    <div className={style.search}>
       <MySearch
         historyType='stock'
         icon={<BellOutline style={{ fontSize: 20 }} />}
@@ -125,7 +125,7 @@ const StockDetail = () => {
     </Tabs>
 
 
-    <div>
+    <div style={{minHeight:'100vh'}}>
       <MyList
         params={params}
         ref={listRef}
