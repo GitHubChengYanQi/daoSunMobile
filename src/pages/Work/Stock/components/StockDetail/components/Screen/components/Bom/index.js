@@ -58,6 +58,9 @@ const Bom = (
     >
       <div className={style.bomType}>
         <Radio
+          icon={(checked) => {
+            return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
+          }}
           checked={type === 'Present'}
           key='children'
           style={{
@@ -67,7 +70,7 @@ const Bom = (
           }}
           onChange={() => {
             setType('Present');
-            if (value){
+            if (value) {
               onChange(value, 'Present');
             }
 
@@ -76,6 +79,9 @@ const Bom = (
           子级物料
         </Radio>
         <Radio
+          icon={(checked) => {
+            return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
+          }}
           checked={type === 'All'}
           key='sku'
           style={{
@@ -85,7 +91,7 @@ const Bom = (
           }}
           onChange={() => {
             setType('All');
-            if (value){
+            if (value) {
               onChange(value, 'All');
             }
           }}
@@ -111,7 +117,7 @@ const Bom = (
                 icon={<div
                   className={ToolUtil.classNames(
                     style.stepIcon,
-                    index === boms.length - 1 ? style.stepCurrentIcon : style.stepOtherIcon
+                    index === boms.length - 1 ? style.stepCurrentIcon : style.stepOtherIcon,
                   )}
                 >{index + 1}</div>}
                 status='process'

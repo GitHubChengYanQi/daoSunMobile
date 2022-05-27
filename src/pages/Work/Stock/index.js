@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TabBar } from 'antd-mobile';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
@@ -6,6 +6,7 @@ import style from './index.less';
 import StockDetail from './components/StockDetail';
 import MyNavBar from '../../components/MyNavBar';
 import { ToolUtil } from '../../components/ToolUtil';
+import { useScroll } from 'ahooks';
 
 const Stock = () => {
 
@@ -33,11 +34,15 @@ const Stock = () => {
       className={style.tabBarItem}
       safeArea
       activeKey={key}
-      onChange={setkey}>
+      onChange={(key) => {
+        if (key !== 'scan') {
+          setkey(key);
+        }
+      }}>
       <TabBar.Item
         title='仓储'
         key='stock'
-        icon={<Icon type='icon-renwu1' />}
+        icon={<Icon type='icon-cangchu' />}
       />
       <TabBar.Item
         title='任务'
@@ -59,7 +64,7 @@ const Stock = () => {
       <TabBar.Item
         title='动态'
         key='dynamic'
-        icon={<Icon type='icon-wode' />}
+        icon={<Icon type='icon-dongtai' />}
       />
     </TabBar>
   </div>;

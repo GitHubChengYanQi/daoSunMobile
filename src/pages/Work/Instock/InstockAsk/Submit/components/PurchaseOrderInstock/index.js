@@ -24,11 +24,11 @@ const PurchaseOrderInstock = ({ data = {} }) => {
     <MyNavBar title='入库申请' />
     <div className={style.data}>
       <div className={style.label}>供应商</div>
-      <div className={style.value}>{ToolUtil.isObject(data.bcustomer).customerName}</div>
+      <div className={style.value}>{ToolUtil.isObject(data.bcustomer).customerName || '-'}</div>
     </div>
     <div className={style.data}>
       <div className={style.label}>合同号</div>
-      <div className={style.value}>{ToolUtil.isObject(contract).coding || '--'}</div>
+      <div className={style.value}>{ToolUtil.isObject(contract).coding || '-'}</div>
     </div>
 
     <InstockSkus skus={details.map(item => {

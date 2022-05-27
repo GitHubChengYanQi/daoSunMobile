@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from './index.less';
 import { List, Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../../components/MyList';
 import { skuList } from '../../../../Scan/Url';
 import MyAntList from '../../../../components/MyAntList';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../../components/MyEllipsis';
-import { useModel } from 'umi';
 import Screen from './components/Screen';
 import MySearch from '../../../../components/MySearch';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
@@ -15,11 +13,9 @@ import { BellOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import SkuItem from '../../../Sku/SkuItem';
 
-const StockDetail = ({}) => {
+const StockDetail = () => {
 
   const listRef = useRef();
-
-  const [overflowHeight, setOverflowHeight] = useState();
 
   const [skuClass, setSkuClass] = useState([]);
   const [supplys, setSupplys] = useState([]);
@@ -78,60 +74,54 @@ const StockDetail = ({}) => {
     });
   };
 
-  useEffect(() => {
-    const topHeight = document.getElementById('top');
-    if (topHeight) {
-      setOverflowHeight(topHeight.clientHeight);
-    }
-  }, [screen]);
 
-
-  return <div style={{ height: '100%' }}>
-    <div id='top'>
-      <div hidden={screen} className={style.search}>
-        <MySearch
-          historyType='stock'
-          extraIcon={<BellOutline style={{ fontSize: 20 }} />}
-          placeholder='请输入关键词搜索'
-          onSearch={(value) => {
-            submit({ ...params, skuName: value });
-          }}
-          onChange={setSkuName}
-          value={skuName}
-          onClear={() => {
-            submit({ ...params, skuName: null });
-          }}
-        />
-      </div>
-      <div className={style.screen}>
-        <div className={style.stockNumber}>库存总数：<span>{stockNumber}</span></div>
-        <div className={style.blank} />
-        <div
-          className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
-          onClick={() => {
-            if (screen) {
-              setFalse();
-            } else {
-              setTrue();
-            }
-          }}>
-          筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
-        </div>
-      </div>
-      <Tabs activeKey={spuClassId || 'all'} className={style.skuClass} onChange={(key) => {
-        submit({ ...params, spuClassIds: key === 'all' ? [] : [key] });
-      }}>
-        <Tabs.Tab title={<span className={!spuClassId && style.classCheck || ''}>全部</span>} key='all' />
-        {skuClass.map((item) => {
-          return <Tabs.Tab
-            title={<span className={spuClassId === item.key && style.classCheck || ''}>{item.title}</span>}
-            key={item.key} />;
-        })}
-      </Tabs>
+  return <>
+    <div className={style.search}>
+      <MySearch
+        historyType='stock'
+        icon={<BellOutline style={{ fontSize: 20 }} />}
+        placeholder='请输入关键词搜索'
+        onSearch={(value) => {
+          submit({ ...params, skuName: value });
+        }}
+        onChange={setSkuName}
+        value={skuName}
+        onClear={() => {
+          submit({ ...params, skuName: null });
+        }}
+      />
     </div>
+    <div
+      className={style.screen}
+      id='screen'
+      onClick={() => {
+        if (screen) {
+          setFalse();
+        } else {
+          document.getElementById('screen').scrollIntoView();
+          setTrue();
+        }
+      }}
+    >
+      <div className={style.stockNumber}>库存总数：<span>{stockNumber}</span></div>
+      <div className={style.blank} />
+      <div className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}>
+        筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
+      </div>
+    </div>
+    <Tabs activeKey={spuClassId || 'all'} className={style.skuClass} onChange={(key) => {
+      submit({ ...params, spuClassIds: key === 'all' ? [] : [key] });
+    }}>
+      <Tabs.Tab title={<span className={!spuClassId && style.classCheck || ''}>全部</span>} key='all' />
+      {skuClass.map((item) => {
+        return <Tabs.Tab
+          title={<span className={spuClassId === item.key && style.classCheck || ''}>{item.title}</span>}
+          key={item.key} />;
+      })}
+    </Tabs>
 
 
-    <div style={{ overflow: 'auto', maxHeight: `calc(100% - ${overflowHeight}px)` }}>
+    <div style={{minHeight:'100vh'}}>
       <MyList
         params={params}
         ref={listRef}
@@ -235,7 +225,7 @@ const StockDetail = ({}) => {
         submit({ stockView: true, skuName: params.skuName });
       }}
     />
-  </div>;
+  </>;
 };
 
 export default StockDetail;
