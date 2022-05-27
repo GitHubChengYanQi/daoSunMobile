@@ -54,6 +54,7 @@ const BottomButton = (
               borderRadius: 50,
               borderTopRightRadius: 0,
               borderBottomRightRadius: 0,
+              borderRight: 'none',
             }}
             onClick={() => {
               typeof leftOnClick === 'function' && leftOnClick();
@@ -63,6 +64,7 @@ const BottomButton = (
           <Button
             disabled={rightDisabled}
             style={{
+              borderLeft: 'none',
               padding: '10px 0',
               fontSize: 14,
               width: '50%',

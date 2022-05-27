@@ -8,6 +8,11 @@ export const brandList = {
   method: 'POST',
 };
 
+export const brandListSelect = {
+  url: '/brand/listSelect',
+  method: 'POST',
+};
+
 export const supplyList = {
   url: '/supplier/list',
   method: 'POST',

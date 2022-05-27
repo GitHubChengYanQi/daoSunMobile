@@ -188,8 +188,9 @@ const StockDetail = ({}) => {
               const spuResult = item.spuResult || {};
               const unit = spuResult.unitResult || {};
 
-              return <List.Item key={index}>
+              return <List.Item key={index} className={style.listItem}>
                 <SkuItem
+                  extraWidth='24px'
                   number={item.stockNumber}
                   unitName={unit.unitName}
                   skuResult={item}

@@ -6,10 +6,13 @@ import { orderDetail } from '../../../Order/Url';
 import MyEmpty from '../../../../components/MyEmpty';
 import PurchaseOrderInstock from './components/PurchaseOrderInstock';
 import { MyLoading } from '../../../../components/MyLoading';
+import InstockSkus from './components/InstockSkus';
 
 const Submit = () => {
 
-  const { query } = useLocation();
+  const { query, state } = useLocation();
+
+  const skus = ToolUtil.isArray(state && state.skus);
 
   const [data, setData] = useState();
 
@@ -48,7 +51,7 @@ const Submit = () => {
     case 'outItem':
       return <MyEmpty />;
     default:
-      return <MyEmpty />;
+      return <InstockSkus skus={skus} />;
   }
 };
 

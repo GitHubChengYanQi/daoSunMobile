@@ -21,3 +21,9 @@
 .inputRight > input {
   text-align: right;
 }
+
+.input {
+  padding: 4px 8px;
+  border: none;
+  --border-radius: 0;
+}

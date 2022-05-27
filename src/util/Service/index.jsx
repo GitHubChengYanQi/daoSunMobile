@@ -1,7 +1,6 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Dialog } from 'antd-mobile';
-import { goToLogin } from '../../components/Auth';
 import { history } from 'umi';
 import { ToolUtil } from '../../pages/components/ToolUtil';
 
@@ -9,8 +8,8 @@ const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'https://lqscyq.xicp.fun'
-  // 'http://192.168.1.119'
+  // 'https://lqscyq.xicp.fun'
+  'http://192.168.1.230'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :

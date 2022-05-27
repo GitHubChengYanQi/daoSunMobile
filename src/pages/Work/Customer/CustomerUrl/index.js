@@ -50,3 +50,9 @@ export const trackMessageAdd = {
   method: 'POST',
   rowKey:'trackMessageId'
 };
+
+export const supplierIdSelect = {
+  url: '/supplier/listSelect',
+  method: 'POST'
+};
+

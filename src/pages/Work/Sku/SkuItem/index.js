@@ -10,7 +10,9 @@ const SkuItem = (
     unitName,
     skuResult = {},
     otherData,
-    extraWidth = 0,
+    extraWidth = '0px',
+    imgSize = 74,
+    gap = 4,
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -19,18 +21,38 @@ const SkuItem = (
 
   return <>
     <div className={style.skuList}>
-      <div className={style.img}>
-        <img src={imgUrl || state.loginLogo} width={74} height={74} alt='' />
+      <div className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }}>
+        <img src={imgUrl || state.loginLogo} width={imgSize} height={imgSize} alt='' />
         <div hidden={number === undefined} className={style.number}>{number}{unitName}</div>
       </div>
-      <div className={style.sku} style={{ maxWidth: `calc(100vw - 74px - 12px - 13px - 29px - ${extraWidth}px)` }}>
+      <div
+        className={style.sku}
+        style={{ gap, maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
+      >
         <MyEllipsis width='100%'><SkuResultSkuJsons skuResult={skuResult} /></MyEllipsis>
         <div className={style.describe}>
-          <MyEllipsis width='100%'><SkuResultSkuJsons skuResult={skuResult} describe /></MyEllipsis>
+          <MyEllipsis width='100%'>
+            {
+              `${
+                skuResult.skuJsons
+                &&
+                skuResult.skuJsons.length > 0
+                &&
+                skuResult.skuJsons[0].values.attributeValues
+                &&
+                skuResult.skuJsons.map((items) => {
+                  return items.values.attributeValues;
+                }).join(' / ') || '--'
+              }`
+            }
+          </MyEllipsis>
         </div>
-        <div hidden={!otherData} className={style.otherData}>
-          <MyEllipsis width='100%'>{otherData}</MyEllipsis>
+        <div className={style.otherDataStyle}>
+          <div hidden={!otherData} className={style.otherData}>
+            <MyEllipsis width='100%'>{otherData}</MyEllipsis>
+          </div>
         </div>
+
       </div>
     </div>
   </>;

@@ -3,3 +3,10 @@ export const instockOrderAdd = {
   method: 'POST',
   rowKey: 'instockOrderId',
 };
+
+export const spuClassList = {
+  url: '/spuClassification/list',
+  method: 'POST',
+  rowKey: 'spuClassificationId',
+};
+

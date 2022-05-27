@@ -25,6 +25,10 @@ body {
   --adm-color-primary: #2680EB;
 }
 
+.adm-button {
+  font-size: 14px;
+}
+
 
 
 
