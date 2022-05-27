@@ -118,7 +118,7 @@ const BasicLayout = (props) => {
 
   if (state.init === true) {
     return (
-      <div className={styles.safeArea}>
+      <div className={styles.safeArea} >
         {props.children}
       </div>
     );

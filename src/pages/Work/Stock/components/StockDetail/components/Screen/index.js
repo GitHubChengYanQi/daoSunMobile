@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
-import { Button, SideBar } from 'antd-mobile';
+import { Button, Popup, SideBar } from 'antd-mobile';
 import SkuClass from './components/SkuClass';
 import Supply from './components/Supply';
 import Brand from './components/Brand';
@@ -76,15 +76,6 @@ const Screen = (
   );
 
   const mainElementRef = useRef(null);
-
-  useEffect(() => {
-    const mainElement = mainElementRef.current;
-    if (!mainElement) return;
-    mainElement.addEventListener('scroll', handleScroll);
-    return () => {
-      mainElement.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   const getOptions = (key) => {
     switch (key) {
@@ -184,91 +175,111 @@ const Screen = (
   };
 
   return <>
-    <div hidden={!screen} className={style.screenDiv} style={{ top: !ToolUtil.isQiyeWeixin() ? 90 : 45 }}>
-      <div className={style.content}>
-        <SideBar
-          className={style.sideBar}
-          activeKey={activeKey}
-          onChange={key => {
-            setChecked(true);
-            if (document.getElementById(key)) {
-              document.getElementById(key).scrollIntoView();
+    <Popup
+      afterShow={()=>{
+        const mainElement = mainElementRef.current;
+        if (!mainElement) return;
+        mainElement.addEventListener('scroll', handleScroll);
+      }}
+      afterClose={()=>{
+        const mainElement = mainElementRef.current;
+        if (!mainElement) return;
+        mainElement.removeEventListener('scroll', handleScroll);
+      }}
+      className={ToolUtil.classNames(style.popup, ToolUtil.isQiyeWeixin() ? style.qywx : style.other)}
+      visible={screen}
+      onMaskClick={() => {
+        onClose();
+      }}
+      position='top'
+      bodyStyle={{ height: '40vh' }}
+    >
+      <div className={style.screenDiv} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+        <div className={style.top} style={{ height: ToolUtil.isQiyeWeixin() ? 45 : 90 }} onClick={onClose} />
+        <div className={style.content}>
+          <SideBar
+            className={style.sideBar}
+            activeKey={activeKey}
+            onChange={key => {
+              setChecked(true);
+              if (document.getElementById(key)) {
+                document.getElementById(key).scrollIntoView();
+              }
+              setActiveKey(key);
+              setTimeout(() => {
+                setChecked(false);
+              }, 1000);
+            }}
+          >
+            {searchtype.map(item => {
+              let screened = false;
+              let overLength = false;
+              switch (item.key) {
+                case 'skuClass':
+                  screened = spuClassIds.length > 0;
+                  break;
+                case 'supply':
+                  screened = customerIds.length > 0;
+                  overLength = overLengths.supply;
+                  break;
+                case 'brand':
+                  screened = brandIds.length > 0;
+                  overLength = overLengths.brand;
+                  break;
+                case 'state':
+                  screened = statusIds.length > 0;
+                  break;
+                case 'bom':
+                  screened = partsSkuId;
+                  break;
+                case 'position':
+                  screened = storehousePositionsId;
+                  break;
+                default:
+                  return <></>;
+              }
+              return <SideBar.Item
+                disabled={item.key === 'bom' ? getOptions(item.key).length === 0 : (getOptions(item.key).length <= 1 && !screened && !overLength)}
+                key={item.key}
+                title={<div className={style.sideBarTitle}>
+                  {screened && <div className={style.screened} />}
+                  <div>{item.title}</div>
+                </div>}
+              />;
+            })}
+          </SideBar>
+          <div className={style.screenContent} ref={mainElementRef} id='screenContent'>
+            {
+              searchtype.map((item, idnex) => {
+                return <div id={item.key} key={idnex}>
+                  {screenContent(item)}
+                </div>;
+              })
             }
-            setActiveKey(key);
-            setTimeout(() => {
-              setChecked(false);
-            }, 1000);
-          }}
-        >
-          {searchtype.map(item => {
-            let screened = false;
-            let overLength = false;
-            switch (item.key) {
-              case 'skuClass':
-                screened = spuClassIds.length > 0;
-                break;
-              case 'supply':
-                screened = customerIds.length > 0;
-                overLength = overLengths.supply;
-                break;
-              case 'brand':
-                screened = brandIds.length > 0;
-                overLength = overLengths.brand;
-                break;
-              case 'state':
-                screened = statusIds.length > 0;
-                break;
-              case 'bom':
-                screened = partsSkuId;
-                break;
-              case 'position':
-                screened = storehousePositionsId;
-                break;
-              default:
-                return <></>;
-            }
-            return <SideBar.Item
-              disabled={item.key === 'bom' ? getOptions(item.key).length === 0 : (getOptions(item.key).length <= 1 && !screened && !overLength)}
-              key={item.key}
-              title={<div className={style.sideBarTitle}>
-                {screened && <div className={style.screened} />}
-                <div>{item.title}</div>
-              </div>}
-            />;
-          })}
-        </SideBar>
-        <div className={style.screenContent} ref={mainElementRef}>
-          {
-            searchtype.map((item, idnex) => {
-              return <div id={item.key} key={idnex}>
-                {screenContent(item)}
-              </div>;
-            })
-          }
-          <div style={{ height: '100%' }} />
+            <div style={{ height: '100%' }} />
+          </div>
+        </div>
+        <div className={style.buttons}>
+          <Button
+            className={ToolUtil.classNames(style.close, style.button)}
+            color='primary'
+            fill='outline'
+            onClick={() => {
+              onClear();
+            }}>
+            清空
+          </Button>
+          <Button
+            className={ToolUtil.classNames(style.ok, style.button)}
+            color='primary'
+            onClick={() => {
+              onClose();
+            }}>
+            {stockNumber === 0 ? '完成' : `查看 ${stockNumber} 件物料`}
+          </Button>
         </div>
       </div>
-      <div className={style.buttons}>
-        <Button
-          className={ToolUtil.classNames(style.close, style.button)}
-          color='primary'
-          fill='outline'
-          onClick={() => {
-            onClear();
-          }}>
-          清空
-        </Button>
-        <Button
-          className={ToolUtil.classNames(style.ok, style.button)}
-          color='primary'
-          onClick={() => {
-            onClose();
-          }}>
-          {stockNumber === 0 ? '完成' : `查看 ${stockNumber} 件物料`}
-        </Button>
-      </div>
-      <div className={style.make} onClick={onClose} />
-    </div>
+    </Popup>
   </>;
 };
 
