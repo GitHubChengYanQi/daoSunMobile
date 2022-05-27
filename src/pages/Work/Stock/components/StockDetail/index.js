@@ -12,6 +12,7 @@ import { useBoolean } from 'ahooks';
 import { BellOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import SkuItem from '../../../Sku/SkuItem';
+import Icon from '../../../../components/Icon';
 
 const StockDetail = () => {
 
@@ -79,7 +80,7 @@ const StockDetail = () => {
     <div className={style.search}>
       <MySearch
         historyType='stock'
-        icon={<BellOutline style={{ fontSize: 20 }} />}
+        extraIcon={<Icon type='icon-lingdang' style={{ fontSize: 20 }} />}
         placeholder='请输入关键词搜索'
         onSearch={(value) => {
           submit({ ...params, skuName: value });
