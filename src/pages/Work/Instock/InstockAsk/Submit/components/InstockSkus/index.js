@@ -25,12 +25,14 @@ const InstockSkus = ({ skus = [] }) => {
   const { loading, run: instock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: () => {
-      history.goBack();
       Message.dialogSuccess({
-        title:'创建入库申请成功',
-        leftText:'返回列表'
-      })
-      Toast.show({ content: '创建入库申请成功！', position: 'bottom' });
+        title: '创建入库申请成功！',
+        rightText: '返回列表',
+        only: true,
+        next: () => {
+          history.goBack();
+        },
+      });
     },
     onError: () => {
       Toast.show({ content: '创建入库申请失败！', position: 'bottom' });
@@ -51,7 +53,6 @@ const InstockSkus = ({ skus = [] }) => {
   data.map(item => countNumber += item.number);
 
   return <div style={{ marginBottom: 60 }}>
-
     <div className={style.skus}>
       <div className={style.skuHead}>
         <div className={style.headTitle}>
