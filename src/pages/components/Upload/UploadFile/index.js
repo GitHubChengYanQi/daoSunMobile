@@ -11,7 +11,12 @@ import { Upload } from 'antd';
 import { CloseOutline } from 'antd-mobile-icons';
 import { MyLoading } from '../../MyLoading';
 
-const UploadFile = () => {
+const UploadFile = (
+  {
+    onChange = () => {
+    },
+  },
+) => {
 
   const [visible, { setTrue, setFalse }] = useBoolean();
 
@@ -20,6 +25,17 @@ const UploadFile = () => {
   const picture = files.filter(item => !ToolUtil.queryString('image', item.type));
 
   const [loading, setLoading] = useState();
+
+  const fileChange = ({ mediaId, url, type, remove }) => {
+    let newFile;
+    if (remove) {
+      newFile = files.filter(fileItem => fileItem.mediaId !== mediaId);
+    } else {
+      newFile = [...files, { type, mediaId, url }];
+    }
+    onChange(newFile.map(item => item.mediaId));
+    setFiles(newFile);
+  };
 
   const uploadImage = (localId, url) => {
     wx.uploadImage({
@@ -32,7 +48,7 @@ const UploadFile = () => {
             method: 'GET',
             params: { mediaId: res.serverId },
           });
-          setFiles([...files, { type: 'image', mediaId, url }]);
+          fileChange({ type: 'image', mediaId, url });
         } catch (e) {
           Toast.show({ content: '上传失败！' });
         }
@@ -78,7 +94,7 @@ const UploadFile = () => {
         imgs.map((item, index) => {
           return <div key={index} className={style.img}>
             <div className={style.remove} onClick={() => {
-              setFiles(files.filter(fileItem => fileItem.mediaId !== item.mediaId));
+              fileChange({ mediaId: item.mediaId, remove: true });
             }}><CloseOutline /></div>
             <img src={item.url} alt='' width='100%' height='100%' />
           </div>;
@@ -101,7 +117,7 @@ const UploadFile = () => {
       fileList={picture}
       listType='picture'
       onRemove={(file) => {
-        setFiles(files.filter(item => item.mediaId !== file.mediaId));
+        fileChange({ mediaId: file.mediaId, remove: true });
       }}
     />
 
@@ -110,7 +126,7 @@ const UploadFile = () => {
       type='picture'
       id='file'
       onChange={(url, mediaId, file) => {
-        setFiles([...files, { type: file.type, mediaId, url, name: file.name }]);
+        fileChange({ type: file.type, mediaId, url, name: file.name });
         setFalse();
       }}
       button

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { Divider, Selector, Stepper, TextArea, Toast } from 'antd-mobile';
+import { Button, Divider, Selector, Stepper, TextArea, Toast } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -10,12 +10,15 @@ import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../util/Request';
-import { instockOrderAdd } from '../../../../Url';
+import { announcementsListSelect, instockOrderAdd } from '../../../../Url';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import { Message } from '../../../../../../components/Message';
 
 const InstockSkus = ({ skus = [] }) => {
 
   const [data, setData] = useState([]);
+
+  const [params, setParams] = useState({});
 
   const history = useHistory();
 
@@ -23,6 +26,10 @@ const InstockSkus = ({ skus = [] }) => {
     manual: true,
     onSuccess: () => {
       history.goBack();
+      Message.dialogSuccess({
+        title:'创建入库申请成功',
+        leftText:'返回列表'
+      })
       Toast.show({ content: '创建入库申请成功！', position: 'bottom' });
     },
     onError: () => {
@@ -30,17 +37,13 @@ const InstockSkus = ({ skus = [] }) => {
     },
   });
 
+  const { loading: announcemensLoading, data: announcemens } = useRequest(announcementsListSelect);
+
 
   useEffect(() => {
     setData(skus);
   }, [skus.length]);
 
-  const carefulData = [
-    { label: '需要叉车', value: '0' },
-    { label: '贵重物资', value: '1' },
-    { label: '大件物资', value: '2' },
-    { label: '非上班时间到货', value: '3' },
-  ];
 
   const [allSku, { toggle }] = useBoolean();
   const [allCareful, { toggle: carefulToggle }] = useBoolean();
@@ -68,7 +71,7 @@ const InstockSkus = ({ skus = [] }) => {
             key={index}
             className={ToolUtil.classNames(
               style.skuItem,
-              (index !== (allSku ? skus.length - 1 : (skus.length - 1 < 2 ? skus.length - 1 : 2))) && style.skuBorderBottom,
+              (index !== (allSku ? skus.length - 1 : 2)) && style.skuBorderBottom,
             )}
           >
             <div className={style.item}>
@@ -96,7 +99,7 @@ const InstockSkus = ({ skus = [] }) => {
           </div>;
         })
       }
-      {data.length !== 0 && <Divider className={style.allSku}>
+      {data.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
         }}>
@@ -113,14 +116,16 @@ const InstockSkus = ({ skus = [] }) => {
     <div className={style.careful}>
       <div className={style.title}>注意事项 <span>*</span></div>
       <div className={style.carefulData}>
-        <Selector
+        {announcemensLoading ? <MyLoading skeleton /> : <Selector
           className={style.selector}
-          options={carefulData}
+          options={ToolUtil.isArray(announcemens).filter((item, index) => allCareful || index < 6)}
           multiple={true}
-          onChange={(arr, extend) => console.log(arr, extend.items)}
-        />
+          onChange={(noticeIds) => {
+            setParams({ ...params, noticeIds });
+          }}
+        />}
       </div>
-      <Divider className={style.allSku}>
+      {ToolUtil.isArray(announcemens).length > 6 && <Divider className={style.allSku}>
         <div onClick={() => {
           carefulToggle();
         }}>
@@ -131,7 +136,7 @@ const InstockSkus = ({ skus = [] }) => {
               <DownOutline />
           }
         </div>
-      </Divider>
+      </Divider>}
     </div>
 
     <div className={style.note}>
@@ -142,7 +147,9 @@ const InstockSkus = ({ skus = [] }) => {
     <div className={style.file}>
       <div className={style.title}>上传附件</div>
       <div className={style.files}>
-        <UploadFile />
+        <UploadFile onChange={(mediaIds) => {
+          setParams({ ...params, mediaIds });
+        }} />
       </div>
 
     </div>
@@ -164,6 +171,7 @@ const InstockSkus = ({ skus = [] }) => {
         instock({
           data: {
             instockRequest,
+            ...params,
           },
         });
       }}

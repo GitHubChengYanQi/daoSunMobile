@@ -56,3 +56,8 @@ export const supplierIdSelect = {
   method: 'POST'
 };
 
+export const supplierBySku = {
+  url: '/supply/getCustomerBySku',
+  method: 'POST'
+};
+

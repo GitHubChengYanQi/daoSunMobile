@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import style from './index.less';
-import { ShopbagOutline } from 'antd-mobile-icons';
 import { Badge, Button, Popup } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
@@ -8,6 +7,7 @@ import { RemoveButton } from '../../../../../../../components/MyButton';
 import Number from '../../../../../../../components/Number';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
+import Icon from '../../../../../../../components/Icon';
 
 const SkuShop = (
   {
@@ -95,8 +95,8 @@ const SkuShop = (
         <div className={style.shop} onClick={() => {
           setVisible(!visible);
         }}>
-          <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '3px' }}>
-            <ShopbagOutline style={{ color: skus.length > 0 && 'var(--adm-color-primary)' }} />
+          <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '5px' }}>
+            <Icon type='icon-cangchu' style={{ color: skus.length > 0 && 'var(--adm-color-primary)' }} />
           </Badge>
           <div>已选<span>{skus.length}</span>类</div>
         </div>

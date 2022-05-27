@@ -13,6 +13,8 @@ import { AddSquareOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../components/LinkButton';
 import AddSku from './components/AddSku';
 import SkuShop from './components/SkuShop';
+import { MyLoading } from '../../../../../components/MyLoading';
+import Icon from '../../../../../components/Icon';
 
 const SkuInstock = ({ searchValue }, ref) => {
 
@@ -20,7 +22,7 @@ const SkuInstock = ({ searchValue }, ref) => {
 
   const [skuClass, setSkuClass] = useState('all');
 
-  const { data: skuClassData } = useRequest(spuClassList);
+  const { loading, data: skuClassData } = useRequest(spuClassList);
 
   const [number, setNumber] = useState(0);
 
@@ -41,6 +43,10 @@ const SkuInstock = ({ searchValue }, ref) => {
   useImperativeHandle(ref, () => ({
     submit,
   }));
+
+  if (loading) {
+    return <MyLoading />;
+  }
 
   return <div>
     <div className={style.top}>
@@ -96,7 +102,7 @@ const SkuInstock = ({ searchValue }, ref) => {
               {!checkSkuIds.includes(item.skuId) && <LinkButton onClick={() => {
                 addSku.current.openSkuAdd(item);
               }}>
-                <AddSquareOutline style={{ fontSize: 20 }} />
+                <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
               </LinkButton>}
             </div>;
           })

@@ -64,6 +64,7 @@ const MySearch = (
 
   const [historys, setHistorys] = useState(actions || []);
 
+
   useEffect(() => {
     const searchBar = document.getElementById('searchBar') || {};
     setHistoryWidth(searchBar.clientWidth);
@@ -133,7 +134,9 @@ const MySearch = (
               onChange('');
               onClear();
             }}
-            onFocus={() => setVisible(true)}
+            onFocus={() => {
+              setVisible(true)
+            }}
             onBlur={() => {
               setTimeout(() => {
                 setVisible(false);
@@ -143,7 +146,7 @@ const MySearch = (
         </div>
 
         {
-         (visible || value)
+          (visible || value)
             ?
             <LinkButton className={style.submit} onClick={() => {
               {

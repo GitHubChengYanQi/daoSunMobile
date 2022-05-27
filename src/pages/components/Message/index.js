@@ -9,11 +9,28 @@ const success = (title) => {
 };
 
 const dialogSuccess = (
-  title,
-  leftText,
-  rightText,
-  next = () => {
+  {
+    title,
+    leftText,
+    rightText,
+    next = () => {
+    },
+    only,
   }) => {
+
+  const actions = [];
+
+  if (!only) {
+    actions.push({
+      key: 'back',
+      text: <div style={{ fontSize: 14 }}>{leftText || '返回'}</div>,
+    });
+  }
+  actions.push({
+    key: 'next',
+    text: <div style={{ fontSize: 14 }}> {rightText || '继续'}</div>,
+  });
+
   Dialog.show({
     content: title || '成功！',
     closeOnAction: true,
@@ -24,18 +41,9 @@ const dialogSuccess = (
         next();
       }
     },
-    actions: [[
-      {
-        key: 'back',
-        text: leftText || '返回',
-      },
-      {
-        key: 'next',
-        text: rightText || '继续',
-      },
-    ],
-    ],
-  });
+    actions: [actions],
+  })
+  ;
 };
 
 const error = (title) => {

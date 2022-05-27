@@ -5,7 +5,8 @@ import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import Number from '../../../../../../../components/Number';
 import { useRequest } from '../../../../../../../../util/Request';
-import { supplierIdSelect } from '../../../../../../Customer/CustomerUrl';
+import { supplierBySku } from '../../../../../../Customer/CustomerUrl';
+import { MyLoading } from '../../../../../../../components/MyLoading';
 
 const AddSku = (
   {
@@ -19,11 +20,16 @@ const AddSku = (
 
   const [dataVisible, setDataVisible] = useState();
 
-  const { data: customerData } = useRequest({ ...supplierIdSelect, data: { supply: 1 } });
+  const {
+    loading: getCustomerLoading,
+    data: customerData,
+    run: getCustomer,
+  } = useRequest(supplierBySku, { manual: true });
 
   const [data, setData] = useState({});
 
   const openSkuAdd = (sku = {}) => {
+    getCustomer({ data: { skuId: sku.skuId } });
     setSku(sku);
     setData({ skuId: sku.skuId, skuResult: sku });
     setVisible(true);
@@ -36,7 +42,7 @@ const AddSku = (
   return <>
     <Dialog
       visible={visible}
-      content={<div className={style.addSku}>
+      content={getCustomerLoading ? <MyLoading skeleton /> : <div className={style.addSku}>
         <SkuItem
           skuResult={sku}
           imgSize={80}
@@ -63,6 +69,7 @@ const AddSku = (
             供应商
           </div>
           <Button
+            disabled={ToolUtil.isArray(customerData).length === 0}
             color='primary'
             fill='outline'
             className={style.check}
@@ -74,7 +81,8 @@ const AddSku = (
         <div className={style.stockNumber}>
           <div>
             <div className={style.checkLabel}>库存</div>
-            <span style={{marginRight:8}}>{sku.stockNumber}</span>{ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
+            <span
+              style={{ marginRight: 8 }}>{sku.stockNumber}</span>{ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
           </div>
           <div className={style.instockNumber}>
             入库
@@ -94,6 +102,8 @@ const AddSku = (
         if (action.key === 'add') {
           if (!data.number) {
             return Toast.show({ content: '请输入入库数量!', position: 'bottom' });
+          } else if (ToolUtil.isArray(customerData).length === 0) {
+            return Toast.show({ content: '此物料未绑定供应商!', position: 'bottom' });
           } else if (!data.customerId) {
             return Toast.show({ content: '请选择供应商!', position: 'bottom' });
           }
@@ -132,7 +142,12 @@ const AddSku = (
 
     <Picker
       popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
-      columns={[customerData || []]}
+      columns={[ToolUtil.isArray(customerData).map(item => {
+        return {
+          label: item.customerName,
+          value: item.customerId,
+        };
+      })]}
       visible={dataVisible === 'customer'}
       onClose={() => {
         setDataVisible(null);
