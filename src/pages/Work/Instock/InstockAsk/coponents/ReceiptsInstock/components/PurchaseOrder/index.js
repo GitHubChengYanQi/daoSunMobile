@@ -71,7 +71,7 @@ const PurchaseOrder = (
                     </div>
                     <div className={style.skuData}>
                       <div className={style.skuDataNumber}>
-                        ×{skuItem.purchaseNumber}{unit.unitName}
+                        <span>×{skuItem.purchaseNumber}</span>{unit.unitName}
                       </div>
                       <div className={style.skuDataMoney}>
                         {accounting.formatMoney(skuItem.totalPrice || 0, '￥')}

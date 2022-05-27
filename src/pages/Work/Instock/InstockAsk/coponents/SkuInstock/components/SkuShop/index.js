@@ -54,7 +54,7 @@ const SkuShop = (
                   imgSize={80}
                   gap={10}
                   extraWidth='124px'
-                  otherData={item.brandName}
+                  otherData={item.customerName}
                 />
               </div>
               <div className={style.action}>

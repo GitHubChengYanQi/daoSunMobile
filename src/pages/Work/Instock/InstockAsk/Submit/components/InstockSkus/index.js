@@ -76,7 +76,7 @@ const InstockSkus = ({ skus = [] }) => {
                 imgSize={60}
                 skuResult={item.skuResult}
                 extraWidth='124px'
-                otherData={item.brandName}
+                otherData={item.customerName}
               />
             </div>
             <div>

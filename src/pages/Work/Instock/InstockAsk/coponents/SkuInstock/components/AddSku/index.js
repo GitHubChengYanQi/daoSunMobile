@@ -4,7 +4,6 @@ import SkuItem from '../../../../../../Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import Number from '../../../../../../../components/Number';
-import { brandListSelect } from '../../../../../../Stock/components/StockDetail/components/Screen/components/Url';
 import { useRequest } from '../../../../../../../../util/Request';
 import { supplierIdSelect } from '../../../../../../Customer/CustomerUrl';
 
@@ -19,8 +18,6 @@ const AddSku = (
   const [visible, setVisible] = useState();
 
   const [dataVisible, setDataVisible] = useState();
-
-  const { data: brandData } = useRequest(brandListSelect);
 
   const { data: customerData } = useRequest({ ...supplierIdSelect, data: { supply: 1 } });
 
@@ -40,12 +37,19 @@ const AddSku = (
     <Dialog
       visible={visible}
       content={<div className={style.addSku}>
-        <SkuItem skuResult={sku} imgSize={80} otherData='123' gap={10} extraWidth={'calc(25vw + 24px)'} />
+        <SkuItem
+          skuResult={sku}
+          imgSize={80}
+          otherData={ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')}
+          gap={10}
+          extraWidth={'calc(25vw + 24px)'}
+        />
         <div className={style.flex}>
           <div className={style.checkLabel}>
             品牌
           </div>
           <Button
+            disabled={ToolUtil.isArray(sku.brandResults).length === 0}
             color='primary'
             fill='outline'
             className={style.check}
@@ -70,7 +74,7 @@ const AddSku = (
         <div className={style.stockNumber}>
           <div>
             <div className={style.checkLabel}>库存</div>
-            {sku.stockNumber}{ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
+            <span style={{marginRight:8}}>{sku.stockNumber}</span>{ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
           </div>
           <div className={style.instockNumber}>
             入库
@@ -90,21 +94,28 @@ const AddSku = (
         if (action.key === 'add') {
           if (!data.number) {
             return Toast.show({ content: '请输入入库数量!', position: 'bottom' });
+          } else if (!data.customerId) {
+            return Toast.show({ content: '请选择供应商!', position: 'bottom' });
           }
           onChange(data);
         }
         setVisible(false);
       }}
       actions={[[
-        { text: <div>取消</div>, key: 'close' },
+        { text: <div style={{ color: '#000' }}>取消</div>, key: 'close' },
         { text: '添加', key: 'add' },
       ]]}
     />
 
 
     <Picker
-      popupStyle={{'--z-index': 'var(--adm-popup-z-index, 1002)'}}
-      columns={[brandData || []]}
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
+      columns={[ToolUtil.isArray(sku.brandResults).map(item => {
+        return {
+          label: item.brandName,
+          value: item.brandId,
+        };
+      })]}
       visible={dataVisible === 'brand'}
       onClose={() => {
         setDataVisible(null);
@@ -120,7 +131,7 @@ const AddSku = (
     />
 
     <Picker
-      popupStyle={{'--z-index': 'var(--adm-popup-z-index, 1002)'}}
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
       columns={[customerData || []]}
       visible={dataVisible === 'customer'}
       onClose={() => {
