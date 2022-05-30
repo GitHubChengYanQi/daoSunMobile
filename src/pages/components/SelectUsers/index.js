@@ -6,7 +6,7 @@ import Cascader from '../Cascader';
 import BottomButton from '../BottomButton';
 import { Spin } from 'antd';
 
-const SelectUsers = ({ value, onChange,multiple }, ref) => {
+const SelectUsers = ({ value, onChange, multiple }, ref) => {
 
   const [visible, setVisible] = useState(false);
 
@@ -17,12 +17,11 @@ const SelectUsers = ({ value, onChange,multiple }, ref) => {
   const { loading, data, run } = useRequest(UserIdSelect, { manual: true });
 
   useEffect(() => {
-    run({});
-  }, [run]);
-
-  useEffect(()=>{
-    onChange([]);
-  },[onChange, visible])
+    if (visible) {
+      run({});
+      onChange([]);
+    }
+  }, [visible]);
 
   useImperativeHandle(ref, () => ({
     setVisible,
@@ -32,7 +31,7 @@ const SelectUsers = ({ value, onChange,multiple }, ref) => {
     <Popup
       visible={visible}
       position='bottom'
-      bodyStyle={{height:'100vh'}}
+      bodyStyle={{ height: '100vh' }}
     >
       <div style={{ padding: 16 }}>
         <Cascader
@@ -54,7 +53,7 @@ const SelectUsers = ({ value, onChange,multiple }, ref) => {
             });
           }} />
         <Divider />
-        <div style={{ height:'80vh',overflowY: 'auto', textAlign: 'center' }}>
+        <div style={{ height: '80vh', overflowY: 'auto', textAlign: 'center' }}>
           {loading ? <Spin style={{ padding: 16 }} /> :
             <Selector
               value={value && value.map((items) => {
@@ -88,7 +87,9 @@ const SelectUsers = ({ value, onChange,multiple }, ref) => {
           setVisible(false);
         }}
         rightOnClick={() => {
-          typeof onChange === 'function' && onChange(user);
+          typeof onChange === 'function' && onChange(user.map(item => {
+            return { userId: item.value, name: item.label };
+          }));
           setVisible(false);
         }}
       />

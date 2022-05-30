@@ -23,7 +23,16 @@ export const wxTicket = async () => {
         timestamp: res.timestamp, // 必填，生成签名的时间戳
         nonceStr: res.nonceStr, // 必填，生成签名的随机串
         signature: res.signature,// 必填，签名，见 附录-JS-SDK使用权限签名算法
-        jsApiList: ['ready', 'getLocation', 'scanQRCode', 'onHistoryBack', 'invoke','getLocalImgData','chooseImage','uploadImage'], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
+        jsApiList: [
+          'ready',
+          'getLocation',
+          'scanQRCode',
+          'onHistoryBack',
+          'invoke',
+          'getLocalImgData',
+          'chooseImage',
+          'uploadImage'
+        ], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
       });
     }
   }

@@ -12,6 +12,8 @@
 }
 
 .popup {
+  z-index: var(--adm-popup-z-index, 1001);
+
   :global .adm-popup-body {
     height: auto !important;
     background-color: rgba(0, 0, 0, 0);
@@ -108,40 +110,3 @@
   }
 }
 
-
-@keyframes frame {
-  from {
-    top: -50%;
-  }
-  to {
-    top: 0;
-  }
-}
-
-.skuClass, .supply {
-  :global .adm-selector-item {
-    font-size: 12px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-}
-
-.left {
-  :global .adm-selector-item {
-    text-align: left;
-  }
-}
-
-.searchBar {
-  padding: 0 0 12px 0 !important;
-
-  :global .adm-search-bar {
-    border: solid 1px #F5F5F5;
-  }
-
-  :global .adm-search-bar-input-box {
-    background-color: #fff !important;
-    border: none;
-  }
-}

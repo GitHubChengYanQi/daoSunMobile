@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Card, Checkbox } from 'antd-mobile';
 import { CaretRightFilled, CaretDownFilled } from '@ant-design/icons';
 import style from './index.less';
-import Icon from '../../../../../../../../components/Icon';
+import Icon from '../../../../../../../components/Icon';
 
 const Position = (
   {
@@ -62,7 +62,7 @@ const Position = (
       const loops = item.loops || [];
       const open = loops.filter(item => openKey.includes(item.key)).length === loops.length;
       return <div key={index} className={style.positions}>
-        <div hidden={!openKey.includes(item.key)} className={style.positionItem} style={{ paddingLeft: left }}>
+        {openKey.includes(item.key) && <div className={style.positionItem} style={{ paddingLeft: left }}>
           <div
             style={{ visibility: loops.length === 0 && 'hidden' }}
             className={open ? style.open : ''}
@@ -88,7 +88,7 @@ const Position = (
               }}
             />
           </div>
-        </div>
+        </div>}
         {positions(item.loops, left + 12)}
       </div>;
     });

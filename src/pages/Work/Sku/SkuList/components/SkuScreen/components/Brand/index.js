@@ -1,65 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Selector } from 'antd-mobile';
-import LinkButton from '../../../../../../../../components/LinkButton';
+import LinkButton from '../../../../../../../components/LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import style from '../../index.less';
 import { useBoolean } from 'ahooks';
-import MySearch from '../../../../../../../../components/MySearch';
-import { useRequest } from '../../../../../../../../../util/Request';
-import { supplyList } from '../Url';
-import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import MySearch from '../../../../../../../components/MySearch';
+import style from '../../index.less';
+import { useRequest } from '../../../../../../../../util/Request';
+import { brandList } from '../Url';
+import { MyLoading } from '../../../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
-const Supply = (
+const Brand = (
   {
     options = [],
     title,
+    value = [],
     onChange = () => {
     },
-    value = [],
     refresh,
     overLength,
   }) => {
 
   const [open, { toggle }] = useBoolean();
 
-  const [supply, setSupply] = useState(options);
+  const [brands, setBrands] = useState(options || []);
 
   const [searchValue, setSearchValue] = useState();
 
-  const { loading, run } = useRequest(supplyList, {
+  const { loading, run } = useRequest(brandList, {
     manual: true,
     onSuccess: (res) => {
       const newArray = Array.isArray(res) ? res.map(item => {
         return {
-          label: item.customerName,
-          value: item.customerId,
+          label: item.brandName,
+          value: item.brandId,
         };
       }) : [];
 
-      setSupply(newArray);
+      setBrands(newArray);
     },
   });
 
   const Select = (data) => {
     run({
       params: { limit: 10, page: 1 },
-      data: { supply: 1, ...data },
+      data,
     });
   };
 
-  const like = (string) => {
+  const like = (value) => {
     if (overLength) {
-      return Select({ customerName: string });
+      return Select({ brandName: value });
     }
     const newArrays = options.filter(item => {
-      if (string) {
-        const patt = new RegExp(string, 'i');
-        return patt.test(item.label);
+      if (value) {
+        return ToolUtil.queryString(value, item.label);
       }
       return true;
     });
-    setSupply(newArrays);
+    setBrands(newArrays);
   };
 
 
@@ -69,7 +68,6 @@ const Supply = (
     }
   }, [refresh]);
 
-
   if (!overLength && options.length <= 1 && value.length === 0) {
     return <></>;
   }
@@ -77,6 +75,7 @@ const Supply = (
   return <div>
     <Card
       title={title}
+      headerStyle={{ border: 'none' }}
       extra={<LinkButton style={{ fontSize: 12 }} onClick={toggle}>
         {!open
           ?
@@ -99,15 +98,15 @@ const Supply = (
         onClear={like}
       />
       {loading ? <MyLoading skeleton /> : <Selector
-        columns={1}
+        columns={2}
         style={{
           '--border': 'solid transparent 1px',
           '--checked-border': 'solid var(--adm-color-primary) 1px',
           '--padding': '4px 15px',
         }}
-        className={ToolUtil.classNames(style.supply, style.left)}
+        className={ToolUtil.classNames(style.supply)}
         showCheckMark={false}
-        options={supply.filter((item, index) => open || index < 3)}
+        options={brands.filter((item, index) => open || index < 6)}
         multiple
         value={value}
         onChange={(v) => {
@@ -118,4 +117,4 @@ const Supply = (
   </div>;
 };
 
-export default Supply;
+export default Brand;

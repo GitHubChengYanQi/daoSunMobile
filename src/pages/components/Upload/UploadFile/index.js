@@ -38,25 +38,27 @@ const UploadFile = (
   };
 
   const uploadImage = (localId, url) => {
-    wx.uploadImage({
-      localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-      isShowProgressTips: 0, // 默认为1，显示进度提示
-      success: async (res) => {
-        try {
-          const mediaId = await request({
-            url: '/media/getTemporaryFile',
-            method: 'GET',
-            params: { mediaId: res.serverId },
-          });
-          fileChange({ type: 'image', mediaId, url });
-        } catch (e) {
-          Toast.show({ content: '上传失败！' });
-        }
+    wx.ready(() => {
+      wx.uploadImage({
+        localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+        isShowProgressTips: 0, // 默认为1，显示进度提示
+        success: async (res) => {
+          try {
+            const mediaId = await request({
+              url: '/media/getTemporaryFile',
+              method: 'GET',
+              params: { mediaId: res.serverId },
+            });
+            fileChange({ type: 'image', mediaId, url });
+          } catch (e) {
+            Toast.show({ content: '上传失败！' });
+          }
 
-        setFalse();
-        setLoading(false);
-      },
-    });
+          setFalse();
+          setLoading(false);
+        },
+      });
+    })
   };
 
   const chooseImage = (sourceType) => {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { Button, Divider, Selector, Stepper, TextArea, Toast } from 'antd-mobile';
+import { Divider, Selector, Stepper, TextArea, Toast } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -13,6 +13,7 @@ import { useRequest } from '../../../../../../../util/Request';
 import { announcementsListSelect, instockOrderAdd } from '../../../../Url';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
+import MyTextArea from '../../../../../../components/MyTextArea';
 
 const InstockSkus = ({ skus = [] }) => {
 
@@ -142,7 +143,7 @@ const InstockSkus = ({ skus = [] }) => {
 
     <div className={style.note}>
       <div className={style.title}>添加备注</div>
-      <TextArea className={style.textArea} placeholder='可@相关人员' rows={1} />
+      <MyTextArea className={style.textArea} />
     </div>
 
     <div className={style.file}>

@@ -3,34 +3,13 @@ import MyNavBar from '../../../components/MyNavBar';
 import MySearch from '../../../components/MySearch';
 import style from './index.less';
 import { ScanningOutline } from 'antd-mobile-icons';
-import { Tabs } from 'antd-mobile';
-import MyEmpty from '../../../components/MyEmpty';
-import ReceiptsInstock from './coponents/ReceiptsInstock';
 import SkuInstock from './coponents/SkuInstock';
 
 const InstockAsk = () => {
 
-  const [key, setKey] = useState('receipts');
-
   const [searchValue, setSearchValue] = useState();
 
   const ref = useRef();
-
-  const tabs = [
-    { title: '单据', key: 'receipts' },
-    { title: '物料', key: 'sku' },
-  ];
-
-  const content = () => {
-    switch (key) {
-      case 'receipts':
-        return <ReceiptsInstock />;
-      case 'sku':
-        return <SkuInstock ref={ref} searchValue={searchValue} />;
-      default:
-        return <MyEmpty height='100%' />;
-    }
-  };
 
   return <div className={style.instockAsk}>
     <MyNavBar title='入库申请' />
@@ -39,7 +18,7 @@ const InstockAsk = () => {
         <MySearch
           value={searchValue}
           searchIcon={<ScanningOutline />}
-          placeholder={`请输入相关${key === 'receipts' ? '单据' : '物料'}信息`}
+          placeholder={`请输入相关物料信息`}
           onChange={setSearchValue}
           onSearch={(value) => {
             if (!ref.current) {
@@ -52,24 +31,7 @@ const InstockAsk = () => {
           }}
         />
       </div>
-      <Tabs
-        activeKey={key}
-        onChange={key => {
-          setSearchValue('');
-          setKey(key);
-        }}
-        className={style.tab}
-      >
-        {
-          tabs.map((item) => {
-            return <Tabs.Tab
-              className={key === item.key ? style.checkTabItem : style.tabItem}
-              {...item}
-            />;
-          })
-        }
-      </Tabs>
-      {content()}
+      <SkuInstock ref={ref} searchValue={searchValue} />
     </div>
   </div>;
 

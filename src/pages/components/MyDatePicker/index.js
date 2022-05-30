@@ -14,6 +14,7 @@ const MyDatePicker = (
     style,
     onChange = () => {
     },
+    show,
     ...props
   }) => {
 
@@ -41,18 +42,21 @@ const MyDatePicker = (
     }
   }, []);
 
-
   return (
     <div>
-      <LinkButton
-        style={{ color: '#000', width: width || '100%', textAlign: 'left',...style }}
-        title={<div>{value || (title || '选择日期')}</div>}
-        onClick={() => {
-          setVisible(true);
-        }} />
+      <div onClick={() => {
+        setVisible(true);
+      }}>
+        {show || <LinkButton
+          style={{ color: '#000', width: width || '100%', textAlign: 'left', ...style }}
+          title={<div>{value || (title || '选择日期')}</div>}
+        />}
+      </div>
+
 
       <DatePicker
         {...props}
+        destroyOnClose
         precision={precision || 'day'}
         title='时间选择'
         value={value && new Date(value)}
@@ -77,7 +81,7 @@ const MyDatePicker = (
             case 'hour':
             case 'minute':
             case 'second':
-              onChange(moment(val).format('YYYY/MM/DD hh:mm:ss'));
+              onChange(moment(val).format('YYYY/MM/DD HH:mm:ss'));
               break;
             default:
               onChange(moment(val).format('YYYY/MM/DD'));

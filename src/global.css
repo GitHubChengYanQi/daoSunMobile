@@ -30,6 +30,13 @@ body {
 }
 
 
+.adm-picker-popup, .adm-mask {
+  --z-index: 1002;
+}
+
+
+
+
 
 
 

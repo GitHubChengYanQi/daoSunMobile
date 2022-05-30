@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button,  Form, TextArea } from 'antd-mobile';
+import { Button, Form, TextArea } from 'antd-mobile';
 import SelectUser from './components/SelectUser';
 import StartEndDate from './components/StartEndDate';
 import Users from './components/Users';
@@ -20,13 +20,13 @@ const CreateTask = (props) => {
       manual: true,
       onSuccess: () => {
         Message.dialogSuccess({
-          title:'分派任务成功!',
-          leftText:'返回工单',
-          rightText:'继续分派任务',
+          title: '分派任务成功!',
+          leftText: '返回工单',
+          rightText: '继续分派任务',
         });
       },
       onError: (err) => {
-       Message.error('创建任务失败!')
+        Message.error('创建任务失败!');
       },
     });
 
@@ -66,7 +66,7 @@ const CreateTask = (props) => {
         <SelectUser />
       </Form.Item>
       <Form.Item name='date' label='执行时间'>
-        <StartEndDate />
+        <StartEndDate min={new Date()} />
       </Form.Item>
       <Form.Item name='userIdList' label='成员'>
         <Users />

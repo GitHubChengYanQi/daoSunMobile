@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Checkbox, List, Radio, Steps } from 'antd-mobile';
-import LinkButton from '../../../../../../../../components/LinkButton';
+import LinkButton from '../../../../../../../components/LinkButton';
 import style from './index.less';
-import Icon from '../../../../../../../../components/Icon';
+import Icon from '../../../../../../../components/Icon';
 import { RightOutline } from 'antd-mobile-icons';
-import MyEllipsis from '../../../../../../../../components/MyEllipsis';
-import { useRequest } from '../../../../../../../../../util/Request';
+import MyEllipsis from '../../../../../../../components/MyEllipsis';
+import { useRequest } from '../../../../../../../../util/Request';
 import { backDetails } from '../Url';
-import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { MyLoading } from '../../../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const Bom = (
   {

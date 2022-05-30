@@ -1,4 +1,5 @@
 import pako from 'pako';
+import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {
@@ -14,12 +15,12 @@ const queryString = (value, string) => {
 
 // 返回空对象
 const isObject = (object) => {
-  return object || {};
+  return typeof object === 'object' ? object : {};
 };
 
 // 返回空集合
 const isArray = (array) => {
-  return array || [];
+  return Array.isArray(array) ? array : [];
 };
 
 // base64解压返回JSON对象
@@ -45,6 +46,26 @@ const classNames = (...props) => {
   return props.join(' ');
 };
 
+// 监听键盘按下@事件
+const listenOnKeyUp = (
+  {
+    even,
+    value,
+    callBack = () => {
+    },
+  }) => {
+  const { location: measureIndex, prefix: measurePrefix } = getLastMeasureIndex(
+    value,
+    '@',
+  );
+  if (measureIndex !== -1) {
+    if (even.key === measurePrefix || even.key === 'Shift') {
+      callBack();
+    }
+
+  }
+};
+
 export const ToolUtil = {
   queryString,
   isObject,
@@ -52,4 +73,5 @@ export const ToolUtil = {
   unzip,
   isQiyeWeixin,
   classNames,
+  listenOnKeyUp,
 };

@@ -6,8 +6,6 @@ import { connect } from 'dva';
 import style from './index.less';
 import MyEmpty from './components/MyEmpty';
 import { ToolUtil } from './components/ToolUtil';
-import { request, useRequest } from '../util/Request';
-import { brandList, supplyList } from './Work/Stock/components/StockDetail/components/Screen/components/Url';
 
 const iconSize = 20;
 

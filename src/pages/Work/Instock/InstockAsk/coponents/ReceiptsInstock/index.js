@@ -7,7 +7,7 @@ import { useBoolean } from 'ahooks';
 import PurchaseOrder from './components/PurchaseOrder';
 import MyEmpty from '../../../../../components/MyEmpty';
 
-const ReceiptsInstock = () => {
+const ReceiptsInstock = ({ submitRef }) => {
 
   const [key, setKey] = useState('purchase');
 
@@ -18,7 +18,7 @@ const ReceiptsInstock = () => {
   const content = () => {
     switch (key) {
       case 'purchase':
-        return <PurchaseOrder type={key} getCount={setNumber} />;
+        return <PurchaseOrder type={key} getCount={setNumber} ref={submitRef} />;
       case 'production':
         return <MyEmpty />;
       case 'outSku':
@@ -55,6 +55,7 @@ const ReceiptsInstock = () => {
     </div>
 
     {content()}
+
   </div>;
 };
 
