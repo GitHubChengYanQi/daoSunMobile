@@ -16,3 +16,10 @@ export const announcementsListSelect = {
   rowKey:'noticeId'
 };
 
+
+export const announcementsAdd = {
+  url: '/announcements/add',
+  method: 'POST',
+  rowKey:'noticeId'
+};
+

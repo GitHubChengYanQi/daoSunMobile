@@ -31,7 +31,7 @@ const User = (
   };
 
 
-  return <div>
+  return <div className={style.content}>
     <Card
       title={title}
       headerStyle={{ border: 'none' }}
@@ -66,9 +66,8 @@ const User = (
         className={ToolUtil.classNames(style.supply)}
         showCheckMark={false}
         options={ToolUtil.isArray(data).filter((item, index) => open ? index < 10 : index < 6)}
-        multiple
         value={[value]}
-        onChange={(v) => {
+        onChange={(v, extend) => {
           onChange(v[0]);
         }}
       />}

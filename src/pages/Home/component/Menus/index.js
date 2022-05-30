@@ -31,9 +31,6 @@ const Menus = (
         }
         if (code === 'LogOut') {
           cookie.remove('cheng-token');
-          props.dispatch({
-            type: 'data/clearState',
-          });
         }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
@@ -182,4 +179,4 @@ const Menus = (
 };
 
 
-export default connect(({ data }) => ({ data }))(Menus);
+export default Menus;

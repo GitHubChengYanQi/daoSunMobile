@@ -100,20 +100,17 @@ const AddSku = (
       </div>}
       onAction={(action) => {
         if (action.key === 'add') {
-          if (!data.number) {
-            return Toast.show({ content: '请输入入库数量!', position: 'bottom' });
-          } else if (ToolUtil.isArray(customerData).length === 0) {
-            return Toast.show({ content: '此物料未绑定供应商!', position: 'bottom' });
-          } else if (!data.customerId) {
-            return Toast.show({ content: '请选择供应商!', position: 'bottom' });
-          }
           onChange(data);
         }
         setVisible(false);
       }}
       actions={[[
         { text: <div style={{ color: '#000' }}>取消</div>, key: 'close' },
-        { text: '添加', key: 'add' },
+        {
+          text: '添加',
+          key: 'add',
+          disabled: !data.number || ToolUtil.isArray(customerData).length === 0 || !data.customerId,
+        },
       ]]}
     />
 

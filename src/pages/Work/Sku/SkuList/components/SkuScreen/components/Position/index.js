@@ -95,7 +95,7 @@ const Position = (
 
   };
 
-  return <div>
+  return <div className={style.content}>
     <Card
       title={title}
       headerStyle={{ border: 'none' }}

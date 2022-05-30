@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { Divider, Selector, Stepper, TextArea, Toast } from 'antd-mobile';
+import { Divider, Stepper, Toast } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -10,10 +10,11 @@ import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../util/Request';
-import { announcementsListSelect, instockOrderAdd } from '../../../../Url';
+import { instockOrderAdd } from '../../../../Url';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
 import MyTextArea from '../../../../../../components/MyTextArea';
+import Careful from './components/Careful';
 
 const InstockSkus = ({ skus = [] }) => {
 
@@ -23,7 +24,7 @@ const InstockSkus = ({ skus = [] }) => {
 
   const history = useHistory();
 
-  const { loading, run: instock } = useRequest(instockOrderAdd, {
+  const { loading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: () => {
       Message.dialogSuccess({
@@ -40,8 +41,6 @@ const InstockSkus = ({ skus = [] }) => {
     },
   });
 
-  const { loading: announcemensLoading, data: announcemens } = useRequest(announcementsListSelect);
-
 
   useEffect(() => {
     setData(skus);
@@ -49,7 +48,7 @@ const InstockSkus = ({ skus = [] }) => {
 
 
   const [allSku, { toggle }] = useBoolean();
-  const [allCareful, { toggle: carefulToggle }] = useBoolean();
+
   let countNumber = 0;
   data.map(item => countNumber += item.number);
 
@@ -86,6 +85,9 @@ const InstockSkus = ({ skus = [] }) => {
             </div>
             <div>
               <Stepper
+                style={{
+                  '--button-text-color': '#000',
+                }}
                 value={item.number}
                 onChange={value => {
                   const newData = data.map((dataItem) => {
@@ -117,41 +119,27 @@ const InstockSkus = ({ skus = [] }) => {
 
     <div className={style.careful}>
       <div className={style.title}>注意事项 <span>*</span></div>
-      <div className={style.carefulData}>
-        {announcemensLoading ? <MyLoading skeleton /> : <Selector
-          className={style.selector}
-          options={ToolUtil.isArray(announcemens).filter((item, index) => allCareful || index < 6)}
-          multiple={true}
-          onChange={(noticeIds) => {
-            setParams({ ...params, noticeIds });
-          }}
-        />}
-      </div>
-      {ToolUtil.isArray(announcemens).length > 6 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          carefulToggle();
-        }}>
-          {
-            allCareful ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
+      <Careful params={params} setParams={setParams} />
     </div>
 
     <div className={style.note}>
       <div className={style.title}>添加备注</div>
-      <MyTextArea className={style.textArea} />
+      <MyTextArea
+        className={style.textArea}
+        onChange={(remark, userIds) => {
+          setParams({ ...params, remark, userIds });
+        }}
+      />
     </div>
 
     <div className={style.file}>
       <div className={style.title}>上传附件</div>
       <div className={style.files}>
-        <UploadFile onChange={(mediaIds) => {
-          setParams({ ...params, mediaIds });
-        }} />
+        <UploadFile
+          onChange={(mediaIds) => {
+            setParams({ ...params, mediaIds });
+          }}
+        />
       </div>
 
     </div>
@@ -170,7 +158,7 @@ const InstockSkus = ({ skus = [] }) => {
           }
           return null;
         });
-        instock({
+        inStock({
           data: {
             instockRequest,
             ...params,

@@ -63,7 +63,7 @@ export const VerificationCode = ({ count, codeChange, ...props }) => {
 
 const form = createForm();
 
-const Login = () => {
+const Login = (props) => {
 
   const dialogRef = useRef();
 
@@ -89,6 +89,9 @@ const Login = () => {
       manual: true,
       onSuccess: async (res) => {
         if (res) {
+          props.dispatch({
+            type: 'data/clearState',
+          });
           Toast.show({ content: '登录成功！', position: 'bottom' });
           cookie.set('cheng-token', res);
           if (query.backUrl) {
@@ -191,4 +194,4 @@ const Login = () => {
   </div>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(Login);
+export default connect(({ qrCode,data }) => ({ qrCode,data }))(Login);

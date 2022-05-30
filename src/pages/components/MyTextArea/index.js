@@ -4,6 +4,7 @@ import wx from 'populee-weixin-js-sdk';
 import SelectUsers from '../SelectUsers';
 import { useRequest } from '../../../util/Request';
 import { Toast } from 'antd-mobile';
+import { MyLoading } from '../MyLoading';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
@@ -29,21 +30,21 @@ const MyTextArea = (
 
   const [users, setUsers] = useState([]);
 
-  const usersChange = (array) => {
-    userIds(array);
-    setUsers(array);
-  };
+  const [loading, setLoading] = useState();
 
-  const valueChange = (string) => {
-    onChange(string);
+
+  const valueChange = (string, array) => {
+    onChange(string, array);
     setValue(string);
+    setUsers(array);
   };
 
   const { run: getUser } = useRequest(getUserByCpUserId, {
     manual: true,
     onSuccess: (res) => {
+      setLoading(false);
       if (res && res.userId) {
-        usersChange([...users, { userId: res.userId, name: res.name }]);
+        valueChange(value + res.name, [...users, { userId: res.userId, name: res.name }]);
       } else {
         Toast.show({ content: '系统无此用户，请先注册！', position: 'bottom' });
       }
@@ -58,6 +59,7 @@ const MyTextArea = (
           'type': ['user'],// 必填，选择限制类型，指定department、user中的一个或者多个
         }, (res) => {
           if (res.err_msg === 'selectEnterpriseContact:ok') {
+            setLoading(true);
             if (typeof res.result == 'string') {
               res.result = JSON.parse(res.result); //由于目前各个终端尚未完全兼容，需要开发者额外判断result类型以保证在各个终端的兼容性
             }
@@ -71,16 +73,12 @@ const MyTextArea = (
             });
 
             const userList = res.result.userList; // 已选的成员列表
-            const users = userList.map((item) => {
-              return {
-                userId: item.id,// 已选的单个部门ID
-                userName: item.name,// 已选的单个部门名称
-                userAvatar: item.avatar,
-              };
+            const userIds = userList.map((item) => {
+              return item.id;
             });
 
             if (users.length > 0) {
-              getUser({ data: { CpUserId: users[0] } });
+              getUser({ params: { CpUserId: userIds[0] } });
             }
           }
         },
@@ -113,12 +111,9 @@ const MyTextArea = (
         }}
         onChange={() => {
           const user = users.filter((items) => {
-            return ref.current.value.indexOf(items.label) !== -1;
+            return ref.current.value.indexOf(items.name) !== -1;
           });
-          if (users.length !== user.length) {
-            usersChange(user);
-          }
-          valueChange(ref.current.value);
+          valueChange(ref.current.value, user);
           if (ref.current.scrollHeight <= 150) {
             setHeight(ref.current.scrollHeight);
           }
@@ -128,12 +123,13 @@ const MyTextArea = (
       </textarea>
     </div>
 
+    {loading && <MyLoading />}
+
     <SelectUsers
       ref={userRef}
       onChange={(user) => {
         if (user && user.length > 0) {
-          valueChange(value + user[0].name);
-          usersChange([...users, user[0]]);
+          valueChange(value + user[0].name, [...users, user[0]]);
         }
       }} />
   </>;

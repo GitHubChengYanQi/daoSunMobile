@@ -4,6 +4,7 @@ import { Card, Selector } from 'antd-mobile';
 import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import moment from 'moment';
+import LinkButton from '../../../../../../../components/LinkButton';
 
 const Time = (
   {
@@ -18,12 +19,16 @@ const Time = (
 
   const [key, setKey] = useState([]);
 
-  const dateChange = (startDate, endDate) => {
-    const startTime = startDate ? moment(startDate).format('YYYY/MM/DD HH:mm:ss') : null;
-    const endTime = endDate ? moment(endDate).format('YYYY/MM/DD HH:mm:ss') : null;
+  const setDate = (startTime, endTime) => {
     setShartDate(startTime);
     setEndtDate(endTime);
     onChange({ startTime, endTime });
+  };
+
+  const dateChange = (startDate, endDate) => {
+    const startTime = startDate ? moment(startDate).format('YYYY/MM/DD HH:mm:ss') : undefined;
+    const endTime = endDate ? moment(endDate).format('YYYY/MM/DD HH:mm:ss') : undefined;
+    setDate(startTime, endTime);
   };
 
   useEffect(() => {
@@ -34,7 +39,7 @@ const Time = (
     }
   }, [value]);
 
-  return <>
+  return <div className={style.content}>
     <Card
       title={title}
       headerStyle={{ border: 'none' }}
@@ -66,6 +71,7 @@ const Time = (
               dateChange(startDate, nowDate);
               break;
             default:
+              dateChange();
               break;
           }
           setKey(v);
@@ -73,31 +79,36 @@ const Time = (
       />
 
       <div className={style.time}>
-        <StartEndDate
-          value={[startDate, endDate]}
-          startShow={
-            <div className={style.timeShow}>
-              <ClockCircleOutline />
-              <span>{startDate ? startDate.split(' ')[0] : '起始时间'}</span>
-            </div>
-          }
-          endShow={
-            <div className={style.timeShow}>
-              <ClockCircleOutline />
-              <span>{endDate ? endDate.split(' ')[0] : '截止时间'}</span>
-            </div>
-          }
-          onChange={(dates) => {
-            dateChange(dates[0], dates[1]);
-          }}
-        />
+        <div className={style.checkDate}>
+          <StartEndDate
+            value={[startDate, endDate]}
+            startShow={
+              <div className={style.timeShow}>
+                <ClockCircleOutline />
+                <span>{startDate ? startDate.split(' ')[0] : '起始时间'}</span>
+              </div>
+            }
+            endShow={
+              <div className={style.timeShow}>
+                <ClockCircleOutline />
+                <span>{endDate ? endDate.split(' ')[0] : '截止时间'}</span>
+              </div>
+            }
+            onChange={(dates) => {
+              setDate(dates[0], dates[1]);
+            }}
+          />
+        </div>
+        <LinkButton onClick={() => {
+          dateChange();
+        }}>清空</LinkButton>
       </div>
 
 
     </Card>
 
 
-  </>;
+  </div>;
 };
 
 export default Time;

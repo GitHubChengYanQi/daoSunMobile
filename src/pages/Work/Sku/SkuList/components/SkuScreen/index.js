@@ -43,6 +43,7 @@ const SkuScreen = (
   const partsSkuId = params.partsSkuId;
   const storehousePositionsId = params.storehousePositionsId;
   const time = params.startTime || params.endTime;
+  const createUser = params.createUser;
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -95,7 +96,7 @@ const SkuScreen = (
         screened = time;
         break;
       case 'user':
-        screened = storehousePositionsId;
+        screened = createUser;
         break;
       default:
         break;

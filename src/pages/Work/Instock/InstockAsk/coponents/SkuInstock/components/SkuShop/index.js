@@ -8,6 +8,7 @@ import Number from '../../../../../../../components/Number';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../../../../../components/Icon';
+import LinkButton from '../../../../../../../components/LinkButton';
 
 const SkuShop = (
   {
@@ -96,10 +97,13 @@ const SkuShop = (
           setVisible(!visible);
         }}>
           <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '5px' }}>
-            <Icon type='icon-cangchu' style={{ color: skus.length > 0 && 'var(--adm-color-primary)' }} />
+            <Icon type='icon-cangchuche' style={{ color: skus.length > 0 ? 'var(--adm-color-primary)' : '#B5B6B8' }} />
           </Badge>
           <div>已选<span>{skus.length}</span>类</div>
         </div>
+        <LinkButton className={style.close} onClick={() => {
+          history.goBack();
+        }}>取消</LinkButton>
         <Button
           disabled={skus.length === 0}
           color='primary'

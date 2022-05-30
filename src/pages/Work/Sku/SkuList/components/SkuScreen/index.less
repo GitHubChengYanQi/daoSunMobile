@@ -18,6 +18,8 @@
 
   :global .adm-search-bar {
     border: solid 1px #F5F5F5;
+    border-radius: 2px;
+    overflow: hidden;
   }
 
   :global .adm-search-bar-input-box {
@@ -26,18 +28,30 @@
   }
 }
 
+.content {
+  margin-bottom: 16px;
+}
+
 .time {
   margin-top: 8px;
+  align-items: center;
+  display: flex;
 
-  .timeShow {
-    padding: 0 8px;
-    border-radius: 50px;
-    border: solid 1px #f5f5f5;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 14px;
+  .checkDate {
+    flex-grow: 1;
+
+    .timeShow {
+      padding: 0 8px;
+      border-radius: 50px;
+      border: solid 1px #f5f5f5;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 14px;
+    }
   }
+
+
 }
 
 .userBox {

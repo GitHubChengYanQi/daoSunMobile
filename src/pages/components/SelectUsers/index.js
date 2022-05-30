@@ -12,13 +12,14 @@ const SelectUsers = ({ value, onChange, multiple }, ref) => {
 
   const [deptId, setDeptId] = useState();
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState([]);
 
   const { loading, data, run } = useRequest(UserIdSelect, { manual: true });
 
   useEffect(() => {
     if (visible) {
       run({});
+      setUser([]);
       onChange([]);
     }
   }, [visible]);
@@ -56,7 +57,7 @@ const SelectUsers = ({ value, onChange, multiple }, ref) => {
         <div style={{ height: '80vh', overflowY: 'auto', textAlign: 'center' }}>
           {loading ? <Spin style={{ padding: 16 }} /> :
             <Selector
-              value={value && value.map((items) => {
+              value={user.map((items) => {
                 return items.value;
               })}
               columns={1}

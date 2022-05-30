@@ -74,7 +74,7 @@ const Supply = (
     return <></>;
   }
 
-  return <div>
+  return <div className={style.content}>
     <Card
       title={title}
       extra={<LinkButton style={{ fontSize: 12 }} onClick={toggle}>

@@ -52,7 +52,7 @@ const Bom = (
     return <></>;
   }
 
-  return <div>
+  return <div className={style.content}>
     <Card
       title={title}
     >

@@ -42,8 +42,8 @@ const SkuInstock = ({ searchValue }, ref) => {
 
   const checkSkuIds = skus.map(item => item.skuId);
 
-
   return <>
+
     <SkuList
       skuClassName={style.skuContent}
       ref={ref}
@@ -52,6 +52,7 @@ const SkuInstock = ({ searchValue }, ref) => {
       defaultParams={{ stockView: true }}
       open={{ time: true, user: true }}
     />
+
     <AddSku
       ref={addSku}
       onChange={(sku) => {
@@ -60,7 +61,6 @@ const SkuInstock = ({ searchValue }, ref) => {
     />
 
     <SkuShop skus={skus} setSkus={setSkus} />
-
 
   </>;
 };
