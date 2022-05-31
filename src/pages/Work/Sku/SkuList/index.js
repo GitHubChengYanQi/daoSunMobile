@@ -8,7 +8,6 @@ import { skuList } from '../../../Scan/Url';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
-import { MyLoading } from '../../../components/MyLoading';
 
 const SkuList = (
   {

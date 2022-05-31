@@ -15,6 +15,7 @@ import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
 import MyTextArea from '../../../../../../components/MyTextArea';
 import Careful from './components/Careful';
+import MyNavBar from '../../../../../../components/MyNavBar';
 
 const InstockSkus = ({ skus = [] }) => {
 
@@ -53,6 +54,7 @@ const InstockSkus = ({ skus = [] }) => {
   data.map(item => countNumber += item.number);
 
   return <div style={{ marginBottom: 60 }}>
+    <MyNavBar title='入库申请' />
     <div className={style.skus}>
       <div className={style.skuHead}>
         <div className={style.headTitle}>

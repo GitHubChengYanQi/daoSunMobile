@@ -13,6 +13,8 @@ import { createForm } from '@formily/core';
 import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
+import GetUserInfo from '../GetUserInfo';
+import { useHistory } from 'react-router-dom';
 
 
 export const Username = (props) => {
@@ -66,6 +68,8 @@ const form = createForm();
 const Login = (props) => {
 
   const dialogRef = useRef();
+
+  const history = useHistory();
 
   const { query } = useLocation();
 
@@ -129,6 +133,11 @@ const Login = (props) => {
   };
 
   useEffect(() => {
+    const token = GetUserInfo().token;
+    console.log(token);
+    // if (token) {
+    //   history.push('/');
+    // }
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
   }, []);
 
@@ -194,4 +203,4 @@ const Login = (props) => {
   </div>;
 };
 
-export default connect(({ qrCode,data }) => ({ qrCode,data }))(Login);
+export default connect(({ qrCode, data }) => ({ qrCode, data }))(Login);
