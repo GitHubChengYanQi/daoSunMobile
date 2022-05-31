@@ -58,6 +58,7 @@ const listenOnKeyUp = (
     value,
     '@',
   );
+  console.log();
   if (measureIndex !== -1) {
     if (even.key === measurePrefix || even.key === 'Shift') {
       callBack();

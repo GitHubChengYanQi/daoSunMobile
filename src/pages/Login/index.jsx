@@ -69,8 +69,6 @@ const Login = (props) => {
 
   const dialogRef = useRef();
 
-  const history = useHistory();
-
   const { query } = useLocation();
 
   const { initialState, refresh, loading } = useModel('@@initialState');

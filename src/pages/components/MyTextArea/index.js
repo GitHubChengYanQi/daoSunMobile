@@ -49,6 +49,9 @@ const MyTextArea = (
         Toast.show({ content: '系统无此用户，请先注册！', position: 'bottom' });
       }
     },
+    onError:()=>{
+      setLoading(false);
+    }
   });
 
   const invoke = () => {

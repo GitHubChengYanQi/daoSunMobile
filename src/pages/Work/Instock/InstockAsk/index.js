@@ -21,6 +21,7 @@ const InStockAsk = (
     <div className={style.content}>
       <div className={style.search}>
         <MySearch
+          historyType={type}
           value={searchValue}
           searchIcon={<ScanningOutline />}
           placeholder={`请输入相关物料信息`}

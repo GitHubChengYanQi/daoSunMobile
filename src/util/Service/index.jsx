@@ -61,8 +61,7 @@ ajaxService.interceptors.response.use((response) => {
   }
   return response;
 }, (error) => {
-  // console.log(error.response);
-  return error;
+  throw new Error(error);
 });
 
 export const request = async (config) => {
