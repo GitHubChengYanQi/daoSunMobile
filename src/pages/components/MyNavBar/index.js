@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { NavBar } from 'antd-mobile';
 import { history, useModel } from 'umi';
 import { ToolUtil } from '../ToolUtil';
@@ -9,9 +9,7 @@ const MyNavBar = ({ title }) => {
 
   const state = initialState || {};
 
-  useEffect(() => {
-    window.document.title = state.systemName ? `${title}-${state.systemName}` : title;
-  }, []);
+  window.document.title = state.systemName ? `${title}-${state.systemName}` : title;
 
   return !ToolUtil.isQiyeWeixin() && <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
     <NavBar style={{

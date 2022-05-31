@@ -1,0 +1,47 @@
+.instockAsk {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .content {
+    flex-grow: 1;
+    overflow: auto;
+  }
+}
+
+.tab {
+  //position: sticky;
+  //top: 0;
+  background-color: #fff;
+  --title-font-size: 14px;
+
+
+  :global .adm-tabs-tab-line {
+    display: none;
+  }
+
+  :global .adm-tabs-tab-active {
+    color: #fff;
+  }
+
+  :global .adm-tabs-header {
+    border-bottom: solid 1px var(--adm-color-primary);
+  }
+
+  :global .adm-tabs-tab {
+    padding: 8px 0;
+    width: 100%;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .checkTabItem {
+    background-color: var(--adm-color-primary);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .tabItem {
+    background-color: var(--body--background--color);
+    border-radius: 8px 8px 0 0;
+  }
+}

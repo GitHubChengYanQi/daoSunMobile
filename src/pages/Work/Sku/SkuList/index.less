@@ -1,0 +1,74 @@
+.skuList {
+  min-height: 100vh;
+}
+
+.screen {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+  background-color: #fff;
+  padding: 12px;
+  border-top: solid 1px #F5F5F5;
+  display: flex;
+
+  .blank {
+    flex-grow: 1;
+  }
+
+  .stockNumber {
+    color: #666666;
+
+    span {
+      color: #257BDE;
+    }
+  }
+
+  .screenButton {
+    color: #000000;
+
+    svg {
+      font-size: 13px;
+    }
+  }
+
+  .checked {
+    color: var(--adm-color-primary);
+  }
+
+}
+
+.skuClass {
+  position: sticky;
+  background-color: var(--body--background--color);
+
+  top: 44px;
+  z-index: 1;
+  --title-font-size: 14px;
+  height: 34px;
+  line-height: 34px;
+
+  :global .adm-tabs-header {
+    border: none;
+  }
+
+  :global .adm-tabs-tab {
+    span {
+      padding: 2px 9px;
+    }
+  }
+
+  .classCheck {
+    background-color: #257BDE;
+    border-radius: 10px;
+    color: #fff;
+  }
+
+
+  :global .adm-tabs-tab-line {
+    display: none;
+  }
+
+  :global .adm-tabs-tab {
+    padding: 0;
+  }
+}

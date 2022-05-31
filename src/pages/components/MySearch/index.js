@@ -14,7 +14,8 @@ const historyDelete = { url: '/queryLog/deleteBatch', method: 'POST' };
 const MySearch = (
   {
     placeholder,
-    icon,
+    searchIcon,
+    extraIcon,
     className,
     onSearch = () => {
     },
@@ -62,6 +63,7 @@ const MySearch = (
   }) : [];
 
   const [historys, setHistorys] = useState(actions || []);
+
 
   useEffect(() => {
     const searchBar = document.getElementById('searchBar') || {};
@@ -119,6 +121,7 @@ const MySearch = (
       <div className={style.search}>
         <div id='searchBar' className={style.searchBar}>
           <SearchBar
+            icon={searchIcon}
             clearable
             value={value}
             className={style.searchBar}
@@ -131,7 +134,9 @@ const MySearch = (
               onChange('');
               onClear();
             }}
-            onFocus={() => setVisible(true)}
+            onFocus={() => {
+              setVisible(true)
+            }}
             onBlur={() => {
               setTimeout(() => {
                 setVisible(false);
@@ -141,7 +146,7 @@ const MySearch = (
         </div>
 
         {
-         (visible || value)
+          (visible || value)
             ?
             <LinkButton className={style.submit} onClick={() => {
               {
@@ -150,8 +155,8 @@ const MySearch = (
               onSearch(value);
             }}>搜索</LinkButton>
             :
-            <div hidden={!icon} className={style.icon}>
-              {icon}
+            <div hidden={!extraIcon} className={style.icon}>
+              {extraIcon}
             </div>
         }
       </div>

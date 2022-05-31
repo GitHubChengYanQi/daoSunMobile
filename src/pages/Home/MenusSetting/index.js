@@ -44,7 +44,7 @@ const MenusSetting = (props) => {
     },
   });
 
-  const sysMenus = userInfo.menus || [];
+  const sysMenus = userInfo.mobielMenus || [];
 
   // console.log(sysMenus);
 
@@ -236,11 +236,6 @@ const MenusSetting = (props) => {
           const subMenus = item.subMenus || [];
           const otherMenus = [];
           switch (item.id) {
-            case 'ERP':
-              otherMenus.push({ name: '仓库管理', code: 'storeHouse' });
-              otherMenus.push({ name: '自由入库', code: 'freeInstock' });
-              otherMenus.push({ name: '自由出库', code: 'freeOutStock' });
-              break;
             case 'production':
               otherMenus.push({ name: '生产任务', code: 'productionTask' });
               otherMenus.push({ name: '领料管理', code: 'pickLists' });

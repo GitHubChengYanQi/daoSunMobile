@@ -1,0 +1,111 @@
+
+.qywx {
+  :global .adm-mask {
+    margin-top: 45px;
+  }
+}
+
+.other {
+  :global .adm-mask {
+    margin-top: 90px;
+  }
+}
+
+.popup {
+  z-index: var(--adm-popup-z-index, 1001);
+
+  :global .adm-popup-body {
+    height: auto !important;
+    background-color: rgba(0, 0, 0, 0);
+  }
+}
+
+.screenDiv {
+  left: 0;
+  width: 100vw;
+  box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.1);
+
+  .top {
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .content {
+    height: 62vh;
+    background-color: #fff;
+    display: flex;
+
+    .sideBar {
+      flex-grow: 1;
+      background-color: var(--body--background--color);
+
+      :global .adm-side-bar-item-highlight {
+        display: none;
+      }
+
+      :global .adm-side-bar-item-active {
+        background-color: #fff !important;
+      }
+
+      :global .adm-side-bar-item {
+        background-color: var(--body--background--color);
+      }
+
+      .sideBarTitle {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .screened {
+          width: 5px;
+          height: 5px;
+          background-color: #FA8F2B;
+          border-radius: 100%;
+        }
+      }
+    }
+
+    .screenContent {
+      flex-grow: 1;
+      width: calc(100vw - 100px);
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+
+      :global .adm-card-header {
+        border: none;
+      }
+
+      :global .adm-card-body {
+        padding: 0;
+      }
+    }
+  }
+
+  .buttons {
+    background-color: #fff;
+    padding: 7px 10%;
+    box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+
+    .button {
+      width: 50%;
+      padding: 6px 0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .close {
+      border-radius: 50px 0 0 50px;
+    }
+
+    .ok {
+      border-radius: 0 50px 50px 0;
+    }
+  }
+
+  .make {
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+}
+

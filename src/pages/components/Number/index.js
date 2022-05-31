@@ -1,6 +1,7 @@
 import React from 'react';
 import { Input } from 'antd-mobile';
 import style from './index.css';
+import { ToolUtil } from '../ToolUtil';
 
 const Number = (
   {
@@ -15,6 +16,7 @@ const Number = (
     inputRight,
     onChange = () => {
     },
+    className,
     ...props
   },
 ) => {
@@ -34,19 +36,19 @@ const Number = (
     }
   };
 
-  return <div className={center && style.center}>
+  return <div className={ToolUtil.classNames(
+    center && style.center,
+    className,
+  )}>
     <Input
       {...props}
       min={0}
       value={value || ''}
       type='number'
       disabled={disabled}
-      className={`${inputColor()} ${inputRight && style.inputRight}`}
+      className={ToolUtil.classNames(style.input, inputColor(), inputRight ? style.inputRight : '')}
       placeholder={placeholder || '请输入'}
       style={{
-        padding: '4px 8px',
-        border: 'none',
-        '--border-radius': 0,
         borderBottom: !noBorder && 'solid 1px rgb(190 184 184)',
         width: width || '100%', ...buttonStyle,
       }}

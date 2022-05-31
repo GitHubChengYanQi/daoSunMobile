@@ -97,14 +97,14 @@ const QualityTask = (props) => {
   }, {
     manual: true,
     onSuccess: (res) => {
-      Message.dialogSuccess(
-        '自检成功!',
-        '返回生产任务',
-        '继续自检报工',
-        () => {
+      Message.dialogSuccess({
+        title: '自检成功!',
+        leftText: '返回生产任务',
+        rightText: '继续自检报工',
+        next: () => {
           productionRefresh();
         },
-      );
+      });
     },
     onError: (res) => {
       Message.error('自检失败！');

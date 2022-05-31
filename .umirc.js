@@ -13,7 +13,8 @@ export default {
   publicPath: process.env.ENV === 'test' ? '/' : '/cp/',
   history: { type: 'hash' },
 
-  hash:true,
+  hash: true,
+  fastRefresh: {},
 
 
   antd: false,

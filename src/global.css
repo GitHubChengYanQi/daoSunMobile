@@ -25,6 +25,17 @@ body {
   --adm-color-primary: #2680EB;
 }
 
+.adm-button {
+  font-size: 14px;
+}
+
+
+.adm-picker-popup, .adm-mask {
+  --z-index: 1002;
+}
+
+
+
 
 
 

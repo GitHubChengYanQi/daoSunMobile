@@ -31,9 +31,6 @@ const Menus = (
         }
         if (code === 'LogOut') {
           cookie.remove('cheng-token');
-          props.dispatch({
-            type: 'data/clearState',
-          });
         }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
@@ -174,10 +171,12 @@ const Menus = (
       return MenusStyle({ icon: 'icon-jichuwuliao' });
     case 'createUser':
       return MenusStyle({ icon: 'icon-kehuliebiao2' });
+    case 'instockAsk':
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Instock/InstockAsk' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }
 };
 
 
-export default connect(({ data }) => ({ data }))(Menus);
+export default Menus;

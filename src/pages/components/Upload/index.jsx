@@ -3,10 +3,26 @@ import { Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { useRequest } from '@/util/Request';
 import { Toast } from 'antd-mobile';
+import { MyLoading } from '../MyLoading';
 
 
-const UpLoadImg = (props) => {
-  const { value, onChange,fileList, disabled,onRemove, showUploadList, button, maxCount, type, imageType } = props;
+const UpLoadImg = (
+  {
+    id,
+    accept,
+    value,
+    onChange,
+    fileList,
+    disabled,
+    onRemove,
+    showUploadList,
+    button,
+    maxCount,
+    type,
+    capture,
+    imageType,
+  }) => {
+
   const [loading, setLoading] = useState(false); // loading 状态
   const [imageUrl, setImageUrl] = useState(''); // 图片地址
   const [oss, setOss] = useState({}); // OSS上传所需参数
@@ -59,6 +75,9 @@ const UpLoadImg = (props) => {
     // name 为发送到后台的文件名
     <div>
       <Upload
+        id={id}
+        accept={accept}
+        capture={capture}
         fileList={fileList}
         disabled={disabled}
         maxCount={maxCount || 1}
@@ -68,7 +87,7 @@ const UpLoadImg = (props) => {
         data={oss}
         action={oss.host}
         beforeUpload={(file) => {
-          if (!imageType || imageType.includes(file.type && file.type.split(','))) {
+          if (!imageType || imageType.includes(file.name && file.name.split('.') && file.name.split('.')[file.name.split('.').length - 1])) {
             setLoading(true);
             return new Promise((resolve, reject) => {
               getOssObj({ params: { type: file.name } }).then(() => {
@@ -85,21 +104,24 @@ const UpLoadImg = (props) => {
             return false;
           }
         }}
-        onRemove={(file)=>{
-          typeof onRemove === 'function' && onRemove(file.name);
+        onRemove={(file) => {
+          typeof onRemove === 'function' && onRemove(file);
         }}
-        onChange={({ file }) => {
+        onChange={({ file, fileList }) => {
           if (file.status === 'done') {
             setImageUrl(`${oss.host}/${oss.key}`);
             setLoading(false);
-            typeof onChange === 'function' && onChange(`${oss.host}/${oss.key}`,oss.mediaId,file.name);
+            typeof onChange === 'function' && onChange(`${oss.host}/${oss.key}`, oss.mediaId, file);
           }
         }
         }
       >
         {button || (imageUrl ? <img src={imageUrl} alt='' style={{ width: '100%', height: '100%' }} /> : uploadButton)}
       </Upload>
+
+      {loading && <MyLoading title='上传中...' />}
     </div>
+
 
   );
 };

@@ -1,0 +1,98 @@
+.orderItem {
+  background-color: #fff;
+  margin-bottom: 8px;
+  padding-bottom: 20px;
+
+  .data {
+    display: flex;
+    padding: 3px 12px;
+    font-size: 14px;
+    align-items: center;
+
+    .customer {
+      padding: 10px 0;
+      font-weight: bold;
+      color: #333333;
+      flex-grow: 1;
+    }
+
+    .status {
+      padding: 10px 0;
+      font-weight: normal;
+      color: #257BDE;
+    }
+
+    .coding {
+      color: #000000;
+      flex-grow: 1;
+    }
+
+    .button {
+      padding: 0;
+      font-size: 14px;
+      --border-radius: 2px;
+      width: 72px;
+      height: 30px;
+      line-height: 28px;
+    }
+
+    .createTime {
+      color: #555555;
+      flex-grow: 1;
+    }
+
+    .money {
+      color: #000000;
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .skus {
+    display: flex;
+    padding: 11px 12px;
+    align-items: stretch;
+    border-top: 1px solid #F5F5F5;;
+
+    .skuItem {
+      flex-grow: 1;
+    }
+
+    .skuData {
+      display: flex;
+      flex-direction: column;
+      max-width: 70px;
+
+      div {
+        flex-grow: 1;
+        text-align: right;
+        font-size: 12px;
+      }
+
+      .skuDataNumber {
+        color: #3D3D3D;
+        font-weight: bold;
+
+        span {
+          margin-right: 8px;
+        }
+      }
+
+      .skuDataMoney {
+        display: flex;
+        align-items: end;
+        color: #555555;
+      }
+    }
+  }
+
+  .allSku {
+    color: #808080;
+    font-size: 12px;
+    margin: 0 12px;
+    border-color: #F5F5F5;
+  }
+
+}
