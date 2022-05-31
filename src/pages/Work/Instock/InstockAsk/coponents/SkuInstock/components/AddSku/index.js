@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Dialog, Picker, Toast } from 'antd-mobile';
+import { Button, Dialog, Picker } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
@@ -10,8 +10,10 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 
 const AddSku = (
   {
+    numberTitle,
     onChange = () => {
     },
+    type,
   }, ref) => {
 
   const [sku, setSku] = useState({});
@@ -31,7 +33,7 @@ const AddSku = (
   const openSkuAdd = (sku = {}) => {
     getCustomer({ data: { skuId: sku.skuId } });
     setSku(sku);
-    setData({ skuId: sku.skuId, skuResult: sku });
+    setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber });
     setVisible(true);
   };
 
@@ -82,13 +84,17 @@ const AddSku = (
           <div>
             <div className={style.checkLabel}>库存</div>
             <span
-              style={{ marginRight: 8 }}>{sku.stockNumber}</span>{ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
+              style={{ marginRight: 8 }}>
+              {data.stockNumber}
+            </span>
+            {ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
           </div>
           <div className={style.instockNumber}>
-            入库
+            {numberTitle}
             <Number
-              placeholder='入库数量'
+              placeholder={`${numberTitle}数量`}
               noBorder
+              max={type === 'outStock' ? data.stockNumber : undefined}
               value={data.number}
               className={style.number}
               onChange={(number) => {
@@ -109,7 +115,7 @@ const AddSku = (
         {
           text: '添加',
           key: 'add',
-          disabled: !data.number || ToolUtil.isArray(customerData).length === 0 || !data.customerId,
+          disabled: !data.number || (type === 'outStock' ? data.stockNumber <= 0 : (ToolUtil.isArray(customerData).length === 0 || !data.customerId)),
         },
       ]]}
     />

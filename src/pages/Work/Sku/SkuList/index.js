@@ -16,6 +16,7 @@ const SkuList = (
     skuClassName,
     open = {},
     defaultParams = {},
+    numberTitle = '库存总数',
   },
   ref,
 ) => {
@@ -92,7 +93,7 @@ const SkuList = (
         }
       }}
     >
-      <div className={style.stockNumber}>库存总数：<span>{stockNumber}</span></div>
+      <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
       <div className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}>
         筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}

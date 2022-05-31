@@ -10,14 +10,14 @@ import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../util/Request';
-import { instockOrderAdd } from '../../../../Url';
+import { instockOrderAdd, outstockOrderAdd } from '../../../../Url';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
 import MyTextArea from '../../../../../../components/MyTextArea';
 import Careful from './components/Careful';
 import MyNavBar from '../../../../../../components/MyNavBar';
 
-const InstockSkus = ({ skus = [] }) => {
+const InstockSkus = ({ skus = [], createType }) => {
 
   const [data, setData] = useState([]);
 
@@ -42,6 +42,23 @@ const InstockSkus = ({ skus = [] }) => {
     },
   });
 
+  const { loading: outLoading, run: outStock } = useRequest(outstockOrderAdd, {
+    manual: true,
+    onSuccess: () => {
+      Message.dialogSuccess({
+        title: '创建出库申请成功！',
+        rightText: '返回列表',
+        only: true,
+        next: () => {
+          history.goBack();
+        },
+      });
+    },
+    onError: () => {
+      Toast.show({ content: '创建出库申请失败！', position: 'bottom' });
+    },
+  });
+
 
   useEffect(() => {
     setData(skus);
@@ -53,8 +70,19 @@ const InstockSkus = ({ skus = [] }) => {
   let countNumber = 0;
   data.map(item => countNumber += item.number);
 
+  const createTypeData = () => {
+    switch (createType) {
+      case 'outStock':
+        return { title: '出库申请', type: '出库' };
+      case 'inStock':
+        return { title: '入库申请', type: '入库' };
+      default:
+        return {};
+    }
+  };
+
   return <div style={{ marginBottom: 60 }}>
-    <MyNavBar title='入库申请' />
+    <MyNavBar title={createTypeData().title} />
     <div className={style.skus}>
       <div className={style.skuHead}>
         <div className={style.headTitle}>
@@ -64,7 +92,7 @@ const InstockSkus = ({ skus = [] }) => {
           合计：<span>{skus.length}</span>类<span>{countNumber}</span>件
         </div>
       </div>
-      {data.length === 0 && <MyEmpty description='暂无入库物料' />}
+      {data.length === 0 && <MyEmpty description={`暂无${createTypeData().type}物料`} />}
       {
         data.map((item, index) => {
           if (!allSku && index >= 3) {
@@ -153,23 +181,44 @@ const InstockSkus = ({ skus = [] }) => {
       rightText='提交'
       rightDisabled={data.length === 0}
       rightOnClick={() => {
-        const instockRequest = [];
-        data.map(item => {
-          if (item.number > 0) {
-            instockRequest.push(item);
-          }
-          return null;
-        });
-        inStock({
-          data: {
-            instockRequest,
-            ...params,
-          },
-        });
+        switch (createType) {
+          case 'outStock':
+            const applyDetails = [];
+            data.map(item => {
+              if (item.number > 0) {
+                applyDetails.push(item);
+              }
+              return null;
+            });
+            outStock({
+              data: {
+                applyDetails,
+                ...params,
+              },
+            });
+            break;
+          case 'inStock':
+            const instockRequest = [];
+            data.map(item => {
+              if (item.number > 0) {
+                instockRequest.push(item);
+              }
+              return null;
+            });
+            inStock({
+              data: {
+                instockRequest,
+                ...params,
+              },
+            });
+            break;
+          default:
+            break;
+        }
       }}
     />
 
-    {loading && <MyLoading />}
+    {(loading || outLoading) && <MyLoading />}
 
   </div>;
 };

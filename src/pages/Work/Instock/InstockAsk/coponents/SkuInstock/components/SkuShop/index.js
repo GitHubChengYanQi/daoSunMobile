@@ -15,6 +15,8 @@ const SkuShop = (
     skus = [],
     setSkus = () => {
     },
+    numberTitle,
+    type,
   },
 ) => {
 
@@ -66,8 +68,9 @@ const SkuShop = (
                 <div className={style.empty} />
                 <div className={style.instockNumber}>
                   <Number
+                    max={type === 'outStock' ? item.stockNumber : undefined}
                     value={item.number}
-                    placeholder='入库数量'
+                    placeholder={`${numberTitle}数量`}
                     noBorder
                     className={style.number}
                     onChange={(number) => {
@@ -111,6 +114,9 @@ const SkuShop = (
           onClick={() => {
             history.push({
               pathname: '/Work/Instock/InstockAsk/Submit',
+              query: {
+                createType: type,
+              },
               state: {
                 skus,
               },

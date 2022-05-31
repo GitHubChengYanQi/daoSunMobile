@@ -5,14 +5,19 @@ import style from './index.less';
 import { ScanningOutline } from 'antd-mobile-icons';
 import SkuInstock from './coponents/SkuInstock';
 
-const InstockAsk = () => {
+const InStockAsk = (
+  {
+    title = '入库申请',
+    numberTitle = '入库',
+    type = 'inStock',
+  }) => {
 
   const [searchValue, setSearchValue] = useState();
 
   const ref = useRef();
 
   return <div className={style.instockAsk}>
-    <MyNavBar title='入库申请' />
+    <MyNavBar title={title} />
     <div className={style.content}>
       <div className={style.search}>
         <MySearch
@@ -31,10 +36,10 @@ const InstockAsk = () => {
           }}
         />
       </div>
-      <SkuInstock ref={ref} searchValue={searchValue} />
+      <SkuInstock ref={ref} searchValue={searchValue} numberTitle={numberTitle} type={type}  />
     </div>
   </div>;
 
 };
 
-export default InstockAsk;
+export default InStockAsk;
