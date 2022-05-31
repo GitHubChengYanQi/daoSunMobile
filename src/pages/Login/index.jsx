@@ -133,11 +133,6 @@ const Login = (props) => {
   };
 
   useEffect(() => {
-    const token = GetUserInfo().token;
-    console.log(token);
-    // if (token) {
-    //   history.push('/');
-    // }
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
   }, []);
 

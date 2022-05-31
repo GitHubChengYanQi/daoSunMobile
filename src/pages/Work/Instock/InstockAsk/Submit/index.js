@@ -51,7 +51,7 @@ const Submit = () => {
     case 'outItem':
       return <MyEmpty />;
     default:
-      return <InstockSkus skus={skus} />;
+      return <InstockSkus skus={skus} createType={query.createType} />;
   }
 };
 

@@ -23,3 +23,9 @@ export const announcementsAdd = {
   rowKey:'noticeId'
 };
 
+export const outstockOrderAdd = {
+  url: '/outstockOrder/add',
+  method: 'POST',
+  rowKey:'outstockOrderId'
+};
+

@@ -34,7 +34,7 @@ export const SkuContent = ({ data, checkSkuIds, addSku }) => {
   </div>;
 };
 
-const SkuInstock = ({ searchValue }, ref) => {
+const SkuInstock = ({ searchValue, numberTitle, type }, ref) => {
 
   const addSku = useRef();
 
@@ -45,6 +45,7 @@ const SkuInstock = ({ searchValue }, ref) => {
   return <>
 
     <SkuList
+      numberTitle='品类'
       skuClassName={style.skuContent}
       ref={ref}
       SkuContent={SkuContent}
@@ -55,12 +56,14 @@ const SkuInstock = ({ searchValue }, ref) => {
 
     <AddSku
       ref={addSku}
+      type={type}
+      numberTitle={numberTitle}
       onChange={(sku) => {
         setSkus([...skus, sku]);
       }}
     />
 
-    <SkuShop skus={skus} setSkus={setSkus} />
+    <SkuShop skus={skus} setSkus={setSkus} numberTitle={numberTitle} type={type} />
 
   </>;
 };

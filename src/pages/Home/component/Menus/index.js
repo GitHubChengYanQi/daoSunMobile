@@ -4,7 +4,7 @@ import { Space, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { history } from 'umi';
 import cookie from 'js-cookie';
-import { connect } from 'dva';
+import style from './index.less';
 
 const Menus = (
   {
@@ -14,7 +14,6 @@ const Menus = (
     onlyIcon,
     textOverflow,
     disabled,
-    ...props
   }) => {
 
   const MenusStyle = ({ icon, title, url }) => {
@@ -22,6 +21,7 @@ const Menus = (
       return <Icon type={icon} style={{ fontSize }} />;
     }
     return <Space
+      className={style.menus}
       direction='vertical'
       align='center'
       style={{ width: '100%' }}
@@ -173,6 +173,8 @@ const Menus = (
       return MenusStyle({ icon: 'icon-kehuliebiao2' });
     case 'instockAsk':
       return MenusStyle({ icon: 'icon-gengduo', url: '/Work/Instock/InstockAsk' });
+    case 'outstockAsk':
+      return MenusStyle({ icon: 'icon-gengduo', url: '/Work/OutStock/OutStockAsk' });
     default:
       return MenusStyle({ icon: 'icon-gengduo' });
   }
