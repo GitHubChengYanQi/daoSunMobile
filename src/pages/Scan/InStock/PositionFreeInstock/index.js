@@ -12,7 +12,7 @@ import MyCascader from '../../../components/MyCascader';
 import IsDev from '../../../../components/IsDev';
 import PrintCode from '../../../components/PrintCode';
 import { batchBind, storehousePositionsDetail } from '../components/Url';
-import SkuResultSkuJsons from '../../Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../Sku/components/SkuResult_skuJsons';
 import Skus from './components/Skus';
 import AddSku from './components/AddSku';
 import { AddOutline } from 'antd-mobile-icons';
@@ -120,7 +120,7 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
             return {
               batch: item.batch === 1,
               skuId: item.skuId,
-              skuResult: <SkuResultSkuJsons skuResult={item} />,
+              skuResult: SkuResultSkuJsons({skuResult:item})
             };
           }),
         });

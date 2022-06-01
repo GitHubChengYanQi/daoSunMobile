@@ -7,6 +7,8 @@ import MyBottom from '../../components/MyBottom';
 import { CreateInstock, CreateInstockBottom, InstockError } from '../components/Instock';
 import Process from '../../Work/PurchaseAsk/components/Process';
 import { ReceiptsEnums } from '../index';
+import InStockAsk from '../../Work/Instock/InstockAsk';
+import OutStockAsk from '../../Work/OutStock/OutStockAsk';
 
 
 const ReceiptsCreate = () => {
@@ -25,12 +27,9 @@ const ReceiptsCreate = () => {
   const createModule = (value) => {
     switch (value) {
       case ReceiptsEnums.instockOrder:
-        return <CreateInstock
-          setModuleObject={setModuleObject}
-          query={query}
-          createRef={createRef}
-          setType={setType}
-        />;
+        return <InStockAsk />;
+      case ReceiptsEnums.outstockOrder:
+        return <OutStockAsk />;
       case 'purchaseAsk':
         return <AskAdd />;
       case ReceiptsEnums.instockError:
@@ -68,15 +67,24 @@ const ReceiptsCreate = () => {
   };
 
 
-  return <>
-    <MyBottom
-      leftActuions={createModuleButtom(true)}
-      buttons={createModuleButtom()}
-    >
-      {createModule(query.type)}
-      <Process type={type} card />
-    </MyBottom>
-  </>;
+  switch (query.type) {
+    case ReceiptsEnums.instockOrder:
+      return <InStockAsk />;
+    case ReceiptsEnums.outstockOrder:
+      return <OutStockAsk />;
+    case 'purchaseAsk':
+      return <AskAdd />;
+    case ReceiptsEnums.instockError:
+      return <Errors
+        params={query.params}
+        setModuleObject={setModuleObject}
+        state={state}
+        setType={setType}
+        ref={createRef}
+      />;
+    default:
+      return <MyEmpty />;
+  }
 
 
 };

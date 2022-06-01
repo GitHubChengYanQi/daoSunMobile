@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
 
 const SkuItem = (
@@ -29,7 +29,9 @@ const SkuItem = (
         className={style.sku}
         style={{ gap, maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
-        <MyEllipsis width='100%'><SkuResultSkuJsons skuResult={skuResult} /></MyEllipsis>
+        <MyEllipsis width='100%'>
+          {SkuResultSkuJsons({ skuResult })}
+        </MyEllipsis>
         <div className={style.describe}>
           <MyEllipsis width='100%'>
             {

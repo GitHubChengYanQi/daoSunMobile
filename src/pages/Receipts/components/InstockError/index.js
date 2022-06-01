@@ -3,7 +3,7 @@ import { Card, Divider, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import Label from '../../../components/Label';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import UpLoadImg from '../../../components/Upload';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
@@ -97,7 +97,7 @@ const InstockError = ({ id }) => {
           key={index}
           style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
         >
-          <MyEllipsis><SkuResultSkuJsons skuResult={item.simpleResult} /></MyEllipsis>
+          <MyEllipsis>{SkuResultSkuJsons({skuResult:item.simpleResult})}</MyEllipsis>
           <div style={{ display: 'flex' }}>
             <div style={{ flexGrow: 1 }}>
               <Label>计划待入库：</Label>{item.planNumber}

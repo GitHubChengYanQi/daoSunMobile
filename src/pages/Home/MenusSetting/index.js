@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Badge, Card, Grid, Toast } from 'antd-mobile';
-import Menus from '../component/Menus';
+import Menus, { borderStyle } from '../component/Menus';
 import { AddOutline, DownOutline, MinusOutline, SetOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import LinkButton from '../../components/LinkButton';
@@ -23,6 +23,8 @@ const MenusSetting = (props) => {
 
   const userInfo = initialState.userInfo || {};
 
+  const sysMenus = userInfo.mobielMenus || [];
+
   const userMenus = props.data.userMenus;
 
   const [commonlyMenus, setCommonlyMenus] = useState([]);
@@ -43,8 +45,6 @@ const MenusSetting = (props) => {
       Toast.show({ content: '保存成功！', position: 'bottom' });
     },
   });
-
-  const sysMenus = userInfo.mobielMenus || [];
 
   // console.log(sysMenus);
 
@@ -194,7 +194,8 @@ const MenusSetting = (props) => {
                 }
                 return <Grid columns={4} gap={0}>
                   {props.children.map((item, index) => {
-                    return <Grid.Item className={style.menus} key={index}>
+                    const border = borderStyle(index, 4, props.children.length);
+                    return <Grid.Item className={style.menus} key={index} style={{ ...border }}>
                       {item}
                     </Grid.Item>;
                   })}
@@ -262,7 +263,8 @@ const MenusSetting = (props) => {
             <Grid columns={4} gap={0}>
               {
                 subMenus.concat(otherMenus).map((item, index) => {
-                  return <Grid.Item className={style.menus} key={index}>
+                  const border = borderStyle(index, 4, subMenus.concat(otherMenus).length);
+                  return <Grid.Item className={style.menus} key={index} style={{ ...border }}>
                     <Badge className={style.badge} content={addButton(item.code, item.name)}>
                       {menus(item)}
                     </Badge>
@@ -283,7 +285,7 @@ const MenusSetting = (props) => {
         headerClassName={style.cardHeader}
       >
         <Grid columns={4} gap={0}>
-          <Grid.Item className={style.menus}>
+          <Grid.Item className={style.menus} style={{ ...borderStyle(0, 4, 1) }}>
             <Badge className={style.badge} content={addButton('LogOut', '退出登录')} color='var(--adm-color-primary)'>
               {menus({ code: 'LogOut', name: '退出登录' })}
             </Badge>

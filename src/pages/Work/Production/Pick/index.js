@@ -7,7 +7,7 @@ import { Button, Card,  Space } from 'antd-mobile';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import BottomButton from '../../../components/BottomButton';
 import { history } from 'umi';
 
@@ -63,10 +63,12 @@ const Pick = ({ module, id, ...props }) => {
               const skuResult = item.skuResult || {};
               return <div key={index} style={{ margin: 8, border: 'solid #eee 1px' }}>
                 <Card style={{ borderRadius: 0 }}>
-                  <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                  <MyEllipsis>
+                    {SkuResultSkuJsons({ skuResult })}></MyEllipsis>
                   <div>
                     <Label>描述：</Label>
-                    <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                    <MyEllipsis width='80%'>
+                      {SkuResultSkuJsons({ skuResult,describe:true })}</MyEllipsis>
                   </div>
                 </Card>
                 <div>

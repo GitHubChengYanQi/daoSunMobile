@@ -4,6 +4,7 @@ import { useDrag } from '@use-gesture/react';
 import clamp from 'lodash.clamp';
 import SkuItem from '../Work/Sku/SkuItem';
 import styles from './index.less';
+import { Dialog, Toast } from 'antd-mobile';
 
 export const Viewpager = (
   {
@@ -55,20 +56,22 @@ export const Viewpager = (
       const x = (i - index.current) * width + (active ? mx : 0);
       const scale = active ? 1 - Math.abs(mx) / width / 2 : 1;
       if (scale === 1 && x === 0) {
-        switch (pages[i]) {
-          case 'add':
-            onAdd(skuItem);
-            break;
-          case 'remove':
-            onRemove(skuItem);
-            break;
-          default:
-            break;
-        }
+        setTimeout(() => {
+          switch (pages[i]) {
+            case 'add':
+              onRemove(skuItem);
+              break;
+            case 'remove':
+              onAdd(skuItem);
+              break;
+            default:
+              break;
+          }
+        }, 500);
       }
       return { x, scale, display: 'block' };
     });
-  });
+  }) || '';
 
 
   return (
@@ -90,9 +93,7 @@ const Test = () => {
   const [items, setItems] = useState([0, 1, 2, 3, 4, 5]);
 
   const remove = (skuItem) => {
-    setTimeout(()=>{
-      setItems(items.filter(item => item !== skuItem));
-    },500);
+    setItems(items.filter(item => item !== skuItem));
   };
 
 
@@ -105,11 +106,25 @@ const Test = () => {
             skuItem={item}
             onAdd={(skuItem) => {
               console.log('add');
+              // setItems(items.filter(() => true));
               remove(skuItem);
             }}
             onRemove={(skuItem) => {
               console.log('remove');
-              remove(skuItem);
+              setTimeout(() => {
+                setItems(items.filter(() => true));
+              }, 100);
+              Dialog.confirm({
+                content: '是否提交申请',
+                onConfirm: () => {
+                  remove(skuItem);
+                  Toast.show({
+                    icon: 'success',
+                    content: '提交成功',
+                    position: 'bottom',
+                  });
+                },
+              });
             }}
           />
         </div>;

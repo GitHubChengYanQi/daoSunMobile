@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 import MyPopup from '../../../../../components/MyPopup';
 import { Card, Dialog, List, TextArea } from 'antd-mobile';
 import MyAntList from '../../../../../components/MyAntList';
-import SkuResultSkuJsons from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyDatePicker from '../../../../../components/MyDatePicker';
 import { useRequest } from '../../../../../../util/Request';
 import { history } from 'umi';
@@ -79,7 +79,7 @@ const Instock = ({ refresh, CodeRun, CodeLoading, setDetail, instockOrderId, pro
                 return null;
               }
               return <List.Item key={index}>
-                <SkuResultSkuJsons skuResult={item.skuResult} />
+                {SkuResultSkuJsons({skuResult:item.skuResult})}
                 <MyAntList>
                   {
                     item.positions && item.positions.map((item, index) => {

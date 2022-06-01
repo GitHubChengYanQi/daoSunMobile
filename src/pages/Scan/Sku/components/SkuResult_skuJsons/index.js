@@ -1,5 +1,4 @@
-
-const SkuResultSkuJsons = ({skuResult, describe}) => {
+export const SkuResultSkuJsons = ({ skuResult, describe }) => {
 
   if (!(skuResult && skuResult.spuResult)) {
     return '--';
@@ -23,4 +22,4 @@ const SkuResultSkuJsons = ({skuResult, describe}) => {
   return `${skuResult.spuResult.name} / ${skuResult.skuName}${skuResult.specifications ? ` / ${skuResult.specifications}` : ''}`;
 };
 
-export default SkuResultSkuJsons;
+// export default SkuResultSkuJsons;

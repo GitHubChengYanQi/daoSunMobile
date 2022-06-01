@@ -1,0 +1,57 @@
+
+.list {
+  background-color: #fff;
+  padding: 12px;
+  height: 100%;
+
+  .item {
+    border-radius: 8px;
+    box-sizing: border-box;
+    border: 1px solid var(--body--background--color);
+    padding: 4px;
+    margin-bottom: 12px;
+
+    .header {
+      padding: 8px 12px;
+      display: flex;
+      border-bottom: 1px solid #F5F5F5;;
+      align-items: center;
+
+      .title {
+        flex-grow: 1;
+        font-size: 14px;
+        font-weight: Bold;
+        color: #000000;
+        display: flex;
+        gap: 20px;
+
+        .name {
+          text-overflow: ellipsis;
+          overflow: hidden;
+          max-width: 130px;
+          white-space: nowrap;
+        }
+
+        span {
+          color: #257BDE;
+          font-weight: normal;
+        }
+      }
+    }
+
+    .content {
+      font-size: 14px;
+      font-weight: normal;
+      color: #000000;
+      padding: 8px 12px;
+
+      .other {
+        margin-top: 4px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+    }
+  }
+}
+

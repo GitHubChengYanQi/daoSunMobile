@@ -207,6 +207,7 @@ const InstockSkus = ({ skus = [], createType }) => {
             });
             inStock({
               data: {
+                module: 'createInstock',
                 instockRequest,
                 ...params,
               },

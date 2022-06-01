@@ -4,7 +4,7 @@ import { useRequest } from '../../../../../../util/Request';
 import { Spin } from 'antd';
 import { useDebounceEffect } from 'ahooks';
 import BackSkus from '../../../../Sku/components/BackSkus';
-import SkuResultSkuJsons from '../../../../Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../Sku/components/SkuResult_skuJsons';
 
 const Search = ({ onChange, ...props }, ref) => {
 
@@ -164,7 +164,7 @@ const Search = ({ onChange, ...props }, ref) => {
   };
 
   const object = (items) => {
-    return <SkuResultSkuJsons skuResult={items} />;
+    return SkuResultSkuJsons({ skuResult: items });
   };
 
   return <div>
@@ -174,10 +174,10 @@ const Search = ({ onChange, ...props }, ref) => {
       onMaskClick={() => {
         setVisible(false);
       }}
-      bodyStyle={{ minHeight: '100vh', }}
+      bodyStyle={{ minHeight: '100vh' }}
     >
       <div style={{ padding: 16 }}>
-        <div style={{position:'sticky',top:0,zIndex:'999',backgroundColor:'#fff',padding:'16px 8px'}}>
+        <div style={{ position: 'sticky', top: 0, zIndex: '999', backgroundColor: '#fff', padding: '16px 8px' }}>
           <SearchBar
             placeholder='请输入内容'
             showCancelButton={() => true}
@@ -189,7 +189,7 @@ const Search = ({ onChange, ...props }, ref) => {
             }}
           />
         </div>
-        <div style={{maxHeight:'80vh',overflowY:'auto'}}>
+        <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
           <List>
             {
               skuLoading || skuBindLoading || storehouseLoading || itemsLoading

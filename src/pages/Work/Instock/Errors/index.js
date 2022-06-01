@@ -2,7 +2,7 @@ import React, { useEffect, useImperativeHandle, useState } from 'react';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
 import { Card, Space, TextArea, Toast } from 'antd-mobile';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import { useRequest } from '../../../../util/Request';
 import { history } from 'umi';
@@ -88,7 +88,8 @@ const Errors = (
           key={index}
           style={{ backgroundColor: '#f9f9f9', padding: 16, maxWidth: '100%', borderRadius: 10, marginBottom: 8 }}
         >
-          <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
+          <MyEllipsis>
+            {SkuResultSkuJsons({skuResult:item.skuResult})}</MyEllipsis>
           <div style={{ display: 'flex' }}>
             <div style={{ flexGrow: 1 }}>
               <Label>计划待入库：</Label>{item.number}
@@ -140,7 +141,8 @@ const Errors = (
           key={index}
           style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
         >
-          <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /></MyEllipsis>
+          <MyEllipsis>
+            {SkuResultSkuJsons({skuResult:item.skuResult})}</MyEllipsis>
           <div style={{ display: 'flex' }}>
             <div style={{ flexGrow: 1 }}>
               <Label>计划待入库：</Label>{item.number}

@@ -8,7 +8,7 @@ import { useRequest } from '../../../../../util/Request';
 import { useSetState } from 'ahooks';
 import MyEmpty from '../../../../components/MyEmpty';
 import SkuResult from '../../../Sku/components/SkuResult';
-import SkuResultSkuJsons from '../../../Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../Sku/components/SkuResult_skuJsons';
 import Number from '../../../../components/Number';
 import { MyLoading } from '../../../../components/MyLoading';
 
@@ -55,7 +55,7 @@ const PositionsInventory = (
     if (list)
       return <SkuResult skuResult={skuResult} />;
     else
-      return <SkuResultSkuJsons skuResult={skuResult} />;
+      return SkuResultSkuJsons({skuResult})
   };
 
   const [inkinds, setInkinds] = useSetState({ data: [] });

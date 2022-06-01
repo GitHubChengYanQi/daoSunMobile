@@ -10,7 +10,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import { Card, Checkbox, Collapse, List, SwipeAction, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
@@ -194,10 +194,11 @@ const PickOutStock = (props) => {
                       >
                         <div style={{ display: 'flex', padding: '0 8px' }}>
                           <div style={{ flexGrow: 1 }}>
-                            <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                            <MyEllipsis>{SkuResultSkuJsons({ skuResult })}</MyEllipsis>
                             <div style={{ display: 'flex', fontSize: '4vw' }}>
                               <Label>描述：</Label>
-                              <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                              <MyEllipsis width='60%'>
+                                {SkuResultSkuJsons({ skuResult ,describe:true})}</MyEllipsis>
                             </div>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center' }}>

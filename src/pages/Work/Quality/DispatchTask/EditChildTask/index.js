@@ -15,7 +15,7 @@ import { history } from 'umi';
 import { useRequest } from '../../../../../util/Request';
 import { qualityPlanListSelect, qualityTaskDetailEdit } from '../components/URL';
 import Dispatch from '../components/Dispatch';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
 import Number from '../../../../components/Number';
@@ -124,7 +124,7 @@ const EditChildTask = (props) => {
               }
               title={
                 <div style={{ color: '#000', fontSize: 16 }}>
-                  <SkuResultSkuJsons skuResult={items.skuResult} />
+                  {SkuResultSkuJsons({skuResult:items.skuResult})}
                 </div>
               }
             >

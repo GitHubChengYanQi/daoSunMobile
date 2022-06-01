@@ -68,7 +68,6 @@ const SkuShop = (
                 <div className={style.empty} />
                 <div className={style.instockNumber}>
                   <Number
-                    max={type === 'outStock' ? item.stockNumber : undefined}
                     value={item.number}
                     placeholder={`${numberTitle}数量`}
                     noBorder

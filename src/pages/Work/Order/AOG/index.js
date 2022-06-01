@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MyEmpty from '../../../components/MyEmpty';
 import { Card, Dialog, Divider, List, Selector } from 'antd-mobile';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useSetState } from 'ahooks';
 import Number from '../../../components/Number';
 import LinkButton from '../../../components/LinkButton';
@@ -86,7 +86,7 @@ const AOG = (props) => {
                   }}
                   title={
                     <div style={{ fontSize: 16, color: '#000' }}>
-                      <SkuResultSkuJsons skuResult={item.skuResult} />
+                      {SkuResultSkuJsons({skuResult:item.skuResult})}
                     </div>
                   }
                   key={index}

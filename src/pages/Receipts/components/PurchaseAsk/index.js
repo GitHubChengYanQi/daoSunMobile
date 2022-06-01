@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Divider, List, Popup } from 'antd-mobile';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../components/MyEmpty';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const PurchaseAsk = ({ detail }) => {
 
@@ -12,9 +12,7 @@ const PurchaseAsk = ({ detail }) => {
   }
 
   const sku = (items) => {
-    return <>
-      <SkuResultSkuJsons skuResult={items.skuResult} />
-    </>;
+    return SkuResultSkuJsons({skuResult:items.skuResult})
   };
 
 

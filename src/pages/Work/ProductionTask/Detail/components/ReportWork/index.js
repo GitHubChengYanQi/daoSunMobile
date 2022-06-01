@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, List, Space, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../../../components/Label';
 import Number from '../../../../../components/Number';
 import { useRequest } from '../../../../../../util/Request';
@@ -88,10 +88,10 @@ const ReportWork = (
           outSkus.map((item, index) => {
             const skuResult = item.skuResult || {};
             return <List.Item key={index}>
-              <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+              <MyEllipsis>{SkuResultSkuJsons({ skuResult })}</MyEllipsis>
               <div style={{ display: 'flex', fontSize: '4vw' }}>
                 <Label>描述：</Label>
-                <MyEllipsis width='80%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                <MyEllipsis width='80%'>{SkuResultSkuJsons({skuResult,describe:true})})}</MyEllipsis>
               </div>
               {
                 item.myQualityId

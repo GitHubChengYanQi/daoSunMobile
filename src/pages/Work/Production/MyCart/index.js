@@ -5,7 +5,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import { Checkbox, List, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import BottomButton from '../../../components/BottomButton';
 import { productionPickListsCreateOutOrder } from '../components/Url';
@@ -99,15 +99,14 @@ const MyCart = (porps) => {
                   />
                 </div>
                 <div style={{ flexGrow: 1 }}>
-                  <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                  <MyEllipsis>
+                    {SkuResultSkuJsons({ skuResult })}</MyEllipsis>
                   <div style={{ display: 'flex', fontSize: 14 }}>
                     <Label>描述：</Label>
                     <MyEllipsis
                       width='60%'
                       smallFont
-                    ><SkuResult_skuJsons
-                      skuResult={skuResult}
-                      describe /></MyEllipsis>
+                    >{SkuResultSkuJsons({ skuResult,describe:true })}</MyEllipsis>
                   </div>
                 </div>
               </div>

@@ -1,136 +1,44 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Dropdown, List, Selector, Space, Tag } from 'antd-mobile';
-import MyList from '../../../components/MyList';
-import { history } from 'umi';
-import Label from '../../../components/Label';
-import { useModel } from 'umi';
+import React, { useState } from 'react';
+import topStyle from '../../../global.less';
+import { ToolUtil } from '../../../components/ToolUtil';
+import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
+import { useBoolean } from 'ahooks';
+import ProcessList from '../ProcessList';
+import MySearch from '../../../components/MySearch';
 
-const MyStart = (props) => {
 
-  const { initialState } = useModel('@@initialState');
+const MyStart = () => {
 
-  const userInfo = initialState.userInfo || {};
 
-  const ref = useRef();
+  const [screen, { setTrue, setFalse }] = useBoolean();
 
-  const [taskType, setTaskType] = useState();
-
-  const [taskStatus, setTaskStatus] = useState();
-
-  const [select, setSelect] = useState({});
-
-  const submit = (data) => {
-    setSelect({
-      ...select,
-      ...data,
-    });
-    ref.current.submit({ ...select, ...data });
-  };
-
-  useEffect(() => {
-    submit({ createUser: userInfo.id });
-  }, [userInfo.id]);
-
-  const [data, setData] = useState([]);
-
-  const type = (value) => {
-    switch (value) {
-      case 'quality_task':
-        return '质检任务';
-      case 'purchase':
-        return '采购申请';
-      case 'instockError':
-        return '入库异常';
-      default:
-        break;
-    }
-  };
-
-  const status = (value) => {
-    switch (value) {
-      case -1:
-        return <Tag color='primary' fill='outline'>
-          进行中
-        </Tag>;
-      case 0:
-        return <Tag color='#87d068' fill='outline'>
-          已通过
-        </Tag>;
-      case 2:
-        return <Tag color='#ff6430' fill='outline'>
-          已拒绝
-        </Tag>;
-      default:
-        return <Tag color='primary' fill='outline'>
-          进行中
-        </Tag>
-    }
-  };
+  const [number, setNumber] = useState(0);
 
   return <>
-    <div style={{ position: 'sticky', top: 0, zIndex: 999, backgroundColor: '#fff' }}>
-      <Dropdown>
-        <Dropdown.Item key='sorter' title={<div>{taskType ? taskType.label : '审批类型'}</div>}>
-          <Selector
-            columns={1}
-            options={[{ label: '质检任务', value: 'quality_task' }, { label: '采购申请', value: 'purchase' }]}
-            onChange={(arr, extend) => {
-              submit({ type: arr[0] });
-              setTaskType(extend.items[0]);
-            }}
-          />
-        </Dropdown.Item>
-        <Dropdown.Item key='bizop' title={<div>{taskStatus ? taskStatus.label : '审批状态'}</div>}>
-          <Selector
-            columns={1}
-            options={[{ label: '进行中', value: 0 }, { label: '已通过', value: 1 }, { label: '已拒绝', value: 2 }]}
-            onChange={(arr, extend) => {
-              submit({ status: arr[0] });
-              setTaskStatus(extend.items[0]);
-            }}
-          />
-        </Dropdown.Item>
-      </Dropdown>
+    <MySearch placeholder='请输入相关单据信息' historyType='process' />
+    <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+      <div
+        className={topStyle.screen}
+        id='screen'
+        onClick={() => {
+          if (screen) {
+            setFalse();
+          } else {
+            document.getElementById('screen').scrollIntoView();
+            setTrue();
+          }
+        }}
+      >
+        <div className={topStyle.stockNumber}>数量：<span>{number}</span></div>
+        <div
+          className={ToolUtil.classNames(topStyle.screenButton, screen ? topStyle.checked : '')}
+        >
+          筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
+        </div>
+      </div>
     </div>
-    <MyList
-      ref={ref}
-      api={{
-        url: '/activitiProcessTask/list',
-        method: 'POST',
-      }}
-      data={data}
-      getData={(value) => {
-        setData(value.filter(item => true));
-      }}>
-      <List>
-        {
-          data && data.map((items, index) => {
-            return <List.Item
-              key={index}
-              extra={status(items.status)}
-              onClick={() => {
-                history.push(`/Receipts/ReceiptsDetail?id=${items.processTaskId}`);
-              }}
-            >
-              <Space direction='vertical'>
-                <div>
-                  <Label>名称：</Label>{items.taskName}
-                </div>
-                <div>
-                  <Label>发起人：</Label>{items.user && items.user.name}
-                </div>
-                <div>
-                  <Label>类型：</Label>{type(items.type)}
-                </div>
-                <div>
-                  <Label>创建时间：</Label>{items.createTime}
-                </div>
-              </Space>
-            </List.Item>;
-          })
-        }
-      </List>
-    </MyList>
+
+    <ProcessList setNumber={setNumber} />
   </>;
 };
 

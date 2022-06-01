@@ -6,6 +6,9 @@ export const ReceiptsEnums = {
   // 采购入库
   purchaseInstock: 'purchaseInstock',
 
+  // 出库单
+  outstockOrder: 'OUTSTOCK',
+
 
   // 入库异常
   instockError: 'INSTOCKERROR',

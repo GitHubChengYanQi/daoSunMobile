@@ -89,7 +89,7 @@ const MyList = (
     return <MyEmpty height='100%' />;
   }
 
-  return <>
+  return <div id='list'>
 
     {children}
 
@@ -114,7 +114,7 @@ const MyList = (
         )}
       </>
     </InfiniteScroll>}
-  </>;
+  </div>;
 };
 
 export default React.forwardRef(MyList);

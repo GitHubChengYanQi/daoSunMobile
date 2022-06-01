@@ -26,7 +26,18 @@ const AddSku = (
     loading: getCustomerLoading,
     data: customerData,
     run: getCustomer,
-  } = useRequest(supplierBySku, { manual: true });
+  } = useRequest(supplierBySku, {
+    manual: true,
+    onSuccess:(res)=>{
+      if (ToolUtil.isArray(res).length === 1){
+        setData({
+          ...data,
+          customerId: res[0].customerId,
+          customerName: res[0].customerName,
+        });
+      }
+    }
+  });
 
   const [data, setData] = useState({});
 
@@ -94,7 +105,6 @@ const AddSku = (
             <Number
               placeholder={`${numberTitle}数量`}
               noBorder
-              max={type === 'outStock' ? data.stockNumber : undefined}
               value={data.number}
               className={style.number}
               onChange={(number) => {
@@ -115,7 +125,7 @@ const AddSku = (
         {
           text: '添加',
           key: 'add',
-          disabled: !data.number || (type === 'outStock' ? data.stockNumber <= 0 : (ToolUtil.isArray(customerData).length === 0 || !data.customerId)),
+          disabled: !data.number || (type === 'outStock' || (ToolUtil.isArray(customerData).length === 0 || !data.customerId)),
         },
       ]]}
     />

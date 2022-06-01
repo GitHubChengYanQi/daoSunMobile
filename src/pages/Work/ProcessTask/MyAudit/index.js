@@ -1,92 +1,71 @@
-import React from 'react';
-import { List, Space, Tag } from 'antd-mobile';
-import { history } from 'umi';
-import { useRequest } from '../../../../util/Request';
-import MyAntList from '../../../components/MyAntList';
-import { MyLoading } from '../../../components/MyLoading';
-import MyEmpty from '../../../components/MyEmpty';
-import Label from '../../../components/Label';
+import React, { useRef, useState } from 'react';
+import { ToolUtil } from '../../../components/ToolUtil';
+import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
+import { Tabs } from 'antd-mobile';
+import { useBoolean } from 'ahooks';
+
+import topStyle from '../../../global.less';
+import ProcessList from '../ProcessList';
+import MySearch from '../../../components/MySearch';
+
 
 const MyAudit = () => {
 
-  const { loading, data } = useRequest({
-    url: '/remarks/auditList',
-    method: 'POST',
-    data: {
-      status: 1,
-    },
-  });
+  const [screen, { setTrue, setFalse }] = useBoolean();
 
-  if (loading) {
-    return <MyLoading />;
-  }
+  const [key, setKey] = useState('wait');
 
-  if (!data) {
-    return <MyEmpty />;
-  }
+  const [number, setNumber] = useState(0);
 
-  const type = (value) => {
-    switch (value) {
-      case 'quality_task':
-        return '质检任务';
-      case 'purchase':
-        return '采购申请';
-      case 'instockError':
-        return '入库异常';
-      default:
-        break;
-    }
-  };
-
-  const status = (value) => {
-    switch (value) {
-      case -1:
-        return <Tag color='primary' fill='outline'>
-          进行中
-        </Tag>;
-      case 1:
-        return <Tag color='#87d068' fill='outline'>
-          已通过
-        </Tag>;
-      case 0:
-        return <Tag color='#ff6430' fill='outline'>
-          已拒绝
-        </Tag>;
-      default:
-        break;
-    }
-  };
+  const listRef = useRef();
 
   return <>
-    <MyAntList>
-      {
-        data && data.map((items, index) => {
-          const taskResult = items.taskResult || {};
-          return <List.Item
-            key={index}
-            extra={status(items.status)}
-            onClick={() => {
-              history.push(`/Receipts/ReceiptsDetail?id=${items.taskId}`);
-            }}
-          >
-            <Space direction='vertical'>
-              <div>
-                <Label>名称：</Label>{taskResult.taskName}
-              </div>
-              <div>
-                <Label>发起人：</Label>{taskResult.user && taskResult.user.name}
-              </div>
-              <div>
-                <Label>类型：</Label>{type(taskResult.type)}
-              </div>
-              <div>
-                <Label>创建时间：</Label>{items.createTime}
-              </div>
-            </Space>
-          </List.Item>;
-        })
-      }
-    </MyAntList>
+    <MySearch placeholder='请输入相关单据信息' historyType='process' />
+    <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+      <Tabs activeKey={key} onChange={(key) => {
+        const ref = listRef.current;
+        switch (key) {
+          case 'wait':
+            ref.submit({ auditType: 'audit', status: 0 });
+            break;
+          case 'processed':
+            ref.submit({ auditType: 'audit', status: 99 });
+            break;
+          case 'send':
+            ref.submit({ auditType: 'send' });
+            break;
+          default:
+            break;
+        }
+        setKey(key);
+      }} className={topStyle.tab}>
+        <Tabs.Tab title='待处理' key='wait' />
+        <Tabs.Tab title='已处理' key='processed' />
+        <Tabs.Tab title='抄送我' key='send' />
+      </Tabs>
+      <div
+        className={topStyle.screen}
+        id='screen'
+        onClick={() => {
+          if (screen) {
+            setFalse();
+          } else {
+            document.getElementById('screen').scrollIntoView();
+            setTrue();
+          }
+        }}
+      >
+        <div className={topStyle.stockNumber}>数量：<span>{number}</span></div>
+        <div
+          className={ToolUtil.classNames(topStyle.screenButton, screen ? topStyle.checked : '')}
+        >
+          筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
+        </div>
+      </div>
+    </div>
+
+    <ProcessList setNumber={setNumber} listRef={listRef} />
+
   </>;
 };
 

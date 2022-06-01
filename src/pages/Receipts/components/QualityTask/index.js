@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Card, Divider, List, Popup, } from 'antd-mobile';
+import { Button, Card, Divider, List, Popup } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../components/MyEmpty';
 
 const QualityTask = ({ detail }) => {
@@ -16,9 +16,7 @@ const QualityTask = ({ detail }) => {
   });
 
   const sku = (items) => {
-    return <>
-      <SkuResultSkuJsons skuResult={items.skuResult} />
-    </>;
+    return SkuResultSkuJsons({ skuResult: items.skuResult });
   };
 
   useEffect(() => {
@@ -58,7 +56,7 @@ const QualityTask = ({ detail }) => {
           setVisible(false);
         }}
       >
-        <Card title='质检信息' bodyStyle={{ maxHeight: '50vh', overflowY: 'scroll',padding:16 }}>
+        <Card title='质检信息' bodyStyle={{ maxHeight: '50vh', overflowY: 'scroll', padding: 16 }}>
           {
             data
               ?

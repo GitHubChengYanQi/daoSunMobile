@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { List, SearchBar, Popover, Card } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
@@ -27,9 +27,7 @@ const MySearch = (
     historyType,
   }) => {
 
-  const [visible, setVisible] = useState(false);
-
-  const [historyWidth, setHistoryWidth] = useState('auto');
+  const [visible, setVisible] = useState();
 
   const { data, refresh } = useRequest({
     ...historyList,
@@ -64,11 +62,6 @@ const MySearch = (
 
   const [historys, setHistorys] = useState(actions || []);
 
-
-  useEffect(() => {
-    const searchBar = document.getElementById('searchBar') || {};
-    setHistoryWidth(searchBar.clientWidth);
-  }, []);
 
   const like = (value) => {
     const newArray = actions.filter(item => {
@@ -112,7 +105,7 @@ const MySearch = (
   return <div className={ToolUtil.classNames(style.searchDiv, className)}>
     <Popover
       className={style.popover}
-      style={{ width: historyWidth }}
+      style={{ width: 'calc(100% - 66px)' }}
       visible={(historyType && historys.length > 0) ? visible : false}
       placement='bottom-start'
       content={historyContent()}
@@ -135,7 +128,7 @@ const MySearch = (
               onClear();
             }}
             onFocus={() => {
-              setVisible(true)
+              setVisible(true);
             }}
             onBlur={() => {
               setTimeout(() => {
