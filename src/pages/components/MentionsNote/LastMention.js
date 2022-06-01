@@ -14,4 +14,9 @@ export const getLastMeasureIndex = (text, prefix) => {
   );
 };
 
+export function getBeforeSelectionText(input) {
+  const { selectionStart } = input;
+  return input.value.slice(0, selectionStart);
+}
+
 

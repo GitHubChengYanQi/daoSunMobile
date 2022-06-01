@@ -157,7 +157,7 @@ const InstockSkus = ({ skus = [], createType }) => {
       <MyTextArea
         className={style.textArea}
         onChange={(remark, userIds) => {
-          setParams({ ...params, remark, userIds });
+          setParams({ ...params, remark, userIds: userIds.map(item => item.userId) });
         }}
       />
     </div>
@@ -183,16 +183,16 @@ const InstockSkus = ({ skus = [], createType }) => {
       rightOnClick={() => {
         switch (createType) {
           case 'outStock':
-            const applyDetails = [];
+            const listingParams = [];
             data.map(item => {
               if (item.number > 0) {
-                applyDetails.push(item);
+                listingParams.push(item);
               }
               return null;
             });
             outStock({
               data: {
-                applyDetails,
+                listingParams,
                 ...params,
               },
             });

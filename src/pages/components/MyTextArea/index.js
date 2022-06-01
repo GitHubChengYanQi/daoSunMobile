@@ -3,8 +3,10 @@ import { ToolUtil } from '../ToolUtil';
 import wx from 'populee-weixin-js-sdk';
 import SelectUsers from '../SelectUsers';
 import { useRequest } from '../../../util/Request';
-import { Toast } from 'antd-mobile';
+import { TextArea, Toast } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
+import { Input, Mentions } from 'antd';
+import { Option } from 'antd/es/mentions';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
@@ -15,8 +17,6 @@ const MyTextArea = (
 
     },
     value: defaultValue,
-    userIds = () => {
-    },
   },
 ) => {
 
@@ -26,14 +26,14 @@ const MyTextArea = (
 
   const [height, setHeight] = useState();
 
-  const [value, setValue] = useState(defaultValue);
+  const [value, setValue] = useState(defaultValue || '');
 
   const [users, setUsers] = useState([]);
 
   const [loading, setLoading] = useState();
 
 
-  const valueChange = (string, array) => {
+  const valueChange = (string, array = []) => {
     onChange(string, array);
     setValue(string);
     setUsers(array);
@@ -49,9 +49,9 @@ const MyTextArea = (
         Toast.show({ content: '系统无此用户，请先注册！', position: 'bottom' });
       }
     },
-    onError:()=>{
+    onError: () => {
       setLoading(false);
-    }
+    },
   });
 
   const invoke = () => {
@@ -82,6 +82,8 @@ const MyTextArea = (
 
             if (users.length > 0) {
               getUser({ params: { CpUserId: userIds[0] } });
+            } else {
+              setLoading(false);
             }
           }
         },
@@ -103,7 +105,7 @@ const MyTextArea = (
         style={{ maxHeight: height }}
         onKeyUp={(even) => {
           ToolUtil.listenOnKeyUp({
-            even, value, callBack: () => {
+            even, value: ref.current.value, callBack: () => {
               if (ToolUtil.isQiyeWeixin()) {
                 invoke();
               } else {

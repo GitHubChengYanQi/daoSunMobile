@@ -1,5 +1,5 @@
 import pako from 'pako';
-import { getLastMeasureIndex } from '../MentionsNote/LastMention';
+import { getBeforeSelectionText, getLastMeasureIndex } from '../MentionsNote/LastMention';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {
@@ -50,20 +50,20 @@ const classNames = (...props) => {
 const listenOnKeyUp = (
   {
     even,
-    value,
+    value = '',
     callBack = () => {
     },
   }) => {
+
   const { location: measureIndex, prefix: measurePrefix } = getLastMeasureIndex(
     value,
     '@',
   );
-  console.log();
+
   if (measureIndex !== -1) {
     if (even.key === measurePrefix || even.key === 'Shift') {
       callBack();
     }
-
   }
 };
 

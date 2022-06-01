@@ -14,7 +14,7 @@ export default {
   history: { type: 'hash' },
 
   hash: true,
-  fastRefresh: {},
+  // fastRefresh: {},
 
 
   antd: false,
