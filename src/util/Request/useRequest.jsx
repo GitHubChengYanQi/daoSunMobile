@@ -9,6 +9,9 @@ const useRequest = (config, options = {}) => {
   };
 
   const formatResult = (response) => {
+    if (!response) {
+      return {};
+    }
     if (typeof response.data === 'undefined') {
       return response;
     } else if (options.response) {

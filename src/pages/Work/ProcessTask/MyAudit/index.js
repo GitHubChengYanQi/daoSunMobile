@@ -66,7 +66,7 @@ const MyAudit = () => {
             key={index}
             extra={status(items.status)}
             onClick={() => {
-              history.push(`/Work/Workflow?id=${items.taskId}`);
+              history.push(`/Receipts/ReceiptsDetail?id=${items.taskId}`);
             }}
           >
             <Space direction='vertical'>

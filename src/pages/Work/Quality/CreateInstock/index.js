@@ -1,8 +1,7 @@
 import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Card, Dialog, List, Loading, Space, Stepper, Toast } from 'antd-mobile';
-import { codingRulesList, codingRulesListSelect, storeHouseSelect, UserIdSelect } from '../Url';
+import { codingRulesList, storeHouseSelect } from '../Url';
 import { useRequest } from '../../../../util/Request';
-import MyPicker from '../../../components/MyPicker';
 import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyCoding from '../../../components/MyCoding';
 import SelectUser from '../../Production/CreateTask/components/SelectUser';

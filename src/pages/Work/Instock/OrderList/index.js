@@ -7,6 +7,7 @@ import styles from '../../Production/index.css';
 import Label from '../../../components/Label';
 import MySearchBar from '../../../components/MySearchBar';
 import MyBottom from '../../../components/MyBottom';
+import { ReceiptsEnums } from '../../../Receipts';
 import { instockOrderList } from '../../Order/Url';
 
 const Orderlist = () => {
@@ -15,34 +16,13 @@ const Orderlist = () => {
 
   const [data, setData] = useState([]);
 
-  const orderStatus = (status) => {
-    switch (status) {
-      case -1:
-        return '已拒绝';
-      case 0:
-        return '审批中';
-      case 1:
-        return '待入库';
-      case 49:
-        return '异常审批中';
-      case 50:
-        return '异常审批拒绝';
-      case 98:
-        return '进行中';
-      case 99:
-        return '入库完成';
-      default:
-        return '';
-    }
-  };
-
   return <>
     <MyBottom
       leftActuions={<div>待处理：5</div>}
       buttons={<Space>
         <Button>合并入库</Button>
         <Button color='primary' onClick={() => {
-          history.push('/Work/Instock/CreateInStock');
+          history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
         }}>新建入库申请</Button>
       </Space>}
     >
@@ -69,7 +49,7 @@ const Orderlist = () => {
                     ?
                     <Button color='danger' style={{ '--border-radius': '50px', padding: '4px 12px' }}>加急</Button> : null
                 }
-                <Button
+                {item.statusResult && <Button
                   color='default'
                   fill='outline'
                   style={{
@@ -78,10 +58,10 @@ const Orderlist = () => {
                     '--background-color': '#fff7e6',
                     '--text-color': '#fca916',
                     '--border-width': '0px',
-                  }}>{orderStatus(item.state)}</Button>
+                  }}>{item.statusResult.name || '-'}</Button>}
               </Space>}
               onClick={() => {
-                history.push(`/Work/Instock/Detail?id=${item.instockOrderId}`);
+                history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${item.instockOrderId}`);
               }}
             >
               <Space direction='vertical' style={{ width: '100%' }}>

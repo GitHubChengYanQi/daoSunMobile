@@ -3,7 +3,7 @@ import { getLastMeasureIndex } from './LastMention';
 import SelectUsers from '../SelectUsers';
 import { Input } from 'antd';
 import ImgUpload from '../Upload/ImgUpload';
-import { Collapse } from 'antd-mobile';
+import { Collapse, Space } from 'antd-mobile';
 import { PaperClipOutlined } from '@ant-design/icons';
 
 const MentionsNote = ({ getUserIds, onChange, value, placeholder, getImgs }) => {
@@ -46,7 +46,7 @@ const MentionsNote = ({ getUserIds, onChange, value, placeholder, getImgs }) => 
     />
 
     <Collapse>
-      <Collapse.Panel key='1' title={<>上传  <PaperClipOutlined /></>}>
+      <Collapse.Panel style={{textAlign:'left'}} key='1' title={<Space align='center'>上传  <PaperClipOutlined /></Space>}>
         <ImgUpload
           length={5}
           value={imgs}

@@ -3,7 +3,7 @@ import {
   productionPickListsList,
   productionPickListsSelfList,
 } from '../components/Url';
-import { CapsuleTabs, Card, Checkbox, Divider, Space } from 'antd-mobile';
+import { CapsuleTabs, Card, Checkbox, Space } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../../components/MyNavBar';
@@ -35,15 +35,6 @@ const PickLists = (props) => {
         return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
       default:
         return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
-    }
-  };
-
-  const source = (source) => {
-    switch (source) {
-      case 'productionTask':
-        return '生产任务';
-      default:
-        return '生产任务';
     }
   };
 

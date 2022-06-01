@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useSprings, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import clamp from 'lodash.clamp';

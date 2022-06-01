@@ -13,8 +13,6 @@ import { createForm } from '@formily/core';
 import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
-import GetUserInfo from '../GetUserInfo';
-import { useHistory } from 'react-router-dom';
 
 
 export const Username = (props) => {

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import MyEmpty from '../../../../components/MyEmpty';
 import { Button, Card, Divider, List, Popup } from 'antd-mobile';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyEmpty from '../../../components/MyEmpty';
 
 const PurchaseAsk = ({ detail }) => {
 
   const [visible, setVisible] = useState(false);
 
-  if (!detail)
+  if (!detail){
     return <MyEmpty />;
+  }
 
   const sku = (items) => {
     return <>

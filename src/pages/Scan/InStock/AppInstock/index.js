@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'dva';
 import { Card, Dialog, List, Space, Toast } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';

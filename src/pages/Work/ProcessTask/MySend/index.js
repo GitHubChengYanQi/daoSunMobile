@@ -1,6 +1,6 @@
 import React from 'react';
 import { useRequest } from '../../../../util/Request';
-import { List, Space, Tag } from 'antd-mobile';
+import { List, Space } from 'antd-mobile';
 import MyAntList from '../../../components/MyAntList';
 import { history } from 'umi';
 import Label from '../../../components/Label';
@@ -46,7 +46,7 @@ const MySend = () => {
           return <List.Item
             key={index}
             onClick={() => {
-              history.push(`/Work/Workflow?id=${items.taskId}`);
+              history.push(`/Receipts/ReceiptsDetail?id=${items.taskId}`);
             }}
           >
             <Space direction='vertical'>

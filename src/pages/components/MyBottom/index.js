@@ -1,21 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-const MyBottom = ({ children, leftActuions, buttons }) => {
+const MyBottom = ({ children, leftActuions, buttons,noBottom }) => {
 
-  const [bottomHeight, seBottomHeight] = useState(0);
-
-  useEffect(() => {
-    if (document.getElementById('bottom')) {
-      const height = document.getElementById('bottom').clientHeight;
-      seBottomHeight(height);
-    }
-  }, []);
 
   return <div>
     <div style={{ minHeight: `100vh` }}>
       {children}
     </div>
-    <div id='bottom' style={{
+    <div hidden={noBottom} id='bottom' style={{
       position: 'sticky',
       bottom: 0,
       zIndex: 999,

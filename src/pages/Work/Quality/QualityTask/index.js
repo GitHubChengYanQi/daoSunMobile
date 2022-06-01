@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
   Card,
   Dialog,
   Empty,
   List,
-  Loading, Space,
+  Space,
 } from 'antd-mobile';
-import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { QrcodeOutlined } from '@ant-design/icons';
@@ -107,7 +105,7 @@ const QualityTask = (props) => {
       });
     },
     onError: (res) => {
-      Message.error('自检失败！');
+      Message.toast('自检失败！');
     },
   });
 

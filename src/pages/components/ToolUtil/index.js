@@ -1,5 +1,5 @@
 import pako from 'pako';
-import { getBeforeSelectionText, getLastMeasureIndex } from '../MentionsNote/LastMention';
+import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {

@@ -3,10 +3,8 @@ import { ToolUtil } from '../ToolUtil';
 import wx from 'populee-weixin-js-sdk';
 import SelectUsers from '../SelectUsers';
 import { useRequest } from '../../../util/Request';
-import { TextArea, Toast } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
-import { Input, Mentions } from 'antd';
-import { Option } from 'antd/es/mentions';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 

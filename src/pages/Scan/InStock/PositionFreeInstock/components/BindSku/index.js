@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { Selector } from 'antd-mobile';
-import { useRequest } from '../../../../../../util/Request';
+
 
 const BindSku = () => {
 

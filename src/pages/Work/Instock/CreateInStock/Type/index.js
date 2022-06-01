@@ -1,6 +1,5 @@
 import React from 'react';
 import { List, Space } from 'antd-mobile';
-import LinkButton from '../../../../components/LinkButton';
 import { CheckOutline } from 'antd-mobile-icons';
 
 const Type = (
@@ -10,21 +9,8 @@ const Type = (
     },
   }) => {
 
-
   return <>
     <List style={{ '--border-top': 'none', '--border-bottom': 'none' }}>
-      <List.Item
-        arrow={false}
-        extra={<Space align='center'>
-          {value === '直接入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
-        </Space>}
-      >
-        <div onClick={() => {
-          onSuccess('直接入库');
-        }}>
-          直接入库
-        </div>
-      </List.Item>
       <List.Item
         extra={<Space>
           {value === '采购入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
@@ -40,14 +26,14 @@ const Type = (
       <List.Item
         arrow={false}
         extra={<Space>
-          {value === '质检入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
+          {value === '生产入库' && <CheckOutline style={{ color: 'var(--adm-color-primary)' }} />}
           {/*<LinkButton>编辑</LinkButton>*/}
         </Space>}
       >
         <div onClick={() => {
-          onSuccess('质检入库');
+          onSuccess('生产入库');
         }}>
-          质检入库
+          生产入库
         </div>
       </List.Item>
     </List>

@@ -10,5 +10,8 @@
 .step :global .adm-step-description {
   color: #000000 !important;
 }
+.step :global .adm-step-content {
+  padding-left: 8px;
+}
 
 

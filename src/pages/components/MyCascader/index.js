@@ -1,9 +1,7 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
-import { Button, Cascader } from 'antd-mobile';
+import React, { useImperativeHandle } from 'react';
+import { Cascader } from 'antd-mobile';
 import { useRequest } from '../../../util/Request';
-import { ListItem } from 'weui-react-v2';
 import { Typography } from 'antd';
-import style from './index.css';
 
 const getParentValue = (value, data) => {
   if (!Array.isArray(data)) {

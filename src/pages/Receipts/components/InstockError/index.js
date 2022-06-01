@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Card, Divider, Space } from 'antd-mobile';
-import Label from '../../../../components/Label';
-import { useRequest } from '../../../../../util/Request';
-import { MyLoading } from '../../../../components/MyLoading';
-import MyEmpty from '../../../../components/MyEmpty';
-import MyEllipsis from '../../../../components/MyEllipsis';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
-import UpLoadImg from '../../../../components/Upload';
+import { useRequest } from '../../../../util/Request';
+import Label from '../../../components/Label';
+import MyEllipsis from '../../../components/MyEllipsis';
+import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import UpLoadImg from '../../../components/Upload';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
 
 const InstockError = ({ id }) => {
 
@@ -95,7 +95,7 @@ const InstockError = ({ id }) => {
         return <Space
           direction='vertical'
           key={index}
-          style={{ backgroundColor: '#f9f9f9', padding: 16, maxWidth: '100%', borderRadius: 10, marginBottom: 8 }}
+          style={{ backgroundColor: '#f9f9f9', padding: 16, width: '100%', borderRadius: 10, marginBottom: 8 }}
         >
           <MyEllipsis><SkuResultSkuJsons skuResult={item.simpleResult} /></MyEllipsis>
           <div style={{ display: 'flex' }}>
