@@ -113,13 +113,12 @@ const UpLoadImg = (
             setLoading(false);
             typeof onChange === 'function' && onChange(`${oss.host}/${oss.key}`, oss.mediaId, file);
           }
-        }
-        }
+        }}
       >
         {button || (imageUrl ? <img src={imageUrl} alt='' style={{ width: '100%', height: '100%' }} /> : uploadButton)}
       </Upload>
 
-      {loading && <MyLoading title='上传中...' />}
+      {/*{loading && <MyLoading title='上传中...' />}*/}
     </div>
 
 

@@ -44,7 +44,7 @@ const SkuItem = (
                 &&
                 skuResult.skuJsons.map((items) => {
                   return items.values.attributeValues;
-                }).join(' / ') || '--'
+                }).join(' / ') || '-'
               }`
             }
           </MyEllipsis>

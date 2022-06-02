@@ -1,7 +1,7 @@
 export const SkuResultSkuJsons = ({ skuResult, describe }) => {
 
   if (!(skuResult && skuResult.spuResult)) {
-    return '--';
+    return '-';
   }
 
   if (describe) {
@@ -14,7 +14,7 @@ export const SkuResultSkuJsons = ({ skuResult, describe }) => {
       &&
       skuResult.skuJsons.map((items) => {
         return `${items.attribute.attribute}:${items.values.attributeValues}`;
-      }).join(' , ') || '--'
+      }).join(' , ') || '-'
     }`;
   }
 

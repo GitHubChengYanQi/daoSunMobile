@@ -4,16 +4,17 @@ import wx from 'populee-weixin-js-sdk';
 import SelectUsers from '../SelectUsers';
 import { useRequest } from '../../../util/Request';
 import { Toast } from 'antd-mobile';
-import { MyLoading } from '../MyLoading';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
 const MyTextArea = (
   {
     className,
+    placeholder,
     onChange = () => {
 
     },
+    row = 1,
     value: defaultValue,
   },
 ) => {
@@ -87,8 +88,6 @@ const MyTextArea = (
         },
       );
     });
-
-
   };
 
   return <>
@@ -97,10 +96,10 @@ const MyTextArea = (
         value={value}
         ref={ref}
         id='text'
-        placeholder='可@相关人员'
+        placeholder={placeholder || '可@相关人员'}
         className='adm-text-area-element'
-        rows={1}
-        style={{ maxHeight: height }}
+        rows={row}
+        style={{ height }}
         onKeyUp={(even) => {
           ToolUtil.listenOnKeyUp({
             even, value: ref.current.value, callBack: () => {
@@ -126,7 +125,7 @@ const MyTextArea = (
       </textarea>
     </div>
 
-    {loading && <MyLoading />}
+    {/*{loading && <MyLoading />}*/}
 
     <SelectUsers
       ref={userRef}

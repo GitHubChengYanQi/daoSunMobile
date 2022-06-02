@@ -51,53 +51,67 @@ const Comments = ({ detail = {}, id, refresh }) => {
     },
   );
 
-  return <>
+  const old = () => {
+    return <div>
+      {detail.remarks && detail.remarks.length > 0 ?
+        <Card title={`评论(${detail.remarks.length})`} extra={<FormOutlined onClick={() => {
+          setVisible(true);
+        }} />}>
+          <MyAntList>
+            {
+              detail.remarks.map((items, index) => {
+                return <List.Item
+                  key={index}
+                  title={items.user &&
+                  <Space align='center'>
+                    <Avatar
+                      shape='square'
+                      size={24}
+                      style={{ fontSize: 14 }}>
+                      {items.user && items.user.name.substring(0, 1)}
+                    </Avatar>
+                    {items.user && items.user.name}
+                    {items.createTime}
+                  </Space>}
+                  description={items.photoId && <div style={{ marginLeft: 32 }}><ImgUpload
+                    disabled
+                    length={5}
+                    value={items.photoId.split(',').map((items) => {
+                      return { url: items };
+                    })} /></div>}
+                >
+                  <div style={{ marginLeft: 32 }}>
+                    {items.content}
+                  </div>
+                </List.Item>;
+              })
+            }
+          </MyAntList>
+        </Card> :
+        <div style={{ padding: 16 }}>
+          <Button
+            style={{ width: '100%' }}
+            onClick={() => {
+              setVisible(true);
+            }}
+          >
+            <FormOutlined /> 添加评论
+          </Button>
+        </div>}
+    </div>;
+  };
 
-    {detail.remarks && detail.remarks.length > 0 ?
-      <Card title={`评论(${detail.remarks.length})`} extra={<FormOutlined onClick={() => {
-        setVisible(true);
-      }} />}>
-        <MyAntList>
-          {
-            detail.remarks.map((items, index) => {
-              return <List.Item
-                key={index}
-                title={items.user &&
-                <Space align='center'>
-                  <Avatar
-                    shape='square'
-                    size={24}
-                    style={{ fontSize: 14 }}>
-                    {items.user && items.user.name.substring(0, 1)}
-                  </Avatar>
-                  {items.user && items.user.name}
-                  {items.createTime}
-                </Space>}
-                description={items.photoId && <div style={{ marginLeft: 32 }}><ImgUpload
-                  disabled
-                  length={5}
-                  value={items.photoId.split(',').map((items) => {
-                    return { url: items };
-                  })} /></div>}
-              >
-                <div style={{ marginLeft: 32 }}>
-                  {items.content}
-                </div>
-              </List.Item>;
-            })
-          }
-        </MyAntList>
-      </Card> :
-      <div style={{ padding: 16 }}>
-        <Button
-          style={{ width: '100%' }}
-          onClick={() => {
-            setVisible(true);
-          }}
-        >
-          <FormOutlined /> 添加评论
-        </Button>
-      </div>}
+  return <>
+    <div style={{ padding: 12, backgroundColor: '#fff' }}>
+      <Button
+        style={{ width: '100%' }}
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        <FormOutlined /> 添加备注
+      </Button>
+    </div>
 
     {/* 审批同意或拒绝 */}
     <Dialog
@@ -110,19 +124,12 @@ const Comments = ({ detail = {}, id, refresh }) => {
             setNote(value);
           }}
           value={note}
+          imgs={imgs}
           getUserIds={(value) => {
-            if (value && value.length > 0) {
-            }
-            const userIds = value.map((items) => {
-              return items.value;
-            });
-            setUserIds(userIds);
+            setUserIds(value);
           }}
           getImgs={(imgs) => {
-            const imgIds = imgs.map((items) => {
-              return items.id;
-            });
-            setImgs(imgIds);
+            setImgs(imgs);
           }}
         />
       }
@@ -137,7 +144,7 @@ const Comments = ({ detail = {}, id, refresh }) => {
               userIds: userIds.filter((item, index) => {
                 return userIds.indexOf(item, 0) === index;
               }).toString(),
-              photoId: imgs.toString(),
+              photoId: imgs.map(item => item.mediaId).toString(),
               note,
             },
           });

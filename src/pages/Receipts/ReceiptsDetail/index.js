@@ -11,6 +11,16 @@ import Detail from '../../Work/Instock/Detail';
 import Comments from '../components/Comments';
 import { ReceiptsEnums } from '../index';
 import { useRequest } from '../../../util/Request';
+import MyNavBar from '../../components/MyNavBar';
+import Header from './components/Header';
+import topStyle from '../../global.less';
+import { ToolUtil } from '../../components/ToolUtil';
+import { Tabs } from 'antd-mobile';
+import MyEmpty from '../../components/MyEmpty';
+import Bottom from './components/Bottom';
+import style from './index.less';
+import ReceiptData from './components/ReceiptData';
+import Log from './components/Log';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -25,6 +35,8 @@ const ReceiptsDetail = () => {
   const [currentNode, setCurrentNode] = useState([]);
 
   const [moduleObject, setModuleObject] = useState({});
+
+  const [key, setKey] = useState('data');
 
   const actionRef = useRef();
 
@@ -134,16 +146,44 @@ const ReceiptsDetail = () => {
     return <MyLoading />;
   }
 
-  return <>
-    <MyBottom
+  const old = () => {
+    return <MyBottom
       leftActuions={createModuleButtom(true)}
       buttons={createModuleButtom()}
     >
       {module(detail.type)}
       <Process auditData={detail.stepsResult} createName={detail.createName} card />
       <Comments detail={detail} id={detail.processTaskId} refresh={refresh} />
-    </MyBottom>
-  </>;
+    </MyBottom>;
+  };
+
+  const content = () => {
+    switch (key) {
+      case 'data':
+        return <ReceiptData data={detail} />;
+      case 'log':
+        return <Log />;
+      default:
+        return <MyEmpty />;
+    }
+  };
+
+  return <div className={style.receipts}>
+    <div className={style.content}>
+      <MyNavBar title='审批详情' />
+      <Header data={detail} />
+      <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+        <Tabs activeKey={key} onChange={(key) => {
+          setKey(key);
+        }} className={topStyle.tab}>
+          <Tabs.Tab title='基本信息' key='data' />
+          <Tabs.Tab title='动态日志' key='log' />
+        </Tabs>
+      </div>
+      {content()}
+    </div>
+    <Bottom />
+  </div>;
 };
 
 export default ReceiptsDetail;
