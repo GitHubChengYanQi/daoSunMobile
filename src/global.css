@@ -7,6 +7,7 @@ body {
   margin: 0;
   background-color: #E1EBF6;
   --body--background--color: #E1EBF6;
+  line-height: revert;
 }
 
 :global .am-badge-text {
@@ -27,12 +28,19 @@ body {
 
 .adm-button {
   font-size: 14px;
+  padding: 4px 12px;
 }
 
 
 .adm-picker-popup, .adm-mask {
   --z-index: 1002;
 }
+
+.adm-action-sheet-popup {
+  --z-index: 1002;
+}
+
+
 
 
 

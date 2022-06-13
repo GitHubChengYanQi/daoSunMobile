@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import MyNavBar from '../../../components/MyNavBar';
 import MySearchBar from '../../../components/MySearchBar';
 import { skuList } from '../../../Scan/Url';
 import MyList from '../../../components/MyList';

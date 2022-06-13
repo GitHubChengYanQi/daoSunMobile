@@ -1,56 +1,57 @@
 import React, { useState } from 'react';
-import { SafeArea, TabBar } from 'antd-mobile';
-import { AuditOutlined, SendOutlined, UpCircleOutlined } from '@ant-design/icons';
-import MyStart from './MyStart';
+import MyNavBar from '../../components/MyNavBar';
+import style from './index.less';
+import Icon from '../../components/Icon';
+import MyEmpty from '../../components/MyEmpty';
+import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
-import MySend from './MySend';
+import Create from './Create';
+import MyStart from './MyStart';
 
 
 const ProcessTask = () => {
 
-  const [key, setKey] = useState('start');
+  const [key, setKey] = useState('audit');
 
-  const module = () => {
+  const content = () => {
     switch (key) {
-      case 'start':
-        return <>
-          <MyStart />
-        </>;
+      case 'create':
+        return <Create />;
       case 'audit':
-        return <>
-          <MyAudit />
-        </>;
-      case 'send':
-        return <>
-          <MySend />
-        </>;
+        return <MyAudit />;
+      case 'start':
+        return <MyStart />;
       default:
-        break;
+        return <MyEmpty />;
     }
   };
 
-  return <>
-    {module()}
-    <div
-      style={{
-        width: '100%',
-        paddingBottom: 0,
-        position: 'fixed',
-        bottom: 0,
-        backgroundColor: '#fff',
-      }}>
-      <TabBar
-        onChange={(value) => {
-          setKey(value);
-        }}
-      >
-        <TabBar.Item key='start' icon={<UpCircleOutlined />} title='我发起的' />
-        <TabBar.Item key='audit' icon={<AuditOutlined />} title='我审批的' />
-        <TabBar.Item key='send' icon={<SendOutlined />} title='我抄送的' />
-      </TabBar>
-      <SafeArea position='bottom' />
+  return <div className={style.process}>
+    <div className={style.content} id='content'>
+      <MyNavBar title='审批中心' />
+      {content()}
     </div>
-  </>;
+
+    <MyTablBar
+      onChange={setKey}
+      activeKey={key}
+      tabBarItems={
+        [{
+          title: '新申请',
+          key: 'create',
+          icon: <Icon type='icon-cangchu' />,
+        }, {
+          title: '我审批的',
+          key: 'audit',
+          icon: <Icon type='icon-xiaoxi2' />,
+        }, {
+          title: '我发起的',
+          key: 'start',
+          icon: <Icon type='icon-baobiao1' />,
+        }]
+      } />
+
+  </div>;
 };
 
 export default ProcessTask;

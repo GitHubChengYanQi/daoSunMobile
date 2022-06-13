@@ -3,7 +3,6 @@ import MyNavBar from '../../components/MyNavBar';
 import MyList from '../../components/MyList';
 import { outstockOrderList } from '../../Scan/Url';
 import { List, Space, Toast } from 'antd-mobile';
-import { history } from 'umi';
 import { useSetState } from 'ahooks';
 import { Badge } from 'antd';
 

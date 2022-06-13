@@ -46,7 +46,7 @@ const StoreHousePositions = (props) => {
               },
             });
           } else if (action.key === 'see') {
-            history.push(`/Work/Stock/StockDetails?storehousePositionsId=${items.key}`);
+            history.push(`/Work/Stock?storehousePositionsId=${items.key}`);
           }
         },
         actions: [

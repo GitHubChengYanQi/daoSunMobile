@@ -22,7 +22,7 @@ import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Carts from './components/Carts';
 import MyPopup from '../../../components/MyPopup';
 import { history } from 'umi';
@@ -292,10 +292,11 @@ const PickDetail = (props) => {
                     <Card style={{ borderRadius: 0 }}>
                       <div style={{ display: 'flex' }}>
                         <div style={{ width: '80vw' }}>
-                          <MyEllipsis><SkuResult_skuJsons skuResult={skuResult} /></MyEllipsis>
+                          <MyEllipsis>
+                            {SkuResultSkuJsons({ skuResult })}</MyEllipsis>
                           <div style={{ display: 'flex', fontSize: '4vw' }}>
                             <Label>描述：</Label>
-                            <MyEllipsis width='60%'><SkuResult_skuJsons skuResult={skuResult} describe /></MyEllipsis>
+                            <MyEllipsis width='60%'>{SkuResultSkuJsons({ skuResult ,describe:true})}</MyEllipsis>
                           </div>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>

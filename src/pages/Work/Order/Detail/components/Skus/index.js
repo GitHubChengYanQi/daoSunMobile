@@ -2,7 +2,7 @@ import React from 'react';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { Card, Space } from 'antd-mobile';
 import MyEllipsis from '../../../../../components/MyEllipsis';
-import SkuResultSkuJsons from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../../../components/Label';
 
 const Skus = ({ skus,data }) => {
@@ -18,7 +18,8 @@ const Skus = ({ skus,data }) => {
           headerStyle={{display:'block'}}
           key={index}
           title={<div>
-            <MyEllipsis><SkuResultSkuJsons skuResult={item.skuResult} /> </MyEllipsis>
+            <MyEllipsis>
+              {SkuResultSkuJsons({skuResult:item.skuResult})} </MyEllipsis>
           </div>}
           style={{ margin: 8 }}>
           <Space direction='vertical'>

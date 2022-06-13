@@ -15,7 +15,7 @@ const queryString = (value, string) => {
 
 // 返回空对象
 const isObject = (object) => {
-  return typeof object === 'object' ? object : {};
+  return object && typeof object === 'object' ? object : {};
 };
 
 // 返回空集合
@@ -50,20 +50,20 @@ const classNames = (...props) => {
 const listenOnKeyUp = (
   {
     even,
-    value,
+    value = '',
     callBack = () => {
     },
   }) => {
+
   const { location: measureIndex, prefix: measurePrefix } = getLastMeasureIndex(
     value,
     '@',
   );
-  console.log();
+
   if (measureIndex !== -1) {
     if (even.key === measurePrefix || even.key === 'Shift') {
       callBack();
     }
-
   }
 };
 

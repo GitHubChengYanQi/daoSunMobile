@@ -4,7 +4,7 @@ import { Button, Card, List, ProgressBar, Space } from 'antd-mobile';
 import Label from '../../../../components/Label';
 import styles from '../../index.css';
 import { history } from 'umi';
-import SkuResultSkuJsons from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const ShipList = ({ data }) => {
 
@@ -72,7 +72,7 @@ const ShipList = ({ data }) => {
             {
               setpSetDetails.map((skuItem,index) => {
                 return <List.Item key={index} extra={' × '+(parseInt(skuItem.num) * parseInt(item.count))}>
-                  <SkuResultSkuJsons skuResult={skuItem.skuResult} />
+                  {SkuResultSkuJsons({skuResult:skuItem.skuResult})}
                 </List.Item>;
               })
             }

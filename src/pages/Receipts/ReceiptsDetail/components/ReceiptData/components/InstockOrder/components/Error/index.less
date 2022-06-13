@@ -1,0 +1,263 @@
+
+.error {
+  padding: 12px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+
+
+  .header {
+    display: flex;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #EEEEEE;
+    align-items: center;
+
+    .skuShow {
+      flex-grow: 1;
+      display: flex;
+      gap: 8px;
+      font-size: 12px;
+      align-items: center;
+
+      span {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+
+      .number {
+        max-width: 100px;
+      }
+    }
+
+    .title {
+      flex-grow: 1;
+      text-align: center;
+      font-size: 18px;
+    }
+  }
+
+  .skuItem {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #D8D8D8;
+
+    .sku {
+      border: none;
+    }
+
+    .showNumber {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .through {
+        text-decoration: line-through
+      }
+    }
+
+  }
+
+  .verify {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+    max-height: 100px;
+    overflow: auto;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkNumber {
+      display: flex;
+      align-items: center;
+
+      span {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  .sku {
+    padding: 12px 0;
+    flex-grow: 1;
+    border-bottom: 1px solid #D8D8D8;
+  }
+
+  .actual {
+    padding: 8px 0;
+    font-size: 14px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    .number {
+      flex-grow: 1;
+    }
+
+    svg {
+      font-size: 16px;
+    }
+
+    :global .adm-input {
+      border: 1px solid #D9D9D9;
+      padding: 4px;
+      --font-size: 12px;
+    }
+  }
+
+  .space {
+    margin: 0 -12px;
+    height: 8px;
+    background-color: var(--body--background--color);
+  }
+
+  .errors {
+    flex-grow: 1;
+    overflow: auto;
+
+    .inkindItem {
+      padding: 16px 0;
+      border-bottom: 1px solid #D8D8D8;;
+
+      .inkindTitle {
+        display: flex;
+        align-items: center;
+
+        .inkind {
+          flex-grow: 1;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .inkindNumber {
+            color: var(--adm-color-danger);
+            margin-left: 8px;
+          }
+
+          .prohibit {
+            color: var(--adm-color-danger);
+          }
+
+          .allow {
+            color: var(--adm-color-primary);
+          }
+
+          .index {
+            border-radius: 100%;
+            background-color: var(--adm-color-primary);
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+          }
+
+          svg {
+            font-size: 16px;
+            color: var(--adm-color-primary);
+          }
+        }
+      }
+
+      .stepper {
+        padding: 12px 0;
+        display: flex;
+        align-items: center;
+
+        span {
+          flex-grow: 1;
+        }
+      }
+
+      .careful {
+        padding: 12px 0;
+
+        .notices {
+          font-size: 12px;
+          display: inline-block;
+          border-radius: 2px;
+          background: #F5F5F5;
+          border: 1px solid #D9D9D9;
+          padding: 2px 12px;
+          margin-left: 8px;
+        }
+      }
+
+      .opinion {
+        display: flex;
+        align-items: center;
+
+        span {
+          min-width: 70px;
+        }
+
+        .textArea {
+          padding: 4px;
+        }
+      }
+
+      .actions {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        padding: 12px;
+
+        .ok {
+          --border-color: #2EAF5D;
+          --text-color: #2EAF5D;
+          --border-radius: 2;
+        }
+      }
+
+      .textArea {
+        border-radius: 4px;
+        border: 1px solid #999999;
+        padding: 8px;
+        --font-size: 12px;
+      }
+    }
+
+  }
+
+  .bottom {
+    margin: 0 -12px -12px -12px;
+    padding: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+
+    button {
+      border-radius: 50px;
+      width: 100%;
+    }
+  }
+
+  .bottomAction {
+    margin: 0 -12px -12px -12px;
+    padding: 12px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+
+    .action {
+      flex-grow: 1;
+      gap: 8px;
+      display: flex;
+      align-items: center;
+
+      .instockNumber {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+
+}

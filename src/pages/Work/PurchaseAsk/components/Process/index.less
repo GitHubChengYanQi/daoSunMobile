@@ -1,0 +1,102 @@
+
+.process {
+  background-color: #fff;
+  padding: 12px;
+  color: #333333;
+  margin-bottom: 8px;
+
+  .cartTitle {
+    padding: 8px 0;
+  }
+
+  .step {
+    :global .adm-step {
+      --line-to-next-color: var(--adm-color-primary);
+    }
+
+    :global .adm-step-description {
+      padding-top: 8px !important;
+    }
+
+    //
+    //:global .adm-step-icon-container {
+    //  top: calc(var(--title-font-size) * 2.5 / 2) !important
+    //}
+    //
+    //:global .adm-step-description {
+    //  color: #000000 !important;
+    //}
+    //
+
+    :global .adm-step-content {
+      padding-left: 8px;
+    }
+
+    .wait {
+      :global .ant-avatar {
+        background-color: #ccc;
+      }
+    }
+
+    .success {
+      :global .ant-avatar {
+        background-color: var(--adm-color-primary);
+      }
+    }
+
+    .error {
+      :global .ant-avatar {
+        background-color: var(--adm-color-danger);
+      }
+    }
+
+    .stepIcon {
+      :global .ant-avatar {
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        font-size: 14px;
+      }
+    }
+
+    .users {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      color: #808080;
+
+      .nameAvatar {
+        flex-grow: 1;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
+      :global .ant-avatar {
+        font-size: 12px !important;
+      }
+    }
+
+
+    .title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #000000;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      svg {
+        color: #D8D8D8;
+      }
+    }
+
+  }
+}
+
+

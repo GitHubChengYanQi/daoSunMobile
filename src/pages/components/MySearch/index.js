@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { List, SearchBar, Popover, Card } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
@@ -27,9 +27,7 @@ const MySearch = (
     historyType,
   }) => {
 
-  const [visible, setVisible] = useState(false);
-
-  const [historyWidth, setHistoryWidth] = useState('auto');
+  const [visible, setVisible] = useState();
 
   const { data, refresh } = useRequest({
     ...historyList,
@@ -64,11 +62,6 @@ const MySearch = (
 
   const [historys, setHistorys] = useState(actions || []);
 
-
-  useEffect(() => {
-    const searchBar = document.getElementById('searchBar') || {};
-    setHistoryWidth(searchBar.clientWidth);
-  }, []);
 
   const like = (value) => {
     const newArray = actions.filter(item => {
@@ -109,10 +102,15 @@ const MySearch = (
     </Card>;
   };
 
+  const search = (value) => {
+    historyType && run({ data: { record: value, formType: historyType } });
+    onSearch(value);
+  };
+
   return <div className={ToolUtil.classNames(style.searchDiv, className)}>
     <Popover
       className={style.popover}
-      style={{ width: historyWidth }}
+      style={{ width: 'calc(100% - 66px)' }}
       visible={(historyType && historys.length > 0) ? visible : false}
       placement='bottom-start'
       content={historyContent()}
@@ -123,6 +121,9 @@ const MySearch = (
           <SearchBar
             icon={searchIcon}
             clearable
+            onSearch={(value) => {
+              search(value);
+            }}
             value={value}
             className={style.searchBar}
             placeholder={placeholder || '请输入搜索内容'}
@@ -135,7 +136,7 @@ const MySearch = (
               onClear();
             }}
             onFocus={() => {
-              setVisible(true)
+              setVisible(true);
             }}
             onBlur={() => {
               setTimeout(() => {
@@ -149,10 +150,7 @@ const MySearch = (
           (visible || value)
             ?
             <LinkButton className={style.submit} onClick={() => {
-              {
-                historyType && run({ data: { record: value, formType: historyType } });
-              }
-              onSearch(value);
+              search(value);
             }}>搜索</LinkButton>
             :
             <div hidden={!extraIcon} className={style.icon}>

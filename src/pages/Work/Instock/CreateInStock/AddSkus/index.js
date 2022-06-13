@@ -117,7 +117,7 @@ const AddSkus = (
                 <List.Item
                   extra={<div>{spuResult.unitResult && spuResult.unitResult.unitName}</div>}
                 >
-                  <div style={{ display: 'flex' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Label style={{ minWidth: 150 }}>计划入库总数：</Label>
                     <Number
                       value={item.number}
@@ -141,9 +141,11 @@ const AddSkus = (
                       },
                     });
                   }}
-                  extra={<MyEllipsis width='45vw' style={{ color: item.brandName && '#000', textAlign: 'right' }}>
-                    {item.brandName || '选择品牌'}
-                  </MyEllipsis>}
+                  extra={<div style={{ display: 'flex', alignItems: 'center' }}>
+                    <MyEllipsis width='45vw' style={{ color: item.brandName && '#000', textAlign: 'right' }}>
+                      {item.brandName || '选择品牌'}
+                    </MyEllipsis>
+                  </div>}
                 >
                   <Label>关联品牌：</Label>
                 </List.Item>
@@ -160,9 +162,11 @@ const AddSkus = (
                       },
                     });
                   }}
-                  extra={<MyEllipsis width='45vw' style={{ color: item.customerName && '#000', textAlign: 'right' }}>
-                    {item.customerName || '选择供应商'}
-                  </MyEllipsis>}
+                  extra={<div style={{ display: 'flex', alignItems: 'center' }}>
+                    <MyEllipsis width='45vw' style={{ color: item.customerName && '#000', textAlign: 'right' }}>
+                      {item.customerName || '选择供应商'}
+                    </MyEllipsis>
+                  </div>}
                 >
                   <Label>关联供应商：</Label>
                 </List.Item>

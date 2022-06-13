@@ -3,7 +3,7 @@ import { Card, Space } from 'antd-mobile';
 import { CloseCircleOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../components/LinkButton';
 import Number from '../../../../../components/Number';
-import SkuResultSkuJsons from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import {SkuResultSkuJsons} from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../../../components/MyEmpty';
 import Label from '../../../../../components/Label';
 import { Col, Row } from 'antd';
@@ -42,9 +42,10 @@ const Skus = ({ data, value = [], onChange }) => {
           <Row gutter={24}>
             <Col span={16}>
               <Space direction='vertical'>
-                <SkuResultSkuJsons skuResult={skuResult} />
+                {SkuResultSkuJsons({skuResult})}
                 <div>
-                  <Label>描述：</Label><SkuResultSkuJsons describe skuResult={skuResult} />
+                  <Label>描述：</Label>
+                  {SkuResultSkuJsons({skuResult,describe:true})}
                 </div>
               </Space>
             </Col>

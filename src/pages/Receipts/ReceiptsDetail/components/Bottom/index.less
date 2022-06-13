@@ -1,0 +1,45 @@
+.bottom {
+  height: 60px;
+  background: #FFFFFF;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+  display: flex;
+  padding: 10px;
+  align-items: center;
+
+  .all {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 20px;
+    color: #808080;
+
+    svg {
+      color: #257BDE;
+    }
+  }
+
+  .buttons {
+    flex-grow: 1;
+    display: flex;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid var(--adm-color-primary);
+
+    button {
+      flex-grow: 1;
+      height: 100%;
+      --border-radius: 0;
+    }
+  }
+
+  .button {
+    width: 100%;
+    border-radius: 50px;
+  }
+}
+
+.action {
+  :global .adm-button-block {
+    padding: 20px 0;
+  }
+}

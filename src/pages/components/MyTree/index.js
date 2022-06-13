@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Popup } from 'antd-mobile';
 import { Tree } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 import LinkButton from '../LinkButton';
 import { CloseOutline } from 'antd-mobile-icons';
 

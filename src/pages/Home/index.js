@@ -4,7 +4,7 @@ import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
 import DataShow from './component/DatsShow';
 import { Avatar, Badge } from 'antd';
-import Menus from './component/Menus';
+import Menus, { borderStyle } from './component/Menus';
 import { useModel } from 'umi';
 import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
@@ -91,15 +91,23 @@ const Home = (props) => {
     >
       <Grid columns={3} gap={0}>
         {
-          commonlyMenus.map((item, index) => {
-            return <Grid.Item className={style.menus} key={index}>
+          [...commonlyMenus, 'all'].map((item, index) => {
+            const border = borderStyle(index, 3, [...commonlyMenus, 'all'].length);
+            if (item === 'all') {
+              return <Grid.Item key={index} className={style.menus} style={{ ...border }}>
+                <Menus fontSize={50} />
+              </Grid.Item>;
+            }
+
+            return <Grid.Item
+              className={style.menus}
+              key={index}
+              style={{ ...border }}
+            >
               <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
             </Grid.Item>;
           })
         }
-        <Grid.Item className={style.menus}>
-          <Menus fontSize={50} />
-        </Grid.Item>
       </Grid>
     </Card>
     <div style={{ height: 16 }} />

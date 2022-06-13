@@ -49,7 +49,7 @@ const ListByInstockOrder = ({ id }) => {
             </Space>
           </Space>}
         >
-          <table style={{width:'100%'}} border={1} className={styles.table}>
+          <table style={{ width: '100%' }} border={1} className={styles.table}>
             <tbody>
             <tr>
               <td>
@@ -70,10 +70,10 @@ const ListByInstockOrder = ({ id }) => {
                 const skuResult = item.skuResult || {};
                 return <tr key={index}>
                   <td>
-                    <MyEllipsis>{skuResult.standard}</MyEllipsis>
+                    <MyEllipsis width={100}>{skuResult.standard}</MyEllipsis>
                   </td>
                   <td>
-                    <MyEllipsis> {skuResult.spuResult && skuResult.spuResult.name}</MyEllipsis>
+                    <MyEllipsis width={100}> {skuResult.spuResult && skuResult.spuResult.name}</MyEllipsis>
                   </td>
                   <td>
                     {item.listNumber}

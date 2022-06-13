@@ -3,7 +3,7 @@ import cookie from 'js-cookie';
 import { Button, Checkbox, Divider, Input, Toast } from 'antd-mobile';
 import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
-import { connect } from 'dva';
+import { connect, useHistory } from 'dva';
 import { useLocation, useModel } from 'umi';
 import Icon from '../components/Icon';
 import { useBoolean } from 'ahooks';
@@ -14,7 +14,6 @@ import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
-import { useHistory } from 'react-router-dom';
 
 
 export const Username = (props) => {
@@ -70,6 +69,8 @@ const Login = (props) => {
   const dialogRef = useRef();
 
   const { query } = useLocation();
+
+  const history = useHistory();
 
   const { initialState, refresh, loading } = useModel('@@initialState');
 
@@ -132,6 +133,10 @@ const Login = (props) => {
 
   useEffect(() => {
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
+    const token = GetUserInfo().token;
+    if (token && query.backUrl) {
+      history.push('/');
+    }
   }, []);
 
   return <div className={style.login}>

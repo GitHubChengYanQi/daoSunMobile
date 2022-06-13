@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Button,
   Card,
   Dialog,
   Empty,
   List,
-  Loading, Space,
+  Space,
 } from 'antd-mobile';
-import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { QrcodeOutlined } from '@ant-design/icons';
@@ -17,7 +15,7 @@ import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import QualityPlan from './QualityPlan';
 import BottomButton from '../../../components/BottomButton';
 import Label from '../../../components/Label';
-import SkuResultSkuJsons from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import MyNavBar from '../../../components/MyNavBar';
 import { Message } from '../../../components/Message';
@@ -107,7 +105,7 @@ const QualityTask = (props) => {
       });
     },
     onError: (res) => {
-      Message.error('自检失败！');
+      Message.toast('自检失败！');
     },
   });
 
@@ -253,14 +251,15 @@ const QualityTask = (props) => {
       title={
         <div>
           <MyEllipsis>
-            <SkuResultSkuJsons skuResult={items.skuResult} />
+            {SkuResultSkuJsons({skuResult:items.skuResult})}
           </MyEllipsis>
         </div>
       }
     >
       <div style={{ display: 'flex' }}>
         <Label>物料描述：</Label>
-        <MyEllipsis width='60%'><SkuResultSkuJsons describe skuResult={items.skuResult} /></MyEllipsis>
+        <MyEllipsis width='60%'>
+          {SkuResultSkuJsons({skuResult:items.skuResult,describe:true})}</MyEllipsis>
       </div>
       <div>
         <Label>数量：</Label>{items.number}

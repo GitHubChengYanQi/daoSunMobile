@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Card, List, Selector, Space, Toast } from 'antd-mobile';
+import { Card, List, Selector, Toast } from 'antd-mobile';
 import BottomButton from '../../../../../components/BottomButton';
 import { stockDetailsList, storehousePositionsTreeView } from '../../../../Url';
 import { useRequest } from '../../../../../../util/Request';

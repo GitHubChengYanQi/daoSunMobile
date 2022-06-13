@@ -1,9 +1,7 @@
 import { Button, Card, Dialog, List, Space, Stepper, Toast } from 'antd-mobile';
 import { ScanOutlined } from '@ant-design/icons';
 import React, { useState } from 'react';
-import { storehousePositionsTreeView } from '../Url';
 import { request, useRequest } from '../../../util/Request';
-import TreeSelectSee from '../../components/TreeSelectSee';
 import { WhiteSpace } from 'weui-react-v2';
 import { useBoolean, useDebounceEffect } from 'ahooks';
 import MyEmpty from '../../components/MyEmpty';

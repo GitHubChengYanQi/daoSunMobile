@@ -1,22 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Badge, Button, Popup } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { RemoveButton } from '../../../../../../../components/MyButton';
-import Number from '../../../../../../../components/Number';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../components/LinkButton';
+import ShopNumber from '../ShopNumber';
+import { useRequest } from '../../../../../../../../util/Request';
+import { shopCartAllList, shopCartDelete, shopCartEdit } from '../../../../../Url';
 
 const SkuShop = (
   {
     skus = [],
+    onClear = () => {
+    },
     setSkus = () => {
     },
-    numberTitle,
     type,
+    noClose,
+    className,
   },
 ) => {
 
@@ -24,10 +29,91 @@ const SkuShop = (
 
   const history = useHistory();
 
-  return <>
+  const skuChange = (cartId, number) => {
+    const newSkus = skus.map(item => {
+      if (item.cartId === cartId) {
+        return { ...item, number };
+      }
+      return item;
+    });
+    setSkus(newSkus);
+  };
 
+  const skuDelete = (cartIds = []) => {
+    const newSkus = skus.filter(item => {
+      return !cartIds.includes(item.cartId);
+    });
+    setSkus(newSkus);
+  };
+
+  const { run: showShop } = useRequest(shopCartAllList, {
+    manual: true,
+    onSuccess: (res) => {
+      setSkus(ToolUtil.isArray(res).map((item) => {
+        return {
+          cartId: item.cartId,
+          skuId: item.skuId,
+          skuResult: item.skuResult,
+          customerId: item.customerId,
+          customerName: ToolUtil.isObject(item.customer).customerName,
+          brandName: ToolUtil.isObject(item.brandResult).brandName,
+          number: item.number,
+        };
+      }));
+    },
+  });
+
+  const { run: shopDelete } = useRequest(shopCartDelete, {
+    manual: true,
+    onSuccess: (res) => {
+      skuDelete(res);
+    },
+  });
+
+  const { run: shopEdit } = useRequest(shopCartEdit, {manual: true});
+
+  useEffect(() => {
+    if (type) {
+      showShop({
+        data: {
+          type,
+        },
+      });
+    }
+  }, []);
+
+  const taskData = () => {
+    switch (type) {
+      case 'allocation':
+        return {
+          title: '调拨任务明细',
+        };
+      case 'curing':
+        return {
+          title: '养护任务明细',
+        };
+      case 'stocktaking':
+        return {
+          title: '盘点任务明细',
+        };
+      case 'outStock':
+        return {
+          title: '出库任务明细',
+        };
+      case 'inStock':
+        return {
+          title: '入库任务明细',
+        };
+      default:
+        return {
+          title: '选择明细',
+        };
+    }
+  };
+
+  return <>
     <Popup
-      className={style.popup}
+      className={ToolUtil.classNames(style.popup, className)}
       visible={visible}
       onMaskClick={() => {
         setVisible(false);
@@ -35,11 +121,12 @@ const SkuShop = (
     >
       <div className={style.popupTitle}>
         <div>
-          选择明细
+          {taskData().title}
         </div>
         <div className={style.empty} />
         <div onClick={() => {
-          setSkus([]);
+          onClear();
+          shopDelete({ data: { ids: skus.map(item => item.cartId) } });
         }}>
           <RemoveButton /> 全部清除
         </div>
@@ -56,36 +143,23 @@ const SkuShop = (
                   skuResult={skuResult}
                   imgSize={80}
                   gap={10}
-                  extraWidth='124px'
+                  extraWidth='130px'
                   otherData={item.customerName}
                 />
               </div>
               <div className={style.action}>
                 <RemoveButton onClick={() => {
-                  const newSkus = skus.filter(skuItem => skuItem.skuId !== item.skuId);
-                  setSkus(newSkus);
+                  shopDelete({ data: { ids: [item.cartId] } });
                 }} />
                 <div className={style.empty} />
-                <div className={style.instockNumber}>
-                  <Number
-                    max={type === 'outStock' ? item.stockNumber : undefined}
-                    value={item.number}
-                    placeholder={`${numberTitle}数量`}
-                    noBorder
-                    className={style.number}
-                    onChange={(number) => {
-                      const newSkus = skus.map((skuItem) => {
-                        if (skuItem.skuId === item.skuId) {
-                          return { ...skuItem, number };
-                        }
-                        return skuItem;
-                      });
-                      setSkus(newSkus);
-                    }}
-                  />
-                  {ToolUtil.isObject(skuResult.spuResult && skuResult.spuResult.unitResult).unitName}
-                </div>
-
+                <ShopNumber
+                  value={item.number}
+                  unitName={ToolUtil.isObject(skuResult.spuResult && skuResult.spuResult.unitResult).unitName}
+                  onChange={async (number) => {
+                    const res = await shopEdit({ data: { cartId: item.cartId, number } });
+                    skuChange(res, number);
+                  }}
+                />
               </div>
             </div>;
           })
@@ -94,33 +168,48 @@ const SkuShop = (
 
     </Popup>
 
-    <div className={style.bottom}>
+    <div className={style.bottom} id='shop'>
       <div className={style.bottomMenu}>
         <div className={style.shop} onClick={() => {
           setVisible(!visible);
         }}>
           <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '5px' }}>
-            <Icon type='icon-cangchuche' style={{ color: skus.length > 0 ? 'var(--adm-color-primary)' : '#B5B6B8' }} />
+            <Icon
+              id='shopIcon'
+              type='icon-cangchuche'
+              style={{ color: skus.length > 0 ? 'var(--adm-color-primary)' : '#B5B6B8' }}
+            />
           </Badge>
           <div>已选<span>{skus.length}</span>类</div>
         </div>
-        <LinkButton className={style.close} onClick={() => {
+        {!noClose && <LinkButton className={style.close} onClick={() => {
           history.goBack();
-        }}>取消</LinkButton>
+        }}>取消</LinkButton>}
         <Button
           disabled={skus.length === 0}
           color='primary'
           className={style.submit}
           onClick={() => {
-            history.push({
-              pathname: '/Work/Instock/InstockAsk/Submit',
-              query: {
-                createType: type,
-              },
-              state: {
-                skus,
-              },
-            });
+            switch (type) {
+              case 'allocation':
+              case 'curing':
+              case 'stocktaking':
+                break;
+              case 'outStock':
+              case 'inStock':
+                history.push({
+                  pathname: '/Work/Instock/InstockAsk/Submit',
+                  query: {
+                    createType: type,
+                  },
+                  state: {
+                    skus,
+                  },
+                });
+                break;
+              default:
+                break;
+            }
           }}>确认
         </Button>
       </div>
