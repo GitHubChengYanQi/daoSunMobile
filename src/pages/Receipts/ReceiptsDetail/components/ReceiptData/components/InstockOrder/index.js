@@ -56,7 +56,7 @@ const InstockOrder = (
 
     <div className={style.note}>
       <div className={style.title}>备注说明</div>
-      {data.remark || '-'}
+      <span className={style.remake}>{data.remark || '-'}</span>
     </div>
 
     <div className={style.file}>

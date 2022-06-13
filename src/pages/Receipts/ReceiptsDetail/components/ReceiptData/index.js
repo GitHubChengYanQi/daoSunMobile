@@ -37,21 +37,21 @@ const ReceiptData = (
     {receiptType()}
     <Process auditData={data.stepsResult} createName={data.createName} card />
     <Comments detail={data} id={data.processTaskId} />
-    <MyTextArea placeholder='填写审批意见，可@相关人员' className={style.text} />
-    <div className={style.img}>
-      <UpLoadImg
-        maxCount={1}
-        showUploadList
-        type='picture'
-        id='file'
-        onChange={(url, mediaId, file) => {
-          setFile(mediaId);
-        }}
-        button={file ? <></> : <div className={style.upload}>
-          <PaperClipOutlined />
-        </div>}
-      />
-    </div>
+    {/*<MyTextArea placeholder='填写审批意见，可@相关人员' className={style.text} />*/}
+    {/*<div className={style.img}>*/}
+    {/*  <UpLoadImg*/}
+    {/*    maxCount={1}*/}
+    {/*    showUploadList*/}
+    {/*    type='picture'*/}
+    {/*    id='file'*/}
+    {/*    onChange={(url, mediaId, file) => {*/}
+    {/*      setFile(mediaId);*/}
+    {/*    }}*/}
+    {/*    button={file ? <></> : <div className={style.upload}>*/}
+    {/*      <PaperClipOutlined />*/}
+    {/*    </div>}*/}
+    {/*  />*/}
+    {/*</div>*/}
 
   </>;
 };
