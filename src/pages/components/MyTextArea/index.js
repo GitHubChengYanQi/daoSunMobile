@@ -1,12 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ToolUtil } from '../ToolUtil';
-import wx from 'populee-weixin-js-sdk';
-import SelectUsers from '../SelectUsers';
-import { useRequest } from '../../../util/Request';
-import { Toast } from 'antd-mobile';
 import CheckUser from '../CheckUser';
-
-const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
 const MyTextArea = (
   {
@@ -29,28 +23,10 @@ const MyTextArea = (
 
   const [users, setUsers] = useState([]);
 
-  const [loading, setLoading] = useState();
-
-
   const valueChange = (string, array = []) => {
     onChange(string, array);
     setUsers(array);
   };
-
-  const { run: getUser } = useRequest(getUserByCpUserId, {
-    manual: true,
-    onSuccess: (res) => {
-      setLoading(false);
-      if (res && res.userId) {
-        valueChange(value + res.name, [...users, { userId: res.userId, name: res.name }]);
-      } else {
-        Toast.show({ content: '系统无此用户，请先注册！', position: 'bottom' });
-      }
-    },
-    onError: () => {
-      setLoading(false);
-    },
-  });
 
 
   return <>
