@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Dialog, Space, Toast } from 'antd-mobile';
+import { Button, Dialog, Toast } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import MentionsNote from '../../../components/MentionsNote';
+import style from '../../ReceiptsDetail/components/Bottom/index.less';
 
-const Audit = ({ detail = {}, id, refresh }) => {
+const Audit = ({ id, refresh }) => {
 
   const [visible, setVisible] = useState(false);
 
@@ -39,21 +40,21 @@ const Audit = ({ detail = {}, id, refresh }) => {
     },
   );
 
-
-  if (!detail.permissions) {
-    return <></>;
-  }
-
-  return <Space>
-
-    <Button color='primary' fill='outline' onClick={() => {
-      setAgree(true);
-      setVisible(true);
-    }}>同意</Button>
-    <Button color='danger' fill='outline' onClick={() => {
-      setAgree(false);
-      setVisible(true);
-    }}>拒绝</Button>
+  return <>
+    <div className={style.buttons}>
+      <Button color='primary' fill='none'onClick={() => {
+        setAgree(false);
+        setVisible(true);
+      }}>
+        驳回
+      </Button>
+      <Button color='primary'  onClick={() => {
+        setAgree(true);
+        setVisible(true);
+      }}>
+        同意
+      </Button>
+    </div>
 
     {/* 审批同意或拒绝 */}
     <Dialog
@@ -88,10 +89,10 @@ const Audit = ({ detail = {}, id, refresh }) => {
             data: {
               taskId: id,
               status: agree ? 1 : 0,
-              userIds: userIds.filter((item, index) => {
-                return userIds.indexOf(item, 0) === index;
+              userIds: userIds.map(item => {
+                return item.userId;
               }).toString(),
-              photoId: imgs.toString(),
+              photoId: imgs.map(item => item.mediaId).toString(),
               note,
             },
           });
@@ -116,7 +117,7 @@ const Audit = ({ detail = {}, id, refresh }) => {
         ],
       ]}
     />
-  </Space>;
+  </>;
 };
 
 export default Audit;

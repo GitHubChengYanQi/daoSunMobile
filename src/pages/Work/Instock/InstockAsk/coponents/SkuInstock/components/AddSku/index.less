@@ -1,5 +1,10 @@
 
+.addSkuPopup {
+  --z-index: var(--adm-popup-z-index, 1001);
+}
+
 .addSku {
+  padding: 24px;
   font-size: 14px;
   display: flex;
   gap: 24px;
@@ -49,7 +54,27 @@
       padding: 0;
     }
   }
+}
 
+.buttons {
+  padding: 7px 10%;
+  box-shadow: 0px -2px 3px 0px rgba(0, 0, 0, 0.1);
+  display: flex;
 
+  .button {
+    flex-grow: 1;
+    padding: 6px 0;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .close {
+    border-radius: 50px 0 0 50px;
+  }
+
+  .ok {
+    border-radius: 0 50px 50px 0;
+    border: none;
+  }
 }
 

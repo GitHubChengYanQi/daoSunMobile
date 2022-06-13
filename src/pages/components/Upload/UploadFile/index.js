@@ -9,18 +9,30 @@ import { request } from '../../../../util/Request';
 import { ToolUtil } from '../../ToolUtil';
 import { Upload } from 'antd';
 import { CloseOutline } from 'antd-mobile-icons';
-import { MyLoading } from '../../MyLoading';
+import { LoadingOutlined } from '@ant-design/icons';
 
 const UploadFile = (
   {
+    show,
+    value = [],
     onChange = () => {
     },
+    noFile,
+    icon,
+    imgSize,
+    uploadId = 'myUpload',
   },
 ) => {
 
+  const options = [{ text: '图片', key: 'img' }, { text: '拍照', key: 'photo' }];
+
+  if (!noFile) {
+    options.push({ text: '文件', key: 'file' });
+  }
+
   const [visible, { setTrue, setFalse }] = useBoolean();
 
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(value);
   const imgs = files.filter(item => ToolUtil.queryString('image', item.type));
   const picture = files.filter(item => !ToolUtil.queryString('image', item.type));
 
@@ -58,7 +70,7 @@ const UploadFile = (
           setLoading(false);
         },
       });
-    })
+    });
   };
 
   const chooseImage = (sourceType) => {
@@ -89,13 +101,14 @@ const UploadFile = (
     });
   };
 
+
   return <>
 
     <div className={style.imgs}>
       {
         imgs.map((item, index) => {
-          return <div key={index} className={style.img}>
-            <div className={style.remove} onClick={() => {
+          return <div key={index} className={style.img} style={{ width: imgSize, height: imgSize }}>
+            <div hidden={show} className={style.remove} onClick={() => {
               fileChange({ mediaId: item.mediaId, remove: true });
             }}><CloseOutline /></div>
             <img src={item.url} alt='' width='100%' height='100%' />
@@ -103,14 +116,18 @@ const UploadFile = (
         })
       }
 
-      <div className={style.img} onClick={() => {
+      <div hidden={!loading} className={style.img} style={{ width: imgSize, height: imgSize }}>
+        <LoadingOutlined />
+      </div>
+
+      <div hidden={show} className={style.img} style={{ width: imgSize, height: imgSize }} onClick={() => {
         if (ToolUtil.isQiyeWeixin()) {
           setTrue();
         } else {
-          document.getElementById('file').click();
+          document.getElementById(uploadId).click();
         }
       }}>
-        <img src={add} alt='' width='100%' height='100%' />
+        {icon || <img src={add} alt='' width='100%' height='100%' />}
       </div>
     </div>
 
@@ -124,9 +141,10 @@ const UploadFile = (
     />
 
     <UpLoadImg
+      uploadLoading={setLoading}
       maxCount={5}
       type='picture'
-      id='file'
+      id={uploadId}
       onChange={(url, mediaId, file) => {
         fileChange({ type: file.type, mediaId, url, name: file.name });
         setFalse();
@@ -139,7 +157,7 @@ const UploadFile = (
       className={style.action}
       cancelText='取消'
       visible={visible}
-      actions={[{ text: '图片', key: 'img' }, { text: '拍照', key: 'photo' }, { text: '文件', key: 'file' }]}
+      actions={options}
       onClose={setFalse}
       onAction={(action) => {
         switch (action.key) {
@@ -150,7 +168,7 @@ const UploadFile = (
             chooseImage('camera');
             break;
           case 'file':
-            const fileDom = document.getElementById('file');
+            const fileDom = document.getElementById(uploadId);
             fileDom.setAttribute('accept', 'application/*,.pdf');
             fileDom.click();
             break;
@@ -159,8 +177,6 @@ const UploadFile = (
         }
       }}
     />
-
-    {loading && <MyLoading title='上传中...' />}
 
   </>;
 };

@@ -1,0 +1,198 @@
+.float {
+
+  :global .adm-floating-bubble-button {
+    --size: auto;
+    --border-radius: 50px;
+    padding: 2px;
+    box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    background-color: #fff;
+  }
+
+  .actions, .action {
+    display: flex;
+    flex-direction: column;
+    font-size: 10px;
+    align-items: center;
+    color: #3D3D3D;
+
+    :global .ant-avatar {
+      background-color: var(--body--background--color);
+    }
+
+    .actionButton {
+      border-radius: 100%;
+      background-color: var(--body--background--color);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        font-size: 24px;
+      }
+    }
+
+
+    .text {
+      padding: 4px 0 6px;
+    }
+  }
+
+}
+
+
+.content {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+
+  .header {
+    padding: 12px;
+    text-align: center;
+    font-size: 18px;
+    border-bottom: 1px solid #EEEEEE;
+
+    span {
+      float: right;
+    }
+  }
+
+  .screen {
+    padding: 12px;
+    border-bottom: 1px solid #E1EBF6;
+  }
+
+  .skuList {
+    flex-grow: 1;
+    overflow: auto;
+
+    .skuItem {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px;
+      border-bottom: 1px solid #F5F5F5;
+
+      .check {
+        svg {
+          font-size: 16px;
+        }
+      }
+
+      .sku {
+        flex-grow: 1;
+      }
+
+      .inStock {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        height: 74px;
+
+        button {
+          padding: 4px;
+          font-size: 12px;
+          text-align: center;
+          min-width: 60px;
+        }
+      }
+    }
+
+    .errorAction {
+      padding: 0 12px 12px;
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #F5F5F5;
+      color: #000000;
+
+      .number {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+
+        .red {
+          color: var(--adm-color-danger);
+        }
+
+        .yellow {
+          color: #FA8F2B;
+        }
+
+        .black {
+          color: #000;
+        }
+
+        span {
+          flex-grow: 1;
+        }
+
+      }
+    }
+  }
+
+  .bottom {
+    display: flex;
+    padding: 12px;
+
+    .all {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      gap: 8px;
+
+      :global .adm-checkbox {
+        --icon-size: 18px;
+        --font-size: 14px;
+      }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 8px;
+
+      button {
+        padding: 4px 12px;
+        font-size: 12px;
+      }
+    }
+  }
+
+
+}
+
+.position {
+  padding-bottom: 12px;
+  font-size: 14px;
+  max-height: 50vh;
+  overflow: auto;
+
+  .positionItem {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+
+    .action {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      svg {
+        color: var(--adm-color-danger);
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.addPositions {
+  display: inline-block;
+  width: fit-content;
+  padding: 4px 12px;
+}
+
+

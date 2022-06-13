@@ -48,7 +48,7 @@ const BottomButton = (
             fill='outline'
             disabled={leftDisabled}
             style={{
-              padding: '10px 0',
+              padding: '8px 0',
               fontSize: 14,
               width: '50%',
               borderRadius: 50,
@@ -65,7 +65,7 @@ const BottomButton = (
             disabled={rightDisabled}
             style={{
               borderLeft: 'none',
-              padding: '10px 0',
+              padding: '8px 0',
               fontSize: 14,
               width: '50%',
               backgroundColor: '#4B8BF5',

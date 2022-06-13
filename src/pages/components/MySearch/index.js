@@ -102,6 +102,11 @@ const MySearch = (
     </Card>;
   };
 
+  const search = (value) => {
+    historyType && run({ data: { record: value, formType: historyType } });
+    onSearch(value);
+  };
+
   return <div className={ToolUtil.classNames(style.searchDiv, className)}>
     <Popover
       className={style.popover}
@@ -116,6 +121,9 @@ const MySearch = (
           <SearchBar
             icon={searchIcon}
             clearable
+            onSearch={(value) => {
+              search(value);
+            }}
             value={value}
             className={style.searchBar}
             placeholder={placeholder || '请输入搜索内容'}
@@ -142,10 +150,7 @@ const MySearch = (
           (visible || value)
             ?
             <LinkButton className={style.submit} onClick={() => {
-              {
-                historyType && run({ data: { record: value, formType: historyType } });
-              }
-              onSearch(value);
+              search(value);
             }}>搜索</LinkButton>
             :
             <div hidden={!extraIcon} className={style.icon}>

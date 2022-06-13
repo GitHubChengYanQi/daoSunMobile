@@ -2,17 +2,17 @@
 .pageIndex {
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   height: 100%;
 
   .content {
     flex-grow: 1;
     overflow: auto;
-    padding-bottom: 16px;
   }
 }
 
 .tab {
+
+  z-index: var(--adm-popup-z-index, 1001);
 
   .scan {
     position: relative;
@@ -39,5 +39,19 @@
       }
     }
 
+  }
+}
+
+.popup {
+
+  :global .adm-popup-body {
+    background-color: var(--body--background--color);
+    bottom: 130px;
+    padding-bottom: 8px;
+  }
+
+  :global .adm-mask {
+    bottom: 130px;
+    top: auto;
   }
 }

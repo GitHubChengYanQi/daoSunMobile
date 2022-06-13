@@ -11,18 +11,23 @@ import LinkButton from '../../../../../../../../components/LinkButton';
 
 const Careful = (
   {
-    params,
-    setParams,
+    type,
+    value = [],
+    onChange = () => {
+    },
   }) => {
 
-  const { loading: announcemensLoading, data: announcemens, refresh } = useRequest(announcementsListSelect);
+  const { data: announcemens, refresh } = useRequest({
+    ...announcementsListSelect,
+    data: { type },
+  });
 
   const { loading: addLoading, run: add } = useRequest(announcementsAdd, {
     manual: true,
     onSuccess: (res) => {
       openAddOther();
       refresh();
-      setParams({ ...params, noticeIds: [...(params.noticeIds || []), res.noticeId] });
+      onChange([...value, res.noticeId]);
     },
   });
 
@@ -32,10 +37,11 @@ const Careful = (
 
   const [content, setContent] = useState('');
 
+
   return <>
     <div className={style.carefulData}>
       <Selector
-        value={params.noticeIds}
+        value={value}
         className={style.selector}
         options={[...ToolUtil.isArray(announcemens).filter((item, index) => allCareful || index < 6), {
           label: '其他',
@@ -47,7 +53,7 @@ const Careful = (
             setContent('');
             openAddOther();
           }
-          setParams({ ...params, noticeIds: noticeIds.filter(item => item !== 'other') });
+          onChange(noticeIds.filter(item => item !== 'other'));
         }}
       />
       {addOther && <div className={style.addCareful}>
@@ -57,7 +63,7 @@ const Careful = (
         }}>取消</LinkButton>
         <LinkButton className={style.button} onClick={() => {
           if (content) {
-            add({ data: { content } });
+            add({ data: { content, type } });
           } else {
             Toast.show({ content: '请输入事项名称！', position: 'bottom' });
           }
@@ -77,7 +83,7 @@ const Careful = (
       </div>
     </Divider>}
 
-    {(announcemensLoading || addLoading) && <MyLoading />}
+    {addLoading && <MyLoading />}
   </>;
 };
 

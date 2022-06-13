@@ -65,4 +65,5 @@ export const menus = [
   { code: 'createUser', icon: 'icon-kehuliebiao2' },
   { code: 'instockAsk', icon: 'icon-gengduo', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}` },
   { code: 'outstockAsk', icon: 'icon-gengduo', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.outstockOrder}` },
+  { code: 'error', icon: 'icon-gengduo', url: '/Work/Error' },
 ];

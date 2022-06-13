@@ -142,10 +142,6 @@ const ReceiptsDetail = () => {
     }
   };
 
-  if (getTaskIdLoading || detailLoading) {
-    return <MyLoading />;
-  }
-
   const old = () => {
     return <MyBottom
       leftActuions={createModuleButtom(true)}
@@ -160,9 +156,9 @@ const ReceiptsDetail = () => {
   const content = () => {
     switch (key) {
       case 'data':
-        return <ReceiptData data={detail} />;
+        return <ReceiptData permissions={detail.permissions} data={detail} currentNode={currentNode} refresh={refresh} loading={detailLoading} />;
       case 'log':
-        return <Log />;
+        return <Log data={detail} refresh={refresh} />;
       default:
         return <MyEmpty />;
     }
@@ -182,7 +178,10 @@ const ReceiptsDetail = () => {
       </div>
       {content()}
     </div>
-    <Bottom />
+
+    <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />
+
+    {(getTaskIdLoading || detailLoading) && <MyLoading />}
   </div>;
 };
 

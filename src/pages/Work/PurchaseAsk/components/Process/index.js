@@ -35,7 +35,7 @@ const Process = (
   }, [type]);
 
   // 节点icon
-  const status = (step, stepStatus) => {
+  const status = (step) => {
     switch (step.auditType) {
       case 'start':
         return <Avatar><Icon type='icon-caigou_faqiren' /></Avatar>;
@@ -44,29 +44,10 @@ const Process = (
       case 'route':
         return <AuditOutlined />;
       case 'process':
-        switch (step.auditRule.type) {
-          case 'audit':
-            return <Avatar>审</Avatar>;
-          // switch (step.logResult.status) {
-          //   case -1:
-          //     return <Avatar>审</Avatar>;
-          //     switch (stepStatus) {
-          //       case 'process':
-          //         return <Icon type='icon-shenhe' />
-          //       case 'wait':
-          //         return <Avatar><Icon type='icon-caigou_weishenpi1' /></Avatar>;
-          //       default:
-          //         return;
-          //     }
-          //   case 0:
-          //     return <Avatar><Icon type='icon-caigou_shenpibutongguo1' /></Avatar>;
-          //   case 1:
-          //     return <Avatar><Icon type='icon-caigou_shenpitongguo1' /></Avatar>;
-          //   default:
-          //     return <Avatar><Icon type='icon-caigou_weishenpi1' /></Avatar>;
-          // }
-          default:
-            return <Icon type='icon-caigou_dongzuo' />;
+        if (step.auditRule.type === 'audit') {
+          return <Avatar>审</Avatar>;
+        } else {
+          return <Avatar><Icon type='icon-caigou_dongzuo' /></Avatar>;
         }
       default:
         break;
@@ -121,6 +102,16 @@ const Process = (
             return '已审批';
           case 'wait':
             return '未审批';
+          default:
+            return '';
+        }
+      case 'action':
+        // 动作节点状态
+        switch (stepStatus) {
+          case 'success':
+            return '已执行';
+          case 'wait':
+            return '未执行';
           default:
             return '';
         }
@@ -256,7 +247,7 @@ const Process = (
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
-            )}>{status(step, stepStatus)}</div>}
+            )}>{status(step)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
         </div>;
@@ -281,25 +272,33 @@ const Process = (
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
-            )}>{status(step, stepStatus)}</div>}
+            )}>{status(step)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
         </div>;
       case 'send':
       case 'process':
+        let title;
+        if (step.auditType === 'send'){
+          title = <span>抄送人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
+        }else if (step.auditRule.type === 'audit') {
+          title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
+        } else {
+          title = <span>执行人 · {nodeStatusName('action', stepStatus)}</span>;
+        }
         return <div>
           <Steps.Step
             style={{ minHeight }}
             status={stepStatus}
             title={<div className={style.title}>
-              <span>审批人 · {nodeStatusName(step.auditType, stepStatus)}</span>
+              {title}
               {visiable(hidden, index)}
             </div>}
             description={!hidden && rules(step, stepStatus)}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
-            )}>{status(step, stepStatus)}</div>}
+            )}>{status(step)}</div>}
           />
           {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
         </div>;
@@ -325,7 +324,7 @@ const Process = (
 
   return <>
     <div className={style.process}>
-      <div className={style.title}>审批流程</div>
+      <div className={style.cartTitle}>审批流程</div>
       {allStep(auditData || data, true, 0)}
     </div>
   </>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from 'antd-mobile';
 import style from '../../../Home/index.less';
-import Menus from '../../../Home/component/Menus';
+import Menus, { borderStyle } from '../../../Home/component/Menus';
 import { useModel } from 'umi';
 
 const Create = () => {
@@ -25,12 +25,13 @@ const Create = () => {
     return null;
   });
 
-  return <div style={{backgroundColor:'#fff'}}>
+  return <div style={{ backgroundColor: '#fff' }}>
 
     <Grid columns={3} gap={0}>
       {
         receipts.map((item, index) => {
-          return <Grid.Item className={style.menus} key={index}>
+          const border = borderStyle(index, 3, receipts.length);
+          return <Grid.Item className={style.menus} key={index} style={{ ...border }}>
             <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
           </Grid.Item>;
         })

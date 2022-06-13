@@ -14,6 +14,11 @@ const Header = ({ data = {} }) => {
           coding: receipts.coding,
           statusName: receipts.statusName,
         };
+      case ReceiptsEnums.instockError:
+        return {
+          coding: receipts.coding,
+          statusName: receipts.statusName,
+        };
       default:
         return {};
     }

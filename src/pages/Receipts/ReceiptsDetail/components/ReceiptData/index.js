@@ -8,16 +8,24 @@ import MyTextArea from '../../../../components/MyTextArea';
 import style from './index.less';
 import UpLoadImg from '../../../../components/Upload';
 import { PaperClipOutlined } from '@ant-design/icons';
+import InstockError from './components/InstockError';
 
 const ReceiptData = (
   {
     data = {},
+    currentNode,
+    refresh = () => {
+    },
+    loading,
+    permissions,
   }) => {
 
   const receiptType = () => {
     switch (data.type) {
       case ReceiptsEnums.instockOrder:
-        return <InstockOrder data={data.receipts} />;
+        return <InstockOrder permissions={permissions} data={data.receipts} currentNode={currentNode} refresh={refresh} loading={loading} />;
+      case ReceiptsEnums.instockError:
+        return <InstockError permissions={permissions} data={data.receipts} currentNode={currentNode} refresh={refresh} />;
       default:
         return <MyEmpty />;
     }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { Button, Card, Dialog, List, Loading, Space, Toast } from 'antd-mobile';
 import { FormOutlined } from '@ant-design/icons';
 import { Avatar } from 'antd';
@@ -8,7 +8,16 @@ import { Message } from '../../../components/Message';
 import ImgUpload from '../../../components/Upload/ImgUpload';
 import { useRequest } from '../../../../util/Request';
 
-const Comments = ({ detail = {}, id, refresh }) => {
+const Comments = (
+  {
+    detail = {},
+    id,
+    refresh = () => {
+    },
+    title = '添加备注',
+  }, ref) => {
+
+  const [pid, setPid] = useState();
 
   const [visible, setVisible] = useState(false);
 
@@ -23,6 +32,7 @@ const Comments = ({ detail = {}, id, refresh }) => {
     setNote('');
     setUserIds([]);
     setImgs([]);
+    setPid(null);
   };
 
   // 任务评论
@@ -50,6 +60,15 @@ const Comments = ({ detail = {}, id, refresh }) => {
       },
     },
   );
+
+  const addComments = (id) => {
+    setPid(id);
+    setVisible(true);
+  };
+
+  useImperativeHandle(ref, () => ({
+    addComments,
+  }));
 
   const old = () => {
     return <div>
@@ -109,7 +128,7 @@ const Comments = ({ detail = {}, id, refresh }) => {
           setVisible(true);
         }}
       >
-        <FormOutlined /> 添加备注
+        <FormOutlined />{title}
       </Button>
     </div>
 
@@ -140,9 +159,10 @@ const Comments = ({ detail = {}, id, refresh }) => {
           }
           taskComments({
             data: {
+              pid,
               taskId: id,
-              userIds: userIds.filter((item, index) => {
-                return userIds.indexOf(item, 0) === index;
+              userIds: userIds.map(item => {
+                return item.userId;
               }).toString(),
               photoId: imgs.map(item => item.mediaId).toString(),
               note,
@@ -170,4 +190,4 @@ const Comments = ({ detail = {}, id, refresh }) => {
   </>;
 };
 
-export default Comments;
+export default React.forwardRef(Comments);

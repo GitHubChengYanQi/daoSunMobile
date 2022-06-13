@@ -1,23 +1,57 @@
 import React, { useState } from 'react';
-import { TabBar } from 'antd-mobile';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
-import StockDetail from './components/StockDetail';
+import StockDetail from './StockDetail';
 import MyNavBar from '../../components/MyNavBar';
-import { ToolUtil } from '../../components/ToolUtil';
 import MyTablBar from '../../components/MyTablBar';
+import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 
-const Stock = () => {
+const Stock = (props) => {
 
   const [key, setKey] = useState('stock');
+
+  const ids = props.location.query;
+
+  const [stockDetail, setStockDetail] = useState({});
 
   const content = () => {
     switch (key) {
       case 'stock':
-        return <StockDetail />;
+        return <StockDetail
+          storehousePositionsId={ids.storehousePositionsId}
+          setTask={(task) => {
+            setStockDetail({ ...stockDetail, task });
+          }}
+          setSkus={(skus) => {
+            setStockDetail({ ...stockDetail, skus });
+          }}
+          task={stockDetail.task}
+          skus={stockDetail.skus}
+        />;
       default:
         return <MyEmpty height='100%' />;
+    }
+  };
+
+  const contentBottom = () => {
+    switch (key) {
+      case 'stock':
+        return stockDetail.task && <SkuShop
+          className={style.popup}
+          noClose
+          bottom={70}
+          skus={stockDetail.skus}
+          setSkus={(skus) => {
+            setStockDetail({ ...stockDetail, skus });
+          }}
+          type={stockDetail.task}
+          onClear={() => {
+            setStockDetail({ ...stockDetail, task: null, skus: [] });
+          }}
+        />;
+      default:
+        return <></>;
     }
   };
 
@@ -26,15 +60,17 @@ const Stock = () => {
     <MyNavBar title='库存管理' />
     <div
       className={style.content}
-      style={{ height: ToolUtil.isQiyeWeixin() ? 'calc(100% - 70px)' : 'calc(100% - 70px - 45px)' }}
     >
       {content()}
     </div>
+
+    {contentBottom()}
 
     <MyTablBar
       className={style.tab}
       onChange={(key) => {
         if (key !== 'scan') {
+          setStockDetail({ ...stockDetail, task: null });
           setKey(key);
         }
       }}

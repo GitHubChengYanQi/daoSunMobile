@@ -68,7 +68,7 @@ const InstockSkus = ({ skus = [], createType }) => {
   const [allSku, { toggle }] = useBoolean();
 
   let countNumber = 0;
-  data.map(item => countNumber += item.number);
+  data.map(item => countNumber += (item.number || 0));
 
   const createTypeData = () => {
     switch (createType) {
@@ -149,12 +149,19 @@ const InstockSkus = ({ skus = [], createType }) => {
 
     <div className={style.careful}>
       <div className={style.title}>注意事项 <span>*</span></div>
-      <Careful params={params} setParams={setParams} />
+      <Careful
+        type='inStock'
+        value={params.noticeIds}
+        onChange={(noticeIds)=>{
+          setParams({ ...params, noticeIds });
+        }}
+      />
     </div>
 
     <div className={style.note}>
       <div className={style.title}>添加备注</div>
       <MyTextArea
+        value={params.remark}
         className={style.textArea}
         onChange={(remark, userIds) => {
           setParams({ ...params, remark, userIds: userIds.map(item => item.userId) });

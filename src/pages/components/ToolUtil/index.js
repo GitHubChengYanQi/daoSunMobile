@@ -15,7 +15,7 @@ const queryString = (value, string) => {
 
 // 返回空对象
 const isObject = (object) => {
-  return typeof object === 'object' ? object : {};
+  return object && typeof object === 'object' ? object : {};
 };
 
 // 返回空集合

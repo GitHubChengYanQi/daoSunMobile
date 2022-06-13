@@ -5,6 +5,10 @@
   color: #333333;
   margin-bottom: 8px;
 
+  .cartTitle {
+    padding: 8px 0;
+  }
+
   .step {
     :global .adm-step {
       --line-to-next-color: var(--adm-color-primary);
@@ -42,7 +46,7 @@
 
     .error {
       :global .ant-avatar {
-        background-color: red;
+        background-color: var(--adm-color-danger);
       }
     }
 

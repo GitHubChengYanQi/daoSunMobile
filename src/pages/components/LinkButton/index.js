@@ -8,6 +8,7 @@ const LinkButton = ({ children, title, style, onClick, color, disabled,className
     color={color || 'primary'}
     disabled={disabled}
     fill='none'
+    type='submit'
     style={{ padding: 0, ...style }}
     onClick={() => {
       typeof onClick === 'function' && onClick();

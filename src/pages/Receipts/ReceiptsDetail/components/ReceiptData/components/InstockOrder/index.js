@@ -1,84 +1,52 @@
 import React from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import MyEmpty from '../../../../../../components/MyEmpty';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import SkuItem from '../../../../../../Work/Sku/SkuItem';
-import { Divider, Stepper } from 'antd-mobile';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import { useBoolean } from 'ahooks';
 import { Upload } from 'antd';
+import SkuAction from './components/SkuAction';
 
-const InstockOrder = ({ data = {} }) => {
+const InstockOrder = (
+  {
+    data = {},
+    currentNode = [],
+    refresh = () => {
+    },
+    loading,
+    permissions,
+  }) => {
 
-  const details = data.instockListResults || [];
-
-  console.log(data);
+  const details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
 
   let countNumber = 0;
   details.map(item => countNumber += item.number);
 
-  const [allSku, { toggle }] = useBoolean();
+  const actions = [];
+  currentNode.map((item) => {
+    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
+      return item.logResult.actionResults.map((item) => {
+        return actions.push({action:item.action,id:item.documentsActionId});
+      });
+    }
+    return null;
+  });
+
+  const getAction = (action) => {
+    const actionData = actions.filter(item => {
+      return item.action === action;
+    });
+    return actionData[0] || {};
+  };
+
 
   return <>
     <div className={style.skus}>
-      <div className={style.skuHead}>
-        <div className={style.headTitle}>
-          申请明细
-        </div>
-        <div className={style.extra}>
-          合计：<span>{details.length}</span>类<span>{countNumber}</span>件
-        </div>
-      </div>
-      {details.length === 0 && <MyEmpty description={`暂无入库物料`} />}
-      {
-        details.map((item, index) => {
-          const skuResult = item.skuResult || {};
-          const spuResult = item.spuResult || {};
-
-          if (!allSku && index >= 3) {
-            return null;
-          }
-          return <div
-            key={index}
-            className={ToolUtil.classNames(
-              style.skuItem,
-              (index !== (allSku ? details.length - 1 : 2)) && style.skuBorderBottom,
-            )}
-          >
-            <div className={style.item}>
-              <SkuItem
-                imgSize={60}
-                skuResult={{ ...skuResult, spuResult }}
-                extraWidth='124px'
-                otherData={item.customerName}
-              />
-            </div>
-            <div>
-              <Stepper
-                style={{
-                  '--button-text-color': '#000',
-                }}
-                value={item.number}
-                onChange={value => {
-
-                }}
-              />
-            </div>
-          </div>;
-        })
-      }
-      {data.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
+      <SkuAction
+        loading={loading}
+        data={details}
+        actionId={getAction('performInstock').id}
+        action={getAction('performInstock').id && permissions}
+        instockOrderId={data.instockOrderId}
+        refresh={refresh}
+      />
     </div>
 
     <div className={style.careful}>
@@ -96,7 +64,7 @@ const InstockOrder = ({ data = {} }) => {
       <div className={style.files}>
         <Upload
           showUploadList={{
-            showRemoveIcon:false
+            showRemoveIcon: false,
           }}
           className='avatar-uploader'
           fileList={ToolUtil.isArray(data.url).map(item => {

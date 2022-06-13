@@ -34,11 +34,23 @@ const ProcessList = (
             入库物料：{
             details.map((item, index) => {
               const skuResult = item.skuResult || {};
-              const spuResult = item.spuResult || {};
-              return SkuResultSkuJsons({ skuResult: { ...skuResult, spuResult } });
+              return SkuResultSkuJsons({ skuResult});
             }).join('、')
           }
           </div>
+        </div>;
+      case ReceiptsEnums.instockError:
+        return <div className={style.content}>
+          <div>单据编号：{receipts.coding}</div>
+          {/*<div className={style.other}>*/}
+          {/*  异常物料：{*/}
+          {/*  details.map((item, index) => {*/}
+          {/*    const skuResult = item.skuResult || {};*/}
+          {/*    const spuResult = item.spuResult || {};*/}
+          {/*    return SkuResultSkuJsons({ skuResult: { ...skuResult, spuResult } });*/}
+          {/*  }).join('、')*/}
+          {/*}*/}
+          {/*</div>*/}
         </div>;
       default:
         return <></>;
