@@ -24,6 +24,11 @@ const SkuItem = (
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
+
+
+  const spuResult = skuResult.spuResult || {};
+  const unitResult = spuResult.unitResult || {};
+
   const describe = `${
     skuResult.skuJsons
     &&
@@ -39,8 +44,8 @@ const SkuItem = (
   return <>
     <div className={ToolUtil.classNames(style.skuList, className)}>
       <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }}>
-        <img src={imgUrl || state.loginLogo} width={imgSize} height={imgSize} alt='' />
-        <div hidden={number === undefined} className={style.number}>{number}{unitName}</div>
+        <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
+        <div hidden={number === undefined} className={style.number}>{number}{unitName || unitResult.unitName}</div>
       </div>
       <div
         className={style.sku}

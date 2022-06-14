@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { Upload } from 'antd';
 import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
-import { ActionSheet } from 'antd-mobile';
 
 const InstockOrder = (
   {
@@ -25,7 +24,7 @@ const InstockOrder = (
       details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
       break;
     case ReceiptsEnums.outstockOrder:
-      details = ToolUtil.isArray(data.detailResults);
+      details = ToolUtil.isArray(data.detailResults).filter(item => item.number > 0);
       break;
     default:
       break;
@@ -65,7 +64,7 @@ const InstockOrder = (
           data={details}
           actionId={getAction('stockPreparation').id}
           action={getAction('stockPreparation').id && permissions}
-          outStockOrderId={data.instockOrderId}
+          pickListsId={data.pickListsId}
           refresh={refresh}
         />;
       default:

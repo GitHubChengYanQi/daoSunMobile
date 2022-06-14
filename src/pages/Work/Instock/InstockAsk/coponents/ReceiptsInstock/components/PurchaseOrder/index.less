@@ -14,6 +14,9 @@
       font-weight: bold;
       color: #333333;
       flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .status {
@@ -56,6 +59,12 @@
     align-items: stretch;
     border-top: 1px solid #F5F5F5;;
 
+    .checked {
+      margin: 0 8px;
+      display: flex;
+      align-items: center;
+    }
+
     .skuItem {
       flex-grow: 1;
     }
@@ -64,6 +73,31 @@
       display: flex;
       flex-direction: column;
       max-width: 70px;
+      align-items: flex-end;
+
+      .time {
+        color: #999999;
+        display: flex;
+        align-items: center;
+
+        div {
+          flex-grow: 0;
+        }
+        .left {
+          margin-bottom: 16px;
+        }
+        .right {
+          margin-top: 16px;
+        }
+
+        .slash {
+          margin: -10px;
+          width: 30px;
+          height: 1px;
+          border-bottom: 1px solid #c9c6c6;
+          transform: rotate(126.03deg);
+        }
+      }
 
       div {
         flex-grow: 1;

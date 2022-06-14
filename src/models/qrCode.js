@@ -225,10 +225,12 @@ export default {
           case 'freeOutstock':
           case 'inventory':
           case 'quality':
+          case 'outStock':
             // 自由入库
             // 自由出库
             // 盘点
             // 质检任务
+            // 出库
             yield put({ type: 'scanCodeState', payload: { codeId, backObject: res } });
             break;
           case 'scanStorehousePositon':

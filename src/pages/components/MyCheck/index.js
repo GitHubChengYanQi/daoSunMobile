@@ -8,13 +8,14 @@ const MyCheck = (
     onChange = () => {
     },
     children,
+    fontSize,
   }) => {
 
 
   return <Checkbox
     checked={checked}
     icon={(checked) => {
-      return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
+      return checked ? <Icon type='icon-a-jianqudingceng2' style={{fontSize}} /> : <Icon type='icon-jizhumimamoren' style={{fontSize}} />;
     }}
     onChange={onChange}
   >

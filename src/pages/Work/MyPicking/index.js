@@ -9,6 +9,7 @@ import topStyle from '../../global.less';
 import { ToolUtil } from '../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
+import Receipts from './components/Receipts';
 
 const MyPicking = () => {
 
@@ -19,7 +20,9 @@ const MyPicking = () => {
 
   const ref = useRef();
 
-  const [screen,{setFalse,setTrue}] = useBoolean();
+  const [screen, { setFalse, setTrue }] = useBoolean();
+
+  const [count, setCount] = useState(0);
 
   const tabs = [
     { title: '单据', key: 'receipts' },
@@ -29,7 +32,7 @@ const MyPicking = () => {
   const content = () => {
     switch (key) {
       case 'receipts':
-        return <MyEmpty />;
+        return <Receipts getCount={setCount} />;
       case 'sku':
         return <MyEmpty />;
       default:
@@ -40,20 +43,20 @@ const MyPicking = () => {
   return <div className={style.myPicking}>
     <MyNavBar title='我的领料' />
     <div className={style.content}>
-        <MySearch
-          searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
-          value={searchValue}
-          onChange={setSearchValue}
-          onSearch={(value) => {
-            if (!ref.current) {
-              return;
-            }
-            ref.current.submit({ skuName: value });
-          }}
-          onClear={() => {
-            ref.current.submit({ skuName: '' });
-          }}
-        />
+      <MySearch
+        searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
+        value={searchValue}
+        onChange={setSearchValue}
+        onSearch={(value) => {
+          if (!ref.current) {
+            return;
+          }
+          ref.current.submit({ skuName: value });
+        }}
+        onClear={() => {
+          ref.current.submit({ skuName: '' });
+        }}
+      />
       <Tabs
         activeKey={key}
         onChange={key => {
@@ -84,7 +87,7 @@ const MyPicking = () => {
             }
           }}
         >
-          <div className={topStyle.stockNumber}>数量：<span>{1}</span></div>
+          <div className={topStyle.stockNumber}>数量：<span>{count}</span></div>
           <div
             className={ToolUtil.classNames(topStyle.screenButton, screen ? topStyle.checked : '')}
           >

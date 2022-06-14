@@ -48,9 +48,10 @@ const OutStockShop = (
         setVisible(false);
       }}
       mask
+      destroyOnClose
       visible={visible}
     >
-      <WaitOutSku />
+      <WaitOutSku id={id} />
     </Popup>
   </div>;
 };

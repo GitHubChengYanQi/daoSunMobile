@@ -10,7 +10,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import { Card, Checkbox, Collapse, List, SwipeAction, Toast } from 'antd-mobile';
 import MyEllipsis from '../../../components/MyEllipsis';
-import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../components/Label';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';

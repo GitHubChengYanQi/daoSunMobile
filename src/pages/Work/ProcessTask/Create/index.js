@@ -4,7 +4,6 @@ import style from '../../../Home/index.less';
 import Menus, { borderStyle } from '../../../Home/component/Menus';
 import { history, useModel } from 'umi';
 import createStyle from './index.less'
-
 const Create = () => {
 
   const { initialState } = useModel('@@initialState');
@@ -29,7 +28,6 @@ const Create = () => {
   });
 
   return <div style={{ backgroundColor: '#fff' }}>
-
     <Grid columns={3} gap={0}>
       {
         receipts.map((item, index) => {
@@ -52,6 +50,7 @@ const Create = () => {
         })
       }
     </Grid>
+
 
     <ActionSheet
       className={createStyle.action}

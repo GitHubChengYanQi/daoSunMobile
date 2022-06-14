@@ -16,7 +16,7 @@ import OutStockShop from '../OutStockShop';
 const OutSkuAction = (
   {
     actionId,
-    outStockOrderId,
+    pickListsId,
     data = [],
     action,
     refresh = () => {
@@ -37,8 +37,6 @@ const OutSkuAction = (
     }));
   }, [data.length]);
 
-  console.log(items);
-
   const showItems = items.filter(item => !item.hidden);
 
   let countNumber = 0;
@@ -57,9 +55,9 @@ const OutSkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-  const remove = (pickListsDetailId) => {
+  const remove = (data = {}) => {
     const newItems = items.map((item) => {
-      if (item.pickListsDetailId === pickListsDetailId) {
+      if (item.pickListsDetailId === data.pickListsDetailId) {
         return { ...item, hidden: true };
       }
       return item;
@@ -102,7 +100,7 @@ const OutSkuAction = (
             imgSize={60}
             skuResult={skuResult}
             extraWidth='124px'
-            otherData={ToolUtil.isObject(item.bradnResult).brandName}
+            // otherData={ToolUtil.isObject(item.bradnResult).brandName}
           />
         </div>
         <div className={style.number}>
@@ -152,12 +150,10 @@ const OutSkuAction = (
           <Viewpager
             currentIndex={index}
             onLeft={() => {
-              setVisible(item.pickListsDetailId);
-              // remove(index);
+              setVisible(item);
             }}
             onRight={() => {
-              setVisible(item.pickListsDetailId);
-              // remove(index);
+              setVisible(item);
             }}
           >
             {skuItem(item, index)}
@@ -185,6 +181,8 @@ const OutSkuAction = (
       destroyOnClose
     >
       <Prepare
+        id={pickListsId}
+        skuItem={visible}
         dimension={dimension}
         onSuccess={() => {
           remove(visible);
@@ -196,7 +194,7 @@ const OutSkuAction = (
       />
     </Popup>
 
-    {action && <OutStockShop />}
+    {action && <OutStockShop id={pickListsId} />}
 
 
   </div>;
