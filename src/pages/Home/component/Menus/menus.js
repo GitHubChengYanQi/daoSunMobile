@@ -27,7 +27,7 @@ export const menus = [
   { code: 'productionPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
   { code: 'productionTask', icon: 'icon-gengduo', url: '/Work/ProductionTask' },
   { code: 'pickLists', icon: 'icon-gengduo', url: '/Work/Production/PickLists' },
-  { code: 'myCart', icon: 'icon-wodelingliao', url: '/Work/Production/MyCart' },
+  { code: 'myCart', icon: 'icon-wodelingliao', url: '/Work/MyPicking' },
   { code: 'purchase_ask', icon: 'icon-caigoushenqingguanli', url: '/Work/purchaseAsk' },
   { code: 'procurementOrder', icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' },
   { code: 'Repair', icon: 'icon-gongdanguanli2', url: '/Repair' },

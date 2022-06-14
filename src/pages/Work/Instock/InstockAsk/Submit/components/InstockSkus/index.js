@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
@@ -10,20 +10,31 @@ import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../util/Request';
-import { instockOrderAdd, outstockOrderAdd } from '../../../../Url';
+import { instockOrderAdd, productionPickListAdd } from '../../../../Url';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
 import MyTextArea from '../../../../../../components/MyTextArea';
 import Careful from './components/Careful';
 import MyNavBar from '../../../../../../components/MyNavBar';
+import LinkButton from '../../../../../../components/LinkButton';
+import CheckUser from '../../../../../../components/CheckUser';
+import { useModel } from 'umi';
 
 const InstockSkus = ({ skus = [], createType }) => {
 
+  const { initialState } = useModel('@@initialState');
+
+  const state = initialState || {};
+
+  const userInfo = state.userInfo || {};
+
   const [data, setData] = useState([]);
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState({ userId: userInfo.id, userName: userInfo.name });
 
   const history = useHistory();
+
+  const userRef = useRef();
 
   const { loading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
@@ -42,7 +53,7 @@ const InstockSkus = ({ skus = [], createType }) => {
     },
   });
 
-  const { loading: outLoading, run: outStock } = useRequest(outstockOrderAdd, {
+  const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
     onSuccess: () => {
       Message.dialogSuccess({
@@ -118,6 +129,7 @@ const InstockSkus = ({ skus = [], createType }) => {
                 style={{
                   '--button-text-color': '#000',
                 }}
+                min={1}
                 value={item.number}
                 onChange={value => {
                   const newData = data.map((dataItem) => {
@@ -147,12 +159,19 @@ const InstockSkus = ({ skus = [], createType }) => {
       </Divider>}
     </div>
 
+    <div hidden={createType !== 'outStock'} className={style.user}>
+      <div className={style.title}>领料负责人<span>*</span></div>
+      <LinkButton onClick={() => {
+        userRef.current.open();
+      }}>{params.userId ? params.userName : '添加负责人'}</LinkButton>
+    </div>
+
     <div className={style.careful}>
       <div className={style.title}>注意事项 <span>*</span></div>
       <Careful
         type='inStock'
         value={params.noticeIds}
-        onChange={(noticeIds)=>{
+        onChange={(noticeIds) => {
           setParams({ ...params, noticeIds });
         }}
       />
@@ -190,21 +209,34 @@ const InstockSkus = ({ skus = [], createType }) => {
       rightOnClick={() => {
         switch (createType) {
           case 'outStock':
-            const listingParams = [];
+            if (ToolUtil.isArray(params.noticeIds).length === 0) {
+              return Message.toast('请选择注意事项！');
+            } else if (!params.userId) {
+              return Message.toast('请添加领料负责人！');
+            }
+            const pickListsDetailParams = [];
             data.map(item => {
               if (item.number > 0) {
-                listingParams.push(item);
+                pickListsDetailParams.push(item);
               }
               return null;
             });
             outStock({
               data: {
-                listingParams,
-                ...params,
+                source: 'outstock',
+                pickListsDetailParams,
+                enclosure: ToolUtil.isArray(params.mediaIds).toString(),
+                remarks: ToolUtil.isArray(params.noticeIds).toString(),
+                note: params.remark,
+                userIds: ToolUtil.isArray(params.userIds).toString(),
+                userId: params.userId,
               },
             });
             break;
           case 'inStock':
+            if (ToolUtil.isArray(params.noticeIds).length === 0) {
+              return Message.toast('请选择注意事项！');
+            }
             const instockRequest = [];
             data.map(item => {
               if (item.number > 0) {
@@ -225,6 +257,10 @@ const InstockSkus = ({ skus = [], createType }) => {
         }
       }}
     />
+
+    <CheckUser ref={userRef} value={params.userId} onChange={(id, name) => {
+      setParams({ ...params, userId: id, userName: name });
+    }} />
 
     {(loading || outLoading) && <MyLoading />}
 

@@ -1,15 +1,6 @@
 import { useLocation } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MyLoading } from '../../components/MyLoading';
-import MyBottom from '../../components/MyBottom';
-import Process from '../../Work/PurchaseAsk/components/Process';
-import { InstockDetailBottom } from '../components/Instock';
-import QualityTask from '../components/QualityTask';
-import PurchaseAsk from '../components/PurchaseAsk';
-import InstockError from '../components/InstockError';
-import Detail from '../../Work/Instock/Detail';
-import Comments from '../components/Comments';
-import { ReceiptsEnums } from '../index';
 import { useRequest } from '../../../util/Request';
 import MyNavBar from '../../components/MyNavBar';
 import Header from './components/Header';
@@ -34,11 +25,9 @@ const ReceiptsDetail = () => {
 
   const [currentNode, setCurrentNode] = useState([]);
 
-  const [moduleObject, setModuleObject] = useState({});
-
   const [key, setKey] = useState('data');
 
-  const actionRef = useRef();
+  const [params, setParams] = useState({});
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -99,64 +88,18 @@ const ReceiptsDetail = () => {
     getTaskId();
   }, [query.id, query.formId, query.type]);
 
-  const module = (value) => {
-    switch (value) {
-      case 'quality_task':
-        return <QualityTask detail={detail.object} />;
-      case 'purchase':
-      case 'purchaseAsk':
-        return <PurchaseAsk detail={detail.object} />;
-      case ReceiptsEnums.instockError:
-        return <InstockError id={detail.formId} />;
-      case ReceiptsEnums.instockOrder:
-        return <Detail
-          id={detail.formId}
-          moduleObject={moduleObject}
-          setModuleObject={setModuleObject}
-          ref={actionRef}
-          currentNode={currentNode}
-          processRefresh={refresh}
-        />;
-      default:
-        break;
-    }
-  };
-
-  const createModuleButtom = (left) => {
-    const type = detail.type;
-    switch (type) {
-      case ReceiptsEnums.instockOrder:
-        return <InstockDetailBottom
-          left={left}
-          moduleObject={moduleObject}
-          id={detail.processTaskId}
-          detail={detail}
-          refresh={refresh}
-          currentNode={currentNode}
-          actionRef={actionRef}
-        />;
-      case 'purchaseAsk':
-        return <></>;
-      default:
-        return <>???</>;
-    }
-  };
-
-  const old = () => {
-    return <MyBottom
-      leftActuions={createModuleButtom(true)}
-      buttons={createModuleButtom()}
-    >
-      {module(detail.type)}
-      <Process auditData={detail.stepsResult} createName={detail.createName} card />
-      <Comments detail={detail} id={detail.processTaskId} refresh={refresh} />
-    </MyBottom>;
-  };
-
   const content = () => {
     switch (key) {
       case 'data':
-        return <ReceiptData permissions={detail.permissions} data={detail} currentNode={currentNode} refresh={refresh} loading={detailLoading} />;
+        return <ReceiptData
+          permissions={detail.permissions}
+          data={detail}
+          currentNode={currentNode}
+          refresh={refresh}
+          loading={detailLoading}
+          params={params}
+          setParams={setParams}
+        />;
       case 'log':
         return <Log data={detail} refresh={refresh} />;
       default:
@@ -179,7 +122,7 @@ const ReceiptsDetail = () => {
       {content()}
     </div>
 
-    <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />
+    <Bottom params={params} currentNode={currentNode} detail={detail} refresh={refresh} />
 
     {(getTaskIdLoading || detailLoading) && <MyLoading />}
   </div>;

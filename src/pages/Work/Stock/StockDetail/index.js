@@ -9,7 +9,6 @@ import SkuItem from '../../Sku/SkuItem';
 import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
-import { useBoolean } from 'ahooks';
 
 export const SkuContent = (
   {

@@ -226,7 +226,7 @@ const SkuError = (
 
           const inkindId = item.inkindId || '';
 
-          const handle = item.status !== 0 || (item.userId && item.userId !== userInfo.id);
+          const handle = item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
 
           return <div key={index} className={style.inkindItem}>
             <div className={style.inkindTitle}>

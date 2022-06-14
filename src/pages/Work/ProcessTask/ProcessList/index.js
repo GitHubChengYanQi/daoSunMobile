@@ -42,15 +42,10 @@ const ProcessList = (
       case ReceiptsEnums.instockError:
         return <div className={style.content}>
           <div>单据编号：{receipts.coding}</div>
-          {/*<div className={style.other}>*/}
-          {/*  异常物料：{*/}
-          {/*  details.map((item, index) => {*/}
-          {/*    const skuResult = item.skuResult || {};*/}
-          {/*    const spuResult = item.spuResult || {};*/}
-          {/*    return SkuResultSkuJsons({ skuResult: { ...skuResult, spuResult } });*/}
-          {/*  }).join('、')*/}
-          {/*}*/}
-          {/*</div>*/}
+        </div>;
+      case ReceiptsEnums.outstockOrder:
+        return <div className={style.content}>
+          <div>单据编号：{receipts.coding}</div>
         </div>;
       default:
         return <></>;

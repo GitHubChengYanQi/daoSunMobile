@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { Upload } from 'antd';
 import SkuAction from './components/SkuAction';
+import { ReceiptsEnums } from '../../../../../index';
+import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
+import { ActionSheet } from 'antd-mobile';
 
 const InstockOrder = (
   {
@@ -12,18 +15,27 @@ const InstockOrder = (
     },
     loading,
     permissions,
+    type,
   }) => {
 
-  const details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
+  let details = [];
 
-  let countNumber = 0;
-  details.map(item => countNumber += item.number);
+  switch (type) {
+    case ReceiptsEnums.instockOrder:
+      details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
+      break;
+    case ReceiptsEnums.outstockOrder:
+      details = ToolUtil.isArray(data.detailResults);
+      break;
+    default:
+      break;
+  }
 
   const actions = [];
   currentNode.map((item) => {
     if (item.logResult && Array.isArray(item.logResult.actionResults)) {
       return item.logResult.actionResults.map((item) => {
-        return actions.push({action:item.action,id:item.documentsActionId});
+        return actions.push({ action: item.action, id: item.documentsActionId });
       });
     }
     return null;
@@ -36,17 +48,35 @@ const InstockOrder = (
     return actionData[0] || {};
   };
 
+  const action = () => {
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        return <SkuAction
+          loading={loading}
+          data={details}
+          actionId={getAction('performInstock').id}
+          action={getAction('performInstock').id && permissions}
+          instockOrderId={data.instockOrderId}
+          refresh={refresh}
+        />;
+      case ReceiptsEnums.outstockOrder:
+        return <OutSkuAction
+          loading={loading}
+          data={details}
+          actionId={getAction('stockPreparation').id}
+          action={getAction('stockPreparation').id && permissions}
+          outStockOrderId={data.instockOrderId}
+          refresh={refresh}
+        />;
+      default:
+        return <></>;
+    }
+  };
+
 
   return <>
     <div className={style.skus}>
-      <SkuAction
-        loading={loading}
-        data={details}
-        actionId={getAction('performInstock').id}
-        action={getAction('performInstock').id && permissions}
-        instockOrderId={data.instockOrderId}
-        refresh={refresh}
-      />
+      {action()}
     </div>
 
     <div className={style.careful}>
@@ -75,7 +105,6 @@ const InstockOrder = (
           listType='picture'
         />
       </div>
-
     </div>
   </>;
 };
