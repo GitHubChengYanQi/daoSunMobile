@@ -4,15 +4,21 @@ import MySearch from '../../components/MySearch';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
-import { Tabs } from 'antd-mobile';
+import { Button, Tabs } from 'antd-mobile';
 import topStyle from '../../global.less';
 import { ToolUtil } from '../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import Receipts from './components/Receipts';
+import MyCheck from '../../components/MyCheck';
+import { useRequest } from '../../../util/Request';
+import { MyLoading } from '../../components/MyLoading';
+import { Message } from '../../components/Message';
+import Sku from './components/Sku';
+
+const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
 
 const MyPicking = () => {
-
 
   const [key, setKey] = useState('receipts');
 
@@ -24,6 +30,23 @@ const MyPicking = () => {
 
   const [count, setCount] = useState(0);
 
+  const [outSkus, setOutSkus] = useState([]);
+
+  const [refresh, setRefresh] = useState();
+
+  const { loading, run } = useRequest(outStock, {
+    manual: true,
+    onSuccess: () => {
+      Message.toast('领取成功！');
+      setRefresh(true);
+    },
+    onError: () => {
+      Message.toast('领取失败！');
+    },
+  });
+
+  const [allChecked, setAllChecked] = useState();
+
   const tabs = [
     { title: '单据', key: 'receipts' },
     { title: '物料', key: 'sku' },
@@ -32,9 +55,21 @@ const MyPicking = () => {
   const content = () => {
     switch (key) {
       case 'receipts':
-        return <Receipts getCount={setCount} />;
+        return <Receipts
+          value={outSkus}
+          getCount={(number) => {
+            setRefresh(false);
+            setCount(number);
+          }}
+          onChange={(array) => {
+            setAllChecked(count ? array.length === count : false);
+            setOutSkus(array);
+          }}
+          allChecked={allChecked}
+          refresh={refresh}
+        />;
       case 'sku':
-        return <MyEmpty />;
+        return <Sku />;
       default:
         return <MyEmpty />;
     }
@@ -77,6 +112,7 @@ const MyPicking = () => {
       <div className={topStyle.top}>
         <div
           className={topStyle.screen}
+          style={{borderBottom:'1px solid #E1EBF6'}}
           id='screen'
           onClick={() => {
             if (screen) {
@@ -97,6 +133,47 @@ const MyPicking = () => {
       </div>
       {content()}
     </div>
+    <div className={style.bottom}>
+      <div className={style.all}>
+        <MyCheck checked={allChecked} onChange={() => {
+          if (allChecked) {
+            setOutSkus([]);
+            setAllChecked(false);
+          } else {
+            setAllChecked(true);
+          }
+        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {outSkus.length} 种</span>
+      </div>
+      <div className={style.buttons}>
+        <Button
+          disabled={outSkus.length === 0}
+          color='primary'
+          fill='outline'
+          onClick={() => {
+            const cartsParams = [];
+            outSkus.map(item => {
+              return cartsParams.push({
+                listsId: item.pickListsId,
+                pickListsCart: item.pickListsCart,
+                storehousePositionId: item.storehousePositionsId,
+                storehouseId: item.storehouseId,
+                skuId: item.skuId,
+                number: item.number,
+                brandId: item.brandId,
+                customerId: item.customerId,
+              });
+            });
+            run({
+              data: {
+                cartsParams,
+              },
+            });
+          }}
+        >确认</Button>
+      </div>
+    </div>
+
+    {loading && <MyLoading />}
   </div>;
 
 };

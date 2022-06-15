@@ -5,7 +5,7 @@ import MyCheck from '../../../../../../../../../components/MyCheck';
 import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { Button, Toast } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { useRequest } from '../../../../../../../../../../util/Request';
 import {
   listByUser, productionPickListsSend,
@@ -25,33 +25,55 @@ const WaitOutSku = (
 
   const [userIds, setUserIds] = useState([]);
 
-  const { loading, data, run, refresh } = useRequest(listByUser,
+  const [returnSkus, setReturnSkus] = useState([]);
+
+  const [data, setData] = useState([]);
+
+  const [allSkus, setAllSkus] = useState([]);
+
+  let count = 0;
+  allSkus.map(item => count += item.number);
+
+  const { loading, run } = useRequest(listByUser,
     {
       manual: true,
+      onSuccess: (res) => {
+        const newData = [];
+        const sku = [];
+        ToolUtil.isArray(res).map(userItem => {
+          const pickListsResults = userItem.pickListsResults || [];
+          const newPickListsResults = [];
+          pickListsResults.map(item => {
+            const cartResults = item.cartResults || [];
+            if (cartResults.length > 0) {
+              const newCartResults = cartResults.map(item => {
+                const data = { ...item, userId: userItem.userId };
+                sku.push(data);
+                return data;
+              });
+              newPickListsResults.push({ ...item, cartResults: newCartResults });
+            }
+            return null;
+          });
+          return newData.push({ ...userItem, pickListsResults: newPickListsResults });
+        });
+        setAllSkus(sku);
+        setData(newData);
+      },
     });
 
   const { loading: pickLoading, run: pickRun } = useRequest(productionPickListsSend, {
     manual: true,
     onSuccess: () => {
-     Message.toast('提醒成功!')
+      Message.toast('提醒成功!');
     },
     onError: () => {
-      Message.toast('提醒失败!')
+      Message.toast('提醒失败!');
     },
   });
 
-  const waitOutSkus = data || [];
 
-  const skus = waitOutSkus.filter(item => {
-    const pickListsResults = item.pickListsResults || [];
-    const pickLists = pickListsResults.filter(item => {
-      const cartResults = item.cartResults || [];
-      return cartResults.length > 0;
-    });
-    return pickLists.length === pickListsResults.length;
-  });
-
-  const allChecked = sys ? false : waitOutSkus.length === userIds.length;
+  const allChecked = sys ? returnSkus.length === allSkus.length : data.length === userIds.length;
 
   useEffect(() => {
     if (id) {
@@ -59,30 +81,30 @@ const WaitOutSku = (
     }
   }, []);
 
-  const checkChange = () => {
-    if (sys) {
-
-    } else {
-
-    }
-  };
-
   return <>
     <div className={style.header}>待出物料</div>
     <div className={style.sys}>
-      <span>待出 200</span>
+      <span>待出 {count}</span>
       <LinkButton onClick={() => {
         setSys(!sys);
       }}>{sys ? '取消管理' : '管理'}</LinkButton>
     </div>
     <div className={style.content}>
-      {(skus.length !== waitOutSkus.length) && <MyEmpty />}
+      {data.length === 0 && <MyEmpty />}
       {
-        waitOutSkus.map((userItem, userIndex) => {
+        data.map((userItem, userIndex) => {
 
           const pickListsResults = userItem.pickListsResults || [];
 
-          const userChecked = sys ? false : userIds.includes(userItem.userId);
+          const checkUserSkus = returnSkus.filter(item => item.userId === userItem.userId);
+
+          const carts = [];
+          pickListsResults.map(item => {
+            const cartResults = item.cartResults || [];
+            return cartResults.map(item => carts.push(item));
+          });
+
+          const userChecked = sys ? checkUserSkus.length === carts.length : userIds.includes(userItem.userId);
 
           const pickLists = pickListsResults.filter(item => {
             const cartResults = item.cartResults || [];
@@ -92,11 +114,12 @@ const WaitOutSku = (
           return <div hidden={pickLists.length !== pickListsResults.length} key={userIndex}>
             <div className={style.user}>
               <span onClick={() => {
-                if (userChecked){
-                  setUserIds(userIds.filter(item=>item !== userItem.userId))
-                  return;
+                if (sys) {
+                  const newReturnSku = returnSkus.filter(item => item.userId !== userItem.userId);
+                  setReturnSkus(userChecked ? newReturnSku : [...newReturnSku, ...carts]);
+                } else {
+                  setUserIds(userChecked ? userIds.filter(item => item !== userItem.userId) : [...userIds, userItem.userId]);
                 }
-                setUserIds([...userIds, userItem.userId]);
               }}>
                 <MyCheck
                   checked={userChecked}
@@ -111,18 +134,36 @@ const WaitOutSku = (
 
                 const cartResults = pickItem.cartResults || [];
 
+                const checkPickSkus = checkUserSkus.filter(item => item.pickListsId === pickItem.pickListsId);
+
+                const checked = checkPickSkus.length === cartResults.length;
+
                 return <div hidden={cartResults.length === 0} key={pickIndex}>
                   <div className={style.orderData}>
-                    {sys && <span><MyCheck /></span>}xxx的出库申请 / {pickItem.coding}
+                    {sys && <span onChange={() => {
+                      const newReruenSkus = returnSkus.filter(item => item.pickListsId !== pickItem.pickListsId);
+                      setReturnSkus(checked ? newReruenSkus : [...newReruenSkus, cartResults]);
+                    }}><MyCheck checked={checked} /></span>}{ToolUtil.isObject(pickItem.createUserResult).name}的出库申请
+                    / {pickItem.coding}
                   </div>
 
                   {
                     cartResults.map((cartItem, cartIndex) => {
+
+                      const checkedSkus = checkPickSkus.map(item => item.pickListsCart);
+                      const checked = checkedSkus.includes(cartItem.pickListsCart);
+
                       return <div key={cartIndex}>
                         <div
                           className={style.skuItem}
                         >
-                          {sys && <span><MyCheck /></span>}
+                          {sys && <span onClick={() => {
+                            if (checked) {
+                              setReturnSkus(returnSkus.filter(item => item.pickListsCart !== cartItem.pickListsCart));
+                            } else {
+                              setReturnSkus([...returnSkus, cartItem]);
+                            }
+                          }}><MyCheck checked={checked} /></span>}
                           <div className={style.item}>
                             <SkuItem
                               skuResult={cartItem.skuResult}
@@ -149,32 +190,29 @@ const WaitOutSku = (
     <div className={style.bottom}>
       <div className={style.all}>
         <MyCheck checked={allChecked} onChange={() => {
-
           if (sys) {
-
+            setReturnSkus(allChecked ? [] : allSkus);
           } else {
-            if (allChecked) {
-              setUserIds([]);
-            } else {
-              setUserIds(waitOutSkus.map(item => item.userId));
-            }
+            setUserIds(allChecked ? [] : data.map(item => item.userId));
           }
-        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {1} 种</span>
+        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {sys ? returnSkus.length : userIds.length} 种</span>
       </div>
       <div className={style.buttons}>
-        {sys && <Button color='danger' fill='outline'>退回</Button>}
+        {sys && <Button color='danger' fill='outline' onClick={() => {
+          console.log(returnSkus);
+        }}>退回</Button>}
         {!sys && <Button
           disabled={userIds.length === 0}
           color='primary'
           fill='outline'
           onClick={() => {
-            pickRun({ data: { userIds:userIds.toString() } });
+            pickRun({ data: { userIds: userIds.toString() } });
           }}
         >备料完成</Button>}
       </div>
     </div>
 
-    {loading && <MyLoading />}
+    {(loading || pickLoading) && <MyLoading />}
 
   </>;
 };
