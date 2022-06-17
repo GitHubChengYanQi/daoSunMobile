@@ -109,7 +109,7 @@ const StockDetail = (
 
     <SkuList
       ref={ref}
-      defaultParams={{ stockView: true, openBom: true, openPosition: true, storehousePositionsId }}
+      defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
       SkuContent={SkuContent}
       skuContentProps={{
         openTask: (item) => {

@@ -13,6 +13,7 @@ import styles from '../index.css';
 import Label from '../../../components/Label';
 import BottomButton from '../../../components/BottomButton';
 import Icon from '../../../components/Icon';
+import { ReceiptsEnums } from '../../../Receipts';
 
 
 const PickLists = (props) => {
@@ -94,7 +95,7 @@ const PickLists = (props) => {
                     setIds([...ids, item.pickListsId]);
                   }
                 } else if (params.type === 'all') {
-                  history.push(`/Work/Production/PickDetail?ids=${item.pickListsId}`);
+                  history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.outstockOrder}&formId=${item.pickListsId}`);
                 } else {
                   history.push(`/Work/Production/Pick?id=${item.productionTaskResult && item.productionTaskResult.productionTaskId}`);
                 }

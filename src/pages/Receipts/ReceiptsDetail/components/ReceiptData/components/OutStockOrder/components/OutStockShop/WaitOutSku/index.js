@@ -15,9 +15,13 @@ import MyEmpty from '../../../../../../../../../components/MyEmpty';
 import { MyLoading } from '../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../components/Message';
 
+const backSkus = { url: '/productionPickListsCart/deleteBatch', method: 'POST' };
+
 const WaitOutSku = (
   {
     id,
+    refresh = () => {
+    },
   },
 ) => {
 
@@ -34,7 +38,7 @@ const WaitOutSku = (
   let count = 0;
   allSkus.map(item => count += item.number);
 
-  const { loading, run } = useRequest(listByUser,
+  const { loading, run, refresh: listRefresh } = useRequest(listByUser,
     {
       manual: true,
       onSuccess: (res) => {
@@ -55,7 +59,10 @@ const WaitOutSku = (
             }
             return null;
           });
-          return newData.push({ ...userItem, pickListsResults: newPickListsResults });
+          if (newPickListsResults.length > 0) {
+            newData.push({ ...userItem, pickListsResults: newPickListsResults });
+          }
+          return null;
         });
         setAllSkus(sku);
         setData(newData);
@@ -69,6 +76,18 @@ const WaitOutSku = (
     },
     onError: () => {
       Message.toast('提醒失败!');
+    },
+  });
+
+  const { loading: backLoading, run: backRun } = useRequest(backSkus, {
+    manual: true,
+    onSuccess: () => {
+      listRefresh();
+      refresh();
+      Message.toast('退回成功!');
+    },
+    onError: () => {
+      Message.toast('退回失败!');
     },
   });
 
@@ -198,8 +217,15 @@ const WaitOutSku = (
         }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {sys ? returnSkus.length : userIds.length} 种</span>
       </div>
       <div className={style.buttons}>
-        {sys && <Button color='danger' fill='outline' onClick={() => {
-          console.log(returnSkus);
+        {sys && <Button color='danger' fill='outline' disabled={returnSkus.length === 0} onClick={() => {
+          const productionPickListsCartParams = returnSkus.map(item => {
+            return {
+              pickListsId: item.pickListsId,
+              skuId: item.skuId,
+              brandId: item.brandId,
+            };
+          });
+          backRun({ data: { productionPickListsCartParams } });
         }}>退回</Button>}
         {!sys && <Button
           disabled={userIds.length === 0}
@@ -212,7 +238,7 @@ const WaitOutSku = (
       </div>
     </div>
 
-    {(loading || pickLoading) && <MyLoading />}
+    {(loading || pickLoading || backLoading) && <MyLoading />}
 
   </>;
 };

@@ -43,7 +43,7 @@ const AddSku = (
   } = useRequest(supplierBySku, {
     manual: true,
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length === 1) {
+      if (ToolUtil.isArray(res).length === 1 && type === 'inStock') {
         setData({
           ...data,
           customerId: res[0].customerId,
@@ -57,7 +57,11 @@ const AddSku = (
 
   const disabled = () => {
     const snameSku = skus.filter((item) => {
-      return item.skuId === data.skuId && item.customerId === data.customerId && item.brandId === data.brandId;
+      return item.skuId === data.skuId
+        &&
+      (data.customerId ? item.customerId === data.customerId : false)
+        &&
+        (data.brandId ? item.brandId === data.brandId : false)
     });
     return snameSku.length > 0;
   };
@@ -97,6 +101,7 @@ const AddSku = (
         return {
           title: '出库',
           disabledText,
+          customerDisabled: true,
         };
       case 'inStock':
         if (ToolUtil.isArray(customerData).length === 0) {
@@ -201,7 +206,7 @@ const AddSku = (
               }}
             >{data.brandName || '请选择品牌'}</Button>
           </div>
-          <div className={style.flex}>
+          <div hidden={taskData().customerDisabled} className={style.flex}>
             <div className={style.checkLabel}>
               供应商
             </div>

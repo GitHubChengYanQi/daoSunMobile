@@ -69,7 +69,19 @@ const MyPicking = () => {
           refresh={refresh}
         />;
       case 'sku':
-        return <Sku />;
+        return <Sku
+          value={outSkus}
+          getCount={(number) => {
+            setRefresh(false);
+            setCount(number);
+          }}
+          onChange={(array) => {
+            setAllChecked(count ? array.length === count : false);
+            setOutSkus(array);
+          }}
+          allChecked={allChecked}
+          refresh={refresh}
+        />;
       default:
         return <MyEmpty />;
     }
@@ -112,7 +124,7 @@ const MyPicking = () => {
       <div className={topStyle.top}>
         <div
           className={topStyle.screen}
-          style={{borderBottom:'1px solid #E1EBF6'}}
+          style={{ borderBottom: '1px solid #E1EBF6' }}
           id='screen'
           onClick={() => {
             if (screen) {
@@ -153,14 +165,10 @@ const MyPicking = () => {
             const cartsParams = [];
             outSkus.map(item => {
               return cartsParams.push({
-                listsId: item.pickListsId,
-                pickListsCart: item.pickListsCart,
-                storehousePositionId: item.storehousePositionsId,
-                storehouseId: item.storehouseId,
+                pickListsId: item.pickListsId,
                 skuId: item.skuId,
-                number: item.number,
-                brandId: item.brandId,
-                customerId: item.customerId,
+                number: item.outStockNumber,
+                brandIds: [item.brandId || 0],
               });
             });
             run({

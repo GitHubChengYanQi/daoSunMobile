@@ -57,6 +57,7 @@ const SkuShop = (
           customerId: item.customerId,
           customerName: ToolUtil.isObject(item.customer).customerName,
           brandName: ToolUtil.isObject(item.brandResult).brandName,
+          brandId: item.brandId,
           number: item.number,
         };
       }));
@@ -70,7 +71,7 @@ const SkuShop = (
     },
   });
 
-  const { run: shopEdit } = useRequest(shopCartEdit, {manual: true});
+  const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
 
   useEffect(() => {
     if (type) {
@@ -82,7 +83,7 @@ const SkuShop = (
     }
   }, []);
 
-  const taskData = () => {
+  const taskData = (item = {}) => {
     switch (type) {
       case 'allocation':
         return {
@@ -99,10 +100,12 @@ const SkuShop = (
       case 'outStock':
         return {
           title: '出库任务明细',
+          otherData: item.brandName,
         };
       case 'inStock':
         return {
           title: '入库任务明细',
+          otherData: item.customerName,
         };
       default:
         return {
@@ -144,7 +147,7 @@ const SkuShop = (
                   imgSize={80}
                   gap={10}
                   extraWidth='130px'
-                  otherData={item.customerName}
+                  otherData={taskData(item).otherData}
                 />
               </div>
               <div className={style.action}>

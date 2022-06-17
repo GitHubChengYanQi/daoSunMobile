@@ -1,32 +1,38 @@
 import React, { useState } from 'react';
 import MySearch from '../../../../../../../../../../components/MySearch';
 import { useRequest } from '../../../../../../../../../../../util/Request';
-import { storehousePositionsTreeView } from '../../../../../../../../../../Scan/Url';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../../../components/BottomButton';
 import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 
+const positions = {url:'/storehousePositions/treeViewByName',method:'POST'}
+
 const Positions = (
   {
     onClose = () => {
     },
     onSuccess = () => {
-
     },
   },
 ) => {
 
-  const { loading, data } = useRequest(storehousePositionsTreeView);
+  const { loading, data, run } = useRequest(positions);
 
   const [value, onChange] = useState({});
 
-  return <div style={{ height: '80vh',display:'flex',flexDirection:'column',paddingBottom:60 }}>
+  const [name, setName] = useState();
 
-    <MySearch placeholder='搜索库位' />
+  return <div style={{ height: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
 
-    <div style={{ padding: 12, overflow: 'auto',flexGrow:1 }}>
+    <MySearch placeholder='搜索库位' onChange={setName} onSearch={() => {
+      run({ data: { name } });
+    }} onClear={() => {
+      run();
+    }} />
+
+    <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
         value={value.id}
         onChange={(id, name) => {
@@ -35,7 +41,7 @@ const Positions = (
         data={data}
         refresh={data}
         checkShow={(item) => {
-          return ToolUtil.isArray(item.children).length === 0;
+          return ToolUtil.isArray(item.loops).length === 0;
         }}
       />
     </div>

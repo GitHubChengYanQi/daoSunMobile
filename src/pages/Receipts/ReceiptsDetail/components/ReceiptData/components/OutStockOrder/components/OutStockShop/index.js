@@ -51,7 +51,7 @@ const OutStockShop = (
       destroyOnClose
       visible={visible}
     >
-      <WaitOutSku id={id} />
+      <WaitOutSku id={id} refresh={refresh} />
     </Popup>
   </div>;
 };

@@ -18,13 +18,22 @@ const InstockOrder = (
   }) => {
 
   let details = [];
+  let announcementsList = [];
+  let remake = '';
+  let fileUrls = [];
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
+      announcementsList = data.announcementsList;
+      remake = ToolUtil.isArray(data.remake)
+      fileUrls = ToolUtil.isArray(data.url);
       break;
     case ReceiptsEnums.outstockOrder:
       details = ToolUtil.isArray(data.detailResults).filter(item => item.number > 0);
+      announcementsList = data.announcementsResults;
+      remake = data.note;
+      fileUrls = ToolUtil.isArray(data.enclosureUrl)
       break;
     default:
       break;
@@ -80,12 +89,18 @@ const InstockOrder = (
 
     <div className={style.careful}>
       <div className={style.title}>注意事项</div>
-
+      <div>
+        {ToolUtil.isArray(announcementsList).map((item, index) => {
+          return <div key={index} className={style.carefulShow}>
+            {item.content}
+          </div>;
+        })}
+      </div>
     </div>
 
     <div className={style.note}>
       <div className={style.title}>备注说明</div>
-      <span className={style.remake}>{data.remark || '-'}</span>
+      <div className={style.remake}>{remake}</div>
     </div>
 
     <div className={style.file}>
@@ -96,7 +111,7 @@ const InstockOrder = (
             showRemoveIcon: false,
           }}
           className='avatar-uploader'
-          fileList={ToolUtil.isArray(data.url).map(item => {
+          fileList={fileUrls.map(item => {
             return {
               url: item,
             };

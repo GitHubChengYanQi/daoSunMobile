@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
+import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 
 const getPositionsAndBrands = { url: '/storehousePositions/selectBySku', method: 'POST' };
 
@@ -13,6 +14,7 @@ const Order = (
   {
     codeData,
     id,
+    pickListsDetailId,
     skuId,
     customerId,
     brandId,
@@ -23,7 +25,6 @@ const Order = (
 ) => {
 
   const [positions, setPositions] = useState([]);
-  console.log(positions);
 
   let outNumber = 0;
   positions.map(item => {
@@ -51,7 +52,7 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId } });
+      run({ data: { skuId,brandId } });
     }
   }, []);
 
@@ -85,9 +86,10 @@ const Order = (
         if (brandItem.outStockNumber > 0) {
           array.push({
             skuId,
+            pickListsDetailId,
             storehouseId: item.storehouseId,
             storehousePositionsId: item.storehousePositionsId,
-            brandId: brandItem.brandId,
+            brandId: brandItem.brandId || 0,
             customerId,
             number: brandItem.outStockNumber,
             pickListsId: id,
@@ -130,6 +132,7 @@ const Order = (
   };
 
   return <div className={style.action}>
+    {positions.length === 0 && <MyEmpty description='暂无库存' />}
     {positions.map((item, index) => {
 
       const brandResults = item.brandResults || [];
@@ -182,6 +185,9 @@ const Order = (
                       });
                       if ((number + num) > outStockNumber) {
                         return Message.toast('不能超过出库数量！');
+                      }
+                      if (num > brandItem.num){
+                        return Message.toast('不能超过库存数量！');
                       }
                       brandChange(index, brandIndex, { outStockNumber: num });
                     }}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -25,53 +25,33 @@ const OutSkuAction = (
   },
 ) => {
 
-  const [items, setItems] = useState(data.map((item, index) => {
-    return { ...item, key: index };
-  }));
 
   const [visible, setVisible] = useState();
 
-  useEffect(() => {
-    setItems(data.map((item, index) => {
-      return { ...item, key: index };
-    }));
-  }, [data.length]);
-
-  const showItems = items.filter(item => !item.hidden);
-
   let countNumber = 0;
-  showItems.map(item => countNumber += (item.number || 0));
-
-  const getItemIndex = (key) => {
-    let currentIndex = 0;
-    showItems.map((item, index) => {
-      if (item.key === key) {
-        currentIndex = index;
-      }
-      return null;
-    });
-    return currentIndex;
-  };
+  data.map(item => countNumber += (item.number || 0));
 
   const [allSku, { toggle }] = useBoolean();
 
-  const remove = (data = {}) => {
-    const newItems = items.map((item) => {
-      if (item.pickListsDetailId === data.pickListsDetailId) {
-        return { ...item, hidden: true };
-      }
-      return item;
-    });
-    setItems(newItems);
-  };
-
   const skuItem = (item, index) => {
     const skuResult = item.skuResult || {};
+    const stockNumber = item.stockNumber || 0;
+
+    const positions = [];
+
+
+    ToolUtil.isArray(item.positionAndStockDetail).map((item) => {
+      if (!positions.map(item => item.storehousePositionsId).includes(item.storehousePositionsId)) {
+        positions.push(item);
+      }
+      return null;
+    });
+
 
     let stockNumberColor = '';
     let stockNumberText = '';
 
-    switch (item.stockNumber) {
+    switch (stockNumber) {
       case 0:
         stockNumberColor = '#EA0000';
         stockNumberText = '零库存';
@@ -89,7 +69,7 @@ const OutSkuAction = (
 
     return <div key={index} className={ToolUtil.classNames(
       style.skuItems,
-      showItems.length <= 3 && style.skuBorderBottom,
+      data.length <= 3 && style.skuBorderBottom,
     )}>
       <div
         className={style.skuItem}
@@ -100,7 +80,7 @@ const OutSkuAction = (
             imgSize={60}
             skuResult={skuResult}
             extraWidth='124px'
-            // otherData={ToolUtil.isObject(item.bradnResult).brandName}
+            otherData={ToolUtil.isObject(item.brandResult).brandName}
           />
         </div>
         <div className={style.number}>
@@ -109,16 +89,15 @@ const OutSkuAction = (
         </div>
       </div>
       <div>
-        <div className={style.positions}>
-          <MyEllipsis width='100%'>
-            库位1
-          </MyEllipsis>
-        </div>
-        <div className={style.positions}>
-          <MyEllipsis width='100%'>
-            库位2
-          </MyEllipsis>
-        </div>
+        {
+          positions.map((item, index) => {
+            return <div className={style.positions} key={index}>
+              <MyEllipsis width='100%'>
+                {item.storeHousePositionsName}   库存{item.number}
+              </MyEllipsis>
+            </div>;
+          })
+        }
       </div>
 
     </div>;
@@ -131,14 +110,14 @@ const OutSkuAction = (
         申请明细
       </div>
       <div className={style.extra}>
-        合计：<span>{showItems.length}</span>类<span>{countNumber}</span>件
+        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>
     </div>
-    {showItems.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+    {data.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
     {
-      items.map((item, index) => {
+      data.map((item, index) => {
 
-        if ((!allSku && getItemIndex(item.key) >= 3) || item.hidden) {
+        if (!allSku && index >= 3) {
           return null;
         }
 
@@ -162,7 +141,7 @@ const OutSkuAction = (
       })
     }
 
-    {showItems.length > 3 && <Divider className={style.allSku}>
+    {data.length > 3 && <Divider className={style.allSku}>
       <div onClick={() => {
         toggle();
       }}>
@@ -185,7 +164,7 @@ const OutSkuAction = (
         skuItem={visible}
         dimension={dimension}
         onSuccess={() => {
-          remove(visible);
+          refresh();
           setVisible(false);
         }}
         onClose={() => {
@@ -194,7 +173,7 @@ const OutSkuAction = (
       />
     </Popup>
 
-    {action && <OutStockShop id={pickListsId} />}
+    {action && <OutStockShop id={pickListsId} refresh={refresh} />}
 
 
   </div>;

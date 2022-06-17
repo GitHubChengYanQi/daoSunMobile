@@ -5,6 +5,7 @@ import { ClockCircleOutline } from 'antd-mobile-icons';
 import { ReceiptsEnums } from '../../../Receipts';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useHistory } from 'react-router-dom';
+import { MyDate } from '../../../components/MyDate';
 
 
 const startList = {
@@ -76,7 +77,7 @@ const ProcessList = (
                   <span>· {receipts.statusName}</span>
                 </div>
                 <div className={style.time}>
-                  <ClockCircleOutline /> {item.createTime}
+                  <ClockCircleOutline />  {MyDate.Show(item.createTime)}
                 </div>
               </div>
               {receiptsData(item.type, item.receipts)}

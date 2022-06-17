@@ -49,7 +49,7 @@ const Prepare = (
   useEffect(() => {
     if (codeId) {
       const inkind = ToolUtil.isObject(backObject.inkindResult);
-      if (backObject.type === 'item' && inkind.skuId === skuItem.skuId) {
+      if (backObject.type === 'item' && inkind.skuId === skuItem.skuId && (skuItem.brandId ? skuItem.brandId === inkind.brandId : true)) {
         const inkindDetail = ToolUtil.isObject(inkind.inkindDetail);
         setCodeData({
           positionId: ToolUtil.isObject(inkindDetail.storehousePositions).storehousePositionsId,
@@ -69,8 +69,9 @@ const Prepare = (
         return <Order
           codeData={codeData}
           customerId={skuItem.customerId}
-          brandId={skuItem.brandId}
+          brandId={skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
           id={id}
+          pickListsDetailId={skuItem.pickListsDetailId}
           skuId={skuItem.skuId}
           outStockNumber={skuItem.number}
           onChange={(array) => {
@@ -97,7 +98,7 @@ const Prepare = (
           imgSize={60}
           skuResult={skuItem.skuResult}
           extraWidth='124px'
-          // otherData={ToolUtil.isObject(skuItem.bradnResult).brandName}
+          otherData={ToolUtil.isObject(skuItem.bradnResult).brandName}
         />
       </div>
       <div className={style.scan}>

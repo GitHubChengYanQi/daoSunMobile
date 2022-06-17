@@ -8,6 +8,9 @@ import ShopNumber from '../../../Instock/InstockAsk/coponents/SkuInstock/compone
 import MyCheck from '../../../../components/MyCheck';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
+import MyEmpty from '../../../../components/MyEmpty';
+import { history } from 'umi';
+import { ReceiptsEnums } from '../../../../Receipts';
 
 const getCarts = { url: '/productionPickListsCart/getSelfCartsByLists', method: 'POST' };
 
@@ -29,14 +32,30 @@ const Receipts = (
   const { loading, refresh: cartRefresh } = useRequest(getCarts, {
     onSuccess: (res) => {
       let count = 0;
-      setData(ToolUtil.isArray(res).map(item => {
-        const cartResults = item.cartResults || [];
-        const newCarts = cartResults.map((item) => {
+      const newData = [];
+      ToolUtil.isArray(res).map(item => {
+
+        const detailResults = item.detailResults || [];
+
+        const carts = item.cartResults || [];
+        const newCarts = carts.map((skuItem,index) => {
+          const detail = detailResults.filter(item => (item.skuId === skuItem.skuId) && (skuItem.brandId ? item.brandId === skuItem.brandId : true));
           count++;
-          return { ...item, maxNumber: item.number };
+          return {
+            ...skuItem,
+            outStockNumber: skuItem.number,
+            cartNumber: skuItem.number,
+            key: item.pickListsId + skuItem.skuId + skuItem.brandId+index,
+            receivedNumber: ToolUtil.isObject(detail[0]).receivedNumber || 0,
+            number: ToolUtil.isObject(detail[0]).number ||0,
+          };
         });
-        return { ...item, cartResults: newCarts };
-      }));
+        if (newCarts.length > 0) {
+          newData.push({ ...item, carts: newCarts });
+        }
+        return null;
+      });
+      setData(newData);
       getCount(count);
     },
   });
@@ -46,8 +65,8 @@ const Receipts = (
     if (allChecked) {
       const newOutSkus = [];
       data.map(item => {
-        const cartResults = item.cartResults || [];
-        return cartResults.map(item => newOutSkus.push(item));
+        const carts = item.carts || [];
+        return carts.map(item => newOutSkus.push(item));
       });
       outSkusChange(newOutSkus);
     }
@@ -60,7 +79,7 @@ const Receipts = (
     }
   }, [refresh]);
 
-  const outSkusChange = (newOutSkus) => {
+  const outSkusChange = (newOutSkus = []) => {
     onChange(newOutSkus);
   };
 
@@ -74,75 +93,85 @@ const Receipts = (
     setData(newData);
   };
 
-  const detailChange = (number, itemId, orderId) => {
+  const detailChange = (outStockNumber, key, orderId) => {
     const newData = data.map((item) => {
       if (item.pickListsId === orderId) {
-        const cartResults = item.cartResults || [];
-        const newCarts = cartResults.map((item) => {
-          if (item.pickListsCart === itemId) {
-            return { ...item, number };
+        const carts = item.carts || [];
+        const newCarts = carts.map((item) => {
+          if (item.key === key) {
+            return { ...item, outStockNumber };
           }
           return item;
         });
-        return { ...item, cartResults: newCarts };
+        return { ...item, carts: newCarts };
       }
       return item;
     });
     setData(newData);
   };
 
-  return <>
+  const checkChange = (checked, skuItem) => {
+    if (!checked) {
+      outSkusChange([...value, skuItem]);
+    } else {
+      outSkusChange(value.filter(outItem => outItem.key !== skuItem.key));
+    }
+  };
 
+  return <>
+    {data.length === 0 && <MyEmpty />}
     {
       data.map((item, index) => {
-        const cartResults = item.cartResults || [];
+        const carts = item.carts || [];
         const checkCarts = value.filter(outItem => outItem.pickListsId === item.pickListsId);
 
-        const orderChecked = checkCarts.length === cartResults.length;
+        const orderChecked = checkCarts.length === carts.length;
 
-        return <div key={index} className={style.orderItem} hidden={cartResults.length === 0}>
+        return <div key={index} className={style.orderItem}>
           <div className={style.data}>
             <div className={style.customer}>
               <MyCheck checked={orderChecked} fontSize={18} onChange={(checked) => {
                 const newOutSkus = value.filter(skuItem => skuItem.pickListsId !== item.pickListsId);
                 if (checked) {
-                  outSkusChange([...newOutSkus, ...cartResults]);
+                  outSkusChange([...newOutSkus, ...carts]);
                 } else {
                   outSkusChange(newOutSkus);
                 }
-              }} />{ToolUtil.isObject(item.createUserResult).name}的出库申请 / {item.coding} <RightOutline
-              style={{ color: '#B9B9B9' }} />
+              }} />
+              <span onClick={() => {
+                history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.outstockOrder}&formId=${item.pickListsId}`);
+              }}>{ToolUtil.isObject(item.createUserResult).name}的出库申请 / {item.coding} <RightOutline
+                style={{ color: '#B9B9B9' }} /></span>
             </div>
             <div className={style.status} style={{ color: '#555555' }}>
-              备料人:{ToolUtil.isObject(item.userResult).name}
+              备料人：{ToolUtil.isObject(item.userResult).name}
             </div>
           </div>
           {
-            cartResults.map((skuItem, skuIndex) => {
+            carts.map((skuItem, skuIndex) => {
 
-              const createTime = new Date(skuItem.createTime.replaceAll('-','/'));
+              const cartChecked = checkCarts.map(item => item.key).includes(skuItem.key);
 
-              const cartChecked = checkCarts.map(item => item.pickListsCart).includes(skuItem.pickListsCart);
+              const skuResut = skuItem.skuResult || {};
+              const spuResult = skuResut.spuResult || {};
+              const unit = spuResult.unitResult || {};
 
               if (!item.allSku && skuIndex > 2) {
                 return null;
               }
 
               return <div key={skuIndex} className={style.skus}>
-                <span className={style.checked}>
+                <span className={style.checked} onClick={() => {
+                  checkChange(cartChecked, skuItem);
+                }}>
                   <MyCheck
                     checked={cartChecked}
                     fontSize={18}
-                    onChange={(checked) => {
-                      if (checked) {
-                        outSkusChange([...value, skuItem]);
-                      } else {
-                        outSkusChange(value.filter(outItem => outItem.pickListsCart !== skuItem.pickListsCart));
-                      }
-                    }}
                   />
                 </span>
-                <div className={style.skuItem}>
+                <div className={style.skuItem} onClick={() => {
+                  checkChange(cartChecked, skuItem);
+                }}>
                   <SkuItem
                     imgSize={60}
                     skuResult={skuItem.skuResult}
@@ -152,17 +181,17 @@ const Receipts = (
                 </div>
                 <div className={style.skuData} style={{ width: 100, maxWidth: 100 }}>
                   <div className={style.time}>
-                    <div className={style.left}>{createTime.getMonth() + 1}</div>
+                    <div className={style.left}>{skuItem.receivedNumber || 0}{unit.unitName}</div>
                     <div className={style.slash} />
-                    <div className={style.right}>{createTime.getDate()}</div>
+                    <div className={style.right}>{skuItem.number || 0} {unit.unitName}</div>
                   </div>
                   <div className={style.skuDataMoney}>
-                    <ShopNumber value={skuItem.number} max={skuItem.maxNumber} onChange={(number) => {
-                      detailChange(number, skuItem.pickListsCart, item.pickListsId);
+                    <ShopNumber value={skuItem.outStockNumber} max={skuItem.cartNumber} onChange={(outStockNumber) => {
+                      detailChange(outStockNumber, skuItem.key, item.pickListsId);
                       if (cartChecked) {
                         const newOutSkus = value.map(item => {
-                          if (item.pickListsCart === skuItem.pickListsCart) {
-                            return { ...item, number };
+                          if (item.key === skuItem.key) {
+                            return { ...item, outStockNumber };
                           }
                           return item;
                         });
@@ -174,7 +203,7 @@ const Receipts = (
               </div>;
             })
           }
-          {cartResults.length > 3 && <Divider className={style.allSku}>
+          {carts.length > 3 && <Divider className={style.allSku}>
             <div onClick={() => {
               dataChange({ allSku: !item.allSku }, index);
             }}>

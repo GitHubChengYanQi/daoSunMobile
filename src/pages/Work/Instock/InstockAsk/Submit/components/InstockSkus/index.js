@@ -72,7 +72,9 @@ const InstockSkus = ({ skus = [], createType }) => {
 
 
   useEffect(() => {
-    setData(skus);
+    setData(skus.map((item,index)=>{
+      return {...item,key:index}
+    }));
   }, [skus.length]);
 
 
@@ -81,12 +83,12 @@ const InstockSkus = ({ skus = [], createType }) => {
   let countNumber = 0;
   data.map(item => countNumber += (item.number || 0));
 
-  const createTypeData = () => {
+  const createTypeData = (item = {}) => {
     switch (createType) {
       case 'outStock':
-        return { title: '出库申请', type: '出库' };
+        return { title: '出库申请', type: '出库', otherData: item.brandName };
       case 'inStock':
-        return { title: '入库申请', type: '入库' };
+        return { title: '入库申请', type: '入库', otherData: item.customerName };
       default:
         return {};
     }
@@ -121,7 +123,7 @@ const InstockSkus = ({ skus = [], createType }) => {
                 imgSize={60}
                 skuResult={item.skuResult}
                 extraWidth='124px'
-                otherData={item.customerName}
+                otherData={createTypeData(item).otherData}
               />
             </div>
             <div>
@@ -133,7 +135,7 @@ const InstockSkus = ({ skus = [], createType }) => {
                 value={item.number}
                 onChange={value => {
                   const newData = data.map((dataItem) => {
-                    if (dataItem.skuId === item.skuId) {
+                    if (dataItem.key === index) {
                       return { ...dataItem, number: value };
                     }
                     return dataItem;

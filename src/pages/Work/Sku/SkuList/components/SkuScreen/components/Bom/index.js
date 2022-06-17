@@ -6,23 +6,23 @@ import Icon from '../../../../../../../components/Icon';
 import { RightOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../../../util/Request';
-import { backDetails } from '../Url';
+import { backDetails, partsList } from '../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import MySearch from '../../../../../../../components/MySearch';
+import { SkuResultSkuJsons } from '../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const Bom = (
   {
-    options,
     title,
     value,
     onChange = () => {
     },
-    refresh,
   }) => {
 
   const [type, setType] = useState('Present');
 
-  const [boms, setBoms] = useState([options]);
+  const [boms, setBoms] = useState([]);
 
   const { loading, run } = useRequest(backDetails, {
     manual: true,
@@ -42,13 +42,34 @@ const Bom = (
     },
   });
 
-  useEffect(() => {
-    if (refresh && !value) {
-      setBoms([options]);
-    }
-  }, [refresh]);
+  const [searchValue, setSearchValue] = useState();
 
-  if (options.length === 0) {
+  const { loading: listLoading, run: listRun } = useRequest(partsList, {
+    manual: true,
+    onSuccess: (res) => {
+      const options = res.map((item) => {
+        return {
+          title: SkuResultSkuJsons({ skuResult: item.skuResult }),
+          key: item.skuId,
+        };
+      });
+      setBoms([options]);
+    },
+  });
+
+  const Select = (skuName) => {
+    listRun({
+      params: { limit: 10, page: 1 },
+      data: { skuName },
+    });
+  };
+
+  useEffect(() => {
+    Select();
+  }, []);
+
+
+  if (boms.length === 0) {
     return <></>;
   }
 
@@ -56,6 +77,15 @@ const Bom = (
     <Card
       title={title}
     >
+      <MySearch
+        className={style.searchBar}
+        onSearch={(value) => {
+          Select(value);
+        }}
+        onChange={setSearchValue}
+        value={searchValue}
+        onClear={Select}
+      />
       <div className={style.bomType}>
         <Radio
           icon={(checked) => {
@@ -73,7 +103,6 @@ const Bom = (
             if (value) {
               onChange(value, 'Present');
             }
-
           }}
         >
           子级物料
@@ -132,7 +161,7 @@ const Bom = (
         }}>上一级</LinkButton>
       </div>
 
-      {loading ? <MyLoading skeleton /> : <List>
+      {(loading || listLoading) ? <MyLoading skeleton /> : <List>
         {
           boms[boms.length - 1].map((item, index) => {
             return <List.Item

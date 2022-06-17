@@ -12,6 +12,9 @@ import Bottom from './components/Bottom';
 import style from './index.less';
 import ReceiptData from './components/ReceiptData';
 import Log from './components/Log';
+import { ReceiptsEnums } from '../index';
+import InStockLog from './components/InStockLog';
+import OutStockLog from './components/OutStockLog';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -28,6 +31,8 @@ const ReceiptsDetail = () => {
   const [key, setKey] = useState('data');
 
   const [params, setParams] = useState({});
+
+  const [type, setType] = useState();
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -57,6 +62,8 @@ const ReceiptsDetail = () => {
         if (res) {
           // 详细数据
           setDetail(res);
+          //类型
+          setType(res.type);
           //当前节点
           const node = getCurrentNode(res.stepsResult);
           const currentNode = Array.isArray(node) ? node : [node];
@@ -102,8 +109,29 @@ const ReceiptsDetail = () => {
         />;
       case 'log':
         return <Log data={detail} refresh={refresh} />;
+      case 'inStockLog':
+        return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
+      case 'outStockLog':
+        return <OutStockLog outstockOrderId={ToolUtil.isObject(detail.receipts).pickListsId} />;
       default:
         return <MyEmpty />;
+    }
+  };
+
+  const receiptsTabs = () => {
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        return {
+          title: '入库记录',
+          key: 'inStockLog',
+        };
+      case ReceiptsEnums.outstockOrder:
+        return {
+          title: '出库记录',
+          key: 'outStockLog',
+        };
+      default:
+        return {};
     }
   };
 
@@ -116,6 +144,7 @@ const ReceiptsDetail = () => {
           setKey(key);
         }} className={topStyle.tab}>
           <Tabs.Tab title='基本信息' key='data' />
+          {receiptsTabs().key && <Tabs.Tab title={receiptsTabs().title} key={receiptsTabs().key} />}
           <Tabs.Tab title='动态日志' key='log' />
         </Tabs>
       </div>
