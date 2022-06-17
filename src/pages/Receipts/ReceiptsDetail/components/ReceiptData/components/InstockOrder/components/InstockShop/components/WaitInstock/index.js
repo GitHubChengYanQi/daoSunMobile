@@ -14,6 +14,8 @@ import LinkButton from '../../../../../../../../../../components/LinkButton';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 
+export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
+
 const WaitInstock = (
   {
     refresh,
@@ -48,13 +50,26 @@ const WaitInstock = (
     },
   });
 
+  // 退回
+  const { loading: backLoading, run: backRun } = useRequest(sendBack, {
+    manual: true,
+    onSuccess: () => {
+      shopRefresh();
+      refresh();
+      Message.toast('退回成功！');
+    },
+    onError: () => {
+      Message.toast('退回失败！');
+    },
+  });
+
   const instockList = ToolUtil.isArray(shopList).filter(item => item.number > 0);
 
   const [data, setData] = useState([]);
 
-  const skus = instockList.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
+  const instockSkus = data.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
 
-  const allChecked = skus.length === data.length;
+  const allChecked = data.length === 0 ? false : instockList.length === data.length;
 
   const check = (checked, item) => {
     if (!checked) {
@@ -77,7 +92,7 @@ const WaitInstock = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        待入 {skus.length}
+        待入 {instockList.length}
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>
@@ -92,7 +107,7 @@ const WaitInstock = (
               const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
 
               return <div key={index} className={style.skuItem}>
-                <LinkButton disabled={!positionsResult} className={style.check} onClick={() => {
+                <LinkButton className={style.check} onClick={() => {
                   check(checked, item);
                 }}>
                   <MyCheck checked={checked} />
@@ -111,6 +126,7 @@ const WaitInstock = (
                   />
                 </div>
                 <div className={style.inStock}>
+                  <div hidden={item.type !== 'instockByAnomaly'} className={style.error}>异常转入</div>
                   <ShopNumber show value={item.number} />
                   <Button color='primary' fill='outline' onClick={() => {
                     onInstock(item);
@@ -122,21 +138,24 @@ const WaitInstock = (
         </>}
       </div>
 
-
       <div className={style.bottom}>
         <div className={style.all}>
           <MyCheck checked={allChecked} onChange={() => {
             if (allChecked) {
               setData([]);
             } else {
-              setData(skus);
+              setData(instockList);
             }
           }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 种</span>
         </div>
         <div className={style.buttons}>
-          <Button color='danger' fill='outline'>退回</Button>
-          <Button color='primary' fill='outline' disabled={data.length === 0} onClick={() => {
-            const listParams = data.map((item) => {
+          <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
+            backRun({
+              data: { ids: data.map(item => item.cartId) },
+            });
+          }}>退回</Button>
+          <Button color='primary' fill='outline' disabled={instockSkus.length === 0} onClick={() => {
+            const listParams = instockSkus.map((item) => {
               const skuResult = ToolUtil.isObject(item.skuResult);
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0] || {};
               const batch = ToolUtil.isObject(item.skuResult).batch === 1;
@@ -165,7 +184,7 @@ const WaitInstock = (
       </div>
     </div>
 
-    {instockLoading && <MyLoading />}
+    {(instockLoading || backLoading) && <MyLoading />}
   </>;
 };
 

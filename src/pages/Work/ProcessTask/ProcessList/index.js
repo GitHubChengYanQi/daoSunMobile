@@ -5,6 +5,7 @@ import { ClockCircleOutline } from 'antd-mobile-icons';
 import { ReceiptsEnums } from '../../../Receipts';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useHistory } from 'react-router-dom';
+import { MyDate } from '../../../components/MyDate';
 
 
 const startList = {
@@ -42,15 +43,10 @@ const ProcessList = (
       case ReceiptsEnums.instockError:
         return <div className={style.content}>
           <div>单据编号：{receipts.coding}</div>
-          {/*<div className={style.other}>*/}
-          {/*  异常物料：{*/}
-          {/*  details.map((item, index) => {*/}
-          {/*    const skuResult = item.skuResult || {};*/}
-          {/*    const spuResult = item.spuResult || {};*/}
-          {/*    return SkuResultSkuJsons({ skuResult: { ...skuResult, spuResult } });*/}
-          {/*  }).join('、')*/}
-          {/*}*/}
-          {/*</div>*/}
+        </div>;
+      case ReceiptsEnums.outstockOrder:
+        return <div className={style.content}>
+          <div>单据编号：{receipts.coding}</div>
         </div>;
       default:
         return <></>;
@@ -81,7 +77,7 @@ const ProcessList = (
                   <span>· {receipts.statusName}</span>
                 </div>
                 <div className={style.time}>
-                  <ClockCircleOutline /> {item.createTime}
+                  <ClockCircleOutline />  {MyDate.Show(item.createTime)}
                 </div>
               </div>
               {receiptsData(item.type, item.receipts)}

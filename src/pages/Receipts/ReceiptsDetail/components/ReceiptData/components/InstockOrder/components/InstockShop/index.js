@@ -88,6 +88,9 @@ const InstockShop = (
 
 
     <Popup
+      onMaskClick={() => {
+        setContent(null);
+      }}
       mask
       visible={content}
     >

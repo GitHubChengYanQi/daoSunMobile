@@ -87,6 +87,11 @@ export const productionPickListCartGroupByUserList = {
   method: 'POST'
 };
 
+export const listByUser = {
+  url: '/productionPickLists/listByUser',
+  method: 'POST'
+};
+
 export const productionPickListsSend = {
   url: '/productionPickLists/sendPersonPick',
   method: 'POST'

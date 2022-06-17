@@ -9,7 +9,6 @@ import SkuItem from '../../Sku/SkuItem';
 import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
-import { useBoolean } from 'ahooks';
 
 export const SkuContent = (
   {
@@ -110,7 +109,7 @@ const StockDetail = (
 
     <SkuList
       ref={ref}
-      defaultParams={{ stockView: true, openBom: true, openPosition: true, storehousePositionsId }}
+      defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
       SkuContent={SkuContent}
       skuContentProps={{
         openTask: (item) => {

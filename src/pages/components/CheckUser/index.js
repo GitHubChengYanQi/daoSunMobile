@@ -13,7 +13,7 @@ const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 const CheckUser = (
   {
     value,
-    onChange = () => {
+    onChange = (id,name,params) => {
     },
   },
   ref,
@@ -97,6 +97,7 @@ const CheckUser = (
 
   return <>
     <Picker
+      value={[value]}
       popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
       columns={[data || []]}
       visible={visible}

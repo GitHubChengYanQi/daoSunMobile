@@ -33,6 +33,7 @@ const Menus = (
     onlyIcon,
     textOverflow,
     disabled,
+    onClick,
   }) => {
 
   const MenusStyle = ({ icon = 'icon-gengduo', title, url }) => {
@@ -45,6 +46,9 @@ const Menus = (
       align='center'
       style={{ width: '100%' }}
       onClick={() => {
+        if (typeof onClick === 'function'){
+          return onClick(code,url);
+        }
         if (disabled) {
           return;
         }

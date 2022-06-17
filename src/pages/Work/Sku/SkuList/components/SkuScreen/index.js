@@ -113,9 +113,7 @@ const SkuScreen = (
       case 'position':
         return getOptions(key).length <= 1 && !screened && !overLength;
       case 'bom':
-        return getOptions(key).length === 0;
       case 'time':
-        return false;
       case 'user':
         return false;
       default:

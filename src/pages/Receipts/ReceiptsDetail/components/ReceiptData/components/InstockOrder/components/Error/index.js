@@ -203,7 +203,7 @@ const Error = (
       {
         over ?
           <div className={style.skuShow}>
-            <img src={imgUrl || state.loginLogo} width={40} height={40} alt='' />
+            <img src={imgUrl || state.imgLogo} width={40} height={40} alt='' />
             <span style={{ maxWidth: `calc(100vw - ${id ? 270 : 210}px)` }}>{SkuResultSkuJsons({ skuResult })}</span>
             <div className={style.number}>
               <ShopNumber min={allNumber} value={data.number} onChange={(number) => {

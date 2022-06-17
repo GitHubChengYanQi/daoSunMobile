@@ -165,6 +165,9 @@ const Process = (
           case 'AllPeople':
             users.push('所有人');
             break;
+          case 'MasterDocumentPromoter':
+            users.push('主单据审批人');
+            break;
           default:
             break;
         }
@@ -208,6 +211,7 @@ const Process = (
 
   // 渲染单据节点
   const steps = (step, next, index = 0) => {
+
     const minHeight = 60;
 
     let stepStatus = 'wait';
@@ -218,6 +222,11 @@ const Process = (
 
     switch (step.logResult && step.logResult.status) {
       case -1:
+        if (next){
+          stepStatus = 'wait';
+          iconColor = style.success;
+          break;
+        }
         stepStatus = 'wait';
         iconColor = style.wait;
         break;
@@ -279,9 +288,9 @@ const Process = (
       case 'send':
       case 'process':
         let title;
-        if (step.auditType === 'send'){
+        if (step.auditType === 'send') {
           title = <span>抄送人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
-        }else if (step.auditRule.type === 'audit') {
+        } else if (step.auditRule.type === 'audit') {
           title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
         } else {
           title = <span>执行人 · {nodeStatusName('action', stepStatus)}</span>;

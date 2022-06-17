@@ -1,0 +1,99 @@
+.header {
+  font-size: 18px;
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+.sys {
+  padding: 12px;
+  background: #F5F5F5;
+  display: flex;
+  align-items: center;
+
+  span {
+    flex-grow: 1;
+  }
+}
+
+.content {
+  max-height: 60vh;
+  overflow: auto;
+
+  svg {
+    font-size: 18px;
+  }
+}
+
+.user {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+  font-size: 14px;
+  border-bottom: 1px solid #F5F5F5;
+
+  span {
+    flex-grow: 1;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+}
+
+.orderData {
+  padding: 12px;
+  font-size: 14px;
+  color: #333333;
+  border-bottom: 1px solid #F5F5F5;
+  font-weight: bold;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: 8px;
+}
+
+.skuItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  gap: 8px;
+  border-bottom: 1px solid #F5F5F5;
+
+  span {
+    margin-left: 8px;
+  }
+
+  .item {
+    flex-grow: 1;
+  }
+}
+
+.bottom {
+  background-color: var(--body--background--color);
+  display: flex;
+  padding: 12px;
+
+  .all {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 8px;
+
+    :global .adm-checkbox {
+      --icon-size: 18px;
+      --font-size: 14px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+
+    button {
+      padding: 4px 12px;
+      font-size: 12px;
+      border-radius: 2px;
+    }
+  }
+}

@@ -8,6 +8,7 @@ import InStockErrorBottom from './components/InStockErrorBottom';
 
 const Bottom = (
   {
+    params = {},
     currentNode = [],
     detail = {},
     refresh = () => {
@@ -20,7 +21,7 @@ const Bottom = (
   currentNode.map((item) => {
     if (item.logResult && Array.isArray(item.logResult.actionResults)) {
       return item.logResult.actionResults.map((item) => {
-        return actions.push({ action:item.action,id:item.documentsActionId });
+        return actions.push({ action: item.action, id: item.documentsActionId });
       });
     }
     return null;
@@ -46,7 +47,7 @@ const Bottom = (
       更多
       <MoreOutline style={{ fontSize: 15 }} />
     </div>
-    <Audit id={detail.processTaskId} refresh={refresh} />
+    <Audit {...params} id={detail.processTaskId} refresh={refresh} />
 
     <ActionSheet
       className={style.action}

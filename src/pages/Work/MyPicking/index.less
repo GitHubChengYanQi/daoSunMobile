@@ -1,0 +1,79 @@
+.myPicking {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  .content {
+    flex-grow: 1;
+    overflow: auto;
+    background-color: #fff;
+  }
+}
+
+.tab {
+  //position: sticky;
+  //top: 0;
+  background-color: #fff;
+  --title-font-size: 14px;
+
+
+  :global .adm-tabs-tab-line {
+    display: none;
+  }
+
+  :global .adm-tabs-tab-active {
+    color: #fff;
+  }
+
+  :global .adm-tabs-header {
+    border-bottom: solid 1px var(--adm-color-primary);
+  }
+
+  :global .adm-tabs-tab {
+    padding: 8px 0;
+    width: 100%;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .checkTabItem {
+    background-color: var(--adm-color-primary);
+    border-radius: 8px 8px 0 0;
+  }
+
+  .tabItem {
+    background-color: var(--body--background--color);
+    border-radius: 8px 8px 0 0;
+  }
+}
+
+
+.bottom {
+  background-color: var(--body--background--color);
+  display: flex;
+  padding: 12px;
+
+  .all {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    gap: 8px;
+
+    :global .adm-checkbox {
+      --icon-size: 18px;
+      --font-size: 14px;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 8px;
+
+    button {
+      padding: 4px 12px;
+      font-size: 12px;
+      border-radius: 2px;
+    }
+  }
+}

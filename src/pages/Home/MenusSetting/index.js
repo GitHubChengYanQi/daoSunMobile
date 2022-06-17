@@ -237,11 +237,6 @@ const MenusSetting = (props) => {
           const subMenus = item.subMenus || [];
           const otherMenus = [];
           switch (item.id) {
-            case 'production':
-              otherMenus.push({ name: '生产任务', code: 'productionTask' });
-              otherMenus.push({ name: '领料管理', code: 'pickLists' });
-              otherMenus.push({ name: '我的领料', code: 'myCart' });
-              break;
             case 'REPAIR':
               otherMenus.push({ name: '工单管理', code: 'Repair' });
               otherMenus.push({ name: '创建报修', code: 'CreateRepair' });

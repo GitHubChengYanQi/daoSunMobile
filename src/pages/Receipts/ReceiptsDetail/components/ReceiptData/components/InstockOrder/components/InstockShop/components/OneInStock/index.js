@@ -12,7 +12,7 @@ import { Message } from '../../../../../../../../../../components/Message';
 import BottomButton from '../../../../../../../../../../components/BottomButton';
 import Positions from '../Positions';
 
-export const getPositionsBySkuIds = { url: '/storehousePositions/treeView', method: 'POST' };
+export const getPositionsBySkuIds = { url: '/storehousePositions/treeViewBySku', method: 'POST' };
 
 const OneInStock = (
   {

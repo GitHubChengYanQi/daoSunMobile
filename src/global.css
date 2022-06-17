@@ -40,6 +40,10 @@ body {
   --z-index: 1002;
 }
 
+.adm-stepper {
+  --height:24px
+}
+
 
 
 

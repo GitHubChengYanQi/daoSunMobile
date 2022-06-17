@@ -29,6 +29,11 @@ export const outstockOrderAdd = {
   rowKey: 'outstockOrderId',
 };
 
+export const productionPickListAdd = {
+  url: '/productionPickLists/add',
+  method: 'POST',
+};
+
 export const shopCartAdd = {
   url: '/shopCart/add',
   method: 'POST',

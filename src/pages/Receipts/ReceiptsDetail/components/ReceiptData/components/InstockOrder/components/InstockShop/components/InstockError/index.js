@@ -12,6 +12,7 @@ import { Button } from 'antd-mobile';
 import { FormOutlined } from '@ant-design/icons';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { Message } from '../../../../../../../../../../components/Message';
+import { sendBack } from '../WaitInstock';
 
 const InstockError = (
   {
@@ -20,19 +21,38 @@ const InstockError = (
     },
     onEdit = () => {
     },
+    refresh,
   },
 ) => {
 
-  const { loading, data: errorList, run: errorShop, refresh } = useRequest(shopCartAllList, { manual: true });
+  const {
+    loading,
+    data: errorList,
+    run: errorShop,
+    refresh: shopRefresh,
+  } = useRequest(shopCartAllList, { manual: true });
 
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: () => {
-      refresh();
+      shopRefresh();
       Message.toast('添加异常单成功！');
     },
     onError: () => {
       Message.toast('添加异常单失败！');
+    },
+  });
+
+  // 退回
+  const { loading: backLoading, run: backRun } = useRequest(sendBack, {
+    manual: true,
+    onSuccess: () => {
+      shopRefresh();
+      refresh();
+      Message.toast('退回成功！');
+    },
+    onError: () => {
+      Message.toast('退回失败！');
     },
   });
 
@@ -133,7 +153,11 @@ const InstockError = (
           }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 种</span>
         </div>
         <div className={style.buttons}>
-          <Button color='danger' fill='outline'>退回</Button>
+          <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
+            backRun({
+              data: { ids: data.map(item => item.cartId) },
+            });
+          }}>退回</Button>
           <Button
             disabled={data.length === 0}
             color='primary'
@@ -155,7 +179,7 @@ const InstockError = (
       </div>
     </div>
 
-    {orderAddLoading && <MyLoading />}
+    {(orderAddLoading || backLoading) && <MyLoading />}
   </>;
 };
 

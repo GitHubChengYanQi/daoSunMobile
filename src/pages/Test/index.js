@@ -1,10 +1,12 @@
 import React from 'react';
-
+import { MyLoading } from '../components/MyLoading';
 
 
 const Test = () => {
 
-  return <></>;
+  return <>
+    <MyLoading />
+  </>;
 };
 
 export default Test;
