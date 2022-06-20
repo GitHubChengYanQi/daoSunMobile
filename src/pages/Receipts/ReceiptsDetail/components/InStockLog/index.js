@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import style from './index.less';
-import MyList from '../../../../components/MyList';
 import MyEmpty from '../../../../components/MyEmpty';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import { MyDate } from '../../../../components/MyDate';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
 
-export const logList = { url: '/instockLogDetail/list', method: 'POST' };
+export const logList = { url: '/instockLogDetail/history', method: 'POST' };
 
 const InStockLog = (
   {
@@ -14,8 +15,17 @@ const InStockLog = (
   },
 ) => {
 
+  const { loading, data, run } = useRequest(logList, { manual: true });
 
-  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (instockOrderId) {
+      run({ data: { instockOrderId } });
+    }
+  }, []);
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
 
   if (!instockOrderId) {
     return <MyEmpty />;
@@ -23,33 +33,29 @@ const InStockLog = (
 
   return <>
 
-    <MyList getData={setData} data={data} api={logList} params={{ instockOrderId }}>
-
-      {
-        data.map((item, index) => {
-          return <div key={index}>
-            <div className={style.skuItem}>
-              <SkuItem
-                skuResult={item.skuResult}
-                extraWidth='24px'
-                otherData={ToolUtil.isObject(item.customer).customerName}
-              />
-              <div className={style.log}>
-                <div className={style.data}>
-                  <div className={style.left}>{MyDate.Show(item.createTime)}</div>
-                  <div>{ToolUtil.isObject(item.user).name}</div>
-                </div>
-                <div className={style.data}>
-                  <div className={style.left}>{ToolUtil.isObject(item.storehousePositionsResult).name}</div>
-                  <div>{item.number}个</div>
-                </div>
+    {
+      ToolUtil.isArray(data).map((item, index) => {
+        return <div key={index}>
+          <div className={style.skuItem}>
+            <SkuItem
+              skuResult={item.skuResult}
+              extraWidth='24px'
+              otherData={ToolUtil.isObject(item.customer).customerName}
+            />
+            <div className={style.log}>
+              <div className={style.data}>
+                <div className={style.left}>{MyDate.Show(item.createTime)}</div>
+                <div>{ToolUtil.isObject(item.user).name}</div>
+              </div>
+              <div className={style.data}>
+                <div className={style.left}>{ToolUtil.isObject(item.storehousePositionsResult).name}</div>
+                <div>{item.number}个</div>
               </div>
             </div>
-          </div>;
-        })
-      }
-
-    </MyList>
+          </div>
+        </div>;
+      })
+    }
 
   </>;
 };

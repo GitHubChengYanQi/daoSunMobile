@@ -158,8 +158,8 @@ const StockDetail = (
         let judge = false;
         switch (action.key) {
           case 'inStock':
-            // judge = judgeData;
-            setJudge(false);
+            judge = judgeData;
+            setJudge(judgeData);
             break;
           default:
             setJudge(false);
