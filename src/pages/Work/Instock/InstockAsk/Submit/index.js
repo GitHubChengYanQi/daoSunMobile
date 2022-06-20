@@ -13,7 +13,7 @@ const Submit = () => {
   const { query, state } = useLocation();
 
   const skus = ToolUtil.isArray(state && state.skus);
-  const judge = ToolUtil.isArray(state && state.judge);
+  const judge = state && state.judge;
 
   const [data, setData] = useState();
 
