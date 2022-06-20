@@ -17,6 +17,7 @@ import { history } from 'umi';
 import { ToolUtil } from '../../../components/ToolUtil';
 
 const Detail = (props) => {
+
   const params = props.location.query;
 
   const [visible, setVisible] = useState();

@@ -266,7 +266,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               return Message.toast('请选择注意事项！');
             }
             if (judge) {
-              return setVisible(true);
+              // return setVisible(true);
             }
             inStockRun();
             break;
