@@ -159,11 +159,7 @@ const AddSku = (
     /**
      * 动画结束后，删除
      */
-    bar.onanimationend = () => {
-      alert(1)
-    };
     bar.ontransitionend = () => {
-      alert(1);
       bar.remove();
       i++;
       if (i === 2) {
