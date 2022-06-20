@@ -37,10 +37,10 @@ const InStockLog = (
               <div className={style.log}>
                 <div className={style.data}>
                   <div className={style.left}>{MyDate.Show(item.createTime)}</div>
-                  <div>user</div>
+                  <div>{ToolUtil.isObject(item.user).name}</div>
                 </div>
                 <div className={style.data}>
-                  <div className={style.left}>e-1-2-3</div>
+                  <div className={style.left}>{ToolUtil.isObject(item.storehousePositionsResult).name}</div>
                   <div>{item.number}个</div>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../ReceiptsInstock/index.less';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import SkuItem from '../../../../Sku/SkuItem';
@@ -10,6 +10,8 @@ import SkuList from '../../../../Sku/SkuList';
 import { ScanningOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
+import { useRequest } from '../../../../../../util/Request';
+import { judgeLoginUser } from '../../Submit/components/InstockSkus';
 
 export const SkuContent = ({ data, addSku }) => {
 
@@ -47,6 +49,25 @@ const SkuInstock = ({ numberTitle, type, title }) => {
 
   const [searchValue, setSearchValue] = useState();
 
+  const [judge, setJudge] = useState();
+
+  const { run: judgeStock } = useRequest(judgeLoginUser, {
+    manual: true,
+    onSuccess: (res) => {
+      setJudge(res);
+    },
+  });
+
+  useEffect(() => {
+    switch (type) {
+      case 'inStock':
+        judgeStock();
+        break;
+      default:
+        break;
+    }
+  }, []);
+
   return <div className={style.skuInStock}>
     <MyNavBar title={title} />
     <div className={style.content}>
@@ -76,6 +97,7 @@ const SkuInstock = ({ numberTitle, type, title }) => {
 
 
     <AddSku
+      judge={judge}
       skus={skus}
       ref={addSku}
       type={type}
@@ -85,6 +107,7 @@ const SkuInstock = ({ numberTitle, type, title }) => {
     />
 
     <SkuShop
+      judge={judge}
       skus={skus}
       setSkus={setSkus}
       numberTitle={numberTitle}

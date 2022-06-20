@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Card } from 'antd-mobile';
 import style from './index.less';
 import { useBoolean } from 'ahooks';

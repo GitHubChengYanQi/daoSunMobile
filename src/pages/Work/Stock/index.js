@@ -20,8 +20,8 @@ const Stock = (props) => {
       case 'stock':
         return <StockDetail
           storehousePositionsId={ids.storehousePositionsId}
-          setTask={(task) => {
-            setStockDetail({ ...stockDetail, task });
+          setTask={(task, judge) => {
+            setStockDetail({ ...stockDetail, task, judge });
           }}
           setSkus={(skus) => {
             setStockDetail({ ...stockDetail, skus });
@@ -40,6 +40,7 @@ const Stock = (props) => {
         return stockDetail.task && <SkuShop
           className={style.popup}
           noClose
+          judge={stockDetail.judge}
           bottom={70}
           skus={stockDetail.skus}
           setSkus={(skus) => {

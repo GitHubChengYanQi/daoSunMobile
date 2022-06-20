@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from 'antd-mobile';
 import style from './index.css';
 import { ToolUtil } from '../ToolUtil';
@@ -17,9 +17,13 @@ const Number = (
     onChange = () => {
     },
     className,
+    onBlur = () => {
+    },
     ...props
   },
 ) => {
+
+  const [number, setNumber] = useState();
 
   const inputColor = () => {
     switch (color) {
@@ -55,9 +59,14 @@ const Number = (
       onChange={(string) => {
         if (string === '') {
           onChange(string);
+          setNumber(string);
         } else if (!isNaN(parseInt(string))) {
           onChange(parseInt(string));
+          setNumber(parseInt(string));
         }
+      }}
+      onBlur={() => {
+        onBlur(number);
       }}
     />
   </div>;

@@ -9,6 +9,9 @@ import SkuItem from '../../Sku/SkuItem';
 import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
+import { useRequest } from '../../../../util/Request';
+import { judgeLoginUser } from '../../Instock/InstockAsk/Submit/components/InstockSkus';
+import { MyLoading } from '../../../components/MyLoading';
 
 export const SkuContent = (
   {
@@ -90,6 +93,10 @@ const StockDetail = (
 
   const [visible, setVisible] = useState();
 
+  const [judge, setJudge] = useState(false);
+
+  const { loading: judgeLoading, data: judgeData } = useRequest(judgeLoginUser);
+
   return <>
     <div className={style.search}>
       <MySearch
@@ -120,10 +127,11 @@ const StockDetail = (
           }
         },
       }}
-      open={{ bom: true, position: true, state: true }}
+      open={{ bom: true, position: true, state: true, number: true }}
     />
 
     <AddSku
+      judge={judge}
       skus={skus}
       ref={addSku}
       type={task}
@@ -148,11 +156,23 @@ const StockDetail = (
         setVisible(false);
       }}
       onAction={(action) => {
-        setTask(action.key);
+        let judge = false;
+        switch (action.key) {
+          case 'inStock':
+            judge = judgeData;
+            setJudge(judgeData);
+            break;
+          default:
+            setJudge(false);
+            break;
+        }
+        setTask(action.key, judge);
         addSku.current.openSkuAdd(visible);
         setVisible(false);
       }}
     />
+
+    {judgeLoading && <MyLoading />}
 
   </>;
 };

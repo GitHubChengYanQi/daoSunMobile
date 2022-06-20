@@ -23,9 +23,9 @@ const Sku = (
 
   const [data, setData] = useState([]);
 
-  const [checkSku, setCheckSku] = useState([]);
+  console.log(data);
 
-  console.log(checkSku);
+  const [checkSku, setCheckSku] = useState([]);
 
   const skuChange = (newCheckSku) => {
     setCheckSku(newCheckSku);

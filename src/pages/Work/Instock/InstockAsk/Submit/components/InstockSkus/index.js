@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { Divider, Stepper, Toast } from 'antd-mobile';
+import { ActionSheet, Divider, Stepper, Toast } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -20,7 +20,9 @@ import LinkButton from '../../../../../../components/LinkButton';
 import CheckUser from '../../../../../../components/CheckUser';
 import { useModel } from 'umi';
 
-const InstockSkus = ({ skus = [], createType }) => {
+export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
+
+const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const { initialState } = useModel('@@initialState');
 
@@ -29,6 +31,8 @@ const InstockSkus = ({ skus = [], createType }) => {
   const userInfo = state.userInfo || {};
 
   const [data, setData] = useState([]);
+
+  const [visible, setVisible] = useState();
 
   const [params, setParams] = useState({ userId: userInfo.id, userName: userInfo.name });
 
@@ -72,8 +76,8 @@ const InstockSkus = ({ skus = [], createType }) => {
 
 
   useEffect(() => {
-    setData(skus.map((item,index)=>{
-      return {...item,key:index}
+    setData(skus.map((item, index) => {
+      return { ...item, key: index };
     }));
   }, [skus.length]);
 
@@ -88,10 +92,32 @@ const InstockSkus = ({ skus = [], createType }) => {
       case 'outStock':
         return { title: '出库申请', type: '出库', otherData: item.brandName };
       case 'inStock':
-        return { title: '入库申请', type: '入库', otherData: item.customerName };
+        return {
+          title: '入库申请',
+          type: '入库',
+          otherData: judge ? item.positionName : item.customerName,
+        };
       default:
         return {};
     }
+  };
+
+  const inStockRun = (directInStock) => {
+    const listParams = [];
+    data.map(item => {
+      if (item.number > 0) {
+        listParams.push({ ...item,storehousePositionsId:item.positionId });
+      }
+      return null;
+    });
+    inStock({
+      data: {
+        directInStock,
+        module: 'createInstock',
+        listParams,
+        ...params,
+      },
+    });
   };
 
   return <div style={{ marginBottom: 60 }}>
@@ -239,24 +265,40 @@ const InstockSkus = ({ skus = [], createType }) => {
             if (ToolUtil.isArray(params.noticeIds).length === 0) {
               return Message.toast('请选择注意事项！');
             }
-            const instockRequest = [];
-            data.map(item => {
-              if (item.number > 0) {
-                instockRequest.push(item);
-              }
-              return null;
-            });
-            inStock({
-              data: {
-                module: 'createInstock',
-                instockRequest,
-                ...params,
-              },
-            });
+            if (judge) {
+              return setVisible(true);
+            }
+            inStockRun();
             break;
           default:
             break;
         }
+      }}
+    />
+
+    <ActionSheet
+      className={style.action}
+      cancelText='取消'
+      visible={visible}
+      actions={[
+        { text: '提交申请', key: 'submit' },
+        { text: '直接入库', key: 'directInStock' },
+      ]}
+      onClose={() => {
+        setVisible(false);
+      }}
+      onAction={(action) => {
+        switch (action.key) {
+          case 'submit':
+            inStockRun();
+            break;
+          case 'directInStock':
+            inStockRun();
+            break;
+          default:
+            break;
+        }
+        setVisible(false);
       }}
     />
 

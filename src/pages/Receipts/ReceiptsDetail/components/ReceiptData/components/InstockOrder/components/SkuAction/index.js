@@ -37,7 +37,7 @@ const SkuAction = (
     setItems(data.map((item, index) => {
       return { ...item, key: index };
     }));
-  }, [data.length]);
+  }, [data]);
 
   const showItems = items.filter(item => !item.hidden);
 

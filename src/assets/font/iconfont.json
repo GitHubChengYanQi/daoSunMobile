@@ -1,0 +1,1353 @@
+{
+  "id": "2837038",
+  "name": "TaoSunMobile",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "16165040",
+      "name": "排序备份",
+      "font_class": "paixubeifen",
+      "unicode": "e6b6",
+      "unicode_decimal": 59062
+    },
+    {
+      "icon_id": "16165041",
+      "name": "排序备份 2",
+      "font_class": "paixubeifen2",
+      "unicode": "e6b7",
+      "unicode_decimal": 59063
+    },
+    {
+      "icon_id": "16165042",
+      "name": "排序",
+      "font_class": "paixu",
+      "unicode": "e6b8",
+      "unicode_decimal": 59064
+    },
+    {
+      "icon_id": "30061225",
+      "name": "仓储车",
+      "font_class": "cangchuche",
+      "unicode": "e6b5",
+      "unicode_decimal": 59061
+    },
+    {
+      "icon_id": "30028470",
+      "name": "铃铛",
+      "font_class": "lingdang",
+      "unicode": "e6b4",
+      "unicode_decimal": 59060
+    },
+    {
+      "icon_id": "30028056",
+      "name": "加号",
+      "font_class": "jiahao",
+      "unicode": "e6b3",
+      "unicode_decimal": 59059
+    },
+    {
+      "icon_id": "30027704",
+      "name": "单选选中、",
+      "font_class": "a-danxuanxuanzhong",
+      "unicode": "e6b2",
+      "unicode_decimal": 59058
+    },
+    {
+      "icon_id": "30027673",
+      "name": "单选未选中",
+      "font_class": "danxuanweixuanzhong",
+      "unicode": "e6b1",
+      "unicode_decimal": 59057
+    },
+    {
+      "icon_id": "29967651",
+      "name": "动态",
+      "font_class": "dongtai",
+      "unicode": "e6b0",
+      "unicode_decimal": 59056
+    },
+    {
+      "icon_id": "29967542",
+      "name": "仓储",
+      "font_class": "cangchu",
+      "unicode": "e6af",
+      "unicode_decimal": 59055
+    },
+    {
+      "icon_id": "29771185",
+      "name": "基础物料",
+      "font_class": "jichuwuliao",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "29767420",
+      "name": "物料清单",
+      "font_class": "wuliaoqingdan",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "29767357",
+      "name": "作业指导",
+      "font_class": "zuoyezhidao",
+      "unicode": "e6ac",
+      "unicode_decimal": 59052
+    },
+    {
+      "icon_id": "29765837",
+      "name": "产品管理",
+      "font_class": "chanpinguanli",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
+      "icon_id": "29764474",
+      "name": "质检管理",
+      "font_class": "zhijianguanli",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "29761651",
+      "name": "项目管理",
+      "font_class": "xiangmuguanli",
+      "unicode": "e6a9",
+      "unicode_decimal": 59049
+    },
+    {
+      "icon_id": "29759556",
+      "name": "客户管理",
+      "font_class": "kehuguanli",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "29759132",
+      "name": "合同管理",
+      "font_class": "hetongguanli",
+      "unicode": "e6a7",
+      "unicode_decimal": 59047
+    },
+    {
+      "icon_id": "29756659",
+      "name": "二维码管理",
+      "font_class": "erweimaguanli",
+      "unicode": "e6a6",
+      "unicode_decimal": 59046
+    },
+    {
+      "icon_id": "29756015",
+      "name": "销售订单",
+      "font_class": "xiaoshoudingdan",
+      "unicode": "e6a5",
+      "unicode_decimal": 59045
+    },
+    {
+      "icon_id": "29755214",
+      "name": "工具管理",
+      "font_class": "gongjuguanli",
+      "unicode": "e6a4",
+      "unicode_decimal": 59044
+    },
+    {
+      "icon_id": "29753287",
+      "name": "分类列表",
+      "font_class": "fenleiliebiao",
+      "unicode": "e6a3",
+      "unicode_decimal": 59043
+    },
+    {
+      "icon_id": "29716110",
+      "name": "报价管理",
+      "font_class": "baojiaguanli2",
+      "unicode": "e6a2",
+      "unicode_decimal": 59042
+    },
+    {
+      "icon_id": "29716064",
+      "name": "竞争对手",
+      "font_class": "jingzhengduishou2",
+      "unicode": "e6a1",
+      "unicode_decimal": 59041
+    },
+    {
+      "icon_id": "29716031",
+      "name": "信息管理",
+      "font_class": "xinxiguanli",
+      "unicode": "e6a0",
+      "unicode_decimal": 59040
+    },
+    {
+      "icon_id": "29716017",
+      "name": "联系人",
+      "font_class": "lianxiren2",
+      "unicode": "e69f",
+      "unicode_decimal": 59039
+    },
+    {
+      "icon_id": "29715753",
+      "name": "跟进管理",
+      "font_class": "genjinguanli",
+      "unicode": "e69e",
+      "unicode_decimal": 59038
+    },
+    {
+      "icon_id": "29715750",
+      "name": "话术管理",
+      "font_class": "huashuguanli",
+      "unicode": "e69d",
+      "unicode_decimal": 59037
+    },
+    {
+      "icon_id": "29714703",
+      "name": "发货申请",
+      "font_class": "fahuoshenqing1",
+      "unicode": "e69c",
+      "unicode_decimal": 59036
+    },
+    {
+      "icon_id": "29714565",
+      "name": "流程管理",
+      "font_class": "liuchengguanli",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "29714226",
+      "name": "售后管理",
+      "font_class": "shouhouguanli",
+      "unicode": "e69a",
+      "unicode_decimal": 59034
+    },
+    {
+      "icon_id": "29714094",
+      "name": "推荐商品",
+      "font_class": "tuijianshangpin",
+      "unicode": "e699",
+      "unicode_decimal": 59033
+    },
+    {
+      "icon_id": "29701596",
+      "name": "审批管理",
+      "font_class": "shenpiguanli",
+      "unicode": "e698",
+      "unicode_decimal": 59032
+    },
+    {
+      "icon_id": "29701525",
+      "name": "导航管理",
+      "font_class": "daohangguanli",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "29701521",
+      "name": "客户列表",
+      "font_class": "kehuliebiao2",
+      "unicode": "e696",
+      "unicode_decimal": 59030
+    },
+    {
+      "icon_id": "29701511",
+      "name": "轮播图管理",
+      "font_class": "lunbotuguanli",
+      "unicode": "e695",
+      "unicode_decimal": 59029
+    },
+    {
+      "icon_id": "29699086",
+      "name": "未审核的",
+      "font_class": "weishenhede",
+      "unicode": "e694",
+      "unicode_decimal": 59028
+    },
+    {
+      "icon_id": "29699067",
+      "name": "我审核的",
+      "font_class": "woshenhede",
+      "unicode": "e693",
+      "unicode_decimal": 59027
+    },
+    {
+      "icon_id": "29699056",
+      "name": "我的抄送",
+      "font_class": "wodechaosong",
+      "unicode": "e692",
+      "unicode_decimal": 59026
+    },
+    {
+      "icon_id": "29699054",
+      "name": "我发起的",
+      "font_class": "wofaqide",
+      "unicode": "e691",
+      "unicode_decimal": 59025
+    },
+    {
+      "icon_id": "29697923",
+      "name": "开发管理",
+      "font_class": "kaifaguanli",
+      "unicode": "e690",
+      "unicode_decimal": 59024
+    },
+    {
+      "icon_id": "29697919",
+      "name": "系统管理",
+      "font_class": "xitongguanli1",
+      "unicode": "e68f",
+      "unicode_decimal": 59023
+    },
+    {
+      "icon_id": "29697913",
+      "name": "统计报表",
+      "font_class": "tongjibaobiao",
+      "unicode": "e68e",
+      "unicode_decimal": 59022
+    },
+    {
+      "icon_id": "29697908",
+      "name": "主控面板",
+      "font_class": "zhukongmianban",
+      "unicode": "e68d",
+      "unicode_decimal": 59021
+    },
+    {
+      "icon_id": "29697791",
+      "name": "微信绑定",
+      "font_class": "weixinbangding",
+      "unicode": "e68c",
+      "unicode_decimal": 59020
+    },
+    {
+      "icon_id": "29694945",
+      "name": "高级组件",
+      "font_class": "gaojizujian",
+      "unicode": "e68b",
+      "unicode_decimal": 59019
+    },
+    {
+      "icon_id": "29694478",
+      "name": "数据容器",
+      "font_class": "shujurongqi",
+      "unicode": "e68a",
+      "unicode_decimal": 59018
+    },
+    {
+      "icon_id": "29693875",
+      "name": "excel表",
+      "font_class": "excelbiao",
+      "unicode": "e688",
+      "unicode_decimal": 59016
+    },
+    {
+      "icon_id": "29691907",
+      "name": "生产计划",
+      "font_class": "shengchanjihua",
+      "unicode": "e689",
+      "unicode_decimal": 59017
+    },
+    {
+      "icon_id": "29689274",
+      "name": "工单管理",
+      "font_class": "gongdanguanli2",
+      "unicode": "e687",
+      "unicode_decimal": 59015
+    },
+    {
+      "icon_id": "29688847",
+      "name": "我的领料",
+      "font_class": "wodelingliao",
+      "unicode": "e684",
+      "unicode_decimal": 59012
+    },
+    {
+      "icon_id": "29688753",
+      "name": "退出登录",
+      "font_class": "tuichudenglu",
+      "unicode": "e683",
+      "unicode_decimal": 59011
+    },
+    {
+      "icon_id": "29657665",
+      "name": "创建报修",
+      "font_class": "chuangjianbaoxiu2",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
+      "icon_id": "29656911",
+      "name": "采购单管理",
+      "font_class": "caigoudanguanli",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "29656871",
+      "name": "采购申请管理",
+      "font_class": "caigoushenqingguanli",
+      "unicode": "e636",
+      "unicode_decimal": 58934
+    },
+    {
+      "icon_id": "29655033",
+      "name": "出库管理",
+      "font_class": "chukuguanli2",
+      "unicode": "e635",
+      "unicode_decimal": 58933
+    },
+    {
+      "icon_id": "29655028",
+      "name": "库间调拨",
+      "font_class": "kujiantiaobo",
+      "unicode": "e634",
+      "unicode_decimal": 58932
+    },
+    {
+      "icon_id": "29655026",
+      "name": "库存养护",
+      "font_class": "kucunyanghu",
+      "unicode": "e633",
+      "unicode_decimal": 58931
+    },
+    {
+      "icon_id": "29654984",
+      "name": "盘点管理",
+      "font_class": "pandianguanli",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
+      "icon_id": "29654757",
+      "name": "库存管理",
+      "font_class": "kucunguanli1",
+      "unicode": "e62f",
+      "unicode_decimal": 58927
+    },
+    {
+      "icon_id": "29654735",
+      "name": "入库管理",
+      "font_class": "rukuguanli2",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "29617802",
+      "name": "底部导航-扫码",
+      "font_class": "dibudaohang-saoma",
+      "unicode": "e62d",
+      "unicode_decimal": 58925
+    },
+    {
+      "icon_id": "29617799",
+      "name": "底部导航-首页",
+      "font_class": "shouye3",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "29617683",
+      "name": "底部导航-我的",
+      "font_class": "wode",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "29617682",
+      "name": "底部导航-报表",
+      "font_class": "baobiao1",
+      "unicode": "e62b",
+      "unicode_decimal": 58923
+    },
+    {
+      "icon_id": "29617680",
+      "name": "底部导航-消息",
+      "font_class": "xiaoxi2",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "29617679",
+      "name": "底部导航-任务",
+      "font_class": "renwu1",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "29586720",
+      "name": "更多",
+      "font_class": "gengduo",
+      "unicode": "e626",
+      "unicode_decimal": 58918
+    },
+    {
+      "icon_id": "29584881",
+      "name": "消息",
+      "font_class": "xiaoxi1",
+      "unicode": "e625",
+      "unicode_decimal": 58917
+    },
+    {
+      "icon_id": "29584756",
+      "name": "任务",
+      "font_class": "renwu",
+      "unicode": "e624",
+      "unicode_decimal": 58916
+    },
+    {
+      "icon_id": "29582368",
+      "name": "审批",
+      "font_class": "shenpi2",
+      "unicode": "e621",
+      "unicode_decimal": 58913
+    },
+    {
+      "icon_id": "29582355",
+      "name": "crm管理",
+      "font_class": "crmguanli",
+      "unicode": "e61d",
+      "unicode_decimal": 58909
+    },
+    {
+      "icon_id": "29582248",
+      "name": "仓储管理",
+      "font_class": "cangchuguanli",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "29582238",
+      "name": "产研管理",
+      "font_class": "caidan-shengchanguanli",
+      "unicode": "e615",
+      "unicode_decimal": 58901
+    },
+    {
+      "icon_id": "29582220",
+      "name": "产研管理",
+      "font_class": "chanyanguanli",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "29582184",
+      "name": "采购管理",
+      "font_class": "caigouguanli",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "29556021",
+      "name": "记住密码选中",
+      "font_class": "a-jianqudingceng2",
+      "unicode": "e611",
+      "unicode_decimal": 58897
+    },
+    {
+      "icon_id": "29555813",
+      "name": "记住密码默认",
+      "font_class": "jizhumimamoren",
+      "unicode": "e610",
+      "unicode_decimal": 58896
+    },
+    {
+      "icon_id": "29554994",
+      "name": "账号",
+      "font_class": "zhanghao",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "29554910",
+      "name": "密码",
+      "font_class": "a-lianji1",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "29553520",
+      "name": "验证码",
+      "font_class": "yanzhengma",
+      "unicode": "e60d",
+      "unicode_decimal": 58893
+    },
+    {
+      "icon_id": "11111000",
+      "name": "出库",
+      "font_class": "chuku",
+      "unicode": "e682",
+      "unicode_decimal": 59010
+    },
+    {
+      "icon_id": "1305",
+      "name": "购物车满",
+      "font_class": "gouwucheman",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1306",
+      "name": "购物车空",
+      "font_class": "gouwuchekong",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "27070478",
+      "name": "退出登录 (2)",
+      "font_class": "a-tuichudenglu2",
+      "unicode": "e681",
+      "unicode_decimal": 59009
+    },
+    {
+      "icon_id": "27059855",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli2",
+      "unicode": "e676",
+      "unicode_decimal": 58998
+    },
+    {
+      "icon_id": "27059856",
+      "name": "日程管理",
+      "font_class": "richengguanli1",
+      "unicode": "e678",
+      "unicode_decimal": 59000
+    },
+    {
+      "icon_id": "27059857",
+      "name": "全局搜索",
+      "font_class": "quanjusousuo1",
+      "unicode": "e679",
+      "unicode_decimal": 59001
+    },
+    {
+      "icon_id": "27059858",
+      "name": "扫一扫",
+      "font_class": "saoyisao4",
+      "unicode": "e67a",
+      "unicode_decimal": 59002
+    },
+    {
+      "icon_id": "27059859",
+      "name": "联系人",
+      "font_class": "lianxiren1",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "27059860",
+      "name": "质检任务管理",
+      "font_class": "zhijianrenwuguanli",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "27059861",
+      "name": "项目列表",
+      "font_class": "xiangmuliebiao1",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "27059862",
+      "name": "项目流程",
+      "font_class": "xiangmuliucheng1",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "27059863",
+      "name": "盘点",
+      "font_class": "pandian",
+      "unicode": "e67f",
+      "unicode_decimal": 59007
+    },
+    {
+      "icon_id": "27059864",
+      "name": "工单管理",
+      "font_class": "gongdanguanli1",
+      "unicode": "e680",
+      "unicode_decimal": 59008
+    },
+    {
+      "icon_id": "27059838",
+      "name": "合同列表",
+      "font_class": "hetongliebiao1",
+      "unicode": "e663",
+      "unicode_decimal": 58979
+    },
+    {
+      "icon_id": "27059839",
+      "name": "出库管理",
+      "font_class": "chukuguanli1",
+      "unicode": "e664",
+      "unicode_decimal": 58980
+    },
+    {
+      "icon_id": "27059840",
+      "name": "仓库管理",
+      "font_class": "cangkuguanli",
+      "unicode": "e665",
+      "unicode_decimal": 58981
+    },
+    {
+      "icon_id": "27059841",
+      "name": "产品资料管理",
+      "font_class": "chanpinziliaoguanli",
+      "unicode": "e666",
+      "unicode_decimal": 58982
+    },
+    {
+      "icon_id": "27059843",
+      "name": "公海获客",
+      "font_class": "gonghaihuoke1",
+      "unicode": "e66a",
+      "unicode_decimal": 58986
+    },
+    {
+      "icon_id": "27059844",
+      "name": "发货申请列表",
+      "font_class": "fahuoshenqingliebiao1",
+      "unicode": "e66b",
+      "unicode_decimal": 58987
+    },
+    {
+      "icon_id": "27059845",
+      "name": "创建报修",
+      "font_class": "chuangjianbaoxiu1",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "27059846",
+      "name": "自由入库",
+      "font_class": "ziyouruku",
+      "unicode": "e66d",
+      "unicode_decimal": 58989
+    },
+    {
+      "icon_id": "27059847",
+      "name": "竞争对手",
+      "font_class": "jingzhengduishou1",
+      "unicode": "e66e",
+      "unicode_decimal": 58990
+    },
+    {
+      "icon_id": "27059848",
+      "name": "拜访签到",
+      "font_class": "baifangqiandao1",
+      "unicode": "e66f",
+      "unicode_decimal": 58991
+    },
+    {
+      "icon_id": "27059849",
+      "name": "报价管理",
+      "font_class": "baojiaguanli1",
+      "unicode": "e670",
+      "unicode_decimal": 58992
+    },
+    {
+      "icon_id": "27059850",
+      "name": "客户列表",
+      "font_class": "kehuliebiao1",
+      "unicode": "e671",
+      "unicode_decimal": 58993
+    },
+    {
+      "icon_id": "27059851",
+      "name": "审批",
+      "font_class": "shenpi1",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
+      "icon_id": "27059852",
+      "name": "合同模板",
+      "font_class": "hetongmoban1",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "27059853",
+      "name": "自由出库",
+      "font_class": "ziyouchuku",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "27059854",
+      "name": "入库管理",
+      "font_class": "rukuguanli1",
+      "unicode": "e675",
+      "unicode_decimal": 58997
+    },
+    {
+      "icon_id": "26778493",
+      "name": "报表",
+      "font_class": "baobiao",
+      "unicode": "e65d",
+      "unicode_decimal": 58973
+    },
+    {
+      "icon_id": "26778494",
+      "name": "工作-选中",
+      "font_class": "gongzuo-xuanzhong",
+      "unicode": "e65f",
+      "unicode_decimal": 58975
+    },
+    {
+      "icon_id": "26778495",
+      "name": "扫码",
+      "font_class": "saoma",
+      "unicode": "e660",
+      "unicode_decimal": 58976
+    },
+    {
+      "icon_id": "26778496",
+      "name": "报表-选中",
+      "font_class": "baobiao-xuanzhong",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
+      "icon_id": "26778497",
+      "name": "通知",
+      "font_class": "tongzhi",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "26778488",
+      "name": "首页-选中",
+      "font_class": "shouye-xuanzhong",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "26778489",
+      "name": "扫码-选中",
+      "font_class": "saoma-xuanzhong",
+      "unicode": "e659",
+      "unicode_decimal": 58969
+    },
+    {
+      "icon_id": "26778490",
+      "name": "通知-选中",
+      "font_class": "tongzhi-xuanzhong",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "26778491",
+      "name": "首页",
+      "font_class": "shouye2",
+      "unicode": "e65b",
+      "unicode_decimal": 58971
+    },
+    {
+      "icon_id": "26778492",
+      "name": "工作",
+      "font_class": "gongzuo",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "26778125",
+      "name": "创建报修",
+      "font_class": "chuangjianbaoxiu",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "26778126",
+      "name": "出库管理",
+      "font_class": "chukuguanli",
+      "unicode": "e63d",
+      "unicode_decimal": 58941
+    },
+    {
+      "icon_id": "26778127",
+      "name": "发货申请列表",
+      "font_class": "fahuoshenqingliebiao",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "26778128",
+      "name": "公海获客",
+      "font_class": "gonghaihuoke",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    },
+    {
+      "icon_id": "26778129",
+      "name": "报价管理",
+      "font_class": "baojiaguanli",
+      "unicode": "e640",
+      "unicode_decimal": 58944
+    },
+    {
+      "icon_id": "26778130",
+      "name": "合同列表",
+      "font_class": "hetongliebiao",
+      "unicode": "e641",
+      "unicode_decimal": 58945
+    },
+    {
+      "icon_id": "26778131",
+      "name": "客户列表",
+      "font_class": "kehuliebiao",
+      "unicode": "e643",
+      "unicode_decimal": 58947
+    },
+    {
+      "icon_id": "26778132",
+      "name": "全局搜索",
+      "font_class": "quanjusousuo",
+      "unicode": "e644",
+      "unicode_decimal": 58948
+    },
+    {
+      "icon_id": "26778133",
+      "name": "扫一扫",
+      "font_class": "saoyisao3",
+      "unicode": "e645",
+      "unicode_decimal": 58949
+    },
+    {
+      "icon_id": "26778134",
+      "name": "质检任务",
+      "font_class": "zhijianrenwu",
+      "unicode": "e646",
+      "unicode_decimal": 58950
+    },
+    {
+      "icon_id": "26778135",
+      "name": "库存管理",
+      "font_class": "kucunguanli",
+      "unicode": "e647",
+      "unicode_decimal": 58951
+    },
+    {
+      "icon_id": "26778136",
+      "name": "合同模板",
+      "font_class": "hetongmoban",
+      "unicode": "e648",
+      "unicode_decimal": 58952
+    },
+    {
+      "icon_id": "26778137",
+      "name": "项目列表",
+      "font_class": "xiangmuliebiao",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "26778138",
+      "name": "审批",
+      "font_class": "shenpi",
+      "unicode": "e64a",
+      "unicode_decimal": 58954
+    },
+    {
+      "icon_id": "26778139",
+      "name": "入库管理",
+      "font_class": "rukuguanli",
+      "unicode": "e64d",
+      "unicode_decimal": 58957
+    },
+    {
+      "icon_id": "26778140",
+      "name": "竞争对手",
+      "font_class": "jingzhengduishou",
+      "unicode": "e64e",
+      "unicode_decimal": 58958
+    },
+    {
+      "icon_id": "26778141",
+      "name": "联系人",
+      "font_class": "lianxiren",
+      "unicode": "e650",
+      "unicode_decimal": 58960
+    },
+    {
+      "icon_id": "26778142",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli1",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "26778143",
+      "name": "拜访签到",
+      "font_class": "baifangqiandao",
+      "unicode": "e652",
+      "unicode_decimal": 58962
+    },
+    {
+      "icon_id": "26778144",
+      "name": "项目流程",
+      "font_class": "xiangmuliucheng",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "26778145",
+      "name": "工单管理",
+      "font_class": "gongdanguanli",
+      "unicode": "e656",
+      "unicode_decimal": 58966
+    },
+    {
+      "icon_id": "26778146",
+      "name": "日程管理",
+      "font_class": "richengguanli",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
+      "icon_id": "26585303",
+      "name": "审核",
+      "font_class": "shenhe",
+      "unicode": "e63b",
+      "unicode_decimal": 58939
+    },
+    {
+      "icon_id": "26584145",
+      "name": "采购_审批通过",
+      "font_class": "caigou_shenpitongguo1",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "26584143",
+      "name": "采购_未审批",
+      "font_class": "caigou_weishenpi1",
+      "unicode": "e638",
+      "unicode_decimal": 58936
+    },
+    {
+      "icon_id": "26584144",
+      "name": "采购_审批不通过",
+      "font_class": "caigou_shenpibutongguo1",
+      "unicode": "e639",
+      "unicode_decimal": 58937
+    },
+    {
+      "icon_id": "26563406",
+      "name": "采购_发起人",
+      "font_class": "caigou_faqiren",
+      "unicode": "e71f",
+      "unicode_decimal": 59167
+    },
+    {
+      "icon_id": "26563410",
+      "name": "采购_抄送",
+      "font_class": "caigou_chaosong",
+      "unicode": "e724",
+      "unicode_decimal": 59172
+    },
+    {
+      "icon_id": "26563411",
+      "name": "采购_动作",
+      "font_class": "caigou_dongzuo",
+      "unicode": "e725",
+      "unicode_decimal": 59173
+    },
+    {
+      "icon_id": "26345053",
+      "name": "44-110",
+      "font_class": "a-44-110",
+      "unicode": "e71e",
+      "unicode_decimal": 59166
+    },
+    {
+      "icon_id": "577307",
+      "name": "方形选中-fill",
+      "font_class": "fangxingxuanzhongfill",
+      "unicode": "e721",
+      "unicode_decimal": 59169
+    },
+    {
+      "icon_id": "10079556",
+      "name": "多选选中",
+      "font_class": "duoxuanxuanzhong",
+      "unicode": "e71c",
+      "unicode_decimal": 59164
+    },
+    {
+      "icon_id": "12987916",
+      "name": "多选选中",
+      "font_class": "duoxuanxuanzhong1",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "21014627",
+      "name": "出货",
+      "font_class": "chuhuo",
+      "unicode": "e686",
+      "unicode_decimal": 59014
+    },
+    {
+      "icon_id": "8776987",
+      "name": "notification",
+      "font_class": "icon-test",
+      "unicode": "e642",
+      "unicode_decimal": 58946
+    },
+    {
+      "icon_id": "693679",
+      "name": "租赁合同模板",
+      "font_class": "zulinhetongmoban",
+      "unicode": "e677",
+      "unicode_decimal": 58999
+    },
+    {
+      "icon_id": "774446",
+      "name": "报修",
+      "font_class": "baoxiu",
+      "unicode": "e65e",
+      "unicode_decimal": 58974
+    },
+    {
+      "icon_id": "1614439",
+      "name": "导出",
+      "font_class": "daochu",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "1614440",
+      "name": "工单列表",
+      "font_class": "gongdanliebiao",
+      "unicode": "e620",
+      "unicode_decimal": 58912
+    },
+    {
+      "icon_id": "1614449",
+      "name": "结算单列表",
+      "font_class": "jiesuandanliebiao",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "1614466",
+      "name": "员工列表",
+      "font_class": "yuangongliebiao",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "1820725",
+      "name": "挂帐客户列表",
+      "font_class": "guazhangkehuliebiao",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "9713017",
+      "name": "分类1",
+      "font_class": "fenlei1",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    },
+    {
+      "icon_id": "9713066",
+      "name": "扫一扫",
+      "font_class": "saoyisao",
+      "unicode": "e685",
+      "unicode_decimal": 59013
+    },
+    {
+      "icon_id": "10199178",
+      "name": "打款明细",
+      "font_class": "dakuanmingxi",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "10213489",
+      "name": "角色管理",
+      "font_class": "jiaoseguanli",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
+      "icon_id": "10213490",
+      "name": "续约",
+      "font_class": "xuyue",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "10223261",
+      "name": "首页",
+      "font_class": "shouye1",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "10540148",
+      "name": "系统管理",
+      "font_class": "xitongguanli",
+      "unicode": "e616",
+      "unicode_decimal": 58902
+    },
+    {
+      "icon_id": "10540151",
+      "name": "系统管理 半",
+      "font_class": "xitongguanliban",
+      "unicode": "e617",
+      "unicode_decimal": 58903
+    },
+    {
+      "icon_id": "10540175",
+      "name": "主页 全",
+      "font_class": "zhuyequan",
+      "unicode": "e61b",
+      "unicode_decimal": 58907
+    },
+    {
+      "icon_id": "10540176",
+      "name": "主页",
+      "font_class": "zhuye",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "10610655",
+      "name": "扫一扫",
+      "font_class": "saoyisao1",
+      "unicode": "e668",
+      "unicode_decimal": 58984
+    },
+    {
+      "icon_id": "11372658",
+      "name": "订单",
+      "font_class": "dingdan1",
+      "unicode": "e8ae",
+      "unicode_decimal": 59566
+    },
+    {
+      "icon_id": "11372665",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e8b0",
+      "unicode_decimal": 59568
+    },
+    {
+      "icon_id": "11372685",
+      "name": "扫一扫",
+      "font_class": "saoyisao2",
+      "unicode": "e8b5",
+      "unicode_decimal": 59573
+    },
+    {
+      "icon_id": "11372686",
+      "name": "日历",
+      "font_class": "rili",
+      "unicode": "e8b4",
+      "unicode_decimal": 59572
+    },
+    {
+      "icon_id": "11372689",
+      "name": "日签",
+      "font_class": "riqian",
+      "unicode": "e8b6",
+      "unicode_decimal": 59574
+    },
+    {
+      "icon_id": "11372696",
+      "name": "社区",
+      "font_class": "shequ",
+      "unicode": "e8b8",
+      "unicode_decimal": 59576
+    },
+    {
+      "icon_id": "11372700",
+      "name": "声音",
+      "font_class": "shengyin",
+      "unicode": "e8b9",
+      "unicode_decimal": 59577
+    },
+    {
+      "icon_id": "11372704",
+      "name": "数据",
+      "font_class": "shuju",
+      "unicode": "e8ba",
+      "unicode_decimal": 59578
+    },
+    {
+      "icon_id": "11372706",
+      "name": "搜索",
+      "font_class": "sousuo",
+      "unicode": "e8bb",
+      "unicode_decimal": 59579
+    },
+    {
+      "icon_id": "11372708",
+      "name": "讨论区",
+      "font_class": "taolunqu",
+      "unicode": "e8bc",
+      "unicode_decimal": 59580
+    },
+    {
+      "icon_id": "11372715",
+      "name": "问卷",
+      "font_class": "wenjuan",
+      "unicode": "e8bd",
+      "unicode_decimal": 59581
+    },
+    {
+      "icon_id": "11372724",
+      "name": "小聚场",
+      "font_class": "xiaojuchang",
+      "unicode": "e8be",
+      "unicode_decimal": 59582
+    },
+    {
+      "icon_id": "13468921",
+      "name": "发货申请",
+      "font_class": "fahuoshenqing",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "21243062",
+      "name": "首页",
+      "font_class": "shouye",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "21243063",
+      "name": "订单",
+      "font_class": "dingdan",
+      "unicode": "e64c",
+      "unicode_decimal": 58956
+    },
+    {
+      "icon_id": "21243067",
+      "name": "消息",
+      "font_class": "xiaoxi",
+      "unicode": "e64f",
+      "unicode_decimal": 58959
+    },
+    {
+      "icon_id": "21243080",
+      "name": "分类",
+      "font_class": "fenlei",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "21243083",
+      "name": "搜索",
+      "font_class": "sousuo1",
+      "unicode": "e654",
+      "unicode_decimal": 58964
+    }
+  ]
+}

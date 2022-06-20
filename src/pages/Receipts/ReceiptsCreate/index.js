@@ -3,9 +3,7 @@ import React, { useRef, useState } from 'react';
 import AskAdd from '../../Work/PurchaseAsk/AskAdd';
 import Errors from '../../Work/Instock/Errors';
 import MyEmpty from '../../components/MyEmpty';
-import MyBottom from '../../components/MyBottom';
-import { CreateInstock, CreateInstockBottom, InstockError } from '../components/Instock';
-import Process from '../../Work/PurchaseAsk/components/Process';
+import { CreateInstockBottom, InstockError } from '../components/Instock';
 import { ReceiptsEnums } from '../index';
 import InStockAsk from '../../Work/Instock/InstockAsk';
 import OutStockAsk from '../../Work/OutStock/OutStockAsk';
@@ -18,7 +16,7 @@ const ReceiptsCreate = () => {
   const query = location.query;
   const state = location.state;
 
-  const [type, setType] = useState();
+  const [setType] = useState();
 
   const [moduleObject, setModuleObject] = useState({});
 

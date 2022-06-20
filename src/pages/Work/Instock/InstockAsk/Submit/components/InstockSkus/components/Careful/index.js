@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, {  useState } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { Divider, Input, Selector, Toast } from 'antd-mobile';
+import { Divider, Selector, Toast } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { announcementsAdd, announcementsListSelect } from '../../../../../../Url';
 import { useBoolean } from 'ahooks';
 import LinkButton from '../../../../../../../../components/LinkButton';
+import FocusInput from './components/FocusInput';
 
 const Careful = (
   {
@@ -37,7 +38,6 @@ const Careful = (
 
   const [content, setContent] = useState('');
 
-
   return <>
     <div className={style.carefulData}>
       <Selector
@@ -57,7 +57,7 @@ const Careful = (
         }}
       />
       {addOther && <div className={style.addCareful}>
-        <Input className={style.input} placeholder='请输入注意事项名称' onChange={setContent} />
+        <FocusInput onChange={setContent} />
         <LinkButton className={style.button} onClick={() => {
           openAddOther();
         }}>取消</LinkButton>

@@ -9,7 +9,7 @@ import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import BottomButton from '../../../components/BottomButton';
-import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
 import Pick from '../../Production/Pick';
