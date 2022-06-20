@@ -15,6 +15,7 @@ const MyTextArea = (
   },
 ) => {
 
+
   const userRef = useRef();
 
   const [users, setUsers] = useState([]);
@@ -28,6 +29,7 @@ const MyTextArea = (
   return <>
     <Input.TextArea
       autoSize
+      value={value}
       className={ToolUtil.classNames(style.text,className)}
       placeholder={placeholder || '可@相关人员'}
       onKeyUp={(even) => {

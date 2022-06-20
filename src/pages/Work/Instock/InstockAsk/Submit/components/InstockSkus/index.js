@@ -18,23 +18,16 @@ import Careful from './components/Careful';
 import MyNavBar from '../../../../../../components/MyNavBar';
 import LinkButton from '../../../../../../components/LinkButton';
 import CheckUser from '../../../../../../components/CheckUser';
-import { useModel } from 'umi';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 
 const InstockSkus = ({ skus = [], createType, judge }) => {
 
-  const { initialState } = useModel('@@initialState');
-
-  const state = initialState || {};
-
-  const userInfo = state.userInfo || {};
-
   const [data, setData] = useState([]);
 
   const [visible, setVisible] = useState();
 
-  const [params, setParams] = useState({ userId: userInfo.id, userName: userInfo.name });
+  const [params, setParams] = useState({ });
 
   const history = useHistory();
 
@@ -277,7 +270,6 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     />
 
     <ActionSheet
-      className={style.action}
       cancelText='取消'
       visible={visible}
       actions={[

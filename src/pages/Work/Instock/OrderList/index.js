@@ -57,7 +57,7 @@ const Orderlist = () => {
             return <div key={index} className={style.orderItem}>
               <div className={style.data}>
                 <div className={style.customer}>
-                  <div onClick={() => {
+                  <div className={style.name} onClick={() => {
                     history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${item.instockOrderId}`);
                   }}>
                     <span className={style.title}>{ToolUtil.isObject(item.userResult).name}的入库申请 / {item.coding}</span>
