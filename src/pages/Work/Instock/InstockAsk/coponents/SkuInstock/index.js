@@ -54,7 +54,7 @@ const SkuInstock = ({ numberTitle, type, title }) => {
   const { run: judgeStock } = useRequest(judgeLoginUser, {
     manual: true,
     onSuccess: (res) => {
-      setJudge(res);
+      setJudge(false);
     },
   });
 
