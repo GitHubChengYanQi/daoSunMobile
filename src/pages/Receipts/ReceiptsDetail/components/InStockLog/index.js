@@ -32,7 +32,7 @@ const InStockLog = (
   }
 
   return <>
-
+    {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
         return <div key={index}>
