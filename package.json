@@ -7,7 +7,6 @@
     "buildZjzc": "cross-env UMI_ENV=zjzc umi build",
     "buildHunHe": "cross-env UMI_ENV=hunhe umi build",
     "test": "umi test",
-    "lint": "eslint {src,mock,tests}/**/*.{js,jsx} --fix",
     "precommit": "lint-staged"
   },
   "dependencies": {
