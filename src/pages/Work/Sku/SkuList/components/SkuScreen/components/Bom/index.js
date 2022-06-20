@@ -22,7 +22,7 @@ const Bom = (
 
   const [type, setType] = useState('Present');
 
-  const [boms, setBoms] = useState([]);
+  const [boms, setBoms] = useState([[]]);
 
   const { loading, run } = useRequest(backDetails, {
     manual: true,
@@ -67,11 +67,6 @@ const Bom = (
   useEffect(() => {
     Select();
   }, []);
-
-
-  if (boms.length === 0) {
-    return <></>;
-  }
 
   return <div className={style.content}>
     <Card

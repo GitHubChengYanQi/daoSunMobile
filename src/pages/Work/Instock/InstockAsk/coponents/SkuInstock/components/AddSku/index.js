@@ -9,6 +9,7 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import ShopNumber from '../ShopNumber';
 import { shopCartAdd } from '../../../../../Url';
+import Positions from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
 
 const AddSku = (
   {
@@ -16,6 +17,7 @@ const AddSku = (
     },
     type,
     skus = [],
+    judge,
   }, ref) => {
 
   const { initialState } = useModel('@@initialState');
@@ -59,9 +61,9 @@ const AddSku = (
     const snameSku = skus.filter((item) => {
       return item.skuId === data.skuId
         &&
-      (data.customerId ? item.customerId === data.customerId : false)
+        (data.customerId ? item.customerId === data.customerId : true)
         &&
-        (data.brandId ? item.brandId === data.brandId : false)
+        (data.brandId ? item.brandId === data.brandId : true);
     });
     return snameSku.length > 0;
   };
@@ -110,6 +112,9 @@ const AddSku = (
         } else if (!data.customerId) {
           disabledText = '请选择供应商';
           disabled = true;
+        } else if (judge && !data.positionId) {
+          disabledText = '请选择库位';
+          disabled = true;
         }
         return {
           title: '入库',
@@ -128,6 +133,7 @@ const AddSku = (
     const bar = document.createElement('div');
 
     bar.style.backgroundImage = `url(${imgUrl})`;
+    bar.style.backgroundColor = '#e1e1e1';
     bar.style.backgroundSize = 'cover';
     bar.style.border = 'solid #F1F1F1 1px';
     bar.style.borderRadius = '4px';
@@ -153,7 +159,11 @@ const AddSku = (
     /**
      * 动画结束后，删除
      */
+    bar.onanimationend = () => {
+      alert(1)
+    };
     bar.ontransitionend = () => {
+      alert(1);
       bar.remove();
       i++;
       if (i === 2) {
@@ -164,13 +174,12 @@ const AddSku = (
             brandId: data.brandId,
             customerId: data.customerId,
             number: data.number,
+            storehousePositionsId: data.positionId,
           },
         });
       }
 
     };
-
-
   };
 
   return <>
@@ -220,11 +229,23 @@ const AddSku = (
               }}
             >{data.customerName || '请选择供应商'}</Button>
           </div>
+          <div hidden={!judge} className={style.flex}>
+            <div className={style.checkLabel}>
+              库位
+            </div>
+            <Button
+              color='primary'
+              fill='outline'
+              className={style.check}
+              onClick={() => {
+                setDataVisible('position');
+              }}
+            >{data.positionName || '请选择库位'}</Button>
+          </div>
           <div className={style.stockNumber}>
             <div>
               <div className={style.checkLabel}>库存</div>
-              <span
-                style={{ marginRight: 8 }}>
+              <span style={{ marginRight: 8 }}>
               {data.stockNumber}
             </span>
               {ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
@@ -265,21 +286,22 @@ const AddSku = (
 
     <Picker
       popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
-      columns={[ToolUtil.isArray(sku.brandResults).map(item => {
+      columns={[[{ label: '其他品牌', value: 0 }, ...ToolUtil.isArray(sku.brandResults).map(item => {
         return {
           label: item.brandName,
           value: item.brandId,
         };
-      })]}
+      })]]}
       visible={dataVisible === 'brand'}
       onClose={() => {
         setDataVisible(null);
       }}
       onConfirm={(value, options) => {
+        const brand = ToolUtil.isArray(options.items)[0] || {};
         setData({
           ...data,
-          brandId: ToolUtil.isArray(value)[0],
-          brandName: ToolUtil.isObject(ToolUtil.isArray(options.items)[0]).label,
+          brandId: brand.value,
+          brandName: brand.label,
         });
       }}
     />
@@ -298,13 +320,27 @@ const AddSku = (
       }}
       value={[data.customerId]}
       onConfirm={(value, options) => {
+        const customer = ToolUtil.isArray(options.items)[0] || {};
         setData({
           ...data,
-          customerId: ToolUtil.isArray(value)[0],
-          customerName: ToolUtil.isObject(ToolUtil.isArray(options.items)[0]).label,
+          customerId: customer.value,
+          customerName: customer.label,
         });
       }}
     />
+
+    <Popup visible={dataVisible === 'position'} className={style.positionPopup}>
+      <Positions
+        onClose={() => setDataVisible(null)}
+        onSuccess={(value = {}) => {
+          setDataVisible(null);
+          setData({
+            ...data,
+            positionId: value.id,
+            positionName: value.name,
+          });
+        }} />
+    </Popup>
   </>;
 };
 

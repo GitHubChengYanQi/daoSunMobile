@@ -44,6 +44,15 @@ body {
   --height:24px
 }
 
+.adm-action-sheet-button-item-name {
+  font-size: 14px;
+  padding: 8px;
+}
+
+.adm-input {
+  --font-size: 14px;
+}
+
 
 
 

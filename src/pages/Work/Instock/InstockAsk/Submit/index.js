@@ -13,6 +13,7 @@ const Submit = () => {
   const { query, state } = useLocation();
 
   const skus = ToolUtil.isArray(state && state.skus);
+  const judge = ToolUtil.isArray(state && state.judge);
 
   const [data, setData] = useState();
 
@@ -51,7 +52,7 @@ const Submit = () => {
     case 'outItem':
       return <MyEmpty />;
     default:
-      return <InstockSkus skus={skus} createType={query.createType} />;
+      return <InstockSkus skus={skus} createType={query.createType} judge={judge} />;
   }
 };
 

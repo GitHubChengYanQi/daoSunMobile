@@ -22,6 +22,7 @@ const SkuShop = (
     type,
     noClose,
     className,
+    judge,
   },
 ) => {
 
@@ -59,6 +60,8 @@ const SkuShop = (
           brandName: ToolUtil.isObject(item.brandResult).brandName,
           brandId: item.brandId,
           number: item.number,
+          positionId: item.storehousePositionsId,
+          positionName: ToolUtil.isObject(item.storehousePositions).name,
         };
       }));
     },
@@ -105,7 +108,7 @@ const SkuShop = (
       case 'inStock':
         return {
           title: '入库任务明细',
-          otherData: item.customerName,
+          otherData: judge ? item.positionName : item.customerName,
         };
       default:
         return {
@@ -207,6 +210,7 @@ const SkuShop = (
                   },
                   state: {
                     skus,
+                    judge,
                   },
                 });
                 break;

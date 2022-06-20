@@ -90,6 +90,10 @@
   border-color: #F5F5F5;
 }
 
+.user {
+  display: flex;
+}
+
 .careful, .note, .file, .user {
   background-color: #fff;
   padding: 12px;
@@ -121,9 +125,10 @@
     --font-size: 14px;
     border-bottom: 1px solid #F5F5F5;;
     padding: 8px;
+    text-align: center;
 
-    :global .adm-text-area-element {
-      text-align: center;
+    &:focus {
+      border-bottom: 1px solid #F5F5F5;;
     }
   }
 }
@@ -135,6 +140,7 @@
     margin-top: 8px;
     display: flex;
     gap: 8px;
+    border: solid 1px #F5F5F5;
 
     .button {
       min-width: 50px;
@@ -142,7 +148,6 @@
 
     .input {
       flex-grow: 1;
-      border: solid 1px #F5F5F5;
       border-radius: 2px;
       overflow: hidden;
       --font-size: 14px;

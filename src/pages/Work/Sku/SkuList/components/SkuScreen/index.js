@@ -9,6 +9,7 @@ import Bom from './components/Bom';
 import Screen from '../../../../../components/Screen';
 import Time from './components/Time';
 import User from './components/User';
+import StockNumber from './components/StockNumber';
 
 const SkuScreen = (
   {
@@ -34,6 +35,7 @@ const SkuScreen = (
     { key: 'bom', title: '物料清单', open: open.bom },
     { key: 'time', title: '创建时间', open: open.time },
     { key: 'user', title: '创建人', open: open.user },
+    { key: 'number', title: '库存数', open: open.number },
   ];
 
   const spuClassIds = ToolUtil.isArray(params.spuClassIds);
@@ -44,6 +46,7 @@ const SkuScreen = (
   const storehousePositionsId = params.storehousePositionsId;
   const time = params.startTime || params.endTime;
   const createUser = params.createUser;
+  const number = params.number;
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -97,6 +100,9 @@ const SkuScreen = (
         break;
       case 'user':
         screened = createUser;
+        break;
+      case 'number':
+        screened = number;
         break;
       default:
         break;
@@ -208,6 +214,18 @@ const SkuScreen = (
           value={params.createUser}
           onChange={(createUser) => {
             paramsOnChange({ ...params, createUser });
+          }}
+        />;
+      case 'number':
+        return <StockNumber
+          title={item.title}
+          mixNum={params.mixNum}
+          maxNum={params.maxNum}
+          mixNumChange={(mixNum) => {
+            paramsOnChange({ ...params, mixNum });
+          }}
+          maxNumChange={(maxNum) => {
+            paramsOnChange({ ...params, maxNum });
           }}
         />;
       default:

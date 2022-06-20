@@ -27,7 +27,7 @@ const Orderlist = () => {
       }
       return item;
     });
-    setData(newData)
+    setData(newData);
   };
 
   return <>
@@ -57,12 +57,14 @@ const Orderlist = () => {
             return <div key={index} className={style.orderItem}>
               <div className={style.data}>
                 <div className={style.customer}>
-                  <span onClick={() => {
+                  <div onClick={() => {
                     history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${item.instockOrderId}`);
-                  }}>{ToolUtil.isObject(item.userResult).name}的入库申请 / {item.coding} <RightOutline
-                    style={{ color: '#B9B9B9' }} /></span>
+                  }}>
+                    <span className={style.title}>{ToolUtil.isObject(item.userResult).name}的入库申请 / {item.coding}</span>
+                    <RightOutline style={{ color: '#B9B9B9' }} />
+                  </div>
                 </div>
-                <div className={style.status} style={{ color: '#555555' }}>
+                <div className={style.status} style={{ color: '#555555', width: 130, textAlign: 'right' }}>
                   {MyDate.Show(item.createTime)}
                 </div>
               </div>

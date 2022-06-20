@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { DotLoading, InfiniteScroll } from 'antd-mobile';
+import { InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
 import MyEmpty from '../MyEmpty';
 
@@ -26,6 +26,8 @@ const MyList = (
 
   const [params, setParams] = useState(paramsData);
 
+  const [sorter, setSorter] = useState({});
+
   const [error, setError] = useState(true);
 
   const { loading, run } = useRequest({
@@ -33,6 +35,7 @@ const MyList = (
     params: {
       limit: limit,
       page: pages,
+      sorter,
     },
     data: {
       ...params,
@@ -63,13 +66,14 @@ const MyList = (
     },
   });
 
-  const submit = async (value) => {
+  const submit = async (value, sorter) => {
     setHasMore(false);
     setPage(1);
     setContents([]);
     setParams(value);
+    setSorter(sorter);
     await run({
-      params: { limit, page: 1 },
+      params: { limit, page: 1, sorter },
       data: value,
     });
   };

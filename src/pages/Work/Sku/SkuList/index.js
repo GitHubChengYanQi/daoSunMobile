@@ -8,6 +8,7 @@ import { skuList } from '../../../Scan/Url';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
+import Icon from '../../../components/Icon';
 
 const SkuList = (
   {
@@ -44,6 +45,8 @@ const SkuList = (
 
   const [refresh, setRefresh] = useState(false);
 
+  const [sort, setSort] = useState('');
+
   const clear = () => {
     setSkuClass([]);
     setSupplys([]);
@@ -60,7 +63,7 @@ const SkuList = (
   const submit = (newParams) => {
     setRefresh(false);
     setParams({ ...params, ...newParams });
-    listRef.current.submit({ ...params, ...newParams });
+    listRef.current.submit({ ...params, ...newParams }, { field: 'stockNumber', order: sort });
   };
 
   useImperativeHandle(ref, () => ({
@@ -84,18 +87,40 @@ const SkuList = (
     <div
       className={style.screen}
       id='screen'
-      onClick={() => {
-        if (screen) {
-          setFalse();
-        } else {
-          document.getElementById('screen').scrollIntoView();
-          setTrue();
-        }
-      }}
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
-      <div className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}>
+      <div className={style.sort} onClick={() => {
+        let order = '';
+        switch (sort) {
+          case 'ascend':
+            order = 'descend';
+            break;
+          case 'descend':
+            order = '';
+            break;
+          default:
+            order = 'ascend';
+            break;
+        }
+        setSort(order);
+        listRef.current.submit(params, { field: 'stockNumber', order });
+      }}>
+        {sort === 'ascend' && <Icon type='icon-paixubeifen' />}
+        {sort === 'descend' && <Icon type='icon-paixubeifen2' />}
+        {sort === '' && <Icon type='icon-paixu' />}
+      </div>
+      <div
+        className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
+        onClick={() => {
+          if (screen) {
+            setFalse();
+          } else {
+            document.getElementById('screen').scrollIntoView();
+            setTrue();
+          }
+        }}
+      >
         筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
       </div>
     </div>
