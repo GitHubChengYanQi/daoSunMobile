@@ -9,7 +9,8 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import ShopNumber from '../ShopNumber';
 import { shopCartAdd } from '../../../../../Url';
-import Positions from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
+import Positions
+  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
 
 const AddSku = (
   {
@@ -112,9 +113,6 @@ const AddSku = (
         } else if (!data.customerId) {
           disabledText = '请选择供应商';
           disabled = true;
-        } else if (judge && !data.positionId) {
-          disabledText = '请选择库位';
-          disabled = true;
         }
         return {
           title: '入库',
@@ -190,6 +188,7 @@ const AddSku = (
       {
         getCustomerLoading ? <MyLoading skeleton /> : <div className={style.addSku}>
           <SkuItem
+            number={data.stockNumber}
             imgId='skuImg'
             skuResult={sku}
             imgSize={80}
@@ -238,14 +237,7 @@ const AddSku = (
               }}
             >{data.positionName || '请选择库位'}</Button>
           </div>
-          <div className={style.stockNumber}>
-            <div>
-              <div className={style.checkLabel}>库存</div>
-              <span style={{ marginRight: 8 }}>
-              {data.stockNumber}
-            </span>
-              {ToolUtil.isObject(sku.spuResult && sku.spuResult.unitResult).unitName}
-            </div>
+          <div hidden={!judge} className={style.flex}>
             <div className={style.instockNumber}>
               {taskData().title}数量
               <ShopNumber value={data.number} onChange={(number) => {

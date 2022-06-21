@@ -18,9 +18,11 @@
   }
 
   .sort {
-    padding: 0 8px;
-    display: flex;
-    flex-direction: column;
+    padding: 0 16px;
+
+    :global .adm-dropdown-nav {
+      border: none;
+    }
   }
 
   .stockNumber {
@@ -80,3 +82,18 @@
     padding: 0;
   }
 }
+
+.dropdown {
+
+  .sortContent {
+    padding: 12px;
+    border-bottom: 1px #eee solid;
+    display: flex;
+
+    span {
+      flex-grow: 1;
+    }
+  }
+}
+
+

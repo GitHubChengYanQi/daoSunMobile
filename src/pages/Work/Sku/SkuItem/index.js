@@ -18,6 +18,8 @@ const SkuItem = (
     className,
     otherTop,
     otherDom,
+    describe,
+    describeData,
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -25,11 +27,10 @@ const SkuItem = (
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
 
-
   const spuResult = skuResult.spuResult || {};
   const unitResult = spuResult.unitResult || {};
 
-  const describe = `${
+  const skuDescribe = `${
     skuResult.skuJsons
     &&
     skuResult.skuJsons.length > 0
@@ -56,7 +57,7 @@ const SkuItem = (
         </MyEllipsis>
         <div className={style.describe}>
           <MyEllipsis width='100%'>
-            {otherTop ? SkuResultSkuJsons({ skuResult }) : describe}
+            {otherTop ? SkuResultSkuJsons({ skuResult }) : (describe || skuDescribe)}
           </MyEllipsis>
         </div>
         <div>

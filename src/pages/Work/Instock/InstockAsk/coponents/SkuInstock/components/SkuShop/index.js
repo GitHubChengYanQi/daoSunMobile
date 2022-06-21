@@ -103,12 +103,14 @@ const SkuShop = (
       case 'outStock':
         return {
           title: '出库任务明细',
-          otherData: item.brandName,
+          describe: item.brandName,
+          otherData: item.customerName,
         };
       case 'inStock':
         return {
           title: '入库任务明细',
-          otherData: judge ? item.positionName : item.customerName,
+          describe: item.customerName,
+          otherData: item.brandName,
         };
       default:
         return {
@@ -150,6 +152,7 @@ const SkuShop = (
                   imgSize={80}
                   gap={10}
                   extraWidth='130px'
+                  describe={taskData(item).describe}
                   otherData={taskData(item).otherData}
                 />
               </div>

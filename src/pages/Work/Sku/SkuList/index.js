@@ -2,13 +2,14 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
-import { Tabs, Toast } from 'antd-mobile';
+import { Dropdown, Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
 import Icon from '../../../components/Icon';
+import { CheckOutline } from 'antd-mobile-icons';
 
 const SkuList = (
   {
@@ -45,7 +46,7 @@ const SkuList = (
 
   const [refresh, setRefresh] = useState(false);
 
-  const [sort, setSort] = useState('');
+  const [sort, setSort] = useState({});
 
   const clear = () => {
     setSkuClass([]);
@@ -63,7 +64,7 @@ const SkuList = (
   const submit = (newParams) => {
     setRefresh(false);
     setParams({ ...params, ...newParams });
-    listRef.current.submit({ ...params, ...newParams }, { field: 'stockNumber', order: sort });
+    listRef.current.submit({ ...params, ...newParams }, { field: sort.key, order: sort.value });
   };
 
   useImperativeHandle(ref, () => ({
@@ -83,6 +84,13 @@ const SkuList = (
     });
   };
 
+  const sortList = [
+    { title: '时间升序', key: 'createTime', value: 'ascend' },
+    { title: '时间降序', key: 'createTime', value: 'descend' },
+    { title: '库存数量升序', key: 'stockNumber', value: 'ascend' },
+    { title: '库存数量降序', key: 'stockNumber', value: 'descend' },
+  ];
+
   return <>
     <div
       className={style.screen}
@@ -90,25 +98,30 @@ const SkuList = (
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
-      <div className={style.sort} onClick={() => {
-        let order = '';
-        switch (sort) {
-          case 'ascend':
-            order = 'descend';
-            break;
-          case 'descend':
-            order = '';
-            break;
-          default:
-            order = 'ascend';
-            break;
-        }
-        setSort(order);
-        listRef.current.submit(params, { field: 'stockNumber', order });
-      }}>
-        {sort === 'ascend' && <Icon type='icon-paixubeifen' />}
-        {sort === 'descend' && <Icon type='icon-paixubeifen2' />}
-        {sort === '' && <Icon type='icon-paixu' />}
+      <div className={style.sort} style={{color:sort.key && 'var(--adm-color-primary)'}}>
+        <Dropdown closeOnClickAway>
+          <Dropdown.Item key='sorter' title='排序'>
+            <div className={style.dropdown}>
+              {
+                sortList.map((item, index) => {
+                  const checked = sort.key === item.key && sort.value === item.value;
+                  return <div
+                    key={index}
+                    className={style.sortContent}
+                    style={{ color: checked && 'var(--adm-color-primary)' }}
+                    onClick={() => {
+                      setSort(item);
+                      listRef.current.submit(params, { field: item.key, order: item.value });
+                    }}>
+                    <span>{item.title}</span>
+                    {checked && <CheckOutline />}
+                  </div>;
+                })
+              }
+            </div>
+          </Dropdown.Item>
+        </Dropdown>
+        {/*排序 <Icon type='icon-paixu' />*/}
       </div>
       <div
         className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
