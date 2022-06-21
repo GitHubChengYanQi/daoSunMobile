@@ -51,6 +51,7 @@ const Prepare = (
       const inkind = ToolUtil.isObject(backObject.inkindResult);
       if (backObject.type === 'item' && inkind.skuId === skuItem.skuId && (skuItem.brandId ? skuItem.brandId === inkind.brandId : true)) {
         const inkindDetail = ToolUtil.isObject(inkind.inkindDetail);
+        props.dispatch({ type: 'qrCode/clearCode' });
         setCodeData({
           positionId: ToolUtil.isObject(inkindDetail.storehousePositions).storehousePositionsId,
           brandId: ToolUtil.isObject(inkindDetail.brand).brandId,

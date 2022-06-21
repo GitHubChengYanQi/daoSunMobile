@@ -36,34 +36,22 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
   const { loading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: () => {
-      Message.dialogSuccess({
-        title: '创建入库申请成功！',
-        rightText: '返回列表',
-        only: true,
-        next: () => {
-          history.goBack();
-        },
-      });
+      Message.toast('创建入库申请成功!');
+      history.goBack();
     },
     onError: () => {
-      Toast.show({ content: '创建入库申请失败！', position: 'bottom' });
+      Message.toast('创建入库申请失败!');
     },
   });
 
   const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
     onSuccess: () => {
-      Message.dialogSuccess({
-        title: '创建出库申请成功！',
-        rightText: '返回列表',
-        only: true,
-        next: () => {
-          history.goBack();
-        },
-      });
+      Message.toast('创建出库申请成功!');
+      history.goBack();
     },
     onError: () => {
-      Toast.show({ content: '创建出库申请失败！', position: 'bottom' });
+      Message.toast('创建出库申请失败!');
     },
   });
 

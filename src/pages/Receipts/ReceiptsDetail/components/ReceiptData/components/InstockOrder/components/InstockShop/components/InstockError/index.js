@@ -97,6 +97,7 @@ const InstockError = (
 
               const skuResult = item.skuResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
+              const brandName = ToolUtil.isObject(item.brandResult).brandName || '-';
 
               return <div key={index}>
                 <div style={{ border: 'none' }} className={style.skuItem}>
@@ -111,7 +112,8 @@ const InstockError = (
                     <SkuItem
                       skuResult={skuResult}
                       extraWidth='80px'
-                      otherData={customerName}
+                      describe={customerName}
+                      otherData={brandName}
                     />
                   </div>
                   <FormOutlined style={{ fontSize: 18 }} onClick={() => {

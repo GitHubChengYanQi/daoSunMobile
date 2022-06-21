@@ -56,12 +56,12 @@ const SkuShop = (
           skuId: item.skuId,
           skuResult: item.skuResult,
           customerId: item.customerId,
-          customerName: ToolUtil.isObject(item.customer).customerName,
-          brandName: ToolUtil.isObject(item.brandResult).brandName,
+          customerName: ToolUtil.isObject(item.customer).customerName || '',
+          brandName: ToolUtil.isObject(item.brandResult).brandName || '',
           brandId: item.brandId,
           number: item.number,
           positionId: item.storehousePositionsId,
-          positionName: ToolUtil.isObject(item.storehousePositions).name,
+          positionName: ToolUtil.isObject(item.storehousePositions).name || '',
         };
       }));
     },
@@ -109,7 +109,7 @@ const SkuShop = (
         return {
           title: '入库任务明细',
           describe: item.customerName,
-          otherData: item.brandName,
+          otherData: judge ? `${item.positionName} / ${item.brandName}` : item.brandName,
         };
       default:
         return {

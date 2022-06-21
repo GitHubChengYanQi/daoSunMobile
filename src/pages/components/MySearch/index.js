@@ -25,6 +25,8 @@ const MySearch = (
     onClear = () => {
     },
     historyType,
+    searchIconClick = () => {
+    },
   }) => {
 
   const [visible, setVisible] = useState();
@@ -119,7 +121,11 @@ const MySearch = (
       <div className={style.search}>
         <div id='searchBar' className={style.searchBar}>
           <SearchBar
-            icon={searchIcon}
+            icon={<div onClick={() => {
+              searchIconClick()
+            }}>
+              {searchIcon}
+            </div>}
             clearable
             onSearch={(value) => {
               search(value);

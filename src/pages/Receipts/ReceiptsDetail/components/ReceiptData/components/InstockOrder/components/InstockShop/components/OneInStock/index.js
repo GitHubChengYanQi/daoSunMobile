@@ -48,6 +48,11 @@ const OneInStock = (
 
   const inStockSku = positions.filter(item => item.number > 0);
 
+  let skuNumber = skuItem.number;
+  positions.map(item => {
+    return skuNumber -= (item.number || 0);
+  });
+
   const [visible, setVisible] = useState();
 
   const positionResults = (data, array = [], item) => {
@@ -180,8 +185,20 @@ const OneInStock = (
       <Positions
         ids={positions}
         onClose={() => setVisible(false)}
-        onSuccess={(value) => {
+        onSuccess={(value = []) => {
           setVisible(false);
+          const ids = positions.map(item => item.id);
+          const newPosition = value.filter(item => {
+            return !ids.includes(item.id);
+          });
+          if (newPosition.length === 1) {
+            return setPositions(value.map(item => {
+              if (item.id === newPosition[0].id) {
+                return { number: skuNumber, ...item };
+              }
+              return item;
+            }));
+          }
           setPositions(value);
         }} />
     </Popup>

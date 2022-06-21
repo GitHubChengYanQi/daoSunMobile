@@ -52,31 +52,34 @@ const ReceiptData = (
     {receiptType()}
     <Process auditData={data.stepsResult} createName={data.createName} card />
     <Comments detail={data} id={data.processTaskId} />
-    <MyTextArea
-      placeholder='填写审批意见，可@相关人员'
-      className={style.text}
-      value={params.note}
-      onChange={(note, users = []) => {
-        setParams({ ...params, note, userIds: users.map(item => item.userId) });
-      }}
-    />
-    <div className={style.img}>
-      <UpLoadImg
-        maxCount={1}
-        showUploadList
-        type='picture'
-        id='file'
-        onRemove={() => {
-          setParams({ ...params, mediaIds: [] });
+    <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0}>
+      <MyTextArea
+        placeholder='填写审批意见，可@相关人员'
+        className={style.text}
+        value={params.note}
+        onChange={(note, users = []) => {
+          setParams({ ...params, note, userIds: users.map(item => item.userId) });
         }}
-        onChange={(url, mediaId) => {
-          setParams({ ...params, mediaIds: [mediaId] });
-        }}
-        button={ToolUtil.isArray(params.mediaIds).length === 1 ? <></> : <div className={style.upload}>
-          <PaperClipOutlined />
-        </div>}
       />
+      <div className={style.img}>
+        <UpLoadImg
+          maxCount={1}
+          showUploadList
+          type='picture'
+          id='file'
+          onRemove={() => {
+            setParams({ ...params, mediaIds: [] });
+          }}
+          onChange={(url, mediaId) => {
+            setParams({ ...params, mediaIds: [mediaId] });
+          }}
+          button={ToolUtil.isArray(params.mediaIds).length === 1 ? <></> : <div className={style.upload}>
+            <PaperClipOutlined />
+          </div>}
+        />
+      </div>
     </div>
+
 
   </>;
 };

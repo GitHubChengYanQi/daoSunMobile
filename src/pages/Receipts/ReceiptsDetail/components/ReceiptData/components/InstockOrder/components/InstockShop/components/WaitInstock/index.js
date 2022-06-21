@@ -105,6 +105,8 @@ const WaitInstock = (
               const skuResult = item.skuResult || {};
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
               const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
+              const customerName = ToolUtil.isObject(item.customer).customerName || '-';
+              const brandName = ToolUtil.isObject(item.brandName).brandName || '-';
 
               return <div key={index} className={style.skuItem}>
                 <LinkButton className={style.check} onClick={() => {
@@ -123,6 +125,7 @@ const WaitInstock = (
                     skuResult={item.skuResult}
                     extraWidth='120px'
                     otherData={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
+                    describe={`${customerName} / ${brandName}`}
                   />
                 </div>
                 <div className={style.inStock}>

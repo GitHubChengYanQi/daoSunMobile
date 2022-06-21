@@ -81,8 +81,9 @@ const SkuAction = (
         <SkuItem
           imgSize={60}
           skuResult={skuResult}
+          describe={ToolUtil.isObject(item.customerResult).customerName}
           extraWidth='124px'
-          otherData={ToolUtil.isObject(item.customerResult).customerName}
+          otherData={ToolUtil.isObject(item.brandResult).brandName}
         />
       </div>
       <div>

@@ -2,6 +2,7 @@ import wx from 'populee-weixin-js-sdk';
 import { request } from '../util/Request';
 import { history } from 'umi';
 import { Dialog, Toast } from 'antd-mobile';
+import IsDev from '../components/IsDev';
 
 const scan = () => new Promise((resolve, reject) => {
   wx.ready(() => {
@@ -44,7 +45,7 @@ export default {
     scanCodeState(state, { payload }) {
       return { ...state, ...payload };
     },
-    // 清楚二维码
+    // 清除二维码
     clearCode(state) {
       console.log('clearCode');
       return { ...state, codeId: null };
@@ -57,12 +58,12 @@ export default {
     * wxCpScan({ payload }, { call, put }) {
       yield put({ type: 'clearCode' });
       console.log('wxCpScan');
-      if (process.env.ENV === 'test') {
+      if (IsDev()) {
         let code = '';
         // code = '1476356885154385921'; // 入库
-        // code = '1479266552251695105'; // 库位
+        code = '1503256535669456897'; // 库位
         // code = '1475358083438198786'; // 出库
-        code = '1536156897894572033'; // 实物
+        // code = '1536156897894572033'; // 实物
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -99,7 +100,6 @@ export default {
       }
       yield;
     },
-
 
     // 扫码入库操作
     * scanInstock({ payload }, { call, put }) {
@@ -199,7 +199,6 @@ export default {
       }
     },
 
-
     // wxCp获取二维码数据
     * backObject({ payload }, { call, put }) {
       console.log('wxCpbackObject', payload);
@@ -226,11 +225,13 @@ export default {
           case 'inventory':
           case 'quality':
           case 'outStock':
+          case 'position':
             // 自由入库
             // 自由出库
             // 盘点
             // 质检任务
             // 出库
+            // 库位
             yield put({ type: 'scanCodeState', payload: { codeId, backObject: res } });
             break;
           case 'scanStorehousePositon':

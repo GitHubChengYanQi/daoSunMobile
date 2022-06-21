@@ -62,7 +62,7 @@ const SkuItem = (
         <div>
           {otherDom || <div hidden={otherTop ? describe === '-' : !otherData} className={style.otherData}>
             <MyEllipsis width='100%'>
-              {otherTop ? describe : otherData}
+              {otherTop ? (describe || skuDescribe) : otherData}
             </MyEllipsis>
           </div>}
         </div>

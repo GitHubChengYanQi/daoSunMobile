@@ -123,7 +123,10 @@ const Process = (
   // 审批人
   const auditUsers = (users, step, stepsStatus) => {
 
-    const auditType = step.auditType;
+    let auditType = step.auditType;
+    if (step.auditRule.type === 'status') {
+      auditType = 'action'
+    }
     const logResult = step.logResult || {};
     return users.map((items, index) => {
       return <div className={style.user} key={index}>

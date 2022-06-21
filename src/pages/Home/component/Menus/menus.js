@@ -5,7 +5,7 @@ export const menus = [
   { code: 'purchase', icon: 'icon-caigouguanli' },
   { code: 'SPU', icon: 'icon-chanyanguanli' },
   { code: 'production', icon: 'icon-caidan-shengchanguanli' },
-  { code: 'ERP', icon: 'icon-cangchuguanli' },
+  { code: 'ERP', icon: 'icon-cangchuguanli',url:'/Work/Stock' },
   { code: 'CRM', icon: 'icon-crmguanli' },
   { code: 'process', icon: 'icon-liuchengguanli' },
   { code: 'task', icon: 'icon-renwu' },

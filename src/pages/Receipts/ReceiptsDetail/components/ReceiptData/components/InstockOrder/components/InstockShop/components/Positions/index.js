@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MySearch from '../../../../../../../../../../components/MySearch';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
@@ -6,19 +6,26 @@ import BottomButton from '../../../../../../../../../../components/BottomButton'
 import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import Icon from '../../../../../../../../../../components/Icon';
+import { connect } from 'dva';
+import { Message } from '../../../../../../../../../../components/Message';
 
 const positions = { url: '/storehousePositions/treeViewByName', method: 'POST' };
 
 const Positions = (
   {
     single,
-    ids,
+    ids = [],
     onClose = () => {
     },
     onSuccess = () => {
     },
+    ...props
   },
 ) => {
+
+  const codeId = ToolUtil.isObject(props.qrCode).codeId;
+  const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
 
   const { loading, data, run } = useRequest(positions);
 
@@ -26,13 +33,41 @@ const Positions = (
 
   const [name, setName] = useState();
 
+  useEffect(() => {
+    if (codeId) {
+      props.dispatch({ type: 'qrCode/clearCode' });
+      const position = backObject.result || {};
+      if (ids.map(item => item.id).includes(position.storehousePositionsId)) {
+        return Message.toast('已添加此库位!');
+      }
+      if (backObject.type === 'storehousePositions') {
+        onSuccess([...ids, { id: position.storehousePositionsId, name: position.name }]);
+      } else {
+        Message.toast('请扫描正确库位码!');
+      }
+    }
+  }, [codeId]);
+
   return <div style={{ height: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
 
-    <MySearch placeholder='搜索库位' onChange={setName} onSearch={() => {
-      run({ data: { name } });
-    }} onClear={() => {
-      run();
-    }} />
+    <MySearch
+      searchIcon={<Icon type='icon-dibudaohang-saoma' />}
+      placeholder='搜索库位'
+      onChange={setName}
+      searchIconClick={() => {
+        props.dispatch({
+          type: 'qrCode/wxCpScan',
+          payload: {
+            action: 'position',
+          },
+        });
+      }}
+      onSearch={() => {
+        run({ data: { name } });
+      }}
+      onClear={() => {
+        run();
+      }} />
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
@@ -48,7 +83,6 @@ const Positions = (
         }}
       />
     </div>
-
 
     {loading && <MyLoading skeleton />}
 
@@ -66,4 +100,4 @@ const Positions = (
   </div>;
 };
 
-export default Positions;
+export default connect(({ qrCode }) => ({ qrCode }))(Positions);
