@@ -176,12 +176,13 @@ const OneInStock = (
       }}
     />
 
-    <Popup visible={visible}>
+    <Popup visible={visible} destroyOnClose>
       <Positions
+        ids={positions}
         onClose={() => setVisible(false)}
         onSuccess={(value) => {
           setVisible(false);
-          setPositions([...positions, value]);
+          setPositions(value);
         }} />
     </Popup>
 

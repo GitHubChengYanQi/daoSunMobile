@@ -27,7 +27,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const [visible, setVisible] = useState();
 
-  const [params, setParams] = useState({ });
+  const [params, setParams] = useState({});
 
   const history = useHistory();
 
@@ -83,12 +83,17 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
   const createTypeData = (item = {}) => {
     switch (createType) {
       case 'outStock':
-        return { title: '出库申请', type: '出库', otherData: item.brandName };
+        return {
+          title: '出库申请',
+          type: '出库',
+          otherData: item.brandName,
+        };
       case 'inStock':
         return {
           title: '入库申请',
           type: '入库',
-          otherData: judge ? item.positionName : item.customerName,
+          describe: item.customerName,
+          otherData: item.brandName,
         };
       default:
         return {};
@@ -99,7 +104,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     const listParams = [];
     data.map(item => {
       if (item.number > 0) {
-        listParams.push({ ...item,storehousePositionsId:item.positionId });
+        listParams.push({ ...item, storehousePositionsId: item.positionId });
       }
       return null;
     });
@@ -142,6 +147,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
                 imgSize={60}
                 skuResult={item.skuResult}
                 extraWidth='124px'
+                describe={createTypeData(item).describe}
                 otherData={createTypeData(item).otherData}
               />
             </div>

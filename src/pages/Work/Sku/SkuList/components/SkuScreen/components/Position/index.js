@@ -36,7 +36,11 @@ const Position = (
       title={title}
       headerStyle={{ border: 'none' }}
     >
-      <CheckPosition value={value} onChange={onChange} data={options} refresh={refreshPositions} />
+      <CheckPosition single value={value && [{ id: value }]} onChange={(value = []) => {
+        console.log(value);
+        const position = value[0] || {};
+        onChange(position.id);
+      }} data={options} refresh={refreshPositions} />
     </Card>
 
   </div>;

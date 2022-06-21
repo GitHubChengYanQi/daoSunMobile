@@ -30,12 +30,15 @@ const ProcessList = (
       case ReceiptsEnums.instockOrder:
         const details = receipts.instockListResults || [];
         return <div className={style.content}>
-          <div>单据编号：{receipts.coding}</div>
+          <div className={style.orderData}>
+            <span className={style.coding}>单据编号：{receipts.coding}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+          </div>
           <div className={style.other}>
             入库物料：{
-            details.map((item, index) => {
+            details.map((item) => {
               const skuResult = item.skuResult || {};
-              return SkuResultSkuJsons({ skuResult});
+              return SkuResultSkuJsons({ skuResult });
             }).join('、')
           }
           </div>
@@ -73,11 +76,10 @@ const ProcessList = (
             }}>
               <div className={style.header}>
                 <div className={style.title}>
-                  <div className={style.name}>{item.taskName}</div>
-                  <span>· {receipts.statusName}</span>
+                  {item.taskName}
                 </div>
-                <div className={style.time}>
-                  <ClockCircleOutline />  {MyDate.Show(item.createTime)}
+                <div className={style.status}>
+                  · {receipts.statusName}
                 </div>
               </div>
               {receiptsData(item.type, item.receipts)}

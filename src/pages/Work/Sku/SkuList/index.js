@@ -1,15 +1,15 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
+import { FilterOutlined } from '@ant-design/icons';
 import { Dropdown, Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
-import Icon from '../../../components/Icon';
 import { CheckOutline } from 'antd-mobile-icons';
+import Icon from '../../../components/Icon';
 
 const SkuList = (
   {
@@ -64,7 +64,7 @@ const SkuList = (
   const submit = (newParams) => {
     setRefresh(false);
     setParams({ ...params, ...newParams });
-    listRef.current.submit({ ...params, ...newParams }, { field: sort.key, order: sort.value });
+    listRef.current.submit({ ...params, ...newParams }, { ...sort });
   };
 
   useImperativeHandle(ref, () => ({
@@ -84,12 +84,40 @@ const SkuList = (
     });
   };
 
-  const sortList = [
-    { title: '时间升序', key: 'createTime', value: 'ascend' },
-    { title: '时间降序', key: 'createTime', value: 'descend' },
-    { title: '库存数量升序', key: 'stockNumber', value: 'ascend' },
-    { title: '库存数量降序', key: 'stockNumber', value: 'descend' },
-  ];
+  const sortAction = (field) => {
+    let order = 'ascend';
+    if (sort.field === field) {
+      switch (sort.order) {
+        case 'ascend':
+          order = 'descend';
+          break;
+        case 'descend':
+          order = '';
+          break;
+        default:
+          order = 'ascend';
+          break;
+      }
+    }
+    setSort({ field, order });
+    listRef.current.submit(params, { field, order });
+  };
+
+  const sortShow = (field) => {
+
+    if (sort.field !== field) {
+      return <Icon type='icon-paixu' />;
+    }
+
+    switch (sort.order) {
+      case  'ascend' :
+        return <Icon type='icon-paixubeifen' />;
+      case  'descend' :
+        return <Icon type='icon-paixubeifen2' />;
+      default:
+        return <Icon type='icon-paixu' />;
+    }
+  };
 
   return <>
     <div
@@ -98,30 +126,17 @@ const SkuList = (
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
-      <div className={style.sort} style={{color:sort.key && 'var(--adm-color-primary)'}}>
-        <Dropdown closeOnClickAway>
-          <Dropdown.Item key='sorter' title='排序'>
-            <div className={style.dropdown}>
-              {
-                sortList.map((item, index) => {
-                  const checked = sort.key === item.key && sort.value === item.value;
-                  return <div
-                    key={index}
-                    className={style.sortContent}
-                    style={{ color: checked && 'var(--adm-color-primary)' }}
-                    onClick={() => {
-                      setSort(item);
-                      listRef.current.submit(params, { field: item.key, order: item.value });
-                    }}>
-                    <span>{item.title}</span>
-                    {checked && <CheckOutline />}
-                  </div>;
-                })
-              }
-            </div>
-          </Dropdown.Item>
-        </Dropdown>
-        {/*排序 <Icon type='icon-paixu' />*/}
+      <div className={style.sort} onClick={() => {
+        sortAction('stockNumber');
+      }}>
+        库存数量
+        {sortShow('stockNumber')}
+      </div>
+      <div className={style.sort} onClick={() => {
+        sortAction('createTime');
+      }}>
+        创建时间
+        {sortShow('createTime')}
       </div>
       <div
         className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
@@ -134,7 +149,7 @@ const SkuList = (
           }
         }}
       >
-        筛选 {screen ? <CaretUpFilled /> : <CaretDownFilled />}
+        筛选 <FilterOutlined />
       </div>
     </div>
 

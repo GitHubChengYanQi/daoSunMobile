@@ -237,7 +237,7 @@ const AddSku = (
               }}
             >{data.positionName || '请选择库位'}</Button>
           </div>
-          <div hidden={!judge} className={style.flex}>
+          <div className={style.flex}>
             <div className={style.instockNumber}>
               {taskData().title}数量
               <ShopNumber value={data.number} onChange={(number) => {
@@ -319,13 +319,16 @@ const AddSku = (
 
     <Popup visible={dataVisible === 'position'} className={style.positionPopup}>
       <Positions
+        single
+        ids={[{id:data.positionId,name:data.positionName}]}
         onClose={() => setDataVisible(null)}
-        onSuccess={(value = {}) => {
+        onSuccess={(value = []) => {
+          const position = value[0] || {};
           setDataVisible(null);
           setData({
             ...data,
-            positionId: value.id,
-            positionName: value.name,
+            positionId: position.id,
+            positionName: position.name,
           });
         }} />
     </Popup>

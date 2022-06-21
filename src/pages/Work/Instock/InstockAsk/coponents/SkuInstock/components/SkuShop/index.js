@@ -103,8 +103,7 @@ const SkuShop = (
       case 'outStock':
         return {
           title: '出库任务明细',
-          describe: item.brandName,
-          otherData: item.customerName,
+          otherData: item.brandName,
         };
       case 'inStock':
         return {

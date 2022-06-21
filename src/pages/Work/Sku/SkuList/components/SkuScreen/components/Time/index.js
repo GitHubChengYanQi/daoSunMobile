@@ -96,6 +96,7 @@ const Time = (
             }
             onChange={(dates) => {
               setDate(dates[0], dates[1]);
+              setKey(null);
             }}
           />
         </div>

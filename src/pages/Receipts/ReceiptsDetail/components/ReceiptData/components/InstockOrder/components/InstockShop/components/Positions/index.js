@@ -7,10 +7,12 @@ import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 
-const positions = {url:'/storehousePositions/treeViewByName',method:'POST'}
+const positions = { url: '/storehousePositions/treeViewByName', method: 'POST' };
 
 const Positions = (
   {
+    single,
+    ids,
     onClose = () => {
     },
     onSuccess = () => {
@@ -20,7 +22,7 @@ const Positions = (
 
   const { loading, data, run } = useRequest(positions);
 
-  const [value, onChange] = useState({});
+  const [value, onChange] = useState(ids);
 
   const [name, setName] = useState();
 
@@ -34,9 +36,10 @@ const Positions = (
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
-        value={value.id}
-        onChange={(id, name) => {
-          onChange({ name, id });
+        single={single}
+        value={value}
+        onChange={(value) => {
+          onChange(value);
         }}
         data={data}
         refresh={data}
@@ -54,7 +57,7 @@ const Positions = (
       leftOnClick={() => {
         onClose();
       }}
-      rightDisabled={!value.id}
+      rightDisabled={value.length === 0}
       rightOnClick={() => {
         onSuccess(value);
       }}

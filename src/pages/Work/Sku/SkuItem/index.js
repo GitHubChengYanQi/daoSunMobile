@@ -19,7 +19,6 @@ const SkuItem = (
     otherTop,
     otherDom,
     describe,
-    describeData,
   }) => {
 
   const { initialState } = useModel('@@initialState');

@@ -6,8 +6,9 @@ import Icon from '../../../../../../../../../components/Icon';
 
 const CheckPosition = (
   {
+    single,
     data = [],
-    value,
+    value = [],
     onChange = () => {
     },
     refresh,
@@ -69,15 +70,21 @@ const CheckPosition = (
           </div>
           <div hidden={!checkShow(item)} className={style.checked}>
             <Checkbox
-              checked={value === item.key}
+              checked={value.map(item => item.id).includes(item.key)}
               icon={(checked) => {
                 return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
               }}
               onChange={(checked) => {
                 if (!checked) {
-                  onChange(null);
+                  onChange(value.filter(position => position.id !== item.key));
                 } else {
-                  onChange(item.key, item.title);
+                  onChange(single ?
+                    [{ id: item.key, name: item.title }]
+                    :
+                    [...value, {
+                      id: item.key,
+                      name: item.title,
+                    }]);
                 }
               }}
             />
@@ -88,8 +95,34 @@ const CheckPosition = (
     });
   };
 
+  const defaultOpen = (data, ids, openKeys = [], parentIds = []) => {
+
+    data.map(item => {
+      const childrens = item.children || item.loops || [];
+      if (ids.includes(item.key)) {
+        data.map(item => openKeys.push(item.key));
+        parentIds.map(item => openKeys.push(item));
+      } else {
+        defaultOpen(childrens, ids, openKeys, [...parentIds, item.key]);
+      }
+      return null;
+    });
+
+    return openKeys;
+  };
+
   useEffect(() => {
-    setOpenKey(data.map(item => item.key));
+    const ids = value.map(item => item.id);
+    const openKeys = [];
+    data.map(item => {
+      openKeys.push(item.key);
+      const childrens = item.children || item.loops || [];
+      return defaultOpen(childrens, ids).map((item) => {
+        return openKeys.push(item);
+      });
+    });
+    // console.log(defaultOpen(data, ids));
+    setOpenKey(openKeys);
   }, [refresh]);
 
   return positions(data);

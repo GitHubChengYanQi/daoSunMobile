@@ -66,8 +66,14 @@ const SkuError = (
       });
 
       let confirm = false;
-      if (checkUsers.length > 0 && ToolUtil.isObject(checkUsers[checkUsers.length - 1]).number === (ToolUtil.isObject(checkUsers[checkUsers.length - 2]).number || res.realNumber)) {
-        confirm = true;
+      let hidden = false;
+      if (checkUsers.length > 0) {
+        if (ToolUtil.isObject(checkUsers[checkUsers.length - 1]).number === (ToolUtil.isObject(checkUsers[checkUsers.length - 2]).number || res.realNumber)) {
+          confirm = true;
+          hidden = true;
+        } else if (ToolUtil.isObject(checkUsers[checkUsers.length - 1]).userId === userInfo.id) {
+          hidden = true;
+        }
       }
 
       let checkNum = res.realNumber;
@@ -83,6 +89,7 @@ const SkuError = (
 
       setSku({
         confirm,
+        hidden,
         allowNumber: allowNumber < 0 ? 0 : allowNumber,
         instockNumber: instockNumber < 0 ? 0 : instockNumber,
         errorNumber: errorNumber,
@@ -140,11 +147,11 @@ const SkuError = (
     manual: true,
     onSuccess: () => {
       Message.toast('保存成功!');
-      // onSuccess();
       refresh();
     },
     onError: () => {
       Message.toast('保存失败！');
+      refresh();
     },
   });
 
@@ -196,7 +203,7 @@ const SkuError = (
           </span>;
         })
       }
-      <div hidden={sku.confirm} className={style.checkNumber}>
+      <div hidden={sku.hidden} className={style.checkNumber}>
         <span>复核数：<ShopNumber value={sku.checkNumber} onChange={(checkNumber) => {
           setSku({ ...sku, checkNumber });
         }} /> {unitName}</span>
@@ -213,7 +220,7 @@ const SkuError = (
           };
 
           saveRun(param);
-        }}>{sku.confirm ? '已确认' : '确认'}</Button>
+        }}>确认</Button>
       </div>
 
     </div>
@@ -226,7 +233,9 @@ const SkuError = (
 
           const inkindId = item.inkindId || '';
 
-          const handle = item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
+          const confirm = sku.confirm;
+
+          const handle = !confirm || item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
 
           return <div key={index} className={style.inkindItem}>
             <div className={style.inkindTitle}>
@@ -242,7 +251,7 @@ const SkuError = (
                   }
                 </div>
               </div>
-              {(item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
+              {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
                 if (item.userId) {
                   return;
                 }

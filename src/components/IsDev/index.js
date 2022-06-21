@@ -1,6 +1,6 @@
 
 const IsDev = () => {
-  return process.env.ENV === 'test';
+  return ['song','ren'].includes(process.env.ENV);
 };
 
 export default IsDev;
