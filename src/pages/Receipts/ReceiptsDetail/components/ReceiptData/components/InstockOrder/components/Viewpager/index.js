@@ -12,6 +12,8 @@ const Viewpager = (
     },
     children,
     currentIndex,
+    onClick = () => {
+    },
   }) => {
 
   const pages = [
@@ -72,7 +74,7 @@ const Viewpager = (
 
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} onClick={onClick}>
       {props.map(({ x, display, scale }, i) => {
         return <animated.div
           className={styles.page}

@@ -67,7 +67,12 @@ const SkuError = (
 
       let confirm = false;
       let hidden = false;
-      if (checkUsers.length > 0) {
+
+      if (res.needNumber === res.realNumber) {
+        confirm = true;
+        hidden = true;
+      }
+      if (!confirm && checkUsers.length > 0) {
         if (ToolUtil.isObject(checkUsers[checkUsers.length - 1]).number === (ToolUtil.isObject(checkUsers[checkUsers.length - 2]).number || res.realNumber)) {
           confirm = true;
           hidden = true;
@@ -146,11 +151,11 @@ const SkuError = (
   const { loading: editLoading, run: editRun } = useRequest(edit, {
     manual: true,
     onSuccess: () => {
-      Message.toast('保存成功!');
+      Message.toast('操作成功!');
       refresh();
     },
     onError: () => {
-      Message.toast('保存失败！');
+      Message.toast('操作失败！');
       refresh();
     },
   });
@@ -172,6 +177,16 @@ const SkuError = (
 
   const checkUsers = ToolUtil.isArray(sku.checkUsers);
 
+  const action = (item, stauts) => {
+    editRun({
+      data: {
+        detailId: item.detailId,
+        stauts,
+        opinion: item.opinion,
+      },
+    });
+  };
+
   return <div className={style.error} style={{ height }}>
 
     <div className={style.header}>
@@ -190,8 +205,8 @@ const SkuError = (
         otherData={ToolUtil.isObject(sku.brandResult).brandResult}
       />
       <div className={style.showNumber}>
-        <span className={style.through}>× {sku.needNumber}</span>
-        <span>× {sku.realNumber}</span>
+        <span className={style.through} hidden={sku.checkNumber === sku.needNumber}>× {sku.needNumber}</span>
+        <span>× {sku.checkNumber}</span>
       </div>
     </div>
 
@@ -260,6 +275,11 @@ const SkuError = (
               }}>
                 {item.userId ? `已转交：${item.userName}` : '转交处理'}
               </LinkButton>}
+              {item.status !== 0 && <LinkButton onClick={() => {
+                action(item, 0);
+              }}>
+                编辑
+              </LinkButton>}
             </div>
             <div className={style.careful}>
               异常原因：{ToolUtil.isArray(item.notices).map((item, index) => {
@@ -294,22 +314,10 @@ const SkuError = (
             <div hidden={handle} className={style.actions}>
               <Button color='danger' fill='outline' onClick={() => {
                 itemChange(index, { status: -1 });
-                editRun({
-                  data: {
-                    detailId: item.detailId,
-                    stauts: -1,
-                    opinion: item.opinion,
-                  },
-                });
+                action(item, -1);
               }}>终止入库</Button>
               <Button className={style.ok} color='primary' fill='outline' onClick={() => {
-                editRun({
-                  data: {
-                    detailId: item.detailId,
-                    stauts: 1,
-                    opinion: item.opinion,
-                  },
-                });
+                action(item, 1);
               }}>允许入库</Button>
             </div>
           </div>;

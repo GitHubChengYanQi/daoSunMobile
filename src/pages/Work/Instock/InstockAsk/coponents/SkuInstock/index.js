@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from '../ReceiptsInstock/index.less';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import SkuItem from '../../../../Sku/SkuItem';
@@ -10,10 +10,13 @@ import SkuList from '../../../../Sku/SkuList';
 import { ScanningOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
-import { useRequest } from '../../../../../../util/Request';
-import { judgeLoginUser } from '../../Submit/components/InstockSkus';
+import { useLocation } from 'react-router-dom';
 
-export const SkuContent = ({ data, addSku }) => {
+export const SkuContent = (
+  {
+    data,
+    addSku,
+  }) => {
 
   return <div className={style.skuList}>
     {
@@ -49,24 +52,17 @@ const SkuInstock = ({ numberTitle, type, title }) => {
 
   const [searchValue, setSearchValue] = useState();
 
-  const [judge, setJudge] = useState();
+  const { query } = useLocation();
 
-  const { run: judgeStock } = useRequest(judgeLoginUser, {
-    manual: true,
-    onSuccess: (res) => {
-      setJudge(res);
-    },
-  });
+  let judge = false;
 
-  useEffect(() => {
-    switch (type) {
-      case 'inStock':
-        judgeStock();
-        break;
-      default:
-        break;
-    }
-  }, []);
+  switch (type) {
+    case 'inStock':
+      judge = {...query}.hasOwnProperty('directInStock');
+      break;
+    default:
+      break;
+  }
 
   return <div className={style.skuInStock}>
     <MyNavBar title={title} />
@@ -89,7 +85,9 @@ const SkuInstock = ({ numberTitle, type, title }) => {
         skuClassName={style.skuContent}
         ref={ref}
         SkuContent={SkuContent}
-        skuContentProps={{ addSku }}
+        skuContentProps={{
+          addSku,
+        }}
         defaultParams={{ stockView: true }}
         open={{ time: true, user: true }}
       />

@@ -8,6 +8,7 @@ import Menus, { borderStyle } from './component/Menus';
 import { useModel } from 'umi';
 import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
+import MenusItem from './component/MenusItem';
 
 const Home = (props) => {
 
@@ -104,7 +105,12 @@ const Home = (props) => {
               key={index}
               style={{ ...border }}
             >
-              <Menus textOverflow={80} code={item.code} name={item.name} fontSize={50} />
+              <MenusItem
+                textOverflow={80}
+                code={item.code}
+                name={item.name}
+                fontSize={50}
+              />
             </Grid.Item>;
           })
         }

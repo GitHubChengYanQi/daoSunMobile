@@ -2,13 +2,12 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { FilterOutlined } from '@ant-design/icons';
-import { Dropdown, Tabs, Toast } from 'antd-mobile';
+import { Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
-import { CheckOutline } from 'antd-mobile-icons';
 import Icon from '../../../components/Icon';
 
 const SkuList = (

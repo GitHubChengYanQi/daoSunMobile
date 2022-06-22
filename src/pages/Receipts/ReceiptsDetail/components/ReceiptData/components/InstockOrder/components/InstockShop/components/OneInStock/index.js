@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import style from '../../index.less';
-import { CloseCircleOutline, CloseOutline } from 'antd-mobile-icons';
+import { CloseOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
-import { Button, Popup, Stepper } from 'antd-mobile';
 import { Message } from '../../../../../../../../../../components/Message';
 import BottomButton from '../../../../../../../../../../components/BottomButton';
-import Positions from '../Positions';
+import AddPosition from './AddPosition';
 
 export const getPositionsBySkuIds = { url: '/storehousePositions/treeViewBySku', method: 'POST' };
 
@@ -53,30 +52,6 @@ const OneInStock = (
     return skuNumber -= (item.number || 0);
   });
 
-  const [visible, setVisible] = useState();
-
-  const positionResults = (data, array = [], item) => {
-    if (!Array.isArray(data)) {
-      return item ? array.push({ name: item.title, id: item.key }) : [];
-    }
-    data.map((item) => {
-      return positionResults(item.loops, array, item);
-    });
-    return array;
-  };
-
-  const { loading: getPositionsLoading } = useRequest(
-    { ...getPositionsBySkuIds, data: { skuIds: [skuItem.skuId] } },
-    {
-      onSuccess: (res) => {
-        const results = positionResults(res);
-        if (results.length === 1) {
-          results[0] = { ...results[0], number: skuItem.number };
-        }
-        setPositions(results);
-      },
-    });
-
   return <div className={style.content} style={{ height: 'auto', padding: '0 12px 76px' }}>
     <div className={style.header}>
       物料入库
@@ -100,56 +75,15 @@ const OneInStock = (
         </div>
       </div>
     </div>
-    <div className={style.position}>
-      {
-        getPositionsLoading ?
-          <MyLoading skeleton title='正在获取库位信息，请稍后...' />
-          :
-          positions.map((item, index) => {
-            return <div key={index} className={style.positionItem}>
 
-              <div className={style.action}>
-                <CloseCircleOutline onClick={() => {
-                  setPositions(positions.filter((item, currentIndex) => currentIndex !== index));
-                }} />
-                {item.name}
-              </div>
+    <AddPosition
+      skuId={skuItem.skuId}
+      positions={positions}
+      setPositions={setPositions}
+      skuNumber={skuNumber}
+      total={skuItem.number}
+    />
 
-              <Stepper
-                min={0}
-                style={{
-                  '--button-text-color': '#000',
-                }}
-                value={item.number || 0}
-                onChange={(number) => {
-                  let allNumber = 0;
-                  const newPositions = positions.map((item, currentIndex) => {
-                    if (currentIndex === index) {
-                      return { ...item, number };
-                    }
-                    allNumber += (item.number || 0);
-                    return item;
-                  });
-                  if ((number + allNumber) > skuItem.number) {
-                    return Message.toast('不能超过申请数量!');
-                  } else {
-                    setPositions(newPositions);
-                  }
-                }}
-              />
-            </div>;
-          })
-      }
-    </div>
-
-    <Button
-      className={style.addPositions}
-      color='primary'
-      fill='outline'
-      onClick={() => {
-        setVisible(true);
-      }}
-    >添加库位</Button>
 
     <BottomButton
       only
@@ -181,27 +115,6 @@ const OneInStock = (
       }}
     />
 
-    <Popup visible={visible} destroyOnClose>
-      <Positions
-        ids={positions}
-        onClose={() => setVisible(false)}
-        onSuccess={(value = []) => {
-          setVisible(false);
-          const ids = positions.map(item => item.id);
-          const newPosition = value.filter(item => {
-            return !ids.includes(item.id);
-          });
-          if (newPosition.length === 1) {
-            return setPositions(value.map(item => {
-              if (item.id === newPosition[0].id) {
-                return { number: skuNumber, ...item };
-              }
-              return item;
-            }));
-          }
-          setPositions(value);
-        }} />
-    </Popup>
 
     {instockLoading && <MyLoading />}
 

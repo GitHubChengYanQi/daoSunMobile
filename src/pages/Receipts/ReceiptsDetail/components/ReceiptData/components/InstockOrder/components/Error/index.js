@@ -16,7 +16,7 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import LinkButton from '../../../../../../../../components/LinkButton';
-import { Form } from 'antd';
+import { connect } from 'dva';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 export const instockErrorDetail = { url: '/anomaly/detail', method: 'POST' };
@@ -34,6 +34,7 @@ const Error = (
     refreshOrder = () => {
     },
     maxHeight = '80vh',
+    ...props
   },
 ) => {
 
@@ -183,6 +184,8 @@ const Error = (
             observer.disconnect();
             if (errors.scrollTop > 0) {
               setOver(true);
+            } else {
+              setOver(false);
             }
           }
         }
@@ -190,6 +193,25 @@ const Error = (
     });
     setObserver(observer);
   }, []);
+
+  const codeId = ToolUtil.isObject(props.qrCode).codeId;
+  const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
+
+  useEffect(() => {
+    if (codeId) {
+      props.dispatch({ type: 'qrCode/clearCode' });
+      const sku = backObject.inkindResult || backObject.result || {};
+      if (['item', 'sku'].includes(backObject.type) && sku.skuId === skuItem.skuId) {
+        if (ToolUtil.isObject(sku.inkindDetail).stockDetails) {
+          return Message.toast('物料已入库！');
+        } else {
+          setData({ ...data, number: sku.number || 1 });
+        }
+      } else {
+        return Message.toast('扫描物料不符！');
+      }
+    }
+  }, [codeId]);
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -266,7 +288,14 @@ const Error = (
               setData({ ...data, number });
             }}
           />
-          <Icon type='icon-dibudaohang-saoma' />
+          <Icon type='icon-dibudaohang-saoma' onClick={() => {
+            props.dispatch({
+              type: 'qrCode/wxCpScan',
+              payload: {
+                action: 'position',
+              },
+            });
+          }} />
         </div>
       </div>
     </>}
@@ -317,6 +346,7 @@ const Error = (
                   return currentIndex !== index;
                 });
                 setInkinds(newItem);
+                overFlow();
               }} />
             </div>
             <div className={style.stepper}>
@@ -401,9 +431,10 @@ const Error = (
           };
         });
 
-        if (required){
-          return Message.toast('请选择异常原因！')
+        if (required) {
+          return Message.toast('请选择异常原因！');
         }
+
         const param = {
           data: {
             anomalyId: data.anomalyId,
@@ -431,4 +462,4 @@ const Error = (
   </div>;
 };
 
-export default Error;
+export default connect(({ qrCode }) => ({ qrCode }))(Error);

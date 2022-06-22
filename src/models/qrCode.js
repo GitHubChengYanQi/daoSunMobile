@@ -61,9 +61,10 @@ export default {
       if (IsDev()) {
         let code = '';
         // code = '1476356885154385921'; // 入库
-        code = '1503256535669456897'; // 库位
+        // code = '1503256535669456897'; // 库位
         // code = '1475358083438198786'; // 出库
-        // code = '1536156897894572033'; // 实物
+        // code = '1539124045801611265'; // 实物
+        code = '1539423628024688642'; // sku
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);

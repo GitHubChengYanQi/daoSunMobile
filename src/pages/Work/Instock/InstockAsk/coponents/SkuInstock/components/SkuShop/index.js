@@ -56,12 +56,17 @@ const SkuShop = (
           skuId: item.skuId,
           skuResult: item.skuResult,
           customerId: item.customerId,
-          customerName: ToolUtil.isObject(item.customer).customerName || '',
-          brandName: ToolUtil.isObject(item.brandResult).brandName || '',
+          customerName: ToolUtil.isObject(item.customer).customerName,
+          brandName: ToolUtil.isObject(item.brandResult).brandName,
           brandId: item.brandId,
           number: item.number,
-          positionId: item.storehousePositionsId,
-          positionName: ToolUtil.isObject(item.storehousePositions).name || '',
+          positions:ToolUtil.isArray(item.storehousePositions).map(item=>{
+            return {
+              id:item.storehousePositionsId,
+              name:item.name,
+              number:item.number,
+            }
+          })
         };
       }));
     },
@@ -108,8 +113,10 @@ const SkuShop = (
       case 'inStock':
         return {
           title: '入库任务明细',
-          describe: item.customerName,
-          otherData: judge ? `${item.positionName} / ${item.brandName}` : item.brandName,
+          describe: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
+          otherData: judge ? ToolUtil.isArray(item.positions).map(item => {
+            return `${item.name}(${item.number})`;
+          }).join('、') : item.brandName,
         };
       default:
         return {
@@ -150,7 +157,7 @@ const SkuShop = (
                   skuResult={skuResult}
                   imgSize={80}
                   gap={10}
-                  extraWidth='130px'
+                  extraWidth={judge ? '50px' : '130px'}
                   describe={taskData(item).describe}
                   otherData={taskData(item).otherData}
                 />
@@ -159,15 +166,15 @@ const SkuShop = (
                 <RemoveButton onClick={() => {
                   shopDelete({ data: { ids: [item.cartId] } });
                 }} />
-                <div className={style.empty} />
-                <ShopNumber
-                  value={item.number}
-                  unitName={ToolUtil.isObject(skuResult.spuResult && skuResult.spuResult.unitResult).unitName}
-                  onChange={async (number) => {
-                    const res = await shopEdit({ data: { cartId: item.cartId, number } });
-                    skuChange(res, number);
-                  }}
-                />
+                <div hidden={judge}>
+                  <ShopNumber
+                    value={item.number}
+                    onChange={async (number) => {
+                      const res = await shopEdit({ data: { cartId: item.cartId, number } });
+                      skuChange(res, number);
+                    }}
+                  />
+                </div>
               </div>
             </div>;
           })

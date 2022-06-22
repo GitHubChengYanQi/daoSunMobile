@@ -9,8 +9,8 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import ShopNumber from '../ShopNumber';
 import { shopCartAdd } from '../../../../../Url';
-import Positions
-  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
+import AddPosition
+  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 
 const AddSku = (
   {
@@ -73,7 +73,7 @@ const AddSku = (
     getCustomer({ data: { skuId: sku.skuId } });
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
-    setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: 1 });
+    setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: judge ? 0 : 1 });
     setVisible(true);
   };
 
@@ -113,6 +113,13 @@ const AddSku = (
         } else if (!data.customerId) {
           disabledText = '请选择供应商';
           disabled = true;
+        } else if (judge) {
+          const positions = ToolUtil.isArray(data.positions);
+          const inStock = positions.filter(item => item.number);
+          if (inStock.length === 0) {
+            disabledText = '请完善库位信息';
+            disabled = true;
+          }
         }
         return {
           title: '入库',
@@ -161,6 +168,18 @@ const AddSku = (
       bar.remove();
       i++;
       if (i === 2) {
+
+        const positionNums = [];
+        if (judge) {
+          ToolUtil.isArray(data.positions).map(item => {
+            if (item.number) {
+              return positionNums.push({ positionId: item.id, num: item.number });
+            }
+            return null;
+          });
+        }
+
+
         addShop({
           data: {
             type,
@@ -169,6 +188,7 @@ const AddSku = (
             customerId: data.customerId,
             number: data.number,
             storehousePositionsId: data.positionId,
+            positionNums,
           },
         });
       }
@@ -224,26 +244,22 @@ const AddSku = (
               }}
             >{data.customerName || '请选择供应商'}</Button>
           </div>
-          <div hidden={!judge} className={style.flex}>
-            <div className={style.checkLabel}>
-              库位
-            </div>
-            <Button
-              color='primary'
-              fill='outline'
-              className={style.check}
-              onClick={() => {
-                setDataVisible('position');
-              }}
-            >{data.positionName || '请选择库位'}</Button>
-          </div>
-          <div className={style.flex}>
+          <div hidden={judge} className={style.flex}>
             <div className={style.instockNumber}>
               {taskData().title}数量
               <ShopNumber value={data.number} onChange={(number) => {
                 setData({ ...data, number });
               }} />
             </div>
+          </div>
+          <div hidden={!judge} className={style.flex}>
+            <AddPosition
+              skuId={sku.skuId}
+              positions={data.positions}
+              setPositions={(positions) => {
+                setData({ ...data, positions });
+              }}
+            />
           </div>
         </div>
       }
@@ -316,22 +332,6 @@ const AddSku = (
         });
       }}
     />
-
-    <Popup visible={dataVisible === 'position'} className={style.positionPopup}>
-      <Positions
-        single
-        ids={[{id:data.positionId,name:data.positionName}]}
-        onClose={() => setDataVisible(null)}
-        onSuccess={(value = []) => {
-          const position = value[0] || {};
-          setDataVisible(null);
-          setData({
-            ...data,
-            positionId: position.id,
-            positionName: position.name,
-          });
-        }} />
-    </Popup>
   </>;
 };
 

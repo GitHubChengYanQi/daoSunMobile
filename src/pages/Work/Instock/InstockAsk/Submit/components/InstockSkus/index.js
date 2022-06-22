@@ -18,6 +18,8 @@ import Careful from './components/Careful';
 import MyNavBar from '../../../../../../components/MyNavBar';
 import LinkButton from '../../../../../../components/LinkButton';
 import CheckUser from '../../../../../../components/CheckUser';
+import { RemoveButton } from '../../../../../../components/MyButton';
+import ShopNumber from '../../../coponents/SkuInstock/components/ShopNumber';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 
@@ -78,10 +80,11 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
         };
       case 'inStock':
         return {
-          title: '入库申请',
-          type: '入库',
-          describe: item.customerName,
-          otherData: item.brandName,
+          title: '入库任务明细',
+          describe: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
+          otherData: judge ? ToolUtil.isArray(item.positions).map(item => {
+            return `${item.name}(${item.number})`;
+          }).join('、') : item.brandName,
         };
       default:
         return {};
@@ -91,8 +94,22 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
   const inStockRun = (directInStock) => {
     const listParams = [];
     data.map(item => {
-      if (item.number > 0) {
-        listParams.push({ ...item, storehousePositionsId: item.positionId });
+      if (judge) {
+        const positions = item.positions || [];
+        positions.map(positionItem => {
+          if (positionItem.number > 0) {
+            listParams.push({
+              ...item,
+              storehousePositionsId: positionItem.id,
+              number: positionItem.number,
+            });
+          }
+          return null;
+        });
+      } else {
+        if (item.number > 0) {
+          listParams.push({ ...item, storehousePositionsId: item.positionId });
+        }
       }
       return null;
     });
@@ -134,28 +151,29 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               <SkuItem
                 imgSize={60}
                 skuResult={item.skuResult}
-                extraWidth='124px'
+                extraWidth={judge ? '50px' : '130px'}
                 describe={createTypeData(item).describe}
                 otherData={createTypeData(item).otherData}
               />
             </div>
-            <div>
-              <Stepper
-                style={{
-                  '--button-text-color': '#000',
-                }}
-                min={1}
-                value={item.number}
-                onChange={value => {
-                  const newData = data.map((dataItem) => {
-                    if (dataItem.key === index) {
-                      return { ...dataItem, number: value };
-                    }
-                    return dataItem;
-                  });
-                  setData(newData);
-                }}
-              />
+            <div className={style.action}>
+              <RemoveButton onClick={() => {
+                setData(data.filter(item => item.key !== index));
+              }} />
+              <div hidden={judge}>
+                <ShopNumber
+                  value={item.number}
+                  onChange={async (number) => {
+                    const newData = data.map((dataItem) => {
+                      if (dataItem.key === index) {
+                        return { ...dataItem, number };
+                      }
+                      return dataItem;
+                    });
+                    setData(newData);
+                  }}
+                />
+              </div>
             </div>
           </div>;
         })
@@ -253,38 +271,13 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               return Message.toast('请选择注意事项！');
             }
             if (judge) {
-              return setVisible(true);
+              return inStockRun(true);
             }
             inStockRun();
             break;
           default:
             break;
         }
-      }}
-    />
-
-    <ActionSheet
-      cancelText='取消'
-      visible={visible}
-      actions={[
-        { text: '提交申请', key: 'submit' },
-        { text: '直接入库', key: 'directInStock' },
-      ]}
-      onClose={() => {
-        setVisible(false);
-      }}
-      onAction={(action) => {
-        switch (action.key) {
-          case 'submit':
-            inStockRun();
-            break;
-          case 'directInStock':
-            inStockRun(true);
-            break;
-          default:
-            break;
-        }
-        setVisible(false);
       }}
     />
 

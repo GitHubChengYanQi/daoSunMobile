@@ -97,7 +97,7 @@ const InstockError = (
 
               const skuResult = item.skuResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandResult).brandName || '-';
+              const brandName = ToolUtil.isObject(item.brandResult).brandName;
 
               return <div key={index}>
                 <div style={{ border: 'none' }} className={style.skuItem}>

@@ -13,6 +13,8 @@ import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
 import { connect } from 'dva';
 import DefaultMenus from '../component/DefaultMenus';
+import CreateInStock from '../../Work/ProcessTask/Create/components/CreateInStock';
+import MenusItem from '../component/MenusItem';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
@@ -60,13 +62,11 @@ const MenusSetting = (props) => {
     }
   }, []);
 
-  const menus = (item, shake) => {
-    return <Menus
+  const menus = (item) => {
+    return <MenusItem
       textOverflow={70}
-      module={module}
       code={item.code}
       name={item.name}
-      shake={shake}
       disabled={menuSys}
       fontSize={34}
     />;
@@ -287,6 +287,7 @@ const MenusSetting = (props) => {
           </Grid.Item>
         </Grid>
       </Card>
+
 
       {addLoading && <MyLoading />}
     </div>
