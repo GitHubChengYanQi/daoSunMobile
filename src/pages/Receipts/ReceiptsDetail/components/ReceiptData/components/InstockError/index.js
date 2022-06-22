@@ -51,8 +51,8 @@ const InstockError = (
           }}>
             <div className={style.sku}>
               <SkuItem extraWidth='102px' skuResult={item.skuResult} otherDom={<div className={style.error}>
-                <div>数量异常 <span className={style.red}>{item.errorNumber}</span></div>
-                <div>其他异常 <span className={style.yellow}>{item.otherNumber}</span></div>
+                <div hidden={!item.errorNumber}>数量异常 <span className={style.red}>{item.errorNumber}</span></div>
+                <div hidden={!item.otherNumber}>质量异常 <span className={style.yellow}>{item.otherNumber}</span></div>
               </div>} />
             </div>
             <div className={style.status}>

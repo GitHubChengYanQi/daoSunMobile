@@ -16,6 +16,7 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import LinkButton from '../../../../../../../../components/LinkButton';
+import { Form } from 'antd';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 export const instockErrorDetail = { url: '/anomaly/detail', method: 'POST' };
@@ -32,7 +33,7 @@ const Error = (
     },
     refreshOrder = () => {
     },
-    maxHeight = '80vh'
+    maxHeight = '80vh',
   },
 ) => {
 
@@ -196,7 +197,7 @@ const Error = (
 
   const [over, setOver] = useState();
 
-  return <div className={style.error} style={{maxHeight}}>
+  return <div className={style.error} style={{ maxHeight }}>
 
     <div className={style.header}>
 
@@ -297,7 +298,7 @@ const Error = (
       }}>添加异常</Button>
     </Divider>
 
-    <div className={style.errors}  id='errors'>
+    <div className={style.errors} id='errors'>
       {
         inkinds.map((item, index) => {
 
@@ -382,9 +383,27 @@ const Error = (
 
     {(CodeLoading || anomalyLoading || detailyLoading || editLoading || deleteLoading) && <MyLoading />}
 
+
     <div className={style.bottom}>
       <Button color='primary' onClick={() => {
 
+        let required = false;
+        const detailParams = inkinds.map((item) => {
+          if (ToolUtil.isArray(item.noticeIds).length === 0) {
+            required = true;
+          }
+          return {
+            pidInKind: item.inkindId,
+            description: item.description,
+            reasonImg: item.mediaIds,
+            noticeIds: item.noticeIds,
+            number: item.number,
+          };
+        });
+
+        if (required){
+          return Message.toast('请选择异常原因！')
+        }
         const param = {
           data: {
             anomalyId: data.anomalyId,
@@ -397,15 +416,7 @@ const Error = (
             needNumber: sku.number,
             realNumber: data.number,
             anomalyType: 'InstockError',
-            detailParams: inkinds.map((item) => {
-              return {
-                pidInKind: item.inkindId,
-                description: item.description,
-                reasonImg: item.mediaIds,
-                noticeIds: item.noticeIds,
-                number: item.number,
-              };
-            }),
+            detailParams,
           },
         };
 
