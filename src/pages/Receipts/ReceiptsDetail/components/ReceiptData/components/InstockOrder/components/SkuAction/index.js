@@ -12,6 +12,7 @@ import InstockShop from '../InstockShop';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { shopCartAdd } from '../../../../../../../../Work/Instock/Url';
 import Error from '../Error';
+import inStockLogo from '../../../../../../../../../assets/instockLogo.png';
 
 
 const SkuAction = (
@@ -25,25 +26,36 @@ const SkuAction = (
   },
 ) => {
 
-  const { run: addShop } = useRequest(shopCartAdd, { manual: true });
+  const { run: addShop } = useRequest(shopCartAdd, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+    },
+  });
 
   const [visible, setVisible] = useState();
 
-  const [items, setItems] = useState(data.map((item, index) => {
-    return { ...item, key: index };
-  }));
+  const actions = [];
+  const noAction = [];
 
-  useEffect(() => {
-    setItems(data.map((item, index) => {
-      return { ...item, key: index };
-    }));
-  }, [data]);
+  data.map((item) => {
+    if (item.status === 0) {
+      noAction.push(item);
+    } else {
+      actions.push(item);
+    }
+    return null;
+  });
+
+  const items = [...noAction, ...actions].map((item, index) => {
+    return { ...item, key: index };
+  });
+
 
   const showItems = items.filter(item => !item.hidden);
 
   let countNumber = 0;
   showItems.map(item => countNumber += item.number);
-
 
   const getItemIndex = (key) => {
     let currentIndex = 0;
@@ -58,36 +70,44 @@ const SkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-  const remove = (currentIndex) => {
-    const newItems = items.map((item, index) => {
-      if (index === currentIndex) {
-        return { ...item, hidden: true };
-      }
-      return item;
-    });
-    setItems(newItems);
-  };
-
   const skuItem = (item, index) => {
     const skuResult = item.skuResult || {};
+    const complete = item.realNumber === 0 && item.status === 99;
+    const waitInStock = item.status === 1;
+    const errorInStock = item.status === -1;
+
     return <div
       key={index}
-      className={ToolUtil.classNames(
-        style.skuItem,
-        showItems.length <= 3 && style.skuBorderBottom,
-      )}
+      className={style.sku}
     >
-      <div className={style.item}>
-        <SkuItem
-          imgSize={60}
-          skuResult={skuResult}
-          describe={ToolUtil.isObject(item.customerResult).customerName}
-          extraWidth='124px'
-          otherData={ToolUtil.isObject(item.brandResult).brandName}
-        />
+      <div hidden={!(waitInStock || complete || errorInStock) } className={style.mask} />
+      <div
+        className={ToolUtil.classNames(
+          style.skuItem,
+          showItems.length <= 3 && style.skuBorderBottom,
+        )}
+      >
+        <div hidden={!complete} className={style.logo}>
+          <img src={inStockLogo} alt='' />
+        </div>
+        <div className={style.item}>
+          <SkuItem
+            imgSize={60}
+            skuResult={skuResult}
+            describe={ToolUtil.isObject(item.customerResult).customerName}
+            extraWidth='126px'
+            otherData={ToolUtil.isObject(item.brandResult).brandName}
+          />
+        </div>
+        <div className={style.skuNumber}>
+          <ShopNumber value={item.number} show />
+        </div>
       </div>
-      <div>
-        <ShopNumber value={item.number} show />
+      <div hidden={!waitInStock} className={style.status}>
+        待入库
+      </div>
+      <div hidden={!errorInStock} className={style.status}>
+        异常件
       </div>
     </div>;
   };
@@ -106,8 +126,6 @@ const SkuAction = (
       },
     });
   };
-
-
   return <div style={{ backgroundColor: '#fff' }}>
     <div className={style.skuHead}>
       <div className={style.headTitle}>
@@ -125,21 +143,17 @@ const SkuAction = (
           return null;
         }
 
-        if (!action) {
+        if (!action || item.status !== 0) {
           return skuItem(item, index);
         }
 
-        return <div key={index} style={{ margin: 8 }}>
+        return <div key={index}>
           <Viewpager
             currentIndex={index}
             onLeft={() => {
               addInstockShop(1, item, 'waitInStock');
-              remove(index);
             }}
             onRight={() => {
-              setTimeout(() => {
-                setItems(items.filter(() => true));
-              }, 100);
               setVisible(item);
             }}
           >
@@ -174,7 +188,7 @@ const SkuAction = (
         }}
         onSuccess={(item) => {
           setVisible(false);
-          remove(item.key);
+          refresh();
         }}
       />
     </Popup>

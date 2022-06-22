@@ -43,7 +43,7 @@ const classNames = (...props) => {
   if (!Array.isArray(props)) {
     return '';
   }
-  return props.join(' ');
+  return props.map(item => item || '').join(' ');
 };
 
 // 监听键盘按下@事件

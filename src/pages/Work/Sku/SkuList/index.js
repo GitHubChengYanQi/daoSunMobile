@@ -18,6 +18,7 @@ const SkuList = (
     open = {},
     defaultParams = {},
     numberTitle = '库存总数',
+    noSort,
   },
   ref,
 ) => {
@@ -125,13 +126,13 @@ const SkuList = (
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
-      <div className={style.sort} onClick={() => {
+      <div className={style.sort} hidden={noSort} onClick={() => {
         sortAction('stockNumber');
       }}>
         库存数量
         {sortShow('stockNumber')}
       </div>
-      <div className={style.sort} onClick={() => {
+      <div className={style.sort} hidden={noSort} onClick={() => {
         sortAction('createTime');
       }}>
         创建时间

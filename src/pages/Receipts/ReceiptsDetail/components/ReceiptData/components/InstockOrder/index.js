@@ -24,7 +24,7 @@ const InstockOrder = (
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
-      details = ToolUtil.isArray(data.instockListResults).filter(item => item.status === 0);
+      details = ToolUtil.isArray(data.instockListResults);
       announcementsList = data.announcementsList;
       remake = ToolUtil.isArray(data.remake)
       fileUrls = ToolUtil.isArray(data.url);

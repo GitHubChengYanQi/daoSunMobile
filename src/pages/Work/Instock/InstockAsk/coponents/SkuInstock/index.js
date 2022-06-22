@@ -58,7 +58,7 @@ const SkuInstock = ({ numberTitle, type, title }) => {
 
   switch (type) {
     case 'inStock':
-      judge = {...query}.hasOwnProperty('directInStock');
+      judge = { ...query }.hasOwnProperty('directInStock');
       break;
     default:
       break;
@@ -81,6 +81,7 @@ const SkuInstock = ({ numberTitle, type, title }) => {
         }}
       />
       <SkuList
+        noSort
         numberTitle='品类'
         skuClassName={style.skuContent}
         ref={ref}
