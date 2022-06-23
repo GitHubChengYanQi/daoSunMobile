@@ -89,7 +89,7 @@ const InstockError = (
         {loading ? <MyLoading skeleton /> : <>
           {errors.length === 0 && <MyEmpty description='暂无异常物料' />}
           {
-            ToolUtil.isArray(errorList).map((item, index) => {
+            errors.map((item, index) => {
 
               const checked = data.map(item => item.cartId).includes(item.cartId);
 
@@ -97,7 +97,7 @@ const InstockError = (
 
               const skuResult = item.skuResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandResult).brandName;
+              const brandName = ToolUtil.isObject(item.brandResult).brandName || '-';
 
               return <div key={index}>
                 <div style={{ border: 'none' }} className={style.skuItem}>
@@ -112,18 +112,19 @@ const InstockError = (
                     <SkuItem
                       skuResult={skuResult}
                       extraWidth='80px'
-                      describe={customerName}
-                      otherData={brandName}
+                      otherData={`${customerName} / ${brandName}`}
                     />
                   </div>
                   <FormOutlined style={{ fontSize: 18 }} onClick={() => {
-                    onEdit(anomalyResult.anomalyId);
+                    onEdit(anomalyResult.anomalyId, errors.length);
                   }} />
                 </div>
                 <div className={style.errorAction}>
                   <div className={style.number}>
-                    <span hidden={!anomalyResult.errorNumber}>数量异常：<span className={style.red}>{anomalyResult.errorNumber}</span></span>
-                    <span hidden={!anomalyResult.otherNumber}>质量异常：<span className={style.yellow}>{anomalyResult.otherNumber}</span></span>
+                    <span hidden={!anomalyResult.errorNumber}>数量异常：<span
+                      className={style.red}>{anomalyResult.errorNumber}</span></span>
+                    <span hidden={!anomalyResult.otherNumber}>质量异常：<span
+                      className={style.yellow}>{anomalyResult.otherNumber}</span></span>
                     <span>申请总数：<span className={style.black}>{anomalyResult.needNumber}</span></span>
                   </div>
                   <Button color='primary' fill='outline' onClick={() => {

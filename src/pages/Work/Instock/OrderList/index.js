@@ -13,12 +13,15 @@ import { DownOutline, ExclamationCircleOutline, RightOutline, UpOutline } from '
 import SkuItem from '../../Sku/SkuItem';
 import ShopNumber from '../InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { MyDate } from '../../../components/MyDate';
+import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 
 const Orderlist = () => {
 
   const ref = useRef();
 
   const [data, setData] = useState([]);
+
+  const [visible,setVisible] = useState();
 
   const dataChange = (param, currentIndex) => {
     const newData = data.map((item, index) => {
@@ -34,7 +37,7 @@ const Orderlist = () => {
     <MyBottom
       buttons={<Space>
         <Button color='primary' onClick={() => {
-          history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
+          setVisible(true);
         }}>新建入库申请</Button>
       </Space>}
     >
@@ -113,6 +116,8 @@ const Orderlist = () => {
         }
       </MyList>
     </MyBottom>
+
+    <CreateInStock open={visible} onClose={() => setVisible(false)} />
   </>;
 };
 

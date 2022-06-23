@@ -3,6 +3,7 @@ import style from './index.less';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { Popup } from 'antd-mobile';
 import SkuError from './components/SkuError';
+import { ToolUtil } from '../../../../../../components/ToolUtil';
 
 const InstockError = (
   {
@@ -50,10 +51,14 @@ const InstockError = (
             }
           }}>
             <div className={style.sku}>
-              <SkuItem extraWidth='102px' skuResult={item.skuResult} otherDom={<div className={style.error}>
-                <div hidden={!item.errorNumber}>数量异常 <span className={style.red}>{item.errorNumber}</span></div>
-                <div hidden={!item.otherNumber}>质量异常 <span className={style.yellow}>{item.otherNumber}</span></div>
-              </div>} />
+              <SkuItem
+                extraWidth='100px'
+                skuResult={item.skuResult}
+                otherData={`${ToolUtil.isObject(item.customer).customerName || '-'} / ${ToolUtil.isObject(item.brand).brandName || '-'}`}
+                moreDom={<div className={style.error}>
+                  <div hidden={!item.errorNumber}>数量异常 <span className={style.red}>{item.errorNumber}</span></div>
+                  <div hidden={!item.otherNumber}>质量异常 <span className={style.yellow}>{item.otherNumber}</span></div>
+                </div>} />
             </div>
             <div className={style.status}>
               · {item.status === 99 ? '已处理' : '处理中'}
@@ -63,7 +68,7 @@ const InstockError = (
       }
     </div>
 
-    <Popup onMaskClick={()=>setVisible(false)} destroyOnClose visible={visible}>
+    <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError height='80vh' anomalyId={visible} onClose={() => setVisible(false)} onSuccess={() => {
         setVisible(false);
         refresh();

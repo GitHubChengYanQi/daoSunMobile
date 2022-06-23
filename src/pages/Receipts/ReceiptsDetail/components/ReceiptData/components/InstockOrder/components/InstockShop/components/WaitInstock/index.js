@@ -13,6 +13,7 @@ import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url'
 import LinkButton from '../../../../../../../../../../components/LinkButton';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
+import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
 
@@ -121,18 +122,17 @@ const WaitInstock = (
                   check(checked, item);
                 }}>
                   <SkuItem
-                    otherTop
-                    skuResult={item.skuResult}
+                    title={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
                     extraWidth='120px'
-                    otherData={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
-                    describe={`${customerName} / ${brandName}`}
+                    describe={SkuResultSkuJsons({skuResult})}
+                    otherData={`${customerName} / ${brandName}`}
                   />
                 </div>
                 <div className={style.inStock}>
                   <div hidden={item.type !== 'instockByAnomaly'} className={style.error}>异常转入</div>
                   <ShopNumber show value={item.number} />
                   <Button color='primary' fill='outline' onClick={() => {
-                    onInstock(item);
+                    onInstock(item,instockList.length);
                   }}>入库</Button>
                 </div>
               </div>;

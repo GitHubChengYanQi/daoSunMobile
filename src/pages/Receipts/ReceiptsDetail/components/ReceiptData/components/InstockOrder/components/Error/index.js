@@ -67,7 +67,7 @@ const Error = (
   const { loading: editLoading, run: editRun } = useRequest(instockErrorEdit, {
     manual: true,
     onSuccess: () => {
-      onSuccess();
+      onClose();
       Message.toast('修改成功！');
     },
     onError: () => {
@@ -78,7 +78,7 @@ const Error = (
   const { loading: deleteLoading, run: deleteRun } = useRequest(instockErrorDelete, {
     manual: true,
     onSuccess: () => {
-      onSuccess();
+      onClose(true);
       refreshOrder();
       Message.toast('删除成功！');
     },
@@ -258,7 +258,7 @@ const Error = (
           skuResult={sku.skuResult}
           className={style.sku}
           extraWidth={id ? '84px' : '24px'}
-          otherData={ToolUtil.isObject(sku.customerResult).customerName}
+          otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandName || '-'}`}
         />
         {id && <LinkButton color='danger' onClick={() => {
           deleteRun({

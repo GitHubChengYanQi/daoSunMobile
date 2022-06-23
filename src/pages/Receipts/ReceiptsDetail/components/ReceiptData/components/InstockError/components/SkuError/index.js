@@ -201,8 +201,7 @@ const SkuError = (
         skuResult={sku.skuResult}
         className={style.sku}
         extraWidth='64px'
-        describe={ToolUtil.isObject(sku.customerResult).customerName}
-        otherData={ToolUtil.isObject(sku.brandResult).brandResult}
+        otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandResult || '-'}`}
       />
       <div className={style.showNumber}>
         <span className={style.through} hidden={sku.checkNumber === sku.needNumber}>× {sku.needNumber}</span>

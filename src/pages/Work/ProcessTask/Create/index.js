@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { ActionSheet, Grid } from 'antd-mobile';
+import { ActionSheet, Card, Grid } from 'antd-mobile';
 import style from '../../../Home/index.less';
 import Menus, { borderStyle } from '../../../Home/component/Menus';
 import { history, useModel } from 'umi';
 import createStyle from './index.less';
 import CreateInStock from './components/CreateInStock';
+import MenusItem from '../../../Home/component/MenusItem';
 
 const Create = () => {
 
@@ -30,33 +31,40 @@ const Create = () => {
   });
 
 
-  return <div style={{ backgroundColor: '#fff' }}>
-    <Grid columns={3} gap={0}>
-      {
-        receipts.map((item, index) => {
-          const border = borderStyle(index, 3, receipts.length);
-          return <Grid.Item className={style.menus} key={index} style={{ ...border }}>
-            <Menus
-              textOverflow={80}
-              code={item.code}
-              name={item.name}
-              fontSize={50}
-              onClick={async (code) => {
-                switch (code) {
-                  case 'inventoryAsk':
-                    setVisible(code);
-                    return true;
-                  case 'instockAsk':
-                    setVisible(code);
-                    return true;
-                  default:
-                    break;
-                }
-              }} />
-          </Grid.Item>;
-        })
-      }
-    </Grid>
+  return <div style={{ padding:16 }}>
+    <Card
+      className={style.dataCard}
+      style={{ marginBottom: 0 }}
+      bodyClassName={style.manuCardBody}
+      headerClassName={style.cardHeader}
+    >
+      <Grid columns={3} gap={0}>
+        {
+          receipts.map((item, index) => {
+            const border = borderStyle(index, 3, receipts.length);
+            return <Grid.Item className={style.menus} key={index} style={{ ...border }}>
+              <Menus
+                textOverflow={80}
+                code={item.code}
+                name={item.name}
+                fontSize={50}
+                onClick={(code) => {
+                  switch (code) {
+                    case 'inventoryAsk':
+                      setVisible(code);
+                      return true;
+                    case 'instockAsk':
+                      setVisible(code);
+                      return true;
+                    default:
+                      break;
+                  }
+                }} />
+            </Grid.Item>;
+          })
+        }
+      </Grid>
+    </Card>
 
 
     <ActionSheet

@@ -44,8 +44,7 @@ const InStockLog = (
                 <SkuItem
                   skuResult={item.skuResult}
                   extraWidth={error ? '90px' : '24px'}
-                  describe={ToolUtil.isObject(item.customer).customerName}
-                  otherData={ToolUtil.isObject(item.brandResult).brandName}
+                  otherData={`${ToolUtil.isObject(item.customer).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'} `}
                 />
               </div>
               <div hidden={!error} className={style.errorData}>

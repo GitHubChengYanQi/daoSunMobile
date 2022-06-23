@@ -16,30 +16,18 @@ const SkuItem = (
     gap = 4,
     imgId,
     className,
-    otherTop,
-    otherDom,
     describe,
+    title,
+    more,
+    moreDom,
   }) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
-
   const spuResult = skuResult.spuResult || {};
   const unitResult = spuResult.unitResult || {};
-
-  const skuDescribe = `${
-    skuResult.skuJsons
-    &&
-    skuResult.skuJsons.length > 0
-    &&
-    skuResult.skuJsons[0].values.attributeValues
-    &&
-    skuResult.skuJsons.map((items) => {
-      return items.values.attributeValues;
-    }).join(' / ') || '-'
-  }`;
 
   return <>
     <div className={ToolUtil.classNames(style.skuList, className)}>
@@ -52,22 +40,27 @@ const SkuItem = (
         style={{ gap, maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
         <MyEllipsis width='100%'>
-          {otherTop ? otherData : SkuResultSkuJsons({ skuResult })}
+          {title || SkuResultSkuJsons({ skuResult, spu: true })}
         </MyEllipsis>
         <div className={style.describe}>
           <MyEllipsis width='100%'>
-            {otherTop ? SkuResultSkuJsons({ skuResult }) : (describe || skuDescribe)}
+            {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>
         </div>
         <div>
-          {otherDom || <div hidden={otherTop ? describe === '-' : !otherData} className={style.otherData}>
+          <div hidden={!otherData} className={style.otherData}>
             <MyEllipsis width='100%'>
-              {otherTop ? (describe || skuDescribe) : otherData}
+              {otherData}
             </MyEllipsis>
-          </div>}
+          </div>
         </div>
       </div>
     </div>
+    {moreDom || <div hidden={!more} className={style.more} style={{ maxWidth: `calc(100vw - 13px - ${extraWidth})` }}>
+      <MyEllipsis width='100%'>
+        {more}
+      </MyEllipsis>
+    </div>}
   </>;
 };
 

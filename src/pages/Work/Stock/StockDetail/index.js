@@ -12,6 +12,8 @@ import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/Add
 import { useRequest } from '../../../../util/Request';
 import { judgeLoginUser } from '../../Instock/InstockAsk/Submit/components/InstockSkus';
 import { MyLoading } from '../../../components/MyLoading';
+import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 export const SkuContent = (
   {
@@ -76,10 +78,9 @@ export const SkuContent = (
 const StockDetail = (
   {
     storehousePositionsId,
-    task,
     setTask = () => {
     },
-    skus = [],
+    stockDetail = {},
     setSkus = () => {
     },
   }) => {
@@ -92,9 +93,9 @@ const StockDetail = (
 
   const [visible, setVisible] = useState();
 
-  const [judge, setJudge] = useState(false);
+  const [skuItem, setSkuItem] = useState();
 
-  const { loading: judgeLoading, data: judgeData } = useRequest(judgeLoginUser);
+  const [taskVisible, setTaskVisible] = useState();
 
   return <>
     <div className={style.search}>
@@ -119,10 +120,11 @@ const StockDetail = (
       SkuContent={SkuContent}
       skuContentProps={{
         openTask: (item) => {
-          if (task) {
+          if (stockDetail.task) {
             addSku.current.openSkuAdd(item);
           } else {
-            setVisible(item);
+            setVisible(true);
+            setSkuItem(item);
           }
         },
       }}
@@ -130,12 +132,12 @@ const StockDetail = (
     />
 
     <AddSku
-      judge={judge}
-      skus={skus}
+      judge={stockDetail.judge}
+      skus={stockDetail.skus}
       ref={addSku}
-      type={task}
+      type={stockDetail.task}
       onChange={(sku) => {
-        setSkus([...skus, sku]);
+        setSkus([...ToolUtil.isArray(stockDetail.skus), sku]);
       }}
     />
 
@@ -155,23 +157,36 @@ const StockDetail = (
         setVisible(false);
       }}
       onAction={(action) => {
-        let judge = false;
         switch (action.key) {
           case 'inStock':
-            judge = judgeData;
-            setJudge(judgeData);
+            setTaskVisible(action.key);
             break;
           default:
-            setJudge(false);
+            setTask(action.key);
+            addSku.current.openSkuAdd(skuItem);
+            setSkuItem(null);
             break;
         }
-        setTask(action.key, judge);
-        addSku.current.openSkuAdd(visible);
         setVisible(false);
       }}
     />
 
-    {judgeLoading && <MyLoading />}
+    <CreateInStock
+      open={taskVisible === 'inStock'}
+      onClose={() => setTaskVisible(false)}
+      submit={() => {
+        setTask(taskVisible, false);
+        addSku.current.openSkuAdd(skuItem);
+        setSkuItem(null);
+        return true;
+      }}
+      directInStock={() => {
+        setTask(taskVisible, true);
+        addSku.current.openSkuAdd(skuItem);
+        setSkuItem(null);
+        return true;
+      }}
+    />
 
   </>;
 };

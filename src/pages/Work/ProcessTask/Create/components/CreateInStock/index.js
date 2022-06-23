@@ -12,6 +12,10 @@ const CreateInStock = (
     onClose = () => {
 
     },
+    submit = () => {
+    },
+    directInStock = () => {
+    },
   },
 ) => {
 
@@ -50,14 +54,19 @@ const CreateInStock = (
       onAction={(action) => {
         switch (action.key) {
           case 'submit':
-            history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
+            if (!submit()) {
+              history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
+            }
             break;
           case 'directInStock':
-            history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}&directInStock`);
+            if (!directInStock()) {
+              history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}&directInStock`);
+            }
             break;
           default:
             break;
         }
+        setVisible(false);
       }}
     />
 

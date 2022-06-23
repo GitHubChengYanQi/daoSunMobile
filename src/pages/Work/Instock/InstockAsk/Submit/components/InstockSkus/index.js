@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { ActionSheet, Divider, Stepper, Toast } from 'antd-mobile';
+import { Divider } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -27,13 +27,19 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const [data, setData] = useState([]);
 
-  const [visible, setVisible] = useState();
-
   const [params, setParams] = useState({});
 
   const history = useHistory();
 
   const userRef = useRef();
+
+  const normalSku = [];
+  data.map(item => {
+    if (item.number > 0) {
+      normalSku.push(item);
+    }
+    return null;
+  });
 
   const { loading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
@@ -93,7 +99,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const inStockRun = (directInStock) => {
     const listParams = [];
-    data.map(item => {
+    normalSku.map(item => {
       if (judge) {
         const positions = item.positions || [];
         positions.map(positionItem => {
@@ -107,9 +113,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           return null;
         });
       } else {
-        if (item.number > 0) {
-          listParams.push({ ...item, storehousePositionsId: item.positionId });
-        }
+        listParams.push({ ...item, storehousePositionsId: item.positionId });
       }
       return null;
     });
@@ -238,7 +242,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
         history.goBack();
       }}
       rightText='提交'
-      rightDisabled={data.length === 0}
+      rightDisabled={normalSku.length === 0}
       rightOnClick={() => {
         switch (createType) {
           case 'outStock':
@@ -248,10 +252,8 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               return Message.toast('请添加领料负责人！');
             }
             const pickListsDetailParams = [];
-            data.map(item => {
-              if (item.number > 0) {
-                pickListsDetailParams.push(item);
-              }
+            normalSku.map(item => {
+              pickListsDetailParams.push(item);
               return null;
             });
             outStock({

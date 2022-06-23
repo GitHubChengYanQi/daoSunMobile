@@ -19,6 +19,57 @@ const InstockShop = (
 
   const [content, setContent] = useState();
 
+  const wait = () => {
+    setContent(<WaitInstock
+      refresh={refresh}
+      actionId={actionId}
+      instockOrderId={id}
+      onClose={() => {
+        setContent(null);
+      }}
+      onInstock={(item,remainingQuantity) => {
+
+        // 单个入库
+        setContent(<OneInStock
+          refresh={refresh}
+          actionId={actionId}
+          instockOrderId={id}
+          skuItem={item}
+          onClose={(complete) => {
+            if (complete && (remainingQuantity === 1)){
+              setContent(null);
+            }else {
+              wait();
+            }
+          }} />);
+      }} />);
+  };
+
+  const error = () => {
+    setContent(<InstockError
+      instockOrderId={id}
+      refresh={refresh}
+      onClose={() => setContent(null)}
+      onEdit={(id,remainingQuantity) => {
+
+        // 修改入库异常
+        setContent(<Error
+          id={id}
+          onClose={(deleteAction) => {
+            if (deleteAction && (remainingQuantity === 1)){
+              setContent(null);
+            }else {
+              error();
+            }
+          }}
+          refreshOrder={() => {
+            refresh();
+          }}
+        />);
+      }}
+    />);
+  };
+
   return <div>
     <FloatingBubble
       axis='xy'
@@ -32,53 +83,13 @@ const InstockShop = (
     >
       <div className={style.actions}>
         <div className={style.action} onClick={() => {
-
-          // 待入库
-          setContent(<WaitInstock
-            refresh={refresh}
-            actionId={actionId}
-            instockOrderId={id}
-            onClose={() => {
-              setContent(null);
-            }}
-            onInstock={(item) => {
-
-              // 单个入库
-              setContent(<OneInStock
-                refresh={refresh}
-                actionId={actionId}
-                instockOrderId={id}
-                skuItem={item}
-                onClose={() => {
-                  setContent(null);
-                }} />);
-            }} />);
+          wait();
         }}>
           <div className={style.actionButton}><Icon type='icon-rukuguanli2' /></div>
           <span className={style.text}>待入</span>
         </div>
         <div className={style.action} onClick={() => {
-          setContent(<InstockError
-            instockOrderId={id}
-            refresh={refresh}
-            onClose={() => setContent(null)}
-            onEdit={(id) => {
-
-              // 修改入库异常
-              setContent(<Error
-                id={id}
-                onClose={() => {
-                  setContent(null);
-                }}
-                refreshOrder={() => {
-                  refresh();
-                }}
-                onSuccess={() => {
-                  setContent(null);
-                }}
-              />);
-            }}
-          />);
+          error();
         }}>
           <div className={style.actionButton}><ExclamationCircleFill style={{ color: 'red' }} /></div>
           <span className={style.text}>异常</span>

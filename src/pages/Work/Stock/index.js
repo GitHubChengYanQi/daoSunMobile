@@ -26,8 +26,7 @@ const Stock = (props) => {
           setSkus={(skus) => {
             setStockDetail({ ...stockDetail, skus });
           }}
-          task={stockDetail.task}
-          skus={stockDetail.skus}
+          stockDetail={stockDetail}
         />;
       default:
         return <MyEmpty height='100%' />;
@@ -38,6 +37,7 @@ const Stock = (props) => {
     switch (key) {
       case 'stock':
         return stockDetail.task && <SkuShop
+          ask
           className={style.popup}
           noClose
           judge={stockDetail.judge}

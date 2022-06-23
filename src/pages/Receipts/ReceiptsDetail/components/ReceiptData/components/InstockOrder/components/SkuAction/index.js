@@ -80,7 +80,7 @@ const SkuAction = (
       key={index}
       className={style.sku}
     >
-      <div hidden={!(waitInStock || complete || errorInStock) } className={style.mask} />
+      <div hidden={!(waitInStock || complete || errorInStock)} className={style.mask} />
       <div
         className={ToolUtil.classNames(
           style.skuItem,
@@ -94,9 +94,8 @@ const SkuAction = (
           <SkuItem
             imgSize={60}
             skuResult={skuResult}
-            describe={ToolUtil.isObject(item.customerResult).customerName}
             extraWidth='126px'
-            otherData={ToolUtil.isObject(item.brandResult).brandName}
+            otherData={`${ToolUtil.isObject(item.customerResult).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'}`}
           />
         </div>
         <div className={style.skuNumber}>

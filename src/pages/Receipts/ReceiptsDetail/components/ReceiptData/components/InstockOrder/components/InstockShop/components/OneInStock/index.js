@@ -27,6 +27,17 @@ const OneInStock = (
   const skuResult = skuItem.skuResult || {};
   const batch = skuResult.batch === 1;
 
+  const [positions, setPositions] = useState([]);
+
+  const inStockSku = positions.filter(item => item.number > 0);
+
+  let skuNumber = skuItem.number;
+  let total = 0;
+  positions.map(item => {
+    total += item.number;
+    return skuNumber -= (item.number || 0);
+  });
+
   // 入库
   const { loading: instockLoading, run: instockRun } = useRequest({
     url: '/instockOrder/inStockByOrder',
@@ -36,27 +47,18 @@ const OneInStock = (
     onSuccess: () => {
       Message.toast('入库成功！');
       refresh();
-      onClose();
+      onClose(total === skuItem.number);
     },
     onError: () => {
       Message.toast('入库失败！');
     },
   });
 
-  const [positions, setPositions] = useState([]);
-
-  const inStockSku = positions.filter(item => item.number > 0);
-
-  let skuNumber = skuItem.number;
-  positions.map(item => {
-    return skuNumber -= (item.number || 0);
-  });
-
   return <div className={style.content} style={{ height: 'auto', padding: '0 12px 76px' }}>
     <div className={style.header}>
       物料入库
       <span onClick={() => {
-        onClose();
+        onClose(false);
       }}><CloseOutline /></span>
     </div>
     <div className={style.skuList} style={{ borderBottom: '1px solid #EEEEEE' }}>
@@ -65,7 +67,7 @@ const OneInStock = (
           <SkuItem
             skuResult={skuResult}
             extraWidth='120px'
-            otherData={ToolUtil.isObject(skuItem.customer).customerName}
+            otherData={`${ToolUtil.isObject(skuItem.customer).customerName || '-'} / ${ToolUtil.isObject(skuItem.brandResult).brandName}`}
           />
         </div>
         <div className={style.inStock} style={{ justifyContent: 'center' }}>

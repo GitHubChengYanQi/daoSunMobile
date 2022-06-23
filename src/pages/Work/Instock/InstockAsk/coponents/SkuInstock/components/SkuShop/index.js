@@ -23,6 +23,7 @@ const SkuShop = (
     noClose,
     className,
     judge,
+    ask,
   },
 ) => {
 
@@ -60,13 +61,13 @@ const SkuShop = (
           brandName: ToolUtil.isObject(item.brandResult).brandName,
           brandId: item.brandId,
           number: item.number,
-          positions:ToolUtil.isArray(item.storehousePositions).map(item=>{
+          positions: ToolUtil.isArray(item.storehousePositions).map(item => {
             return {
-              id:item.storehousePositionsId,
-              name:item.name,
-              number:item.number,
-            }
-          })
+              id: item.storehousePositionsId,
+              name: item.name,
+              number: item.number,
+            };
+          }),
         };
       }));
     },
@@ -113,8 +114,8 @@ const SkuShop = (
       case 'inStock':
         return {
           title: '入库任务明细',
-          describe: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
-          otherData: judge ? ToolUtil.isArray(item.positions).map(item => {
+          otherData: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
+          more: judge ? ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
           }).join('、') : item.brandName,
         };
@@ -160,6 +161,7 @@ const SkuShop = (
                   extraWidth={judge ? '50px' : '130px'}
                   describe={taskData(item).describe}
                   otherData={taskData(item).otherData}
+                  more={taskData(item).more}
                 />
               </div>
               <div className={style.action}>
@@ -226,7 +228,7 @@ const SkuShop = (
               default:
                 break;
             }
-          }}>确认
+          }}>{ask ? '发起申请' : '确认'}
         </Button>
       </div>
     </div>
