@@ -114,10 +114,10 @@ const SkuShop = (
       case 'inStock':
         return {
           title: '入库任务明细',
-          otherData: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
-          more: judge ? ToolUtil.isArray(item.positions).map(item => {
+          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+          more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
-          }).join('、') : item.brandName,
+          }).join('、')
         };
       default:
         return {
@@ -159,7 +159,6 @@ const SkuShop = (
                   imgSize={80}
                   gap={10}
                   extraWidth={judge ? '50px' : '130px'}
-                  describe={taskData(item).describe}
                   otherData={taskData(item).otherData}
                   more={taskData(item).more}
                 />

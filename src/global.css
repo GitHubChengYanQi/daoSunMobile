@@ -44,6 +44,10 @@ body {
   --height:24px
 }
 
+.adm-action-sheet-button-item {
+  padding: 4px 12px;
+}
+
 .adm-action-sheet-button-item-name {
   font-size: 14px;
   padding: 8px;

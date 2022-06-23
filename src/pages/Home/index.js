@@ -13,9 +13,7 @@ import MenusItem from './component/MenusItem';
 const Home = (props) => {
 
   const { initialState } = useModel('@@initialState');
-
   const state = initialState || {};
-
   const userInfo = state.userInfo || {};
 
   const userMenus = props.data && props.data.userMenus;

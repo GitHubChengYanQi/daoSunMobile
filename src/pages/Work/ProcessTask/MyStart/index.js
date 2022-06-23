@@ -1,18 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import topStyle from '../../../global.less';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
+import { useModel } from 'umi';
 
 
 const MyStart = () => {
 
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
 
   const [screen, { setTrue, setFalse }] = useBoolean();
 
   const [number, setNumber] = useState(0);
+
+  const ref = useRef();
+
+  useEffect(() => {
+    ToolUtil.isObject(ref.current).submit({ createUser: userInfo.id });
+  }, []);
+
 
   return <>
     <MySearch placeholder='请输入相关单据信息' historyType='process' />
@@ -38,7 +49,7 @@ const MyStart = () => {
       </div>
     </div>
 
-    <ProcessList setNumber={setNumber} />
+    <ProcessList setNumber={setNumber} listRef={ref} />
   </>;
 };
 

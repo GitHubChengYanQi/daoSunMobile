@@ -87,10 +87,10 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
       case 'inStock':
         return {
           title: '入库任务明细',
-          describe: judge ? `${item.customerName || '-'} /  ${item.brandName || '-'}` : item.customerName,
-          otherData: judge ? ToolUtil.isArray(item.positions).map(item => {
+          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+          more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
-          }).join('、') : item.brandName,
+          }).join('、')
         };
       default:
         return {};
@@ -156,8 +156,8 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
                 imgSize={60}
                 skuResult={item.skuResult}
                 extraWidth={judge ? '50px' : '130px'}
-                describe={createTypeData(item).describe}
                 otherData={createTypeData(item).otherData}
+                more={createTypeData(item).more}
               />
             </div>
             <div className={style.action}>

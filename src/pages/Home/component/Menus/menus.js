@@ -7,7 +7,7 @@ export const menus = [
   { code: 'production', icon: 'icon-caidan-shengchanguanli' },
   { code: 'ERP', icon: 'icon-cangchuguanli',url:'/Work/Stock' },
   { code: 'CRM', icon: 'icon-crmguanli' },
-  { code: 'process', icon: 'icon-liuchengguanli' },
+  { code: 'process', icon: 'icon-liuchengguanli', url: '/Work/ProcessTask' },
   { code: 'task', icon: 'icon-renwu' },
   { code: 'message', icon: 'icon-xiaoxi1' },
   { code: 'customer', icon: 'icon-kehuguanli', url: '/Work/Customer' },

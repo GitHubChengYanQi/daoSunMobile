@@ -28,7 +28,9 @@ const CreateInStock = (
       if (res) {
         setVisible(true);
       } else {
-        history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
+        if (!submit()) {
+          history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}`);
+        }
       }
     },
   });
