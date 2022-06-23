@@ -27,19 +27,23 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const [data, setData] = useState([]);
 
+  const normalSku = [];
+
+  let countNumber = 0;
+
+  const skuList = data.map((item, index) => {
+    if (item.number > 0) {
+      countNumber += (item.number || 0)
+      normalSku.push(item);
+    }
+    return { ...item, key: index };
+  });
+
   const [params, setParams] = useState({});
 
   const history = useHistory();
 
   const userRef = useRef();
-
-  const normalSku = [];
-  data.map(item => {
-    if (item.number > 0) {
-      normalSku.push(item);
-    }
-    return null;
-  });
 
   const { loading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
@@ -65,16 +69,11 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
 
   useEffect(() => {
-    setData(skus.map((item, index) => {
-      return { ...item, key: index };
-    }));
+    setData(skus);
   }, [skus.length]);
 
 
   const [allSku, { toggle }] = useBoolean();
-
-  let countNumber = 0;
-  data.map(item => countNumber += (item.number || 0));
 
   const createTypeData = (item = {}) => {
     switch (createType) {
@@ -90,7 +89,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
-          }).join('、')
+          }).join('、'),
         };
       default:
         return {};
@@ -138,9 +137,9 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           合计：<span>{skus.length}</span>类<span>{countNumber}</span>件
         </div>
       </div>
-      {data.length === 0 && <MyEmpty description={`暂无${createTypeData().type}物料`} />}
+      {skuList.length === 0 && <MyEmpty description={`暂无${createTypeData().type}物料`} />}
       {
-        data.map((item, index) => {
+        skuList.map((item, index) => {
           if (!allSku && index >= 3) {
             return null;
           }
@@ -162,13 +161,13 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
             </div>
             <div className={style.action}>
               <RemoveButton onClick={() => {
-                setData(data.filter(item => item.key !== index));
+                setData(skuList.filter(item => item.key !== index));
               }} />
               <div hidden={judge}>
                 <ShopNumber
                   value={item.number}
                   onChange={async (number) => {
-                    const newData = data.map((dataItem) => {
+                    const newData = skuList.map((dataItem) => {
                       if (dataItem.key === index) {
                         return { ...dataItem, number };
                       }
@@ -182,7 +181,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           </div>;
         })
       }
-      {data.length > 3 && <Divider className={style.allSku}>
+      {skuList.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
         }}>
