@@ -139,6 +139,9 @@ const StockDetail = (
       onChange={(sku) => {
         setSkus([...ToolUtil.isArray(stockDetail.skus), sku]);
       }}
+      onClose={() => {
+        setTask(null);
+      }}
     />
 
     <ActionSheet
@@ -178,12 +181,14 @@ const StockDetail = (
         setTask(taskVisible, false);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
+        setTaskVisible(false)
         return true;
       }}
       directInStock={() => {
         setTask(taskVisible, true);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
+        setTaskVisible(false)
         return true;
       }}
     />

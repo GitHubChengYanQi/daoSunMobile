@@ -19,6 +19,8 @@ const AddSku = (
     type,
     skus = [],
     judge,
+    onClose = () => {
+    },
   }, ref) => {
 
   const { initialState } = useModel('@@initialState');
@@ -267,6 +269,7 @@ const AddSku = (
         <Button
           className={ToolUtil.classNames(style.close, style.button)}
           onClick={() => {
+            onClose();
             setVisible(false);
           }}>
           取消

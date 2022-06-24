@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from './index.less';
-import { Stepper } from 'antd-mobile';
+import FoucusStepper from './components/FoucusStepper';
 
 const ShopNumber = (
   {
@@ -10,6 +10,7 @@ const ShopNumber = (
     show,
     min = 1,
     max,
+    id = 'stepper',
   },
 ) => {
 
@@ -18,17 +19,7 @@ const ShopNumber = (
   return <>
     <div className={style.shopNumber}>
       {update ?
-        <div>
-          <Stepper
-            max={max}
-            min={min}
-            style={{
-              '--button-text-color': '#000',
-            }}
-            value={value}
-            onChange={onChange}
-          />
-        </div>
+        <FoucusStepper value={value} max={max} onChange={onChange} min={min} id={id} />
         :
         <div className={style.number} style={{ border: show && 'none' }} onClick={() => {
           if (!show) {

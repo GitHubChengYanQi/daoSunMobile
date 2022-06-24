@@ -13,7 +13,7 @@ const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 const CheckUser = (
   {
     value,
-    onChange = (id,name,params) => {
+    onChange = (id, name, params) => {
     },
   },
   ref,
@@ -30,7 +30,7 @@ const CheckUser = (
     },
   });
 
-  const { run: getUser } = useRequest(getUserByCpUserId, {
+  const { loading: getUserLoading, run: getUser } = useRequest(getUserByCpUserId, {
     manual: true,
     onSuccess: (res) => {
       if (res && res.userId) {
@@ -96,6 +96,7 @@ const CheckUser = (
   }
 
   return <>
+    {getUserLoading && <MyLoading />}
     <Picker
       value={[value]}
       popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}

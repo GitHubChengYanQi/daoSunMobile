@@ -33,7 +33,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const skuList = data.map((item, index) => {
     if (item.number > 0) {
-      countNumber += (item.number || 0)
+      countNumber += (item.number || 0);
       normalSku.push(item);
     }
     return { ...item, key: index };
@@ -67,10 +67,21 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     },
   });
 
+  const dataChange = (array = []) => {
+    if (array.length === 0) {
+      if (history.length <= 2) {
+        history.push('/');
+      } else {
+        history.goBack();
+      }
+    }
+    setData(array);
+  };
+
 
   useEffect(() => {
-    setData(skus);
-  }, [skus.length]);
+    dataChange(skus);
+  }, []);
 
 
   const [allSku, { toggle }] = useBoolean();
@@ -86,6 +97,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
       case 'inStock':
         return {
           title: '入库任务明细',
+          type: '入库',
           otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
@@ -161,10 +173,11 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
             </div>
             <div className={style.action}>
               <RemoveButton onClick={() => {
-                setData(skuList.filter(item => item.key !== index));
+                dataChange(skuList.filter(item => item.key !== index));
               }} />
               <div hidden={judge}>
                 <ShopNumber
+                  id={`stepper${index}`}
                   value={item.number}
                   onChange={async (number) => {
                     const newData = skuList.map((dataItem) => {
@@ -173,7 +186,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
                       }
                       return dataItem;
                     });
-                    setData(newData);
+                    dataChange(newData);
                   }}
                 />
               </div>

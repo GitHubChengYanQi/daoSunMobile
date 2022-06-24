@@ -169,6 +169,7 @@ const SkuShop = (
                 }} />
                 <div hidden={judge}>
                   <ShopNumber
+                    id={`stepper${index}`}
                     value={item.number}
                     onChange={async (number) => {
                       const res = await shopEdit({ data: { cartId: item.cartId, number } });

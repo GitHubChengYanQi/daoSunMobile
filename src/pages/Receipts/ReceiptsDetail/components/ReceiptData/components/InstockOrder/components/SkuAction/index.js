@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Divider, Popup } from 'antd-mobile';
 import Viewpager from '../Viewpager';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
@@ -47,9 +47,7 @@ const SkuAction = (
     return null;
   });
 
-  const items = [...noAction, ...actions].map((item, index) => {
-    return { ...item, key: index };
-  });
+  const items = [...noAction, ...actions];
 
 
   const showItems = items.filter(item => !item.hidden);
@@ -57,21 +55,11 @@ const SkuAction = (
   let countNumber = 0;
   showItems.map(item => countNumber += item.number);
 
-  const getItemIndex = (key) => {
-    let currentIndex = 0;
-    showItems.map((item, index) => {
-      if (item.key === key) {
-        currentIndex = index;
-      }
-      return null;
-    });
-    return currentIndex;
-  };
-
   const [allSku, { toggle }] = useBoolean();
 
   const skuItem = (item, index) => {
     const skuResult = item.skuResult || {};
+
     const complete = item.realNumber === 0 && item.status === 99;
     const waitInStock = item.status === 1;
     const errorInStock = item.status === -1;
@@ -138,7 +126,7 @@ const SkuAction = (
     {
       items.map((item, index) => {
 
-        if ((!allSku && getItemIndex(item.key) >= 3) || item.hidden) {
+        if (!allSku && index >= 3) {
           return null;
         }
 

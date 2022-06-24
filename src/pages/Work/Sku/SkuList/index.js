@@ -85,17 +85,17 @@ const SkuList = (
   };
 
   const sortAction = (field) => {
-    let order = 'ascend';
+    let order = 'descend';
     if (sort.field === field) {
       switch (sort.order) {
         case 'ascend':
-          order = 'descend';
-          break;
-        case 'descend':
           order = '';
           break;
-        default:
+        case 'descend':
           order = 'ascend';
+          break;
+        default:
+          order = 'descend';
           break;
       }
     }

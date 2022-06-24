@@ -70,7 +70,7 @@ const Stock = (props) => {
     <MyTablBar
       className={style.tab}
       onChange={(key) => {
-        if (key !== 'scan') {
+        if (key !== 'scan' && key !== 'report') {
           setStockDetail({ ...stockDetail, task: null });
           setKey(key);
         }

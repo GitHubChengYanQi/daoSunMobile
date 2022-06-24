@@ -30,12 +30,12 @@ const SkuScreen = (
     { key: 'skuClass', title: '分类', open: true },
     { key: 'supply', title: '供应商', open: true },
     { key: 'brand', title: '品牌', open: true },
-    { key: 'state', title: '状态', open: open.state },
+    { key: 'state', title: '状态', open: false },
     { key: 'position', title: '库位', open: open.position },
+    { key: 'number', title: '库存数', open: open.number },
     { key: 'bom', title: '物料清单', open: open.bom },
     { key: 'time', title: '创建时间', open: open.time },
     { key: 'user', title: '创建人', open: open.user },
-    { key: 'number', title: '库存数', open: open.number },
   ];
 
   const spuClassIds = ToolUtil.isArray(params.spuClassIds);
@@ -221,11 +221,8 @@ const SkuScreen = (
           title={item.title}
           mixNum={params.mixNum}
           maxNum={params.maxNum}
-          mixNumChange={(mixNum) => {
-            paramsOnChange({ ...params, mixNum });
-          }}
-          maxNumChange={(maxNum) => {
-            paramsOnChange({ ...params, maxNum });
+          numChange={(mixNum,maxNum) => {
+            paramsOnChange({ ...params, mixNum,maxNum });
           }}
         />;
       default:

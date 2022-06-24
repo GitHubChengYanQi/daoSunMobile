@@ -43,7 +43,7 @@ const Home = (props) => {
           {state.homeLogo && <img src={state.homeLogo} width={46} height={46} alt='' />}
         </div>
         <div className={style.enterpriseTitle}>
-        <span className={style.enterpriseName}>
+          <span className={style.enterpriseName}>
           {state.enterpriseName || '企业名称'}
         </span>
           <span className={style.enterpriseDescribe}>

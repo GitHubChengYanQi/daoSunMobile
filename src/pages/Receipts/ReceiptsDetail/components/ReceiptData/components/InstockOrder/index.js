@@ -5,6 +5,7 @@ import { Upload } from 'antd';
 import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
+import LinkButton from '../../../../../../components/LinkButton';
 
 const InstockOrder = (
   {
@@ -26,14 +27,14 @@ const InstockOrder = (
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults);
       announcementsList = data.announcementsList;
-      remake = ToolUtil.isArray(data.remake)
+      remake = ToolUtil.isArray(data.remake);
       fileUrls = ToolUtil.isArray(data.url);
       break;
     case ReceiptsEnums.outstockOrder:
-      details = ToolUtil.isArray(data.detailResults).filter(item => item.number > 0);
+      details = ToolUtil.isArray(data.detailResults);
       announcementsList = data.announcementsResults;
       remake = data.note;
-      fileUrls = ToolUtil.isArray(data.enclosureUrl)
+      fileUrls = ToolUtil.isArray(data.enclosureUrl);
       break;
     default:
       break;
@@ -71,8 +72,8 @@ const InstockOrder = (
         return <OutSkuAction
           loading={loading}
           data={details}
-          actionId={getAction('stockPreparation').id}
-          action={getAction('stockPreparation').id && permissions}
+          actionId={getAction('outStock').id}
+          action={getAction('outStock').id}
           pickListsId={data.pickListsId}
           refresh={refresh}
         />;
@@ -85,6 +86,11 @@ const InstockOrder = (
   return <>
     <div className={style.skus}>
       {action()}
+    </div>
+
+    <div hidden={type !== ReceiptsEnums.outstockOrder} className={style.user}>
+      <div className={style.title}>领料负责人</div>
+      <div>{ToolUtil.isObject(data.userResult).name}</div>
     </div>
 
     <div className={style.careful}>

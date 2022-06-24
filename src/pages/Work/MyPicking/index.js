@@ -167,7 +167,7 @@ const MyPicking = () => {
               return cartsParams.push({
                 pickListsId: item.pickListsId,
                 skuId: item.skuId,
-                number: item.outStockNumber,
+                number: item.perpareNumber,
                 brandIds: [item.brandId || 0],
               });
             });

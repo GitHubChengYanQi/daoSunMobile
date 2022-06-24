@@ -36,7 +36,7 @@ const Screen = (
         const element = document.getElementById(item.key);
         if (!element) continue;
         const rect = element.getBoundingClientRect();
-        if (rect.top <= 46) {
+        if (rect.top <= 90) {
           currentKey = item.key;
         } else {
           break;

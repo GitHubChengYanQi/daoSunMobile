@@ -3,19 +3,18 @@ import { Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Viewpager from '../../../InstockOrder/components/Viewpager';
-import MyEllipsis from '../../../../../../../../components/MyEllipsis';
 import Prepare from '../Prepare';
 import OutStockShop from '../OutStockShop';
+import outStockLogo from '../../../../../../../../../assets/outStockLogo.png';
+import Slash from '../../../../../../../../Work/MyPicking/components/Slash';
 
 
 const OutSkuAction = (
   {
-    actionId,
     pickListsId,
     data = [],
     action,
@@ -28,30 +27,39 @@ const OutSkuAction = (
 
   const [visible, setVisible] = useState();
 
+  const actions = [];
+  const noAction = [];
+
   let countNumber = 0;
-  data.map(item => countNumber += (item.number || 0));
+  data.map(item => {
+    let perpareNumber = 0;
+    ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
+
+    const complete = parseInt(item.receivedNumber) - item.number === 0;
+    const prepare = complete ? false : perpareNumber === item.number;
+
+    if (complete || prepare) {
+      noAction.push({ ...item, complete, prepare, perpareNumber });
+    } else {
+      actions.push({ ...item, complete, prepare, perpareNumber });
+    }
+    return countNumber += (item.number || 0);
+  });
+
+  const outSkus = [...actions, ...noAction];
 
   const [allSku, { toggle }] = useBoolean();
 
   const skuItem = (item, index) => {
     const skuResult = item.skuResult || {};
-    const stockNumber = item.stockNumber || 0;
 
-    const positions = [];
-
-
-    ToolUtil.isArray(item.positionAndStockDetail).map((item) => {
-      if (!positions.map(item => item.storehousePositionsId).includes(item.storehousePositionsId)) {
-        positions.push(item);
-      }
-      return null;
-    });
-
+    const complete = item.complete;
+    const prepare = item.prepare;
 
     let stockNumberColor = '';
     let stockNumberText = '';
 
-    switch (stockNumber) {
+    switch (item.stockNumber || 0) {
       case 0:
         stockNumberColor = '#EA0000';
         stockNumberText = '零库存';
@@ -67,40 +75,41 @@ const OutSkuAction = (
         break;
     }
 
-    return <div key={index} className={ToolUtil.classNames(
-      style.skuItems,
-      data.length <= 3 && style.skuBorderBottom,
-    )}>
+    return <div
+      key={index}
+      className={style.sku}
+    >
+      <div hidden={!(complete || prepare)} className={style.mask} />
       <div
-        className={style.skuItem}
-        style={{ padding: 0 }}
+        className={ToolUtil.classNames(
+          style.skuItem,
+          data.length <= 3 && style.skuBorderBottom,
+        )}
       >
+        <div hidden={!complete} className={style.logo}>
+          <img src={outStockLogo} alt='' />
+        </div>
         <div className={style.item}>
           <SkuItem
+            number={skuResult.stockNumber}
             imgSize={60}
             skuResult={skuResult}
             extraWidth='124px'
             otherData={ToolUtil.isObject(item.brandResult).brandName}
           />
         </div>
-        <div className={style.number}>
-          <span style={{ color: stockNumberColor }}>{stockNumberText}</span>
-          <ShopNumber value={item.number} show />
+        <div className={style.outStockNumber} style={{
+          paddingRight: prepare && 20,
+        }}>
+          <Slash leftText={item.receivedNumber || 0} rightText={item.number} rightStyle={{color:stockNumberColor}} />
+          <div>已备料：{item.perpareNumber}</div>
         </div>
       </div>
-      <div>
-        {
-          positions.map((item, index) => {
-            return <div className={style.positions} key={index}>
-              <MyEllipsis width='100%'>
-                {item.storeHousePositionsName}   库存{item.number}
-              </MyEllipsis>
-            </div>;
-          })
-        }
+      <div hidden={!prepare} className={style.status}>
+        已备料
       </div>
-
     </div>;
+
   };
 
 
@@ -110,22 +119,25 @@ const OutSkuAction = (
         申请明细
       </div>
       <div className={style.extra}>
-        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
+        合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>
     </div>
-    {data.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+    {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
     {
-      data.map((item, index) => {
+      outSkus.map((item, index) => {
+
+        const complete = item.complete;
+        const prepare = item.prepare;
 
         if (!allSku && index >= 3) {
           return null;
         }
 
-        if (!action) {
+        if (!action || complete || prepare || !item.stockNumber) {
           return skuItem(item, index);
         }
 
-        return <div key={index} style={{ margin: 8 }}>
+        return <div key={index}>
           <Viewpager
             currentIndex={index}
             onLeft={() => {
