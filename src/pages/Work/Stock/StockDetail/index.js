@@ -9,9 +9,6 @@ import SkuItem from '../../Sku/SkuItem';
 import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
-import { useRequest } from '../../../../util/Request';
-import { judgeLoginUser } from '../../Instock/InstockAsk/Submit/components/InstockSkus';
-import { MyLoading } from '../../../components/MyLoading';
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
 

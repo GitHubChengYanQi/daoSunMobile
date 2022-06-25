@@ -25,7 +25,7 @@ const ShopNumber = (
       {update ?
         <FoucusStepper value={value} max={max} onChange={onChange} min={min} id={id} onBlur={()=>{
           onBlur();
-          setUpdate(false);
+          // setUpdate(false);
         }} onFocus={onFocus} />
         :
         <div className={style.number} style={{ border: show && 'none' }} onClick={() => {

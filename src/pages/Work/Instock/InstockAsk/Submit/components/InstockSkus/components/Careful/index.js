@@ -1,7 +1,7 @@
-import React, {  useState } from 'react';
+import React, { useState } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { Divider, Selector, Toast } from 'antd-mobile';
+import { Button, Divider, Selector, Toast } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../../../../../../util/Request';
@@ -58,16 +58,22 @@ const Careful = (
       />
       {addOther && <div className={style.addCareful}>
         <FocusInput onChange={setContent} />
-        <LinkButton className={style.button} onClick={() => {
-          openAddOther();
-        }}>取消</LinkButton>
-        <LinkButton className={style.button} onClick={() => {
-          if (content) {
-            add({ data: { content, type } });
-          } else {
-            Toast.show({ content: '请输入事项名称！', position: 'bottom' });
-          }
-        }}>保存</LinkButton>
+        <div className={style.actions}>
+          <div className={style.closeButton} onClick={() => {
+            openAddOther();
+          }}>取消
+          </div>
+          <div className={style.split} />
+          <div className={style.button} onClick={() => {
+            if (content) {
+              add({ data: { content, type } });
+            } else {
+              Toast.show({ content: '请输入事项名称！', position: 'bottom' });
+            }
+          }}>保存
+          </div>
+        </div>
+
       </div>}
     </div>
     {ToolUtil.isArray(announcemens).length > 6 && <Divider className={style.allSku}>

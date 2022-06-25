@@ -72,6 +72,7 @@ const MyList = (
     setContents([]);
     setParams(value);
     setSorter(sorter);
+    getData([]);
     await run({
       params: { limit, page: 1, sorter },
       data: value,

@@ -62,10 +62,11 @@ const SkuList = (
     listRef.current.submit({ ...defaultParams, skuName: params.skuName });
   };
 
-  const submit = (newParams) => {
+  const submit = (newParams = {}, newSort = {}) => {
+    skuListRef.current.setAttribute('style', 'min-height:auto');
     setRefresh(false);
     setParams({ ...params, ...newParams });
-    listRef.current.submit({ ...params, ...newParams }, { ...sort });
+    listRef.current.submit({ ...params, ...newParams }, { ...sort, ...newSort });
   };
 
   useImperativeHandle(ref, () => ({
@@ -101,7 +102,7 @@ const SkuList = (
       }
     }
     setSort({ field, order });
-    listRef.current.submit(params, { field, order });
+    submit({}, { field, order });
   };
 
   const sortShow = (field) => {
@@ -120,10 +121,13 @@ const SkuList = (
     }
   };
 
+  const skuListRef = useRef();
+  const screenRef = useRef();
+
   return <>
     <div
       className={style.screen}
-      id='screen'
+      ref={screenRef}
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stockNumber}</span></div>
       <div className={style.blank} />
@@ -143,9 +147,10 @@ const SkuList = (
         className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
         onClick={() => {
           if (screen) {
+            skuListRef.current.removeAttribute('style');
             setFalse();
           } else {
-            document.getElementById('screen').scrollIntoView();
+            screenRef.current.scrollIntoView();
             setTrue();
           }
         }}
@@ -166,7 +171,7 @@ const SkuList = (
     </Tabs>
 
 
-    <div className={ToolUtil.classNames(style.skuList, skuClassName)}>
+    <div ref={skuListRef} className={ToolUtil.classNames(style.skuList, skuClassName)}>
       <MyList
         params={params}
         ref={listRef}
@@ -174,6 +179,7 @@ const SkuList = (
         getData={setSkuData}
         data={skuData}
         response={(res) => {
+          skuListRef.current.setAttribute('style', 'min-height:100vh');
           setStockNumber(res.count || 0);
           if (!res.count || res.count === 0) {
             Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000 });

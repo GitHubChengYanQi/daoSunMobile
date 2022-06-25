@@ -60,9 +60,7 @@ const SkuError = (
 
       let errorNumber = 0;
       details.map(item => {
-        if (item.stauts === -1) {
-          errorNumber += item.number;
-        }
+        errorNumber += item.number;
         return null;
       });
 
@@ -342,6 +340,7 @@ const SkuError = (
         <span
           className={style.instockNumber}>入库数量：
           <ShopNumber
+            min={0}
             max={sku.allowNumber}
             value={sku.instockNumber}
             onChange={(number) => {

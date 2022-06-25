@@ -88,7 +88,7 @@ const MyPicking = () => {
   };
 
   return <div className={style.myPicking}>
-    <MyNavBar title='我的领料' />
+    <MyNavBar title='领料中心' />
     <div className={style.content} style={{backgroundColor:key === 'sku' && '#fff'}}>
       <MySearch
         searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
