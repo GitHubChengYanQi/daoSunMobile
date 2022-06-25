@@ -97,7 +97,6 @@ const SkuAction = (
           <Viewpager
             currentIndex={index}
             onLeft={() => {
-              console.log(111);
               addInstockShop(1, item, 'waitInStock');
             }}
             onRight={() => {

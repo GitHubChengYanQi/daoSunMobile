@@ -58,10 +58,14 @@ const Viewpager = (
         setTimeout(() => {
           switch (pages[i]) {
             case 'left':
-              onRight();
+              if (index.current === 0){
+                onRight();
+              }
               break;
             case 'right':
-              onLeft();
+              if (index.current === 2){
+                onLeft();
+              }
               break;
             default:
               break;
