@@ -101,7 +101,7 @@ const CheckUser = (
     {getUserLoading && <MyLoading />}
     <Picker
       value={[value]}
-      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
       columns={[data || []]}
       visible={visible}
       onClose={() => {

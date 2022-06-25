@@ -302,7 +302,7 @@ const AddSku = (
 
 
     <Picker
-      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
       columns={[[{ label: '其他品牌', value: 0 }, ...ToolUtil.isArray(sku.brandResults).map(item => {
         return {
           label: item.brandName,
@@ -324,7 +324,7 @@ const AddSku = (
     />
 
     <Picker
-      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1002)' }}
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
       columns={[ToolUtil.isArray(customerData).map(item => {
         return {
           label: item.customerName,
