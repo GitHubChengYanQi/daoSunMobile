@@ -8,7 +8,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 
-const getPositionsAndBrands = { url: '/storehousePositions/selectBySku', method: 'POST' };
+const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
 const Order = (
   {
@@ -24,27 +24,22 @@ const Order = (
   },
 ) => {
 
-  const [positions, setPositions] = useState([]);
+  const [brands, setBrands] = useState([]);
 
   let outNumber = 0;
-  positions.map(item => {
-    const brandResults = item.brandResults || [];
-    return brandResults.map(item => outNumber += (item.outStockNumber || 0));
+  brands.map(item => {
+    const positions = item.positionsResults || [];
+    return positions.map(item => outNumber += (item.outStockNumber || 0));
   });
 
   const { loading, run } = useRequest(getPositionsAndBrands, {
     manual: true,
     onSuccess: (res) => {
-      setPositions(ToolUtil.isArray(res).map((item) => {
-        const brandResults = item.brandResults || [];
-        let brandNumber = 0;
-        brandResults.map(item => brandNumber += item.num);
-        if ((item.number - brandNumber) > 0) {
-          brandResults.push({ other: true, num: item.number - brandNumber });
-        }
+      setBrands(ToolUtil.isArray(res).map((item) => {
+        const positions = item.positionsResults || [];
         return {
           ...item,
-          brandResults,
+          positions,
         };
       }));
     },
@@ -52,20 +47,20 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId,brandId } });
+      run({ data: { skuId, brandId } });
     }
   }, []);
 
   useEffect(() => {
     if (codeData) {
-      const newPosition = positions.map((item) => {
-        if (item.storehousePositionsId === codeData.positionId) {
-          const brandResults = item.brandResults || [];
+      const newPosition = brands.map((item) => {
+        if (item.brandId=== codeData.brandId) {
+          const positions = item.positionsResults || [];
           return {
-            ...item, show: true, brandResults: brandResults.map((item) => {
-              if (item.brandId === codeData.brandId) {
+            ...item, show: true, positionsResults: positions.map((item) => {
+              if (item.storehousePositionsId === codeData.positionId) {
                 const num = (outStockNumber - (outNumber + codeData.number)) > 0 ? codeData.number : (outStockNumber - outNumber);
-                return { ...item, checked:true,outStockNumber:num };
+                return { ...item, checked: true, outStockNumber: num };
               }
               return item;
             }),
@@ -73,7 +68,7 @@ const Order = (
         }
         return item;
       });
-      setPositions(newPosition);
+      setBrands(newPosition);
       outSkuChange(newPosition);
     }
   }, [codeData]);
@@ -81,17 +76,17 @@ const Order = (
   const outSkuChange = (newPosition) => {
     const array = [];
     newPosition.map(item => {
-      const brands = item.brandResults || [];
-      return brands.map((brandItem) => {
-        if (brandItem.outStockNumber > 0) {
+      const positions = item.positionsResults || [];
+      return positions.map((positionItem) => {
+        if (positionItem.outStockNumber > 0) {
           array.push({
             skuId,
             pickListsDetailId,
-            storehouseId: item.storehouseId,
-            storehousePositionsId: item.storehousePositionsId,
-            brandId: brandItem.brandId || 0,
+            storehouseId: positionItem.storehouseId,
+            storehousePositionsId: positionItem.storehousePositionsId,
+            brandId: item.brandId || 0,
             customerId,
-            number: brandItem.outStockNumber,
+            number: positionItem.outStockNumber,
             pickListsId: id,
           });
         }
@@ -102,42 +97,40 @@ const Order = (
     onChange(array);
   };
 
-  const positionChange = (currentIndex, data) => {
-    const newPosition = positions.map((item, index) => {
+  const brandChange = (currentIndex, data) => {
+    const newBrands = brands.map((item, index) => {
       if (index === currentIndex) {
         return { ...item, ...data };
       }
       return item;
     });
-    setPositions(newPosition);
-    outSkuChange(newPosition);
+    setBrands(newBrands);
+    outSkuChange(newBrands);
   };
 
-  const brandChange = (positionIndex, brandIndex, data) => {
-    const newPosition = positions.map((item, index) => {
+  const positionChange = (positionIndex, brandIndex, data) => {
+    const newBrands = brands.map((item, index) => {
       if (index === positionIndex) {
-        const brandResults = item.brandResults || [];
-        const newbrandResults = brandResults.map((item, index) => {
+        const positions = item.positionsResults || [];
+        const newPositions = positions.map((item, index) => {
           if (index === brandIndex) {
             return { ...item, ...data };
           }
           return item;
         });
-        return { ...item, brandResults: newbrandResults };
+        return { ...item, positionsResults: newPositions };
       }
       return item;
     });
-    setPositions(newPosition);
-    outSkuChange(newPosition);
+    setBrands(newBrands);
+    outSkuChange(newBrands);
   };
 
   return <div className={style.action}>
-    {positions.length === 0 && <MyEmpty description='暂无库存' />}
-    {positions.map((item, index) => {
+    {brands.length === 0 && <MyEmpty description='暂无库存' />}
+    {brands.map((item, index) => {
 
-      const brandResults = item.brandResults || [];
-      let brandNumber = 0;
-      brandResults.map(item => brandNumber += (item.outStockNumber || 0));
+      const positions = item.positionsResults || [];
 
       return <div key={index}>
         <Button
@@ -151,45 +144,45 @@ const Order = (
                 return { ...item, outStockNumber: 0, checked: false };
               });
             }
-            positionChange(index, { show: !item.show, brandResults });
+            brandChange(index, { show: !item.show, brandResults });
           }}
         >
-          <LinkOutline /> {item.name} ({item.number})
+          <LinkOutline /> {item.brandName} ({item.num})
         </Button>
         <div hidden={!item.show} className={style.allBrands}>
           {
-            brandResults.map((brandItem, brandIndex) => {
+            positions.map((positionItem, positionIndex) => {
 
-              return <div className={style.brands} key={brandIndex}>
+              return <div className={style.brands} key={positionIndex}>
                 <span onClick={() => {
-                  if (!brandItem.checked) {
-                    const num = (outStockNumber - (outNumber + brandItem.num)) > 0 ? brandItem.num : (outStockNumber - outNumber);
-                    brandChange(index, brandIndex, { checked: true, outStockNumber: num });
+                  if (!positionItem.checked) {
+                    const num = (outStockNumber - (outNumber + positionItem.num)) > 0 ? positionItem.num : (outStockNumber - outNumber);
+                    positionChange(index, positionIndex, { checked: true, outStockNumber: num });
                   }
-                }}>{brandItem.other ? '其他品牌' : brandItem.brandName} ({brandItem.num})</span>
-                <div hidden={!brandItem.checked}>
+                }}>{positionItem.name} ({positionItem.num})</span>
+                <div hidden={!positionItem.checked}>
                   <Stepper
                     min={0}
-                    value={brandItem.outStockNumber || 0}
+                    value={positionItem.outStockNumber || 0}
                     style={{
                       '--button-text-color': '#000',
                     }}
                     onChange={(num) => {
                       let number = 0;
-                      positions.map((pItem, pIndex) => {
-                        const brandResults = pItem.brandResults || [];
-                        const newBrands = brandResults.filter((bIten, bIndex) => {
-                          return !(pIndex === index && bIndex === brandIndex);
+                      brands.map((pItem, pIndex) => {
+                        const positions = pItem.positionsResults || [];
+                        const newPositions = positions.filter((bIten, bIndex) => {
+                          return !(pIndex === index && bIndex === positionIndex);
                         });
-                        return newBrands.map(item => number += (item.outStockNumber || 0));
+                        return newPositions.map(item => number += (item.outStockNumber || 0));
                       });
                       if ((number + num) > outStockNumber) {
                         return Message.toast('不能超过出库数量！');
                       }
-                      if (num > brandItem.num){
+                      if (num > positionItem.num) {
                         return Message.toast('不能超过库存数量！');
                       }
-                      brandChange(index, brandIndex, { outStockNumber: num });
+                      positionChange(index, positionIndex, { outStockNumber: num });
                     }}
                   />
                 </div>
@@ -197,9 +190,6 @@ const Order = (
               </div>;
             })
           }
-          <div className={style.count}>
-            合计：{brandNumber}
-          </div>
         </div>
       </div>;
     })}

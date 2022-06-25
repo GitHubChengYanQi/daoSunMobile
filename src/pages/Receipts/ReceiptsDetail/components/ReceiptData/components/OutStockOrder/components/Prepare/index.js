@@ -37,6 +37,7 @@ const Prepare = (
   const [codeData, setCodeData] = useState();
 
   const [outStockSkus, setOutStockSkus] = useState([]);
+  console.log(outStockSkus);
 
   const { loading, run: addCart } = useRequest(cartAdd, {
     manual: true,

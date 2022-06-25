@@ -8,6 +8,7 @@ import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 import Dynamic from './Dynamic';
 import Task from './Task';
+import KeepAlive, { AliveScope } from '../../../components/KeepAlive';
 
 const Stock = (props) => {
 

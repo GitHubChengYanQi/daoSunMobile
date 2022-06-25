@@ -7,6 +7,10 @@ const ShopNumber = (
     value,
     onChange = () => {
     },
+    onBlur = () => {
+    },
+    onFocus = () => {
+    },
     show,
     min = 1,
     max,
@@ -19,7 +23,10 @@ const ShopNumber = (
   return <>
     <div className={style.shopNumber}>
       {update ?
-        <FoucusStepper value={value} max={max} onChange={onChange} min={min} id={id} />
+        <FoucusStepper value={value} max={max} onChange={onChange} min={min} id={id} onBlur={()=>{
+          onBlur();
+          setUpdate(false);
+        }} onFocus={onFocus} />
         :
         <div className={style.number} style={{ border: show && 'none' }} onClick={() => {
           if (!show) {

@@ -48,7 +48,7 @@ const AddSku = (
   } = useRequest(supplierBySku, {
     manual: true,
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length === 1 && ['inStock','directInStock'].includes(type)) {
+      if (ToolUtil.isArray(res).length === 1 && ['inStock', 'directInStock'].includes(type)) {
         setData({
           ...data,
           customerId: res[0].customerId,
@@ -72,7 +72,7 @@ const AddSku = (
   };
 
   const openSkuAdd = (sku = {}) => {
-    getCustomer({ data: { skuId: sku.skuId } });
+    ['inStock', 'directInStock'].includes(type) && getCustomer({ data: { skuId: sku.skuId } });
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
     setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: judge ? 0 : 1 });
@@ -208,88 +208,95 @@ const AddSku = (
         setVisible(false);
       }}
     >
-      {
-        getCustomerLoading ? <MyLoading skeleton /> : <div className={style.addSku}>
-          <SkuItem
-            number={data.stockNumber}
-            imgId='skuImg'
-            skuResult={sku}
-            imgSize={80}
-            otherData={ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')}
-            gap={10}
-            extraWidth={'calc(25vw + 24px)'}
-          />
-          <div className={style.flex}>
-            <div className={style.checkLabel}>
-              品牌
-            </div>
-            <Button
-              disabled={ToolUtil.isArray(sku.brandResults).length === 0}
-              color='primary'
-              fill='outline'
-              className={style.check}
-              onClick={() => {
-                setDataVisible('brand');
-              }}
-            >{data.brandName || '请选择品牌'}</Button>
-          </div>
-          <div hidden={taskData().customerDisabled} className={style.flex}>
-            <div className={style.checkLabel}>
-              供应商
-            </div>
-            <Button
-              disabled={ToolUtil.isArray(customerData).length === 0}
-              color='primary'
-              fill='outline'
-              className={style.check}
-              onClick={() => {
-                setDataVisible('customer');
-              }}
-            >{data.customerName || '请选择供应商'}</Button>
-          </div>
-          <div hidden={judge} className={style.flex}>
-            <div className={style.instockNumber}>
-              {taskData().title}数量
-              <ShopNumber value={data.number} onChange={(number) => {
-                setData({ ...data, number });
-              }} />
-            </div>
-          </div>
-          <div hidden={!judge} className={style.flex}>
-            <AddPosition
-              min={1}
-              skuNumber={1}
-              skuId={sku.skuId}
-              positions={data.positions}
-              setPositions={(positions) => {
-                setData({ ...data, positions });
-              }}
-            />
-          </div>
-        </div>
-      }
-      <div className={style.buttons}>
-        <Button
-          className={ToolUtil.classNames(style.close, style.button)}
-          onClick={() => {
-            onClose();
-            setVisible(false);
-          }}>
-          取消
-        </Button>
-        <Button
-          disabled={taskData().disabled || disabled()}
-          className={ToolUtil.classNames(style.ok, style.button)}
-          color='primary'
-          onClick={() => {
-            const skuImg = document.getElementById('skuImg');
-            const top = skuImg.getBoundingClientRect().top;
-            const left = skuImg.getBoundingClientRect().left;
-            setVisible(false);
-            createBall(top, left);
-          }}>
-          {disabled() ? '已添加' : taskData().disabledText}
-        </Button>
+      <div className={style.addSku}>
+        {
+          getCustomerLoading ?
+            <MyLoading skeleton />
+            :
+
+            <>
+              <SkuItem
+                number={data.stockNumber}
+                imgId='skuImg'
+                skuResult={sku}
+                imgSize={80}
+                otherData={ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')}
+                gap={10}
+                extraWidth={'calc(25vw + 24px)'}
+              />
+              <div className={style.flex}>
+                <div className={style.checkLabel}>
+                  品牌
+                </div>
+                <Button
+                  disabled={ToolUtil.isArray(sku.brandResults).length === 0}
+                  color='primary'
+                  fill='outline'
+                  className={style.check}
+                  onClick={() => {
+                    setDataVisible('brand');
+                  }}
+                >{data.brandName || '请选择品牌'}</Button>
+              </div>
+              <div hidden={taskData().customerDisabled} className={style.flex}>
+                <div className={style.checkLabel}>
+                  供应商
+                </div>
+                <Button
+                  disabled={ToolUtil.isArray(customerData).length === 0}
+                  color='primary'
+                  fill='outline'
+                  className={style.check}
+                  onClick={() => {
+                    setDataVisible('customer');
+                  }}
+                >{data.customerName || '请选择供应商'}</Button>
+              </div>
+              <div hidden={judge} className={style.flex}>
+                <div className={style.instockNumber}>
+                  {taskData().title}数量
+                  <ShopNumber value={data.number} onChange={(number) => {
+                    setData({ ...data, number });
+                  }} />
+                </div>
+              </div>
+              <div hidden={!judge} className={style.flex}>
+                <AddPosition
+                  min={1}
+                  skuNumber={1}
+                  skuId={sku.skuId}
+                  positions={data.positions}
+                  setPositions={(positions) => {
+                    setData({ ...data, positions });
+                  }}
+                />
+              </div>
+              <div className={style.buttons}>
+                <Button
+                  className={ToolUtil.classNames(style.close, style.button)}
+                  onClick={() => {
+                    onClose();
+                    setVisible(false);
+                  }}>
+                  取消
+                </Button>
+                <Button
+                  disabled={taskData().disabled || disabled()}
+                  className={ToolUtil.classNames(style.ok, style.button)}
+                  color='primary'
+                  onClick={() => {
+                    const skuImg = document.getElementById('skuImg');
+                    const top = skuImg.getBoundingClientRect().top;
+                    const left = skuImg.getBoundingClientRect().left;
+                    setVisible(false);
+                    createBall(top, left);
+                  }}>
+                  {disabled() ? '已添加' : taskData().disabledText}
+                </Button>
+              </div>
+            </>
+
+        }
       </div>
     </Popup>
 
@@ -339,6 +346,7 @@ const AddSku = (
       }}
     />
   </>;
+  ;
 };
 
 export default React.forwardRef(AddSku);

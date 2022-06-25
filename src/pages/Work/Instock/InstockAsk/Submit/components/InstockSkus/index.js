@@ -27,6 +27,8 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const [data, setData] = useState([]);
 
+  const [hiddenBottom,setHiddenBottom] = useState(false);
+
   const normalSku = [];
 
   let countNumber = 0;
@@ -179,6 +181,12 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               }} />
               <div hidden={judge}>
                 <ShopNumber
+                  onBlur={()=>{
+                    setHiddenBottom(false);
+                  }}
+                  onFocus={()=>{
+                    setHiddenBottom(true);
+                  }}
                   id={`stepper${index}`}
                   value={item.number}
                   onChange={async (number) => {
@@ -251,12 +259,12 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
     </div>
 
-    <BottomButton
+    {!hiddenBottom && <BottomButton
       leftOnClick={() => {
         history.goBack();
       }}
       rightText='提交'
-      rightDisabled={normalSku.length === 0}
+      rightDisabled={judge ? false : normalSku.length === 0}
       rightOnClick={() => {
         switch (createType) {
           case 'outStock':
@@ -296,7 +304,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
             break;
         }
       }}
-    />
+    />}
 
     <CheckUser ref={userRef} value={params.userId} onChange={(id, name) => {
       setParams({ ...params, userId: id, userName: name });

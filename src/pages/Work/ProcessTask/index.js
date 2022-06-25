@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import Icon from '../../components/Icon';
@@ -7,11 +7,17 @@ import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
 import Create from './Create';
 import MyStart from './MyStart';
+import KeepAlive from '../../../components/KeepAlive';
+import { useLocation } from 'react-router-dom';
 
 
-const ProcessTask = () => {
+export const Tasks = () => {
 
   const [key, setKey] = useState('audit');
+
+  const [scrollTop, setScrollTop] = useState();
+
+  const location = useLocation();
 
   const content = () => {
     switch (key) {
@@ -26,8 +32,23 @@ const ProcessTask = () => {
     }
   };
 
-  return <div className={style.process}>
-    <div className={style.content} id='content'>
+  const initScroll = () => {
+    // const content = document.getElementById('content');
+    // console.log(content,scrollTop);
+    // if (content) {
+    //   content.scrollTop = scrollTop;
+    // }
+  };
+
+  useEffect(() => {
+    initScroll();
+  }, [location]);
+
+
+  return <div className={style.process} id='process'>
+    <div className={style.content} id='content' onScroll={(event) => {
+      setScrollTop(event.target.scrollTop);
+    }}>
       <MyNavBar title='审批中心' />
       {content()}
     </div>
@@ -52,6 +73,13 @@ const ProcessTask = () => {
       } />
 
   </div>;
+};
+
+const ProcessTask = () => {
+
+  return <KeepAlive id='Test'>
+    <Tasks />
+  </KeepAlive>;
 };
 
 export default ProcessTask;

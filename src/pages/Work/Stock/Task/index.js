@@ -11,7 +11,7 @@ import topStyle from '../../../global.less';
 import { useBoolean } from 'ahooks';
 import OutStockTask from './components/OutStockTask';
 
-export const processTask = { url: '/activitiProcessTask/list', method: 'POST' };
+export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
 const Task = (
   {

@@ -58,6 +58,7 @@ const SkuList = (
     setScreeing(false);
     setRefresh(false);
     setParams({ ...defaultParams, skuName: params.skuName });
+    setSort({});
     listRef.current.submit({ ...defaultParams, skuName: params.skuName });
   };
 

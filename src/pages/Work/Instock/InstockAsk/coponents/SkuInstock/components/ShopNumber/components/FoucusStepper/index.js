@@ -6,6 +6,10 @@ const FoucusStepper = (
     value,
     onChange = () => {
     },
+    onBlur = () => {
+    },
+    onFocus = () => {
+    },
     min = 1,
     max,
     id,
@@ -23,6 +27,8 @@ const FoucusStepper = (
     <Stepper
       max={max}
       min={min}
+      onFocus={onFocus}
+      onBlur={onBlur}
       style={{
         '--button-text-color': '#000',
       }}
