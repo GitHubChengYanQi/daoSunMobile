@@ -10,7 +10,6 @@ import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url';
-import LinkButton from '../../../../../../../../../../components/LinkButton';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
@@ -110,11 +109,9 @@ const WaitInstock = (
               const brandName = ToolUtil.isObject(item.brandName).brandName || '-';
 
               return <div key={index} className={style.skuItem}>
-                <LinkButton className={style.check} onClick={() => {
-                  check(checked, item);
-                }}>
-                  <MyCheck checked={checked} />
-                </LinkButton>
+                  <MyCheck checked={checked} className={style.check} onChange={() => {
+                    check(checked, item);
+                  }} />
                 <div className={style.sku} onClick={() => {
                   if (!positionsResult) {
                     return;
@@ -122,6 +119,7 @@ const WaitInstock = (
                   check(checked, item);
                 }}>
                   <SkuItem
+                    skuResult={skuResult}
                     title={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({skuResult})}

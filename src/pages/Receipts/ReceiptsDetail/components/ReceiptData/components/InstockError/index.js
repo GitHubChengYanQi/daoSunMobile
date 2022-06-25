@@ -28,6 +28,7 @@ const InstockError = (
   });
 
   const anomalyResults = data.anomalyResults || [];
+  const instockOrder = data.instockOrder || {};
 
   return <>
     <div className={style.data}>
@@ -35,7 +36,7 @@ const InstockError = (
         关联单据
       </span>
       <span className={style.value}>
-
+         的入库申请 / {instockOrder.coding}
       </span>
     </div>
 
@@ -69,7 +70,7 @@ const InstockError = (
     </div>
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
-      <SkuError height='80vh' anomalyId={visible} onClose={() => setVisible(false)} onSuccess={() => {
+      <SkuError height='80vh' anomalyOrderId={data.orderId} anomalyId={visible} onClose={() => setVisible(false)} onSuccess={() => {
         setVisible(false);
         refresh();
       }} />

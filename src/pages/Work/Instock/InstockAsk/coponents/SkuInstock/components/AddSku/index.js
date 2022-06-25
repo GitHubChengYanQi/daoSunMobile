@@ -48,7 +48,7 @@ const AddSku = (
   } = useRequest(supplierBySku, {
     manual: true,
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length === 1 && type === 'inStock') {
+      if (ToolUtil.isArray(res).length === 1 && ['inStock','directInStock'].includes(type)) {
         setData({
           ...data,
           customerId: res[0].customerId,
@@ -64,9 +64,9 @@ const AddSku = (
     const snameSku = skus.filter((item) => {
       return item.skuId === data.skuId
         &&
-        (data.customerId ? item.customerId === data.customerId : true)
+        (item.customerId || 0) === (data.customerId || 0)
         &&
-        (data.brandId ? item.brandId === data.brandId : true);
+        (item.brandId || 0) === (data.brandId || 0);
     });
     return snameSku.length > 0;
   };
@@ -109,6 +109,7 @@ const AddSku = (
           customerDisabled: true,
         };
       case 'inStock':
+      case 'directInStock':
         if (ToolUtil.isArray(customerData).length === 0) {
           disabledText = '无供应商';
           disabled = true;
@@ -256,6 +257,8 @@ const AddSku = (
           </div>
           <div hidden={!judge} className={style.flex}>
             <AddPosition
+              min={1}
+              skuNumber={1}
               skuId={sku.skuId}
               positions={data.positions}
               setPositions={(positions) => {

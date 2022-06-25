@@ -17,6 +17,7 @@ const InStockLog = (
 ) => {
 
   const { loading, data, run } = useRequest(logList, { manual: true });
+  console.log(data);
 
   useEffect(() => {
     if (instockOrderId) {
@@ -37,6 +38,9 @@ const InStockLog = (
     {
       ToolUtil.isArray(data).map((item, index) => {
         const error = item.type === 'error';
+
+        const positionsResults = item.positionsResults || [];
+
         return <div key={index}>
           <div className={style.skuItem}>
             <div className={style.sku}>
@@ -53,16 +57,20 @@ const InStockLog = (
               </div>
             </div>
 
-            <div className={style.log} hidden={error}>
-              <div className={style.data}>
-                <div className={style.left}>{MyDate.Show(item.createTime)}</div>
-                <div>{ToolUtil.isObject(item.user).name}</div>
-              </div>
-              <div className={style.data}>
-                <div className={style.left}>{ToolUtil.isObject(item.storehousePositionsResult).name}</div>
-                <div>{item.number}个</div>
-              </div>
-            </div>
+            {
+              !error && positionsResults.map((item, index) => {
+                return <div className={style.log} key={index}>
+                  <div className={style.data}>
+                    <div className={style.left}>{MyDate.Show(item.createTime)}</div>
+                    <div>{ToolUtil.isObject(item.user).name}</div>
+                  </div>
+                  <div className={style.data}>
+                    <div className={style.left}>{item.name}</div>
+                    <div>{item.num}个</div>
+                  </div>
+                </div>;
+              })
+            }
           </div>
         </div>;
       })

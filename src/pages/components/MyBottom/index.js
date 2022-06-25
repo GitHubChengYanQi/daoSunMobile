@@ -1,9 +1,10 @@
 import React from 'react';
+import MyNavBar from '../MyNavBar';
 
 const MyBottom = ({ children, leftActuions, buttons,noBottom }) => {
 
 
-  return <div>
+  return <>
     <div style={{ minHeight: `100vh` }}>
       {children}
     </div>
@@ -24,7 +25,7 @@ const MyBottom = ({ children, leftActuions, buttons,noBottom }) => {
         </div>
       </div>
     </div>
-  </div>;
+  </>;
 };
 
 export default MyBottom;

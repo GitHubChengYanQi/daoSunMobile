@@ -101,11 +101,9 @@ const InstockError = (
 
               return <div key={index}>
                 <div style={{ border: 'none' }} className={style.skuItem}>
-                  <LinkButton className={style.check} onClick={() => {
+                  <MyCheck checked={checked} className={style.check} onChange={() => {
                     check(checked, item);
-                  }}>
-                    <MyCheck checked={checked} />
-                  </LinkButton>
+                  }} />
                   <div className={style.sku} onClick={() => {
                     check(checked, item);
                   }}>

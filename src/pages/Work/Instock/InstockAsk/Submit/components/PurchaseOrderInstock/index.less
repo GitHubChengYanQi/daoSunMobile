@@ -54,43 +54,6 @@
     gap: 12px;
   }
 
-  .skuItem {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-
-    .item {
-      flex-grow: 1;
-    }
-
-    .skuNumber {
-      width: 50px;
-    }
-
-    .action {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      font-size: 14px;
-      gap: 24px;
-    }
-
-    .number {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .outStockNumber {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 12px;
-      width: 100px;
-    }
-  }
-
   .positions {
     display: inline-block;
     max-width: 100%;
@@ -101,6 +64,43 @@
     border-radius: 50px;
   }
 
+}
+
+.skuItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+
+  .item {
+    flex-grow: 1;
+  }
+
+  .skuNumber {
+    width: 50px;
+  }
+
+  .action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 14px;
+    gap: 24px;
+  }
+
+  .number {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .outStockNumber {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    width: 100px;
+  }
 }
 
 .allSku {
@@ -220,6 +220,9 @@
     position: absolute;
     z-index: 1;
     right: 16vw;
+    height: 100%;
+    display: flex;
+    align-items: center;
 
     img {
       width: 70px;

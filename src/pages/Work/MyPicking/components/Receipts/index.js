@@ -12,6 +12,8 @@ import MyEmpty from '../../../../components/MyEmpty';
 import { history } from 'umi';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Slash from '../Slash';
+import outStockLogo from '../../../../../assets/outStockLogo.png';
+import makeStyle from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 
 const getCarts = { url: '/productionPickListsCart/getSelfCartsByLists', method: 'POST' };
 
@@ -31,36 +33,6 @@ const Receipts = (
   const [data, setData] = useState([]);
 
   const { loading, refresh: cartRefresh } = useRequest(getCarts, {
-    // onSuccess: (res) => {
-    //   let count = 0;
-    //   const newData = [];
-    //   ToolUtil.isArray(res).map(item => {
-    //
-    //     const detailResults = item.detailResults || [];
-    //
-    //     const newDetails = [];
-    //     let show = false;
-    //     detailResults.map(item => {
-    //       const carts = item.cartResults || [];
-    //       if (carts.length > 0) {
-    //         show = true;
-    //       }
-    //       let perpareNumber = 0;
-    //       carts.map(item => perpareNumber += item.number);
-    //       newDetails.push({ ...item, perpareNumber });
-    //       return null;
-    //     });
-    //
-    //     if (show) {
-    //       count += newDetails.length;
-    //       newData.push({ ...item, detailResults: newDetails });
-    //     }
-    //
-    //     return show;
-    //   });
-    //   setData(newData);
-    //   getCount(count);
-    // },
     onSuccess: (res) => {
       let count = 0;
       const newData = ToolUtil.isArray(res).map(item => {
@@ -72,12 +44,25 @@ const Receipts = (
         detailResults.map(item => {
           const carts = item.cartResults || [];
           let perpareNumber = 0;
-          carts.map(item => perpareNumber += item.number);
-          newDetails.push({ ...item, perpareNumber });
+          const brandIds = [];
+          carts.map(item => {
+            if (!brandIds.includes(item.brandId)) {
+              brandIds.push(item.brandId);
+            }
+            return perpareNumber += item.number;
+          });
+
+          const complete = item.status === 99;
+          const disabled = complete || perpareNumber === 0;
+
+          if (!disabled) {
+            count++;
+          }
+
+          newDetails.push({ ...item, perpareNumber, brandIds, complete, disabled });
           return null;
         });
 
-        count += newDetails.length;
 
         return { ...item, detailResults: newDetails };
       });
@@ -92,7 +77,7 @@ const Receipts = (
       const newOutSkus = [];
       data.map(item => {
         const detailResults = item.detailResults || [];
-        return detailResults.map(item => newOutSkus.push(item));
+        return detailResults.map(item => !item.disabled && newOutSkus.push(item));
       });
       outSkusChange(newOutSkus);
     }
@@ -135,19 +120,27 @@ const Receipts = (
         const detailResults = item.detailResults || [];
         const checkDetails = value.filter(outItem => outItem.pickListsId === item.pickListsId);
 
-        const orderChecked = checkDetails.length === detailResults.length;
+        const actionDeatils = detailResults.filter(item => {
+          return !item.disabled;
+        });
+
+        const orderChecked = actionDeatils.length !== 0 && checkDetails.length === actionDeatils.length;
 
         return <div key={index} className={style.orderItem}>
           <div className={style.data}>
             <div className={style.customer}>
-              <MyCheck checked={orderChecked} fontSize={18} onChange={(checked) => {
-                const newOutSkus = value.filter(skuItem => skuItem.pickListsId !== item.pickListsId);
-                if (checked) {
-                  outSkusChange([...newOutSkus, ...detailResults]);
-                } else {
-                  outSkusChange(newOutSkus);
-                }
-              }} />
+              <MyCheck
+                disabled={actionDeatils.length === 0}
+                checked={orderChecked}
+                fontSize={18}
+                onChange={(checked) => {
+                  const newOutSkus = value.filter(skuItem => skuItem.pickListsId !== item.pickListsId);
+                  if (checked) {
+                    outSkusChange([...newOutSkus, ...actionDeatils]);
+                  } else {
+                    outSkusChange(newOutSkus);
+                  }
+                }} />
               <span onClick={() => {
                 history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.outstockOrder}&formId=${item.pickListsId}`);
               }}>{ToolUtil.isObject(item.createUserResult).name}的出库申请 / {item.coding} <RightOutline
@@ -159,6 +152,9 @@ const Receipts = (
           </div>
           {
             detailResults.map((detailItem, detailIndex) => {
+
+              const complete = detailItem.complete;
+              const disabled = detailItem.disabled;
 
               const perpareNumber = detailItem.perpareNumber || 0;
               const number = detailItem.number || 0;
@@ -203,17 +199,25 @@ const Receipts = (
                 return null;
               }
 
-              return <div key={detailIndex}>
+              return <div key={detailIndex} className={makeStyle.sku}>
+                <div hidden={!complete} className={makeStyle.mask} />
+                <div hidden={!complete} className={makeStyle.logo}>
+                  <img src={outStockLogo} alt='' />
+                </div>
                 <div className={style.skus} style={{ paddingBottom: storehouse.length > 0 && 0 }}>
-                <span className={style.checked} onClick={() => {
-                  checkChange(detailChecked, detailItem);
-                }}>
                   <MyCheck
+                    disabled={disabled}
+                    className={style.checked}
                     checked={detailChecked}
                     fontSize={18}
+                    onChange={() => {
+                      checkChange(detailChecked, detailItem);
+                    }}
                   />
-                </span>
                   <div className={style.skuItem} onClick={() => {
+                    if (complete || !perpareNumber) {
+                      return;
+                    }
                     checkChange(detailChecked, detailItem);
                   }}>
                     <SkuItem

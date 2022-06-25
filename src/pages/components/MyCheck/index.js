@@ -1,6 +1,7 @@
 import React from 'react';
 import Icon from '../Icon';
 import { Checkbox } from 'antd-mobile';
+import LinkButton from '../LinkButton';
 
 const MyCheck = (
   {
@@ -9,18 +10,24 @@ const MyCheck = (
     },
     children,
     fontSize,
+    disabled,
+    className,
   }) => {
 
 
-  return <Checkbox
-    checked={checked}
-    icon={(checked) => {
-      return checked ? <Icon type='icon-a-jianqudingceng2' style={{fontSize}} /> : <Icon type='icon-jizhumimamoren' style={{fontSize}} />;
-    }}
-    onChange={onChange}
-  >
-    {children}
-  </Checkbox>;
+  return <LinkButton disabled={disabled} className={className} onClick={() => {
+    onChange(!checked);
+  }}>
+    <Checkbox
+      checked={checked}
+      icon={(checked) => {
+        return checked ? <Icon type='icon-a-jianqudingceng2' style={{ fontSize }} /> :
+          <Icon type='icon-jizhumimamoren' style={{ fontSize }} />;
+      }}
+    >
+      {children}
+    </Checkbox>
+  </LinkButton>;
 };
 
 export default MyCheck;

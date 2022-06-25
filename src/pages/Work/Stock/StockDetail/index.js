@@ -178,17 +178,17 @@ const StockDetail = (
       open={taskVisible === 'inStock'}
       onClose={() => setTaskVisible(false)}
       submit={() => {
-        setTask(taskVisible, false);
+        setTask('inStock', false);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
-        setTaskVisible(false)
+        setTaskVisible(false);
         return true;
       }}
       directInStock={() => {
-        setTask(taskVisible, true);
+        setTask('directInStock', true);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
-        setTaskVisible(false)
+        setTaskVisible(false);
         return true;
       }}
     />

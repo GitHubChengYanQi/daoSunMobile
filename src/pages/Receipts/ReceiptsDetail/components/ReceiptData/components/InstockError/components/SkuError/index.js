@@ -21,6 +21,7 @@ const SkuError = (
   {
     onClose = () => {
     },
+    anomalyOrderId,
     anomalyId,
     height = '100%',
     onSuccess = () => {
@@ -180,6 +181,7 @@ const SkuError = (
   const action = (item, stauts) => {
     editRun({
       data: {
+        anomalyOrderId,
         detailId: item.detailId,
         stauts,
         opinion: item.opinion,
@@ -327,6 +329,7 @@ const SkuError = (
     <CheckUser ref={userRef} onChange={(id, name, param) => {
       editRun({
         data: {
+          anomalyOrderId,
           detailId: param.detailId,
           userId: id,
         },

@@ -89,7 +89,7 @@ const MyPicking = () => {
 
   return <div className={style.myPicking}>
     <MyNavBar title='我的领料' />
-    <div className={style.content}>
+    <div className={style.content} style={{backgroundColor:key === 'sku' && '#fff'}}>
       <MySearch
         searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
         value={searchValue}
@@ -147,7 +147,7 @@ const MyPicking = () => {
     </div>
     <div className={style.bottom}>
       <div className={style.all}>
-        <MyCheck checked={allChecked} onChange={() => {
+        <MyCheck disabled={count === 0} checked={allChecked} onChange={() => {
           if (allChecked) {
             setOutSkus([]);
             setAllChecked(false);
@@ -168,7 +168,7 @@ const MyPicking = () => {
                 pickListsId: item.pickListsId,
                 skuId: item.skuId,
                 number: item.perpareNumber,
-                brandIds: [item.brandId || 0],
+                brandIds: item.brandIds,
               });
             });
             run({

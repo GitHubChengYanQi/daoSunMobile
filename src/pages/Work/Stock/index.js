@@ -6,6 +6,8 @@ import StockDetail from './StockDetail';
 import MyNavBar from '../../components/MyNavBar';
 import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
+import Dynamic from './Dynamic';
+import Task from './Task';
 
 const Stock = (props) => {
 
@@ -28,6 +30,10 @@ const Stock = (props) => {
           }}
           stockDetail={stockDetail}
         />;
+      case 'Message':
+        return <Task />
+      case 'dynamic':
+        return <Dynamic />;
       default:
         return <MyEmpty height='100%' />;
     }

@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { Divider, Popup } from 'antd-mobile';
 import Viewpager from '../Viewpager';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
@@ -12,7 +9,8 @@ import InstockShop from '../InstockShop';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { shopCartAdd } from '../../../../../../../../Work/Instock/Url';
 import Error from '../Error';
-import inStockLogo from '../../../../../../../../../assets/instockLogo.png';
+import InSkuItem from './components/InSkuItem';
+import { MyLoading } from '../../../../../../../../components/MyLoading';
 
 
 const SkuAction = (
@@ -26,9 +24,12 @@ const SkuAction = (
   },
 ) => {
 
-  const { run: addShop } = useRequest(shopCartAdd, {
+  const { loading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onSuccess: () => {
+      refresh();
+    },
+    onError: () => {
       refresh();
     },
   });
@@ -56,48 +57,6 @@ const SkuAction = (
   showItems.map(item => countNumber += item.number);
 
   const [allSku, { toggle }] = useBoolean();
-
-  const skuItem = (item, index) => {
-    const skuResult = item.skuResult || {};
-
-    const complete = item.realNumber === 0 && item.status === 99;
-    const waitInStock = item.status === 1;
-    const errorInStock = item.status === -1;
-
-    return <div
-      key={index}
-      className={style.sku}
-    >
-      <div hidden={!(waitInStock || complete || errorInStock)} className={style.mask} />
-      <div
-        className={ToolUtil.classNames(
-          style.skuItem,
-          showItems.length <= 3 && style.skuBorderBottom,
-        )}
-      >
-        <div hidden={!complete} className={style.logo}>
-          <img src={inStockLogo} alt='' />
-        </div>
-        <div className={style.item}>
-          <SkuItem
-            imgSize={60}
-            skuResult={skuResult}
-            extraWidth='126px'
-            otherData={`${ToolUtil.isObject(item.customerResult).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'}`}
-          />
-        </div>
-        <div className={style.skuNumber}>
-          <ShopNumber value={item.number} show />
-        </div>
-      </div>
-      <div hidden={!waitInStock} className={style.status}>
-        待入库
-      </div>
-      <div hidden={!errorInStock} className={style.status}>
-        异常件
-      </div>
-    </div>;
-  };
 
   const addInstockShop = (formStatus, item, type) => {
     addShop({
@@ -131,7 +90,7 @@ const SkuAction = (
         }
 
         if (!action || item.status !== 0) {
-          return skuItem(item, index);
+          return <InSkuItem item={item} data={showItems} key={index} />;
         }
 
         return <div key={index}>
@@ -144,7 +103,7 @@ const SkuAction = (
               setVisible(item);
             }}
           >
-            {skuItem(item, index)}
+            <InSkuItem item={item} data={showItems} key={index} />
           </Viewpager>
         </div>;
       })
@@ -182,6 +141,8 @@ const SkuAction = (
 
 
     {action && <InstockShop actionId={actionId} id={instockOrderId} refresh={refresh} />}
+
+    {loading && <MyLoading />}
 
   </div>;
 };

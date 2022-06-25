@@ -28,6 +28,9 @@ const Prepare = (
   },
 ) => {
 
+  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber
+
+
   const codeId = ToolUtil.isObject(props.qrCode).codeId;
   const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
 
@@ -74,7 +77,7 @@ const Prepare = (
           id={id}
           pickListsDetailId={skuItem.pickListsDetailId}
           skuId={skuItem.skuId}
-          outStockNumber={skuItem.number}
+          outStockNumber={outStockNumber}
           onChange={(array) => {
             setOutStockSkus(array);
           }}
@@ -103,7 +106,7 @@ const Prepare = (
         />
       </div>
       <div className={style.scan}>
-        <ShopNumber value={skuItem.number} show />
+        <ShopNumber value={outStockNumber} show />
         <LinkButton onClick={() => {
           props.dispatch({
             type: 'qrCode/wxCpScan',

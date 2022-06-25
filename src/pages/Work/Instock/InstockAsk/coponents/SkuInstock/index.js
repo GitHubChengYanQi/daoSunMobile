@@ -42,7 +42,7 @@ export const SkuContent = (
   </div>;
 };
 
-const SkuInstock = ({ numberTitle, type, title }) => {
+const SkuInstock = ({ numberTitle, type, title,judge }) => {
 
   const addSku = useRef();
 
@@ -51,18 +51,6 @@ const SkuInstock = ({ numberTitle, type, title }) => {
   const [skus, setSkus] = useState([]);
 
   const [searchValue, setSearchValue] = useState();
-
-  const { query } = useLocation();
-
-  let judge = false;
-
-  switch (type) {
-    case 'inStock':
-      judge = { ...query }.hasOwnProperty('directInStock');
-      break;
-    default:
-      break;
-  }
 
   return <div className={style.skuInStock}>
     <MyNavBar title={title} />

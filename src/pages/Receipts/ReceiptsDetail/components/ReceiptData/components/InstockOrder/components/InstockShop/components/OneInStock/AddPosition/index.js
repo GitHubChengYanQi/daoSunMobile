@@ -17,6 +17,7 @@ const AddPosition = (
     total,
     skuNumber,
     skuId,
+    min = 0,
   },
 ) => {
 
@@ -61,7 +62,7 @@ const AddPosition = (
               </div>
 
               <Stepper
-                min={0}
+                min={min}
                 style={{
                   '--button-text-color': '#000',
                 }}
@@ -114,7 +115,9 @@ const AddPosition = (
               return item;
             }));
           }
-          setPositions(value);
+          setPositions(value.map(item => {
+            return { ...item, number: min };
+          }));
         }} />
     </Popup>
   </div>;

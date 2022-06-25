@@ -3,7 +3,6 @@ import React, { useRef, useState } from 'react';
 import AskAdd from '../../Work/PurchaseAsk/AskAdd';
 import Errors from '../../Work/Instock/Errors';
 import MyEmpty from '../../components/MyEmpty';
-import { CreateInstockBottom, InstockError } from '../components/Instock';
 import { ReceiptsEnums } from '../index';
 import InStockAsk from '../../Work/Instock/InstockAsk';
 import OutStockAsk from '../../Work/OutStock/OutStockAsk';
@@ -22,52 +21,10 @@ const ReceiptsCreate = () => {
 
   const createRef = useRef();
 
-  const createModule = (value) => {
-    switch (value) {
-      case ReceiptsEnums.instockOrder:
-        return <InStockAsk />;
-      case ReceiptsEnums.outstockOrder:
-        return <OutStockAsk />;
-      case 'purchaseAsk':
-        return <AskAdd />;
-      case ReceiptsEnums.instockError:
-        return <Errors
-          params={query.params}
-          setModuleObject={setModuleObject}
-          state={state}
-          setType={setType}
-          ref={createRef}
-        />;
-      default:
-        return <MyEmpty />;
-    }
-  };
-
-  const createModuleButtom = (left) => {
-    switch (query.type) {
-      case ReceiptsEnums.instockOrder:
-        return <CreateInstockBottom
-          createRef={createRef}
-          left={left}
-          moduleObject={moduleObject}
-        />;
-      case ReceiptsEnums.instockError:
-        return <InstockError
-          createRef={createRef}
-          left={left}
-          moduleObject={moduleObject}
-        />;
-      case 'purchaseAsk':
-        return <></>;
-      default:
-        return <></>;
-    }
-  };
-
-
   switch (query.type) {
     case ReceiptsEnums.instockOrder:
-      return <InStockAsk />;
+      const judge = { ...query }.hasOwnProperty('directInStock');
+      return <InStockAsk type={judge ? 'directInStock' : 'inStock'} judge={judge} />;
     case ReceiptsEnums.outstockOrder:
       return <OutStockAsk />;
     case 'purchaseAsk':

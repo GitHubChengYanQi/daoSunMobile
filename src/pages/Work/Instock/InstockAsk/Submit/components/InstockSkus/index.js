@@ -95,6 +95,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           otherData: item.brandName,
         };
       case 'inStock':
+      case 'directInStock':
         return {
           title: '入库任务明细',
           type: '入库',
@@ -130,6 +131,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     });
     inStock({
       data: {
+        shopCardType: createType,
         directInStock,
         module: 'createInstock',
         listParams,
@@ -281,6 +283,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
             });
             break;
           case 'inStock':
+          case 'directInStock':
             if (ToolUtil.isArray(params.noticeIds).length === 0) {
               return Message.toast('请选择注意事项！');
             }

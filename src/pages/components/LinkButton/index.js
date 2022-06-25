@@ -9,7 +9,7 @@ const LinkButton = ({ children, title, style, onClick, color, disabled,className
     disabled={disabled}
     fill='none'
     type='submit'
-    style={{ padding: 0, ...style }}
+    style={{ padding: 0,height:'fit-content', ...style }}
     onClick={() => {
       typeof onClick === 'function' && onClick();
     }}>{title || children || 'link'}</Button>;

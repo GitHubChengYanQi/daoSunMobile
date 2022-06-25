@@ -112,12 +112,17 @@ const SkuShop = (
           otherData: item.brandName,
         };
       case 'inStock':
+      case 'directInStock':
+        let number = 0;
+        const positions = ToolUtil.isArray(item.positions).map(item => {
+          number += item.number;
+          return `${item.name}(${item.number})`;
+        });
         return {
           title: '入库任务明细',
           otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
-          more: judge && ToolUtil.isArray(item.positions).map(item => {
-            return `${item.name}(${item.number})`;
-          }).join('、')
+          more: judge && positions.join('、'),
+          number,
         };
       default:
         return {
@@ -167,10 +172,11 @@ const SkuShop = (
                 <RemoveButton onClick={() => {
                   shopDelete({ data: { ids: [item.cartId] } });
                 }} />
-                <div hidden={judge}>
+                <div>
                   <ShopNumber
+                    show={judge}
                     id={`stepper${index}`}
-                    value={item.number}
+                    value={judge ? taskData(item).number : item.number}
                     onChange={async (number) => {
                       const res = await shopEdit({ data: { cartId: item.cartId, number } });
                       skuChange(res, number);
@@ -214,6 +220,7 @@ const SkuShop = (
                 break;
               case 'outStock':
               case 'inStock':
+              case 'directInStock':
                 history.push({
                   pathname: '/Work/Instock/InstockAsk/Submit',
                   query: {

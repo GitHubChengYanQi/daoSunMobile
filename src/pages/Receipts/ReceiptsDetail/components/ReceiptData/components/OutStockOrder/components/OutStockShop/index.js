@@ -27,12 +27,12 @@ const OutStockShop = (
       className={style.float}
     >
       <div className={style.actions}>
-        <div className={style.action} onClick={() => {
+        {/*<div className={style.action} onClick={() => {*/}
 
-        }}>
-          <div className={style.actionButton}>单据</div>
-          <span className={style.text} />
-        </div>
+        {/*}}>*/}
+        {/*  <div className={style.actionButton}>单据</div>*/}
+        {/*  <span className={style.text} />*/}
+        {/*</div>*/}
         <div className={style.action} onClick={() => {
           setVisible(true);
         }}>
