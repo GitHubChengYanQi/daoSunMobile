@@ -124,7 +124,7 @@ const Screen = (
             onClick={() => {
               onClear();
             }}>
-            清空
+            重置
           </Button>
           <Button
             className={ToolUtil.classNames(style.ok, style.button)}

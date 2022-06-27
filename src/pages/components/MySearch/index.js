@@ -110,19 +110,19 @@ const MySearch = (
   };
 
   return <div className={ToolUtil.classNames(style.searchDiv, className)}>
-    <Popover
-      className={style.popover}
-      style={{ width: 'calc(100% - 66px)' }}
-      visible={(historyType && historys.length > 0) ? visible : false}
-      placement='bottom-start'
-      content={historyContent()}
-      trigger='click'
-    >
-      <div className={style.search}>
+    <div className={style.search}>
+      <Popover
+        className={style.popover}
+        style={{ width: 'calc(100% - 66px)' }}
+        visible={(historyType && historys.length > 0) ? visible : false}
+        placement='bottom-start'
+        content={historyContent()}
+        trigger='click'
+      >
         <div id='searchBar' className={style.searchBar}>
           <SearchBar
             icon={<div onClick={() => {
-              searchIconClick()
+              searchIconClick();
             }}>
               {searchIcon}
             </div>}
@@ -151,20 +151,20 @@ const MySearch = (
             }}
           />
         </div>
+      </Popover>
 
-        {
-          (visible || value)
-            ?
-            <LinkButton className={style.submit} onClick={() => {
-              search(value);
-            }}>搜索</LinkButton>
-            :
-            <div hidden={!extraIcon} className={style.icon}>
-              {extraIcon}
-            </div>
-        }
-      </div>
-    </Popover>
+      {
+        (visible || value)
+          ?
+          <LinkButton className={style.submit} onClick={() => {
+            search(value);
+          }}>搜索</LinkButton>
+          :
+          <div hidden={!extraIcon} className={style.icon}>
+            {extraIcon}
+          </div>
+      }
+    </div>
   </div>;
 };
 

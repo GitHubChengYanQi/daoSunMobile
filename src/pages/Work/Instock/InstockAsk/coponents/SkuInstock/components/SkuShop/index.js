@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from './index.less';
-import { Badge, Button, Popup } from 'antd-mobile';
+import { Badge, Button, Popup, Tabs } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { RemoveButton } from '../../../../../../../components/MyButton';
@@ -19,7 +19,10 @@ const SkuShop = (
     },
     setSkus = () => {
     },
+    taskTypeChange = () => {
+    },
     type,
+    switchType,
     noClose,
     className,
     judge,
@@ -90,26 +93,30 @@ const SkuShop = (
         },
       });
     }
-  }, []);
+  }, [type]);
 
   const taskData = (item = {}) => {
     switch (type) {
       case 'allocation':
         return {
           title: '调拨任务明细',
+          type: '调拨申请',
         };
       case 'curing':
         return {
           title: '养护任务明细',
+          type: '养护申请',
         };
       case 'stocktaking':
         return {
           title: '盘点任务明细',
+          type: '盘点申请',
         };
       case 'outStock':
         return {
           title: '出库任务明细',
           otherData: item.brandName,
+          type: '出库申请',
         };
       case 'inStock':
       case 'directInStock':
@@ -120,6 +127,7 @@ const SkuShop = (
         });
         return {
           title: '入库任务明细',
+          type: '入库申请',
           otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
           more: judge && positions.join('、'),
           number,
@@ -130,6 +138,14 @@ const SkuShop = (
         };
     }
   };
+
+  const tasks = [
+    { title: '出库任务', key: 'outStock' },
+    { title: '入库任务', key: 'inStock' },
+    { title: '盘点任务', key: 'stocktaking' },
+    { title: '调拨任务', key: 'allocation' },
+    { title: '养护任务', key: 'curing' },
+  ];
 
   return <>
     <Popup
@@ -152,6 +168,14 @@ const SkuShop = (
         </div>
       </div>
 
+      {switchType && <Tabs className={style.tabs} activeKey={type} onChange={(key) => {
+        taskTypeChange(key);
+      }}>
+        {tasks.map(item => {
+          return <Tabs.Tab {...item} />;
+        })}
+
+      </Tabs>}
       <div className={style.skuList}>
         {skus.length === 0 && <MyEmpty description='请添加物料' />}
         {
@@ -203,7 +227,10 @@ const SkuShop = (
               style={{ color: skus.length > 0 ? 'var(--adm-color-primary)' : '#B5B6B8' }}
             />
           </Badge>
-          <div>已选<span>{skus.length}</span>类</div>
+          <div>
+            <div className={style.type}>{taskData().type}</div>
+            <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>
+          </div>
         </div>
         {!noClose && <LinkButton className={style.close} onClick={() => {
           history.goBack();

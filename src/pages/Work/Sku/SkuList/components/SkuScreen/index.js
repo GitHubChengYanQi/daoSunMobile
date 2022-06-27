@@ -16,7 +16,7 @@ const SkuScreen = (
     screen,
     overLengths,
     refresh,
-    stockNumber,
+    skuNumber,
     params,
     search,
     onClose,
@@ -28,14 +28,14 @@ const SkuScreen = (
 
   const searchtype = [
     { key: 'skuClass', title: '分类', open: true },
-    { key: 'supply', title: '供应商', open: true },
     { key: 'brand', title: '品牌', open: true },
     { key: 'state', title: '状态', open: false },
     { key: 'position', title: '库位', open: open.position },
-    { key: 'number', title: '库存数', open: open.number },
+    { key: 'supply', title: '供应商', open: true },
+    { key: 'user', title: '创建人', open: open.user },
+    { key: 'number', title: '库存数量', open: open.number },
     { key: 'bom', title: '物料清单', open: open.bom },
     { key: 'time', title: '创建时间', open: open.time },
-    { key: 'user', title: '创建人', open: open.user },
   ];
 
   const spuClassIds = ToolUtil.isArray(params.spuClassIds);
@@ -233,7 +233,7 @@ const SkuScreen = (
   return <>
     <Screen
       screen={screen}
-      buttonTitle={stockNumber === 0 ? '完成' : `查看 ${stockNumber} 件物料`}
+      buttonTitle={skuNumber === 0 ? '完成' : `查看 ${skuNumber} 件物料`}
       onClose={onClose}
       onClear={onClear}
       searchtype={searchtype.filter(item => item.open)}

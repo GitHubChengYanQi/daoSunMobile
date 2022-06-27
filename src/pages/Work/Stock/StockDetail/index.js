@@ -11,6 +11,10 @@ import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+
+export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
 export const SkuContent = (
   {
@@ -82,6 +86,7 @@ const StockDetail = (
     },
   }) => {
 
+
   const ref = useRef();
 
   const addSku = useRef();
@@ -94,7 +99,29 @@ const StockDetail = (
 
   const [taskVisible, setTaskVisible] = useState();
 
+  const tasks = [
+    { text: '出库任务', key: 'outStock' },
+    { text: '入库任务', key: 'inStock' },
+    { text: '盘点任务', key: 'stocktaking' },
+    { text: '调拨任务', key: 'allocation' },
+    { text: '养护任务', key: 'curing' },
+  ];
+
+  const { loading: getDefaultShop } = useRequest({
+    ...shopCartShow,
+    data: { types: tasks.map(item => item.key) },
+  }, {
+    onSuccess: (res) => {
+      if (ToolUtil.isArray(res).length > 0){
+        setTask(res[0])
+      }
+    },
+  });
+
   return <>
+
+    {getDefaultShop && <MyLoading />}
+
     <div className={style.search}>
       <MySearch
         historyType='stock'
@@ -112,6 +139,7 @@ const StockDetail = (
     </div>
 
     <SkuList
+      stock
       ref={ref}
       defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
       SkuContent={SkuContent}
@@ -145,13 +173,7 @@ const StockDetail = (
       className={style.action}
       cancelText='取消'
       visible={visible}
-      actions={[
-        { text: '出库任务', key: 'outStock' },
-        { text: '入库任务', key: 'inStock' },
-        { text: '盘点任务', key: 'stocktaking' },
-        { text: '调拨任务', key: 'allocation' },
-        { text: '养护任务', key: 'curing' },
-      ]}
+      actions={tasks}
       onClose={() => {
         setTask(null);
         setVisible(false);

@@ -15,7 +15,7 @@
     background: var(--body--background--color);
 
     .shop {
-      padding: 8px 24px;
+      padding: 8px 16px;
       align-items: center;
       display: flex;
       gap: 12px;
@@ -23,11 +23,24 @@
       font-size: 14px;
       color: #3D3D3D;
 
+
+      .type {
+        color: var(--adm-color-primary);
+        font-size: 16px;
+        transform: scale(0.5);
+        transform-origin: left
+      }
+
+      .shopNumber {
+        margin-top: -4px;
+      }
+
       span {
         font-weight: bolder;
         font-size: 16px;
         margin: 0 4px;
       }
+
 
       svg {
         font-size: 25px;
@@ -65,8 +78,14 @@
   }
 
   .popupTitle {
-    padding: 8px 12px;
+    padding: 8px 14px;
     display: flex;
+  }
+
+  .tabs {
+    padding-top: 8px;
+    background-color: #fff;
+    --title-font-size: 14px;
   }
 
   .skuList {

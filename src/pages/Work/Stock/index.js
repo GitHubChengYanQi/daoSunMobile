@@ -8,7 +8,6 @@ import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 import Dynamic from './Dynamic';
 import Task from './Task';
-import KeepAlive, { AliveScope } from '../../../components/KeepAlive';
 
 const Stock = (props) => {
 
@@ -44,6 +43,7 @@ const Stock = (props) => {
     switch (key) {
       case 'stock':
         return stockDetail.task && <SkuShop
+          switchType
           ask
           className={style.popup}
           noClose
@@ -52,6 +52,9 @@ const Stock = (props) => {
           skus={stockDetail.skus}
           setSkus={(skus) => {
             setStockDetail({ ...stockDetail, skus });
+          }}
+          taskTypeChange={(task)=>{
+            setStockDetail({ ...stockDetail, task });
           }}
           type={stockDetail.task}
           onClear={() => {

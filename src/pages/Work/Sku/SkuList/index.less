@@ -7,7 +7,7 @@
   top: 0;
   z-index: 1;
   background-color: #fff;
-  padding: 12px;
+  padding: 0 12px;
   border-top: solid 1px #F5F5F5;
   display: flex;
   height: 40px;
@@ -33,10 +33,19 @@
   }
 
   .screenButton {
+    margin-top: 4px;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
     color: #000000;
     border-left: 1px #ebebeb solid;
-    padding: 0 8px;
+    padding-left: 12px;
     margin-left: 8px;
+    height: calc(100% - 4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    position: relative;
 
     svg {
       font-size: 13px;
@@ -45,6 +54,35 @@
 
   .checked {
     color: var(--adm-color-primary);
+    background-color: var(--body--background--color);
+    padding: 8px;
+
+    .leftCorner {
+      left: -8px;
+      transform: rotate(0deg);
+    }
+
+    .rightCorner {
+      right: -8px;
+      transform: rotate(90deg);
+    }
+
+    .leftCorner, .rightCorner {
+      bottom: 0;
+      width: 8px;
+      height: 8px;
+      position: absolute;
+      z-index: 100;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      pointer-events: none;
+
+      path {
+        fill: var(--body--background--color);
+      }
+    }
   }
 
 }
