@@ -35,13 +35,21 @@ const Order = (
   const { loading, run } = useRequest(getPositionsAndBrands, {
     manual: true,
     onSuccess: (res) => {
-      setBrands(ToolUtil.isArray(res).map((item) => {
+      const brands = ToolUtil.isArray(res);
+      const newBrands = brands.map((item) => {
         const positions = item.positionsResults || [];
         return {
           ...item,
-          positions,
+          show: brands.length === 1,
+          positionsResults: positions.map(item => {
+            const checked = positions.length === 1;
+            const number = checked ? (item.number > outStockNumber ? outStockNumber : item.number) : 0;
+            return { ...item, checked, outStockNumber:number };
+          }),
         };
-      }));
+      });
+      setBrands(newBrands);
+      outSkuChange(newBrands);
     },
   });
 
@@ -53,8 +61,8 @@ const Order = (
 
   useEffect(() => {
     if (codeData) {
-      const newPosition = brands.map((item) => {
-        if (item.brandId=== codeData.brandId) {
+      const newBrands = brands.map((item) => {
+        if (item.brandId === codeData.brandId) {
           const positions = item.positionsResults || [];
           return {
             ...item, show: true, positionsResults: positions.map((item) => {
@@ -68,8 +76,8 @@ const Order = (
         }
         return item;
       });
-      setBrands(newPosition);
-      outSkuChange(newPosition);
+      setBrands(newBrands);
+      outSkuChange(newBrands);
     }
   }, [codeData]);
 
@@ -156,10 +164,10 @@ const Order = (
               return <div className={style.brands} key={positionIndex}>
                 <span onClick={() => {
                   if (!positionItem.checked) {
-                    const num = (outStockNumber - (outNumber + positionItem.num)) > 0 ? positionItem.num : (outStockNumber - outNumber);
+                    const num = (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber);
                     positionChange(index, positionIndex, { checked: true, outStockNumber: num });
                   }
-                }}>{positionItem.name} ({positionItem.num})</span>
+                }}>{positionItem.name} ({positionItem.number})</span>
                 <div hidden={!positionItem.checked}>
                   <Stepper
                     min={0}
