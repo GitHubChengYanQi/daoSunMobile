@@ -65,7 +65,6 @@ const SkuList = (
   };
 
   const submit = (newParams = {}, newSort = {}) => {
-    skuListRef.current.setAttribute('style', 'min-height:auto');
     setRefresh(false);
     setParams({ ...params, ...newParams });
     listRef.current.submit({ ...params, ...newParams }, { ...sort, ...newSort });
@@ -146,12 +145,13 @@ const SkuList = (
         {sortShow('createTime')}
       </div>
       <div
-        className={ToolUtil.classNames(style.screenButton, (screen || screening) ? style.checked : '')}
+        className={ToolUtil.classNames(style.screenButton, screen && style.checked, screening && style.checking)}
         onClick={() => {
           if (screen) {
             skuListRef.current.removeAttribute('style');
             setFalse();
           } else {
+            skuListRef.current.setAttribute('style', 'min-height:100vh');
             screenRef.current.scrollIntoView();
             setTrue();
           }
@@ -163,14 +163,14 @@ const SkuList = (
             <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
               <path d='M30,0 C13.4314575,3.04359188e-15 -2.02906125e-15,13.4314575 0,30 L0,30 L0,0 Z'
                     fill='var(--adm-color-white)'
-                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) '/>
+                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) ' />
             </g>
           </svg>
           <svg viewBox='0 0 30 30' className={style.rightCorner}>
             <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
               <path d='M30,0 C13.4314575,3.04359188e-15 -2.02906125e-15,13.4314575 0,30 L0,30 L0,0 Z'
                     fill='var(--adm-color-white)'
-                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) '/>
+                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) ' />
             </g>
           </svg>
         </div>
@@ -199,7 +199,6 @@ const SkuList = (
         getData={setSkuData}
         data={skuData}
         response={(res) => {
-          skuListRef.current.setAttribute('style', 'min-height:100vh');
           setSkuNumber(res.count || 0);
           if (!res.count || res.count === 0) {
             Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000 });
@@ -259,6 +258,7 @@ const SkuList = (
       params={params}
       search={{ skuClass, supplys, brands, states, position, boms }}
       onClose={() => {
+        skuListRef.current.removeAttribute('style');
         setFalse();
       }}
       onChange={(value) => {
