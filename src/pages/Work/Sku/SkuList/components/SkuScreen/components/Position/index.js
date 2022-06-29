@@ -37,7 +37,6 @@ const Position = (
       headerStyle={{ border: 'none' }}
     >
       <CheckPosition single value={value && [{ id: value }]} onChange={(value = []) => {
-        console.log(value);
         const position = value[0] || {};
         onChange(position.id);
       }} data={options} refresh={refreshPositions} />

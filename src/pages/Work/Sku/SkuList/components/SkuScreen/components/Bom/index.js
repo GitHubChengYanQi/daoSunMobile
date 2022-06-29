@@ -3,7 +3,7 @@ import { Card, Checkbox, List, Radio, Steps } from 'antd-mobile';
 import LinkButton from '../../../../../../../components/LinkButton';
 import style from './index.less';
 import Icon from '../../../../../../../components/Icon';
-import { RightOutline } from 'antd-mobile-icons';
+import { LeftOutline, RightOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../../../util/Request';
 import { backDetails, partsList } from '../Url';
@@ -82,46 +82,54 @@ const Bom = (
         onClear={Select}
       />
       <div className={style.bomType}>
-        <Radio
-          icon={(checked) => {
-            return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
-          }}
-          checked={type === 'Present'}
-          key='children'
-          style={{
-            '--icon-size': '18px',
-            '--font-size': '14px',
-            '--gap': '6px',
-          }}
-          onChange={() => {
-            setType('Present');
-            if (value) {
-              onChange(value, 'Present');
-            }
-          }}
-        >
-          子级物料
-        </Radio>
-        <Radio
-          icon={(checked) => {
-            return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
-          }}
-          checked={type === 'All'}
-          key='sku'
-          style={{
-            '--icon-size': '18px',
-            '--font-size': '14px',
-            '--gap': '6px',
-          }}
-          onChange={() => {
-            setType('All');
-            if (value) {
-              onChange(value, 'All');
-            }
-          }}
-        >
-          基础物料
-        </Radio>
+        <div className={style.radio}>
+          <Radio
+            icon={(checked) => {
+              return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
+            }}
+            checked={type === 'Present'}
+            key='children'
+            style={{
+              '--icon-size': '18px',
+              '--font-size': '14px',
+              '--gap': '6px',
+            }}
+            onChange={() => {
+              setType('Present');
+              if (value) {
+                onChange(value, 'Present');
+              }
+            }}
+          >
+            显示下一级
+          </Radio>
+          <Radio
+            icon={(checked) => {
+              return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
+            }}
+            checked={type === 'All'}
+            key='sku'
+            style={{
+              '--icon-size': '18px',
+              '--font-size': '14px',
+              '--gap': '6px',
+            }}
+            onChange={() => {
+              setType('All');
+              if (value) {
+                onChange(value, 'All');
+              }
+            }}
+          >
+            显示全部
+          </Radio>
+        </div>
+
+        {boms.length > 1 && <LinkButton className={style.upBom} onClick={() => {
+          setBoms(boms.filter((item, index) => {
+            return index !== boms.length - 1;
+          }));
+        }}><LeftOutline /> 返回至第{boms.length - 1}级</LinkButton>}
       </div>
 
       <div className={style.bomSteps}>
@@ -149,11 +157,6 @@ const Bom = (
             })
           }
         </Steps>
-        <LinkButton disabled={boms.length <= 1} className={style.upBom} onClick={() => {
-          setBoms(boms.filter((item, index) => {
-            return index !== boms.length - 1;
-          }));
-        }}>上一级</LinkButton>
       </div>
 
       {(loading || listLoading) ? <MyLoading skeleton /> : <List>

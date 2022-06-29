@@ -24,10 +24,9 @@ const SkuClass = (
         // multiple
         className={style.skuClass}
         style={{
-          '--border-radius': '100px',
           '--border': 'solid transparent 1px',
           '--checked-border': 'solid var(--adm-color-primary) 1px',
-          '--padding': '2px 10px',
+          '--padding': '4px 15px',
         }}
         showCheckMark={false}
         options={options}

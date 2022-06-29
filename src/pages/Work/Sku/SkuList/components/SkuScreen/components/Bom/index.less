@@ -32,7 +32,23 @@
 
 .bomType {
   display: flex;
-  gap: 14px;
+  align-items: center;
+
+  button {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+  }
+
+  .radio {
+    flex-grow: 1;
+    display: flex;
+    gap: 14px;
+
+    :global .adm-radio-content {
+      --font-size: 12px;
+    }
+  }
 }
 
 .bomItem {
