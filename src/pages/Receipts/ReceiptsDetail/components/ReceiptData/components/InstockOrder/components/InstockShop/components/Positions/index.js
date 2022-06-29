@@ -20,6 +20,8 @@ const Positions = (
     },
     onSuccess = () => {
     },
+    showAll,
+    autoFocus,
     ...props
   },
 ) => {
@@ -27,7 +29,19 @@ const Positions = (
   const codeId = ToolUtil.isObject(props.qrCode).codeId;
   const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
 
-  const { loading, data, run } = useRequest(positions);
+  const [focus, setFocus] = useState(autoFocus);
+
+  const { loading, data, run } = useRequest(positions, {
+    onSuccess: () => {
+      if (focus) {
+        const positionSearch = document.querySelector('#positionSearch input');
+        if (positionSearch) {
+          positionSearch.focus();
+          setFocus(false);
+        }
+      }
+    },
+  });
 
   const [value, onChange] = useState(ids);
 
@@ -51,6 +65,7 @@ const Positions = (
   return <div style={{ height: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
 
     <MySearch
+      id='positionSearch'
       searchIcon={<Icon type='icon-dibudaohang-saoma' />}
       placeholder='搜索库位'
       onChange={setName}
@@ -79,7 +94,7 @@ const Positions = (
         data={data}
         refresh={data}
         checkShow={(item) => {
-          return ToolUtil.isArray(item.loops).length === 0;
+          return showAll || ToolUtil.isArray(item.loops).length === 0;
         }}
       />
     </div>

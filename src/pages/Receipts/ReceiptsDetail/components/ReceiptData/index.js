@@ -10,6 +10,7 @@ import UpLoadImg from '../../../../components/Upload';
 import { PaperClipOutlined } from '@ant-design/icons';
 import InstockError from './components/InstockError';
 import { ToolUtil } from '../../../../components/ToolUtil';
+import Stocktaking from './components/Stocktaking';
 
 const ReceiptData = (
   {
@@ -24,6 +25,23 @@ const ReceiptData = (
     permissions,
   }) => {
 
+  const actions = [];
+  currentNode.map((item) => {
+    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
+      return item.logResult.actionResults.map((item) => {
+        return actions.push({ action: item.action, id: item.documentsActionId });
+      });
+    }
+    return null;
+  });
+
+  const getAction = (action) => {
+    const actionData = actions.filter(item => {
+      return item.action === action;
+    });
+    return actionData[0] || {};
+  };
+
   const receiptType = () => {
     switch (data.type) {
       case ReceiptsEnums.instockOrder:
@@ -31,7 +49,7 @@ const ReceiptData = (
         return <InstockOrder
           permissions={permissions}
           data={data.receipts}
-          currentNode={currentNode}
+          getAction={getAction}
           refresh={refresh}
           loading={loading}
           type={data.type}
@@ -40,7 +58,14 @@ const ReceiptData = (
         return <InstockError
           permissions={permissions}
           data={data.receipts}
-          currentNode={currentNode}
+          getAction={getAction}
+          refresh={refresh}
+        />;
+      case ReceiptsEnums.stocktaking:
+        return <Stocktaking
+          permissions={permissions}
+          receipts={data.receipts}
+          getAction={getAction}
           refresh={refresh}
         />;
       default:

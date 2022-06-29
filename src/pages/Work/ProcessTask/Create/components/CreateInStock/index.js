@@ -68,6 +68,7 @@ const CreateInStock = (
           default:
             break;
         }
+        onClose();
         setVisible(false);
       }}
     />

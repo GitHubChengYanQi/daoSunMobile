@@ -15,14 +15,15 @@ const MyCheck = (
   }) => {
 
 
-  return <LinkButton disabled={disabled} className={className} onClick={() => {
+  return <LinkButton disabled={disabled} color='default' className={className} onClick={() => {
     onChange(!checked);
   }}>
     <Checkbox
+      style={{ '--font-size': `${fontSize}px`, '--icon-size': `${fontSize}px` }}
       checked={checked}
       icon={(checked) => {
-        return checked ? <Icon type='icon-a-jianqudingceng2' style={{ fontSize }} /> :
-          <Icon type='icon-jizhumimamoren' style={{ fontSize }} />;
+        return checked ? <Icon type='icon-a-jianqudingceng2' /> :
+          <Icon type='icon-jizhumimamoren' />;
       }}
     >
       {children}

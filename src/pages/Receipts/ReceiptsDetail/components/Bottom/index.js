@@ -5,6 +5,7 @@ import Audit from '../../../components/Audit';
 import { ActionSheet } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../index';
 import InStockErrorBottom from './components/InStockErrorBottom';
+import StocktakingBottom from './components/StocktakingBottom';
 
 const Bottom = (
   {
@@ -35,6 +36,8 @@ const Bottom = (
     switch (detail.type) {
       case ReceiptsEnums.instockError:
         return <InStockErrorBottom detail={detail} actions={actions} refresh={refresh} />;
+      case ReceiptsEnums.stocktaking:
+        return <StocktakingBottom detail={detail} actions={actions} refresh={refresh} />;
       default:
         return <></>;
     }

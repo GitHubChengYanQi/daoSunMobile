@@ -10,10 +10,16 @@ import Icon from '../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../components/LinkButton';
 import ShopNumber from '../ShopNumber';
 import { useRequest } from '../../../../../../../../util/Request';
-import { shopCartAllList, shopCartDelete, shopCartEdit } from '../../../../../Url';
+import { shopCartAddList, shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../Url';
+import MyCheck from '../../../../../../../components/MyCheck';
+import { MyLoading } from '../../../../../../../components/MyLoading';
+import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 
 const SkuShop = (
   {
+    checked,
+    checkSkus = [],
+    batch,
     skus = [],
     onClear = () => {
     },
@@ -27,6 +33,10 @@ const SkuShop = (
     className,
     judge,
     ask,
+    selectAll = () => {
+    },
+    onCancel = () => {
+    },
   },
 ) => {
 
@@ -51,7 +61,7 @@ const SkuShop = (
     setSkus(newSkus);
   };
 
-  const { run: showShop } = useRequest(shopCartAllList, {
+  const { loading: shopLoading, run: showShop, refresh: shopRefresh } = useRequest(shopCartApplyList, {
     manual: true,
     onSuccess: (res) => {
       setSkus(ToolUtil.isArray(res).map((item) => {
@@ -83,6 +93,14 @@ const SkuShop = (
     },
   });
 
+  const { loading: addListLoading, run: addList } = useRequest(shopCartAddList, {
+    manual: true,
+    onSuccess: () => {
+      onCancel();
+      shopRefresh();
+    },
+  });
+
   const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
 
   useEffect(() => {
@@ -97,29 +115,30 @@ const SkuShop = (
 
   const taskData = (item = {}) => {
     switch (type) {
-      case 'allocation':
+      case ERPEnums.allocation:
         return {
           title: '调拨任务明细',
           type: '调拨申请',
         };
-      case 'curing':
+      case ERPEnums.curing:
         return {
           title: '养护任务明细',
           type: '养护申请',
         };
-      case 'stocktaking':
+      case ERPEnums.stocktaking:
         return {
           title: '盘点任务明细',
           type: '盘点申请',
+          numberHidden: true,
         };
-      case 'outStock':
+      case ERPEnums.outStock:
         return {
           title: '出库任务明细',
           otherData: item.brandName,
           type: '出库申请',
         };
-      case 'inStock':
-      case 'directInStock':
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
         let number = 0;
         const positions = ToolUtil.isArray(item.positions).map(item => {
           number += item.number;
@@ -140,11 +159,11 @@ const SkuShop = (
   };
 
   const tasks = [
-    { title: '出库任务', key: 'outStock' },
-    { title: '入库任务', key: 'inStock' },
-    { title: '盘点任务', key: 'stocktaking' },
-    { title: '调拨任务', key: 'allocation' },
-    { title: '养护任务', key: 'curing' },
+    { title: '出库任务', key: ERPEnums.outStock },
+    { title: '入库任务', key: ERPEnums.inStock },
+    { title: '盘点任务', key: ERPEnums.stocktaking },
+    { title: '调拨任务', key: ERPEnums.allocation },
+    { title: '养护任务', key: ERPEnums.curing },
   ];
 
   return <>
@@ -196,7 +215,7 @@ const SkuShop = (
                 <RemoveButton onClick={() => {
                   shopDelete({ data: { ids: [item.cartId] } });
                 }} />
-                <div>
+                <div hidden={taskData().numberHidden}>
                   <ShopNumber
                     show={judge}
                     id={`stepper${index}`}
@@ -212,10 +231,34 @@ const SkuShop = (
           })
         }
       </div>
-
     </Popup>
-
+    <div hidden={!batch} className={style.batch}>
+      <div className={style.all}>
+        <MyCheck checked={checked} className={style.checkButton} fontSize={14} onChange={() => {
+          selectAll();
+        }}>全选</MyCheck>
+        <div className={style.checkNumber}>已选中 <span>{checkSkus.length}</span> 种</div>
+      </div>
+      <Button
+        disabled={checkSkus.length === 0}
+        color='primary'
+        fill='outline'
+        onClick={() => {
+          addList({
+            data: {
+              shopCartParams: checkSkus.map(item => {
+                return {
+                  type,
+                  skuId: item.skuId,
+                };
+              }),
+            },
+          });
+        }}
+      >添加</Button>
+    </div>
     <div className={style.bottom} id='shop'>
+
       <div className={style.bottomMenu}>
         <div className={style.shop} onClick={() => {
           setVisible(!visible);
@@ -241,13 +284,13 @@ const SkuShop = (
           className={style.submit}
           onClick={() => {
             switch (type) {
-              case 'allocation':
-              case 'curing':
-              case 'stocktaking':
+              case ERPEnums.allocation:
+              case ERPEnums.curing:
                 break;
-              case 'outStock':
-              case 'inStock':
-              case 'directInStock':
+              case ERPEnums.stocktaking:
+              case ERPEnums.outStock:
+              case ERPEnums.inStock:
+              case ERPEnums.directInStock:
                 history.push({
                   pathname: '/Work/Instock/InstockAsk/Submit',
                   query: {
@@ -266,6 +309,8 @@ const SkuShop = (
         </Button>
       </div>
     </div>
+
+    {(shopLoading || addListLoading) && <MyLoading />}
   </>;
 };
 

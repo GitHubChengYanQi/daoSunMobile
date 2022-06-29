@@ -65,8 +65,6 @@ const UploadFile = (
           } catch (e) {
             Toast.show({ content: '上传失败！' });
           }
-
-          setFalse();
           setLoading(false);
         },
       });
@@ -83,6 +81,7 @@ const UploadFile = (
         isSaveToAlbum: 1, //整型值，0表示拍照时不保存到系统相册，1表示自动保存，默认值是1
         success: (res) => {
           setLoading(true);
+          setFalse();
           const localIds = res.localIds; // 返回选定照片的本地ID列表，
           const u = navigator.userAgent;
           const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
@@ -141,6 +140,7 @@ const UploadFile = (
     />
 
     <UpLoadImg
+      hidden
       uploadLoading={setLoading}
       maxCount={5}
       type='picture'
@@ -149,7 +149,6 @@ const UploadFile = (
         fileChange({ type: file.type, mediaId, url, name: file.name });
         setFalse();
       }}
-      button
     />
 
 

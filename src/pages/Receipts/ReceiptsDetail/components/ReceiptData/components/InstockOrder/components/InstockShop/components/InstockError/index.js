@@ -5,7 +5,6 @@ import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import style from '../../index.less';
 import { CloseOutline } from 'antd-mobile-icons';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
-import LinkButton from '../../../../../../../../../../components/LinkButton';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Button } from 'antd-mobile';
@@ -13,15 +12,18 @@ import { FormOutlined } from '@ant-design/icons';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { Message } from '../../../../../../../../../../components/Message';
 import { sendBack } from '../WaitInstock';
+import { ReceiptsEnums } from '../../../../../../../../../index';
 
 const InstockError = (
   {
-    instockOrderId,
+    formId,
     onClose = () => {
     },
     onEdit = () => {
     },
-    refresh,
+    refresh = () => {
+    },
+    type,
   },
 ) => {
 
@@ -70,8 +72,60 @@ const InstockError = (
     }
   };
 
+  const errorType = (item = {}) => {
+    const skuResult = item.skuResult || {};
+    const customerName = ToolUtil.isObject(item.customer).customerName;
+    const brandName = ToolUtil.isObject(item.brandResult).brandName;
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        return {
+          totalTitle: '申请总数',
+          skuItem: <SkuItem
+            skuResult={skuResult}
+            extraWidth='80px'
+            otherData={`${customerName || ''}${customerName && brandName ? ' / ' : ''}${brandName || ''}`}
+          />,
+        };
+      case ReceiptsEnums.stocktaking:
+        return {
+          totalTitle: '实际总数',
+          skuItem: <SkuItem
+            skuResult={skuResult}
+            extraWidth='80px'
+            otherData={brandName}
+          />,
+        };
+      default:
+        return {};
+    }
+  };
+
   useEffect(() => {
-    errorShop({ data: { type: 'InstockError', sourceId: instockOrderId, status: 0 } });
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        errorShop({
+          data: {
+            receiptsEnum: ReceiptsEnums.instockOrder,
+            type: 'InstockError',
+            sourceId: formId,
+            status: 0,
+          },
+        });
+        break;
+      case ReceiptsEnums.stocktaking:
+        errorShop({
+          data: {
+            receiptsEnum: ReceiptsEnums.stocktaking,
+            type: 'StocktakingError',
+            sourceId: formId,
+            status: 0,
+          },
+        });
+        break;
+      default:
+        return;
+    }
+
   }, []);
 
   return <>
@@ -95,10 +149,6 @@ const InstockError = (
 
               const anomalyResult = ToolUtil.isObject(item.anomalyResult);
 
-              const skuResult = item.skuResult || {};
-              const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandResult).brandName || '-';
-
               return <div key={index}>
                 <div style={{ border: 'none' }} className={style.skuItem}>
                   <MyCheck checked={checked} className={style.check} onChange={() => {
@@ -107,11 +157,7 @@ const InstockError = (
                   <div className={style.sku} onClick={() => {
                     check(checked, item);
                   }}>
-                    <SkuItem
-                      skuResult={skuResult}
-                      extraWidth='80px'
-                      otherData={`${customerName} / ${brandName}`}
-                    />
+                    {errorType(item).skuItem}
                   </div>
                   <FormOutlined style={{ fontSize: 18 }} onClick={() => {
                     onEdit(anomalyResult.anomalyId, errors.length);
@@ -123,12 +169,13 @@ const InstockError = (
                       className={style.red}>{anomalyResult.errorNumber}</span></span>
                     <span hidden={!anomalyResult.otherNumber}>质量异常：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>
-                    <span>申请总数：<span className={style.black}>{anomalyResult.needNumber}</span></span>
+                    <span>{errorType().totalTitle}：<span
+                      className={style.black}>{anomalyResult.needNumber}</span></span>
                   </div>
                   <Button color='primary' fill='outline' onClick={() => {
                     orderAdd({
                       data: {
-                        instockOrderId,
+                        instockOrderId: formId,
                         type: 'instock',
                         anomalyParams: [{ anomalyId: anomalyResult.anomalyId }],
                       },
@@ -166,7 +213,7 @@ const InstockError = (
             onClick={() => {
               orderAdd({
                 data: {
-                  instockOrderId,
+                  instockOrderId: formId,
                   type: 'instock',
                   anomalyParams: data.map((item) => {
                     const anomalyResult = item.anomalyResult || {};

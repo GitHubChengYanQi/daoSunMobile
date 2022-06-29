@@ -14,4 +14,10 @@ export const ReceiptsEnums = {
   instockError: 'INSTOCKERROR',
   // 核实异常
   verifyError: 'verifyError',
+
+  // 盘点单
+  stocktaking: 'Stocktaking',
+
+  // 养护单
+  maintenance: 'MAINTENANCE',
 };

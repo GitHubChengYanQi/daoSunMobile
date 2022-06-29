@@ -23,6 +23,7 @@ const UpLoadImg = (
     imageType,
     uploadLoading = () => {
     },
+    hidden,
   }) => {
 
   const [loading, setLoading] = useState(false); // loading 状态
@@ -75,7 +76,7 @@ const UpLoadImg = (
 
   return (
     // name 为发送到后台的文件名
-    <div>
+    <div hidden={hidden}>
       <Upload
         ref={uploadRef}
         id={id}

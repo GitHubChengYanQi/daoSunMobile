@@ -17,8 +17,11 @@ import { Message } from '../../../../../../../../components/Message';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import { connect } from 'dva';
+import { ReceiptsEnums } from '../../../../../../../index';
+import BottomButton from '../../../../../../../../components/BottomButton';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
+const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
 export const instockErrorDetail = { url: '/anomaly/detail', method: 'POST' };
 const instockErrorEdit = { url: '/anomaly/edit', method: 'POST' };
 const instockErrorDelete = { url: '/anomaly/delete', method: 'POST' };
@@ -26,19 +29,28 @@ const instockErrorDelete = { url: '/anomaly/delete', method: 'POST' };
 const Error = (
   {
     id,
+    noDelete,
     skuItem = {},
     onClose = () => {
+    },
+    onEdit = () => {
     },
     onSuccess = () => {
     },
     refreshOrder = () => {
     },
     maxHeight = '80vh',
+    type,
     ...props
   },
 ) => {
 
   const [sku, setSku] = useState(skuItem);
+
+
+  useEffect(()=>{
+    setSku(skuItem);
+  },[skuItem.skuId])
 
   const [data, setData] = useState({ number: skuItem.number });
 
@@ -64,10 +76,22 @@ const Error = (
     },
   });
 
+  const { loading: anomalyTemporaryLoading, run: anomalyTemporaryRun } = useRequest(anomalyTemporary, {
+    manual: true,
+    onSuccess: () => {
+      onSuccess(skuItem);
+      Message.toast('暂存成功！');
+    },
+    onError: () => {
+      Message.toast('暂存失败！');
+    },
+  });
+
   const { loading: editLoading, run: editRun } = useRequest(instockErrorEdit, {
     manual: true,
     onSuccess: () => {
       onClose();
+      onEdit();
       Message.toast('修改成功！');
     },
     onError: () => {
@@ -90,7 +114,8 @@ const Error = (
   const { loading: detailyLoading, run: detailRun } = useRequest(instockErrorDetail, {
     manual: true,
     onSuccess: (res) => {
-      setSku({
+      let sku = {
+        ...skuItem,
         number: res.needNumber,
         skuId: res.skuId,
         skuResult: res.skuSimpleResult,
@@ -98,17 +123,14 @@ const Error = (
         customerResult: res.customer,
         brandResult: res.brand,
         brandId: res.brandId,
-        instockOrderId: res.formId,
-        instockListId: '',
-      });
+      };
 
-      setData({
+      let data = {
         anomalyId: res.anomalyId,
         number: res.realNumber,
-      });
+      };
 
-
-      setInkinds(ToolUtil.isArray(res.details).map((item) => {
+      let inkinds = ToolUtil.isArray(res.details).map((item) => {
         const imgs = item.reasonImg ? ToolUtil.isArray(JSON.parse(item.reasonImg)) : [];
         return {
           inkindId: item.inkindId,
@@ -126,7 +148,29 @@ const Error = (
             return item.noticeId;
           }),
         };
-      }));
+      });
+
+
+      switch (type) {
+        case ReceiptsEnums.instockOrder:
+          sku = {
+            ...sku,
+            instockOrderId: res.formId,
+            instockListId: '',
+          };
+          break;
+        case ReceiptsEnums.stocktaking:
+          break;
+        default:
+          break;
+      }
+
+      setSku(sku);
+
+      setData(data);
+
+
+      setInkinds(inkinds);
 
       overFlow();
 
@@ -219,6 +263,157 @@ const Error = (
 
   const [over, setOver] = useState();
 
+  const getParams = () => {
+    let required = false;
+    const detailParams = inkinds.map((item) => {
+      if (ToolUtil.isArray(item.noticeIds).length === 0) {
+        required = true;
+      }
+      return {
+        pidInKind: item.inkindId,
+        description: item.description,
+        reasonImg: item.mediaIds,
+        noticeIds: item.noticeIds,
+        number: item.number,
+      };
+    });
+
+    if (required) {
+      return Message.toast('请选择异常原因！');
+    }
+
+    return {
+      anomalyId: data.anomalyId,
+      skuId: sku.skuId,
+      brandId: sku.brandId,
+      customerId: sku.customerId,
+      needNumber: sku.number,
+      realNumber: data.number,
+      detailParams,
+    };
+  };
+
+  const getStocktakingParams = () => {
+    return {
+      ...getParams(),
+      positionId: sku.positionId,
+      formId: sku.inventoryTaskId,
+      anomalyType: 'StocktakingError',
+    };
+  };
+
+  const errorTypeData = () => {
+
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        return {
+          title: '入库异常',
+          skuItem: <SkuItem
+            skuResult={sku.skuResult}
+            className={style.sku}
+            extraWidth={(id && !noDelete) ? '84px' : '24px'}
+            otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandName || '-'}`}
+          />,
+          actionNumber: <div className={style.actual}>
+            <div className={style.number}>
+              入库数量 {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
+            </div>
+            <div className={style.actual}>
+              <span>实际到货</span>
+              <Stepper
+                min={allNumber}
+                style={{
+                  '--button-text-color': '#000',
+                }}
+                value={data.number}
+                onChange={(number) => {
+                  setData({ ...data, number });
+                }}
+              />
+              <Icon type='icon-dibudaohang-saoma' onClick={() => {
+                props.dispatch({
+                  type: 'qrCode/wxCpScan',
+                  payload: {
+                    action: 'position',
+                  },
+                });
+              }} />
+            </div>
+          </div>,
+          button: <div className={style.bottom}><Button color='primary' onClick={() => {
+            const instockParam = {
+              ...getParams(),
+              formId: sku.instockOrderId,
+              instockListId: sku.instockListId,
+              sourceId: sku.instockListId,
+              anomalyType: 'InstockError',
+            };
+            if (id) {
+              editRun({ data: instockParam });
+            } else {
+              anomalyRun({ data: instockParam });
+            }
+          }}>确定</Button></div>,
+        };
+      case ReceiptsEnums.stocktaking:
+        return {
+          title: '盘点异常',
+          skuItem: <SkuItem
+            number={sku.stockNumber}
+            skuResult={sku.skuResult}
+            className={style.sku}
+            extraWidth={id ? '84px' : '24px'}
+            otherData={ToolUtil.isObject(sku.brandResult).brandName}
+          />,
+          actionNumber: <div className={style.actual}>
+            <div className={style.number}>
+              <div className={style.actual} style={{ padding: 0 }}>
+                <span>实际库存</span>
+                <Stepper
+                  min={allNumber}
+                  style={{
+                    '--button-text-color': '#000',
+                  }}
+                  value={data.number}
+                  onChange={(number) => {
+                    setData({ ...data, number });
+                  }}
+                />
+              </div>
+            </div>
+            <div className={style.actual}>
+              <Icon type='icon-dibudaohang-saoma' onClick={() => {
+                props.dispatch({
+                  type: 'qrCode/wxCpScan',
+                  payload: {
+                    action: 'position',
+                  },
+                });
+              }} />
+            </div>
+          </div>,
+          button: <div style={{ height: 60 }}>
+            <BottomButton
+              leftDisabled={id}
+              leftText='暂存'
+              rightText='确定'
+              leftOnClick={() => {
+                anomalyTemporaryRun({ data: getStocktakingParams() });
+              }}
+              rightOnClick={() => {
+                if (id) {
+                  editRun({ data: getStocktakingParams() });
+                } else {
+                  anomalyRun({ data: getStocktakingParams() });
+                }
+              }} />
+          </div>,
+        };
+      default:
+        return {};
+    }
+  };
+
   return <div className={style.error} style={{ maxHeight }}>
 
     <div className={style.header}>
@@ -227,13 +422,14 @@ const Error = (
         over ?
           <div className={style.skuShow}>
             <img src={imgUrl || state.imgLogo} width={40} height={40} alt='' />
-            <span style={{ maxWidth: `calc(100vw - ${id ? 270 : 210}px)` }}>{SkuResultSkuJsons({ skuResult })}</span>
+            <span
+              style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>{SkuResultSkuJsons({ skuResult })}</span>
             <div className={style.number}>
               <ShopNumber min={allNumber} value={data.number} onChange={(number) => {
                 setData({ ...data, number });
               }} />
             </div>
-            {id && <LinkButton color='danger' onClick={() => {
+            {id && !noDelete && <LinkButton color='danger' onClick={() => {
               deleteRun({
                 data: {
                   anomalyId: data.anomalyId,
@@ -244,7 +440,7 @@ const Error = (
             </LinkButton>}
           </div>
           :
-          <div className={style.title}>入库异常</div>
+          <div className={style.title}>{errorTypeData().title}</div>
       }
       <span onClick={() => {
         onClose();
@@ -254,13 +450,8 @@ const Error = (
     {!over && <>
 
       <div className={id ? style.skuItem : ''}>
-        <SkuItem
-          skuResult={sku.skuResult}
-          className={style.sku}
-          extraWidth={id ? '84px' : '24px'}
-          otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandName || '-'}`}
-        />
-        {id && <LinkButton color='danger' onClick={() => {
+        {errorTypeData().skuItem}
+        {id && !noDelete && <LinkButton color='danger' onClick={() => {
           deleteRun({
             data: {
               anomalyId: data.anomalyId,
@@ -271,33 +462,8 @@ const Error = (
         </LinkButton>}
       </div>
 
+      {errorTypeData().actionNumber}
 
-      <div className={style.actual}>
-        <div className={style.number}>
-          入库数量 {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
-        </div>
-        <div className={style.actual}>
-          <span>实际到货</span>
-          <Stepper
-            min={allNumber}
-            style={{
-              '--button-text-color': '#000',
-            }}
-            value={data.number}
-            onChange={(number) => {
-              setData({ ...data, number });
-            }}
-          />
-          <Icon type='icon-dibudaohang-saoma' onClick={() => {
-            props.dispatch({
-              type: 'qrCode/wxCpScan',
-              payload: {
-                action: 'position',
-              },
-            });
-          }} />
-        </div>
-      </div>
     </>}
 
 
@@ -383,7 +549,7 @@ const Error = (
                 }}
               />
             </div>
-            <div>
+            <div className={style.imgs}>
               <UploadFile
                 value={item.media}
                 uploadId={`errorUpload${index}`}
@@ -411,53 +577,22 @@ const Error = (
       }
     </div>
 
-    {(CodeLoading || anomalyLoading || detailyLoading || editLoading || deleteLoading) && <MyLoading />}
+    {(
+      CodeLoading
+      ||
+      anomalyLoading
+      ||
+      detailyLoading
+      ||
+      editLoading
+      ||
+      deleteLoading
+      || anomalyTemporaryLoading
+    ) &&
+    <MyLoading />}
 
 
-    <div className={style.bottom}>
-      <Button color='primary' onClick={() => {
-
-        let required = false;
-        const detailParams = inkinds.map((item) => {
-          if (ToolUtil.isArray(item.noticeIds).length === 0) {
-            required = true;
-          }
-          return {
-            pidInKind: item.inkindId,
-            description: item.description,
-            reasonImg: item.mediaIds,
-            noticeIds: item.noticeIds,
-            number: item.number,
-          };
-        });
-
-        if (required) {
-          return Message.toast('请选择异常原因！');
-        }
-
-        const param = {
-          data: {
-            anomalyId: data.anomalyId,
-            formId: sku.instockOrderId,
-            instockListId: sku.instockListId,
-            sourceId: sku.instockListId,
-            skuId: sku.skuId,
-            brandId: sku.brandId,
-            customerId: sku.customerId,
-            needNumber: sku.number,
-            realNumber: data.number,
-            anomalyType: 'InstockError',
-            detailParams,
-          },
-        };
-
-        if (id) {
-          editRun(param);
-        } else {
-          anomalyRun(param);
-        }
-      }}>确定</Button>
-    </div>
+    {errorTypeData().button}
 
   </div>;
 };

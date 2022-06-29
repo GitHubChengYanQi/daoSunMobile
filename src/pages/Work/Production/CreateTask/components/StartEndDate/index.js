@@ -11,6 +11,7 @@ const StartEndDate = (
     endShow,
     className,
     min,
+    split,
   }) => {
 
   return <>
@@ -25,6 +26,7 @@ const StartEndDate = (
         onChange={(startDate) => {
           onChange([startDate]);
         }} />
+      {split}
       <MyDatePicker
         className={className}
         show={endShow}

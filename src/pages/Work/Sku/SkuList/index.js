@@ -1,7 +1,7 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { FilterOutlined } from '@ant-design/icons';
+import { CopyFilled, FilterOutlined } from '@ant-design/icons';
 import { Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
@@ -20,6 +20,12 @@ const SkuList = (
     numberTitle = '库存总数',
     noSort,
     stock,
+    onBatch = () => {
+    },
+    openBatch,
+    batch,
+    onChange = () => {
+    },
   },
   ref,
 ) => {
@@ -132,6 +138,11 @@ const SkuList = (
     >
       <div className={style.stockNumber}>{numberTitle}：<span>{stock ? stockNumber : skuNumber}</span></div>
       <div className={style.blank} />
+      <div className={style.checking} hidden={!openBatch} onClick={() => {
+        onBatch(!batch);
+      }}>
+        {batch ? '单件' : '批量'}添加 <CopyFilled />
+      </div>
       <div className={style.sort} hidden={noSort} onClick={() => {
         sortAction('stockNumber');
       }}>
@@ -196,7 +207,10 @@ const SkuList = (
         params={params}
         ref={listRef}
         api={skuList}
-        getData={setSkuData}
+        getData={(data) => {
+          setSkuData(data);
+          onChange(data);
+        }}
         data={skuData}
         response={(res) => {
           setSkuNumber(res.count || 0);
@@ -246,7 +260,7 @@ const SkuList = (
           setRefresh(true);
         }}
       >
-        {SkuContent ? <SkuContent data={skuData} {...skuContentProps} /> : <MyEmpty />}
+        {SkuContent ? <SkuContent data={skuData} batch={batch} {...skuContentProps} /> : <MyEmpty />}
       </MyList>
     </div>
 

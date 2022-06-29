@@ -13,6 +13,7 @@ import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
+import { ERPEnums } from '../ERPEnums';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
@@ -21,6 +22,8 @@ export const SkuContent = (
     data,
     openTask = () => {
     },
+    skus = [],
+    type,
   }) => {
 
   const positionResult = (data) => {
@@ -36,14 +39,27 @@ export const SkuContent = (
     return `${positionResult(data.supper)}-${data.name}`;
   };
 
+  const shopSkuIds = skus.map(item => item.skuId);
+
   return <MyAntList>
     {
       data.map((item, index) => {
+
+        const isShop = shopSkuIds.includes(item.skuId);
 
         const positions = item.positionsResult || [];
 
         const spuResult = item.spuResult || {};
         const unit = spuResult.unitResult || {};
+
+        let buttonHidden = false;
+        switch (type) {
+          case ERPEnums.stocktaking:
+            buttonHidden = isShop;
+            break;
+          default:
+            break;
+        }
 
         return <List.Item key={index} className={style.listItem}>
           <div className={style.skuItem}>
@@ -63,11 +79,11 @@ export const SkuContent = (
               />
             </div>
             <div>
-              <LinkButton onClick={() => {
+              {buttonHidden ? <span style={{fontSize:14}}>已添加</span> : <LinkButton onClick={() => {
                 openTask(item);
               }}>
                 <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
-              </LinkButton>
+              </LinkButton>}
             </div>
           </div>
         </List.Item>;
@@ -100,11 +116,11 @@ const StockDetail = (
   const [taskVisible, setTaskVisible] = useState();
 
   const tasks = [
-    { text: '出库任务', key: 'outStock' },
-    { text: '入库任务', key: 'inStock' },
-    { text: '盘点任务', key: 'stocktaking' },
-    { text: '调拨任务', key: 'allocation' },
-    { text: '养护任务', key: 'curing' },
+    { text: '出库任务', key: ERPEnums.outStock },
+    { text: '入库任务', key: ERPEnums.inStock },
+    { text: '盘点任务', key: ERPEnums.stocktaking },
+    { text: '调拨任务', key: ERPEnums.allocation },
+    { text: '养护任务', key: ERPEnums.curing },
   ];
 
   const { loading: getDefaultShop } = useRequest({
@@ -112,8 +128,8 @@ const StockDetail = (
     data: { types: tasks.map(item => item.key) },
   }, {
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length > 0){
-        setTask(res[0])
+      if (ToolUtil.isArray(res).length > 0) {
+        setTask(res[0]);
       }
     },
   });
@@ -144,6 +160,8 @@ const StockDetail = (
       defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
       SkuContent={SkuContent}
       skuContentProps={{
+        type:stockDetail.task,
+        skus: stockDetail.skus,
         openTask: (item) => {
           if (stockDetail.task) {
             addSku.current.openSkuAdd(item);
@@ -180,7 +198,7 @@ const StockDetail = (
       }}
       onAction={(action) => {
         switch (action.key) {
-          case 'inStock':
+          case ERPEnums.inStock:
             setTaskVisible(action.key);
             break;
           default:
@@ -194,17 +212,17 @@ const StockDetail = (
     />
 
     <CreateInStock
-      open={taskVisible === 'inStock'}
+      open={taskVisible === ERPEnums.inStock}
       onClose={() => setTaskVisible(false)}
       submit={() => {
-        setTask('inStock', false);
+        setTask(ERPEnums.inStock, false);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
         setTaskVisible(false);
         return true;
       }}
       directInStock={() => {
-        setTask('directInStock', true);
+        setTask(ERPEnums.directInStock, true);
         addSku.current.openSkuAdd(skuItem);
         setSkuItem(null);
         setTaskVisible(false);

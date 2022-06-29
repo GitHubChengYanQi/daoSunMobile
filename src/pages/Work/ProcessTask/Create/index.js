@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { ActionSheet, Card, Grid } from 'antd-mobile';
+import { Card, Grid } from 'antd-mobile';
 import style from '../../../Home/index.less';
 import Menus, { borderStyle } from '../../../Home/component/Menus';
-import { history, useModel } from 'umi';
-import createStyle from './index.less';
+import { useModel } from 'umi';
 import CreateInStock from './components/CreateInStock';
-import MenusItem from '../../../Home/component/MenusItem';
+import Inventory from './components/Inventory';
+import CuringAsk from './components/CuringAsk';
 
 const Create = () => {
 
@@ -31,7 +31,7 @@ const Create = () => {
   });
 
 
-  return <div style={{ padding:16 }}>
+  return <div style={{ padding: 16 }}>
     <Card
       className={style.dataCard}
       style={{ marginBottom: 0 }}
@@ -51,9 +51,8 @@ const Create = () => {
                 onClick={(code) => {
                   switch (code) {
                     case 'inventoryAsk':
-                      setVisible(code);
-                      return true;
                     case 'instockAsk':
+                    case 'curingAsk':
                       setVisible(code);
                       return true;
                     default:
@@ -66,28 +65,9 @@ const Create = () => {
       </Grid>
     </Card>
 
-
-    <ActionSheet
-      className={createStyle.action}
-      cancelText='取消'
-      visible={visible === 'inventoryAsk'}
-      actions={[{ text: '按物料盘点', key: 'sku' }, { text: '按条件盘点', key: 'condition' }]}
-      onClose={() => setVisible(false)}
-      onAction={(action) => {
-        switch (action.key) {
-          case 'sku':
-            history.push('/Work/Stocktaking/SkuStocktaking');
-            break;
-          case 'condition':
-            history.push('/Work/Stocktaking/ConditionStocktaking');
-            break;
-          default:
-            break;
-        }
-      }}
-    />
-
     <CreateInStock open={visible === 'instockAsk'} onClose={() => setVisible(false)} />
+    <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
+    <CuringAsk open={visible === 'curingAsk'} onClose={() => setVisible(false)} />
 
   </div>;
 };

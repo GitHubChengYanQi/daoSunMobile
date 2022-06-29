@@ -10,12 +10,14 @@ import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import topStyle from '../../../global.less';
 import { useBoolean } from 'ahooks';
 import OutStockTask from './components/OutStockTask';
+import StocktakingTask from './components/StocktakingTask';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
 const Task = (
   {
     activeKey,
+    keyChange=()=>{},
     top,
   },
 ) => {
@@ -31,7 +33,7 @@ const Task = (
     { title: '出库任务', key: ReceiptsEnums.outstockOrder },
     { title: '入库任务', key: ReceiptsEnums.instockOrder },
     { title: '养护任务', key: 'curing' },
-    { title: '盘点任务', key: 'stocktaking' },
+    { title: '盘点任务', key: ReceiptsEnums.stocktaking },
   ];
 
   const content = () => {
@@ -44,8 +46,8 @@ const Task = (
         return <InStockTask data={data} setData={setData} />;
       case 'curing':
         return <></>;
-      case 'stocktaking':
-        return <></>;
+      case ReceiptsEnums.stocktaking:
+        return <StocktakingTask data={data} />
       default:
         return <></>;
     }
@@ -60,6 +62,7 @@ const Task = (
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
         setKey(key);
+        keyChange(key);
         ref.current.submit({ type: key });
       }} className={style.tab}>
         {

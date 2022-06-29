@@ -11,6 +11,7 @@ import ShopNumber from '../ShopNumber';
 import { shopCartAdd } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
+import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 
 const AddSku = (
   {
@@ -48,7 +49,7 @@ const AddSku = (
   } = useRequest(supplierBySku, {
     manual: true,
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length === 1 && ['inStock', 'directInStock'].includes(type)) {
+      if (ToolUtil.isArray(res).length === 1 && [ERPEnums.inStock, ERPEnums.directInStock].includes(type)) {
         setData({
           ...data,
           customerId: res[0].customerId,
@@ -72,11 +73,33 @@ const AddSku = (
   };
 
   const openSkuAdd = (sku = {}) => {
-    ['inStock', 'directInStock'].includes(type) && getCustomer({ data: { skuId: sku.skuId } });
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
     setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: judge ? 0 : 1 });
-    setVisible(true);
+    switch (type) {
+      case ERPEnums.allocation:
+        break;
+      case ERPEnums.curing:
+        break;
+      case ERPEnums.stocktaking:
+        addShop({
+          data: {
+            type,
+            skuId: sku.skuId,
+          },
+        });
+        break;
+      case ERPEnums.outStock:
+        setVisible(true);
+        break;
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
+        getCustomer({ data: { skuId: sku.skuId } });
+        setVisible(true);
+        break;
+      default:
+        break;
+    }
   };
 
   useImperativeHandle(ref, () => ({
@@ -87,29 +110,29 @@ const AddSku = (
     let disabledText = '添加';
     let disabled = false;
     switch (type) {
-      case 'allocation':
+      case ERPEnums.allocation:
         return {
           title: '调拨',
           disabledText,
         };
-      case 'curing':
+      case ERPEnums.curing:
         return {
           title: '养护',
           disabledText,
         };
-      case 'stocktaking':
+      case ERPEnums.stocktaking:
         return {
           title: '盘点',
           disabledText,
         };
-      case 'outStock':
+      case ERPEnums.outStock:
         return {
           title: '出库',
           disabledText,
           customerDisabled: true,
         };
-      case 'inStock':
-      case 'directInStock':
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
         if (ToolUtil.isArray(customerData).length === 0) {
           disabledText = '无供应商';
           disabled = true;
@@ -346,7 +369,6 @@ const AddSku = (
       }}
     />
   </>;
-  ;
 };
 
 export default React.forwardRef(AddSku);

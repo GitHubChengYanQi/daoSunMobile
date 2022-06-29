@@ -5,16 +5,17 @@ import { Upload } from 'antd';
 import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
-import LinkButton from '../../../../../../components/LinkButton';
 
 const InstockOrder = (
   {
     data = {},
-    currentNode = [],
     refresh = () => {
     },
     loading,
     permissions,
+    getAction = () => {
+      return {};
+    },
     type,
   }) => {
 
@@ -39,23 +40,6 @@ const InstockOrder = (
     default:
       break;
   }
-
-  const actions = [];
-  currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push({ action: item.action, id: item.documentsActionId });
-      });
-    }
-    return null;
-  });
-
-  const getAction = (action) => {
-    const actionData = actions.filter(item => {
-      return item.action === action;
-    });
-    return actionData[0] || {};
-  };
 
   const action = () => {
     switch (type) {

@@ -9,6 +9,13 @@
     font-size: 14px;
     align-items: center;
 
+    .announcements {
+      max-width: 80vw;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
     .icon {
       margin-right: 8px;
 
@@ -74,6 +81,46 @@
     }
   }
 
+  .content {
+    display: flex;
+    align-items: center;
+
+    .show {
+      padding: 16px;
+      flex-grow: 1;
+      border: solid 1px #F5F5F5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .showNumber {
+        display: flex;
+        flex-direction: column;
+        padding-left: 16px;
+
+        .number {
+          color: var(--adm-color-primary);
+        }
+      }
+
+      svg {
+        font-size: 32px;
+        color: var(--body--background--color);
+      }
+    }
+  }
+
+  .methodAndMode {
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #F5F5F5;;
+
+    .method, .mode {
+      flex-grow: 1;
+      text-align: center;
+      padding: 8px;
+    }
+  }
 
   .skus {
     display: flex;

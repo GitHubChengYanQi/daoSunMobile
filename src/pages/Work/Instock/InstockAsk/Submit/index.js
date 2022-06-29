@@ -52,7 +52,7 @@ const Submit = () => {
     case 'outItem':
       return <MyEmpty />;
     default:
-      return <InstockSkus skus={skus} createType={query.createType} judge={judge} />;
+      return <InstockSkus state={state} skus={skus} createType={query.createType} judge={judge} />;
   }
 };
 

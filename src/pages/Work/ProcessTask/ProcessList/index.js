@@ -44,8 +44,12 @@ const ProcessList = (
           </div>
         </div>;
       case ReceiptsEnums.instockError:
+      case ReceiptsEnums.stocktaking:
         return <div className={style.content}>
-          <div>单据编号：{receipts.coding}</div>
+          <div className={style.orderData}>
+            <span className={style.coding}>单据编号：{receipts.coding}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+          </div>
         </div>;
       case ReceiptsEnums.outstockOrder:
         const detailResults = receipts.detailResults || [];

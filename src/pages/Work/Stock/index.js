@@ -8,6 +8,8 @@ import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 import Dynamic from './Dynamic';
 import Task from './Task';
+import { Button } from 'antd-mobile';
+import { ReceiptsEnums } from '../../Receipts';
 
 const Stock = (props) => {
 
@@ -16,6 +18,8 @@ const Stock = (props) => {
   const ids = props.location.query;
 
   const [stockDetail, setStockDetail] = useState({});
+
+  const [taskKey, setTaskKey] = useState();
 
   const content = () => {
     switch (key) {
@@ -31,7 +35,7 @@ const Stock = (props) => {
           stockDetail={stockDetail}
         />;
       case 'Message':
-        return <Task />
+        return <Task keyChange={setTaskKey} />;
       case 'dynamic':
         return <Dynamic />;
       default:
@@ -53,7 +57,7 @@ const Stock = (props) => {
           setSkus={(skus) => {
             setStockDetail({ ...stockDetail, skus });
           }}
-          taskTypeChange={(task)=>{
+          taskTypeChange={(task) => {
             setStockDetail({ ...stockDetail, task });
           }}
           type={stockDetail.task}
@@ -61,6 +65,16 @@ const Stock = (props) => {
             setStockDetail({ ...stockDetail, task: null, skus: [] });
           }}
         />;
+      case 'Message':
+        switch (taskKey) {
+          case ReceiptsEnums.stocktaking:
+            return <div className={style.stocktakingButtom}>
+              <Button>即时盘点</Button>
+              <Button color='primary'>开始盘点</Button>
+            </div>;
+          default:
+            return <></>;
+        }
       default:
         return <></>;
     }

@@ -24,11 +24,14 @@ body {
 
 :root {
   --adm-color-primary: #2680EB;
+  --adm-font-size-main: 14px;
 }
 
 .adm-button {
   font-size: 14px;
   padding: 4px 12px;
+  line-height: normal;
+  --border-radius: 2px;
 }
 
 
@@ -41,7 +44,7 @@ body {
 }
 
 .adm-stepper {
-  --height:24px
+  --height: 24px
 }
 
 .adm-action-sheet-button-item {

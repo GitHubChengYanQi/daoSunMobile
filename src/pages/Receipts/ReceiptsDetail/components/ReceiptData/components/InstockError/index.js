@@ -8,7 +8,9 @@ import { ToolUtil } from '../../../../../../components/ToolUtil';
 const InstockError = (
   {
     data = {},
-    currentNode = [],
+    getAction = () => {
+      return {};
+    },
     permissions,
     refresh = () => {
     },
@@ -16,16 +18,6 @@ const InstockError = (
 ) => {
 
   const [visible, setVisible] = useState();
-
-  const actions = [];
-  currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push(item.action);
-      });
-    }
-    return null;
-  });
 
   const anomalyResults = data.anomalyResults || [];
   const instockOrder = data.instockOrder || {};
@@ -47,7 +39,7 @@ const InstockError = (
       {
         anomalyResults.map((item, index) => {
           return <div key={index} className={style.skuItem} onClick={() => {
-            if (actions.includes('verify') && permissions) {
+            if (getAction('verify').id && permissions) {
               setVisible(item.anomalyId);
             }
           }}>
@@ -70,10 +62,15 @@ const InstockError = (
     </div>
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
-      <SkuError height='80vh' anomalyOrderId={data.orderId} anomalyId={visible} onClose={() => setVisible(false)} onSuccess={() => {
-        setVisible(false);
-        refresh();
-      }} />
+      <SkuError
+        height='80vh'
+        anomalyOrderId={data.orderId}
+        anomalyId={visible}
+        onClose={() => setVisible(false)}
+        onSuccess={() => {
+          setVisible(false);
+          refresh();
+        }} />
     </Popup>
   </>;
 };

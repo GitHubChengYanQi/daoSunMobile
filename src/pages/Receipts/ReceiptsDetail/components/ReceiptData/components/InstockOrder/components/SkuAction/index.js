@@ -11,6 +11,7 @@ import { shopCartAdd } from '../../../../../../../../Work/Instock/Url';
 import Error from '../Error';
 import InSkuItem from './components/InSkuItem';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
+import { ReceiptsEnums } from '../../../../../../../index';
 
 
 const SkuAction = (
@@ -128,6 +129,7 @@ const SkuAction = (
       destroyOnClose
     >
       <Error
+        type={ReceiptsEnums.instockOrder}
         skuItem={visible}
         onClose={() => {
           setVisible(false);

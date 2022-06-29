@@ -59,8 +59,12 @@ const SkuError = (
       const details = ToolUtil.isArray(res.details);
 
       let errorNumber = 0;
+      let termination = 0;
       details.map(item => {
         errorNumber += item.number;
+        if (item.stauts === -1) {
+          termination += item.number;
+        }
         return null;
       });
 
@@ -88,8 +92,8 @@ const SkuError = (
         return null;
       });
 
-      const instockNumber = res.instockNumber || (checkNum - errorNumber);
-      const allowNumber = checkNum - errorNumber;
+      const instockNumber = res.instockNumber || (checkNum - termination);
+      const allowNumber = checkNum - termination;
 
       setSku({
         confirm,
@@ -104,6 +108,7 @@ const SkuError = (
         skuResult: res.skuSimpleResult,
         customerResult: res.customer,
         user: res.user,
+        type: res.type,
       });
 
       setErrorItems(details.map((item) => {
@@ -187,6 +192,78 @@ const SkuError = (
     });
   };
 
+  const errorTypeData = (item = {}, index) => {
+    switch (sku.type) {
+      case 'InstockError':
+        return {
+          showAction: <>
+            {item.status === -1 && <span className={style.prohibit}>· 禁止入库</span>}
+            {item.status === 1 && <span className={style.allow}>· 允许入库</span>}
+          </>,
+          actions: <>
+            <Button color='danger' fill='outline' onClick={() => {
+              itemChange(index, { status: -1 });
+              action(item, -1);
+            }}>终止入库</Button>
+            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+              action(item, 1);
+            }}>允许入库</Button>
+          </>,
+          bottom: <>
+            <div className={style.action}>
+              <div>异常总数：{sku.errorNumber} </div>
+              <div
+                className={style.instockNumber}>
+                入库数量：
+                <ShopNumber
+                  min={0}
+                  max={sku.allowNumber}
+                  value={sku.instockNumber}
+                  onChange={(number) => {
+                    setSku({ ...sku, instockNumber: number });
+                  }} />
+              </div>
+            </div>
+
+            <Button disabled={!handle} color='primary' fill='outline' onClick={() => {
+              const param = {
+                data: {
+                  anomalyId,
+                  instockNumber: sku.instockNumber,
+                },
+              };
+              saveRun(param).then(() => {
+                onSuccess();
+              });
+            }}>确定</Button>
+          </>,
+        };
+      case 'StocktakingError':
+        return {
+          showAction: <>
+            {item.status === -1 && <span className={style.allow}>· 维修</span>}
+            {item.status === 1 && <span className={style.prohibit}>· 忽略异常</span>}
+            {item.status === 2 && <span className={style.allow}>· 报损</span>}
+          </>,
+          actions: <>
+            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+              action(item, 1);
+            }}>维修</Button>
+            <Button color='danger' fill='outline' onClick={() => {
+              itemChange(index, { status: -1 });
+              action(item, -1);
+            }}>忽略异常</Button>
+            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+              action(item, 2);
+            }}>报损</Button>
+          </>,
+          bottom: <Button color='primary'>确定</Button>
+        };
+      default:
+        return {};
+    }
+  };
+
   return <div className={style.error} style={{ height }}>
 
     <div className={style.header}>
@@ -259,11 +336,7 @@ const SkuError = (
                 <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
                 <span className={style.inkindNumber}>× {item.number}</span>
                 <div hidden={item.status === 0}>
-                  {item.status === -1 ?
-                    <span className={style.prohibit}>· 禁止入库</span>
-                    :
-                    <span className={style.allow}>· 允许入库</span>
-                  }
+                  {errorTypeData(item, index).showAction}
                 </div>
               </div>
               {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
@@ -311,13 +384,7 @@ const SkuError = (
             </div>
 
             <div hidden={handle} className={style.actions}>
-              <Button color='danger' fill='outline' onClick={() => {
-                itemChange(index, { status: -1 });
-                action(item, -1);
-              }}>终止入库</Button>
-              <Button className={style.ok} color='primary' fill='outline' onClick={() => {
-                action(item, 1);
-              }}>允许入库</Button>
+              {errorTypeData(item, index).actions}
             </div>
           </div>;
         })
@@ -335,31 +402,7 @@ const SkuError = (
     }} />
 
     <div className={style.bottomAction}>
-      <div className={style.action}>
-        <span>异常总数：{sku.errorNumber} </span>
-        <span
-          className={style.instockNumber}>入库数量：
-          <ShopNumber
-            min={0}
-            max={sku.allowNumber}
-            value={sku.instockNumber}
-            onChange={(number) => {
-              setSku({ ...sku, instockNumber: number });
-            }} /></span>
-      </div>
-
-      <Button disabled={!handle} color='primary' fill='outline' onClick={() => {
-        const param = {
-          data: {
-            anomalyId,
-            instockNumber: sku.instockNumber,
-          },
-        };
-        saveRun(param).then(() => {
-          onSuccess();
-        });
-      }}>确定</Button>
-
+      {errorTypeData().bottom}
     </div>
 
     {(saveLoading || detailLoading || editLoading) && <MyLoading />}

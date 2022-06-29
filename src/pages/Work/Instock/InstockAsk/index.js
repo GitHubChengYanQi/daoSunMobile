@@ -9,12 +9,12 @@ const InStockAsk = (
     judge,
   }) => {
 
-  return <div style={{height:'100%'}}>
+  return <div style={{ height: '100%' }}>
     <SkuInstock
       judge={judge}
       title={title}
-      numberTitle={numberTitle}
-      type={type} />
+      type={type}
+    />
   </div>;
 
 };

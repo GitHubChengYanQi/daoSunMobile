@@ -23,7 +23,7 @@ export const menus = [
   { code: 'outstock', icon: 'icon-chukuguanli2', url: '/Work/Production/PickLists?type=all' },
   { code: 'freeInstock', icon: 'icon-gengduo', url: '/Scan/InStock/FreeInstock' },
   { code: 'freeOutStock', icon: 'icon-gengduo', url: '/Scan/OutStock/FreeOutstock' },
-  { code: 'inventory', icon: 'icon-pandianguanli', url: '/Scan/Inventory' },
+  { code: 'inventory', icon: 'icon-pandianguanli', url: '/Work/Inventory/InventoryList' },
   { code: 'productionPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
   { code: 'productionTask', icon: 'icon-gengduo', url: '/Work/ProductionTask' },
   { code: 'pickLists', icon: 'icon-gengduo', url: '/Work/Production/PickLists' },
@@ -64,6 +64,7 @@ export const menus = [
   { code: 'sku', icon: 'icon-jichuwuliao' },
   { code: 'createUser', icon: 'icon-kehuliebiao2' },
   { code: 'instockAsk', icon: 'icon-gengduo', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}` },
+  { code: 'outstockAsk', icon: 'icon-gengduo', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.outstockOrder}` },
   { code: 'outstockAsk', icon: 'icon-gengduo', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.outstockOrder}` },
   { code: 'error', icon: 'icon-gengduo', url: '/Work/Error' },
 ];

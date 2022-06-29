@@ -92,7 +92,7 @@ const OutStockTask = (
       </Divider>}
       <div className={style.data}>
         <div className={style.icon}><ExclamationCircleOutline /></div>
-        {ToolUtil.isArray(receipts.announcementsResults).map(item => item.content).join('、')}
+        <div className={style.announcements}>{ToolUtil.isArray(receipts.announcementsResults).map(item => item.content).join('、')}</div>
       </div>
     </div>;
   });

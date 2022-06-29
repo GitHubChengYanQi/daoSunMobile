@@ -110,16 +110,22 @@
   border-color: #F5F5F5;
 }
 
-.user {
+.dataItem {
   display: flex;
   align-items: center;
 
   .title {
     flex-grow: 1;
   }
+
+  .method, .mode {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
 }
 
-.careful, .note, .file, .user {
+.careful, .note, .file, .dataItem {
   background-color: #fff;
   padding: 12px;
   color: #333333;
@@ -140,6 +146,11 @@
     span {
       color: #EB0F0F;
     }
+  }
+
+  .nearMaintenance {
+    display: flex;
+    align-items: center;
   }
 
   .files {

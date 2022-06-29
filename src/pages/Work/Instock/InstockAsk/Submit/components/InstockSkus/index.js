@@ -1,13 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from '../PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import SkuItem from '../../../../../Sku/SkuItem';
-import { Divider } from 'antd-mobile';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
-import { useBoolean } from 'ahooks';
-import MyEmpty from '../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../util/Request';
 import { instockOrderAdd, productionPickListAdd } from '../../../../Url';
@@ -16,18 +11,27 @@ import { Message } from '../../../../../../components/Message';
 import MyTextArea from '../../../../../../components/MyTextArea';
 import Careful from './components/Careful';
 import MyNavBar from '../../../../../../components/MyNavBar';
-import LinkButton from '../../../../../../components/LinkButton';
-import CheckUser from '../../../../../../components/CheckUser';
-import { RemoveButton } from '../../../../../../components/MyButton';
-import ShopNumber from '../../../coponents/SkuInstock/components/ShopNumber';
+import Stocktaking from './components/Stocktaking';
+import Skus from './components/Skus';
+import User from './components/User';
+import Condition from '../../../../../ProcessTask/Create/components/Inventory/compoennts/Condition';
+import { ERPEnums } from '../../../../../Stock/ERPEnums';
+import Curing from './components/Curing';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
+export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
+export const inventorySelectCondition = { url: '/inventory/selectCondition', method: 'POST' };
 
-const InstockSkus = ({ skus = [], createType, judge }) => {
+const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
 
   const [data, setData] = useState([]);
 
-  const [hiddenBottom,setHiddenBottom] = useState(false);
+  const [hiddenBottom, setHiddenBottom] = useState(false);
+
+  const [params, setParams] = useState({});
+  console.log(params);
+
+  const history = useHistory();
 
   const normalSku = [];
 
@@ -41,13 +45,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     return { ...item, key: index };
   });
 
-  const [params, setParams] = useState({});
-
-  const history = useHistory();
-
-  const userRef = useRef();
-
-  const { loading, run: inStock } = useRequest(instockOrderAdd, {
+  const { loading: instockLoading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: () => {
       Message.toast('创建入库申请成功!');
@@ -55,6 +53,29 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     },
     onError: () => {
       Message.toast('创建入库申请失败!');
+    },
+  });
+
+  const { loading: inventoryLoading, run: inventory } = useRequest(inventoryAdd, {
+    manual: true,
+    onSuccess: () => {
+      Message.toast('创建盘点单成功!');
+      history.goBack();
+    },
+    onError: () => {
+      Message.toast('创建盘点单失败!');
+    },
+  });
+
+
+  const { loading: inventoryConditionLoading, run: inventoryCondition } = useRequest(inventorySelectCondition, {
+    manual: true,
+    onSuccess: () => {
+      Message.toast('创建盘点单成功!');
+      history.goBack();
+    },
+    onError: () => {
+      Message.toast('创建盘点单失败!');
     },
   });
 
@@ -82,22 +103,34 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
 
   useEffect(() => {
-    dataChange(skus);
+    switch (createType) {
+      case ERPEnums.stocktaking:
+        setParams({ method: 'OpenDisc', mode: 'dynamic', ...ToolUtil.isObject(state.data) });
+        if (!state.condition) {
+          dataChange(skus);
+        }
+        break;
+      case ERPEnums.curing:
+        setParams({ ...ToolUtil.isObject(state.data) });
+        break;
+      default:
+        dataChange(skus);
+        break;
+    }
   }, []);
-
-
-  const [allSku, { toggle }] = useBoolean();
 
   const createTypeData = (item = {}) => {
     switch (createType) {
-      case 'outStock':
+      case ERPEnums.outStock:
         return {
           title: '出库申请',
           type: '出库',
           otherData: item.brandName,
+          careful: '注意事项',
+          disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
         };
-      case 'inStock':
-      case 'directInStock':
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
         return {
           title: '入库任务明细',
           type: '入库',
@@ -105,6 +138,59 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
           }).join('、'),
+          careful: '注意事项',
+          buttonHidden: judge,
+          disabled: ToolUtil.isArray(params.noticeIds).length === 0 || (judge ? false : normalSku.length === 0),
+        };
+      case ERPEnums.stocktaking:
+        const stocktakingDisabled = () => {
+          if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId && ToolUtil.isArray(params.noticeIds).length > 0)) {
+            return true;
+          }
+
+          if (!state.condition) {
+            return false;
+          }
+
+          const conditions = params.conditions || [];
+          if (conditions.length === 0) {
+            return true;
+          }
+
+          const newConditions = conditions.filter(item => item.data && item.data.key);
+          return newConditions.length !== conditions.length;
+        };
+        return {
+          title: '盘点申请明细',
+          type: '盘点',
+          careful: '盘点缘由',
+          buttonHidden: true,
+          disabled: stocktakingDisabled(),
+        };
+      case ERPEnums.curing:
+        const maintenanceDisabled = () => {
+          if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId && ToolUtil.isArray(params.noticeIds).length > 0)) {
+            return true;
+          }
+
+          if (!state.condition) {
+            return false;
+          }
+
+          const conditions = params.conditions || [];
+          if (conditions.length === 0) {
+            return true;
+          }
+
+          const newConditions = conditions.filter(item => item.data && item.data.key);
+          return newConditions.length !== conditions.length;
+        };
+        return {
+          title: '养护申请明细',
+          type: '养护',
+          careful: '养护缘由',
+          buttonHidden: true,
+          disabled: maintenanceDisabled(),
         };
       default:
         return {};
@@ -113,7 +199,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
 
   const inStockRun = (directInStock) => {
     const listParams = [];
-    normalSku.map(item => {
+    (directInStock ? skuList : normalSku).map(item => {
       if (judge) {
         const positions = item.positions || [];
         positions.map(positionItem => {
@@ -142,93 +228,131 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
     });
   };
 
+  const stocktaskingAsk = () => {
+    let data = {
+      ...params,
+      participants: [params.participantsId],
+      notice: params.noticeIds,
+      enclosure: params.mediaIds,
+      userIds: ToolUtil.isArray(params.userIds).toString(),
+    };
+    if (state.condition) {
+      ToolUtil.isArray(params.conditions).map(item => {
+        const dataValue = item.data || {};
+        switch (item.value) {
+          case 'sys':
+            data = {
+              ...data,
+              allSku: dataValue.key === 'all',
+              AllBom: dataValue.key === 'bom',
+            };
+            break;
+          case 'material':
+            break;
+          case 'brand':
+            data = {
+              ...data,
+              brandId: dataValue.key,
+            };
+            break;
+          case 'position':
+            data = {
+              ...data,
+              positionId: dataValue.key,
+            };
+            break;
+          default:
+            return [];
+        }
+        return null;
+      });
+
+      inventoryCondition({
+        data,
+      });
+    } else {
+      inventory({
+        data: {
+          ...data,
+          detailParams: skuList.map(item => {
+            return {
+              skuId: item.skuId,
+            };
+          }),
+        },
+      });
+    }
+  };
+
+  const content = () => {
+    switch (createType) {
+      case ERPEnums.curing:
+        return <>
+          <Curing value={params} onChange={setParams} />
+          <Condition noTime type={createType} paddingBottom={8} value={params} onChange={(value) => {
+            setParams(value);
+          }} />
+        </>;
+      case ERPEnums.stocktaking:
+        return <>
+          <Stocktaking value={params} onChange={setParams} />
+          {state.condition ?
+            <Condition noTime type={createType} paddingBottom={8} value={params} onChange={(value) => {
+              setParams(value);
+            }} />
+            :
+            <Skus
+              skus={skus}
+              createTypeData={createTypeData}
+              setHiddenBottom={setHiddenBottom}
+              judge={judge}
+              skuList={skuList}
+              countNumber={countNumber}
+              dataChange={dataChange}
+            />}
+          <User title='参与人' id={params.participantsId} name={params.participantsName} onChange={(id, name) => {
+            setParams({ ...params, participantsId: id, participantsName: name });
+          }} />
+        </>;
+      case ERPEnums.outStock:
+        return <>
+          <Skus
+            skus={skus}
+            createTypeData={createTypeData}
+            setHiddenBottom={setHiddenBottom}
+            judge={judge}
+            skuList={skuList}
+            countNumber={countNumber}
+            dataChange={dataChange}
+          />
+          <User title='领料负责人' id={params.userId} name={params.userName} onChange={(id, name) => {
+            setParams({ ...params, userId: id, userName: name });
+          }} />
+
+        </>;
+      default:
+        return <>
+          <Skus
+            skus={skus}
+            createTypeData={createTypeData}
+            setHiddenBottom={setHiddenBottom}
+            judge={judge}
+            skuList={skuList}
+            countNumber={countNumber}
+            dataChange={dataChange}
+          />
+        </>;
+    }
+  };
+
   return <div style={{ marginBottom: 60 }}>
     <MyNavBar title={createTypeData().title} />
-    <div className={style.skus}>
-      <div className={style.skuHead}>
-        <div className={style.headTitle}>
-          物料明细
-        </div>
-        <div className={style.extra}>
-          合计：<span>{skus.length}</span>类<span>{countNumber}</span>件
-        </div>
-      </div>
-      {skuList.length === 0 && <MyEmpty description={`暂无${createTypeData().type}物料`} />}
-      {
-        skuList.map((item, index) => {
-          if (!allSku && index >= 3) {
-            return null;
-          }
-          return <div
-            key={index}
-            className={ToolUtil.classNames(
-              style.skuItem,
-              (index !== (allSku ? skus.length - 1 : 2)) && style.skuBorderBottom,
-            )}
-          >
-            <div className={style.item}>
-              <SkuItem
-                imgSize={60}
-                skuResult={item.skuResult}
-                extraWidth={judge ? '50px' : '130px'}
-                otherData={createTypeData(item).otherData}
-                more={createTypeData(item).more}
-              />
-            </div>
-            <div className={style.action}>
-              <RemoveButton onClick={() => {
-                dataChange(skuList.filter(item => item.key !== index));
-              }} />
-              <div hidden={judge}>
-                <ShopNumber
-                  onBlur={()=>{
-                    setHiddenBottom(false);
-                  }}
-                  onFocus={()=>{
-                    setHiddenBottom(true);
-                  }}
-                  id={`stepper${index}`}
-                  value={item.number}
-                  onChange={async (number) => {
-                    const newData = skuList.map((dataItem) => {
-                      if (dataItem.key === index) {
-                        return { ...dataItem, number };
-                      }
-                      return dataItem;
-                    });
-                    dataChange(newData);
-                  }}
-                />
-              </div>
-            </div>
-          </div>;
-        })
-      }
-      {skuList.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
-    </div>
-
-    <div hidden={createType !== 'outStock'} className={style.user}>
-      <div className={style.title}>领料负责人<span>*</span></div>
-      <LinkButton onClick={() => {
-        userRef.current.open();
-      }}>{params.userId ? params.userName : '添加负责人'}</LinkButton>
-    </div>
+    {content()}
 
     <div className={style.careful}>
-      <div className={style.title}>注意事项 <span>*</span></div>
+      <div className={style.title}>{createTypeData().careful} <span>*</span></div>
       <Careful
-        type='inStock'
+        type={createType}
         value={params.noticeIds}
         onChange={(noticeIds) => {
           setParams({ ...params, noticeIds });
@@ -264,15 +388,10 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
         history.goBack();
       }}
       rightText='提交'
-      rightDisabled={judge ? false : normalSku.length === 0}
+      rightDisabled={createTypeData().disabled}
       rightOnClick={() => {
         switch (createType) {
-          case 'outStock':
-            if (ToolUtil.isArray(params.noticeIds).length === 0) {
-              return Message.toast('请选择注意事项！');
-            } else if (!params.userId) {
-              return Message.toast('请添加领料负责人！');
-            }
+          case ERPEnums.outStock:
             const pickListsDetailParams = [];
             normalSku.map(item => {
               pickListsDetailParams.push(item);
@@ -290,15 +409,15 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
               },
             });
             break;
-          case 'inStock':
-          case 'directInStock':
-            if (ToolUtil.isArray(params.noticeIds).length === 0) {
-              return Message.toast('请选择注意事项！');
-            }
+          case ERPEnums.inStock:
+          case ERPEnums.directInStock:
             if (judge) {
               return inStockRun(true);
             }
             inStockRun();
+            break;
+          case ERPEnums.stocktaking:
+            stocktaskingAsk();
             break;
           default:
             break;
@@ -306,11 +425,7 @@ const InstockSkus = ({ skus = [], createType, judge }) => {
       }}
     />}
 
-    <CheckUser ref={userRef} value={params.userId} onChange={(id, name) => {
-      setParams({ ...params, userId: id, userName: name });
-    }} />
-
-    {(loading || outLoading) && <MyLoading />}
+    {(instockLoading || outLoading || inventoryLoading || inventoryConditionLoading) && <MyLoading />}
 
   </div>;
 };

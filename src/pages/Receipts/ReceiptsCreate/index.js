@@ -6,6 +6,7 @@ import MyEmpty from '../../components/MyEmpty';
 import { ReceiptsEnums } from '../index';
 import InStockAsk from '../../Work/Instock/InstockAsk';
 import OutStockAsk from '../../Work/OutStock/OutStockAsk';
+import InventoryAsk from '../../Work/Inventory/InventoryAsk';
 
 
 const ReceiptsCreate = () => {
@@ -27,6 +28,8 @@ const ReceiptsCreate = () => {
       return <InStockAsk type={judge ? 'directInStock' : 'inStock'} judge={judge} />;
     case ReceiptsEnums.outstockOrder:
       return <OutStockAsk />;
+    case ReceiptsEnums.stocktaking:
+      return <InventoryAsk />;
     case 'purchaseAsk':
       return <AskAdd />;
     case ReceiptsEnums.instockError:

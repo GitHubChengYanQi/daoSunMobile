@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { FloatingBubble, Popup } from 'antd-mobile';
 import style from './index.less';
 import Icon from '../../../../../../../../components/Icon';
-import { ExclamationCircleFill } from 'antd-mobile-icons';
 import WaitInstock from './components/WaitInstock';
 import OneInStock from './components/OneInStock';
 import InstockError from './components/InstockError';
 import Error from '../Error';
+import { WarningOutlined } from '@ant-design/icons';
+import { ReceiptsEnums } from '../../../../../../../index';
 
 const InstockShop = (
   {
@@ -47,13 +48,15 @@ const InstockShop = (
 
   const error = () => {
     setContent(<InstockError
-      instockOrderId={id}
+      type={ReceiptsEnums.instockOrder}
+      formId={id}
       refresh={refresh}
       onClose={() => setContent(null)}
       onEdit={(id,remainingQuantity) => {
 
         // 修改入库异常
         setContent(<Error
+          type={ReceiptsEnums.instockOrder}
           id={id}
           onClose={(deleteAction) => {
             if (deleteAction && (remainingQuantity === 1)){
@@ -91,7 +94,7 @@ const InstockShop = (
         <div className={style.action} onClick={() => {
           error();
         }}>
-          <div className={style.actionButton}><ExclamationCircleFill style={{ color: 'red' }} /></div>
+          <div className={style.actionButton}><WarningOutlined style={{ color: 'red' }} /></div>
           <span className={style.text}>异常</span>
         </div>
       </div>

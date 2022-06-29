@@ -44,6 +44,11 @@ export const shopCartAllList = {
   method: 'POST',
 };
 
+export const shopCartApplyList = {
+  url: '/shopCart/applyList',
+  method: 'POST',
+};
+
 
 export const shopCartDelete = {
   url: '/shopCart/delete',
@@ -52,6 +57,11 @@ export const shopCartDelete = {
 
 export const shopCartEdit = {
   url: '/shopCart/edit',
+  method: 'POST',
+};
+
+export const shopCartAddList = {
+  url: '/shopCart/addList',
   method: 'POST',
 };
 

@@ -13,6 +13,7 @@ import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url'
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { ReceiptsEnums } from '../../../../../../../../../index';
 
 export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
 
@@ -80,7 +81,13 @@ const WaitInstock = (
   };
 
   useEffect(() => {
-    showShop({ data: { types: ['instockByAnomaly', 'waitInStock'], sourceId: instockOrderId } });
+    showShop({
+      data: {
+        receiptsEnum: ReceiptsEnums.instockOrder,
+        types: ['instockByAnomaly', 'waitInStock'],
+        sourceId: instockOrderId,
+      },
+    });
   }, []);
 
   return <>
@@ -109,9 +116,9 @@ const WaitInstock = (
               const brandName = ToolUtil.isObject(item.brandName).brandName || '-';
 
               return <div key={index} className={style.skuItem}>
-                  <MyCheck checked={checked} className={style.check} onChange={() => {
-                    check(checked, item);
-                  }} />
+                <MyCheck checked={checked} className={style.check} onChange={() => {
+                  check(checked, item);
+                }} />
                 <div className={style.sku} onClick={() => {
                   if (!positionsResult) {
                     return;
@@ -122,7 +129,7 @@ const WaitInstock = (
                     skuResult={skuResult}
                     title={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
                     extraWidth='120px'
-                    describe={SkuResultSkuJsons({skuResult})}
+                    describe={SkuResultSkuJsons({ skuResult })}
                     otherData={`${customerName} / ${brandName}`}
                   />
                 </div>
@@ -130,7 +137,7 @@ const WaitInstock = (
                   <div hidden={item.type !== 'instockByAnomaly'} className={style.error}>异常转入</div>
                   <ShopNumber show value={item.number} />
                   <Button color='primary' fill='outline' onClick={() => {
-                    onInstock(item,instockList.length);
+                    onInstock(item, instockList.length);
                   }}>入库</Button>
                 </div>
               </div>;

@@ -13,6 +13,7 @@ const historyDelete = { url: '/queryLog/deleteBatch', method: 'POST' };
 
 const MySearch = (
   {
+    id = 'searchBar',
     placeholder,
     searchIcon,
     extraIcon,
@@ -26,6 +27,8 @@ const MySearch = (
     },
     historyType,
     searchIconClick = () => {
+    },
+    onFocus = () => {
     },
   }) => {
 
@@ -119,7 +122,7 @@ const MySearch = (
         content={historyContent()}
         trigger='click'
       >
-        <div id='searchBar' className={style.searchBar}>
+        <div id={id} className={style.searchBar}>
           <SearchBar
             icon={<div onClick={() => {
               searchIconClick();
@@ -143,6 +146,7 @@ const MySearch = (
             }}
             onFocus={() => {
               setVisible(true);
+              onFocus();
             }}
             onBlur={() => {
               setTimeout(() => {
