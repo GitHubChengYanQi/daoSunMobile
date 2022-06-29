@@ -5,6 +5,7 @@ import MyAntPopup from '../../../../../components/MyAntPopup';
 import BottomButton from '../../../../../components/BottomButton';
 import Condition from './compoennts/Condition';
 import { ERPEnums } from '../../../../Stock/ERPEnums';
+import { ReceiptsEnums } from '../../../../../Receipts';
 
 const Inventory = (
   {
@@ -87,7 +88,7 @@ const Inventory = (
       onAction={(action) => {
         switch (action.key) {
           case 'sku':
-            history.push(`/Receipts/ReceiptsCreate?type=${ERPEnums.stocktaking}`);
+            history.push(`/Receipts/ReceiptsCreate?type=${ReceiptsEnums.stocktaking}`);
             break;
           case 'condition':
             setCondition(true);
