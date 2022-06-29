@@ -68,6 +68,8 @@ const ReceiptData = (
           getAction={getAction}
           refresh={refresh}
         />;
+      case ReceiptsEnums.maintenance:
+        return <></>
       default:
         return <MyEmpty />;
     }

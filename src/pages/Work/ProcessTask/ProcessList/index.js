@@ -45,6 +45,7 @@ const ProcessList = (
         </div>;
       case ReceiptsEnums.instockError:
       case ReceiptsEnums.stocktaking:
+      case ReceiptsEnums.maintenance:
         return <div className={style.content}>
           <div className={style.orderData}>
             <span className={style.coding}>单据编号：{receipts.coding}</span>

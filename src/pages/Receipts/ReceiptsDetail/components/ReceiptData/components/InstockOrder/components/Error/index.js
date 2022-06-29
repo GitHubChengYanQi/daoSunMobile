@@ -236,6 +236,8 @@ const Error = (
       }
     });
     setObserver(observer);
+
+
   }, []);
 
   const codeId = ToolUtil.isObject(props.qrCode).codeId;

@@ -11,6 +11,7 @@ import topStyle from '../../../global.less';
 import { useBoolean } from 'ahooks';
 import OutStockTask from './components/OutStockTask';
 import StocktakingTask from './components/StocktakingTask';
+import MaintenanceTask from './components/MaintenanceTask';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
@@ -32,7 +33,7 @@ const Task = (
     { title: '调拨任务', key: 'allocation' },
     { title: '出库任务', key: ReceiptsEnums.outstockOrder },
     { title: '入库任务', key: ReceiptsEnums.instockOrder },
-    { title: '养护任务', key: 'curing' },
+    { title: '养护任务', key: ReceiptsEnums.maintenance },
     { title: '盘点任务', key: ReceiptsEnums.stocktaking },
   ];
 
@@ -44,8 +45,8 @@ const Task = (
         return <OutStockTask data={data} setData={setData} />;
       case ReceiptsEnums.instockOrder:
         return <InStockTask data={data} setData={setData} />;
-      case 'curing':
-        return <></>;
+      case ReceiptsEnums.maintenance:
+        return <MaintenanceTask data={data} />
       case ReceiptsEnums.stocktaking:
         return <StocktakingTask data={data} />
       default:
