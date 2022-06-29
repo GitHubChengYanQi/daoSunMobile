@@ -119,13 +119,11 @@ const BasicLayout = (props) => {
   }
 
   if (state.init === true) {
-    return (
-      <AliveScope>
-        <div className={styles.safeArea}>
-          {props.children}
-        </div>
-      </AliveScope>
-    );
+    return <AliveScope>
+      <div className={styles.safeArea}>
+        {props.children}
+      </div>
+    </AliveScope>;
   } else {
     return <div>
       <ErrorBlock fullPage title='系统初始化失败' />

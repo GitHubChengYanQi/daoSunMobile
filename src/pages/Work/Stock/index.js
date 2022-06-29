@@ -29,8 +29,8 @@ const Stock = (props) => {
           setTask={(task, judge) => {
             setStockDetail({ ...stockDetail, task, judge });
           }}
-          setSkus={(skus) => {
-            setStockDetail({ ...stockDetail, skus });
+          setSkus={(skus,type) => {
+            setStockDetail({ ...stockDetail, skus,task:type });
           }}
           stockDetail={stockDetail}
         />;
@@ -46,16 +46,17 @@ const Stock = (props) => {
   const contentBottom = () => {
     switch (key) {
       case 'stock':
+        const skus = stockDetail.skus || [];
         return stockDetail.task && <SkuShop
+          // emptyHidden
           switchType
-          ask
           className={style.popup}
           noClose
           judge={stockDetail.judge}
           bottom={70}
-          skus={stockDetail.skus}
+          skus={skus}
           setSkus={(skus) => {
-            setStockDetail({ ...stockDetail, skus });
+            setStockDetail({ ...stockDetail, skus, task: skus.length > 0 ? stockDetail.task : null });
           }}
           taskTypeChange={(task) => {
             setStockDetail({ ...stockDetail, task });

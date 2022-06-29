@@ -50,15 +50,15 @@ const Inventory = (
 
   const disabled = () => {
 
-    if (!data.time) {
-      return true;
-    }
+    let disabled = false;
 
     switch (type) {
       case ERPEnums.stocktaking:
+        disabled = !data.endTime || !data.beginTime;
         break;
       case ERPEnums.curing:
-        return !data.type;
+        disabled = !data.type || !data.startTime || !data.endTime;
+        break;
       default:
         return true;
     }
@@ -66,11 +66,12 @@ const Inventory = (
     const conditions = data.conditions || [];
 
     if (conditions.length === 0) {
-      return true;
+      disabled = true;
     }
 
     const newConditions = conditions.filter(item => item.data && item.data.key);
-    return newConditions.length !== conditions.length;
+    disabled = newConditions.length !== conditions.length;
+    return disabled;
   };
 
   return <>

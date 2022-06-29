@@ -23,6 +23,7 @@ const SkuShop = (
     skus = [],
     onClear = () => {
     },
+    emptyHidden,
     setSkus = () => {
     },
     taskTypeChange = () => {
@@ -32,7 +33,6 @@ const SkuShop = (
     noClose,
     className,
     judge,
-    ask,
     selectAll = () => {
     },
     onCancel = () => {
@@ -163,8 +163,12 @@ const SkuShop = (
     { title: '入库任务', key: ERPEnums.inStock },
     { title: '盘点任务', key: ERPEnums.stocktaking },
     { title: '调拨任务', key: ERPEnums.allocation },
-    { title: '养护任务', key: ERPEnums.curing },
+    // { title: '养护任务', key: ERPEnums.curing },
   ];
+
+  if (emptyHidden && skus.length === 0) {
+    return <></>;
+  }
 
   return <>
     <Popup
@@ -305,7 +309,7 @@ const SkuShop = (
               default:
                 break;
             }
-          }}>{ask ? '发起申请' : '确认'}
+          }}>发起申请
         </Button>
       </div>
     </div>

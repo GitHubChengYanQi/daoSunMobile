@@ -17,12 +17,14 @@ const AddSku = (
   {
     onChange = () => {
     },
-    type,
+    type: defaultType,
     skus = [],
     judge,
     onClose = () => {
     },
   }, ref) => {
+
+  const [type, setType] = useState(defaultType);
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -38,7 +40,7 @@ const AddSku = (
   const { run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onSuccess: (res) => {
-      onChange({ ...data, cartId: res });
+      onChange({ ...data, cartId: res },type);
     },
   });
 
@@ -72,7 +74,9 @@ const AddSku = (
     return snameSku.length > 0;
   };
 
-  const openSkuAdd = (sku = {}) => {
+  const openSkuAdd = (sku = {}, initType) => {
+    const type = initType || defaultType;
+    setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
     setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: judge ? 0 : 1 });
@@ -157,8 +161,39 @@ const AddSku = (
     }
   };
 
+  const add = () => {
+    const positionNums = [];
+    if (judge) {
+      ToolUtil.isArray(data.positions).map(item => {
+        if (item.number) {
+          return positionNums.push({ positionId: item.id, num: item.number });
+        }
+        return null;
+      });
+    }
+
+
+    addShop({
+      data: {
+        type,
+        skuId: data.skuId,
+        brandId: data.brandId,
+        customerId: data.customerId,
+        number: data.number,
+        storehousePositionsId: data.positionId,
+        positionNums,
+      },
+    });
+  };
+
   const createBall = (top, left) => {
 
+    const shop = document.getElementById('shop');
+
+    if (!shop) {
+      add();
+      return;
+    }
     let i = 0;
 
     const bar = document.createElement('div');
@@ -180,11 +215,8 @@ const AddSku = (
     document.body.appendChild(bar);
     // 添加动画属性
     setTimeout(() => {
-      const shop = document.getElementById('shop');
-      if (shop) {
-        bar.style.left = (shop.offsetLeft + 36) + 'px';
-        bar.style.top = (shop.offsetTop) + 'px';
-      }
+      bar.style.left = (shop.offsetLeft + 36) + 'px';
+      bar.style.top = (shop.offsetTop) + 'px';
     }, 0);
 
     /**
@@ -194,29 +226,7 @@ const AddSku = (
       bar.remove();
       i++;
       if (i === 2) {
-
-        const positionNums = [];
-        if (judge) {
-          ToolUtil.isArray(data.positions).map(item => {
-            if (item.number) {
-              return positionNums.push({ positionId: item.id, num: item.number });
-            }
-            return null;
-          });
-        }
-
-
-        addShop({
-          data: {
-            type,
-            skuId: data.skuId,
-            brandId: data.brandId,
-            customerId: data.customerId,
-            number: data.number,
-            storehousePositionsId: data.positionId,
-            positionNums,
-          },
-        });
+        add();
       }
 
     };

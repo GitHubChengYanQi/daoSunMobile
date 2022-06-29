@@ -2,10 +2,11 @@ import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
 import MyDatePicker from '../../../../../../../components/MyDatePicker';
 import { CalendarOutline, RightOutline } from 'antd-mobile-icons';
-import { Button, Divider, Picker } from 'antd-mobile';
+import { Button, Divider, Picker, Space } from 'antd-mobile';
 import { MinusCircleFilled } from '@ant-design/icons';
 import AllCondition from '../AllCondition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
+import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
 
 const Condition = (
   {
@@ -61,9 +62,15 @@ const Condition = (
             <div hidden={noTime} className={style.item}>
               <div className={style.title}>盘点时间 <span>*</span></div>
               <div>
-                <MyDatePicker precision='second' show={value.time || <CalendarOutline />} onChange={(time) => {
-                  onChange({ ...value, time });
-                }} />
+                <StartEndDate
+                  split={<div>—</div>}
+                  value={[value.beginTime, value.endTime]}
+                  startShow={value.beginTime || <Space align='center'><CalendarOutline />起始</Space>}
+                  endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
+                  onChange={(dates) => {
+                    onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
+                  }}
+                />
               </div>
             </div>
           </>,
@@ -74,9 +81,15 @@ const Condition = (
             <div hidden={noTime} className={style.item}>
               <div className={style.title}>任务时间 <span>*</span></div>
               <div>
-                <MyDatePicker precision='second' show={value.time || <CalendarOutline />} onChange={(time) => {
-                  onChange({ ...value, time });
-                }} />
+                <StartEndDate
+                  split={<div>—</div>}
+                  value={[value.startTime, value.endTime]}
+                  startShow={value.startTime || <Space align='center'><CalendarOutline />起始</Space>}
+                  endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
+                  onChange={(dates) => {
+                    onChange({ ...value, startTime: dates[0], endTime: dates[1] });
+                  }}
+                />
               </div>
             </div>
             <div hidden={noTime} className={style.item}>

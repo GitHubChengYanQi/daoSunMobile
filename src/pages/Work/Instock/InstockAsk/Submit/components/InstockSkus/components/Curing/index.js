@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import { CalendarOutline, RightOutline } from 'antd-mobile-icons';
-import { Picker } from 'antd-mobile';
+import { Picker, Space } from 'antd-mobile';
 import User from '../User';
-import MyDatePicker from '../../../../../../../../components/MyDatePicker';
 import Number from '../../../../../../../../components/Number';
+import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
 
 const Curing = (
   {
@@ -25,9 +25,15 @@ const Curing = (
     <div className={style.dataItem}>
       <div className={style.title}>任务时间 <span>*</span></div>
       <div>
-        <MyDatePicker precision='second' show={value.time || <CalendarOutline />} onChange={(time) => {
-          onChange({ ...value, time });
-        }} />
+        <StartEndDate
+          split={<div>—</div>}
+          value={[value.startTime, value.endTime]}
+          startShow={value.startTime || <Space align='center'><CalendarOutline />起始</Space>}
+          endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
+          onChange={(dates) => {
+            onChange({ ...value, startTime: dates[0], endTime: dates[1] });
+          }}
+        />
       </div>
     </div>
 

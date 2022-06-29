@@ -21,6 +21,7 @@ import Curing from './components/Curing';
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
 export const inventorySelectCondition = { url: '/inventory/selectCondition', method: 'POST' };
+export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
 
@@ -76,6 +77,17 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     },
     onError: () => {
       Message.toast('创建盘点单失败!');
+    },
+  });
+
+  const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
+    manual: true,
+    onSuccess: () => {
+      Message.toast('创建养护单成功!');
+      history.goBack();
+    },
+    onError: () => {
+      Message.toast('创建养护单失败!');
     },
   });
 
@@ -151,7 +163,6 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
           if (!state.condition) {
             return false;
           }
-
           const conditions = params.conditions || [];
           if (conditions.length === 0) {
             return true;
@@ -169,12 +180,8 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         };
       case ERPEnums.curing:
         const maintenanceDisabled = () => {
-          if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId && ToolUtil.isArray(params.noticeIds).length > 0)) {
+          if (!(params.userId && params.startTime && params.endTime && params.nearMaintenance && params.type && ToolUtil.isArray(params.noticeIds).length > 0)) {
             return true;
-          }
-
-          if (!state.condition) {
-            return false;
           }
 
           const conditions = params.conditions || [];
@@ -282,6 +289,46 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         },
       });
     }
+  };
+
+  const curingAsk = () => {
+    let data = {
+      ...params,
+      notice: params.noticeIds,
+      enclosure: params.mediaIds,
+      userIds: ToolUtil.isArray(params.userIds).toString(),
+      note:params.remark,
+    };
+    ToolUtil.isArray(params.conditions).map(item => {
+      const dataValue = item.data || {};
+      switch (item.value) {
+        case 'material':
+          data = {
+            ...data,
+            materialId: dataValue.key,
+          };
+          break;
+        case 'brand':
+          data = {
+            ...data,
+            brandId: dataValue.key,
+          };
+          break;
+        case 'position':
+          data = {
+            ...data,
+            storehousePositionsId: dataValue.key,
+          };
+          break;
+        default:
+          return [];
+      }
+      return null;
+    });
+
+    maintenanceRun({
+      data,
+    });
   };
 
   const content = () => {
@@ -418,6 +465,9 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
             break;
           case ERPEnums.stocktaking:
             stocktaskingAsk();
+            break;
+          case ERPEnums.curing:
+            curingAsk();
             break;
           default:
             break;

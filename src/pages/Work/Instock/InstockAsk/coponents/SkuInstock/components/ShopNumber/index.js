@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import FoucusStepper from './components/FoucusStepper';
 
@@ -13,17 +13,26 @@ const ShopNumber = (
     },
     show,
     min = 1,
-    max,
+    max = 99999,
     id = 'stepper',
   },
 ) => {
 
   const [update, setUpdate] = useState();
 
+  useEffect(()=>{
+    const input = document.querySelector(`#${id} input`);
+    if (input){
+      input.setAttribute('type','number')
+    }
+  },[update])
+
   return <>
     <div className={style.shopNumber}>
       {update ?
-        <FoucusStepper value={value} max={max} onChange={onChange} min={min} id={id} onBlur={()=>{
+        <FoucusStepper value={value} max={max} onChange={(number)=>{
+          onChange(number);
+        }} min={min} id={id} onBlur={()=>{
           onBlur();
           // setUpdate(false);
         }} onFocus={onFocus} />

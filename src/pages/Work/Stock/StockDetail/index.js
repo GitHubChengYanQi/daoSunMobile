@@ -79,7 +79,7 @@ export const SkuContent = (
               />
             </div>
             <div>
-              {buttonHidden ? <span style={{fontSize:14}}>已添加</span> : <LinkButton onClick={() => {
+              {buttonHidden ? <span style={{ fontSize: 14 }}>已添加</span> : <LinkButton onClick={() => {
                 openTask(item);
               }}>
                 <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
@@ -120,7 +120,7 @@ const StockDetail = (
     { text: '入库任务', key: ERPEnums.inStock },
     { text: '盘点任务', key: ERPEnums.stocktaking },
     { text: '调拨任务', key: ERPEnums.allocation },
-    { text: '养护任务', key: ERPEnums.curing },
+    // { text: '养护任务', key: ERPEnums.curing },
   ];
 
   const { loading: getDefaultShop } = useRequest({
@@ -160,7 +160,7 @@ const StockDetail = (
       defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
       SkuContent={SkuContent}
       skuContentProps={{
-        type:stockDetail.task,
+        type: stockDetail.task,
         skus: stockDetail.skus,
         openTask: (item) => {
           if (stockDetail.task) {
@@ -179,8 +179,8 @@ const StockDetail = (
       skus={stockDetail.skus}
       ref={addSku}
       type={stockDetail.task}
-      onChange={(sku) => {
-        setSkus([...ToolUtil.isArray(stockDetail.skus), sku]);
+      onChange={(sku, type) => {
+        setSkus([...ToolUtil.isArray(stockDetail.skus), sku],type);
       }}
       onClose={() => {
         setTask(null);
@@ -203,7 +203,7 @@ const StockDetail = (
             break;
           default:
             setTask(action.key);
-            addSku.current.openSkuAdd(skuItem);
+            addSku.current.openSkuAdd(skuItem, action.key);
             setSkuItem(null);
             break;
         }
@@ -216,14 +216,14 @@ const StockDetail = (
       onClose={() => setTaskVisible(false)}
       submit={() => {
         setTask(ERPEnums.inStock, false);
-        addSku.current.openSkuAdd(skuItem);
+        addSku.current.openSkuAdd(skuItem, ERPEnums.inStock);
         setSkuItem(null);
         setTaskVisible(false);
         return true;
       }}
       directInStock={() => {
         setTask(ERPEnums.directInStock, true);
-        addSku.current.openSkuAdd(skuItem);
+        addSku.current.openSkuAdd(skuItem, ERPEnums.directInStock);
         setSkuItem(null);
         setTaskVisible(false);
         return true;
