@@ -98,7 +98,11 @@ const SkuList = (
     if (sort.field === field) {
       switch (sort.order) {
         case 'ascend':
-          order = '';
+          if (field === 'createTime'){
+            order = 'descend'
+          }else {
+            order = '';
+          }
           break;
         case 'descend':
           order = 'ascend';

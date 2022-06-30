@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from '../../index.less';
-import { Button, Card, Slider } from 'antd-mobile';
+import { Button, Card, Divider, Slider } from 'antd-mobile';
 
 const StockNumber = (
   {
@@ -16,7 +16,7 @@ const StockNumber = (
 
   return <div className={style.content}>
     <Card
-      title={title}
+      title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
       headerStyle={{ border: 'none' }}
       extra={ <Button style={{backgroundColor:'#f5f5f5',fontSize:12}} color='default' onClick={() => {
         switch (step) {

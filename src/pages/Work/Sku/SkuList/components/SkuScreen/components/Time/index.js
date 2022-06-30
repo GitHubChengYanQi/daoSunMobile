@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
-import { Card, Selector } from 'antd-mobile';
+import { Card, Divider, Selector } from 'antd-mobile';
 import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import moment from 'moment';
@@ -41,7 +41,7 @@ const Time = (
 
   return <div className={style.content}>
     <Card
-      title={title}
+      title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
       headerStyle={{ border: 'none' }}
     >
       <Selector

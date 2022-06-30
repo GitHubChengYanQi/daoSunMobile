@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, Selector } from 'antd-mobile';
+import { Card, Divider, Selector } from 'antd-mobile';
 import style from '../../index.less';
 import { useBoolean } from 'ahooks';
 import { useRequest } from '../../../../../../../../util/Request';
@@ -33,7 +33,7 @@ const User = (
 
   return <div className={style.content}>
     <Card
-      title={title}
+      title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
       headerStyle={{ border: 'none' }}
       extra={<LinkButton style={{ fontSize: 12 }} onClick={toggle}>
         {!open

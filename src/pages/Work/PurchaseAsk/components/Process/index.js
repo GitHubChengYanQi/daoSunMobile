@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
-import { Space, Steps } from 'antd-mobile';
+import { Badge, Space, Steps } from 'antd-mobile';
 import { Avatar } from 'antd';
 import Icon from '../../../../components/Icon';
 import { AuditOutlined, CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { Skeleton } from 'weui-react-v2';
 import style from './index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
+import moment from 'moment';
+import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 
 const Process = (
   {
@@ -99,7 +101,7 @@ const Process = (
           case 'error':
             return '已拒绝';
           case 'success':
-            return '已审批';
+            return '已通过';
           case 'wait':
             return '未审批';
           default:
@@ -132,29 +134,41 @@ const Process = (
 
     return users.map((items, index) => {
       let stepsStatus;
-      switch (items.auditStatus) {
-        case 99:
-          stepsStatus = 'success';
-          break;
-        case 50:
-          stepsStatus = 'errror';
-          break;
-        default:
-          break;
+      let content;
+      if (items.auditStatus){
+        switch (logResult.status) {
+          case 1:
+            stepsStatus = 'success';
+            content = <span className={style.auditSuccess}><CheckCircleFill /></span>;
+            break;
+          case 0:
+            stepsStatus = 'error';
+            content = <span className={style.auditError}><CloseCircleFill /></span>;
+            break;
+          default:
+            break;
+        }
       }
+
 
       return <div className={style.user} key={index}>
         <div className={style.nameAvatar}>
-          <Avatar
-            size={26}
-            shape='square'
-            key={index}
-            src={items.avatar}
-          >{items.name.substring(0, 1)}</Avatar>
+          <Badge
+            color='#fff'
+            content={content}
+          >
+            <Avatar
+              size={26}
+              shape='square'
+              key={index}
+              src={items.avatar}
+            >{items.name.substring(0, 1)}</Avatar>
+          </Badge>
+
           {items.name}
         </div>
         <div hidden={!stepsStatus}>
-          {nodeStatusName(auditType, stepsStatus)} · {logResult.updateTime}
+          {nodeStatusName(auditType, stepsStatus)} · {moment(logResult.updateTime || new Date()).format('M/DD HH:mm')}
         </div>
       </div>;
     });
@@ -164,8 +178,6 @@ const Process = (
   const rules = (step) => {
     const users = [];
     const rules = ToolUtil.isObject(step.auditRule).rules || [];
-
-    const logResult = step.logResult || {};
 
     if (rules.length > 0) {
       rules.map((items) => {
@@ -185,7 +197,7 @@ const Process = (
             });
             break;
           case 'AllPeople':
-            users.push({ name: '所有人', auditStatus: logResult.status === 1 ? 99 : 50 });
+            users.push({ name: '所有人', auditStatus:99 });
             break;
           case 'MasterDocumentPromoter':
             users.push({ name: '主单据审批人' });

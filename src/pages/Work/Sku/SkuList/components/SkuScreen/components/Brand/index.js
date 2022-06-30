@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Selector } from 'antd-mobile';
+import { Card, Divider, Selector } from 'antd-mobile';
 import LinkButton from '../../../../../../../components/LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
@@ -74,7 +74,7 @@ const Brand = (
 
   return <div className={style.content}>
     <Card
-      title={title}
+      title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
       headerStyle={{ border: 'none' }}
       extra={<LinkButton style={{ fontSize: 12 }} onClick={toggle}>
         {!open

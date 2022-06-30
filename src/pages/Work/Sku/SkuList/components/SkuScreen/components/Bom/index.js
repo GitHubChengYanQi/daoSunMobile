@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Checkbox, List, Radio, Steps } from 'antd-mobile';
+import { Card, Checkbox, Divider, List, Radio, Steps } from 'antd-mobile';
 import LinkButton from '../../../../../../../components/LinkButton';
 import style from './index.less';
 import Icon from '../../../../../../../components/Icon';
@@ -70,7 +70,7 @@ const Bom = (
 
   return <div className={style.content}>
     <Card
-      title={title}
+      title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
     >
       <MySearch
         className={style.searchBar}

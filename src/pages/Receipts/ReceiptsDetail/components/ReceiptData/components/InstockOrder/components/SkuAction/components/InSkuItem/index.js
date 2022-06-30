@@ -37,7 +37,7 @@ const InSkuItem = (
         <SkuItem
           imgSize={60}
           skuResult={skuResult}
-          extraWidth='200px'
+          extraWidth='150px'
           otherData={`${ToolUtil.isObject(item.customerResult).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'}`}
         />
       </div>
