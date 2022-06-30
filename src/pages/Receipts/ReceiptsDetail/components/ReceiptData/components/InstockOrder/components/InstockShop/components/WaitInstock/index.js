@@ -169,7 +169,7 @@ const WaitInstock = (
               const batch = ToolUtil.isObject(item.skuResult).batch === 1;
               return {
                 type: item.type,
-                shopCartId: item.cartId,
+                cartId: item.cartId,
                 skuId: item.skuId,
                 customerId: item.customerId,
                 brandId: item.brandId,

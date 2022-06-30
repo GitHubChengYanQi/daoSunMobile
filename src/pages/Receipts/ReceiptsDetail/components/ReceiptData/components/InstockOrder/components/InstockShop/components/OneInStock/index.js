@@ -96,7 +96,7 @@ const OneInStock = (
         const listParams = inStockSku.map((item) => {
           return {
             type: skuItem.type,
-            shopCartId: skuItem.cartId,
+            cartId: skuItem.cartId,
             skuId: skuItem.skuId,
             customerId: skuItem.customerId,
             brandId: skuItem.brandId,
