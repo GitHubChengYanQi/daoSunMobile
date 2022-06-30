@@ -12,6 +12,8 @@ import Error from '../Error';
 import InSkuItem from './components/InSkuItem';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
+import { useModel } from 'umi';
+import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 
 const SkuAction = (
@@ -24,6 +26,9 @@ const SkuAction = (
     },
   },
 ) => {
+
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
 
   const { loading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
@@ -51,7 +56,6 @@ const SkuAction = (
 
   const items = [...noAction, ...actions];
 
-
   const showItems = items.filter(item => !item.hidden);
 
   let countNumber = 0;
@@ -59,20 +63,57 @@ const SkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-  const addInstockShop = (formStatus, item, type) => {
-    addShop({
-      data: {
-        formStatus,
-        type,
-        instockListId: item.instockListId,
-        skuId: item.skuId,
-        customerId: item.customerId,
-        brandId: item.brandId,
-        number: item.number,
-        formId: item.instockListId,
-      },
+  const addShopCart = (
+    imgUrl,
+    imgId,
+    transitionEnd = () => {
+  }) => {
+
+    const skuImg = document.getElementById(imgId);
+    if (!skuImg) {
+      return;
+    }
+    const top = skuImg.getBoundingClientRect().top;
+    const left = skuImg.getBoundingClientRect().left;
+    ToolUtil.createBall({
+      top,
+      left,
+      imgUrl,
+      transitionEnd,
+      getNodePosition:()=>{
+        const waitInstock = document.getElementById('waitInstock');
+        const parent = waitInstock.offsetParent;
+        const translates = document.defaultView.getComputedStyle(parent, null).transform;
+        let translateX = parseFloat(translates.substring(6).split(',')[4]);
+        let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
+        return {
+          top:parent.offsetTop + tanslateY,
+          left:parent.offsetLeft + translateX
+        }
+      }
     });
   };
+
+  const addInstockShop = (formStatus, item, index, type) => {
+    const skuResult = item.skuResult || {};
+    const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
+    addShopCart(imgUrl, `skuImg${index}`, () => {
+      addShop({
+        data: {
+          formStatus,
+          type,
+          instockListId: item.instockListId,
+          skuId: item.skuId,
+          customerId: item.customerId,
+          brandId: item.brandId,
+          number: item.number,
+          formId: item.instockListId,
+        },
+      });
+    });
+
+  };
+
   return <div style={{ backgroundColor: '#fff' }}>
     <div className={style.skuHead}>
       <div className={style.headTitle}>
@@ -98,13 +139,13 @@ const SkuAction = (
           <Viewpager
             currentIndex={index}
             onLeft={() => {
-              addInstockShop(1, item, 'waitInStock');
+              addInstockShop(1, item, index, 'waitInStock');
             }}
             onRight={() => {
               setVisible(item);
             }}
           >
-            <InSkuItem item={item} data={showItems} key={index} />
+            <InSkuItem index={index} item={item} data={showItems} key={index} />
           </Viewpager>
         </div>;
       })
@@ -134,9 +175,9 @@ const SkuAction = (
         onClose={() => {
           setVisible(false);
         }}
+        refreshOrder={refresh}
         onSuccess={(item) => {
           setVisible(false);
-          refresh();
         }}
       />
     </Popup>

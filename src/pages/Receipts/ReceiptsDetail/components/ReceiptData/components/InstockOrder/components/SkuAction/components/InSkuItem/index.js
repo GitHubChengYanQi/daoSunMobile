@@ -11,6 +11,7 @@ const InSkuItem = (
   {
     item,
     data,
+    index,
   }) => {
 
 
@@ -35,7 +36,7 @@ const InSkuItem = (
       </div>
       <div className={style.item}>
         <SkuItem
-          imgSize={60}
+          imgId={`skuImg${index}`}
           skuResult={skuResult}
           extraWidth='150px'
           otherData={`${ToolUtil.isObject(item.customerResult).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'}`}

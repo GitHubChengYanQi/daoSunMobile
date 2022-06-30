@@ -13,6 +13,7 @@ import CheckUser from '../../../../../../../../components/CheckUser';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { Message } from '../../../../../../../../components/Message';
 import { useModel } from 'umi';
+import BottomButton from '../../../../../../../../components/BottomButton';
 
 export const save = { url: '/anomaly/dealWithError', method: 'POST' };
 export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
@@ -209,7 +210,7 @@ const SkuError = (
               action(item, 1);
             }}>允许入库</Button>
           </>,
-          bottom: <>
+          bottom: <div className={style.bottomAction}>
             <div className={style.action}>
               <div>异常总数：{sku.errorNumber} </div>
               <div
@@ -236,7 +237,7 @@ const SkuError = (
                 onSuccess();
               });
             }}>确定</Button>
-          </>,
+          </div>,
         };
       case 'StocktakingError':
         return {
@@ -257,7 +258,12 @@ const SkuError = (
               action(item, 2);
             }}>报损</Button>
           </>,
-          bottom: <Button color='primary'>确定</Button>
+          bottom: <BottomButton disabled={!handle} only onClick={() => {
+            const param = { data: { anomalyId } };
+            saveRun(param).then(() => {
+              onSuccess();
+            });
+          }} />,
         };
       default:
         return {};
@@ -401,9 +407,7 @@ const SkuError = (
       });
     }} />
 
-    <div className={style.bottomAction}>
-      {errorTypeData().bottom}
-    </div>
+    {errorTypeData().bottom}
 
     {(saveLoading || detailLoading || editLoading) && <MyLoading />}
 

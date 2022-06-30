@@ -28,7 +28,7 @@ const InstockShop = (
       onClose={() => {
         setContent(null);
       }}
-      onInstock={(item,remainingQuantity) => {
+      onInstock={(item, remainingQuantity) => {
 
         // 单个入库
         setContent(<OneInStock
@@ -37,9 +37,9 @@ const InstockShop = (
           instockOrderId={id}
           skuItem={item}
           onClose={(complete) => {
-            if (complete && (remainingQuantity === 1)){
+            if (complete && (remainingQuantity === 1)) {
               setContent(null);
-            }else {
+            } else {
               wait();
             }
           }} />);
@@ -52,16 +52,16 @@ const InstockShop = (
       formId={id}
       refresh={refresh}
       onClose={() => setContent(null)}
-      onEdit={(id,remainingQuantity) => {
+      onEdit={(id, remainingQuantity) => {
 
         // 修改入库异常
         setContent(<Error
           type={ReceiptsEnums.instockOrder}
           id={id}
           onClose={(deleteAction) => {
-            if (deleteAction && (remainingQuantity === 1)){
+            if (deleteAction && (remainingQuantity === 1)) {
               setContent(null);
-            }else {
+            } else {
               error();
             }
           }}
@@ -85,7 +85,7 @@ const InstockShop = (
       className={style.float}
     >
       <div className={style.actions}>
-        <div className={style.action} onClick={() => {
+        <div id='waitInstock' className={style.action} onClick={() => {
           wait();
         }}>
           <div className={style.actionButton}><Icon type='icon-rukuguanli2' /></div>

@@ -48,9 +48,9 @@ const Error = (
   const [sku, setSku] = useState(skuItem);
 
 
-  useEffect(()=>{
+  useEffect(() => {
     setSku(skuItem);
-  },[skuItem.skuId])
+  }, [skuItem.skuId]);
 
   const [data, setData] = useState({ number: skuItem.number });
 
@@ -59,17 +59,20 @@ const Error = (
   let allNumber = 0;
   inkinds.map((item) => allNumber += item.number);
 
-  const overFlow = () => {
-    const errors = document.getElementById('errors');
-    const config = { attributes: true, childList: true, subtree: true };
-    observer.observe(errors, config);
-  };
-
   const { loading: anomalyLoading, run: anomalyRun } = useRequest(instockError, {
     manual: true,
     onSuccess: () => {
       onSuccess(skuItem);
-      Message.toast('添加成功！');
+      switch (type) {
+        case ReceiptsEnums.instockOrder:
+          addShop();
+          break;
+        case ReceiptsEnums.stocktaking:
+          Message.toast('添加成功！');
+          break;
+        default:
+          break;
+      }
     },
     onError: () => {
       Message.toast('添加失败！');
@@ -172,15 +175,11 @@ const Error = (
 
       setInkinds(inkinds);
 
-      overFlow();
-
     },
     onError: () => {
 
     },
   });
-
-  const [observer, setObserver] = useState();
 
   const skuResult = sku.skuResult || {};
 
@@ -220,23 +219,17 @@ const Error = (
     }
 
     const errors = document.getElementById('errors');
-    const observer = new MutationObserver(function(mutationsList, observer) {
-      for (var mutation of mutationsList) {
-        if (mutation.type === 'childList') {
-          if (errors.scrollTop < errors.scrollHeight) {
-            errors.scrollTop = errors.scrollHeight;
-            observer.disconnect();
-            if (errors.scrollTop > 0) {
-              setOver(true);
-            } else {
-              setOver(false);
-            }
-          }
-        }
-      }
-    });
-    setObserver(observer);
 
+    if (errors) {
+      errors.addEventListener('scroll', (event) => {
+        const scrollTop = event.target.scrollTop;
+        if (scrollTop > 135) {
+          setOver(true);
+        } else {
+          setOver(false);
+        }
+      });
+    }
 
   }, []);
 
@@ -304,6 +297,47 @@ const Error = (
     };
   };
 
+  const addShopCart = (
+    imgUrl,
+    imgId,
+    transitionEnd = () => {
+    }) => {
+
+    const skuImg = document.getElementById(imgId);
+    if (!skuImg) {
+      return;
+    }
+    const top = skuImg.getBoundingClientRect().top;
+    const left = skuImg.getBoundingClientRect().left;
+    console.log(top);
+    ToolUtil.createBall({
+      top,
+      left,
+      imgUrl,
+      transitionEnd,
+      getNodePosition: () => {
+        const waitInstock = document.getElementById('waitInstock');
+        const parent = waitInstock.offsetParent;
+        const translates = document.defaultView.getComputedStyle(parent, null).transform;
+        let translateX = parseFloat(translates.substring(6).split(',')[4]);
+        let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
+        return {
+          top: parent.offsetTop + tanslateY,
+          left: parent.offsetLeft + translateX,
+        };
+      },
+    });
+  };
+
+  const addShop = () => {
+    const imgUrl = Array.isArray(skuItem.imgUrls) && skuItem.imgUrls[0] || state.homeLogo;
+    addShopCart(imgUrl, 'errorSku', () => {
+      refreshOrder();
+      Message.toast('添加成功！');
+    });
+
+  };
+
   const errorTypeData = () => {
 
     switch (type) {
@@ -311,6 +345,7 @@ const Error = (
         return {
           title: '异常描述',
           skuItem: <SkuItem
+            imgId='errorSku'
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={(id && !noDelete) ? '84px' : '24px'}
@@ -342,20 +377,25 @@ const Error = (
               }} />
             </div>
           </div>,
-          button: <div className={style.bottom}><Button color='primary' onClick={() => {
-            const instockParam = {
-              ...getParams(),
-              formId: sku.instockOrderId,
-              instockListId: sku.instockListId,
-              sourceId: sku.instockListId,
-              anomalyType: 'InstockError',
-            };
-            if (id) {
-              editRun({ data: instockParam });
-            } else {
-              anomalyRun({ data: instockParam });
-            }
-          }}>确定</Button></div>,
+          button: <div>
+            <BottomButton
+              only
+              onClick={() => {
+                const instockParam = {
+                  ...getParams(),
+                  formId: sku.instockOrderId,
+                  instockListId: sku.instockListId,
+                  sourceId: sku.instockListId,
+                  anomalyType: 'InstockError',
+                };
+                if (id) {
+                  editRun({ data: instockParam });
+                } else {
+                  anomalyRun({ data: instockParam });
+                }
+              }}
+            />
+          </div>,
         };
       case ReceiptsEnums.stocktaking:
         return {
@@ -416,14 +456,14 @@ const Error = (
     }
   };
 
-  return <div className={style.error} style={{ maxHeight }}>
+  return <div className={style.error} style={{ maxHeight }} id='errors'>
 
     <div className={style.header}>
 
       {
         over ?
           <div className={style.skuShow}>
-            <img src={imgUrl || state.imgLogo} width={40} height={40} alt='' />
+            <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
             <span
               style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>{SkuResultSkuJsons({ skuResult })}</span>
             <div className={style.number}>
@@ -449,30 +489,27 @@ const Error = (
       }}><CloseOutline /></span>
     </div>
 
-    {!over && <>
 
-      <div className={id ? style.skuItem : ''}>
-        {errorTypeData().skuItem}
-        {id && !noDelete && <LinkButton color='danger' onClick={() => {
-          deleteRun({
-            data: {
-              anomalyId: data.anomalyId,
-            },
-          });
-        }}>
-          删除异常
-        </LinkButton>}
-      </div>
+    <div style={{ padding: '0 12px' }} className={id ? style.skuItem : ''}>
+      {errorTypeData().skuItem}
+      {id && !noDelete && <LinkButton color='danger' onClick={() => {
+        deleteRun({
+          data: {
+            anomalyId: data.anomalyId,
+          },
+        });
+      }}>
+        删除异常
+      </LinkButton>}
+    </div>
 
-      {errorTypeData().actionNumber}
-
-    </>}
+    {errorTypeData().actionNumber}
 
 
     <div className={style.space} />
 
-    <Divider>
-      <Button style={{width:100}} color='danger' fill='outline' onClick={() => {
+    <Divider className={style.divider}>
+      <Button style={{ width: 100 }} color='danger' fill='outline' onClick={() => {
 
         if (allNumber >= data.number) {
           return Message.toast('不能超过实际数量！');
@@ -490,12 +527,11 @@ const Error = (
             }],
           },
         });
-        overFlow();
 
       }}><AddOutline /></Button>
     </Divider>
 
-    <div className={style.errors} id='errors'>
+    <div className={style.errors}>
       {
         inkinds.map((item, index) => {
 
@@ -514,7 +550,6 @@ const Error = (
                   return currentIndex !== index;
                 });
                 setInkinds(newItem);
-                overFlow();
               }} />
             </div>
             <div className={style.stepper}>
@@ -563,7 +598,7 @@ const Error = (
                 }}
               />
             </div>
-            <Space direction='vertical' style={{width:'100%'}}>
+            <Space direction='vertical' style={{ width: '100%' }}>
               描述
               <TextArea
                 className={style.textArea}

@@ -67,6 +67,59 @@ const listenOnKeyUp = (
   }
 };
 
+// 动画
+const createBall = (
+  {
+    top,
+    left,
+    imgUrl,
+    transitionEnd = () => {
+    },
+    getNodePosition = () => {
+    },
+  },
+) => {
+
+  let i = 0;
+
+  const bar = document.createElement('div');
+
+  bar.style.backgroundImage = `url(${imgUrl})`;
+  bar.style.backgroundColor = '#e1e1e1';
+  bar.style.backgroundSize = 'cover';
+  bar.style.border = 'solid #F1F1F1 1px';
+  bar.style.borderRadius = '4px';
+  bar.style.zIndex = '1001';
+  bar.style.position = 'fixed';
+  bar.style.display = 'block';
+  bar.style.left = left + 'px';
+  bar.style.top = top + 'px';
+  bar.style.width = '50px';
+  bar.style.height = '50px';
+  bar.style.transition = 'left .6s linear, top .6s cubic-bezier(0.5, -0.5, 1, 1)';
+
+  document.body.appendChild(bar);
+  // 添加动画属性
+  setTimeout(() => {
+   const {top,left} = getNodePosition();
+    bar.style.top = (top) + 'px';
+    bar.style.left = (left) + 'px';
+  }, 0);
+
+  /**
+   * 动画结束后，删除
+   */
+  bar.ontransitionend = () => {
+    bar.remove();
+    i++;
+    if (i === 2) {
+      transitionEnd();
+    }
+
+  };
+};
+
+
 export const ToolUtil = {
   queryString,
   isObject,
@@ -75,4 +128,5 @@ export const ToolUtil = {
   isQiyeWeixin,
   classNames,
   listenOnKeyUp,
+  createBall,
 };
