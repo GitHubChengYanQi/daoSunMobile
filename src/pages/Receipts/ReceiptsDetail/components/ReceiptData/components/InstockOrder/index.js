@@ -46,6 +46,7 @@ const InstockOrder = (
       case ReceiptsEnums.instockOrder:
         return <SkuAction
           loading={loading}
+          order={data}
           data={details}
           actionId={getAction('performInstock').id}
           action={getAction('performInstock').id && permissions}
@@ -72,7 +73,7 @@ const InstockOrder = (
       {action()}
     </div>
 
-    <div hidden={type !== ReceiptsEnums.outstockOrder} className={style.user}>
+    <div hidden={type !== ReceiptsEnums.outstockOrder} className={style.dataItem}>
       <div className={style.title}>领料负责人</div>
       <div>{ToolUtil.isObject(data.userResult).name}</div>
     </div>

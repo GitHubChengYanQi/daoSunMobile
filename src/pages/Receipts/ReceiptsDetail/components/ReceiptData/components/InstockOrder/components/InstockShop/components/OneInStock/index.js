@@ -67,7 +67,7 @@ const OneInStock = (
           <SkuItem
             skuResult={skuResult}
             extraWidth='120px'
-            otherData={`${ToolUtil.isObject(skuItem.customer).customerName || '-'} / ${ToolUtil.isObject(skuItem.brandResult).brandName}`}
+            otherData={`${ToolUtil.isObject(skuItem.customer).customerName || '-'} / ${ToolUtil.isObject(skuItem.brandResult).brandName || '-'}`}
           />
         </div>
         <div className={style.inStock} style={{ justifyContent: 'center' }}>
@@ -79,11 +79,14 @@ const OneInStock = (
     </div>
 
     <AddPosition
+      verification
+      maxNumber={skuItem.number}
       skuId={skuItem.skuId}
       positions={positions}
       setPositions={setPositions}
       skuNumber={skuNumber}
       total={skuItem.number}
+      min={1}
     />
 
 

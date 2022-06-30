@@ -22,6 +22,8 @@ const Positions = (
     },
     showAll,
     autoFocus,
+    maxNumber,
+    verification,
     ...props
   },
 ) => {
@@ -55,7 +57,11 @@ const Positions = (
         return Message.toast('已添加此库位!');
       }
       if (backObject.type === 'storehousePositions') {
-        onSuccess([...ids, { id: position.storehousePositionsId, name: position.name }]);
+        const newPositions = [...ids, { id: position.storehousePositionsId, name: position.name }];
+        if (verification && newPositions.length > maxNumber) {
+          return Message.toast('不能超过剩余数量！');
+        }
+        onSuccess(newPositions);
       } else {
         Message.toast('请扫描正确库位码!');
       }
@@ -108,6 +114,9 @@ const Positions = (
       }}
       rightDisabled={value.length === 0}
       rightOnClick={() => {
+        if (verification && value.length > maxNumber) {
+          return Message.toast('不能超过总数！');
+        }
         onSuccess(value);
       }}
     />

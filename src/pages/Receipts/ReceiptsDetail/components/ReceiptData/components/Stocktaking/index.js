@@ -30,7 +30,6 @@ const Stocktaking = (
   const actionPermissions = getAction('check').id && permissions;
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   useEffect(() => {
     const taskList = receipts.taskList || [];
@@ -129,6 +128,7 @@ const Stocktaking = (
                               setVisible({
                                 skuId: skuItem.skuId,
                                 skuResult: skuItem,
+                                inkindId: brandItem.inkind,
                                 brandId: brandItem.brandId,
                                 brandResult: { brandName: brandItem.brandName || '其他品牌' },
                                 stockNumber: brandItem.number,

@@ -24,6 +24,7 @@ const SkuAction = (
     instockOrderId,
     refresh = () => {
     },
+    order,
   },
 ) => {
 
@@ -183,7 +184,7 @@ const SkuAction = (
     </Popup>
 
 
-    {action && <InstockShop actionId={actionId} id={instockOrderId} refresh={refresh} />}
+    {action && <InstockShop order={order} actionId={actionId} id={instockOrderId} refresh={refresh} />}
 
     {loading && <MyLoading />}
 

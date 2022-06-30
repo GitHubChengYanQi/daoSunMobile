@@ -273,8 +273,10 @@ const Error = (
       };
     });
 
+
     if (required) {
-      return Message.toast('请选择异常原因！');
+      Message.toast('请选择异常原因！');
+      return;
     }
 
     return {
@@ -287,14 +289,18 @@ const Error = (
       detailParams,
     };
   };
-
+  
   const getStocktakingParams = () => {
-    return {
-      ...getParams(),
-      positionId: sku.positionId,
-      formId: sku.inventoryTaskId,
-      anomalyType: 'StocktakingError',
-    };
+    if (getParams()) {
+      return {
+        ...getParams(),
+        inkind: sku.inkindId,
+        positionId: sku.positionId,
+        formId: sku.inventoryTaskId,
+        anomalyType: 'StocktakingError',
+      };
+    }
+
   };
 
   const addShopCart = (
@@ -309,9 +315,8 @@ const Error = (
     }
     const top = skuImg.getBoundingClientRect().top;
     const left = skuImg.getBoundingClientRect().left;
-    console.log(top);
     ToolUtil.createBall({
-      top,
+      top: top > 0 ? top : 0,
       left,
       imgUrl,
       transitionEnd,
@@ -322,7 +327,7 @@ const Error = (
         let translateX = parseFloat(translates.substring(6).split(',')[4]);
         let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
         return {
-          top: parent.offsetTop + tanslateY,
+          top: parent.offsetTop + tanslateY + 65,
           left: parent.offsetLeft + translateX,
         };
       },
@@ -381,6 +386,9 @@ const Error = (
             <BottomButton
               only
               onClick={() => {
+                if (!getParams()) {
+                  return;
+                }
                 const instockParam = {
                   ...getParams(),
                   formId: sku.instockOrderId,
@@ -434,22 +442,20 @@ const Error = (
               }} />
             </div>
           </div>,
-          button: <div style={{ height: 60 }}>
-            <BottomButton
-              leftDisabled={id}
-              leftText='暂存'
-              rightText='确定'
-              leftOnClick={() => {
-                anomalyTemporaryRun({ data: getStocktakingParams() });
-              }}
-              rightOnClick={() => {
-                if (id) {
-                  editRun({ data: getStocktakingParams() });
-                } else {
-                  anomalyRun({ data: getStocktakingParams() });
-                }
-              }} />
-          </div>,
+          button: <BottomButton
+            leftDisabled={id}
+            leftText='暂存'
+            rightText='确定'
+            leftOnClick={() => {
+              anomalyTemporaryRun({ data: getStocktakingParams() });
+            }}
+            rightOnClick={() => {
+              if (id) {
+                editRun({ data: getStocktakingParams() });
+              } else {
+                anomalyRun({ data: getStocktakingParams() });
+              }
+            }} />,
         };
       default:
         return {};
@@ -507,7 +513,6 @@ const Error = (
 
 
     <div className={style.space} />
-
     <Divider className={style.divider}>
       <Button style={{ width: 100 }} color='danger' fill='outline' onClick={() => {
 

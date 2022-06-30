@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FloatingBubble, Popup } from 'antd-mobile';
+import { Badge, FloatingBubble, Popup } from 'antd-mobile';
 import style from './index.less';
 import Icon from '../../../../../../../../components/Icon';
 import WaitInstock from './components/WaitInstock';
@@ -15,6 +15,7 @@ const InstockShop = (
     id,
     refresh = () => {
     },
+    order,
   }) => {
 
 
@@ -88,13 +89,17 @@ const InstockShop = (
         <div id='waitInstock' className={style.action} onClick={() => {
           wait();
         }}>
-          <div className={style.actionButton}><Icon type='icon-rukuguanli2' /></div>
+          <div className={style.actionButton}>
+            <Badge content={order.waitInStockNum || null}  style={{ '--right': '5%','--top':'5%' }}><Icon type='icon-rukuguanli2' /></Badge>
+          </div>
           <span className={style.text}>待入</span>
         </div>
         <div className={style.action} onClick={() => {
           error();
         }}>
-          <div className={style.actionButton}><WarningOutlined style={{ color: 'red' }} /></div>
+          <div className={style.actionButton}>
+            <Badge content={order.instockErrorNum || null}  style={{ '--right': '5%','--top':'5%' }}> <WarningOutlined style={{ color: 'red' }} /></Badge>
+          </div>
           <span className={style.text}>异常</span>
         </div>
       </div>

@@ -18,6 +18,8 @@ const AddPosition = (
     skuNumber,
     skuId,
     min = 0,
+    verification,
+    maxNumber,
   },
 ) => {
 
@@ -99,6 +101,8 @@ const AddPosition = (
 
     <Popup visible={visible} destroyOnClose className={style.positionPopup}>
       <Positions
+        verification={verification}
+        maxNumber={maxNumber}
         ids={positions}
         onClose={() => setVisible(false)}
         onSuccess={(value = []) => {
