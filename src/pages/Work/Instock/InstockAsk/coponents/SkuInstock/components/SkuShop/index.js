@@ -299,6 +299,11 @@ const SkuShop = (
 
       <div className={style.bottomMenu}>
         <div className={style.shop} onClick={() => {
+          showShop({
+            data: {
+              type,
+            },
+          });
           setVisible(!visible);
         }}>
           <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '5px' }}>

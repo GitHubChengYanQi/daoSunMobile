@@ -3,7 +3,7 @@ import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { Button, Divider, Space, Stepper, TextArea } from 'antd-mobile';
-import { CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
+import { AddOutline, CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
 import Icon from '../../../../../../../../components/Icon';
 import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
@@ -309,7 +309,7 @@ const Error = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return {
-          title: '入库异常',
+          title: '异常描述',
           skuItem: <SkuItem
             skuResult={sku.skuResult}
             className={style.sku}
@@ -359,7 +359,7 @@ const Error = (
         };
       case ReceiptsEnums.stocktaking:
         return {
-          title: '盘点异常',
+          title: '异常描述',
           skuItem: <SkuItem
             number={sku.stockNumber}
             skuResult={sku.skuResult}
@@ -472,7 +472,7 @@ const Error = (
     <div className={style.space} />
 
     <Divider>
-      <Button color='danger' fill='outline' onClick={() => {
+      <Button style={{width:100}} color='danger' fill='outline' onClick={() => {
 
         if (allNumber >= data.number) {
           return Message.toast('不能超过实际数量！');
@@ -492,7 +492,7 @@ const Error = (
         });
         overFlow();
 
-      }}>添加异常</Button>
+      }}><AddOutline /></Button>
     </Divider>
 
     <div className={style.errors} id='errors'>

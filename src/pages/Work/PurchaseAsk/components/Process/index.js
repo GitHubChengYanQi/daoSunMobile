@@ -65,9 +65,9 @@ const Process = (
         switch (stepStatus) {
           case 'error':
           case 'success':
-            return '已发起';
+            return '发起';
           case 'wait':
-            return '未发起';
+            return '发起';
           default:
             return '';
         }
@@ -75,11 +75,11 @@ const Process = (
         // 路由节点状态
         switch (stepStatus) {
           case 'error':
-            return '已拒绝';
+            return '拒绝';
           case 'success':
-            return '已同意';
+            return '同意';
           case 'wait':
-            return '未审批';
+            return '审批';
           default:
             return '';
         }
@@ -89,9 +89,9 @@ const Process = (
           case 'error':
             return '抄送异常';
           case 'success':
-            return '已抄送';
+            return '抄送';
           case 'wait':
-            return '未抄送';
+            return '抄送';
           default:
             return '';
         }
@@ -99,11 +99,11 @@ const Process = (
         // 审批节点状态
         switch (stepStatus) {
           case 'error':
-            return '已拒绝';
+            return '拒绝';
           case 'success':
-            return '已通过';
+            return '同意';
           case 'wait':
-            return '未审批';
+            return '审批';
           default:
             return '';
         }
@@ -111,9 +111,9 @@ const Process = (
         // 动作节点状态
         switch (stepStatus) {
           case 'success':
-            return '已执行';
+            return '执行';
           case 'wait':
-            return '未执行';
+            return '执行';
           default:
             return '';
         }

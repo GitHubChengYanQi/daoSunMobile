@@ -8,10 +8,11 @@ import { supplierBySku } from '../../../../../../Customer/CustomerUrl';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import ShopNumber from '../ShopNumber';
-import { shopCartAdd } from '../../../../../Url';
+import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
+import LinkButton from '../../../../../../../components/LinkButton';
 
 const AddSku = (
   {
@@ -43,6 +44,10 @@ const AddSku = (
     },
   });
 
+  const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
+
+  const [snameAction, setSnameAction] = useState();
+
   const {
     loading: getCustomerLoading,
     data: customerData,
@@ -62,7 +67,7 @@ const AddSku = (
 
   const [data, setData] = useState({});
 
-  const disabled = () => {
+  const disabled = (get) => {
     const snameSku = skus.filter((item) => {
       return item.skuId === data.skuId
         &&
@@ -70,11 +75,15 @@ const AddSku = (
         &&
         (item.brandId || 0) === (data.brandId || 0);
     });
+    if (get) {
+      return snameSku[0] || {};
+    }
     return snameSku.length > 0;
   };
 
   const openSkuAdd = (sku = {}, initType) => {
     const type = initType || defaultType;
+    setSnameAction();
     setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
@@ -82,7 +91,7 @@ const AddSku = (
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
-      number: type === ERPEnums.directInStock ? 0 : 1
+      number: type === ERPEnums.directInStock ? 0 : 1,
     });
     switch (type) {
       case ERPEnums.allocation:
@@ -187,18 +196,27 @@ const AddSku = (
       });
     }
 
+    const params = {
+      type,
+      skuId: data.skuId,
+      brandId: data.brandId,
+      customerId: data.customerId,
+      number: data.number,
+      storehousePositionsId: data.positionId,
+      positionNums,
+    };
 
-    addShop({
-      data: {
-        type,
-        skuId: data.skuId,
-        brandId: data.brandId,
-        customerId: data.customerId,
-        number: data.number,
-        storehousePositionsId: data.positionId,
-        positionNums,
-      },
-    });
+    switch (snameAction) {
+      case 'add':
+        addShop({ data: params });
+        break;
+      case 'edit':
+        shopEdit({ data: { cartId: disabled(true).cartId, ...params } });
+        break;
+      default:
+        addShop({ data: params });
+        break;
+    }
   };
 
   const createBall = (top, left) => {
@@ -245,6 +263,14 @@ const AddSku = (
       }
 
     };
+  };
+
+  const addSku = () => {
+    const skuImg = document.getElementById('skuImg');
+    const top = skuImg.getBoundingClientRect().top;
+    const left = skuImg.getBoundingClientRect().left;
+    setVisible(false);
+    createBall(top, left);
   };
 
   return <>
@@ -309,8 +335,17 @@ const AddSku = (
                   }} />
                 </div>
               </div>
-              <div hidden={!disabled()} className={style.danger}>
-                已办理{taskData().title}准备是否继续添加
+              <div hidden={!disabled() || snameAction} className={style.danger}>
+                <span>已办理{taskData().title}准备是否继续添加</span>
+                <div className={style.sname} hidden={taskData().judge}>
+                  <LinkButton onClick={() => {
+                    setSnameAction('add');
+                  }}>继续</LinkButton>
+                  <LinkButton onClick={() => {
+                    setData({ ...data, number: disabled(true).number });
+                    setSnameAction('edit');
+                  }}>修改</LinkButton>
+                </div>
               </div>
               <div hidden={!taskData().judge} className={style.flex}>
                 <AddPosition
@@ -337,11 +372,7 @@ const AddSku = (
                   className={ToolUtil.classNames(style.ok, style.button)}
                   color='primary'
                   onClick={() => {
-                    const skuImg = document.getElementById('skuImg');
-                    const top = skuImg.getBoundingClientRect().top;
-                    const left = skuImg.getBoundingClientRect().left;
-                    setVisible(false);
-                    createBall(top, left);
+                    addSku();
                   }}>
                   添加
                 </Button>
