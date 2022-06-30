@@ -165,9 +165,9 @@ const InstockError = (
                 </div>
                 <div className={style.errorAction}>
                   <div className={style.number}>
-                    <span hidden={!anomalyResult.errorNumber}>数量异常：<span
-                      className={style.red}>{anomalyResult.errorNumber}</span></span>
-                    <span hidden={!anomalyResult.otherNumber}>质量异常：<span
+                    <span hidden={!anomalyResult.errorNumber}>数量：<span
+                      className={style.red}>{anomalyResult.errorNumber > 0 ? `+${anomalyResult.errorNumber}` : anomalyResult.errorNumber}</span></span>
+                    <span hidden={!anomalyResult.otherNumber}>质量：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>
                     <span>{errorType().totalTitle}：<span
                       className={style.black}>{anomalyResult.needNumber}</span></span>

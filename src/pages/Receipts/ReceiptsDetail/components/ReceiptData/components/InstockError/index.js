@@ -49,8 +49,10 @@ const InstockError = (
                 skuResult={item.skuResult}
                 otherData={`${ToolUtil.isObject(item.customer).customerName || '-'} / ${ToolUtil.isObject(item.brand).brandName || '-'}`}
                 moreDom={<div className={style.error}>
-                  <div hidden={!item.errorNumber}>数量异常 <span className={style.red}>{item.errorNumber}</span></div>
-                  <div hidden={!item.otherNumber}>质量异常 <span className={style.yellow}>{item.otherNumber}</span></div>
+                  <div hidden={!item.errorNumber}>数量 <span
+                    className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
+                  </div>
+                  <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
                 </div>} />
             </div>
             <div className={style.status}>
