@@ -8,6 +8,8 @@ const Header = ({ data = {} }) => {
 
   const receipts = data.receipts || {};
 
+  const user = data.user || {};
+
   const receiptsData = () => {
     switch (data.type) {
       case ReceiptsEnums.instockOrder:
@@ -25,8 +27,8 @@ const Header = ({ data = {} }) => {
   };
 
   return <div className={style.header}>
-    <Avatar className={style.avatar} size={60}>
-      {data.createName && data.createName.substring(0, 1)}
+    <Avatar className={style.avatar} src={user.avatar} size={60}>
+      {user.name && user.name.substring(0, 1)}
     </Avatar>
     <div className={style.data}>
       <div className={style.line}>

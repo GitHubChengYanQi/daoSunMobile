@@ -11,7 +11,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 const Process = (
   {
     type,
-    createName,
+    createUser = {},
     auditData,
   }) => {
 
@@ -165,6 +165,8 @@ const Process = (
     const users = [];
     const rules = ToolUtil.isObject(step.auditRule).rules || [];
 
+    const logResult = step.logResult || {};
+
     if (rules.length > 0) {
       rules.map((items) => {
         switch (items.type) {
@@ -183,7 +185,7 @@ const Process = (
             });
             break;
           case 'AllPeople':
-            users.push({ name: '所有人', auditStatus: 99 });
+            users.push({ name: '所有人', auditStatus: logResult.status === 1 ? 99 : 50 });
             break;
           case 'MasterDocumentPromoter':
             users.push({ name: '主单据审批人' });
@@ -272,8 +274,9 @@ const Process = (
               <span>发起人 · {nodeStatusName(step.auditType, stepStatus)}</span>
               {visiable(hidden, index)}
             </div>}
-            description={!hidden && (createName ? auditUsers([{
-              name: createName,
+            description={!hidden && (createUser.name ? auditUsers([{
+              name: createUser.name,
+              avatar: createUser.avatar,
               auditStatus: 99,
             }], step, stepStatus) : rules(step, stepStatus))}
             icon={<div className={ToolUtil.classNames(

@@ -83,7 +83,7 @@ const ReceiptData = (
 
   return <>
     {receiptType()}
-    <Process auditData={data.stepsResult} createName={data.createName} card />
+    <Process auditData={data.stepsResult} createUser={data.user} card />
     <Comments detail={data} id={data.processTaskId} />
     <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0}>
       <MyTextArea
