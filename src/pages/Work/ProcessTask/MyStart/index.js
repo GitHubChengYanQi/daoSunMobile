@@ -7,6 +7,7 @@ import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
 import { useModel } from 'umi';
 
+export const myStart = {url:'/activitiProcessTask/LoginStart',method:'POST'}
 
 const MyStart = () => {
 
@@ -49,7 +50,7 @@ const MyStart = () => {
       </div>
     </div>
 
-    <ProcessList setNumber={setNumber} listRef={ref} />
+    <ProcessList api={myStart} setNumber={setNumber} listRef={ref} />
   </>;
 };
 

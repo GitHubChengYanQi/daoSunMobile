@@ -34,7 +34,7 @@ const Skus = (
           物料明细
         </div>
         <div className={style.extra}>
-          合计：<span>{skus.length}</span>类 <div hidden={!countNumber}><span>{countNumber}</span>件</div>
+          合计：<span>{skus.length}</span>类 <div hidden={!countNumber}><span><span>{countNumber}</span></span>件</div>
         </div>
       </div>
       {skuList.length === 0 && <MyEmpty description={`暂无${createTypeData().type}物料`} />}

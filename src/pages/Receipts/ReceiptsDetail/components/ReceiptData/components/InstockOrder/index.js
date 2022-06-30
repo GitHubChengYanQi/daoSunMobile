@@ -28,7 +28,7 @@ const InstockOrder = (
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults);
       announcementsList = data.announcementsList;
-      remake = data.remake;
+      remake = data.remark;
       fileUrls = ToolUtil.isArray(data.url);
       break;
     case ReceiptsEnums.outstockOrder:

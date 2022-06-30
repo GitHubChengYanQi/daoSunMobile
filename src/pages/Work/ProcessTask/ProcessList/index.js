@@ -18,6 +18,7 @@ const ProcessList = (
     setNumber = () => {
     },
     listRef,
+    api,
   },
 ) => {
 
@@ -77,7 +78,7 @@ const ProcessList = (
     <div className={style.list}>
       <MyList
         ref={listRef}
-        api={startList}
+        api={api || startList}
         params={{ auditType: 'audit' }}
         data={data}
         getData={setData}

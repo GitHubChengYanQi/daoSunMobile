@@ -101,6 +101,9 @@ const StockDetail = (
     setSkus = () => {
     },
     tasks,
+    refreshTask=()=>{
+
+    }
   }) => {
 
 
@@ -155,15 +158,14 @@ const StockDetail = (
     />
 
     <AddSku
-      judge={stockDetail.judge}
       skus={stockDetail.skus}
       ref={addSku}
       type={stockDetail.task}
       onChange={(sku, type) => {
-        setSkus([...ToolUtil.isArray(stockDetail.skus), sku],type);
+        setSkus([...ToolUtil.isArray(stockDetail.skus), sku], type);
       }}
       onClose={() => {
-        // setTask(null);
+        refreshTask();
       }}
     />
 

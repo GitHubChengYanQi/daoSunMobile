@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { List, SearchBar, Popover, Card } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
-import { ClockCircleOutline, DeleteOutline } from 'antd-mobile-icons';
+import { ClockCircleOutline, DeleteOutline, SearchOutline } from 'antd-mobile-icons';
 import MyAntList from '../MyAntList';
 import { useRequest } from '../../../util/Request';
 import { ToolUtil } from '../ToolUtil';
@@ -15,7 +15,7 @@ const MySearch = (
   {
     id = 'searchBar',
     placeholder,
-    searchIcon,
+    searchIcon = <SearchOutline /> ,
     extraIcon,
     className,
     onSearch = () => {

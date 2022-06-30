@@ -14,6 +14,9 @@ import { shopCartAddList, shopCartApplyList, shopCartDelete, shopCartEdit } from
 import MyCheck from '../../../../../../../components/MyCheck';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
+import { judgeLoginUser } from '../../../../Submit/components/InstockSkus';
+import { history } from 'umi';
+import { ReceiptsEnums } from '../../../../../../../Receipts';
 
 const SkuShop = (
   {
@@ -32,13 +35,13 @@ const SkuShop = (
     switchType,
     noClose,
     className,
-    judge,
     selectAll = () => {
     },
     onCancel = () => {
     },
     onDelete = () => {
     },
+    judge,
   },
 ) => {
 
@@ -106,8 +109,35 @@ const SkuShop = (
 
   const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
 
+  const [tasks, setTasks] = useState([
+    { title: '出库申请', key: ERPEnums.outStock },
+    { title: '盘点申请', key: ERPEnums.stocktaking },
+    { title: '调拨申请', key: ERPEnums.allocation },
+    { title: '入库申请', key: ERPEnums.inStock },
+    // { title: '养护任务', key: ERPEnums.curing },
+  ]);
+
+
+  const { loading,data:judgeData, run: judgeRun } = useRequest(judgeLoginUser, {
+    manual: true,
+    onSuccess: (res) => {
+      if (res) {
+        setTasks([...tasks, { title: '直接入库', key: ERPEnums.directInStock }]);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (switchType) {
+      judgeRun();
+    }
+  }, []);
+
   useEffect(() => {
     if (type) {
+      if (type === ERPEnums.directInStock && !judgeData){
+        judgeRun();
+      }
       showShop({
         data: {
           type,
@@ -141,6 +171,11 @@ const SkuShop = (
           type: '出库申请',
         };
       case ERPEnums.inStock:
+        return {
+          title: '入库任务明细',
+          type: '入库申请',
+          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+        };
       case ERPEnums.directInStock:
         let number = 0;
         const positions = ToolUtil.isArray(item.positions).map(item => {
@@ -150,8 +185,9 @@ const SkuShop = (
         return {
           title: '入库任务明细',
           type: '入库申请',
+          judge: true,
           otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
-          more: judge && positions.join('、'),
+          more: positions.join('、'),
           number,
         };
       default:
@@ -160,14 +196,6 @@ const SkuShop = (
         };
     }
   };
-
-  const tasks = [
-    { title: '出库申请', key: ERPEnums.outStock },
-    { title: '入库申请', key: type === ERPEnums.inStock ? ERPEnums.inStock : ERPEnums.directInStock },
-    { title: '盘点申请', key: ERPEnums.stocktaking },
-    { title: '调拨申请', key: ERPEnums.allocation },
-    // { title: '养护任务', key: ERPEnums.curing },
-  ];
 
   if (emptyHidden && skus.length === 0) {
     return <></>;
@@ -213,20 +241,23 @@ const SkuShop = (
                   skuResult={skuResult}
                   imgSize={80}
                   gap={8}
-                  extraWidth={judge ? '50px' : '130px'}
+                  extraWidth={taskData().judge ? '50px' : '130px'}
                   otherData={taskData(item).otherData}
                   more={taskData(item).more}
                 />
               </div>
               <div className={style.action}>
-                <RemoveButton onClick={() => {
-                  shopDelete({ data: { ids: [item.cartId] } });
-                }} />
+                <div className={style.removeButton}>
+                  <RemoveButton onClick={() => {
+                    shopDelete({ data: { ids: [item.cartId] } });
+                  }} />
+                </div>
+
                 <div hidden={taskData().numberHidden}>
                   <ShopNumber
-                    show={judge}
+                    show={taskData().judge}
                     id={`stepper${index}`}
-                    value={judge ? taskData(item).number : item.number}
+                    value={taskData().judge ? taskData(item).number : item.number}
                     onChange={async (number) => {
                       const res = await shopEdit({ data: { cartId: item.cartId, number } });
                       skuChange(res, number);
@@ -305,7 +336,7 @@ const SkuShop = (
                   },
                   state: {
                     skus,
-                    judge,
+                    judge: taskData().judge,
                   },
                 });
                 break;
@@ -317,7 +348,7 @@ const SkuShop = (
       </div>
     </div>
 
-    {(shopLoading || addListLoading) && <MyLoading />}
+    {(shopLoading || addListLoading || loading) && <MyLoading />}
   </>;
 };
 

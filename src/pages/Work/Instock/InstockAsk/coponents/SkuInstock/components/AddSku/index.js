@@ -12,7 +12,6 @@ import { shopCartAdd } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
-import LinkButton from '../../../../../../../components/LinkButton';
 
 const AddSku = (
   {
@@ -20,7 +19,6 @@ const AddSku = (
     },
     type: defaultType,
     skus = [],
-    judge,
     onClose = () => {
     },
   }, ref) => {
@@ -41,7 +39,7 @@ const AddSku = (
   const { run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onSuccess: (res) => {
-      onChange({ ...data, cartId: res },type);
+      onChange({ ...data, cartId: res }, type);
     },
   });
 
@@ -80,7 +78,12 @@ const AddSku = (
     setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
-    setData({ skuId: sku.skuId, skuResult: sku, stockNumber: sku.stockNumber, number: judge ? 0 : 1 });
+    setData({
+      skuId: sku.skuId,
+      skuResult: sku,
+      stockNumber: sku.stockNumber,
+      number: type === ERPEnums.directInStock ? 0 : 1
+    });
     switch (type) {
       case ERPEnums.allocation:
         break;
@@ -137,24 +140,35 @@ const AddSku = (
           customerDisabled: true,
         };
       case ERPEnums.inStock:
-      case ERPEnums.directInStock:
         if (ToolUtil.isArray(customerData).length === 0) {
           disabledText = '无供应商';
           disabled = true;
         } else if (!data.customerId) {
           disabledText = '请选择供应商';
           disabled = true;
-        } else if (judge) {
-          const positions = ToolUtil.isArray(data.positions);
-          const inStock = positions.filter(item => item.number);
-          if (inStock.length === 0) {
-            disabledText = '请完善库位信息';
-            disabled = true;
-          }
         }
         return {
           title: '入库',
           disabled,
+          disabledText,
+        };
+      case ERPEnums.directInStock:
+        const positions = ToolUtil.isArray(data.positions);
+        const inStock = positions.filter(item => item.number);
+        if (ToolUtil.isArray(customerData).length === 0) {
+          disabledText = '无供应商';
+          disabled = true;
+        } else if (!data.customerId) {
+          disabledText = '请选择供应商';
+          disabled = true;
+        } else if (inStock.length === 0) {
+          disabledText = '请完善库位信息';
+          disabled = true;
+        }
+        return {
+          title: '入库',
+          disabled,
+          judge: true,
           disabledText,
         };
       default:
@@ -164,7 +178,7 @@ const AddSku = (
 
   const add = () => {
     const positionNums = [];
-    if (judge) {
+    if (taskData().judge) {
       ToolUtil.isArray(data.positions).map(item => {
         if (item.number) {
           return positionNums.push({ positionId: item.id, num: item.number });
@@ -240,6 +254,7 @@ const AddSku = (
       visible={visible}
       onMaskClick={() => {
         setVisible(false);
+        onClose();
       }}
     >
       <div className={style.addSku}>
@@ -286,7 +301,7 @@ const AddSku = (
                   }}
                 >{data.customerName || '请选择供应商'}</Button>
               </div>
-              <div hidden={judge} className={style.flex}>
+              <div hidden={taskData().judge} className={style.flex}>
                 <div className={style.instockNumber}>
                   {taskData().title}数量
                   <ShopNumber value={data.number} onChange={(number) => {
@@ -297,7 +312,7 @@ const AddSku = (
               <div hidden={!disabled()} className={style.danger}>
                 已办理{taskData().title}准备是否继续添加
               </div>
-              <div hidden={!judge} className={style.flex}>
+              <div hidden={!taskData().judge} className={style.flex}>
                 <AddPosition
                   min={1}
                   skuNumber={1}

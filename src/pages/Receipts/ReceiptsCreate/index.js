@@ -7,6 +7,7 @@ import { ReceiptsEnums } from '../index';
 import InStockAsk from '../../Work/Instock/InstockAsk';
 import OutStockAsk from '../../Work/OutStock/OutStockAsk';
 import InventoryAsk from '../../Work/Inventory/InventoryAsk';
+import { ERPEnums } from '../../Work/Stock/ERPEnums';
 
 
 const ReceiptsCreate = () => {
@@ -25,7 +26,7 @@ const ReceiptsCreate = () => {
   switch (query.type) {
     case ReceiptsEnums.instockOrder:
       const judge = { ...query }.hasOwnProperty('directInStock');
-      return <InStockAsk type={judge ? 'directInStock' : 'inStock'} judge={judge} />;
+      return <InStockAsk type={judge ? ERPEnums.directInStock : ERPEnums.inStock} judge={judge} />;
     case ReceiptsEnums.outstockOrder:
       return <OutStockAsk />;
     case ReceiptsEnums.stocktaking:

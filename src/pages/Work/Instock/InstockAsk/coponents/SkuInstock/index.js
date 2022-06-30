@@ -11,6 +11,7 @@ import { ScanningOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
 import MyCheck from '../../../../../components/MyCheck';
+import { ERPEnums } from '../../../../Stock/ERPEnums';
 
 export const SkuContent = (
   {
@@ -106,7 +107,7 @@ const SkuInstock = ({ type, title, judge }) => {
         }}
       />
       <SkuList
-        openBatch
+        openBatch={type ===  ERPEnums.stocktaking}
         noSort
         batch={batch}
         onBatch={setBatch}

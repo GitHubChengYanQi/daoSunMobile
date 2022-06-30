@@ -35,7 +35,7 @@ const Stock = (props) => {
 
   const { loading: getDefaultShop, refresh } = useRequest({
     ...shopCartShow,
-    data: { types: tasks.map(item => item.key) },
+    data: { types: [...tasks.map(item => item.key),ERPEnums.directInStock] },
   }, {
     onSuccess: (res) => {
       if (ToolUtil.isArray(res).length > 0) {
@@ -52,6 +52,7 @@ const Stock = (props) => {
     switch (key) {
       case 'stock':
         return <StockDetail
+          refreshTask={refresh}
           tasks={tasks}
           storehousePositionsId={ids.storehousePositionsId}
           setTask={(task, judge) => {
