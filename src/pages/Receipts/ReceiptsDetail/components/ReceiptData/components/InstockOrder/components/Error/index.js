@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import { Button, Divider, Stepper, TextArea } from 'antd-mobile';
+import { Button, Divider, Space, Stepper, TextArea } from 'antd-mobile';
 import { CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
 import Icon from '../../../../../../../../components/Icon';
 import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
@@ -505,7 +505,7 @@ const Error = (
             <div className={style.inkindTitle}>
               <div className={style.inkind}>
                 <div className={style.index}>{index + 1}</div>
-                <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
+                <span>识别码：{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
                 <SystemQRcodeOutline />
               </div>
 
@@ -518,7 +518,7 @@ const Error = (
               }} />
             </div>
             <div className={style.stepper}>
-              <span>异常数量</span>
+              <span>数量</span>
               <Stepper
                 min={1}
                 style={{
@@ -542,7 +542,7 @@ const Error = (
               />
             </div>
             <div className={style.careful}>
-              异常原因
+              原因
               <Careful
                 type='inStockError'
                 value={item.noticeIds}
@@ -563,8 +563,8 @@ const Error = (
                 }}
               />
             </div>
-            <div>
-              异常描述
+            <Space direction='vertical' style={{width:'100%'}}>
+              描述
               <TextArea
                 className={style.textArea}
                 placeholder='请输入具体异常情况'
@@ -573,7 +573,7 @@ const Error = (
                   inkinsChange(index, { description });
                 }}
               />
-            </div>
+            </Space>
           </div>;
         })
       }

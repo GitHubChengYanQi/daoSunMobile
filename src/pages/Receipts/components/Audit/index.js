@@ -3,6 +3,7 @@ import { Button, Toast } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import style from '../../ReceiptsDetail/components/Bottom/index.less';
 import { MyLoading } from '../../../components/MyLoading';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const Audit = (
   {
@@ -11,6 +12,7 @@ const Audit = (
     mediaIds = [],
     userIds = [],
     note,
+    currentNode = [],
   }) => {
 
   // 执行审批接口
@@ -41,6 +43,9 @@ const Audit = (
     processLogRun({
       data: {
         taskId: id,
+        logIds:currentNode.map(item=>{
+          return ToolUtil.isObject(item.logResult).logId;
+        }),
         status,
         userIds: userIds.toString(),
         photoId: mediaIds.toString(),

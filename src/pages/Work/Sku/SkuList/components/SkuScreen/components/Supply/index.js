@@ -90,6 +90,7 @@ const Supply = (
       </LinkButton>}
     >
       <MySearch
+        placeholder='请输入供应商信息'
         className={style.searchBar}
         onSearch={(value) => {
           like(value);

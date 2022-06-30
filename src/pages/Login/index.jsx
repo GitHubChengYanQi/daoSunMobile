@@ -15,14 +15,13 @@ import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
 
-
 export const Username = (props) => {
   return <div className={style.account}>
     <Icon type='icon-zhanghao' />
     <Input
       className={style.accountInput}
       name='account'
-      placeholder='请输入手机号/邮箱/账号'
+      placeholder='请输入账号'
       autoComplete='off'
       {...props}
     />

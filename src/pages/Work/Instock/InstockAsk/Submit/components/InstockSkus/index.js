@@ -475,7 +475,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       }}
     />}
 
-    {(instockLoading || outLoading || inventoryLoading || inventoryConditionLoading) && <MyLoading />}
+    {(instockLoading || outLoading || inventoryLoading || inventoryConditionLoading || maintenanceLoading) && <MyLoading />}
 
   </div>;
 };

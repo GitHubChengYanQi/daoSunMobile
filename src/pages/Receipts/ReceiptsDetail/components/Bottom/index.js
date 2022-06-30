@@ -50,7 +50,7 @@ const Bottom = (
       更多
       <MoreOutline style={{ fontSize: 15 }} />
     </div>
-    <Audit {...params} id={detail.processTaskId} refresh={refresh} />
+    <Audit {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
 
     <ActionSheet
       className={style.action}

@@ -37,6 +37,8 @@ const SkuShop = (
     },
     onCancel = () => {
     },
+    onDelete = () => {
+    },
   },
 ) => {
 
@@ -90,6 +92,7 @@ const SkuShop = (
     manual: true,
     onSuccess: (res) => {
       skuDelete(res);
+      onDelete();
     },
   });
 
@@ -159,10 +162,10 @@ const SkuShop = (
   };
 
   const tasks = [
-    { title: '出库任务', key: ERPEnums.outStock },
-    { title: '入库任务', key: ERPEnums.inStock },
-    { title: '盘点任务', key: ERPEnums.stocktaking },
-    { title: '调拨任务', key: ERPEnums.allocation },
+    { title: '出库申请', key: ERPEnums.outStock },
+    { title: '入库申请', key: type === ERPEnums.inStock ? ERPEnums.inStock : ERPEnums.directInStock },
+    { title: '盘点申请', key: ERPEnums.stocktaking },
+    { title: '调拨申请', key: ERPEnums.allocation },
     // { title: '养护任务', key: ERPEnums.curing },
   ];
 
@@ -180,7 +183,7 @@ const SkuShop = (
     >
       <div className={style.popupTitle}>
         <div>
-          {taskData().title}
+          物料明细
         </div>
         <div className={style.empty} />
         <div onClick={() => {
@@ -209,7 +212,7 @@ const SkuShop = (
                 <SkuItem
                   skuResult={skuResult}
                   imgSize={80}
-                  gap={10}
+                  gap={8}
                   extraWidth={judge ? '50px' : '130px'}
                   otherData={taskData(item).otherData}
                   more={taskData(item).more}
@@ -309,7 +312,7 @@ const SkuShop = (
               default:
                 break;
             }
-          }}>发起申请
+          }}>确认
         </Button>
       </div>
     </div>

@@ -89,6 +89,7 @@ const Brand = (
       </LinkButton>}
     >
       <MySearch
+        placeholder='请输入品牌信息'
         className={style.searchBar}
         onSearch={(value) => {
           like(value);

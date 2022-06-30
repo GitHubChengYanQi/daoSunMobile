@@ -12,6 +12,7 @@ import { shopCartAdd } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
+import LinkButton from '../../../../../../../components/LinkButton';
 
 const AddSku = (
   {
@@ -254,7 +255,7 @@ const AddSku = (
                 skuResult={sku}
                 imgSize={80}
                 otherData={ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')}
-                gap={10}
+                gap={8}
                 extraWidth={'calc(25vw + 24px)'}
               />
               <div className={style.flex}>
@@ -293,6 +294,9 @@ const AddSku = (
                   }} />
                 </div>
               </div>
+              <div hidden={!disabled()} className={style.danger}>
+                已办理{taskData().title}准备是否继续添加
+              </div>
               <div hidden={!judge} className={style.flex}>
                 <AddPosition
                   min={1}
@@ -314,7 +318,7 @@ const AddSku = (
                   取消
                 </Button>
                 <Button
-                  disabled={taskData().disabled || disabled()}
+                  disabled={taskData().disabled}
                   className={ToolUtil.classNames(style.ok, style.button)}
                   color='primary'
                   onClick={() => {
@@ -324,7 +328,7 @@ const AddSku = (
                     setVisible(false);
                     createBall(top, left);
                   }}>
-                  {disabled() ? '已添加' : taskData().disabledText}
+                  添加
                 </Button>
               </div>
             </>

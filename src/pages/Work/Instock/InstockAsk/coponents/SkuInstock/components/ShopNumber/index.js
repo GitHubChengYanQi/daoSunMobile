@@ -13,7 +13,7 @@ const ShopNumber = (
     },
     show,
     min = 1,
-    max = 99999,
+    max = 999999999,
     id = 'stepper',
   },
 ) => {

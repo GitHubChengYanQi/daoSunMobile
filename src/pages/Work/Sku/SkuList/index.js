@@ -54,7 +54,7 @@ const SkuList = (
 
   const [refresh, setRefresh] = useState(false);
 
-  const [sort, setSort] = useState({});
+  const [sort, setSort] = useState({ field:'createTime', order:'descend' });
 
   const clear = () => {
     setSkuClass([]);

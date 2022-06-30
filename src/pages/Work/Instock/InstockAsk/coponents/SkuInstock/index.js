@@ -49,7 +49,7 @@ export const SkuContent = (
             <SkuItem
               skuResult={item}
               imgSize={80}
-              gap={10}
+              gap={8}
               extraWidth='60px'
               otherData={ToolUtil.isArray(item.brandResults).map(item => item.brandName).join(' / ')}
             />

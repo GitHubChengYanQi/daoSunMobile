@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
-import StockDetail from './StockDetail';
+import StockDetail, { shopCartShow } from './StockDetail';
 import MyNavBar from '../../components/MyNavBar';
 import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
@@ -10,6 +10,10 @@ import Dynamic from './Dynamic';
 import Task from './Task';
 import { Button } from 'antd-mobile';
 import { ReceiptsEnums } from '../../Receipts';
+import { useRequest } from '../../../util/Request';
+import { ToolUtil } from '../../components/ToolUtil';
+import { ERPEnums } from './ERPEnums';
+import { MyLoading } from '../../components/MyLoading';
 
 const Stock = (props) => {
 
@@ -21,16 +25,40 @@ const Stock = (props) => {
 
   const [taskKey, setTaskKey] = useState();
 
+  const tasks = [
+    { text: '出库任务', key: ERPEnums.outStock },
+    { text: '入库任务', key: ERPEnums.inStock },
+    { text: '盘点任务', key: ERPEnums.stocktaking },
+    { text: '调拨任务', key: ERPEnums.allocation },
+    // { text: '养护任务', key: ERPEnums.curing },
+  ];
+
+  const { loading: getDefaultShop, refresh } = useRequest({
+    ...shopCartShow,
+    data: { types: tasks.map(item => item.key) },
+  }, {
+    onSuccess: (res) => {
+      if (ToolUtil.isArray(res).length > 0) {
+        if (!stockDetail.task){
+          setStockDetail({ ...stockDetail, task: res[0] });
+        }
+      } else {
+        setStockDetail({ ...stockDetail, task: null });
+      }
+    },
+  });
+
   const content = () => {
     switch (key) {
       case 'stock':
         return <StockDetail
+          tasks={tasks}
           storehousePositionsId={ids.storehousePositionsId}
           setTask={(task, judge) => {
             setStockDetail({ ...stockDetail, task, judge });
           }}
-          setSkus={(skus,type) => {
-            setStockDetail({ ...stockDetail, skus,task:type });
+          setSkus={(skus, type) => {
+            setStockDetail({ ...stockDetail, skus, task: type });
           }}
           stockDetail={stockDetail}
         />;
@@ -48,23 +76,22 @@ const Stock = (props) => {
       case 'stock':
         const skus = stockDetail.skus || [];
         return stockDetail.task && <SkuShop
-          // emptyHidden
           switchType
           className={style.popup}
           noClose
           judge={stockDetail.judge}
           bottom={70}
           skus={skus}
+          onDelete={() => {
+            refresh();
+          }}
           setSkus={(skus) => {
-            setStockDetail({ ...stockDetail, skus, task: skus.length > 0 ? stockDetail.task : null });
+            setStockDetail({ ...stockDetail, skus });
           }}
           taskTypeChange={(task) => {
             setStockDetail({ ...stockDetail, task });
           }}
           type={stockDetail.task}
-          onClear={() => {
-            setStockDetail({ ...stockDetail, task: null, skus: [] });
-          }}
         />;
       case 'Message':
         switch (taskKey) {
@@ -124,6 +151,8 @@ const Stock = (props) => {
           icon: <Icon type='icon-dongtai' />,
         }]
       } />
+
+    {getDefaultShop && <MyLoading />}
   </div>;
 };
 

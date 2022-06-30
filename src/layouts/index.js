@@ -7,8 +7,6 @@ import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
-import KeepAlive, { AliveScope } from '../components/KeepAlive';
-import Task from '../pages/Work/Stock/Task';
 
 
 const BasicLayout = (props) => {
@@ -119,11 +117,14 @@ const BasicLayout = (props) => {
   }
 
   if (state.init === true) {
-    return <AliveScope>
-      <div className={styles.safeArea}>
-        {props.children}
-      </div>
-    </AliveScope>;
+    return <div className={styles.safeArea}>
+      {props.children}
+    </div>
+    // return <AliveScope>
+    //   <div className={styles.safeArea}>
+    //     {props.children}
+    //   </div>
+    // </AliveScope>;
   } else {
     return <div>
       <ErrorBlock fullPage title='系统初始化失败' />

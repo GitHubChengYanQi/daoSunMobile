@@ -11,6 +11,7 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import InstockError from './components/InstockError';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import Stocktaking from './components/Stocktaking';
+import Maintenance from './components/Maintenance';
 
 const ReceiptData = (
   {
@@ -69,7 +70,12 @@ const ReceiptData = (
           refresh={refresh}
         />;
       case ReceiptsEnums.maintenance:
-        return <></>
+        return <Maintenance
+          getAction={getAction}
+          refresh={refresh}
+          permissions={permissions}
+          receipts={data.receipts}
+        />;
       default:
         return <MyEmpty />;
     }

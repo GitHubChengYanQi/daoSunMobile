@@ -2,6 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { Avatar } from 'antd';
 import { ReceiptsEnums } from '../../../index';
+import { MyDate } from '../../../../components/MyDate';
 
 const Header = ({ data = {} }) => {
 
@@ -12,6 +13,8 @@ const Header = ({ data = {} }) => {
       case ReceiptsEnums.instockOrder:
       case ReceiptsEnums.instockError:
       case ReceiptsEnums.outstockOrder:
+      case ReceiptsEnums.maintenance:
+      case ReceiptsEnums.stocktaking:
         return {
           coding: receipts.coding,
           statusName: receipts.statusName,
@@ -39,7 +42,7 @@ const Header = ({ data = {} }) => {
           {receiptsData().coding}
         </div>
         <span className={style.time}>
-          {data.createTime}
+          {MyDate.Show(data.createTime)}
         </span>
       </div>
     </div>

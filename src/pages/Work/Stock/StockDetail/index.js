@@ -100,6 +100,7 @@ const StockDetail = (
     stockDetail = {},
     setSkus = () => {
     },
+    tasks,
   }) => {
 
 
@@ -115,34 +116,13 @@ const StockDetail = (
 
   const [taskVisible, setTaskVisible] = useState();
 
-  const tasks = [
-    { text: '出库任务', key: ERPEnums.outStock },
-    { text: '入库任务', key: ERPEnums.inStock },
-    { text: '盘点任务', key: ERPEnums.stocktaking },
-    { text: '调拨任务', key: ERPEnums.allocation },
-    // { text: '养护任务', key: ERPEnums.curing },
-  ];
-
-  const { loading: getDefaultShop } = useRequest({
-    ...shopCartShow,
-    data: { types: tasks.map(item => item.key) },
-  }, {
-    onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length > 0) {
-        setTask(res[0]);
-      }
-    },
-  });
-
   return <>
-
-    {getDefaultShop && <MyLoading />}
 
     <div className={style.search}>
       <MySearch
         historyType='stock'
         extraIcon={<Icon type='icon-lingdang' style={{ fontSize: 20 }} />}
-        placeholder='请输入关键词搜索'
+        placeholder='请输入物料相关信息'
         onSearch={(value) => {
           ref.current.submit({ skuName: value });
         }}
@@ -183,7 +163,7 @@ const StockDetail = (
         setSkus([...ToolUtil.isArray(stockDetail.skus), sku],type);
       }}
       onClose={() => {
-        setTask(null);
+        // setTask(null);
       }}
     />
 

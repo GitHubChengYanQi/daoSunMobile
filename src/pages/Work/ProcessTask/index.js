@@ -76,10 +76,10 @@ export const Tasks = () => {
 };
 
 const ProcessTask = () => {
-
-  return <KeepAlive id='Test'>
-    <Tasks />
-  </KeepAlive>;
+  return <Tasks />;
+  // return <KeepAlive id='Test'>
+  //   <Tasks />
+  // </KeepAlive>;
 };
 
 export default ProcessTask;

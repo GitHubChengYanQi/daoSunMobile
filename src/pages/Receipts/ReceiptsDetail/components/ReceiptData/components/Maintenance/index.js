@@ -2,15 +2,11 @@ import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { Divider } from 'antd';
-import UploadFile from '../../../../../../components/Upload/UploadFile';
-import { CheckOutlined, PauseCircleFilled, WarningOutlined } from '@ant-design/icons';
 import { Button, Popup } from 'antd-mobile';
-import { CameraOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
-import Error from '../InstockOrder/components/Error';
-import { ReceiptsEnums } from '../../../../../index';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import { useRequest } from '../../../../../../../util/Request';
-import { MyLoading } from '../../../../../../components/MyLoading';
+import Maintenanceing from './components/Maintenanceing';
+import MyAntPopup from '../../../../../../components/MyAntPopup';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -26,25 +22,16 @@ const Maintenance = (
   },
 ) => {
 
-  const actionPermissions = getAction('check').id && permissions;
+  const actionPermissions = getAction('maintenanceing').id && permissions;
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   useEffect(() => {
-    const taskList = receipts.taskList || [];
-    setData(taskList);
-  }, [receipts.taskList]);
+    const detailResultsByPositions = receipts.detailResultsByPositions || [];
+    setData(detailResultsByPositions);
+  }, [receipts.detailResultsByPositions]);
 
   const [visible, setVisible] = useState();
-
-  const { run: addPhoto } = useRequest(inventoryAddPhoto, { manual: true });
-  const { loading: temporaryLockLoading, run: temporaryLockRun } = useRequest(temporaryLock, {
-    manual: true,
-    onSuccess: () => {
-      refresh();
-    },
-  });
 
   const positionChange = (params, currentIndex) => {
     const newData = data.map((item, index) => {
@@ -65,7 +52,7 @@ const Maintenance = (
 
     {
       data.map((positionItem, positionIndex) => {
-        const skuResultList = positionItem.skuResultList || [];
+        const skuList = positionItem.object || [];
 
         return <div key={positionIndex} className={style.position}>
           <div className={style.title}>
@@ -74,129 +61,45 @@ const Maintenance = (
 
           <div className={style.skus}>
             {
-              skuResultList.map((skuItem, skuIndex) => {
+              skuList.map((skuItem, skuIndex) => {
                 const brandResults = skuItem.brandResults || [];
-
-                const noComplete = brandResults.filter(item => {
-                  return [0, 2].includes(item.inventoryStatus);
-                });
 
                 if (!positionItem.show && skuIndex >= 2) {
                   return null;
                 }
 
-                const border = (positionItem.show || skuResultList.length <= 2) ? skuIndex === skuResultList.length - 1 : skuIndex === 1;
+                const border = (positionItem.show || skuList.length <= 2) ? skuIndex === skuList.length - 1 : skuIndex === 1;
 
                 return <div
-                  className={style.sku}
+                  className={style.skuItem}
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
-                  <SkuItem skuResult={skuItem} />
-                  <Divider style={{ margin: '8px 0' }} />
-                  <div className={style.brands}>
-                    {
-                      brandResults.map((brandItem, brandIndex) => {
-                        let color = '';
-                        let icon = <></>;
-                        switch (brandItem.inventoryStatus) {
-                          case 0:
-                            color = '#D9D9D9';
-                            break;
-                          case 1:
-                            color = '#2EAF5D';
-                            icon = <CheckOutlined style={{ color: '#2EAF5D' }} />;
-                            break;
-                          case -1:
-                            color = '#FF0000';
-                            icon = <WarningOutlined style={{ color: '#FF0000' }} />;
-                            break;
-                          case 2:
-                            color = '#FA8F2B';
-                            icon = <PauseCircleFilled style={{ color: '#FA8F2B' }} />;
-                            break;
-                          default:
-                            color = '#D9D9D9';
-                            break;
-                        }
-
-                        return <div
-                          key={brandIndex}
-                          className={style.brand}
-                          style={{ border: `1px solid ${color}` }}
-                          onClick={() => {
-                            if (actionPermissions) {
-                              setVisible({
-                                skuId: skuItem.skuId,
-                                skuResult: skuItem,
-                                brandId: brandItem.brandId,
-                                brandResult: { brandName: brandItem.brandName || '其他品牌' },
-                                stockNumber: brandItem.number,
-                                number: brandItem.number,
-                                inventoryTaskId: receipts.inventoryTaskId,
-                                positionId: positionItem.storehousePositionsId,
-                                anomalyId: brandItem.anomalyId || false,
-                              });
-                            }
-                          }}
-                        >
-                          <div className={style.name}>{brandItem.brandName || '其他品牌'}({brandItem.number})</div>
-                          {icon}
-                        </div>;
-                      })
-                    }
+                  <div className={style.skuRow}>
+                    <SkuItem
+                      extraWidth={actionPermissions ? '74px' : '24px'}
+                      skuResult={skuItem}
+                      otherData={brandResults.map(item => {
+                        return `${item.brandName} (${item.number})`;
+                      }).join(' 、 ')}
+                    />
                   </div>
-                  <div className={style.action}>
-                    <div className={style.mediaIds}>
-                      <UploadFile
-                        show={!actionPermissions}
-                        value={ToolUtil.isArray(skuItem.mediaIds).map((item, index) => {
-                          return {
-                            mediaId: item,
-                            url: ToolUtil.isArray(skuItem.inventoryUrls)[index],
-                            type: 'image',
-                            inventoryTaskId: receipts.inventoryTaskId,
-                          };
-                        })}
-                        uploadId={`errorUpload${positionIndex}${skuIndex}`}
-                        imgSize={36}
-                        icon={<CameraOutline />}
-                        noFile
-                        onChange={(mediaIds) => {
-                          addPhoto({
-                            data: {
-                              positionId: positionItem.storehousePositionsId,
-                              enclosure: mediaIds,
-                              skuId: skuItem.skuId,
-                              inventoryId: receipts.inventoryTaskId,
-                            },
-                          });
-                        }}
-                      />
-                    </div>
-                    {actionPermissions &&
+                  <div hidden={!actionPermissions}>
                     <Button
-                      disabled={noComplete.length > 0 || skuItem.lockStatus === 98}
                       color='primary'
                       fill='outline'
-                      onClick={() => {
-                        temporaryLockRun({
-                          data: {
-                            positionId: positionItem.storehousePositionsId,
-                            skuId: skuItem.skuId,
-                            inventoryId: receipts.inventoryTaskId,
-                          },
-                        });
-                      }}
-                    >
-                      {skuItem.lockStatus === 98 ? '已盘点' : '确定'}
-                    </Button>}
+                      onClick={() => setVisible({
+                        ...skuItem,
+                        positionId: positionItem.storehousePositionsId,
+                        positionName: positionItem.name,
+                      })}>
+                      养护
+                    </Button>
                   </div>
-
                 </div>;
               })
             }
 
-            {skuResultList.length > 2 && <Divider style={{ margin: 0 }}>
+            {skuList.length > 2 && <Divider style={{ margin: 0 }}>
               <div onClick={() => {
                 positionChange({ show: !positionItem.show }, positionIndex);
               }}>
@@ -213,28 +116,17 @@ const Maintenance = (
       })
     }
 
-    <Popup
-      onMaskClick={() => setVisible(false)}
+    <MyAntPopup
+      title='养护'
+      onClose={() => setVisible(false)}
       visible={visible}
       destroyOnClose
     >
-      <Error
-        id={visible && visible.anomalyId}
-        type={ReceiptsEnums.stocktaking}
-        skuItem={visible}
-        onClose={() => {
-          setVisible(false);
-        }}
-        onEdit={refresh}
-        refreshOrder={refresh}
-        onSuccess={() => {
-          refresh();
-          setVisible(false);
-        }}
-      />
-    </Popup>
-
-    {temporaryLockLoading && <MyLoading />}
+      <Maintenanceing skuItem={visible} onSuccess={() => {
+        refresh();
+        setVisible(false);
+      }} />
+    </MyAntPopup>
 
   </div>;
 };

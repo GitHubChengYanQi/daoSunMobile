@@ -29,6 +29,8 @@ const BottomButton = (
       left: 0,
       backgroundColor: '#fff',
       boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.3)',
+      // display:'flex',
+      // alignItems:'center',
     }}>
     <div style={{ padding: '10px 12px' }}>
       {only ?
@@ -81,7 +83,7 @@ const BottomButton = (
           </Button>
         </>}
     </div>
-    <SafeArea position='bottom' />
+    {/*<SafeArea position='bottom' />*/}
   </div>;
 };
 

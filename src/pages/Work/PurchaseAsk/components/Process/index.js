@@ -75,7 +75,7 @@ const Process = (
           case 'error':
             return '已拒绝';
           case 'success':
-            return '已审批';
+            return '已同意';
           case 'wait':
             return '未审批';
           default:
@@ -121,24 +121,39 @@ const Process = (
   };
 
   // 审批人
-  const auditUsers = (users, step, stepsStatus) => {
+  const auditUsers = (users, step) => {
 
     let auditType = step.auditType;
     if (step.auditRule.type === 'status') {
-      auditType = 'action'
+      auditType = 'action';
     }
     const logResult = step.logResult || {};
+
+
     return users.map((items, index) => {
+      let stepsStatus;
+      switch (items.auditStatus) {
+        case 99:
+          stepsStatus = 'success';
+          break;
+        case 50:
+          stepsStatus = 'errror';
+          break;
+        default:
+          break;
+      }
+
       return <div className={style.user} key={index}>
         <div className={style.nameAvatar}>
           <Avatar
             size={26}
             shape='square'
             key={index}
-          >{items.substring(0, 1)}</Avatar>
-          {items}
+            src={items.avatar}
+          >{items.name.substring(0, 1)}</Avatar>
+          {items.name}
         </div>
-        <div hidden={logResult.status === -1}>
+        <div hidden={!stepsStatus}>
           {nodeStatusName(auditType, stepsStatus)} · {logResult.updateTime}
         </div>
       </div>;
@@ -146,7 +161,7 @@ const Process = (
   };
 
   // 审批人列表
-  const rules = (step, stepsStatus) => {
+  const rules = (step) => {
     const users = [];
     const rules = ToolUtil.isObject(step.auditRule).rules || [];
 
@@ -155,21 +170,23 @@ const Process = (
         switch (items.type) {
           case 'AppointUsers':
             items.appointUsers && items.appointUsers.map((itemuser) => {
-              return users.push(itemuser.title);
+              return users.push({ name: itemuser.title, avatar: itemuser.avatar, auditStatus: itemuser.auditStatus });
             });
             break;
           case 'DeptPositions':
             items.deptPositions && items.deptPositions.map((itemdept) => {
-              return users.push(`${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
-                return items.label;
-              })})`);
+              return users.push({
+                name: `${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
+                  return items.label;
+                })})`,
+              });
             });
             break;
           case 'AllPeople':
-            users.push('所有人');
+            users.push({ name: '所有人', auditStatus: 99 });
             break;
           case 'MasterDocumentPromoter':
-            users.push('主单据审批人');
+            users.push({ name: '主单据审批人' });
             break;
           default:
             break;
@@ -177,7 +194,7 @@ const Process = (
         return null;
       });
       return <div className={style.users}>
-        {auditUsers(users, step, stepsStatus)}
+        {auditUsers(users, step)}
       </div>;
     }
   };
@@ -225,7 +242,7 @@ const Process = (
 
     switch (step.logResult && step.logResult.status) {
       case -1:
-        if (next){
+        if (next) {
           stepStatus = 'wait';
           iconColor = style.success;
           break;
@@ -255,7 +272,10 @@ const Process = (
               <span>发起人 · {nodeStatusName(step.auditType, stepStatus)}</span>
               {visiable(hidden, index)}
             </div>}
-            description={!hidden && (createName ? auditUsers([createName], step, stepStatus) : rules(step, stepStatus))}
+            description={!hidden && (createName ? auditUsers([{
+              name: createName,
+              auditStatus: 99,
+            }], step, stepStatus) : rules(step, stepStatus))}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,

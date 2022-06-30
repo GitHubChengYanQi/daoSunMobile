@@ -21,14 +21,14 @@ const InstockOrder = (
 
   let details = [];
   let announcementsList = [];
-  let remake = '';
+  let remake;
   let fileUrls = [];
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults);
       announcementsList = data.announcementsList;
-      remake = ToolUtil.isArray(data.remake);
+      remake = data.remake;
       fileUrls = ToolUtil.isArray(data.url);
       break;
     case ReceiptsEnums.outstockOrder:
@@ -90,12 +90,13 @@ const InstockOrder = (
 
     <div className={style.note}>
       <div className={style.title}>备注说明</div>
-      <div className={style.remake}>{remake}</div>
+      <div className={style.remake}>{remake || '无'}</div>
     </div>
 
     <div className={style.file}>
       <div className={style.title}>附件</div>
       <div className={style.files}>
+        {fileUrls.length === 0 && '无'}
         <Upload
           showUploadList={{
             showRemoveIcon: false,

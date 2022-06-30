@@ -92,7 +92,7 @@ const Stocktaking = (
                   className={style.sku}
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
-                  <SkuItem skuResult={skuItem} />
+                  <SkuItem skuResult={skuItem} extraWidth='24px' />
                   <Divider style={{ margin: '8px 0' }} />
                   <div className={style.brands}>
                     {
