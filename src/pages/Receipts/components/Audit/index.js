@@ -35,6 +35,7 @@ const Audit = (
           content: '审批失败！',
           position: 'bottom',
         });
+        refresh();
       },
     },
   );
@@ -43,7 +44,7 @@ const Audit = (
     processLogRun({
       data: {
         taskId: id,
-        logIds:currentNode.map(item=>{
+        logIds: currentNode.map(item => {
           return ToolUtil.isObject(item.logResult).logId;
         }),
         status,

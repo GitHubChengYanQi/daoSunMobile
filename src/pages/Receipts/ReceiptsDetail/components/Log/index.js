@@ -24,7 +24,6 @@ const Log = (
     <StepList remarks={remarks} onChange={setRemarks} addComments={(remarksId) => {
       ref.current.addComments(remarksId);
     }} />
-
   </div>;
 };
 

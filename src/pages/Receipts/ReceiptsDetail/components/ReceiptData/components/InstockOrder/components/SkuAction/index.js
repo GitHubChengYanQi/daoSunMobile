@@ -55,12 +55,15 @@ const SkuAction = (
     return null;
   });
 
-  const items = [...noAction, ...actions];
-
-  const showItems = items.filter(item => !item.hidden);
+  const items = [...noAction, ...actions].map(item => {
+    return {
+      ...item,
+      number: item.realNumber,
+    };
+  });
 
   let countNumber = 0;
-  showItems.map(item => countNumber += item.number);
+  items.map(item => countNumber += item.number);
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -68,7 +71,7 @@ const SkuAction = (
     imgUrl,
     imgId,
     transitionEnd = () => {
-  }) => {
+    }) => {
 
     const skuImg = document.getElementById(imgId);
     if (!skuImg) {
@@ -81,17 +84,17 @@ const SkuAction = (
       left,
       imgUrl,
       transitionEnd,
-      getNodePosition:()=>{
+      getNodePosition: () => {
         const waitInstock = document.getElementById('waitInstock');
         const parent = waitInstock.offsetParent;
         const translates = document.defaultView.getComputedStyle(parent, null).transform;
         let translateX = parseFloat(translates.substring(6).split(',')[4]);
         let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
         return {
-          top:parent.offsetTop + tanslateY,
-          left:parent.offsetLeft + translateX
-        }
-      }
+          top: parent.offsetTop + tanslateY,
+          left: parent.offsetLeft + translateX,
+        };
+      },
     });
   };
 
@@ -99,6 +102,8 @@ const SkuAction = (
     const skuResult = item.skuResult || {};
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, `skuImg${index}`, () => {
+      // alert(2222)
+      // toggle();
       addShop({
         data: {
           formStatus,
@@ -121,10 +126,10 @@ const SkuAction = (
         申请明细
       </div>
       <div className={style.extra}>
-        合计：<span>{showItems.length}</span>类<span>{countNumber}</span>件
+        合计：<span>{items.length}</span>类<span>{countNumber}</span>件
       </div>
     </div>
-    {showItems.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+    {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
     {
       items.map((item, index) => {
 
@@ -133,26 +138,27 @@ const SkuAction = (
         }
 
         if (!action || item.status !== 0) {
-          return <InSkuItem item={item} data={showItems} key={index} />;
+          return <InSkuItem item={item} data={items} key={index} />;
         }
 
         return <div key={index}>
           <Viewpager
             currentIndex={index}
             onLeft={() => {
+              // alert(111);
               addInstockShop(1, item, index, 'waitInStock');
             }}
             onRight={() => {
               setVisible(item);
             }}
           >
-            <InSkuItem index={index} item={item} data={showItems} key={index} />
+            <InSkuItem index={index} item={item} data={items} key={index} />
           </Viewpager>
         </div>;
       })
     }
 
-    {showItems.length > 3 && <Divider className={style.allSku}>
+    {items.length > 3 && <Divider className={style.allSku}>
       <div onClick={() => {
         toggle();
       }}>

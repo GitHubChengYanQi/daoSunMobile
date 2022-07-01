@@ -13,6 +13,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
 import SkuError from './components/InstockError/components/SkuError';
+import StepList from '../Log/components/StepList';
 
 const ReceiptData = (
   {
@@ -82,11 +83,17 @@ const ReceiptData = (
     }
   };
 
+  const remarks = data.remarks || [];
+
   return <>
     {receiptType()}
     <Process auditData={data.stepsResult} createUser={data.user} card />
-    <Comments detail={data} id={data.processTaskId} />
-    <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0}>
+    <Comments detail={data} id={data.processTaskId} refresh={refresh} />
+    <div className={style.comments}>
+      <StepList remarks={remarks.filter(item => item.type === 'comments')} />
+    </div>
+
+    <div hidden>
       <MyTextArea
         placeholder='填写审批意见，可@相关人员'
         className={style.text}
