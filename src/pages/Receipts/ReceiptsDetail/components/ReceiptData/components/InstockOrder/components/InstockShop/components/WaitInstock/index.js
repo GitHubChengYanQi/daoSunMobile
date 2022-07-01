@@ -44,6 +44,7 @@ const WaitInstock = (
     onSuccess: () => {
       shopRefresh();
       refresh();
+      setData([]);
       Message.toast('入库成功！');
     },
     onError: () => {
@@ -57,6 +58,7 @@ const WaitInstock = (
     onSuccess: () => {
       shopRefresh();
       refresh();
+      setData([]);
       Message.toast('退回成功！');
     },
     onError: () => {
@@ -130,7 +132,7 @@ const WaitInstock = (
                     title={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({ skuResult })}
-                    otherData={`${customerName} / ${brandName}`}
+                    otherData={[customerName,brandName]}
                   />
                 </div>
                 <div className={style.inStock}>
@@ -154,7 +156,7 @@ const WaitInstock = (
             } else {
               setData(instockList);
             }
-          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 种</span>
+          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
         </div>
         <div className={style.buttons}>
           <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
@@ -162,7 +164,7 @@ const WaitInstock = (
               data: { ids: data.map(item => item.cartId) },
             });
           }}>退回</Button>
-          <Button color='primary' fill='outline' disabled={instockSkus.length === 0} onClick={() => {
+          <Button color='primary' disabled={instockSkus.length === 0} onClick={() => {
             const listParams = instockSkus.map((item) => {
               const skuResult = ToolUtil.isObject(item.skuResult);
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0] || {};

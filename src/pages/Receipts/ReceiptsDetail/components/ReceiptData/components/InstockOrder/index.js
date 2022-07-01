@@ -1,10 +1,10 @@
 import React from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import { Upload } from 'antd';
 import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
+import UploadFile from '../../../../../../components/Upload/UploadFile';
 
 const InstockOrder = (
   {
@@ -98,18 +98,12 @@ const InstockOrder = (
       <div className={style.title}>附件</div>
       <div className={style.files}>
         {fileUrls.length === 0 && '无'}
-        <Upload
-          showUploadList={{
-            showRemoveIcon: false,
-          }}
-          className='avatar-uploader'
-          fileList={fileUrls.map(item => {
-            return {
-              url: item,
-            };
-          })}
-          listType='picture'
-        />
+        <UploadFile show value={fileUrls.map(item => {
+          return {
+            url: item,
+            type:'image'
+          };
+        })} />
       </div>
     </div>
   </>;

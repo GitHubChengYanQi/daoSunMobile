@@ -3,7 +3,6 @@ import style from './index.less';
 import { Badge, Button, Popup, Tabs } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-import { RemoveButton } from '../../../../../../../components/MyButton';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../../../../../components/Icon';
@@ -15,8 +14,7 @@ import MyCheck from '../../../../../../../components/MyCheck';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import { judgeLoginUser } from '../../../../Submit/components/InstockSkus';
-import { history } from 'umi';
-import { ReceiptsEnums } from '../../../../../../../Receipts';
+import MyRemoveButton from '../../../../../../../components/MyRemoveButton';
 
 const SkuShop = (
   {
@@ -118,7 +116,7 @@ const SkuShop = (
   ]);
 
 
-  const { loading,data:judgeData, run: judgeRun } = useRequest(judgeLoginUser, {
+  const { loading, data: judgeData, run: judgeRun } = useRequest(judgeLoginUser, {
     manual: true,
     onSuccess: (res) => {
       if (res) {
@@ -135,7 +133,7 @@ const SkuShop = (
 
   useEffect(() => {
     if (type) {
-      if (type === ERPEnums.directInStock && !judgeData){
+      if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();
       }
       showShop({
@@ -167,14 +165,14 @@ const SkuShop = (
       case ERPEnums.outStock:
         return {
           title: '出库任务明细',
-          otherData: item.brandName,
+          otherData: [item.brandName],
           type: '出库申请',
         };
       case ERPEnums.inStock:
         return {
           title: '入库任务明细',
           type: '入库申请',
-          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+          otherData: [item.customerName,item.brandName],
         };
       case ERPEnums.directInStock:
         let number = 0;
@@ -186,7 +184,7 @@ const SkuShop = (
           title: '入库任务明细',
           type: '入库申请',
           judge: true,
-          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+          otherData: [item.customerName,item.brandName],
           more: positions.join('、'),
           number,
         };
@@ -214,12 +212,12 @@ const SkuShop = (
           物料明细
         </div>
         <div className={style.empty} />
-        <div onClick={() => {
+        <MyRemoveButton onRemove={()=>{
           onClear();
           shopDelete({ data: { ids: skus.map(item => item.cartId) } });
         }}>
-          <RemoveButton /> 全部清除
-        </div>
+          全部清除
+        </MyRemoveButton>
       </div>
 
       {switchType && <Tabs className={style.tabs} activeKey={type} onChange={(key) => {
@@ -248,7 +246,7 @@ const SkuShop = (
               </div>
               <div className={style.action}>
                 <div className={style.removeButton}>
-                  <RemoveButton onClick={() => {
+                  <MyRemoveButton onRemove={() => {
                     shopDelete({ data: { ids: [item.cartId] } });
                   }} />
                 </div>
@@ -275,7 +273,7 @@ const SkuShop = (
         <MyCheck checked={checked} className={style.checkButton} fontSize={14} onChange={() => {
           selectAll();
         }}>全选</MyCheck>
-        <div className={style.checkNumber}>已选中 <span>{checkSkus.length}</span> 种</div>
+        <div className={style.checkNumber}>已选中 <span>{checkSkus.length}</span> 类</div>
       </div>
       <Button
         disabled={checkSkus.length === 0}

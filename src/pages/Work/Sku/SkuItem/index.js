@@ -10,10 +10,9 @@ const SkuItem = (
     number,
     unitName,
     skuResult = {},
-    otherData,
+    otherData = [],
     extraWidth = '0px',
     imgSize = 74,
-    gap = 4,
     imgId,
     className,
     describe,
@@ -37,7 +36,7 @@ const SkuItem = (
       </div>
       <div
         className={style.sku}
-        style={{ gap, maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
+        style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
         <MyEllipsis width='100%'>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
@@ -47,12 +46,19 @@ const SkuItem = (
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>
         </div>
-        <div>
-          <div hidden={!otherData} className={style.otherData}>
-            <MyEllipsis width='100%'>
-              {otherData}
-            </MyEllipsis>
-          </div>
+        <div hidden={otherData.length === 0}>
+          {
+            otherData.map((item, index) => {
+              if (!item){
+                return null;
+              }
+              return <div key={index} className={style.otherData}>
+                <MyEllipsis width='100%'>
+                  {item}
+                </MyEllipsis>
+              </div>;
+            })
+          }
         </div>
       </div>
     </div>

@@ -137,7 +137,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         return {
           title: '出库申请',
           type: '出库',
-          otherData: item.brandName,
+          otherData: [item.brandName],
           careful: '注意事项',
           disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
         };
@@ -146,7 +146,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         return {
           title: '入库任务明细',
           type: '入库',
-          otherData: `${item.customerName || '-'} /  ${item.brandName || '-'}`,
+          otherData: [item.customerName,item.brandName],
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
           }).join('、'),

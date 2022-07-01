@@ -52,7 +52,7 @@ export const SkuContent = (
               imgSize={80}
               gap={8}
               extraWidth='60px'
-              otherData={ToolUtil.isArray(item.brandResults).map(item => item.brandName).join(' / ')}
+              otherData={[ToolUtil.isArray(item.brandResults).map(item => item.brandName).join(' / ')]}
             />
           </div>
           {buttonHidden ? '已添加' : (!batch && <LinkButton onClick={() => {

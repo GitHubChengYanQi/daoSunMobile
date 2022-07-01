@@ -224,7 +224,7 @@ const Receipts = (
                       imgSize={60}
                       skuResult={skuResut}
                       extraWidth='158px'
-                      otherData={ToolUtil.isObject(detailItem.brandResult).brandName}
+                      otherData={[ToolUtil.isObject(detailItem.brandResult).brandName]}
                     />
                   </div>
                   <div className={style.skuData} style={{ alignItems: 'center', gap: 12 }}>

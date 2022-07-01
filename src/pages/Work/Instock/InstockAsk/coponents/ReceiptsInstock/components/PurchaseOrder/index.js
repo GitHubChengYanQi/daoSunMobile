@@ -73,7 +73,7 @@ const PurchaseOrder = (
                       imgSize={60}
                       skuResult={skuItem.skuResult}
                       extraWidth='94px'
-                      otherData={ToolUtil.isObject(skuItem.brandResult).brandName}
+                      otherData={[ToolUtil.isObject(skuItem.brandResult).brandName]}
                     />
                   </div>
                   <div className={style.skuData}>

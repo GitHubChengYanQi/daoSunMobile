@@ -188,7 +188,7 @@ const WaitOutSku = (
                               skuResult={cartItem.skuResult}
                               imgSize={60}
                               extraWidth='148px'
-                              otherData={ToolUtil.isObject(cartItem.brandResult).brandName}
+                              otherData={[ToolUtil.isObject(cartItem.brandResult).brandName]}
                             />
                           </div>
                           <div>
@@ -214,10 +214,10 @@ const WaitOutSku = (
           } else {
             setUserIds(allChecked ? [] : data.map(item => item.userId));
           }
-        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {sys ? returnSkus.length : userIds.length} 种</span>
+        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {sys ? returnSkus.length : userIds.length} 类</span>
       </div>
       <div className={style.buttons}>
-        {sys && <Button color='danger' fill='outline' disabled={returnSkus.length === 0} onClick={() => {
+        {sys && <Button color='danger' disabled={returnSkus.length === 0} onClick={() => {
           const productionPickListsCartParams = returnSkus.map(item => {
             return {
               pickListsId: item.pickListsId,

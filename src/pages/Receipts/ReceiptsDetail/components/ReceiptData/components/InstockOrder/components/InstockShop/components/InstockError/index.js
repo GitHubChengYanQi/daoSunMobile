@@ -38,6 +38,7 @@ const InstockError = (
     manual: true,
     onSuccess: () => {
       shopRefresh();
+      setData([]);
       Message.toast('添加异常单成功！');
     },
     onError: () => {
@@ -51,6 +52,7 @@ const InstockError = (
     onSuccess: () => {
       shopRefresh();
       refresh();
+      setData([]);
       Message.toast('退回成功！');
     },
     onError: () => {
@@ -83,7 +85,10 @@ const InstockError = (
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
-            otherData={`${customerName || ''}${customerName && brandName ? ' / ' : ''}${brandName || ''}`}
+            otherData={[
+              customerName,
+              brandName
+            ]}
           />,
         };
       case ReceiptsEnums.stocktaking:
@@ -92,7 +97,7 @@ const InstockError = (
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
-            otherData={brandName}
+            otherData={[brandName]}
           />,
         };
       default:
@@ -198,7 +203,7 @@ const InstockError = (
             } else {
               setData(errors);
             }
-          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 种</span>
+          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
         </div>
         <div className={style.buttons}>
           <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
@@ -209,7 +214,6 @@ const InstockError = (
           <Button
             disabled={data.length === 0}
             color='primary'
-            fill='outline'
             onClick={() => {
               orderAdd({
                 data: {

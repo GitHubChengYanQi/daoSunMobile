@@ -49,7 +49,7 @@ const OutSkuItem = ({item,data}) => {
           imgSize={60}
           skuResult={skuResult}
           extraWidth='124px'
-          otherData={ToolUtil.isObject(item.brandResult).brandName}
+          otherData={[ToolUtil.isObject(item.brandResult).brandName]}
         />
       </div>
       <div className={style.outStockNumber} style={{

@@ -69,7 +69,7 @@ const Maintenanceing = (
     return <div style={{ paddingBottom: 60 }}>
       <div className={style.skuItem}>
         <div className={style.sku}>
-          <SkuItem extraWidth='94px' skuResult={skuItem} otherData={skuItem.positionName} />
+          <SkuItem extraWidth='94px' skuResult={skuItem} otherData={[skuItem.positionName]} />
         </div>
         <div className={style.actions}>
           <div className={style.sop}>

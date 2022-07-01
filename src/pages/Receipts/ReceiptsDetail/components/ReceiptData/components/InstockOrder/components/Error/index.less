@@ -25,7 +25,7 @@
       font-size: 12px;
       align-items: center;
 
-      span {
+      .smallSku {
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
@@ -73,8 +73,8 @@
     flex-direction: column;
     gap: 8px;
     margin-bottom: 12px;
-    max-height: 100px;
-    overflow: auto;
+    //max-height: 100px;
+    //overflow: auto;
 
     span {
       display: flex;
@@ -121,7 +121,7 @@
   }
 
   .space {
-    height: 8px;
+    min-height: 8px;
     background-color: var(--body--background--color);
   }
 
@@ -195,7 +195,7 @@
       }
 
       .careful {
-        padding: 12px 0;
+        //padding: 12px 0;
 
         .notices {
           font-size: 12px;
@@ -215,6 +215,7 @@
       .opinion {
         display: flex;
         align-items: center;
+        padding: 8px 0;
 
         span {
           min-width: 70px;
@@ -261,6 +262,10 @@
   }
 
   .bottomAction {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     padding: 12px;
     background-color: #FFFFFF;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);

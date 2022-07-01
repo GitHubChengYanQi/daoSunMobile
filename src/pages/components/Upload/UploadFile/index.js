@@ -9,7 +9,7 @@ import { request } from '../../../../util/Request';
 import { ToolUtil } from '../../ToolUtil';
 import { Upload } from 'antd';
 import { CloseOutline } from 'antd-mobile-icons';
-import { LoadingOutlined } from '@ant-design/icons';
+import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const UploadFile = (
   {
@@ -33,8 +33,6 @@ const UploadFile = (
   const [visible, { setTrue, setFalse }] = useBoolean();
 
   const [files, setFiles] = useState(value);
-  const imgs = files.filter(item => ToolUtil.queryString('image', item.type));
-  const picture = files.filter(item => !ToolUtil.queryString('image', item.type));
 
   const [loading, setLoading] = useState();
 
@@ -100,17 +98,29 @@ const UploadFile = (
     });
   };
 
-
   return <>
 
     <div className={style.imgs}>
       {
-        imgs.map((item, index) => {
+        files.map((item, index) => {
           return <div key={index} className={style.img} style={{ width: imgSize, height: imgSize }}>
             <div hidden={show} className={style.remove} onClick={() => {
               fileChange({ mediaId: item.mediaId, remove: true });
             }}><CloseOutline /></div>
-            <img src={item.url} alt='' width='100%' height='100%' />
+            {
+              typeof item.url === 'object' ? <FileOutlined style={{color:'var(--adm-color-primary)'}} /> :
+                <img src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
+                  const newFile = files.map((currentItem, currentIndex) => {
+                    if (currentIndex === index) {
+                      return { ...currentItem, url: <FileOutlined /> };
+                    } else {
+                      return currentItem;
+                    }
+                  });
+                  setFiles(newFile);
+                }} />
+            }
+
           </div>;
         })
       }
@@ -129,15 +139,6 @@ const UploadFile = (
         {icon || <img src={add} alt='' width='100%' height='100%' />}
       </div>
     </div>
-
-    <Upload
-      className='avatar-uploader'
-      fileList={picture}
-      listType='picture'
-      onRemove={(file) => {
-        fileChange({ mediaId: file.mediaId, remove: true });
-      }}
-    />
 
     <UpLoadImg
       hidden

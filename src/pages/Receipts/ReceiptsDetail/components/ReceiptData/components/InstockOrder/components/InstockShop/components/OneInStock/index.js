@@ -67,7 +67,10 @@ const OneInStock = (
           <SkuItem
             skuResult={skuResult}
             extraWidth='120px'
-            otherData={`${ToolUtil.isObject(skuItem.customer).customerName || '-'} / ${ToolUtil.isObject(skuItem.brandResult).brandName || '-'}`}
+            otherData={[
+              ToolUtil.isObject(skuItem.customer).customerName,
+              ToolUtil.isObject(skuItem.brandResult).brandName
+            ]}
           />
         </div>
         <div className={style.inStock} style={{ justifyContent: 'center' }}>

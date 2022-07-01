@@ -141,6 +141,7 @@ const ReceiptsDetail = () => {
       <Header data={detail} />
       <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
         <Tabs activeKey={key} onChange={(key) => {
+          refresh();
           setKey(key);
         }} className={topStyle.tab}>
           <Tabs.Tab title='基本信息' key='data' />

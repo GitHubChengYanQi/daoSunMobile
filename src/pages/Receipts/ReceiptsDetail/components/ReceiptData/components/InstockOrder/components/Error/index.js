@@ -7,7 +7,6 @@ import { AddOutline, CameraOutline, CloseOutline, SystemQRcodeOutline } from 'an
 import Icon from '../../../../../../../../components/Icon';
 import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
-import { RemoveButton } from '../../../../../../../../components/MyButton';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../Scan/InStock/components/Url';
 import { useModel } from 'umi';
@@ -19,6 +18,7 @@ import LinkButton from '../../../../../../../../components/LinkButton';
 import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
+import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -258,12 +258,13 @@ const Error = (
 
   const [over, setOver] = useState();
 
+  let required = inkinds.filter((item) => {
+    return ToolUtil.isArray(item.noticeIds).length === 0;
+  }).length > 0;
+
+
   const getParams = () => {
-    let required = false;
     const detailParams = inkinds.map((item) => {
-      if (ToolUtil.isArray(item.noticeIds).length === 0) {
-        required = true;
-      }
       return {
         pidInKind: item.inkindId,
         description: item.description,
@@ -272,12 +273,6 @@ const Error = (
         number: item.number,
       };
     });
-
-
-    if (required) {
-      Message.toast('请选择异常原因！');
-      return;
-    }
 
     return {
       anomalyId: data.anomalyId,
@@ -289,7 +284,7 @@ const Error = (
       detailParams,
     };
   };
-  
+
   const getStocktakingParams = () => {
     if (getParams()) {
       return {
@@ -354,7 +349,10 @@ const Error = (
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={(id && !noDelete) ? '84px' : '24px'}
-            otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandName || '-'}`}
+            otherData={[
+              ToolUtil.isObject(sku.customerResult).customerName,
+              ToolUtil.isObject(sku.brandResult).brandName
+            ]}
           />,
           actionNumber: <div className={style.actual}>
             <div className={style.number}>
@@ -384,6 +382,7 @@ const Error = (
           </div>,
           button: <div>
             <BottomButton
+              disabled={required}
               only
               onClick={() => {
                 if (!getParams()) {
@@ -413,7 +412,7 @@ const Error = (
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}
-            otherData={ToolUtil.isObject(sku.brandResult).brandName}
+            otherData={[ToolUtil.isObject(sku.brandResult).brandName]}
           />,
           actionNumber: <div className={style.actual}>
             <div className={style.number}>
@@ -443,6 +442,7 @@ const Error = (
             </div>
           </div>,
           button: <BottomButton
+            disabled={required}
             leftDisabled={id}
             leftText='暂存'
             rightText='确定'
@@ -470,8 +470,14 @@ const Error = (
         over ?
           <div className={style.skuShow}>
             <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
-            <span
-              style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>{SkuResultSkuJsons({ skuResult })}</span>
+            <div>
+              <div className={style.smallSku}  style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
+                {SkuResultSkuJsons({ skuResult,spu:true })}
+              </div>
+              <div className={style.smallSku}  style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
+              {SkuResultSkuJsons({ skuResult,sku:true })}
+              </div>
+            </div>
             <div className={style.number}>
               <ShopNumber min={allNumber} value={data.number} onChange={(number) => {
                 setData({ ...data, number });
@@ -550,7 +556,7 @@ const Error = (
                 <SystemQRcodeOutline />
               </div>
 
-              <RemoveButton onClick={() => {
+              <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;
                 });

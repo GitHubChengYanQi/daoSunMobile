@@ -78,9 +78,9 @@ const Maintenance = (
                     <SkuItem
                       extraWidth={actionPermissions ? '74px' : '24px'}
                       skuResult={skuItem}
-                      otherData={brandResults.map(item => {
+                      otherData={[brandResults.map(item => {
                         return `${item.brandName} (${item.number})`;
-                      }).join(' 、 ')}
+                      }).join(' 、 ')]}
                     />
                   </div>
                   <div hidden={!actionPermissions}>

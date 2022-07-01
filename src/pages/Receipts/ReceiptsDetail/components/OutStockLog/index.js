@@ -33,7 +33,7 @@ const OutStockLog = (
               <SkuItem
                 skuResult={item.skuResult}
                 extraWidth='24px'
-                otherData={ToolUtil.isObject(item.customer).customerName}
+                otherData={[ToolUtil.isObject(item.customer).customerName]}
               />
               <div className={style.log}>
                 <div className={style.data}>

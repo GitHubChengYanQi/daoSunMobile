@@ -39,7 +39,10 @@ const InSkuItem = (
           imgId={`skuImg${index}`}
           skuResult={skuResult}
           extraWidth='150px'
-          otherData={`${ToolUtil.isObject(item.customerResult).customerName || '-'} / ${ToolUtil.isObject(item.brandResult).brandName || '-'}`}
+          otherData={[
+            ToolUtil.isObject(item.customerResult).customerName,
+            ToolUtil.isObject(item.brandResult).brandName,
+          ]}
         />
       </div>
       <div className={style.skuNumber}>

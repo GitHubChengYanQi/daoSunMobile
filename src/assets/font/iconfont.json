@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "3663275",
+      "name": "审批",
+      "font_class": "shenpi3",
+      "unicode": "e6b9",
+      "unicode_decimal": 59065
+    },
+    {
       "icon_id": "16165040",
       "name": "排序备份",
       "font_class": "paixubeifen",

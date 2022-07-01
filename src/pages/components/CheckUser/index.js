@@ -81,8 +81,7 @@ const CheckUser = (
   const open = (param) => {
     setParams(param);
     const u = navigator.userAgent;
-    const isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
-    if (ToolUtil.isQiyeWeixin() && !IsDev() && isiOS) {
+    if (ToolUtil.isQiyeWeixin() && !IsDev()) {
       invoke();
     } else {
       run();

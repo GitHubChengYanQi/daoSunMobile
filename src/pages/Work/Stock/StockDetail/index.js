@@ -69,13 +69,9 @@ export const SkuContent = (
                 number={item.stockNumber}
                 unitName={unit.unitName}
                 skuResult={item}
-                otherData={positions.length > 0 && <MyEllipsis width='100%'>
-                  {
-                    positions.map((item) => {
-                      return positionResult(item);
-                    }).join(' / ')
-                  }
-                </MyEllipsis>}
+                otherData={[positions.map((item) => {
+                  return positionResult(item);
+                }).join(' / ')]}
               />
             </div>
             <div>

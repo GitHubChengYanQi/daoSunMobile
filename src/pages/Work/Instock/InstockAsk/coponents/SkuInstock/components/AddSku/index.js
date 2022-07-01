@@ -295,8 +295,7 @@ const AddSku = (
                 imgId='skuImg'
                 skuResult={sku}
                 imgSize={80}
-                otherData={ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')}
-                gap={8}
+                otherData={[ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')]}
                 extraWidth={'calc(25vw + 24px)'}
               />
               <div className={style.flex}>

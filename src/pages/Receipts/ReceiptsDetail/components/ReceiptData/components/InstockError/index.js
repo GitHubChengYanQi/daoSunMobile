@@ -22,20 +22,19 @@ const InstockError = (
   const anomalyResults = data.anomalyResults || [];
   const instockOrder = data.instockOrder || {};
 
-  return <>
-    <div className={style.data}>
-      <span className={style.label}>
-        关联单据
-      </span>
-      <span className={style.value}>
-         的入库申请 / {instockOrder.coding}
-      </span>
-    </div>
+  const errorTypeData = () => {
+    switch (data.type) {
+      case 'instock':
+        return {
+          receipts: `${ToolUtil.isObject(data.masterUser).name || ''}的入库申请 / ${instockOrder.coding ||''}`,
+        };
+      default:
+        return {};
+    }
+  };
 
+  return <>
     <div className={style.skuList}>
-      <div className={style.skuItem}>
-        异常物料
-      </div>
       {
         anomalyResults.map((item, index) => {
           return <div key={index} className={style.skuItem} onClick={() => {
@@ -47,7 +46,10 @@ const InstockError = (
               <SkuItem
                 extraWidth='100px'
                 skuResult={item.skuResult}
-                otherData={`${ToolUtil.isObject(item.customer).customerName || '-'} / ${ToolUtil.isObject(item.brand).brandName || '-'}`}
+                otherData={[
+                  ToolUtil.isObject(item.customer).customerName,
+                  ToolUtil.isObject(item.brand).brandName,
+                ]}
                 moreDom={<div className={style.error}>
                   <div hidden={!item.errorNumber}>数量 <span
                     className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
@@ -61,6 +63,15 @@ const InstockError = (
           </div>;
         })
       }
+    </div>
+    <div className={style.space} />
+    <div className={style.data}>
+      <span className={style.label}>
+        关联单据
+      </span>
+      <span className={style.value}>
+         {errorTypeData().receipts}
+      </span>
     </div>
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>

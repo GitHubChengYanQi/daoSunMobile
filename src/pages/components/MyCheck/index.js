@@ -2,6 +2,8 @@ import React from 'react';
 import Icon from '../Icon';
 import { Checkbox } from 'antd-mobile';
 import LinkButton from '../LinkButton';
+import { ToolUtil } from '../ToolUtil';
+import style from './index.less';
 
 const MyCheck = (
   {
@@ -9,15 +11,19 @@ const MyCheck = (
     onChange = () => {
     },
     children,
-    fontSize,
+    fontSize = 14,
     disabled,
     className,
   }) => {
 
 
-  return <LinkButton disabled={disabled} color='default' className={className} onClick={() => {
-    onChange(!checked);
-  }}>
+  return <LinkButton
+    disabled={disabled}
+    color='default'
+    className={ToolUtil.classNames(className, style.check)}
+    onClick={() => {
+      onChange(!checked);
+    }}>
     <Checkbox
       style={{ '--font-size': `${fontSize}px`, '--icon-size': `${fontSize}px` }}
       checked={checked}

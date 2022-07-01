@@ -3,11 +3,11 @@ import style from '../../../PurchaseOrderInstock/index.less';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../Sku/SkuItem';
-import { RemoveButton } from '../../../../../../../../components/MyButton';
 import ShopNumber from '../../../../../coponents/SkuInstock/components/ShopNumber';
 import { Divider } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
+import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
 
 const Skus = (
   {
@@ -62,7 +62,7 @@ const Skus = (
               />
             </div>
             <div className={style.action}>
-              <RemoveButton onClick={() => {
+              <MyRemoveButton onRemove={() => {
                 dataChange(skuList.filter(item => item.key !== index));
               }} />
               <div hidden={createTypeData().buttonHidden}>

@@ -60,7 +60,7 @@ const Error = () => {
                       imgSize={60}
                       skuResult={skuItem.skuResult}
                       extraWidth='24px'
-                      otherData={ToolUtil.isObject(skuItem.brandResult).brandName}
+                      otherData={[ToolUtil.isObject(skuItem.brandResult).brandName]}
                     />
                   </div>
                 </div>;

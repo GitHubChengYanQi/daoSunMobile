@@ -14,6 +14,8 @@ import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponent
 import { Message } from '../../../../../../../../components/Message';
 import { useModel } from 'umi';
 import BottomButton from '../../../../../../../../components/BottomButton';
+import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { FormOutlined } from '@ant-design/icons';
 
 export const save = { url: '/anomaly/dealWithError', method: 'POST' };
 export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
@@ -27,6 +29,7 @@ const SkuError = (
     height = '100%',
     onSuccess = () => {
     },
+    forward,
   },
 ) => {
 
@@ -36,6 +39,8 @@ const SkuError = (
   const [sku, setSku] = useState({});
 
   const [errorItems, setErrorItems] = useState([]);
+
+  const [over, setOver] = useState();
 
   const handle = (errorItems.filter(item => item.status !== 0).length === errorItems.length) && sku.confirm;
 
@@ -101,7 +106,7 @@ const SkuError = (
         hidden,
         allowNumber: allowNumber < 0 ? 0 : allowNumber,
         instockNumber: instockNumber < 0 ? 0 : instockNumber,
-        errorNumber: errorNumber,
+        errorNumber: termination,
         checkNumber: checkNum,
         checkUsers: checkUsers,
         realNumber: res.realNumber,
@@ -178,6 +183,18 @@ const SkuError = (
         },
       });
     }
+    const errors = document.getElementById('errors');
+
+    if (errors) {
+      errors.addEventListener('scroll', (event) => {
+        const scrollTop = event.target.scrollTop;
+        if (scrollTop > 90) {
+          setOver(true);
+        } else {
+          setOver(false);
+        }
+      });
+    }
   }, []);
 
   const checkUsers = ToolUtil.isArray(sku.checkUsers);
@@ -210,9 +227,9 @@ const SkuError = (
               action(item, 1);
             }}>允许入库</Button>
           </>,
-          bottom: <div className={style.bottomAction}>
+          bottom: <div className={style.bottomAction} hidden={forward}>
             <div className={style.action}>
-              <div>异常总数：{sku.errorNumber} </div>
+              <div>终止入库数量：{sku.errorNumber} </div>
               <div
                 className={style.instockNumber}>
                 入库数量：
@@ -226,7 +243,7 @@ const SkuError = (
               </div>
             </div>
 
-            <Button disabled={!handle} color='primary' fill='outline' onClick={() => {
+            <Button disabled={!handle} color='primary' onClick={() => {
               const param = {
                 data: {
                   anomalyId,
@@ -258,7 +275,7 @@ const SkuError = (
               action(item, 2);
             }}>报损</Button>
           </>,
-          bottom: <BottomButton disabled={!handle} only onClick={() => {
+          bottom: !forward && <BottomButton disabled={!handle} only onClick={() => {
             const param = { data: { anomalyId } };
             saveRun(param).then(() => {
               onSuccess();
@@ -270,10 +287,29 @@ const SkuError = (
     }
   };
 
-  return <div className={style.error} style={{ height }}>
+  const state = initialState || {};
+  const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+
+  return <div className={style.error} style={{ height }} id='errors'>
 
     <div className={style.header}>
-      <div className={style.title}>异常处理</div>
+
+      {
+        over ?
+          <div className={style.skuShow}>
+            <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
+            <div>
+              <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                {SkuResultSkuJsons({ skuResult, spu: true })}
+              </div>
+              <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                {SkuResultSkuJsons({ skuResult, sku: true })}
+              </div>
+            </div>
+          </div>
+          :
+          <div className={style.title}>异常处理</div>
+      }
       <span onClick={() => {
         onClose();
       }}><CloseOutline /></span>
@@ -284,18 +320,24 @@ const SkuError = (
         skuResult={sku.skuResult}
         className={style.sku}
         extraWidth='64px'
-        otherData={`${ToolUtil.isObject(sku.customerResult).customerName || '-'} / ${ToolUtil.isObject(sku.brandResult).brandResult || '-'}`}
+        otherData={[
+          ToolUtil.isObject(sku.customerResult).customerName,
+          ToolUtil.isObject(sku.brandResult).brandName
+        ]}
       />
       <div className={style.showNumber}>
-        <span className={style.through} hidden={sku.checkNumber === sku.needNumber}>× {sku.needNumber}</span>
-        <span>× {sku.checkNumber}</span>
+        <span className={style.through} hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
+        <span>× {sku.confirm ? sku.checkNumber : sku.realNumber}</span>
       </div>
     </div>
 
-    <div className={style.verify}>
+    <div className={style.verify} hidden={forward}>
       <span>到货数：<ShopNumber show value={sku.realNumber} /> {unitName} ({ToolUtil.isObject(sku.user).name || '-'})</span>
       {
         checkUsers.map((item, index) => {
+          if (index < checkUsers.length - 2){
+           return null;
+          }
           return <span key={index}>复核数：
             <ShopNumber show value={item.number} /> {unitName} ({item.name || ''})
           </span>;
@@ -325,7 +367,7 @@ const SkuError = (
 
     <div className={style.space} />
 
-    <div className={style.errors} id='errors'>
+    <div className={style.errors}>
       {
         errorItems.map((item, index) => {
 
@@ -334,6 +376,10 @@ const SkuError = (
           const confirm = sku.confirm;
 
           const handle = !confirm || item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
+
+          if (forward && item.userId !== userInfo.id) {
+            return null;
+          }
 
           return <div key={index} className={style.inkindItem}>
             <div className={style.inkindTitle}>
@@ -353,21 +399,21 @@ const SkuError = (
               }}>
                 {item.userId ? `已转交：${item.userName}` : '转交处理'}
               </LinkButton>}
-              {item.status !== 0 && <LinkButton onClick={() => {
+              {item.status !== 0  && <LinkButton style={{marginLeft:8}} onClick={() => {
                 action(item, 0);
               }}>
-                编辑
+                <FormOutlined />
               </LinkButton>}
             </div>
-            <div className={style.careful}>
+            <div className={style.careful} style={{ padding: '12px 0' }}>
               异常原因：{ToolUtil.isArray(item.notices).map((item, index) => {
               return <div key={index} className={style.notices}>
                 {item}
               </div>;
             })}
             </div>
-            <div style={{ padding: '4px 0' }}>
-              异常描述：{item.description}
+            <div style={{ padding: '8px 0' }}>
+              异常描述：{item.description || '无'}
             </div>
             <div>
               <UploadFile
@@ -381,12 +427,12 @@ const SkuError = (
               {!handle ? <TextArea
                 className={style.textArea}
                 rows={1}
-                placeholder='请输入具体异常情况'
+                placeholder='请给与处理意见'
                 value={item.opinion}
                 onChange={(opinion) => {
                   itemChange(index, { opinion });
                 }}
-              /> : item.opinion}
+              /> : (item.opinion || '无')}
             </div>
 
             <div hidden={handle} className={style.actions}>

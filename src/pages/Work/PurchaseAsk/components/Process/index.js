@@ -47,7 +47,7 @@ const Process = (
         return <AuditOutlined />;
       case 'process':
         if (step.auditRule.type === 'audit') {
-          return <Avatar>审</Avatar>;
+          return <Avatar><Icon type='icon-shenpi3' /></Avatar>;
         } else {
           return <Avatar><Icon type='icon-caigou_dongzuo' /></Avatar>;
         }

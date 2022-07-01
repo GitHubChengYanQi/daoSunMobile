@@ -154,7 +154,7 @@ const MyPicking = () => {
           } else {
             setAllChecked(true);
           }
-        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {outSkus.length} 种</span>
+        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {outSkus.length} 类</span>
       </div>
       <div className={style.buttons}>
         <Button

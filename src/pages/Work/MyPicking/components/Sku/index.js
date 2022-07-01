@@ -164,7 +164,7 @@ const Sku = (
             <span><MyCheck checked={checked} /></span>
             <SkuItem
               skuResult={item.skuResult}
-              otherData={ToolUtil.isObject(item.brandResult).brandName}
+              otherData={[ToolUtil.isObject(item.brandResult).brandName]}
               extraWidth='58px'
             />
           </div>
