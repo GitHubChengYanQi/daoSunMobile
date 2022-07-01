@@ -16,6 +16,7 @@ import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
 import BackSkus from '../Sku/components/BackSkus';
 import { ToolUtil } from '../../components/ToolUtil';
+import MyStepper from '../../components/MyStepper';
 
 
 const InStock = (props) => {
@@ -500,7 +501,7 @@ const InStock = (props) => {
                 <div>
                   入库数量：
                 </div>
-                <Stepper
+                <MyStepper
                   min={1}
                   max={instockNumber}
                   value={number}

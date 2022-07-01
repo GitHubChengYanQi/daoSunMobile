@@ -19,6 +19,7 @@ import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
+import MyStepper from '../../../../../../../../components/MyStepper';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -360,11 +361,8 @@ const Error = (
             </div>
             <div className={style.actual}>
               <span>实际到货</span>
-              <Stepper
+              <MyStepper
                 min={allNumber}
-                style={{
-                  '--button-text-color': '#000',
-                }}
                 value={data.number}
                 onChange={(number) => {
                   setData({ ...data, number });
@@ -418,7 +416,7 @@ const Error = (
             <div className={style.number}>
               <div className={style.actual} style={{ padding: 0 }}>
                 <span>实际库存</span>
-                <Stepper
+                <MyStepper
                   min={allNumber}
                   style={{
                     '--button-text-color': '#000',
@@ -565,7 +563,7 @@ const Error = (
             </div>
             <div className={style.stepper}>
               <span>数量</span>
-              <Stepper
+              <MyStepper
                 min={1}
                 style={{
                   '--button-text-color': '#000',

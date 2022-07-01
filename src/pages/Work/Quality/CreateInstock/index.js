@@ -6,6 +6,7 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import MyCoding from '../../../components/MyCoding';
 import SelectUser from '../../Production/CreateTask/components/SelectUser';
 import MyAntPicker from '../../../components/MyAntPicker';
+import MyStepper from '../../../components/MyStepper';
 
 const CreateInstock = ({ show, qualityDeatlis, onSuccess }, ref) => {
 
@@ -102,7 +103,7 @@ const CreateInstock = ({ show, qualityDeatlis, onSuccess }, ref) => {
                     return <List.Item
                       key={index}
                       extra={
-                        <Stepper
+                        <MyStepper
                           digits={0}
                           min={0}
                           max={items.number - items.instockNumber}

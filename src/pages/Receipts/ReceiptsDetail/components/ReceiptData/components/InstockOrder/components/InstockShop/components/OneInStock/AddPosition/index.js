@@ -7,6 +7,7 @@ import { Message } from '../../../../../../../../../../../components/Message';
 import Positions from '../../Positions';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { getPositionsBySkuIds } from '../index';
+import MyStepper from '../../../../../../../../../../../components/MyStepper';
 
 const AddPosition = (
   {
@@ -63,7 +64,7 @@ const AddPosition = (
                 {item.name}
               </div>
 
-              <Stepper
+              <MyStepper
                 min={min}
                 style={{
                   '--button-text-color': '#000',

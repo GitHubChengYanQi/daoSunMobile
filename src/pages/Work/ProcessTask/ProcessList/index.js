@@ -6,6 +6,7 @@ import { ReceiptsEnums } from '../../../Receipts';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useHistory } from 'react-router-dom';
 import { MyDate } from '../../../components/MyDate';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 
 const startList = {
@@ -50,6 +51,13 @@ const ProcessList = (
         return <div className={style.content}>
           <div className={style.orderData}>
             <span className={style.coding}>单据编号：{receipts.coding}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+          </div>
+        </div>;
+      case 'ErrorForWard':
+        return <div className={style.content}>
+          <div className={style.orderData}>
+            <span className={style.coding}>关联单据：{ToolUtil.isObject(receipts.orderResult).coding}</span>
             <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
           </div>
         </div>;

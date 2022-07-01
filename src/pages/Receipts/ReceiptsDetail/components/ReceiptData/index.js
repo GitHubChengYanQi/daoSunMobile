@@ -12,6 +12,7 @@ import InstockError from './components/InstockError';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
+import SkuError from './components/InstockError/components/SkuError';
 
 const ReceiptData = (
   {

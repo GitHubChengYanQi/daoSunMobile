@@ -11,6 +11,7 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import { useRequest } from '../../../../../../../../../util/Request';
+import MyStepper from '../../../../../../../../components/MyStepper';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
@@ -94,12 +95,9 @@ const Maintenanceing = (
                 <span>({item.number})</span>
               </div>
               <div hidden={!checked}>
-                <Stepper
+                <MyStepper
                   max={item.number}
                   min={1}
-                  style={{
-                    '--button-text-color': '#000',
-                  }}
                   value={item.curingNumber}
                   onChange={(curingNumber) => {
                     brandsChange({ curingNumber }, index);

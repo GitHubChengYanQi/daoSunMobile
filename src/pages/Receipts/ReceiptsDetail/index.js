@@ -15,6 +15,7 @@ import Log from './components/Log';
 import { ReceiptsEnums } from '../index';
 import InStockLog from './components/InStockLog';
 import OutStockLog from './components/OutStockLog';
+import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -135,27 +136,32 @@ const ReceiptsDetail = () => {
     }
   };
 
-  return <div className={style.receipts}>
-    <div className={style.content}>
-      <MyNavBar title='审批详情' />
-      <Header data={detail} />
-      <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
-        <Tabs activeKey={key} onChange={(key) => {
-          refresh();
-          setKey(key);
-        }} className={topStyle.tab}>
-          <Tabs.Tab title='基本信息' key='data' />
-          {receiptsTabs().key && <Tabs.Tab title={receiptsTabs().title} key={receiptsTabs().key} />}
-          <Tabs.Tab title='动态日志' key='log' />
-        </Tabs>
+  switch (detail.type) {
+    case 'ErrorForWard':
+      return <SkuError anomalyId={detail.formId} forward />;
+    default:
+      return <div className={style.receipts}>
+        <div className={style.content}>
+          <MyNavBar title='审批详情' />
+          <Header data={detail} />
+          <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
+            <Tabs activeKey={key} onChange={(key) => {
+              refresh();
+              setKey(key);
+            }} className={topStyle.tab}>
+              <Tabs.Tab title='基本信息' key='data' />
+              {receiptsTabs().key && <Tabs.Tab title={receiptsTabs().title} key={receiptsTabs().key} />}
+              <Tabs.Tab title='动态日志' key='log' />
+            </Tabs>
+          </div>
+          {content()}
+        </div>
+
+        <Bottom params={params} currentNode={currentNode} detail={detail} refresh={refresh} />
+
+        {(getTaskIdLoading || detailLoading) && <MyLoading />}
       </div>
-      {content()}
-    </div>
-
-    <Bottom params={params} currentNode={currentNode} detail={detail} refresh={refresh} />
-
-    {(getTaskIdLoading || detailLoading) && <MyLoading />}
-  </div>;
+  }
 };
 
 export default ReceiptsDetail;

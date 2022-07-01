@@ -290,9 +290,9 @@ const SkuError = (
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
-  return <div className={style.error} style={{ height }} id='errors'>
+  return <div className={style.error} style={{ height,margin:forward && 0 }} id='errors'>
 
-    <div className={style.header}>
+    <div className={style.header} hidden={forward}>
 
       {
         over ?

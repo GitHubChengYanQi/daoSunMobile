@@ -7,6 +7,7 @@ import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
+import MyStepper from '../../../../../../../../../../components/MyStepper';
 
 const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
@@ -169,7 +170,7 @@ const Order = (
                   }
                 }}>{positionItem.name} ({positionItem.number})</span>
                 <div hidden={!positionItem.checked}>
-                  <Stepper
+                  <MyStepper
                     min={0}
                     value={positionItem.outStockNumber || 0}
                     style={{

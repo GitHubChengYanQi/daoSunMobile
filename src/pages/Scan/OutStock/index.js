@@ -13,6 +13,7 @@ import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
 import BackSkus from '../Sku/components/BackSkus';
 import { ToolUtil } from '../../components/ToolUtil';
+import MyStepper from '../../components/MyStepper';
 
 const OutStock = (props) => {
 
@@ -123,7 +124,7 @@ const OutStock = (props) => {
         <div>
           出库数量：
         </div>
-        <Stepper
+        <MyStepper
           min={1}
           max={maxNumber}
           value={number}

@@ -2,14 +2,13 @@ import React from 'react';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { Steps } from 'antd-mobile';
 import style from '../../index.less';
-import { DownOutline, FileOutline, UpOutline } from 'antd-mobile-icons';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useModel } from 'umi';
-import Icon from '../../../../../../components/Icon';
+import { Avatar } from 'antd';
 
 const StepList = (
   {
-    noIcon,
     remarks = [],
     onChange = () => {
     },
@@ -20,25 +19,6 @@ const StepList = (
 
   const { initialState } = useModel('@@initialState');
   const userInfo = initialState.userInfo || {};
-
-  const icon = (type, status) => {
-    switch (type) {
-      case 'audit':
-        return <Icon
-          type={status ? 'icon-caigou_shenpitongguo1' : 'icon-caigou_shenpibutongguo1'}
-          style={{ fontSize: 29 }}
-        />;
-      case 'comments':
-        return <FileOutline style={{ fontSize: 29, color: 'var(--adm-color-primary)' }} />;
-      case 'dynamic':
-        return <Icon
-          type='icon-dongtai'
-          style={{ fontSize: 29, color: 'var(--adm-color-primary)' }}
-        />;
-      default:
-        return <></>;
-    }
-  };
 
   return <>
     <Steps
@@ -57,7 +37,7 @@ const StepList = (
           const user = ToolUtil.isObject(item.user);
 
           return <Steps.Step
-            status='wait'
+            status='success'
             key={index}
             title={
               <div className={style.name}>
@@ -103,7 +83,12 @@ const StepList = (
                 {permissions && <LinkButton color='danger'>删除</LinkButton>}
               </div>
             </div>}
-            icon={noIcon ? null : icon(item.type, item.status)}
+            icon={<Avatar
+              size={26}
+              shape='square'
+              key={index}
+              src={user.avatar}
+            >{user.name && user.name.substring(0, 1)}</Avatar>}
           />;
         })
       }
