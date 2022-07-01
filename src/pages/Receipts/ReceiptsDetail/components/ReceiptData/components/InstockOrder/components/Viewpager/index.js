@@ -11,7 +11,6 @@ const Viewpager = (
     onRight = () => {
     },
     children,
-    currentIndex,
     onClick = () => {
     },
   }) => {
@@ -58,12 +57,14 @@ const Viewpager = (
         setTimeout(() => {
           switch (pages[i]) {
             case 'left':
-              if (index.current === 0){
+              if (index.current === 0) {
+                index.current = 2;
                 onRight();
               }
               break;
             case 'right':
-              if (index.current === 2){
+              if (index.current === 2) {
+                index.current = 0;
                 onLeft();
               }
               break;

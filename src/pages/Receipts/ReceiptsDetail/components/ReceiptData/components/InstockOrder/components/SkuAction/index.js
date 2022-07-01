@@ -102,8 +102,6 @@ const SkuAction = (
     const skuResult = item.skuResult || {};
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, `skuImg${index}`, () => {
-      // alert(2222)
-      // toggle();
       addShop({
         data: {
           formStatus,
@@ -145,7 +143,6 @@ const SkuAction = (
           <Viewpager
             currentIndex={index}
             onLeft={() => {
-              // alert(111);
               addInstockShop(1, item, index, 'waitInStock');
             }}
             onRight={() => {
