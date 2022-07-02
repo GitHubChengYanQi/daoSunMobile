@@ -85,13 +85,15 @@ const AddSku = (
 
   const [disabled, setDisabled] = useState();
 
-  const disabledChange = ({ customerId = data.customerId, brandId = data.brandId }) => {
+  const disabledChange = ({ customerId, brandId, newData = data }) => {
+    const newCustomerId = customerId === undefined ? newData.customerId : customerId;
+    const newBrandId = brandId === undefined ? newData.brandId : brandId;
     const snameSku = skus.filter((item) => {
-      return item.skuId === data.skuId
+      return item.skuId === newData.skuId
         &&
-        (item.customerId || 0) === (customerId || 0)
+        (item.customerId || 0) === (newCustomerId || 0)
         &&
-        (item.brandId || 0) === (brandId || 0);
+        (item.brandId || 0) === (newBrandId || 0);
     });
     setSnameAction(defaultAction);
     setDisabled(snameSku[0]);
@@ -103,14 +105,15 @@ const AddSku = (
     setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
-    setData({
+    const newData = {
       ...other,
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
       number: type === ERPEnums.directInStock ? 0 : 1,
-    });
-    disabledChange({});
+    };
+    setData(newData);
+    disabledChange({ newData });
     switch (type) {
       case ERPEnums.allocation:
         break;
