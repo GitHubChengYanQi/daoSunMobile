@@ -26,29 +26,12 @@
 
     .sku {
       flex-grow: 1;
-
-      .error {
-        margin: 8px 0;
-        display: flex;
-        gap: 8px;
-
-        .red {
-          color: var(--adm-color-danger);
-        }
-
-        .yellow {
-          color: #FA8F2B;
-        }
-
-        div {
-          flex-grow: 1;
-        }
-      }
     }
 
     .realNumber {
       display: flex;
       flex-direction: column;
+      align-items: center;
       gap: 8px;
 
       .status {
@@ -59,6 +42,24 @@
     }
 
 
+  }
+
+  .error {
+    padding: 8px 0;
+    display: flex;
+    gap: 8px;
+
+    .red {
+      color: var(--adm-color-danger);
+    }
+
+    .yellow {
+      color: #FA8F2B;
+    }
+
+    div {
+      flex-grow: 1;
+    }
   }
 }
 

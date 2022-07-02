@@ -1,5 +1,6 @@
 import React from 'react';
-import { Button, SafeArea } from 'antd-mobile';
+import { Button } from 'antd-mobile';
+import style from './index.less';
 
 const BottomButton = (
   {
@@ -18,20 +19,7 @@ const BottomButton = (
   }) => {
 
 
-  return <div
-    style={{
-      height: 60,
-      zIndex: 999,
-      width: '100%',
-      paddingBottom: 0,
-      position: 'fixed',
-      bottom: 0,
-      left: 0,
-      backgroundColor: '#fff',
-      boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.3)',
-      // display:'flex',
-      // alignItems:'center',
-    }}>
+  return <div className={style.bottom}>
     <div style={{ padding: '10px 12px' }}>
       {only ?
         <Button
@@ -49,15 +37,7 @@ const BottomButton = (
             color='primary'
             fill='outline'
             disabled={leftDisabled}
-            style={{
-              padding: '8px 0',
-              fontSize: 14,
-              width: '50%',
-              borderRadius: 50,
-              borderTopRightRadius: 0,
-              borderBottomRightRadius: 0,
-              borderRight: 'none',
-            }}
+            className={style.left}
             onClick={() => {
               typeof leftOnClick === 'function' && leftOnClick();
             }}>
@@ -65,16 +45,7 @@ const BottomButton = (
           </Button>
           <Button
             disabled={rightDisabled}
-            style={{
-              borderLeft: 'none',
-              padding: '8px 0',
-              fontSize: 14,
-              width: '50%',
-              backgroundColor: '#4B8BF5',
-              borderRadius: 50,
-              borderTopLeftRadius: 0,
-              borderBottomLeftRadius: 0,
-            }}
+            className={style.right}
             color='primary'
             onClick={() => {
               typeof rightOnClick === 'function' && rightOnClick();

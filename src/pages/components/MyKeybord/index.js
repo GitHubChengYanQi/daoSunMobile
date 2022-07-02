@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Button, Popup } from 'antd-mobile';
 import { AddOutline, MinusOutline } from 'antd-mobile-icons';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { ToolUtil } from '../ToolUtil';
-import logo from '../../../assets/logo.png';
 
 const MyKeybord = (
   {
@@ -32,12 +31,15 @@ const MyKeybord = (
     onChange(newValue);
   };
 
+  useEffect(() => {
+    if (visible){
+      setNumber(value);
+    }
+  }, [visible]);
+
   return <>
     <Popup
       visible={visible}
-      afterShow={() => {
-        setNumber(value);
-      }}
       afterClose={() => {
         save();
       }}
@@ -54,7 +56,7 @@ const MyKeybord = (
             <MinusOutline />
           </Button>
           <div className={style.value}>
-            {number}<span className={style.line}>|</span>
+            {number || ''}<span className={style.line}>|</span>
           </div>
           <Button onClick={() => {
             const newValue = number + 1;
@@ -67,12 +69,6 @@ const MyKeybord = (
         <div className={style.numberKeyboard}>
           <div
             className={style.keyboard}
-            style={{
-              backgroundImage: `url(${logo})`,
-              backgroundRepeat: 'no-repeat',
-              backgroundSize: '100%',
-              backgroundPosition: 'center',
-            }}
           >
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, '.'].map((item, index) => {
               switch (item) {

@@ -6,13 +6,10 @@ import SkuList from '../../Sku/SkuList';
 import MyAntList from '../../../components/MyAntList';
 import { ActionSheet, List } from 'antd-mobile';
 import SkuItem from '../../Sku/SkuItem';
-import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { useRequest } from '../../../../util/Request';
-import { MyLoading } from '../../../components/MyLoading';
 import { ERPEnums } from '../ERPEnums';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };

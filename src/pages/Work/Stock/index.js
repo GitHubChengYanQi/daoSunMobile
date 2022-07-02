@@ -35,12 +35,12 @@ const Stock = (props) => {
 
   const { loading: getDefaultShop, refresh } = useRequest({
     ...shopCartShow,
-    data: { types: [...tasks.map(item => item.key),ERPEnums.directInStock] },
+    data: { types: [...tasks.map(item => item.key), ERPEnums.directInStock] },
   }, {
     onSuccess: (res) => {
       if (ToolUtil.isArray(res).length > 0) {
-        if (!stockDetail.task){
-          setStockDetail({ ...stockDetail, task: res[0] });
+        if (!stockDetail.task) {
+          setStockDetail({ ...stockDetail, task: res[res.length - 1] });
         }
       } else {
         setStockDetail({ ...stockDetail, task: null });

@@ -27,7 +27,7 @@ const InstockError = (
     switch (data.type) {
       case 'instock':
         return {
-          receipts: `${ToolUtil.isObject(data.masterUser).name || ''}的入库申请 / ${instockOrder.coding ||''}`,
+          receipts: `${ToolUtil.isObject(data.masterUser).name || ''}的入库申请 / ${instockOrder.coding || ''}`,
           totalTitle: '申请总数',
         };
       default:
@@ -39,33 +39,37 @@ const InstockError = (
     <div className={style.skuList}>
       {
         anomalyResults.map((item, index) => {
-          return <div key={index} className={style.skuItem} onClick={() => {
-            if (getAction('verify').id && permissions) {
-              setVisible(item.anomalyId);
-            }
-          }}>
-            <div className={style.sku}>
-              <SkuItem
-                extraWidth='100px'
-                skuResult={item.skuResult}
-                otherData={[
-                  ToolUtil.isObject(item.customer).customerName,
-                  ToolUtil.isObject(item.brand).brandName,
-                ]}
-                moreDom={<div className={style.error}>
-                  <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
-                  </div>
-                  <div hidden={!item.errorNumber}>数量 <span
-                    className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
-                  </div>
-                  <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
-                </div>} />
-            </div>
-            <div className={style.realNumber}>
-              <ShopNumber show value={item.realNumber} />
-              <div className={style.status}>
-                · {item.status === 99 ? '已处理' : '处理中'}
+          return <div key={index}>
+            <div className={style.skuItem} onClick={() => {
+              if (getAction('verify').id && permissions) {
+                setVisible(item.anomalyId);
+              }
+            }}>
+              <div className={style.sku}>
+                <SkuItem
+                  extraWidth='100px'
+                  skuResult={item.skuResult}
+                  otherData={[
+                    ToolUtil.isObject(item.customer).customerName,
+                    ToolUtil.isObject(item.brand).brandName,
+                  ]}
+                />
               </div>
+              <div className={style.realNumber}>
+                <ShopNumber show value={item.realNumber} />
+                <div className={style.status}>
+                  · {item.status === 99 ? '已处理' : '处理中'}
+                </div>
+              </div>
+            </div>
+
+            <div className={style.error}>
+              <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
+              </div>
+              <div hidden={!item.errorNumber}>数量 <span
+                className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
+              </div>
+              <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
             </div>
           </div>;
         })
