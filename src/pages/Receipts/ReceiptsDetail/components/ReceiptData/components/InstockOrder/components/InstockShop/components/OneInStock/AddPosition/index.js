@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import style from '../../../index.less';
 import { MyLoading } from '../../../../../../../../../../../components/MyLoading';
-import { CloseCircleOutline } from 'antd-mobile-icons';
-import { Button, Popup, Stepper } from 'antd-mobile';
+import { AddOutline } from 'antd-mobile-icons';
+import { Button, Popup } from 'antd-mobile';
 import { Message } from '../../../../../../../../../../../components/Message';
 import Positions from '../../Positions';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { getPositionsBySkuIds } from '../index';
 import MyStepper from '../../../../../../../../../../../components/MyStepper';
+import MyRemoveButton from '../../../../../../../../../../../components/MyRemoveButton';
 
 const AddPosition = (
   {
@@ -39,12 +40,20 @@ const AddPosition = (
   const { loading: getPositionsLoading } = useRequest(
     { ...getPositionsBySkuIds, data: { skuIds: [skuId] } },
     {
+      manual: positions.length > 0,
       onSuccess: (res) => {
         const results = positionResults(res);
         if (results.length === 1) {
-          results[0] = { ...results[0], number: total || 0 };
+          results[0] = { ...results[0], number: total || min };
         }
-        setPositions(results);
+        const positions = [];
+        results.map((item, index) => {
+          if (!total || index <= total) {
+            positions.push({ ...item, number: 1 });
+          }
+          return null;
+        });
+        setPositions(positions);
       },
     });
 
@@ -58,47 +67,51 @@ const AddPosition = (
             return <div key={index} className={style.positionItem}>
 
               <div className={style.action}>
-                <CloseCircleOutline onClick={() => {
-                  setPositions(positions.filter((item, currentIndex) => currentIndex !== index));
-                }} />
                 {item.name}
               </div>
 
-              <MyStepper
-                min={min}
-                style={{
-                  '--button-text-color': '#000',
-                }}
-                value={item.number || 0}
-                onChange={(number) => {
-                  let allNumber = 0;
-                  const newPositions = positions.map((item, currentIndex) => {
-                    if (currentIndex === index) {
-                      return { ...item, number };
+              <div style={{ marginRight: 8 }}>
+                <MyStepper
+                  min={min}
+                  style={{
+                    '--button-text-color': '#000',
+                  }}
+                  value={item.number || 0}
+                  onChange={(number) => {
+                    let allNumber = 0;
+                    const newPositions = positions.map((item, currentIndex) => {
+                      if (currentIndex === index) {
+                        return { ...item, number };
+                      }
+                      allNumber += (item.number || 0);
+                      return item;
+                    });
+                    if (total && (number + allNumber) > total) {
+                      return Message.toast('不能超过申请数量!');
+                    } else {
+                      setPositions(newPositions);
                     }
-                    allNumber += (item.number || 0);
-                    return item;
-                  });
-                  if (total && (number + allNumber) > total) {
-                    return Message.toast('不能超过申请数量!');
-                  } else {
-                    setPositions(newPositions);
-                  }
-                }}
-              />
+                  }}
+                />
+              </div>
+
+              <MyRemoveButton onRemove={() => {
+                setPositions(positions.filter((item, currentIndex) => currentIndex !== index));
+              }} />
             </div>;
           })
       }
     </div>
 
     <Button
+      disabled={positions.length === maxNumber}
       className={style.addPositions}
       color='primary'
       fill='outline'
       onClick={() => {
         setVisible(true);
       }}
-    >添加库位</Button>
+    ><AddOutline /></Button>
 
     <Popup visible={visible} destroyOnClose className={style.positionPopup}>
       <Positions

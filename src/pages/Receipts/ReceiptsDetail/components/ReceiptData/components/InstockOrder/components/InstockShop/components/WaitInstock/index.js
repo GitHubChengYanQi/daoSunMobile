@@ -101,7 +101,7 @@ const WaitInstock = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        待入 {instockList.length}
+        待入数量：{instockList.length} 类
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>

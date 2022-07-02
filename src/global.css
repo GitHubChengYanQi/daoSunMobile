@@ -35,6 +35,10 @@ body {
 }
 
 
+.adm-dialog {
+  --z-index: 1004;
+}
+
 .adm-picker-popup, .adm-mask {
   --z-index: 1003;
 }

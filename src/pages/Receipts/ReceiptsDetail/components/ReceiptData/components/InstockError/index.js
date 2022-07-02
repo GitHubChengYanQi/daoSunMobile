@@ -4,6 +4,7 @@ import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { Popup } from 'antd-mobile';
 import SkuError from './components/SkuError';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
+import ShopNumber from '../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const InstockError = (
   {
@@ -27,6 +28,7 @@ const InstockError = (
       case 'instock':
         return {
           receipts: `${ToolUtil.isObject(data.masterUser).name || ''}的入库申请 / ${instockOrder.coding ||''}`,
+          totalTitle: '申请总数',
         };
       default:
         return {};
@@ -51,14 +53,19 @@ const InstockError = (
                   ToolUtil.isObject(item.brand).brandName,
                 ]}
                 moreDom={<div className={style.error}>
+                  <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
+                  </div>
                   <div hidden={!item.errorNumber}>数量 <span
                     className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
                   </div>
                   <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
                 </div>} />
             </div>
-            <div className={style.status}>
-              · {item.status === 99 ? '已处理' : '处理中'}
+            <div className={style.realNumber}>
+              <ShopNumber show value={item.realNumber} />
+              <div className={style.status}>
+                · {item.status === 99 ? '已处理' : '处理中'}
+              </div>
             </div>
           </div>;
         })

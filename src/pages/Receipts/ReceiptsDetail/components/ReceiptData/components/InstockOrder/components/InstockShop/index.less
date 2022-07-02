@@ -73,6 +73,7 @@
   .skuList {
     flex-grow: 1;
     overflow: auto;
+    margin-bottom: 12px;
 
     .skuItem {
       display: flex;
@@ -89,6 +90,12 @@
 
       .sku {
         flex-grow: 1;
+      }
+
+      .edit {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
       }
 
       .inStock {
@@ -176,7 +183,7 @@
 }
 
 .position {
-  padding-bottom: 12px;
+  //padding-bottom: 12px;
   font-size: 14px;
   max-height: 50vh;
   overflow: auto;
@@ -201,6 +208,7 @@
 }
 
 .addPositions {
+  //margin-top: 12px;
   display: inline-block;
   width: fit-content;
   padding: 4px 12px;

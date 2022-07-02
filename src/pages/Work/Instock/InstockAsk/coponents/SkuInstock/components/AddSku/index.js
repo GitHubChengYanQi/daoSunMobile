@@ -12,7 +12,6 @@ import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
-import LinkButton from '../../../../../../../components/LinkButton';
 
 const AddSku = (
   {
@@ -22,6 +21,7 @@ const AddSku = (
     skus = [],
     onClose = () => {
     },
+    defaultAction,
   }, ref) => {
 
   const [type, setType] = useState(defaultType);
@@ -44,7 +44,12 @@ const AddSku = (
     },
   });
 
-  const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
+  const { run: shopEdit } = useRequest(shopCartEdit, {
+    manual: true,
+    onSuccess: () => {
+      onClose();
+    },
+  });
 
   const [snameAction, setSnameAction] = useState();
 
@@ -55,7 +60,7 @@ const AddSku = (
   } = useRequest(supplierBySku, {
     manual: true,
     onSuccess: (res) => {
-      if (ToolUtil.isArray(res).length === 1 && [ERPEnums.inStock, ERPEnums.directInStock].includes(type)) {
+      if (!data.customerId && ToolUtil.isArray(res).length === 1 && [ERPEnums.inStock, ERPEnums.directInStock].includes(type)) {
         setData({
           ...data,
           customerId: res[0].customerId,
@@ -81,13 +86,14 @@ const AddSku = (
     return snameSku.length > 0;
   };
 
-  const openSkuAdd = (sku = {}, initType) => {
+  const openSkuAdd = (sku = {}, initType, other = {}) => {
     const type = initType || defaultType;
-    setSnameAction();
+    setSnameAction(defaultAction);
     setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
     setData({
+      ...other,
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
@@ -187,14 +193,12 @@ const AddSku = (
 
   const add = () => {
     const positionNums = [];
-    if (taskData().judge) {
-      ToolUtil.isArray(data.positions).map(item => {
-        if (item.number) {
-          return positionNums.push({ positionId: item.id, num: item.number });
-        }
-        return null;
-      });
-    }
+    ToolUtil.isArray(data.positions).map(item => {
+      if (item.number) {
+        return positionNums.push({ positionId: item.id, num: item.number });
+      }
+      return null;
+    });
 
     const params = {
       type,
@@ -211,7 +215,7 @@ const AddSku = (
         addShop({ data: params });
         break;
       case 'edit':
-        shopEdit({ data: { cartId: disabled(true).cartId, ...params } });
+        shopEdit({ data: { cartId: data.cartId || disabled(true).cartId, ...params } });
         break;
       default:
         addShop({ data: params });
@@ -273,6 +277,12 @@ const AddSku = (
     createBall(top, left);
   };
 
+  const disaledMake = () => {
+    return <div hidden={!disabled() || snameAction} className={style.danger}>
+      <span>已办理{taskData().title}准备是否继续添加?</span>
+    </div>;
+  };
+
   return <>
     <Popup
       destroyOnClose
@@ -326,7 +336,8 @@ const AddSku = (
                   }}
                 >{data.customerName || '请选择供应商'}</Button>
               </div>
-              <div hidden={taskData().judge} className={style.flex}>
+              <div hidden={taskData().judge} className={ToolUtil.classNames(style.flex, style.disabled)}>
+                {disaledMake()}
                 <div className={style.instockNumber}>
                   {taskData().title}数量
                   <ShopNumber value={data.number} onChange={(number) => {
@@ -334,28 +345,25 @@ const AddSku = (
                   }} />
                 </div>
               </div>
-              <div hidden={!disabled() || snameAction} className={style.danger}>
-                <span>已办理{taskData().title}准备是否继续添加</span>
-                <div className={style.sname} hidden={taskData().judge}>
-                  <LinkButton onClick={() => {
-                    setSnameAction('add');
-                  }}>继续</LinkButton>
-                  <LinkButton onClick={() => {
-                    setData({ ...data, number: disabled(true).number });
-                    setSnameAction('edit');
-                  }}>修改</LinkButton>
-                </div>
-              </div>
-              <div hidden={!taskData().judge} className={style.flex}>
+              <div hidden={!taskData().judge} className={ToolUtil.classNames(style.flex, style.disabled)}>
+                {disaledMake()}
                 <AddPosition
                   min={1}
                   skuNumber={1}
                   skuId={sku.skuId}
                   positions={data.positions}
-                  setPositions={(positions) => {
+                  setPositions={(positions = []) => {
                     setData({ ...data, positions });
-                  }}
-                />
+                  }} />
+              </div>
+              <div className={style.sname} hidden={!disabled() || snameAction}>
+                <Button color='primary' fill='outline' onClick={() => {
+                  setSnameAction('add');
+                }}>继续</Button>
+                <Button color='primary' fill='outline' onClick={() => {
+                  setData({ ...data, ...disabled(true) });
+                  setSnameAction('edit');
+                }}>修改</Button>
               </div>
               <div className={style.buttons}>
                 <Button
@@ -367,13 +375,13 @@ const AddSku = (
                   取消
                 </Button>
                 <Button
-                  disabled={taskData().disabled}
+                  disabled={taskData().disabled || (disabled() && !snameAction)}
                   className={ToolUtil.classNames(style.ok, style.button)}
                   color='primary'
                   onClick={() => {
                     addSku();
                   }}>
-                  添加
+                  {snameAction === 'edit' ? '修改' : '添加'}
                 </Button>
               </div>
             </>

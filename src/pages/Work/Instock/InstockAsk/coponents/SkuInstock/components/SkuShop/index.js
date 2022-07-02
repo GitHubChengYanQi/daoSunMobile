@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import { Badge, Button, Popup, Tabs } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
@@ -15,6 +15,7 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import { judgeLoginUser } from '../../../../Submit/components/InstockSkus';
 import MyRemoveButton from '../../../../../../../components/MyRemoveButton';
+import AddSku from '../AddSku';
 
 const SkuShop = (
   {
@@ -125,6 +126,8 @@ const SkuShop = (
     },
   });
 
+  const addRef = useRef();
+
   useEffect(() => {
     if (switchType) {
       judgeRun();
@@ -172,7 +175,7 @@ const SkuShop = (
         return {
           title: '入库任务明细',
           type: '入库申请',
-          otherData: [item.customerName,item.brandName],
+          otherData: [item.customerName, item.brandName],
         };
       case ERPEnums.directInStock:
         let number = 0;
@@ -184,7 +187,7 @@ const SkuShop = (
           title: '入库任务明细',
           type: '入库申请',
           judge: true,
-          otherData: [item.customerName,item.brandName],
+          otherData: [item.customerName, item.brandName],
           more: positions.join('、'),
           number,
         };
@@ -212,7 +215,7 @@ const SkuShop = (
           物料明细
         </div>
         <div className={style.empty} />
-        <MyRemoveButton onRemove={()=>{
+        <MyRemoveButton onRemove={() => {
           onClear();
           shopDelete({ data: { ids: skus.map(item => item.cartId) } });
         }}>
@@ -242,6 +245,11 @@ const SkuShop = (
                   extraWidth={taskData().judge ? '50px' : '130px'}
                   otherData={taskData(item).otherData}
                   more={taskData(item).more}
+                  moreClick={() => {
+                    if (type === ERPEnums.directInStock) {
+                      addRef.current.openSkuAdd(skuResult, type, item);
+                    }
+                  }}
                 />
               </div>
               <div className={style.action}>
@@ -350,6 +358,10 @@ const SkuShop = (
         </Button>
       </div>
     </div>
+
+    <AddSku ref={addRef} defaultAction='edit' onClose={() => {
+      shopRefresh();
+    }} />
 
     {(shopLoading || addListLoading || loading) && <MyLoading />}
   </>;

@@ -13,6 +13,8 @@ import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { Message } from '../../../../../../../../../../components/Message';
 import { sendBack } from '../WaitInstock';
 import { ReceiptsEnums } from '../../../../../../../../../index';
+import ShopNumber
+  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const InstockError = (
   {
@@ -37,6 +39,7 @@ const InstockError = (
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: () => {
+      refresh();
       shopRefresh();
       setData([]);
       Message.toast('添加异常单成功！');
@@ -142,7 +145,7 @@ const InstockError = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        异常 {errors.length}
+        异常数量：{errors.length} 类
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>
@@ -164,18 +167,22 @@ const InstockError = (
                   }}>
                     {errorType(item).skuItem}
                   </div>
-                  <FormOutlined style={{ fontSize: 18 }} onClick={() => {
-                    onEdit(anomalyResult.anomalyId, errors.length);
-                  }} />
+                  <div className={style.edit}>
+                    <ShopNumber show value={anomalyResult.realNumber} />
+                    <FormOutlined style={{ fontSize: 18 }} onClick={() => {
+                      onEdit(anomalyResult.anomalyId, errors.length);
+                    }} />
+                  </div>
+
                 </div>
                 <div className={style.errorAction}>
                   <div className={style.number}>
+                    <span>{errorType().totalTitle}：<span
+                      className={style.black}>{anomalyResult.needNumber}</span></span>
                     <span hidden={!anomalyResult.errorNumber}>数量：<span
                       className={style.red}>{anomalyResult.errorNumber > 0 ? `+${anomalyResult.errorNumber}` : anomalyResult.errorNumber}</span></span>
                     <span hidden={!anomalyResult.otherNumber}>质量：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>
-                    <span>{errorType().totalTitle}：<span
-                      className={style.black}>{anomalyResult.needNumber}</span></span>
                   </div>
                   <Button color='primary' fill='outline' onClick={() => {
                     orderAdd({

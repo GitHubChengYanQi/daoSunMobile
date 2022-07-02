@@ -12,24 +12,39 @@
   flex-direction: column;
   grid-gap: 24px;
 
-  .danger {
-    color:var(--adm-color-danger);
-    display: flex;
-    align-items: center;
-
-    span {
-      flex-grow: 1;
-    }
-
-    .sname {
-      display: flex;
-      gap: 8px;
-    }
-  }
-
   .flex {
     display: flex;
     align-items: center;
+  }
+
+  .sname {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .disabled {
+    position: relative;
+
+    .danger {
+      z-index: 1;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding-right: 8px;
+      top: 0;
+      left: 0;
+      color: #fff;
+      background: linear-gradient(to right, rgba(250, 250, 250, 0.8), var(--adm-color-danger));
+      display: flex;
+      align-items: center;
+      text-align: right;
+
+      span {
+        flex-grow: 1;
+      }
+    }
   }
 
   .checkLabel {

@@ -19,6 +19,8 @@ const SkuItem = (
     title,
     more,
     moreDom,
+    moreClick = () => {
+    },
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -49,7 +51,7 @@ const SkuItem = (
         <div hidden={otherData.length === 0}>
           {
             otherData.map((item, index) => {
-              if (!item){
+              if (!item) {
                 return null;
               }
               return <div key={index} className={style.otherData}>
@@ -62,7 +64,12 @@ const SkuItem = (
         </div>
       </div>
     </div>
-    {moreDom || <div hidden={!more} className={style.more} style={{ maxWidth: `calc(100vw - 13px - ${extraWidth})` }}>
+    {moreDom || <div
+      hidden={!more}
+      className={style.more}
+      style={{ maxWidth: `calc(100vw - 13px - ${extraWidth})` }}
+      onClick={moreClick}
+    >
       <MyEllipsis width='100%'>
         {more}
       </MyEllipsis>

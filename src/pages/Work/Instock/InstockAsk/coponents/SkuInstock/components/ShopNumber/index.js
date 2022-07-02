@@ -25,7 +25,7 @@ const ShopNumber = (
       {update ?
         <MyStepper open onChange={onChange} value={value} min={min} max={max} />
         :
-        <div className={style.number} style={{ border: show && 'none' }} onClick={() => {
+        <div className={style.number} style={show && { border: 'none',padding:0 }} onClick={() => {
           if (!show) {
             setUpdate(true);
           }
