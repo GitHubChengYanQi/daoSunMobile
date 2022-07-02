@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { Button, Divider, Selector, Toast } from 'antd-mobile';
+import { Divider, Selector, Toast } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { announcementsAdd, announcementsListSelect } from '../../../../../../Url';
 import { useBoolean } from 'ahooks';
-import LinkButton from '../../../../../../../../components/LinkButton';
 import FocusInput from './components/FocusInput';
 
 const Careful = (
@@ -18,9 +17,13 @@ const Careful = (
     },
   }) => {
 
-  const { data: announcemens, refresh } = useRequest({
+  const { loading: listLoading, data: announcemens, refresh } = useRequest({
     ...announcementsListSelect,
     data: { type },
+  },{
+    onSuccess:()=>{
+
+    }
   });
 
   const { loading: addLoading, run: add } = useRequest(announcementsAdd, {
@@ -39,7 +42,7 @@ const Careful = (
   const [content, setContent] = useState('');
 
   return <>
-    <div className={style.carefulData}>
+    <div className={style.carefulData} id='careful'>
       <Selector
         value={value}
         className={style.selector}
@@ -89,7 +92,7 @@ const Careful = (
       </div>
     </Divider>}
 
-    {addLoading && <MyLoading />}
+    {(addLoading || listLoading) && <MyLoading />}
   </>;
 };
 

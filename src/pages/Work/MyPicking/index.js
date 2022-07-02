@@ -16,7 +16,8 @@ import { MyLoading } from '../../components/MyLoading';
 import { Message } from '../../components/Message';
 import Sku from './components/Sku';
 
-const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
+const outStockByReceipts = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
+const outStockBySku = { url: '/productionPickLists/createOutStockOrderBySku', method: 'POST' };
 
 const MyPicking = () => {
 
@@ -34,7 +35,18 @@ const MyPicking = () => {
 
   const [refresh, setRefresh] = useState();
 
-  const { loading, run } = useRequest(outStock, {
+  const { loading: receiptsLoading, run: receiptsRun } = useRequest(outStockByReceipts, {
+    manual: true,
+    onSuccess: () => {
+      Message.toast('领取成功！');
+      setRefresh(true);
+    },
+    onError: () => {
+      Message.toast('领取失败！');
+    },
+  });
+
+  const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
     onSuccess: () => {
       Message.toast('领取成功！');
@@ -89,7 +101,7 @@ const MyPicking = () => {
 
   return <div className={style.myPicking}>
     <MyNavBar title='领料中心' />
-    <div className={style.content} style={{backgroundColor:key === 'sku' && '#fff'}}>
+    <div className={style.content} style={{ backgroundColor: key === 'sku' && '#fff' }}>
       <MySearch
         searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
         value={searchValue}
@@ -160,28 +172,51 @@ const MyPicking = () => {
         <Button
           disabled={outSkus.length === 0}
           color='primary'
-          fill='outline'
           onClick={() => {
             const cartsParams = [];
-            outSkus.map(item => {
-              return cartsParams.push({
-                pickListsId: item.pickListsId,
-                skuId: item.skuId,
-                number: item.perpareNumber,
-                brandIds: item.brandIds,
-              });
-            });
-            run({
-              data: {
-                cartsParams,
-              },
-            });
+            switch (key) {
+              case 'receipts':
+                outSkus.map(item => {
+                  return cartsParams.push({
+                    pickListsId: item.pickListsId,
+                    skuId: item.skuId,
+                    number: item.perpareNumber,
+                    brandIds: item.brandIds,
+                  });
+                });
+                receiptsRun({
+                  data: {
+                    cartsParams,
+                  },
+                });
+                return;
+              case 'sku':
+                outSkus.map(skuItem => {
+                  const cartResults = skuItem.cartResults || [];
+                  return cartResults.map(item => {
+                    return cartsParams.push({
+                      'storehouseId': skuItem.storehouseId,
+                      'skuId': skuItem.skuId,
+                      'pickListsId': item.pickListsId,
+                      'number': item.number,
+                    });
+                  });
+                });
+                skuRun({
+                  data: {
+                    cartsParams,
+                  },
+                });
+                return;
+              default:
+                return;
+            }
           }}
         >确认</Button>
       </div>
     </div>
 
-    {loading && <MyLoading />}
+    {(skuLoading || receiptsLoading) && <MyLoading />}
   </div>;
 
 };

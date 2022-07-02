@@ -1,14 +1,38 @@
 
 .outSku {
-  padding: 12px;
   border-bottom: 1px solid #F5F5F5;
+  padding: 12px 12px 0;
+
+  .skus {
+    padding-left: 12px;
+  }
 
   .skuItem {
     display: flex;
     align-items: center;
+    border-bottom: solid 1px #F5F5F5;
+    padding: 12px 0;
+
+    .storeName {
+      padding: 0 8px;
+      font-size: 14px;
+      font-weight: normal;
+      color: #333333;
+    }
+
+    .sku {
+      flex-grow: 1;
+      padding: 0 8px;
+    }
+
+    .skuData {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
 
     span {
-      margin: 0 8px;
+      //margin: 0 8px;
 
       svg {
         font-size: 18px;
@@ -19,7 +43,7 @@
   .askData {
     display: flex;
     gap: 8px;
-    padding: 8px 0 8px 50px;
+    padding: 8px 12px;
     align-items: center;
 
     .title {
