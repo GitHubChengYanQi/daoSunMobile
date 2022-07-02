@@ -227,7 +227,7 @@ const InstockError = (
               orderAdd({
                 data: {
                   instockOrderId: formId,
-                  type: 'instock',
+                  type: errorType().type,
                   anomalyParams: data.map((item) => {
                     const anomalyResult = item.anomalyResult || {};
                     return { anomalyId: anomalyResult.anomalyId };
