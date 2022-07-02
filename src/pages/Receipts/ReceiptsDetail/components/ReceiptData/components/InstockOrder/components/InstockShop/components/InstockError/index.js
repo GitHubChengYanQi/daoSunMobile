@@ -145,7 +145,7 @@ const InstockError = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        异常数量：{errors.length} 类
+        数量：{errors.length} 类
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>

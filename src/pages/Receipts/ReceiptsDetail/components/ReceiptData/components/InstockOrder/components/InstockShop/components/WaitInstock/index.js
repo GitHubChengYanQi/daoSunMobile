@@ -5,7 +5,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
-import { Button } from 'antd-mobile';
+import { Button, Popup } from 'antd-mobile';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
@@ -14,6 +14,7 @@ import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { ReceiptsEnums } from '../../../../../../../../../index';
+import Positions from '../Positions';
 
 export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
 
@@ -28,12 +29,31 @@ const WaitInstock = (
     },
   }) => {
 
+  const [instockList, setInstockList] = useState([]);
+
   const {
     loading,
-    data: shopList,
     run: showShop,
     refresh: shopRefresh,
-  } = useRequest(shopCartAllList, { manual: true });
+  } = useRequest(shopCartAllList, {
+    manual: true,
+    onSuccess: (res) => {
+      const newInstockList = [];
+      ToolUtil.isArray(res).map((item) => {
+        if (item.number <= 0) {
+          return null;
+        }
+        const instocks = instockList.filter(inItem => inItem.cartId === item.cartId);
+        if (instocks.length > 0) {
+          newInstockList.push({ ...instocks[0], checked: false });
+        } else {
+          newInstockList.push({ ...item, checked: false });
+        }
+        return null;
+      });
+      setInstockList(newInstockList);
+    },
+  });
 
   // 入库
   const { loading: instockLoading, run: instockRun } = useRequest({
@@ -44,7 +64,6 @@ const WaitInstock = (
     onSuccess: () => {
       shopRefresh();
       refresh();
-      setData([]);
       Message.toast('入库成功！');
     },
     onError: () => {
@@ -58,7 +77,6 @@ const WaitInstock = (
     onSuccess: () => {
       shopRefresh();
       refresh();
-      setData([]);
       Message.toast('退回成功！');
     },
     onError: () => {
@@ -66,20 +84,24 @@ const WaitInstock = (
     },
   });
 
-  const instockList = ToolUtil.isArray(shopList).filter(item => item.number > 0);
 
-  const [data, setData] = useState([]);
+  const [visible, setVisible] = useState();
 
-  const instockSkus = data.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
+  const inStockChecked = instockList.filter(item => item.checked);
 
-  const allChecked = data.length === 0 ? false : instockList.length === data.length;
+  const instockSkus = inStockChecked.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
 
-  const check = (checked, item) => {
-    if (!checked) {
-      setData([...data, item]);
-    } else {
-      setData(data.filter(currentItem => currentItem.cartId !== item.cartId));
-    }
+  const allChecked = inStockChecked.length === 0 ? false : instockList.length === inStockChecked.length;
+
+  const check = (checked, currentIndex) => {
+    const newInStockList = instockList.map((item, index) => {
+      if (currentIndex === index) {
+        return { ...item, checked: !checked };
+      } else {
+        return item;
+      }
+    });
+    setInstockList(newInStockList);
   };
 
   useEffect(() => {
@@ -101,7 +123,7 @@ const WaitInstock = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        待入数量：{instockList.length} 类
+        数量：{instockList.length} 类
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>
@@ -109,7 +131,7 @@ const WaitInstock = (
           {
             instockList.map((item, index) => {
 
-              const checked = data.map(item => item.cartId).includes(item.cartId);
+              const checked = item.checked;
 
               const skuResult = item.skuResult || {};
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
@@ -119,20 +141,17 @@ const WaitInstock = (
 
               return <div key={index} className={style.skuItem}>
                 <MyCheck checked={checked} className={style.check} onChange={() => {
-                  check(checked, item);
+                  check(checked, index);
                 }} />
                 <div className={style.sku} onClick={() => {
-                  if (!positionsResult) {
-                    return;
-                  }
-                  check(checked, item);
+                  setVisible(item);
                 }}>
                   <SkuItem
                     skuResult={skuResult}
-                    title={positionsResult ? positionsResult.name + ' / ' + storehouseResult.name : '无库位'}
+                    title={positionsResult ? (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') : '无库位'}
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({ skuResult })}
-                    otherData={[customerName,brandName]}
+                    otherData={[customerName, brandName]}
                   />
                 </div>
                 <div className={style.inStock}>
@@ -151,17 +170,15 @@ const WaitInstock = (
       <div className={style.bottom}>
         <div className={style.all}>
           <MyCheck checked={allChecked} onChange={() => {
-            if (allChecked) {
-              setData([]);
-            } else {
-              setData(instockList);
-            }
-          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
+            setInstockList(instockList.map(item => {
+              return { ...item, checked: !allChecked };
+            }));
+          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {inStockChecked.length} 类</span>
         </div>
         <div className={style.buttons}>
-          <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
+          <Button color='danger' disabled={inStockChecked.length === 0} fill='outline' onClick={() => {
             backRun({
-              data: { ids: data.map(item => item.cartId) },
+              data: { ids: inStockChecked.map(item => item.cartId) },
             });
           }}>退回</Button>
           <Button color='primary' disabled={instockSkus.length === 0} onClick={() => {
@@ -193,6 +210,32 @@ const WaitInstock = (
         </div>
       </div>
     </div>
+
+    <Popup visible={visible} destroyOnClose className={style.positionPopup}>
+      <Positions
+        ids={[]}
+        single
+        onClose={() => setVisible(false)}
+        onSuccess={(value = []) => {
+          const skuItem = ToolUtil.isObject(visible);
+          const newInstockList = instockList.map(item => {
+            if (item.cartId === skuItem.cartId) {
+              const positions = value[0] || {};
+              return {
+                ...skuItem,
+                skuResult: {
+                  ...skuItem.skuResult,
+                  positionsResult: [{ storehousePositionsId: positions.id, name: positions.name }],
+                },
+              };
+            }
+            return item;
+          });
+
+          setInstockList(newInstockList);
+          setVisible(false);
+        }} />
+    </Popup>
 
     {(instockLoading || backLoading) && <MyLoading />}
   </>;

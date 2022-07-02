@@ -31,8 +31,6 @@ const ReceiptsDetail = () => {
 
   const [key, setKey] = useState('data');
 
-  const [params, setParams] = useState({});
-
   const [type, setType] = useState();
 
   // 获取当前节点
@@ -105,8 +103,6 @@ const ReceiptsDetail = () => {
           currentNode={currentNode}
           refresh={refresh}
           loading={detailLoading}
-          params={params}
-          setParams={setParams}
         />;
       case 'log':
         return <Log data={detail} refresh={refresh} />;
@@ -157,7 +153,7 @@ const ReceiptsDetail = () => {
           {content()}
         </div>
 
-        <Bottom params={params} currentNode={currentNode} detail={detail} refresh={refresh} />
+        <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />
 
         {(getTaskIdLoading || detailLoading) && <MyLoading />}
       </div>

@@ -4,22 +4,14 @@ import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
 import Process from '../../../../Work/PurchaseAsk/components/Process';
 import Comments from '../../../components/Comments';
-import MyTextArea from '../../../../components/MyTextArea';
 import style from './index.less';
-import UpLoadImg from '../../../../components/Upload';
-import { PaperClipOutlined } from '@ant-design/icons';
 import InstockError from './components/InstockError';
-import { ToolUtil } from '../../../../components/ToolUtil';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
-import SkuError from './components/InstockError/components/SkuError';
 import StepList from '../Log/components/StepList';
 
 const ReceiptData = (
   {
-    params = {},
-    setParams = () => {
-    },
     data = {},
     currentNode,
     refresh = () => {
@@ -90,38 +82,8 @@ const ReceiptData = (
     <Process auditData={data.stepsResult} createUser={data.user} card />
     <Comments detail={data} id={data.processTaskId} refresh={refresh} />
     <div className={style.comments}>
-      <StepList remarks={remarks.filter(item => item.type === 'comments')} />
+      <StepList remarks={remarks.filter(item => ['comments', 'audit'].includes(item.type))} />
     </div>
-
-    <div hidden>
-      <MyTextArea
-        placeholder='填写审批意见，可@相关人员'
-        className={style.text}
-        value={params.note}
-        onChange={(note, users = []) => {
-          setParams({ ...params, note, userIds: users.map(item => item.userId) });
-        }}
-      />
-      <div className={style.img}>
-        <UpLoadImg
-          maxCount={1}
-          showUploadList
-          type='picture'
-          id='file'
-          onRemove={() => {
-            setParams({ ...params, mediaIds: [] });
-          }}
-          onChange={(url, mediaId) => {
-            setParams({ ...params, mediaIds: [mediaId] });
-          }}
-          button={ToolUtil.isArray(params.mediaIds).length === 1 ? <></> : <div className={style.upload}>
-            <PaperClipOutlined />
-          </div>}
-        />
-      </div>
-    </div>
-
-
   </>;
 };
 

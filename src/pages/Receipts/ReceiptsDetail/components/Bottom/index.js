@@ -6,10 +6,14 @@ import { ActionSheet } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../index';
 import InStockErrorBottom from './components/InStockErrorBottom';
 import StocktakingBottom from './components/StocktakingBottom';
+import MyTextArea from '../../../../components/MyTextArea';
+import UpLoadImg from '../../../../components/Upload';
+import { ToolUtil } from '../../../../components/ToolUtil';
+import { PaperClipOutlined } from '@ant-design/icons';
+import UploadFile from '../../../../components/Upload/UploadFile';
 
 const Bottom = (
   {
-    params = {},
     currentNode = [],
     detail = {},
     refresh = () => {
@@ -17,6 +21,8 @@ const Bottom = (
   }) => {
 
   const [visible, setVisible] = useState();
+
+  const [params, setParams] = useState({});
 
   const actions = [];
   currentNode.map((item) => {
@@ -44,13 +50,32 @@ const Bottom = (
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <div className={style.all} onClick={() => {
-      setVisible(true);
-    }}>
-      更多
-      <MoreOutline style={{ fontSize: 15 }} />
+    <div>
+      <MyTextArea
+        placeholder='填写审批意见，可@相关人员'
+        value={params.note}
+        className={style.note}
+        onChange={(note, users = []) => {
+          setParams({ ...params, note, userIds: users.map(item => item.userId) });
+        }}
+      />
+      <div hidden className={style.img}>
+        <UploadFile
+          onChange={(mediaIds) => {
+            setParams({ ...params, mediaIds: mediaIds });
+          }}
+        />
+      </div>
     </div>
-    <Audit {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
+    <div className={style.actions}>
+      <div className={style.all} onClick={() => {
+        setVisible(true);
+      }}>
+        更多
+        <MoreOutline style={{ fontSize: 15 }} />
+      </div>
+      <Audit {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
+    </div>
 
     <ActionSheet
       className={style.action}
@@ -68,6 +93,7 @@ const Bottom = (
         setVisible(false);
       }}
     />
+
   </div>;
 };
 

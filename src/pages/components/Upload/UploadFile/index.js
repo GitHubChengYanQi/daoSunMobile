@@ -7,7 +7,6 @@ import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
 import { ToolUtil } from '../../ToolUtil';
-import { Upload } from 'antd';
 import { CloseOutline } from 'antd-mobile-icons';
 import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
 

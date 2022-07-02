@@ -103,7 +103,7 @@ const WaitOutSku = (
   return <>
     <div className={style.header}>待出物料</div>
     <div className={style.sys}>
-      <span>待出 {count}</span>
+      <span>数量：{count} 类</span>
       <LinkButton onClick={() => {
         setSys(!sys);
       }}>{sys ? '取消管理' : '管理'}</LinkButton>
