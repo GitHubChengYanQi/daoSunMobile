@@ -82,7 +82,7 @@ const ReceiptData = (
     <Process auditData={data.stepsResult} createUser={data.user} card />
     <Comments detail={data} id={data.processTaskId} refresh={refresh} />
     <div className={style.comments}>
-      <StepList remarks={remarks.filter(item => ['comments', 'audit'].includes(item.type))} />
+      <StepList remarks={remarks.filter(item => ['comments'].includes(item.type))} />
     </div>
   </>;
 };

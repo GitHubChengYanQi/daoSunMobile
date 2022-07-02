@@ -1,6 +1,5 @@
 import React from 'react';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import { Steps } from 'antd-mobile';
 import style from '../../index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../../components/LinkButton';
@@ -20,34 +19,62 @@ const StepList = (
   const { initialState } = useModel('@@initialState');
   const userInfo = initialState.userInfo || {};
 
-  return <>
-    <Steps
-      direction='vertical'
-      style={{
-        '--indicator-margin-right': '12px',
-      }}
-    >
-      {
-        remarks.map((item, index) => {
-
-          const permissions = userInfo.id === item.createUser;
-
-          const replys = item.childrens || [];
-
-          const user = ToolUtil.isObject(item.user);
-
-          return <Steps.Step
-            status='success'
-            key={index}
-            title={
-              <div className={style.name}>
-                <span hidden={!user.name}>{user.name}</span>
-                <span>{item.createTime}</span>
-              </div>
-            }
-            description={<div className={style.description}>
-              <div className={style.content}>
+  const getContent = (item) => {
+    switch (item.type) {
+      case 'audit':
+        switch (item.status) {
+          case 1:
+            return <div>
+              同意了审批
+              <div style={{padding:'4px 0'}}>
                 {item.content}
+              </div>
+            </div>;
+          case 0:
+            return <div>
+              拒绝了审批
+              <div>
+                {item.content}
+              </div>
+            </div>;
+          default:
+            return '';
+        }
+      default:
+        return item.content;
+    }
+  };
+
+  return <div className={style.log}>
+    {
+      remarks.map((item, index) => {
+
+        const permissions = userInfo.id === item.createUser;
+
+        const replys = item.childrens || [];
+
+        const user = ToolUtil.isObject(item.user);
+
+        return <div key={index} className={style.dynamic} style={{ borderTop: index === 0 && 'none' }}>
+
+          <div className={style.avatar}>
+            <Avatar
+              size={32}
+              shape='square'
+              key={index}
+              src={user.avatar}
+            >
+              {user.name && user.name.substring(0, 1)}
+            </Avatar>
+          </div>
+
+          <div>
+            <div className={style.name} hidden={!user.name}>
+              {user.name}
+            </div>
+            <div className={style.description}>
+              <div className={style.content}>
+                {getContent(item)}
               </div>
               <div hidden={replys.length === 0} className={style.reply}>
                 <div onClick={() => {
@@ -74,7 +101,7 @@ const StepList = (
                   })
                 }
               </div>
-              <div hidden={item.type !== 'comments'} className={style.actions}>
+              <div hidden={true || item.type !== 'comments'} className={style.actions}>
                 <LinkButton onClick={() => {
                   addComments(item.remarksId);
                 }}>回复</LinkButton>
@@ -82,19 +109,16 @@ const StepList = (
                 {permissions && <LinkButton>编辑</LinkButton>}
                 {permissions && <LinkButton color='danger'>删除</LinkButton>}
               </div>
-            </div>}
-            icon={<Avatar
-              size={26}
-              shape='square'
-              key={index}
-              src={user.avatar}
-            >{user.name && user.name.substring(0, 1)}</Avatar>}
-          />;
-        })
-      }
+            </div>
+            <div className={style.time}>
+              {ToolUtil.timeDifference(item.createTime)}
+            </div>
+          </div>
 
-    </Steps>
-  </>;
+        </div>;
+      })
+    }
+  </div>;
 };
 
 export default StepList;
