@@ -30,7 +30,6 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
   const [params, setParams] = useState({});
-  console.log(params);
 
   const history = useHistory();
 

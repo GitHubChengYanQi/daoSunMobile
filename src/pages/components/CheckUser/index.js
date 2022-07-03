@@ -15,6 +15,8 @@ const CheckUser = (
     value,
     onChange = (id, name, params) => {
     },
+    onClose = () => {
+    },
   },
   ref,
 ) => {
@@ -104,6 +106,7 @@ const CheckUser = (
       columns={[data || []]}
       visible={visible}
       onClose={() => {
+        onClose();
         setVisible(false);
       }}
       onConfirm={(value, options) => {

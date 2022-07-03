@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
-import MyStepper from '../components/MyStepper';
+import MyTextArea from '../components/MyTextArea';
+import { Button } from 'antd-mobile';
 
 const Test = () => {
 
-  const [value, onChange] = useState(0);
+  const [value, setValue] = useState('');
+  const [users,setUsers] = useState([]);
 
   return <>
-    <MyStepper onChange={onChange} value={value} min={5} max={13} open />
+   <MyTextArea value={value} onChange={(value,users)=>{
+     setValue(value);
+     setUsers(users);
+   }} />
+    <Button onClick={()=>{
+      alert(`${users.map(item=>item.name).join('、')}`)
+    }}>12321</Button>
   </>;
 };
 
