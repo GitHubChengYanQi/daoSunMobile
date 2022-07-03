@@ -84,9 +84,9 @@ const MyTextArea = (
     return clickUsers[0];
   };
 
-  const userPosChange = (length, userPos) => {
+  const userPosChange = (length, userPos,cursorPos = cursor) => {
     const newUserPos = userPos.map(item => {
-      if (cursor < item.start) {
+      if (cursorPos < item.start) {
         return { ...item, start: item.start + length, end: item.end + length };
       } else {
         return item;
@@ -105,6 +105,7 @@ const MyTextArea = (
         if (clickUser()) {
           setCaretPosition(cursor);
         } else {
+          console.log(getCursortPosition());
           setCursor(getCursortPosition());
         }
       }}
@@ -162,7 +163,7 @@ const MyTextArea = (
           userId,
           userName,
         }];
-        userPosChange(newPos - caretPos, newUserPos);
+        userPosChange(newPos - caretPos, newUserPos,caretPos);
         valueChange(newValue, newUserPos, newPos);
       }} />
   </>;
