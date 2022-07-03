@@ -85,6 +85,7 @@ const InstockError = (
       case ReceiptsEnums.instockOrder:
         return {
           totalTitle: '申请总数',
+          type:'instock',
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
@@ -97,6 +98,7 @@ const InstockError = (
       case ReceiptsEnums.stocktaking:
         return {
           totalTitle: '实际总数',
+          type:'Stocktaking',
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
@@ -188,7 +190,7 @@ const InstockError = (
                     orderAdd({
                       data: {
                         instockOrderId: formId,
-                        type: 'instock',
+                        type: errorType().type,
                         anomalyParams: [{ anomalyId: anomalyResult.anomalyId }],
                       },
                     });
@@ -225,7 +227,7 @@ const InstockError = (
               orderAdd({
                 data: {
                   instockOrderId: formId,
-                  type: 'instock',
+                  type: errorType().type,
                   anomalyParams: data.map((item) => {
                     const anomalyResult = item.anomalyResult || {};
                     return { anomalyId: anomalyResult.anomalyId };
