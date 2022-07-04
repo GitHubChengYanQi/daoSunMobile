@@ -1,5 +1,5 @@
 import style from '../../index.less';
-import { Button, Stepper } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
 import React, { useEffect, useState } from 'react';
@@ -142,22 +142,25 @@ const Order = (
       const positions = item.positionsResults || [];
 
       return <div key={index}>
-        <Button
-          className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
-          color={item.show ? 'primary' : 'default'}
-          fill='outline'
-          onClick={() => {
-            let brandResults = item.brandResults || [];
-            if (item.show) {
-              brandResults = brandResults.map(item => {
-                return { ...item, outStockNumber: 0, checked: false };
-              });
-            }
-            brandChange(index, { show: !item.show, brandResults });
-          }}
-        >
-          <LinkOutline /> {item.brandName} ({item.num})
-        </Button>
+        <div hidden={brands.length === 1}>
+          <Button
+            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
+            color={item.show ? 'primary' : 'default'}
+            fill='outline'
+            onClick={() => {
+              let brandResults = item.brandResults || [];
+              if (item.show) {
+                brandResults = brandResults.map(item => {
+                  return { ...item, outStockNumber: 0, checked: false };
+                });
+              }
+              brandChange(index, { show: !item.show, brandResults });
+            }}
+          >
+            <LinkOutline /> {item.brandName} ({item.num})
+          </Button>
+        </div>
+
         <div hidden={!item.show} className={style.allBrands}>
           {
             positions.map((positionItem, positionIndex) => {

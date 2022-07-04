@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2837038 */
-  src: url('iconfont.woff2?t=1656645467776') format('woff2'),
-       url('iconfont.woff?t=1656645467776') format('woff'),
-       url('iconfont.ttf?t=1656645467776') format('truetype');
+  src: url('iconfont.woff2?t=1656914776130') format('woff2'),
+       url('iconfont.woff?t=1656914776130') format('woff'),
+       url('iconfont.ttf?t=1656914776130') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,34 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yichangchuli:before {
+  content: "\e6c0";
+}
+
+.icon-kucunyanghu:before {
+  content: "\e6ba";
+}
+
+.icon-pandian1:before {
+  content: "\e6bb";
+}
+
+.icon-rukuguanli2:before {
+  content: "\e6bc";
+}
+
+.icon-chukuguanli2:before {
+  content: "\e6bd";
+}
+
+.icon-kujiantiaobo:before {
+  content: "\e6be";
+}
+
+.icon-wodelingliao1:before {
+  content: "\e6bf";
 }
 
 .icon-shenpi3:before {
@@ -235,30 +263,6 @@
 
 .icon-caigoushenqingguanli:before {
   content: "\e636";
-}
-
-.icon-chukuguanli2:before {
-  content: "\e635";
-}
-
-.icon-kujiantiaobo:before {
-  content: "\e634";
-}
-
-.icon-kucunyanghu:before {
-  content: "\e633";
-}
-
-.icon-pandianguanli:before {
-  content: "\e632";
-}
-
-.icon-kucunguanli1:before {
-  content: "\e62f";
-}
-
-.icon-rukuguanli2:before {
-  content: "\e62e";
 }
 
 .icon-dibudaohang-saoma:before {

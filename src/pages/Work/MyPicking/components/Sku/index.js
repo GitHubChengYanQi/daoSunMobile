@@ -120,8 +120,8 @@ const Sku = (
               cartResults.map(item => {
                 const detail = item.productionPickListsDetailResult || {};
                 receivedNumber += parseInt(detail.receivedNumber || 0);
-                number += detail.number;
-                perpareNumber += item.number;
+                number += (detail.number || 0);
+                perpareNumber += (item.number || 0);
                 return null;
               });
 
@@ -161,11 +161,13 @@ const Sku = (
                 {
                   cartResults.map((detailItem, detailIndex) => {
                     const detail = detailItem.productionPickListsDetailResult || {};
+                    const pickListsResult = detail.pickListsResult || {};
                     return <div key={detailIndex} className={style.askData}>
                       <div className={style.title}>
                         <div className={style.outOrder}>
-                          的出库申请
-                          /1232
+                          {ToolUtil.isObject(pickListsResult.createUserResult).name}的出库申请
+                          /
+                          {pickListsResult.coding}
                         </div>
                         <div className={style.time}>
                           {detail.receivedNumber || 0} / {detail.number}

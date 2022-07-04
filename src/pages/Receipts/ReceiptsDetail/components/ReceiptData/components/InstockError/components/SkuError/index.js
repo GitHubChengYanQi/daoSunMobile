@@ -427,7 +427,7 @@ const SkuError = (
               {!handle ? <TextArea
                 className={style.textArea}
                 rows={1}
-                placeholder='请给与处理意见'
+                placeholder='请填写处理意见'
                 value={item.opinion}
                 onChange={(opinion) => {
                   itemChange(index, { opinion });

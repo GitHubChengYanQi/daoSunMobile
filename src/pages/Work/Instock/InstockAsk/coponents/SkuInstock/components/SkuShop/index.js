@@ -168,14 +168,14 @@ const SkuShop = (
       case ERPEnums.outStock:
         return {
           title: '出库任务明细',
-          otherData: [item.brandName],
+          otherData: [ item.brandName || '任意品牌'],
           type: '出库申请',
         };
       case ERPEnums.inStock:
         return {
           title: '入库任务明细',
           type: '入库申请',
-          otherData: [item.customerName, item.brandName],
+          otherData: [item.customerName, item.brandName || '无品牌'],
         };
       case ERPEnums.directInStock:
         let number = 0;

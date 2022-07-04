@@ -14,8 +14,11 @@ import { useRequest } from '../../../util/Request';
 import { ToolUtil } from '../../components/ToolUtil';
 import { ERPEnums } from './ERPEnums';
 import { MyLoading } from '../../components/MyLoading';
+import { useHistory } from 'react-router-dom';
 
 const Stock = (props) => {
+
+  const history = useHistory();
 
   const [key, setKey] = useState('stock');
 
@@ -98,7 +101,9 @@ const Stock = (props) => {
         switch (taskKey) {
           case ReceiptsEnums.stocktaking:
             return <div className={style.stocktakingButtom}>
-              <Button>即时盘点</Button>
+              <Button onClick={() => {
+                history.push('/Work/Inventory/RealTimeInventory');
+              }}>即时盘点</Button>
               <Button color='primary'>开始盘点</Button>
             </div>;
           default:

@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "30268104",
+      "name": "异常处理",
+      "font_class": "yichangchuli",
+      "unicode": "e6c0",
+      "unicode_decimal": 59072
+    },
+    {
+      "icon_id": "30257279",
+      "name": "库存养护",
+      "font_class": "kucunyanghu",
+      "unicode": "e6ba",
+      "unicode_decimal": 59066
+    },
+    {
+      "icon_id": "30257843",
+      "name": "盘点",
+      "font_class": "pandian1",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    },
+    {
+      "icon_id": "30257941",
+      "name": "入库管理",
+      "font_class": "rukuguanli2",
+      "unicode": "e6bc",
+      "unicode_decimal": 59068
+    },
+    {
+      "icon_id": "30257943",
+      "name": "出库管理",
+      "font_class": "chukuguanli2",
+      "unicode": "e6bd",
+      "unicode_decimal": 59069
+    },
+    {
+      "icon_id": "30257944",
+      "name": "库间调拨",
+      "font_class": "kujiantiaobo",
+      "unicode": "e6be",
+      "unicode_decimal": 59070
+    },
+    {
+      "icon_id": "30259372",
+      "name": "我的领料",
+      "font_class": "wodelingliao1",
+      "unicode": "e6bf",
+      "unicode_decimal": 59071
+    },
+    {
       "icon_id": "3663275",
       "name": "审批",
       "font_class": "shenpi3",
@@ -396,48 +445,6 @@
       "font_class": "caigoushenqingguanli",
       "unicode": "e636",
       "unicode_decimal": 58934
-    },
-    {
-      "icon_id": "29655033",
-      "name": "出库管理",
-      "font_class": "chukuguanli2",
-      "unicode": "e635",
-      "unicode_decimal": 58933
-    },
-    {
-      "icon_id": "29655028",
-      "name": "库间调拨",
-      "font_class": "kujiantiaobo",
-      "unicode": "e634",
-      "unicode_decimal": 58932
-    },
-    {
-      "icon_id": "29655026",
-      "name": "库存养护",
-      "font_class": "kucunyanghu",
-      "unicode": "e633",
-      "unicode_decimal": 58931
-    },
-    {
-      "icon_id": "29654984",
-      "name": "盘点管理",
-      "font_class": "pandianguanli",
-      "unicode": "e632",
-      "unicode_decimal": 58930
-    },
-    {
-      "icon_id": "29654757",
-      "name": "库存管理",
-      "font_class": "kucunguanli1",
-      "unicode": "e62f",
-      "unicode_decimal": 58927
-    },
-    {
-      "icon_id": "29654735",
-      "name": "入库管理",
-      "font_class": "rukuguanli2",
-      "unicode": "e62e",
-      "unicode_decimal": 58926
     },
     {
       "icon_id": "29617802",

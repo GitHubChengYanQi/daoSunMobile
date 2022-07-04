@@ -30,7 +30,8 @@ export const wxTicket = async () => {
           'invoke',
           'getLocalImgData',
           'chooseImage',
-          'uploadImage'
+          'uploadImage',
+          'previewImage',
         ], // 必填，需要使用的JS接口列表，凡是要调用的接口都需要传进来
       });
     }

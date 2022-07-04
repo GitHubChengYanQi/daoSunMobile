@@ -105,12 +105,15 @@ const AddSku = (
     setType(type);
     setSku(sku);
     setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
+    const brands = ToolUtil.isArray(sku.brandResults);
     const newData = {
-      ...other,
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
       number: type === ERPEnums.directInStock ? 0 : 1,
+      brandId: brands.length === 1 ? brands[0].brandId : null,
+      brandName: brands.length === 1 ? brands[0].brandName : null,
+      ...other,
     };
     setData(newData);
     disabledChange({ newData });
@@ -152,22 +155,26 @@ const AddSku = (
         return {
           title: '调拨',
           disabledText,
+          otherBrand: '请选择品牌',
         };
       case ERPEnums.curing:
         return {
           title: '养护',
           disabledText,
+          otherBrand: '请选择品牌',
         };
       case ERPEnums.stocktaking:
         return {
           title: '盘点',
           disabledText,
+          otherBrand: '请选择品牌',
         };
       case ERPEnums.outStock:
         return {
           title: '出库',
           disabledText,
           customerDisabled: true,
+          otherBrand: '任意品牌',
         };
       case ERPEnums.inStock:
         if (ToolUtil.isArray(customerData).length === 0) {
@@ -181,6 +188,7 @@ const AddSku = (
           title: '入库',
           disabled,
           disabledText,
+          otherBrand: '无品牌',
         };
       case ERPEnums.directInStock:
         const positions = ToolUtil.isArray(data.positions);
@@ -200,6 +208,7 @@ const AddSku = (
           disabled,
           judge: true,
           disabledText,
+          otherBrand: '无品牌',
         };
       default:
         return {};
@@ -324,7 +333,7 @@ const AddSku = (
                   onClick={() => {
                     setDataVisible('brand');
                   }}
-                >{data.brandName || '请选择品牌'}</Button>
+                >{data.brandName || taskData().otherBrand}</Button>
               </div>
               <div hidden={taskData().customerDisabled} className={style.flex}>
                 <div className={style.checkLabel}>
@@ -399,7 +408,7 @@ const AddSku = (
     <Picker
       destroyOnClose
       popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
-      columns={[[{ label: '其他品牌', value: 0 }, ...ToolUtil.isArray(sku.brandResults).map(item => {
+      columns={[[{ label: taskData().otherBrand, value: 0 }, ...ToolUtil.isArray(sku.brandResults).map(item => {
         return {
           label: item.brandName,
           value: item.brandId,
@@ -409,6 +418,7 @@ const AddSku = (
       onClose={() => {
         setDataVisible(null);
       }}
+      value={[data.brandId]}
       onConfirm={(value, options) => {
         const brand = ToolUtil.isArray(options.items)[0] || {};
         setData({

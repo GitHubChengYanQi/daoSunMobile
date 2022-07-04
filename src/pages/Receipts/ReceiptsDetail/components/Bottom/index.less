@@ -1,10 +1,11 @@
 .bottom {
   //height: 60px;
   background: #FFFFFF;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
   padding: 10px;
   display: flex;
   flex-direction: column;
+  z-index: 1;
 
   .actions {
     display: flex;
@@ -36,8 +37,10 @@
 
     button {
       flex-grow: 1;
-      height: 100%;
       --border-radius: 0;
+      padding: 0;
+      height: 40px;
+      font-size: 14px;
     }
   }
 
@@ -48,7 +51,10 @@
 }
 
 .action {
-  :global .adm-button-block {
-    padding: 20px 0;
+
+  button {
+    padding: 0;
+    font-size: 18px;
+    height: 58px;
   }
 }

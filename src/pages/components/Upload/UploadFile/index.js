@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import style from './index.less';
 import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
-import { ActionSheet, Toast } from 'antd-mobile';
+import { ActionSheet, ImageViewer, Toast } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
@@ -34,6 +34,10 @@ const UploadFile = (
   const [files, setFiles] = useState(value);
 
   const [loading, setLoading] = useState();
+
+  const imgs = files.filter(item => item.type !== 'other').map(item => item.url);
+
+  const [currentImg, setCurrentImg] = useState(null);
 
   const fileChange = ({ mediaId, url, type, remove }) => {
     let newFile;
@@ -97,6 +101,15 @@ const UploadFile = (
     });
   };
 
+  const previewImage = (current, urls = []) => {
+    wx.ready(() => {
+      wx.previewImage({
+        current, // 第一张显示的图片链接
+        urls, // 需要预加载的图片http链接列表，预加载后，可以滑动浏览这些图片
+      });
+    });
+  };
+
   return <>
 
     <div className={style.imgs}>
@@ -107,11 +120,16 @@ const UploadFile = (
               fileChange({ mediaId: item.mediaId, remove: true });
             }}><CloseOutline /></div>
             {
-              typeof item.url === 'object' ? <FileOutlined style={{color:'var(--adm-color-primary)'}} /> :
-                <img src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
+              item.type === 'other' ? <FileOutlined style={{ color: 'var(--adm-color-primary)' }} /> :
+                <img onClick={() => {
+                  if (!ToolUtil.isQiyeWeixin()) {
+                    return setCurrentImg(index);
+                  }
+                  previewImage(item.url, imgs);
+                }} src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
                   const newFile = files.map((currentItem, currentIndex) => {
                     if (currentIndex === index) {
-                      return { ...currentItem, url: <FileOutlined /> };
+                      return { ...currentItem, type: 'other' };
                     } else {
                       return currentItem;
                     }
@@ -174,6 +192,15 @@ const UploadFile = (
           default:
             break;
         }
+      }}
+    />
+
+    <ImageViewer.Multi
+      images={imgs}
+      visible={currentImg !== null}
+      defaultIndex={currentImg}
+      onClose={() => {
+       setCurrentImg(null)
       }}
     />
 

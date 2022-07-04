@@ -45,11 +45,11 @@ const OutSkuItem = ({item,data}) => {
       </div>
       <div className={style.item}>
         <SkuItem
-          number={skuResult.stockNumber}
+          number={item.stockNumber}
           imgSize={60}
           skuResult={skuResult}
           extraWidth='124px'
-          otherData={[ToolUtil.isObject(item.brandResult).brandName]}
+          otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
         />
       </div>
       <div className={style.outStockNumber} style={{

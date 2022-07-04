@@ -90,7 +90,7 @@ const InstockOrder = (
     </div>
 
     <div className={style.note}>
-      <div className={style.title}>备注说明</div>
+      <div className={style.title}>备注</div>
       <div className={style.remake}>{remake || '无'}</div>
     </div>
 

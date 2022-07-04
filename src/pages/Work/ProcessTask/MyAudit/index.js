@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { Tabs } from 'antd-mobile';
@@ -25,8 +25,12 @@ const MyAudit = () => {
   const submit = (data) => {
     const newParmas = { ...params, ...data };
     setParams(newParmas);
-    listRef.current.submit(newParmas);
+    listRef.current.submit(newParmas,{field:'createTime',order:'ascend'});
   };
+
+  useEffect(()=>{
+    submit({ auditType: 'audit', status: 0 });
+  },[])
 
   return <>
     <MySearch placeholder='请输入相关单据信息' historyType='process' />

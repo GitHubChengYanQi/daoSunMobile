@@ -84,7 +84,7 @@ const InstockError = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return {
-          totalTitle: '申请总数',
+          totalTitle: '申请数量',
           type:'instock',
           skuItem: <SkuItem
             skuResult={skuResult}
@@ -181,9 +181,9 @@ const InstockError = (
                   <div className={style.number}>
                     <span>{errorType().totalTitle}：<span
                       className={style.black}>{anomalyResult.needNumber}</span></span>
-                    <span hidden={!anomalyResult.errorNumber}>数量：<span
+                    <span hidden={!anomalyResult.errorNumber}>数量差异：<span
                       className={style.red}>{anomalyResult.errorNumber > 0 ? `+${anomalyResult.errorNumber}` : anomalyResult.errorNumber}</span></span>
-                    <span hidden={!anomalyResult.otherNumber}>质量：<span
+                    <span hidden={!anomalyResult.otherNumber}>其他异常：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>
                   </div>
                   <Button color='primary' fill='outline' onClick={() => {

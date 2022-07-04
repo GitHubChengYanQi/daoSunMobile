@@ -9,6 +9,7 @@ import style from './index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import moment from 'moment';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
+import { MyDate } from '../../../../components/MyDate';
 
 const Process = (
   {
@@ -57,7 +58,7 @@ const Process = (
   };
 
   // 节点名称 + 状态
-  const nodeStatusName = (auditType, stepStatus) => {
+  const nodeStatusName = (auditType, stepStatus, status) => {
     // 节点类型
     switch (auditType) {
       case 'start':
@@ -65,9 +66,9 @@ const Process = (
         switch (stepStatus) {
           case 'error':
           case 'success':
-            return '发起';
+            return status ? '发起' : '已发起';
           case 'wait':
-            return '发起';
+            return status ? '发起' : '未发起';
           default:
             return '';
         }
@@ -75,11 +76,11 @@ const Process = (
         // 路由节点状态
         switch (stepStatus) {
           case 'error':
-            return '拒绝';
+            return status ? '拒绝' : '已拒绝';
           case 'success':
-            return '同意';
+            return status ? '通过' : '已通过';
           case 'wait':
-            return '审批';
+            return status ? '通过' : '未通过';
           default:
             return '';
         }
@@ -87,11 +88,11 @@ const Process = (
         // 抄送节点状态
         switch (stepStatus) {
           case 'error':
-            return '抄送异常';
+            return status ? '抄送' : '抄送异常';
           case 'success':
-            return '抄送';
+            return status ? '抄送' : '已抄送';
           case 'wait':
-            return '抄送';
+            return status ? '抄送' : '未抄送';
           default:
             return '';
         }
@@ -99,11 +100,11 @@ const Process = (
         // 审批节点状态
         switch (stepStatus) {
           case 'error':
-            return '拒绝';
+            return status ? '拒绝' : '已拒绝';
           case 'success':
-            return '同意';
+            return status ? '审批' : '已审批';
           case 'wait':
-            return '审批';
+            return status ? '审批' : '未审批';
           default:
             return '';
         }
@@ -111,9 +112,9 @@ const Process = (
         // 动作节点状态
         switch (stepStatus) {
           case 'success':
-            return '执行';
+            return status ? '执行' : '已执行';
           case 'wait':
-            return '执行';
+            return status ? '执行' : '未执行';
           default:
             return '';
         }
@@ -135,7 +136,7 @@ const Process = (
     return users.map((items, index) => {
       let stepsStatus;
       let content;
-      if (items.auditStatus){
+      if (items.auditStatus) {
         switch (logResult.status) {
           case 1:
             stepsStatus = 'success';
@@ -168,14 +169,14 @@ const Process = (
           {items.name}
         </div>
         <div hidden={!stepsStatus}>
-          {nodeStatusName(auditType, stepsStatus)} · {moment(logResult.updateTime || new Date()).format('M/DD HH:mm')}
+          {nodeStatusName(auditType, stepsStatus, true)} · {MyDate.Show(logResult.updateTime || new Date())}
         </div>
       </div>;
     });
   };
 
   // 审批人列表
-  const rules = (step) => {
+  const rules = (step, status) => {
     const users = [];
     const rules = ToolUtil.isObject(step.auditRule).rules || [];
 
@@ -184,7 +185,11 @@ const Process = (
         switch (items.type) {
           case 'AppointUsers':
             items.appointUsers && items.appointUsers.map((itemuser) => {
-              return users.push({ name: itemuser.title, avatar: itemuser.avatar, auditStatus: itemuser.auditStatus });
+              return users.push({
+                name: itemuser.title,
+                avatar: itemuser.avatar,
+                auditStatus: status || itemuser.auditStatus,
+              });
             });
             break;
           case 'DeptPositions':
@@ -193,14 +198,15 @@ const Process = (
                 name: `${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
                   return items.label;
                 })})`,
+                auditStatus: status,
               });
             });
             break;
           case 'AllPeople':
-            users.push({ name: '所有人', auditStatus:99 });
+            users.push({ name: '所有人', auditStatus: status || 99 });
             break;
           case 'MasterDocumentPromoter':
-            users.push({ name: '主单据审批人' });
+            users.push({ name: '主单据审批人', auditStatus: status });
             break;
           default:
             break;
@@ -256,11 +262,11 @@ const Process = (
 
     switch (step.logResult && step.logResult.status) {
       case -1:
-        if (next) {
-          stepStatus = 'wait';
-          iconColor = style.success;
-          break;
-        }
+        // if (next) {
+        //   stepStatus = 'wait';
+        //   iconColor = style.success;
+        //   break;
+        // }
         stepStatus = 'wait';
         iconColor = style.wait;
         break;
@@ -290,7 +296,7 @@ const Process = (
               name: createUser.name,
               avatar: createUser.avatar,
               auditStatus: 99,
-            }], step, stepStatus) : rules(step, stepStatus))}
+            }], step, stepStatus) : rules(step))}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
@@ -341,7 +347,7 @@ const Process = (
               {title}
               {visiable(hidden, index)}
             </div>}
-            description={!hidden && rules(step, stepStatus)}
+            description={!hidden && rules(step, step.auditType === 'send')}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,

@@ -12,6 +12,7 @@ const MyStepper = (
     onChange = () => {
     },
     open,
+    decimal,
   },
 ) => {
 
@@ -38,7 +39,15 @@ const MyStepper = (
       </Button>
     </div>
 
-    <MyKeybord visible={visible} setVisible={setVisible} value={value} min={min} max={max} onChange={onChange} />
+    <MyKeybord
+      visible={visible}
+      setVisible={setVisible}
+      value={value}
+      min={min}
+      max={max}
+      onChange={onChange}
+      decimal={decimal}
+    />
   </>;
 };
 

@@ -15,25 +15,48 @@ const MyKeybord = (
     },
     min = 0,
     max = 999999999,
+    decimal = 0,
   },
 ) => {
 
-  const [number, setNumber] = useState(value);
+  const [number, setNumber] = useState(value || '');
+
+  let decimalLength;
+
+  try {
+    decimalLength = `${number}`.split('.')[1].length;
+  } catch (e) {
+    decimalLength = 0;
+  }
+
+  let step = '0.';
+  if (decimalLength === 0) {
+    step = 1;
+  } else {
+    for (let i = 0; i < decimalLength; i++) {
+      if (i === decimalLength - 1) {
+        step += 1;
+      } else {
+        step += 0;
+      }
+    }
+  }
 
   const save = () => {
-    let newValue = number;
-    if (number < min) {
+    const num = Number(number);
+    let newValue = num;
+    if (num < min) {
       newValue = min;
     }
-    if (number > max) {
+    if (num > max) {
       newValue = max;
     }
     onChange(newValue);
   };
 
   useEffect(() => {
-    if (visible){
-      setNumber(value);
+    if (visible) {
+      setNumber(value || '');
     }
   }, [visible]);
 
@@ -50,8 +73,8 @@ const MyKeybord = (
       <div className={style.content}>
         <div className={style.calculation}>
           <Button onClick={() => {
-            const newValue = number - 1;
-            setNumber(newValue > min ? newValue : min);
+            const newValue = Number((Number(number) - Number(step)).toFixed(decimalLength));
+            setNumber(newValue);
           }}>
             <MinusOutline />
           </Button>
@@ -59,8 +82,8 @@ const MyKeybord = (
             {number || ''}<span className={style.line}>|</span>
           </div>
           <Button onClick={() => {
-            const newValue = number + 1;
-            setNumber(newValue < max ? newValue : max);
+            const newValue = Number((Number(number) + Number(step)).toFixed(decimalLength));
+            setNumber(newValue);
           }}>
             <AddOutline />
           </Button>
@@ -74,8 +97,10 @@ const MyKeybord = (
               switch (item) {
                 case '.':
                   return <div key={index} className={style.numberButton}>
-                    <Button disabled onClick={() => {
-
+                    <Button disabled={!decimal} onClick={() => {
+                      if (`${number}`.indexOf('.') === -1) {
+                        setNumber((number || 0) + '.');
+                      }
                     }}>.</Button>
                   </div>;
                 default:
@@ -87,8 +112,9 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      const newValue = parseInt(`${number}` + item);
-                      setNumber(newValue);
+                      if (decimalLength < decimal){
+                        setNumber(`${number || ''}` + item);
+                      }
                     }}>{item}</Button>
                   </div>;
               }
@@ -98,11 +124,12 @@ const MyKeybord = (
             <div className={style.numberButton}>
               <Button onClick={() => {
                 const numbers = `${number}`.split('');
-                const newValue = parseInt(numbers.filter((item, index) => {
+                const newValue = numbers.filter((item, index) => {
                   return index !== numbers.length - 1;
-                }).join('') || 0);
+                }).join('');
                 setNumber(newValue);
-              }}><ArrowLeftOutlined />
+              }}>
+                <ArrowLeftOutlined />
               </Button>
             </div>
             <div className={ToolUtil.classNames(style.numberButton, style.ok)}>

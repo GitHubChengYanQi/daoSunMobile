@@ -17,6 +17,7 @@ import User from './components/User';
 import Condition from '../../../../../ProcessTask/Create/components/Inventory/compoennts/Condition';
 import { ERPEnums } from '../../../../../Stock/ERPEnums';
 import Curing from './components/Curing';
+import { useModel } from 'umi';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
@@ -24,6 +25,9 @@ export const inventorySelectCondition = { url: '/inventory/selectCondition', met
 export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
+
+  const { initialState } = useModel('@@initialState');
+  const userInfo = ToolUtil.isObject(initialState).userInfo || {};
 
   const [data, setData] = useState([]);
 
@@ -124,6 +128,10 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       case ERPEnums.curing:
         setParams({ ...ToolUtil.isObject(state.data) });
         break;
+      case ERPEnums.outStock:
+        setParams({userId:userInfo.id,userName:userInfo.name });
+        dataChange(skus);
+        break;
       default:
         dataChange(skus);
         break;
@@ -143,9 +151,9 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       case ERPEnums.inStock:
       case ERPEnums.directInStock:
         return {
-          title: '入库任务明细',
+          title: '入库申请',
           type: '入库',
-          otherData: [item.customerName,item.brandName],
+          otherData: [item.customerName, item.brandName],
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
           }).join('、'),
@@ -296,7 +304,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       notice: params.noticeIds,
       enclosure: params.mediaIds,
       userIds: ToolUtil.isArray(params.userIds).toString(),
-      note:params.remark,
+      note: params.remark,
     };
     ToolUtil.isArray(params.conditions).map(item => {
       const dataValue = item.data || {};
@@ -474,7 +482,8 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       }}
     />}
 
-    {(instockLoading || outLoading || inventoryLoading || inventoryConditionLoading || maintenanceLoading) && <MyLoading />}
+    {(instockLoading || outLoading || inventoryLoading || inventoryConditionLoading || maintenanceLoading) &&
+    <MyLoading />}
 
   </div>;
 };
