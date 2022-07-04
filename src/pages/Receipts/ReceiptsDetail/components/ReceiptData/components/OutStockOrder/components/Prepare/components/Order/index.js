@@ -39,13 +39,14 @@ const Order = (
       const brands = ToolUtil.isArray(res);
       const newBrands = brands.map((item) => {
         const positions = item.positionsResults || [];
+        const show = brands.length === 1;
         return {
           ...item,
-          show: brands.length === 1,
+          show,
           positionsResults: positions.map(item => {
             const checked = positions.length === 1;
-            const number = checked ? (item.number > outStockNumber ? outStockNumber : item.number) : 0;
-            return { ...item, checked, outStockNumber:number };
+            const number = (checked && show) ? (item.number > outStockNumber ? outStockNumber : item.number) : 0;
+            return { ...item, checked, outStockNumber: number };
           }),
         };
       });

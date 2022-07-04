@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import style from './index.less';
 import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
@@ -9,6 +9,7 @@ import { request } from '../../../../util/Request';
 import { ToolUtil } from '../../ToolUtil';
 import { CloseOutline } from 'antd-mobile-icons';
 import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
+import IsDev from '../../../../components/IsDev';
 
 const UploadFile = (
   {
@@ -20,7 +21,8 @@ const UploadFile = (
     icon,
     imgSize,
     uploadId = 'myUpload',
-  },
+    noAddButton,
+  }, ref,
 ) => {
 
   const options = [{ text: '图片', key: 'img' }, { text: '拍照', key: 'photo' }];
@@ -110,6 +112,18 @@ const UploadFile = (
     });
   };
 
+  const addFile = () => {
+    if (ToolUtil.isQiyeWeixin() && !IsDev()) {
+      setTrue();
+    } else {
+      document.getElementById(uploadId).click();
+    }
+  };
+
+  useImperativeHandle(ref, () => ({
+    addFile,
+  }));
+
   return <>
 
     <div className={style.imgs}>
@@ -146,13 +160,11 @@ const UploadFile = (
         <LoadingOutlined />
       </div>
 
-      <div hidden={show} className={style.img} style={{ width: imgSize, height: imgSize }} onClick={() => {
-        if (ToolUtil.isQiyeWeixin()) {
-          setTrue();
-        } else {
-          document.getElementById(uploadId).click();
-        }
-      }}>
+      <div
+        hidden={show || noAddButton}
+        className={style.img}
+        style={{ width: imgSize, height: imgSize }}
+        onClick={() => addFile()}>
         {icon || <img src={add} alt='' width='100%' height='100%' />}
       </div>
     </div>
@@ -200,11 +212,11 @@ const UploadFile = (
       visible={currentImg !== null}
       defaultIndex={currentImg}
       onClose={() => {
-       setCurrentImg(null)
+        setCurrentImg(null);
       }}
     />
 
   </>;
 };
 
-export default UploadFile;
+export default React.forwardRef(UploadFile);

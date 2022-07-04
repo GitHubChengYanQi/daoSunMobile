@@ -11,11 +11,11 @@ import MyEmpty from '../../components/MyEmpty';
 import Bottom from './components/Bottom';
 import style from './index.less';
 import ReceiptData from './components/ReceiptData';
-import Log from './components/Log';
 import { ReceiptsEnums } from '../index';
-import InStockLog from './components/InStockLog';
-import OutStockLog from './components/OutStockLog';
+import InStockLog from './components/Log/InStockLog';
+import OutStockLog from './components/Log/OutStockLog';
 import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
+import Dynamic from './components/Dynamic';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -26,6 +26,8 @@ const ReceiptsDetail = () => {
   const query = location.query;
 
   const [detail, setDetail] = useState({});
+
+  const [hidden, setHidden] = useState(false);
 
   const [currentNode, setCurrentNode] = useState([]);
 
@@ -103,9 +105,10 @@ const ReceiptsDetail = () => {
           currentNode={currentNode}
           refresh={refresh}
           loading={detailLoading}
+          addComments={setHidden}
         />;
-      case 'log':
-        return <Log data={detail} refresh={refresh} />;
+      case 'dynamic':
+        return <Dynamic data={detail} refresh={refresh} />;
       case 'inStockLog':
         return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
       case 'outStockLog':
@@ -144,19 +147,21 @@ const ReceiptsDetail = () => {
             <Tabs activeKey={key} onChange={(key) => {
               refresh();
               setKey(key);
+              setHidden(key !== 'data');
             }} className={topStyle.tab}>
               <Tabs.Tab title='基本信息' key='data' />
               {receiptsTabs().key && <Tabs.Tab title={receiptsTabs().title} key={receiptsTabs().key} />}
-              <Tabs.Tab title='动态日志' key='log' />
+              <Tabs.Tab title='动态日志' key='dynamic' />
+              <Tabs.Tab title='关联单据' key='relation' />
             </Tabs>
           </div>
           {content()}
         </div>
 
-        <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />
+        {!hidden && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
 
         {(getTaskIdLoading || detailLoading) && <MyLoading />}
-      </div>
+      </div>;
   }
 };
 

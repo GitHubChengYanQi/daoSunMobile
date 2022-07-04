@@ -43,12 +43,6 @@ const Index = (props) => {
         safeArea
         activeKey={module}
         onChange={(value) => {
-          console.log(module,value);
-          if (module === '/Home' && value === '/Home' && ToolUtil.isQiyeWeixin()) {
-            props.dispatch({
-              type: 'qrCode/wxCpScan',
-            });
-          }
           route(value);
           setModule(value);
         }}>
@@ -65,10 +59,17 @@ const Index = (props) => {
         <TabBar.Item
           title={(module === '/Home' && ToolUtil.isQiyeWeixin()) ? '扫码' : '首页'}
           key='/Home'
-          icon={<Icon
-            style={{ fontSize: iconSize }}
-            type={(module === '/Home' && ToolUtil.isQiyeWeixin()) ? 'icon-dibudaohang-saoma' : 'icon-shouye3'}
-          />}
+          icon={(module === '/Home' && ToolUtil.isQiyeWeixin())
+            ?
+            <Icon
+              style={{ fontSize: iconSize }}
+              type='icon-dibudaohang-saoma'
+              onClick={() => {
+                props.dispatch({
+                  type: 'qrCode/wxCpScan',
+                });
+              }}
+            /> : <Icon type='icon-shouye3' style={{ fontSize: iconSize }}/>}
         />
         <TabBar.Item
           title='报表'

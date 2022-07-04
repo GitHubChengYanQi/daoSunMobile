@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MyList from '../../../components/MyList';
-import StepList from '../../../Receipts/ReceiptsDetail/components/Log/components/StepList';
+import StepList from '../../../Receipts/ReceiptsDetail/components/Dynamic/components/StepList';
 
 export const remakeList = { url: '/remarks/list', method: 'POST' };
 

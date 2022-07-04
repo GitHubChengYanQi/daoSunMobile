@@ -8,7 +8,7 @@ import style from './index.less';
 import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
-import StepList from '../Log/components/StepList';
+import StepList from '../Dynamic/components/StepList';
 
 const ReceiptData = (
   {
@@ -18,6 +18,8 @@ const ReceiptData = (
     },
     loading,
     permissions,
+    addComments = () => {
+    },
   }) => {
 
   const actions = [];
@@ -80,7 +82,7 @@ const ReceiptData = (
   return <>
     {receiptType()}
     <Process auditData={data.stepsResult} createUser={data.user} card />
-    <Comments detail={data} id={data.processTaskId} refresh={refresh} />
+    <Comments detail={data} id={data.processTaskId} refresh={refresh} onInput={addComments} />
     <div className={style.comments}>
       <StepList remarks={remarks.filter(item => ['comments'].includes(item.type))} />
     </div>

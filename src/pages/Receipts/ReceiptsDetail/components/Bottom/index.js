@@ -6,11 +6,7 @@ import { ActionSheet } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../index';
 import InStockErrorBottom from './components/InStockErrorBottom';
 import StocktakingBottom from './components/StocktakingBottom';
-import MyTextArea from '../../../../components/MyTextArea';
-import UpLoadImg from '../../../../components/Upload';
-import { ToolUtil } from '../../../../components/ToolUtil';
-import { PaperClipOutlined } from '@ant-design/icons';
-import UploadFile from '../../../../components/Upload/UploadFile';
+import Note from '../../../components/Comments/components/Note';
 
 const Bottom = (
   {
@@ -50,23 +46,7 @@ const Bottom = (
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <div>
-      <MyTextArea
-        placeholder='填写审批意见，可@相关人员'
-        value={params.note}
-        className={style.note}
-        onChange={(note, users = []) => {
-          setParams({ ...params, note, userIds: users.map(item => item.userId) });
-        }}
-      />
-      <div hidden className={style.img}>
-        <UploadFile
-          onChange={(mediaIds) => {
-            setParams({ ...params, mediaIds: mediaIds });
-          }}
-        />
-      </div>
-    </div>
+    <Note noAdd className={style.note} value={params} uploadId='auditImg' onChange={setParams} />
     <div className={style.actions}>
       <div className={style.all} onClick={() => {
         setVisible(true);

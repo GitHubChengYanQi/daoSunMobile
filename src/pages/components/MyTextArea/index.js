@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ToolUtil } from '../ToolUtil';
 import CheckUser from '../CheckUser';
 import { Input } from 'antd';
@@ -8,11 +8,15 @@ const MyTextArea = (
   {
     className,
     placeholder,
-    onChange = () => {
+    onChange = (value,users) => {
 
     },
     value = '',
     id = 'textArea',
+    autoFocus,
+    onFocus = () => {
+
+    },
   },
 ) => {
 
@@ -84,7 +88,7 @@ const MyTextArea = (
     return clickUsers[0];
   };
 
-  const userPosChange = (length, userPos,cursorPos = cursor) => {
+  const userPosChange = (length, userPos, cursorPos = cursor) => {
     const newUserPos = userPos.map(item => {
       if (cursorPos < item.start) {
         return { ...item, start: item.start + length, end: item.end + length };
@@ -95,17 +99,26 @@ const MyTextArea = (
     setUserPos(newUserPos);
   };
 
+  useEffect(() => {
+    if (autoFocus) {
+      const textArea = document.getElementById(id);
+      if (textArea) {
+        textArea.focus();
+      }
+    }
+  }, []);
+
   return <>
     <Input.TextArea
       id={id}
       autoSize
       value={value}
       style={{ userSelect: 'none' }}
+      onFocus={onFocus}
       onSelect={() => {
         if (clickUser()) {
           setCaretPosition(cursor);
         } else {
-          console.log(getCursortPosition());
           setCursor(getCursortPosition());
         }
       }}
@@ -146,8 +159,8 @@ const MyTextArea = (
     />
 
     <CheckUser
-      onClose={()=>{
-        setCaretPosition(cursor+1)
+      onClose={() => {
+        setCaretPosition(cursor + 1);
       }}
       ref={userRef}
       onChange={(userId, userName) => {
@@ -163,7 +176,7 @@ const MyTextArea = (
           userId,
           userName,
         }];
-        userPosChange(newPos - caretPos, newUserPos,caretPos);
+        userPosChange(newPos - caretPos, newUserPos, caretPos);
         valueChange(newValue, newUserPos, newPos);
       }} />
   </>;

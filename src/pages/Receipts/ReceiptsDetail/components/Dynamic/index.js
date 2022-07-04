@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import StepList from './components/StepList';
 
-const Log = (
+const Dynamic = (
   {
     data = {},
   },
@@ -24,4 +24,4 @@ const Log = (
   </div>;
 };
 
-export default Log;
+export default Dynamic;

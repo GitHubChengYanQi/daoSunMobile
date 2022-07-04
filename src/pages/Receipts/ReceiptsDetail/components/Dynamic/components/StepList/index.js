@@ -5,6 +5,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useModel } from 'umi';
 import { Avatar } from 'antd';
+import UploadFile from '../../../../../../components/Upload/UploadFile';
 
 const StepList = (
   {
@@ -26,7 +27,7 @@ const StepList = (
           case 1:
             return <div>
               同意了审批
-              <div style={{padding:'4px 0'}}>
+              <div style={{ padding: '4px 0' }}>
                 {item.content}
               </div>
             </div>;
@@ -55,6 +56,10 @@ const StepList = (
 
         const user = ToolUtil.isObject(item.user);
 
+        const imgs = item.photoId ? item.photoId.split(',').map(item => {
+          return { url: item };
+        }) : [];
+
         return <div key={index} className={style.dynamic} style={{ borderTop: index === 0 && 'none' }}>
 
           <div className={style.avatar}>
@@ -75,6 +80,12 @@ const StepList = (
             <div className={style.description}>
               <div className={style.content}>
                 {getContent(item)}
+              </div>
+              <div className={style.photos} hidden={imgs.length === 0}>
+                <UploadFile show value={imgs} />
+              </div>
+              <div className={style.time}>
+                {ToolUtil.timeDifference(item.createTime)}
               </div>
               <div hidden={replys.length === 0} className={style.reply}>
                 <div onClick={() => {
@@ -109,9 +120,6 @@ const StepList = (
                 {permissions && <LinkButton>编辑</LinkButton>}
                 {permissions && <LinkButton color='danger'>删除</LinkButton>}
               </div>
-            </div>
-            <div className={style.time}>
-              {ToolUtil.timeDifference(item.createTime)}
             </div>
           </div>
 
