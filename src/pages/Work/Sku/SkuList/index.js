@@ -172,7 +172,7 @@ const SkuList = (
           }
         }}
       >
-        筛选 <FilterOutlined />
+        筛选 <Icon type='icon-shaixuan' />
         <div>
           <svg viewBox='0 0 30 30' className={style.leftCorner}>
             <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>

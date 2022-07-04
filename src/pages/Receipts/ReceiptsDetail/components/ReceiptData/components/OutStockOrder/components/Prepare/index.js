@@ -98,11 +98,11 @@ const Prepare = (
     >
       <div className={style.item}>
         <SkuItem
-          number={ToolUtil.isObject(skuItem.skuResult).stockNumber}
+          number={skuItem.stockNumber}
           imgSize={60}
           skuResult={skuItem.skuResult}
           extraWidth='124px'
-          otherData={[ToolUtil.isObject(skuItem.bradnResult).brandName]}
+          otherData={[ToolUtil.isObject(skuItem.brandResult).brandName]}
         />
       </div>
       <div className={style.scan}>
