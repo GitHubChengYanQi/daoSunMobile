@@ -43,6 +43,7 @@ const Index = (props) => {
         safeArea
         activeKey={module}
         onChange={(value) => {
+          console.log(module,value);
           if (module === '/Home' && value === '/Home' && ToolUtil.isQiyeWeixin()) {
             props.dispatch({
               type: 'qrCode/wxCpScan',

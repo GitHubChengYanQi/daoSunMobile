@@ -129,7 +129,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         setParams({ ...ToolUtil.isObject(state.data) });
         break;
       case ERPEnums.outStock:
-        setParams({userId:userInfo.id,userName:userInfo.name });
+        setParams({ userId: userInfo.id, userName: userInfo.name });
         dataChange(skus);
         break;
       default:
@@ -144,7 +144,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         return {
           title: '出库申请',
           type: '出库',
-          otherData: [item.brandName],
+          otherData: [item.brandName || '任意品牌'],
           careful: '注意事项',
           disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
         };
@@ -153,7 +153,7 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
         return {
           title: '入库申请',
           type: '入库',
-          otherData: [item.customerName, item.brandName],
+          otherData: [item.customerName, item.brandName || '无品牌'],
           more: judge && ToolUtil.isArray(item.positions).map(item => {
             return `${item.name}(${item.number})`;
           }).join('、'),

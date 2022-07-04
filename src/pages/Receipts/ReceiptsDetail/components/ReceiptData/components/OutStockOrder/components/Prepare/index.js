@@ -102,7 +102,7 @@ const Prepare = (
           imgSize={60}
           skuResult={skuItem.skuResult}
           extraWidth='124px'
-          otherData={[ToolUtil.isObject(skuItem.brandResult).brandName]}
+          otherData={[ToolUtil.isObject(skuItem.brandResult).brandName || '任意品牌']}
         />
       </div>
       <div className={style.scan}>

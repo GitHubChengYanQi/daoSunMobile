@@ -188,7 +188,7 @@ const WaitOutSku = (
                               skuResult={cartItem.skuResult}
                               imgSize={60}
                               extraWidth='148px'
-                              otherData={[ToolUtil.isObject(cartItem.brandResult).brandName]}
+                              otherData={[ToolUtil.isObject(cartItem.brandResult).brandName || '任意品牌']}
                             />
                           </div>
                           <div>
