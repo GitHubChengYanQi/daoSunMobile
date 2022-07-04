@@ -60,15 +60,15 @@ export const Tasks = () => {
         [{
           title: '新申请',
           key: 'create',
-          icon: <Icon type='icon-cangchu' />,
+          icon: <Icon type='icon-xinshenqing' />,
         }, {
           title: '我审批的',
           key: 'audit',
-          icon: <Icon type='icon-xiaoxi2' />,
+          icon: <Icon type='icon-shenpiguanli' />,
         }, {
           title: '我发起的',
           key: 'start',
-          icon: <Icon type='icon-baobiao1' />,
+          icon: <Icon type='icon-wofaqide1' />,
         }]
       } />
 

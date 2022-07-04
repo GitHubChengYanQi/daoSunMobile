@@ -17,7 +17,7 @@ export const menus = [
   { code: 'contacts', icon: 'icon-lianxiren2', url: '/Work/Customer?contacts' },
   { code: 'outstockApply', icon: 'icon-fahuoshenqing1', url: '/Work/OutstockApply' },
   { code: 'SalesOrder', icon: 'icon-xiaoshoudingdan', url: '/Work/Order?type=2' },
-  { code: 'stock', icon: 'icon-kucunguanli1', url: '/Work/Stock' },
+  { code: 'stock', icon: 'icon-cangchuguanli', url: '/Work/Stock' },
   { code: 'storeHouse', icon: 'icon-gengduo', url: '/Work/StoreHouse' },
   { code: 'instock', icon: 'icon-rukuguanli2', url: '/Work/Instock/Orderlist' },
   { code: 'outstock', icon: 'icon-chukuguanli2', url: '/Work/Production/PickLists?type=all' },

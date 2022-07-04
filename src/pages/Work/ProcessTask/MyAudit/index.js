@@ -28,10 +28,6 @@ const MyAudit = () => {
     listRef.current.submit(newParmas,{field:'createTime',order:'ascend'});
   };
 
-  useEffect(()=>{
-    submit({ auditType: 'audit', status: 0 });
-  },[])
-
   return <>
     <MySearch placeholder='请输入相关单据信息' historyType='process' />
     <Tabs activeKey={key} onChange={(key) => {

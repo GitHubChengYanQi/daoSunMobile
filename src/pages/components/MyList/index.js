@@ -16,6 +16,7 @@ const MyList = (
     params: paramsData,
     response = () => {
     },
+    sorter: defaultSorter,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -24,9 +25,9 @@ const MyList = (
 
   const [contents, setContents] = useState([]);
 
-  const [params, setParams] = useState(paramsData);
+  const [params, setParams] = useState(paramsData || {});
 
-  const [sorter, setSorter] = useState({});
+  const [sorter, setSorter] = useState(defaultSorter || {});
 
   const [error, setError] = useState(true);
 

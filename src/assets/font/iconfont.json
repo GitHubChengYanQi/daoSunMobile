@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "30274360",
+      "name": "新申请",
+      "font_class": "xinshenqing",
+      "unicode": "e6c1",
+      "unicode_decimal": 59073
+    },
+    {
+      "icon_id": "30274373",
+      "name": "我发起的1",
+      "font_class": "wofaqide1",
+      "unicode": "e6c2",
+      "unicode_decimal": 59074
+    },
+    {
       "icon_id": "30268104",
       "name": "异常处理",
       "font_class": "yichangchuli",

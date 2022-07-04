@@ -99,7 +99,7 @@ const Home = (props) => {
             const border = borderStyle(index, 3, [...commonlyMenus, 'all'].length);
             if (item === 'all') {
               return <Grid.Item key={index} className={style.menus} style={{ ...border }}>
-                <Menus fontSize={45} />
+                <Menus fontSize={34} />
               </Grid.Item>;
             }
 
@@ -112,7 +112,7 @@ const Home = (props) => {
                 textOverflow={80}
                 code={item.code}
                 name={item.name}
-                fontSize={45}
+                fontSize={34}
               />
             </Grid.Item>;
           })

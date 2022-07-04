@@ -27,14 +27,15 @@ const ProcessList = (
 
   const [data, setData] = useState([]);
 
-  const receiptsData = (type, receipts = {}) => {
-    switch (type) {
+  const receiptsData = (item) => {
+    const receipts = item.receipts || {}
+    switch (item.type) {
       case ReceiptsEnums.instockOrder:
         const instockListResults = receipts.instockListResults || [];
         return <div className={style.content}>
           <div className={style.orderData}>
             <span className={style.coding}>单据编号：{receipts.coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
           </div>
           <div className={style.other}>
             入库物料：{
@@ -50,15 +51,15 @@ const ProcessList = (
       case ReceiptsEnums.maintenance:
         return <div className={style.content}>
           <div className={style.orderData}>
-            <span className={style.coding}>单据编号：{receipts.coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+            <span className={style.coding}>单据编号：{receipts.coding || '-'}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
           </div>
         </div>;
       case 'ErrorForWard':
         return <div className={style.content}>
           <div className={style.orderData}>
             <span className={style.coding}>关联单据：{ToolUtil.isObject(receipts.orderResult).coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
           </div>
         </div>;
       case ReceiptsEnums.outstockOrder:
@@ -66,7 +67,7 @@ const ProcessList = (
         return <div className={style.content}>
           <div className={style.orderData}>
             <span className={style.coding}>单据编号：{receipts.coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(receipts.createTime)}</span>
+            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
           </div>
           <div className={style.other}>
             出库物料：{
@@ -88,6 +89,7 @@ const ProcessList = (
         ref={listRef}
         api={api || startList}
         params={{ auditType: 'audit' }}
+        sorter={{field:'createTime',order:'ascend'}}
         data={data}
         getData={setData}
         response={(res) => {
@@ -108,7 +110,7 @@ const ProcessList = (
                   · {receipts.statusName}
                 </div>
               </div>
-              {receiptsData(item.type, item.receipts)}
+              {receiptsData(item, item.receipts)}
 
             </div>;
           })

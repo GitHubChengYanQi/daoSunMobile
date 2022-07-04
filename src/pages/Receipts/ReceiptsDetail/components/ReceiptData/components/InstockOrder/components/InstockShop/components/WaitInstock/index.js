@@ -144,11 +144,14 @@ const WaitInstock = (
                   check(checked, index);
                 }} />
                 <div className={style.sku} onClick={() => {
+                  if (positionsResult){
+                    return;
+                  }
                   setVisible(item);
                 }}>
                   <SkuItem
                     skuResult={skuResult}
-                    title={positionsResult ? (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') : '无库位'}
+                    title={positionsResult ? (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') : '请选择库位'}
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({ skuResult })}
                     otherData={[customerName, brandName]}

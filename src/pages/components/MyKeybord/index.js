@@ -112,7 +112,7 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      if (decimalLength < decimal){
+                      if (!decimal || decimalLength < decimal){
                         setNumber(`${number || ''}` + item);
                       }
                     }}>{item}</Button>
