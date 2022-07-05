@@ -37,7 +37,7 @@ const Header = ({ data = {} }) => {
           {data.taskName}
         </div>
         <span>
-          <Icon type='icon-dian' /> {receiptsData().statusName}
+          <Icon type='icon-dian' /> {receiptsData().statusName || '进行中'}
         </span>
       </div>
       <div className={style.line}>

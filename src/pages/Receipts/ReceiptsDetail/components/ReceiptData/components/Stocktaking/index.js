@@ -19,7 +19,7 @@ export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'P
 const Stocktaking = (
   {
     permissions,
-    receipts,
+    receipts = {},
     getAction = () => {
       return {};
     },
@@ -30,6 +30,8 @@ const Stocktaking = (
   const actionPermissions = getAction('check').id && permissions;
 
   const [data, setData] = useState([]);
+
+  const showStock = receipts.method !== 'DarkDisk';
 
   useEffect(() => {
     const taskList = receipts.taskList || [];
@@ -91,7 +93,7 @@ const Stocktaking = (
                   className={style.sku}
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
-                  <SkuItem skuResult={skuItem} extraWidth='24px' />
+                  <SkuItem skuResult={skuItem} extraWidth='24px' number={showStock && skuItem.stockNumber} />
                   <Divider style={{ margin: '8px 0' }} />
                   <div className={style.brands}>
                     {
@@ -220,6 +222,7 @@ const Stocktaking = (
       destroyOnClose
     >
       <Error
+        showStock={showStock}
         id={visible && visible.anomalyId}
         type={ReceiptsEnums.stocktaking}
         skuItem={visible}

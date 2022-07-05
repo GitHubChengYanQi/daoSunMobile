@@ -43,10 +43,14 @@ const ReceiptsDetail = () => {
       closeOnMaskClick: true,
       confirmText: '确认',
       onConfirm: () => {
-        history.push('/');
+        if (history.length <= 2) {
+          history.push('/');
+        } else {
+          history.goBack();
+        }
       },
     });
-  }
+  };
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -73,7 +77,6 @@ const ReceiptsDetail = () => {
     {
       manual: true,
       onSuccess: (res) => {
-        console.log(res);
         if (res) {
           // 详细数据
           setDetail(res);
@@ -93,7 +96,12 @@ const ReceiptsDetail = () => {
     },
   );
 
-  const { loading: getTaskIdLoading, run: getTaskIdRun } = useRequest(getTaskIdApi, { manual: true });
+  const { loading: getTaskIdLoading, run: getTaskIdRun } = useRequest(getTaskIdApi, {
+    manual: true,
+    onError: () => {
+      error();
+    },
+  });
 
   const getTaskId = async () => {
     let taskId;
@@ -108,7 +116,7 @@ const ReceiptsDetail = () => {
           taskId: taskId,
         },
       });
-    }else {
+    } else {
       error();
     }
   };

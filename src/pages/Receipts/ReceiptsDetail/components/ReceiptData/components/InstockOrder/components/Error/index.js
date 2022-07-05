@@ -42,6 +42,7 @@ const Error = (
     },
     maxHeight = '80vh',
     type,
+    showStock,
     ...props
   },
 ) => {
@@ -406,7 +407,7 @@ const Error = (
         return {
           title: '异常描述',
           skuItem: <SkuItem
-            number={sku.stockNumber}
+            number={showStock && sku.stockNumber}
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}

@@ -34,7 +34,11 @@ const SkuItem = (
     <div className={ToolUtil.classNames(style.skuList, className)}>
       <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }}>
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
-        <div hidden={number === undefined} className={style.number}>{number}{unitName || unitResult.unitName}</div>
+        <div
+          hidden={typeof number !== 'number'}
+          className={style.number}
+        >{number}{unitName || unitResult.unitName}
+        </div>
       </div>
       <div
         className={style.sku}

@@ -7,6 +7,10 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import { useHistory } from 'react-router-dom';
 import { MyDate } from '../../../components/MyDate';
 import { ToolUtil } from '../../../components/ToolUtil';
+import InStockItem from '../../Stock/Task/components/InStockTask/components/InStockItem';
+import OutStockItem from '../../Stock/Task/components/OutStockTask/components/OutStockItem';
+import MaintenaceItem from '../../Stock/Task/components/MaintenanceTask/components/MaintenaceItem';
+import StocktakingItem from '../../Stock/Task/components/StocktakingTask/components/StocktakingItem';
 
 
 const startList = {
@@ -24,59 +28,58 @@ const ProcessList = (
   },
 ) => {
 
-  const history = useHistory();
-
   const [data, setData] = useState([]);
 
-  const receiptsData = (item) => {
+  const history = useHistory();
+
+  const receiptsData = (item, index) => {
     const receipts = item.receipts || {};
     switch (item.type) {
       case ReceiptsEnums.instockOrder:
-        const instockListResults = receipts.instockListResults || [];
-        return <div className={style.content}>
-          <div className={style.orderData}>
-            <span className={style.coding}>单据编号：{receipts.coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
-          </div>
-          <div className={style.other}>
-            入库物料：{
-            instockListResults.map((item) => {
-              const skuResult = item.skuResult || {};
-              return SkuResultSkuJsons({ skuResult });
-            }).join('、')
-          }
-          </div>
-        </div>;
-      case ReceiptsEnums.instockError:
-      case ReceiptsEnums.stocktaking:
-      case ReceiptsEnums.maintenance:
-        return <div className={style.content}>
-          <div className={style.orderData}>
-            <span className={style.coding}>单据编号：{receipts.coding || '-'}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
-          </div>
-        </div>;
-      case 'ErrorForWard':
-        return <div className={style.content}>
-          <div className={style.orderData}>
-            <span className={style.coding}>关联单据：{ToolUtil.isObject(receipts.orderResult).coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
-          </div>
-        </div>;
+        return <InStockItem item={item} index={index} />;
       case ReceiptsEnums.outstockOrder:
-        const detailResults = receipts.detailResults || [];
-        return <div className={style.content}>
-          <div className={style.orderData}>
-            <span className={style.coding}>单据编号：{receipts.coding}</span>
-            <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
+        return <OutStockItem item={item} index={index} />;
+      case ReceiptsEnums.maintenance:
+        return <MaintenaceItem item={item} index={index} />;
+      case ReceiptsEnums.stocktaking:
+        return <StocktakingItem item={item} index={index} />;
+      case ReceiptsEnums.instockError:
+        return <div className={style.item} onClick={() => {
+          history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+        }}>
+          <div className={style.header}>
+            <div className={style.title}>
+              {item.taskName}
+            </div>
+            <div className={style.status}>
+              · {receipts.statusName}
+            </div>
           </div>
-          <div className={style.other}>
-            出库物料：{
-            detailResults.map((item) => {
-              const skuResult = item.skuResult || {};
-              return SkuResultSkuJsons({ skuResult });
-            }).join('、')
-          }
+          <div className={style.content}>
+            <div className={style.orderData}>
+              <span className={style.coding}>单据编号：{receipts.coding || '-'}</span>
+              <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
+            </div>
+          </div>
+        </div>;
+
+      case 'ErrorForWard':
+        return <div className={style.item} onClick={() => {
+          history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+        }}>
+          <div className={style.header}>
+            <div className={style.title}>
+              {item.taskName}
+            </div>
+            <div className={style.status}>
+              · {receipts.statusName}
+            </div>
+          </div>
+          <div className={style.content}>
+            <div className={style.orderData}>
+              <span className={style.coding}>关联单据：{ToolUtil.isObject(receipts.orderResult).coding}</span>
+              <span className={style.time}><ClockCircleOutline /> {MyDate.Show(item.createTime)}</span>
+            </div>
           </div>
         </div>;
       default:
@@ -99,21 +102,7 @@ const ProcessList = (
       >
         {
           data.map((item, index) => {
-            const receipts = item.receipts || {};
-            return <div key={index} className={style.item} onClick={() => {
-              history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-            }}>
-              <div className={style.header}>
-                <div className={style.title}>
-                  {item.taskName}
-                </div>
-                <div className={style.status}>
-                  · {receipts.statusName}
-                </div>
-              </div>
-              {receiptsData(item, item.receipts)}
-
-            </div>;
+            return <div key={index}>{receiptsData(item, index)}</div>;
           })
         }
       </MyList>
