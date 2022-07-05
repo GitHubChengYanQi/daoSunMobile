@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { MyLoading } from '../../components/MyLoading';
 import { useRequest } from '../../../util/Request';
@@ -6,7 +6,7 @@ import MyNavBar from '../../components/MyNavBar';
 import Header from './components/Header';
 import topStyle from '../../global.less';
 import { ToolUtil } from '../../components/ToolUtil';
-import { Tabs } from 'antd-mobile';
+import { Dialog, Tabs } from 'antd-mobile';
 import MyEmpty from '../../components/MyEmpty';
 import Bottom from './components/Bottom';
 import style from './index.less';
@@ -23,9 +23,11 @@ const ReceiptsDetail = () => {
 
   const location = useLocation();
 
+  const history = useHistory();
+
   const query = location.query;
 
-  const [detail, setDetail] = useState({});
+  const [detail, setDetail] = useState();
 
   const [hidden, setHidden] = useState(false);
 
@@ -34,6 +36,17 @@ const ReceiptsDetail = () => {
   const [key, setKey] = useState('data');
 
   const [type, setType] = useState();
+
+  const error = () => {
+    Dialog.alert({
+      content: '获取审批信息失败！',
+      closeOnMaskClick: true,
+      confirmText: '确认',
+      onConfirm: () => {
+        history.push('/');
+      },
+    });
+  }
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -60,6 +73,7 @@ const ReceiptsDetail = () => {
     {
       manual: true,
       onSuccess: (res) => {
+        console.log(res);
         if (res) {
           // 详细数据
           setDetail(res);
@@ -69,7 +83,12 @@ const ReceiptsDetail = () => {
           const node = getCurrentNode(res.stepsResult);
           const currentNode = Array.isArray(node) ? node : [node];
           setCurrentNode(currentNode);
+        } else {
+          error();
         }
+      },
+      onError: () => {
+        error();
       },
     },
   );
@@ -89,6 +108,8 @@ const ReceiptsDetail = () => {
           taskId: taskId,
         },
       });
+    }else {
+      error();
     }
   };
 
@@ -135,6 +156,10 @@ const ReceiptsDetail = () => {
     }
   };
 
+  if (!detail) {
+    return <MyLoading skeleton />;
+  }
+
   switch (detail.type) {
     case 'ErrorForWard':
       return <SkuError anomalyId={detail.formId} forward />;
@@ -145,7 +170,6 @@ const ReceiptsDetail = () => {
           <Header data={detail} />
           <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
             <Tabs activeKey={key} onChange={(key) => {
-              refresh();
               setKey(key);
               setHidden(key !== 'data');
             }} className={topStyle.tab}>

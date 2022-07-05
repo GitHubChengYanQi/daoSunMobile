@@ -16,6 +16,7 @@ const Note = (
     uploadId,
     noAdd,
     className,
+    loading=()=>{},
   },
 ) => {
 
@@ -32,6 +33,7 @@ const Note = (
     <div className={ToolUtil.classNames(style.content, className)}>
       <div hidden={mediaIds.length === 0} className={style.imgs}>
         <UploadFile
+          loading={loading}
           uploadId={uploadId}
           noAddButton
           ref={addFileRef}

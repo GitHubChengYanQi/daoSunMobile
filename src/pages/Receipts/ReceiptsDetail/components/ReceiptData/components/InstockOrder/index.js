@@ -5,6 +5,7 @@ import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
+import Title from '../../../../../../components/Title';
 
 const InstockOrder = (
   {
@@ -74,12 +75,12 @@ const InstockOrder = (
     </div>
 
     <div hidden={type !== ReceiptsEnums.outstockOrder} className={style.dataItem}>
-      <div className={style.title}>领料负责人</div>
+      <Title className={style.title}>领料负责人</Title>
       <div>{ToolUtil.isObject(data.userResult).name}</div>
     </div>
 
     <div className={style.careful}>
-      <div className={style.title}>注意事项</div>
+      <Title>注意事项</Title>
       <div>
         {ToolUtil.isArray(announcementsList).map((item, index) => {
           return <div key={index} className={style.carefulShow}>
@@ -90,12 +91,12 @@ const InstockOrder = (
     </div>
 
     <div className={style.note}>
-      <div className={style.title}>备注</div>
+      <Title>备注</Title>
       <div className={style.remake}>{remake || '无'}</div>
     </div>
 
     <div className={style.file}>
-      <div className={style.title}>附件</div>
+      <Title>附件</Title>
       <div className={style.files}>
         {fileUrls.length === 0 && '无'}
         <UploadFile show value={fileUrls.map(item => {

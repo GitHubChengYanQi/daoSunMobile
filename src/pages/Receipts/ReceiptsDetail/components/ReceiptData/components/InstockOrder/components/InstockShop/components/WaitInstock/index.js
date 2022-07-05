@@ -137,7 +137,7 @@ const WaitInstock = (
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
               const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandName).brandName || '-';
+              const brandName = ToolUtil.isObject(item.brandName).brandName  || '无品牌';
 
               return <div key={index} className={style.skuItem}>
                 <MyCheck checked={checked} className={style.check} onChange={() => {

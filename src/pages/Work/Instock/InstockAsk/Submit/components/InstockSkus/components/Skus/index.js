@@ -14,12 +14,10 @@ const Skus = (
     skus,
     createTypeData = () => {
     },
-    countNumber,
+    countNumber = 0,
     skuList = [],
     judge,
     dataChange = () => {
-    },
-    setHiddenBottom = () => {
     },
   },
 ) => {
@@ -67,13 +65,6 @@ const Skus = (
               }} />
               <div hidden={createTypeData().buttonHidden}>
                 <ShopNumber
-                  onBlur={() => {
-                    setHiddenBottom(false);
-                  }}
-                  onFocus={() => {
-                    setHiddenBottom(true);
-                  }}
-                  id={`stepper${index}`}
                   value={item.number}
                   onChange={async (number) => {
                     const newData = skuList.map((dataItem) => {

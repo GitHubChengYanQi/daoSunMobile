@@ -352,7 +352,7 @@ const Error = (
             extraWidth={(id && !noDelete) ? '84px' : '24px'}
             otherData={[
               ToolUtil.isObject(sku.customerResult).customerName,
-              ToolUtil.isObject(sku.brandResult).brandName
+              ToolUtil.isObject(sku.brandResult).brandName || '无品牌'
             ]}
           />,
           actionNumber: <div className={style.actual}>
@@ -517,28 +517,6 @@ const Error = (
 
 
     <div className={style.space} />
-    <Divider className={style.divider}>
-      <Button style={{ width: 100 }} color='danger' fill='outline' onClick={() => {
-
-        if (allNumber >= data.number) {
-          return Message.toast('不能超过实际数量！');
-        }
-
-        CodeRun({
-          data: {
-            codeRequests: [{
-              source: batch ? 'inErrorBatch' : 'inErrorSingle',
-              brandId: sku.brandId,
-              customerId: sku.customerId,
-              id: sku.skuId,
-              number: 1,
-              inkindType: '入库异常',
-            }],
-          },
-        });
-
-      }}><AddOutline /></Button>
-    </Divider>
 
     <div className={style.errors}>
       {
@@ -621,6 +599,29 @@ const Error = (
           </div>;
         })
       }
+
+      <Divider className={style.divider}>
+        <Button style={{ width: 100 }} color='danger' fill='outline' onClick={() => {
+
+          if (allNumber >= data.number) {
+            return Message.toast('不能超过实际数量！');
+          }
+
+          CodeRun({
+            data: {
+              codeRequests: [{
+                source: batch ? 'inErrorBatch' : 'inErrorSingle',
+                brandId: sku.brandId,
+                customerId: sku.customerId,
+                id: sku.skuId,
+                number: 1,
+                inkindType: '入库异常',
+              }],
+            },
+          });
+
+        }}><AddOutline /></Button>
+      </Divider>
     </div>
 
     {(

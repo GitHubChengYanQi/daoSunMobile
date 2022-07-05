@@ -13,10 +13,11 @@ const Audit = (
     userIds = [],
     note,
     currentNode = [],
+    loading,
   }) => {
 
   // 执行审批接口
-  const { loading, run: processLogRun } = useRequest(
+  const { loading:auditLoading, run: processLogRun } = useRequest(
     {
       url: '/audit/post',
       method: 'POST',
@@ -57,19 +58,19 @@ const Audit = (
 
   return <>
     <div className={style.buttons}>
-      <Button color='primary' fill='none' onClick={() => {
+      <Button disabled={loading} color='primary' fill='none' onClick={() => {
         audit(0);
       }}>
         驳回
       </Button>
-      <Button color='primary' onClick={() => {
+      <Button disabled={loading} color='primary' onClick={() => {
         audit(1);
       }}>
         同意
       </Button>
     </div>
 
-    {loading && <MyLoading />}
+    {auditLoading && <MyLoading />}
   </>;
 };
 

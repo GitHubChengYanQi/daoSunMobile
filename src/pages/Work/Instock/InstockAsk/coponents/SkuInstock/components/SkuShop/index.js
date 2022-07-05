@@ -215,7 +215,7 @@ const SkuShop = (
           物料明细
         </div>
         <div className={style.empty} />
-        <MyRemoveButton onRemove={() => {
+        <MyRemoveButton disabled={skus.length === 0} onRemove={() => {
           onClear();
           shopDelete({ data: { ids: skus.map(item => item.cartId) } });
         }}>
@@ -324,9 +324,6 @@ const SkuShop = (
             <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>
           </div>
         </div>
-        {!noClose && <LinkButton className={style.close} onClick={() => {
-          history.goBack();
-        }}>取消</LinkButton>}
         <Button
           disabled={skus.length === 0}
           color='primary'

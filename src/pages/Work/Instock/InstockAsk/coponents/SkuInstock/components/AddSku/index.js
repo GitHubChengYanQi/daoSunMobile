@@ -31,24 +31,33 @@ const AddSku = (
 
   const [sku, setSku] = useState({});
 
-  const [imgUrl, setImgUrl] = useState();
-
   const [visible, setVisible] = useState();
 
   const [dataVisible, setDataVisible] = useState();
 
-  const addShopBall = (cartId) => {
-    const skuImg = document.getElementById('skuImg');
-    const top = skuImg.getBoundingClientRect().top;
-    const left = skuImg.getBoundingClientRect().left;
-    setVisible(false);
-    createBall(top, left, cartId);
+  const addShopBall = (cartId, newData = data) => {
+    const skuImg = document.getElementById(newData.imgId || 'skuImg');
+    if (skuImg) {
+      const top = skuImg.getBoundingClientRect().top;
+      const left = skuImg.getBoundingClientRect().left;
+      setVisible(false);
+      createBall(top, left, cartId, newData);
+    } else {
+      onChange({ ...newData, cartId }, type);
+    }
+
   };
 
   const { loading: addLoading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onSuccess: (res) => {
-      addShopBall(res);
+      switch (type) {
+        case ERPEnums.stocktaking:
+          return;
+        default:
+          addShopBall(res);
+          return;
+      }
     },
   });
 
@@ -99,14 +108,16 @@ const AddSku = (
     setDisabled(snameSku[0]);
   };
 
-  const openSkuAdd = (sku = {}, initType, other = {}) => {
+  const openSkuAdd = async (sku = {}, initType, other = {}) => {
     const type = initType || defaultType;
+    const imgUrl = Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo;
     setSnameAction(defaultAction);
     setType(type);
     setSku(sku);
-    setImgUrl(Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo);
     const brands = ToolUtil.isArray(sku.brandResults);
     const newData = {
+      imgUrl,
+      imgId: sku.imgId,
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
@@ -123,12 +134,14 @@ const AddSku = (
       case ERPEnums.curing:
         break;
       case ERPEnums.stocktaking:
-        addShop({
+        const cartId = await addShop({
           data: {
             type,
             skuId: sku.skuId,
           },
         });
+        addShopBall(cartId,
+          newData);
         break;
       case ERPEnums.outStock:
         setVisible(true);
@@ -247,7 +260,7 @@ const AddSku = (
     }
   };
 
-  const createBall = (top, left, cartId) => {
+  const createBall = (top, left, cartId, newData = {}) => {
 
     const shop = document.getElementById('shop');
 
@@ -258,7 +271,7 @@ const AddSku = (
 
     const bar = document.createElement('div');
 
-    bar.style.backgroundImage = `url(${imgUrl})`;
+    bar.style.backgroundImage = `url(${newData.imgUrl})`;
     bar.style.backgroundColor = '#e1e1e1';
     bar.style.backgroundSize = 'cover';
     bar.style.border = 'solid #F1F1F1 1px';
@@ -286,7 +299,7 @@ const AddSku = (
       bar.remove();
       i++;
       if (i === 2 && cartId) {
-        onChange({ ...data, cartId }, type);
+        onChange({ ...newData, cartId }, type);
       }
 
     };

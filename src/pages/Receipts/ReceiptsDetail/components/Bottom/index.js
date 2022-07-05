@@ -20,6 +20,8 @@ const Bottom = (
 
   const [params, setParams] = useState({});
 
+  const [loading, setLoading] = useState();
+
   const actions = [];
   currentNode.map((item) => {
     if (item.logResult && Array.isArray(item.logResult.actionResults)) {
@@ -46,7 +48,7 @@ const Bottom = (
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <Note noAdd className={style.note} value={params} uploadId='auditImg' onChange={setParams} />
+    <Note noAdd className={style.note} value={params} uploadId='auditImg' onChange={setParams} loading={setLoading} />
     <div className={style.actions}>
       <div className={style.all} onClick={() => {
         setVisible(true);
@@ -54,7 +56,7 @@ const Bottom = (
         更多
         <MoreOutline style={{ fontSize: 15 }} />
       </div>
-      <Audit {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
+      <Audit loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
     </div>
 
     <ActionSheet

@@ -35,9 +35,6 @@ const WaitOutSku = (
 
   const [allSkus, setAllSkus] = useState([]);
 
-  let count = 0;
-  allSkus.map(item => count += item.number);
-
   const { loading, run, refresh: listRefresh } = useRequest(listByUser,
     {
       manual: true,
@@ -103,7 +100,7 @@ const WaitOutSku = (
   return <>
     <div className={style.header}>待出物料</div>
     <div className={style.sys}>
-      <span>数量：{count} 类</span>
+      <span>数量：{allSkus.length} 类</span>
       <LinkButton onClick={() => {
         setSys(!sys);
       }}>{sys ? '取消管理' : '管理'}</LinkButton>
@@ -145,7 +142,7 @@ const WaitOutSku = (
                 />
                 领料人：{userItem.userName}
               </span>
-              <LinkButton><SystemQRcodeOutline /></LinkButton>
+              {/*<LinkButton><SystemQRcodeOutline /></LinkButton>*/}
             </div>
 
             {
@@ -158,7 +155,7 @@ const WaitOutSku = (
                 const checked = checkPickSkus.length === cartResults.length;
 
                 return <div hidden={cartResults.length === 0} key={pickIndex}>
-                  <div className={style.orderData}>
+                  <div className={style.orderData} hidden={pickListsResults.length === 1}>
                     {sys && <span onChange={() => {
                       const newReruenSkus = returnSkus.filter(item => item.pickListsId !== pickItem.pickListsId);
                       setReturnSkus(checked ? newReruenSkus : [...newReruenSkus, cartResults]);
@@ -230,11 +227,10 @@ const WaitOutSku = (
         {!sys && <Button
           disabled={userIds.length === 0}
           color='primary'
-          fill='outline'
           onClick={() => {
             pickRun({ data: { userIds: userIds.toString() } });
           }}
-        >备料完成</Button>}
+        >通知备料</Button>}
       </div>
     </div>
 

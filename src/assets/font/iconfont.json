@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4933869",
+      "name": "点",
+      "font_class": "dian",
+      "unicode": "ec1e",
+      "unicode_decimal": 60446
+    },
+    {
       "icon_id": "30272911",
       "name": "筛选",
       "font_class": "shaixuan",

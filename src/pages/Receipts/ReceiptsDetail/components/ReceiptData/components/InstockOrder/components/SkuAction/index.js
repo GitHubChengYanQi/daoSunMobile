@@ -14,6 +14,7 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import Title from '../../../../../../../../components/Title';
 
 
 const SkuAction = (
@@ -120,9 +121,9 @@ const SkuAction = (
 
   return <div style={{ backgroundColor: '#fff' }}>
     <div className={style.skuHead}>
-      <div className={style.headTitle}>
+      <Title className={style.headTitle}>
         申请明细
-      </div>
+      </Title>
       <div className={style.extra}>
         合计：<span>{items.length}</span>类<span>{countNumber}</span>件
       </div>

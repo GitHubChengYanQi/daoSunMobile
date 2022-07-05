@@ -49,6 +49,7 @@ export const SkuContent = (
           <div className={style.sku}>
             <SkuItem
               skuResult={item}
+              imgId={`stocktakingImg${index}`}
               imgSize={80}
               gap={8}
               extraWidth='60px'
@@ -56,7 +57,7 @@ export const SkuContent = (
             />
           </div>
           {buttonHidden ? '已添加' : (!batch && <LinkButton onClick={() => {
-            addSku.current.openSkuAdd(item);
+            addSku.current.openSkuAdd({ ...item,imgId:`stocktakingImg${index}` });
           }}>
             <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
           </LinkButton>)}

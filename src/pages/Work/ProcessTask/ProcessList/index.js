@@ -20,6 +20,7 @@ const ProcessList = (
     },
     listRef,
     api,
+    processListRef,
   },
 ) => {
 
@@ -28,7 +29,7 @@ const ProcessList = (
   const [data, setData] = useState([]);
 
   const receiptsData = (item) => {
-    const receipts = item.receipts || {}
+    const receipts = item.receipts || {};
     switch (item.type) {
       case ReceiptsEnums.instockOrder:
         const instockListResults = receipts.instockListResults || [];
@@ -84,12 +85,12 @@ const ProcessList = (
   };
 
   return <>
-    <div className={style.list}>
+    <div className={style.list} ref={processListRef}>
       <MyList
         ref={listRef}
         api={api || startList}
         params={{ auditType: 'audit' }}
-        sorter={{field:'createTime',order:'ascend'}}
+        sorter={{ field: 'createTime', order: 'ascend' }}
         data={data}
         getData={setData}
         response={(res) => {

@@ -7,12 +7,13 @@ const MyRemoveButton = (
     children,
     onRemove = () => {
     },
+    disabled,
   },
 ) => {
 
 
   return <>
-    <Button color='danger' fill='none' style={{ padding: 0 }} onClick={() => {
+    <Button disabled={disabled} color='danger' fill='none' style={{ padding: 0 }} onClick={() => {
       Dialog.confirm({
         content: '是否确认删除？',
         onConfirm:onRemove,

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
 import { CaretDownFilled, CaretRightFilled } from '@ant-design/icons';
-import { Checkbox } from 'antd-mobile';
-import Icon from '../../../../../../../../../components/Icon';
+import MyCheck from '../../../../../../../../../components/MyCheck';
 
 const CheckPosition = (
   {
@@ -12,6 +11,7 @@ const CheckPosition = (
     onChange = () => {
     },
     refresh,
+    disabled,
     checkShow = () => {
       return true;
     },
@@ -56,6 +56,8 @@ const CheckPosition = (
     return data.map((item, index) => {
       const childrens = item.children || item.loops || [];
       const open = childrens.filter(item => openKey.includes(item.key)).length === childrens.length;
+
+      const checked = value.map(item => item.id).includes(item.key);
       return <div key={index} className={style.positions}>
         {openKey.includes(item.key) && <div className={style.positionItem} style={{ paddingLeft: left }}>
           <div
@@ -69,11 +71,9 @@ const CheckPosition = (
             {item.title}
           </div>
           <div hidden={!checkShow(item)} className={style.checked}>
-            <Checkbox
-              checked={value.map(item => item.id).includes(item.key)}
-              icon={(checked) => {
-                return checked ? <Icon type='icon-a-jianqudingceng2' /> : <Icon type='icon-jizhumimamoren' />;
-              }}
+            <MyCheck
+              disabled={!checked && disabled}
+              checked={checked}
               onChange={(checked) => {
                 if (!checked) {
                   onChange(value.filter(position => position.id !== item.key));

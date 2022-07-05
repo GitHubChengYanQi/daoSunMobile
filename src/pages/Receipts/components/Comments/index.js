@@ -67,7 +67,7 @@ const Comments = (
       </Button>
     </div>
 
-    <Popup className={style.popup} destroyOnClose visible={visible} onMaskClick={() => {
+    <Popup destroyOnClose visible={visible} onMaskClick={() => {
       onInput(false);
       setVisible(false);
     }}>

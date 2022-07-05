@@ -26,7 +26,6 @@ const MenusItem = (
       onClick={(code) => {
         switch (code) {
           case 'inventoryAsk':
-          case 'instockAsk':
           case 'curingAsk':
             setVisible(code);
             return true;
@@ -36,7 +35,6 @@ const MenusItem = (
       }}
     />
 
-    <CreateInStock open={visible === 'instockAsk'} onClose={() => setVisible(false)} />
     <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
 
   </>;

@@ -322,7 +322,7 @@ const SkuError = (
         extraWidth='64px'
         otherData={[
           ToolUtil.isObject(sku.customerResult).customerName,
-          ToolUtil.isObject(sku.brandResult).brandName
+          ToolUtil.isObject(sku.brandResult).brandName || '无品牌'
         ]}
       />
       <div className={style.showNumber}>

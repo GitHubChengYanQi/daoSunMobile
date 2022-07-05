@@ -1,38 +1,41 @@
 import React, { useState } from 'react';
 import style from './index.less';
 import MyStepper from '../../../../../../../components/MyStepper';
+import MyKeybord from '../../../../../../../components/MyKeybord';
 
 const ShopNumber = (
   {
     value,
     onChange = () => {
     },
-    onBlur = () => {
-    },
-    onFocus = () => {
-    },
     show,
     min = 1,
     max = 999999999,
-    id = 'stepper',
   },
 ) => {
 
-  const [update, setUpdate] = useState();
+  const [visible, setVisible] = useState();
 
   return <>
     <div className={style.shopNumber}>
-      {update ?
-        <MyStepper open onChange={onChange} value={value} min={min} max={max} />
-        :
-        <div className={style.number} style={show && { border: 'none',padding:0 }} onClick={() => {
-          if (!show) {
-            setUpdate(true);
-          }
-        }}>
-          × {value}
-        </div>}
+      <div className={style.number} style={show && { border: 'none', padding: 0 }} onClick={() => {
+        if (!show) {
+          setVisible(true);
+        }
+      }}>
+        × {value}
+      </div>
     </div>
+
+    <MyKeybord
+      visible={visible}
+      setVisible={setVisible}
+      value={value}
+      min={min}
+      max={max}
+      onChange={onChange}
+      // decimal={decimal}
+    />
   </>;
 };
 

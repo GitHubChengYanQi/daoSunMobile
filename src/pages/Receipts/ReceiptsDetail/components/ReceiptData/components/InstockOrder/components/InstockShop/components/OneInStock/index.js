@@ -69,7 +69,7 @@ const OneInStock = (
             extraWidth='120px'
             otherData={[
               ToolUtil.isObject(skuItem.customer).customerName,
-              ToolUtil.isObject(skuItem.brandResult).brandName
+              ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌'
             ]}
           />
         </div>

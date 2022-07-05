@@ -71,6 +71,8 @@ const MyAudit = () => {
     }
   };
 
+  const processListRef = useRef();
+
   return <>
     <MySearch placeholder='请输入相关单据信息' historyType='process' />
     <Tabs activeKey={key} onChange={(key) => {
@@ -118,10 +120,10 @@ const MyAudit = () => {
           className={ToolUtil.classNames(style.screenButton, screen && style.checked, screening && style.checking)}
           onClick={() => {
             if (screen) {
-              // screenRef.current.removeAttribute('style');
+              ToolUtil.isObject(processListRef.current).removeAttribute('style');
               setFalse();
             } else {
-              // screenRef.current.setAttribute('style', 'min-height:100vh');
+              ToolUtil.isObject(processListRef.current).setAttribute('style', 'min-height:100vh');
               screenRef.current.scrollIntoView();
               setTrue();
             }
@@ -150,12 +152,13 @@ const MyAudit = () => {
       </div>
     </div>
 
-    <ProcessList setNumber={setNumber} listRef={listRef} />
+    <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen
       skuNumber={number}
       onClose={() => {
         setFalse();
+        ToolUtil.isObject(processListRef.current).removeAttribute('style');
       }}
       params={params}
       onClear={() => {

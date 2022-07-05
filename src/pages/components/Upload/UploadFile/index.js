@@ -22,6 +22,8 @@ const UploadFile = (
     imgSize,
     uploadId = 'myUpload',
     noAddButton,
+    loading: getLoading = () => {
+    },
   }, ref,
 ) => {
 
@@ -68,6 +70,7 @@ const UploadFile = (
           } catch (e) {
             Toast.show({ content: '上传失败！' });
           }
+          getLoading(false);
           setLoading(false);
         },
       });
@@ -83,6 +86,7 @@ const UploadFile = (
         defaultCameraMode: 'batch', //表示进入拍照界面的默认模式，目前有normal与batch两种选择，normal表示普通单拍模式，batch表示连拍模式，不传该参数则为normal模式。从3.0.26版本开始支持front和batch_front两种值，其中front表示默认为前置摄像头单拍模式，batch_front表示默认为前置摄像头连拍模式。（注：用户进入拍照界面仍然可自由切换两种模式）
         isSaveToAlbum: 1, //整型值，0表示拍照时不保存到系统相册，1表示自动保存，默认值是1
         success: (res) => {
+          getLoading(true);
           setLoading(true);
           setFalse();
           const localIds = res.localIds; // 返回选定照片的本地ID列表，
@@ -171,7 +175,10 @@ const UploadFile = (
 
     <UpLoadImg
       hidden
-      uploadLoading={setLoading}
+      uploadLoading={(loading)=>{
+        getLoading(loading);
+        setLoading(loading)
+      }}
       maxCount={5}
       type='picture'
       id={uploadId}

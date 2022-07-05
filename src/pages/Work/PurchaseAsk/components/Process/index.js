@@ -262,11 +262,11 @@ const Process = (
 
     switch (step.logResult && step.logResult.status) {
       case -1:
-        // if (next) {
-        //   stepStatus = 'wait';
-        //   iconColor = style.success;
-        //   break;
-        // }
+        if (next) {
+          stepStatus = 'wait';
+          iconColor = style.action;
+          break;
+        }
         stepStatus = 'wait';
         iconColor = style.wait;
         break;

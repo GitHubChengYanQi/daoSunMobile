@@ -103,7 +103,7 @@ const MyPicking = () => {
     <MyNavBar title='领料中心' />
     <div className={style.content} style={{ backgroundColor: key === 'sku' && '#fff' }}>
       <MySearch
-        searchIcon={<Icon type='icon-dibudaohang-saoma' />} placeholder='搜索'
+        searchIcon={<><Icon type='icon-dibudaohang-saoma' /> | </>} placeholder='搜索'
         value={searchValue}
         onChange={setSearchValue}
         onSearch={(value) => {
@@ -147,7 +147,7 @@ const MyPicking = () => {
             }
           }}
         >
-          <div className={topStyle.stockNumber}>数量：<span>{count}</span></div>
+          <div className={topStyle.stockNumber}>可领数量：<span>{count}</span>类</div>
           <div
             className={ToolUtil.classNames(topStyle.screenButton, screen ? topStyle.checked : '')}
           >

@@ -51,7 +51,7 @@ const InstockError = (
                   skuResult={item.skuResult}
                   otherData={[
                     ToolUtil.isObject(item.customer).customerName,
-                    ToolUtil.isObject(item.brand).brandName,
+                    ToolUtil.isObject(item.brand).brandName || '无品牌',
                   ]}
                 />
               </div>

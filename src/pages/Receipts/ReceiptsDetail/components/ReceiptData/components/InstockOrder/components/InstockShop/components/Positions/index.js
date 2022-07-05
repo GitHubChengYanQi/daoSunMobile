@@ -33,6 +33,10 @@ const Positions = (
 
   const [focus, setFocus] = useState(autoFocus);
 
+  const [value, onChange] = useState(ids);
+
+  const disabled = verification && value.length >= maxNumber;
+
   const { loading, data, run } = useRequest(positions, {
     onSuccess: () => {
       if (focus) {
@@ -44,8 +48,6 @@ const Positions = (
       }
     },
   });
-
-  const [value, onChange] = useState(ids);
 
   const [name, setName] = useState();
 
@@ -92,6 +94,7 @@ const Positions = (
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
+        disabled={disabled}
         single={single}
         value={value}
         onChange={(value) => {
@@ -114,9 +117,6 @@ const Positions = (
       }}
       rightDisabled={value.length === 0}
       rightOnClick={() => {
-        if (verification && value.length > maxNumber) {
-          return Message.toast('不能超过总数！');
-        }
         onSuccess(value);
       }}
     />

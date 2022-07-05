@@ -91,7 +91,7 @@ const InstockError = (
             extraWidth='80px'
             otherData={[
               customerName,
-              brandName
+              brandName || '无品牌'
             ]}
           />,
         };

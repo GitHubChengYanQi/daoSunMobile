@@ -3,6 +3,7 @@ import style from './index.less';
 import { Avatar } from 'antd';
 import { ReceiptsEnums } from '../../../index';
 import { MyDate } from '../../../../components/MyDate';
+import Icon from '../../../../components/Icon';
 
 const Header = ({ data = {} }) => {
 
@@ -36,7 +37,7 @@ const Header = ({ data = {} }) => {
           {data.taskName}
         </div>
         <span>
-          · {receiptsData().statusName}
+          <Icon type='icon-dian' /> {receiptsData().statusName}
         </span>
       </div>
       <div className={style.line}>

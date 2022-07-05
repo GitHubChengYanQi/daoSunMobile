@@ -9,6 +9,7 @@ import Viewpager from '../../../InstockOrder/components/Viewpager';
 import Prepare from '../Prepare';
 import OutStockShop from '../OutStockShop';
 import OutSkuItem from './compoennts/OutSkuItem';
+import Title from '../../../../../../../../components/Title';
 
 
 const OutSkuAction = (
@@ -51,9 +52,9 @@ const OutSkuAction = (
 
   return <div style={{ backgroundColor: '#fff' }}>
     <div className={style.skuHead}>
-      <div className={style.headTitle}>
+      <Title className={style.headTitle}>
         申请明细
-      </div>
+      </Title>
       <div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>

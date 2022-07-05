@@ -11,6 +11,8 @@ import { Message } from '../../../../../../../../components/Message';
 import Order from './components/Order';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
+import Bottom from '../../../../../Bottom';
+import BottomButton from '../../../../../../../../components/BottomButton';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
 
@@ -28,7 +30,7 @@ const Prepare = (
   },
 ) => {
 
-  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber
+  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
 
   const codeId = ToolUtil.isObject(props.qrCode).codeId;
@@ -117,13 +119,18 @@ const Prepare = (
         }}><Icon type='icon-dibudaohang-saoma' style={{ fontSize: 24 }} /></LinkButton>
       </div>
     </div>
-    {dimensionAction()}
-    <div className={style.bottom}>
-      <Button className={style.close} onClick={onClose}>取消</Button>
-      <Button disabled={outStockSkus.length === 0} className={style.ok} onClick={() => {
-        addCart({ data: { productionPickListsCartParams: outStockSkus } });
-      }}>确定</Button>
+    <div style={{paddingBottom:60}}>
+      {dimensionAction()}
     </div>
+
+    <BottomButton
+      leftOnClick={onClose}
+      rightDisabled={outStockSkus.length === 0}
+      rightText='确定'
+      rightOnClick={() => {
+        addCart({ data: { productionPickListsCartParams: outStockSkus } });
+      }}
+    />
 
     {loading && <MyLoading />}
   </>;

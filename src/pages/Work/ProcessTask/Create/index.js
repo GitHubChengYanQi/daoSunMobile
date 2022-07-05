@@ -51,7 +51,6 @@ const Create = () => {
                 onClick={(code) => {
                   switch (code) {
                     case 'inventoryAsk':
-                    case 'instockAsk':
                     case 'curingAsk':
                       setVisible(code);
                       return true;
@@ -65,7 +64,6 @@ const Create = () => {
       </Grid>
     </Card>
 
-    <CreateInStock open={visible === 'instockAsk'} onClose={() => setVisible(false)} />
     <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
     <CuringAsk open={visible === 'curingAsk'} onClose={() => setVisible(false)} />
 
