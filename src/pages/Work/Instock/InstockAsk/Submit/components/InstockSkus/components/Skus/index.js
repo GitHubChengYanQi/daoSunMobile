@@ -8,6 +8,7 @@ import { Divider } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
+import Title from '../../../../../../../../components/Title';
 
 const Skus = (
   {
@@ -28,9 +29,9 @@ const Skus = (
   return <>
     <div className={style.skus}>
       <div className={style.skuHead}>
-        <div className={style.headTitle}>
+        <Title className={style.headTitle}>
           物料明细
-        </div>
+        </Title>
         <div className={style.extra}>
           合计：
           <div>{skus.length}</div>类
@@ -47,7 +48,7 @@ const Skus = (
             key={index}
             className={ToolUtil.classNames(
               style.skuItem,
-              (index !== (allSku ? skus.length - 1 : 2)) && style.skuBorderBottom,
+              (skuList.length > 3) && (index !== (allSku ? skus.length - 1 : 2)) && style.skuBorderBottom,
             )}
           >
             <div className={style.item}>

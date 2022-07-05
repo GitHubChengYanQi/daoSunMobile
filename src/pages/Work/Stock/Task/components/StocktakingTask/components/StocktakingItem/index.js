@@ -1,18 +1,19 @@
 import React from 'react';
 import style from '../../../../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
 import { history } from 'umi';
-import { ReceiptsEnums } from '../../../../../../../Receipts';
 import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
 import moment from 'moment';
 
 const StocktakingItem = ({item,index}) => {
   const receipts = item.receipts || {};
 
-  return <div key={index} className={style.orderItem} style={{ padding: 0 }}>
+  const onClick = () => {
+    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+  }
+
+  return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.data}>
-      <div className={style.customer} onClick={() => {
-        history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-      }}>
+      <div className={style.customer}>
         <div className={style.name}>
           <span className={style.title}>{item.taskName} / {receipts.coding}</span>
           <RightOutline style={{ color: '#B9B9B9' }} />

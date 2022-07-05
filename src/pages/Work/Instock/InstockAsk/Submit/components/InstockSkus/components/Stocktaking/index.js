@@ -5,6 +5,7 @@ import { Radio, Space } from 'antd-mobile';
 import Icon from '../../../../../../../../components/Icon';
 import User from '../User';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
+import Title from '../../../../../../../../components/Title';
 
 const Stocktaking = (
   {
@@ -24,7 +25,7 @@ const Stocktaking = (
     }} title='负责人' />
 
     <div className={style.dataItem}>
-      <div className={style.title}>盘点时间 <span>*</span></div>
+      <Title className={style.title}>盘点时间 <span>*</span></Title>
       <div>
         <StartEndDate
           split={<div>——</div>}
@@ -39,7 +40,7 @@ const Stocktaking = (
     </div>
 
     <div className={style.dataItem}>
-      <div className={style.title}>方法 <span>*</span></div>
+      <Title className={style.title}>方法 <span>*</span></Title>
       <div className={style.method}>
         {
           method.map((item, index) => {
@@ -67,7 +68,7 @@ const Stocktaking = (
     </div>
 
     <div className={style.dataItem}>
-      <div className={style.title}>方式 <span>*</span></div>
+      <Title className={style.title}>方式 <span>*</span></Title>
       <div className={style.mode}>
         {
           mode.map((item, index) => {

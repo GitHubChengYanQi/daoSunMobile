@@ -5,6 +5,7 @@ import { Picker, Space } from 'antd-mobile';
 import User from '../User';
 import Number from '../../../../../../../../components/Number';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
+import Title from '../../../../../../../../components/Title';
 
 const Curing = (
   {
@@ -23,7 +24,7 @@ const Curing = (
     }} title='负责人' />
 
     <div className={style.dataItem}>
-      <div className={style.title}>任务时间 <span>*</span></div>
+      <Title className={style.title}>任务时间 <span>*</span></Title>
       <div>
         <StartEndDate
           split={<div>—</div>}
@@ -38,7 +39,7 @@ const Curing = (
     </div>
 
     <div className={style.dataItem}>
-      <div className={style.title}>养护类型 <span>*</span></div>
+      <Title className={style.title}>养护类型 <span>*</span></Title>
       <div onClick={() => {
         setTypeVisible(true);
       }}>
@@ -47,7 +48,7 @@ const Curing = (
     </div>
 
     <div className={style.dataItem}>
-      <div className={style.title}>养护临近 <span>*</span></div>
+      <Title className={style.title}>养护临近 <span>*</span></Title>
       <div className={style.nearMaintenance}>
         <Number width={70} noBorder value={value.nearMaintenance} onChange={(number) => {
           onChange({ ...value, nearMaintenance: number });

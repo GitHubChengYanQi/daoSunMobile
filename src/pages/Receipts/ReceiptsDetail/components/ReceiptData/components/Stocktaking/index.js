@@ -12,6 +12,7 @@ import ErrorShop from './components/ErrorShop';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import Title from '../../../../../../components/Title';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -70,9 +71,9 @@ const Stocktaking = (
         const skuResultList = positionItem.skuResultList || [];
 
         return <div key={positionIndex} className={style.position}>
-          <div className={style.title}>
+          <Title className={style.title}>
             {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
-          </div>
+          </Title>
 
           <div className={style.skus}>
             {

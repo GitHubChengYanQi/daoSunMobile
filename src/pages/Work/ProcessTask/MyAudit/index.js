@@ -152,6 +152,8 @@ const MyAudit = () => {
       </div>
     </div>
 
+    <div className={style.space} />
+
     <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen

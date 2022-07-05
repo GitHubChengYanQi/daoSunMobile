@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import CheckUser from '../../../../../../../../components/CheckUser';
 import { RightOutline } from 'antd-mobile-icons';
+import Title from '../../../../../../../../components/Title';
 
 const User = (
   {
@@ -17,7 +18,7 @@ const User = (
 
   return <>
     <div className={style.dataItem}>
-      <div className={style.title}>{title}<span>*</span></div>
+      <Title className={style.title}>{title}<span>*</span></Title>
       <div onClick={() => {
         userRef.current.open();
       }}>

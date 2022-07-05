@@ -13,6 +13,7 @@ import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { maintenanceAdd } from '../../index';
+import OtherData from '../OtherData';
 
 const CuringAsk = ({ createType, state }) => {
 
@@ -111,39 +112,7 @@ const CuringAsk = ({ createType, state }) => {
     <MyNavBar title={createTypeData().title} />
     {content()}
 
-    <div className={style.careful}>
-      <div className={style.title}>{createTypeData().careful} <span>*</span></div>
-      <Careful
-        type={createType}
-        value={params.noticeIds}
-        onChange={(noticeIds) => {
-          setParams({ ...params, noticeIds });
-        }}
-      />
-    </div>
-
-    <div className={style.note}>
-      <div className={style.title}>添加备注</div>
-      <MyTextArea
-        value={params.remark}
-        className={style.textArea}
-        onChange={(remark, userIds) => {
-          setParams({ ...params, remark, userIds: userIds.map(item => item.userId) });
-        }}
-      />
-    </div>
-
-    <div className={style.file}>
-      <div className={style.title}>上传附件</div>
-      <div className={style.files}>
-        <UploadFile
-          onChange={(mediaIds) => {
-            setParams({ ...params, mediaIds });
-          }}
-        />
-      </div>
-
-    </div>
+    <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
 
     <BottomButton
       leftOnClick={() => {

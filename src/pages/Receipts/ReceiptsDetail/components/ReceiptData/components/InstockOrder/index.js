@@ -28,13 +28,13 @@ const InstockOrder = (
   switch (type) {
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults);
-      announcementsList = data.announcementsList;
+      announcementsList = data.announcementsList || [];
       remake = data.remark;
       fileUrls = ToolUtil.isArray(data.url);
       break;
     case ReceiptsEnums.outstockOrder:
       details = ToolUtil.isArray(data.detailResults);
-      announcementsList = data.announcementsResults;
+      announcementsList = data.announcementsResults || [];
       remake = data.note;
       fileUrls = ToolUtil.isArray(data.enclosureUrl);
       break;
@@ -79,10 +79,13 @@ const InstockOrder = (
       <div>{ToolUtil.isObject(data.userResult).name}</div>
     </div>
 
+    <div className={style.space} />
+
     <div className={style.careful}>
       <Title>注意事项</Title>
       <div>
-        {ToolUtil.isArray(announcementsList).map((item, index) => {
+        {announcementsList.length === 0 && <div style={{padding:8}}>无</div>}
+        {announcementsList.map((item, index) => {
           return <div key={index} className={style.carefulShow}>
             {item.content}
           </div>;

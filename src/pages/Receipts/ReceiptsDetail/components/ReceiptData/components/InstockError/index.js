@@ -5,6 +5,7 @@ import { Popup } from 'antd-mobile';
 import SkuError from './components/SkuError';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import Title from '../../../../../../components/Title';
 
 const InstockError = (
   {
@@ -23,12 +24,19 @@ const InstockError = (
   const anomalyResults = data.anomalyResults || [];
   const instockOrder = data.instockOrder || {};
 
+  const masterUser = ToolUtil.isObject(data.masterUser);
+
   const errorTypeData = () => {
     switch (data.type) {
       case 'instock':
         return {
-          receipts: `${ToolUtil.isObject(data.masterUser).name || ''}的入库申请 / ${instockOrder.coding || ''}`,
+          receipts: masterUser.name && `${masterUser.name || '-'}的入库申请 / ${instockOrder.coding || '-'}`,
           totalTitle: '申请总数',
+        };
+        case 'Stocktaking':
+        return {
+          receipts: masterUser.name && `${masterUser.name || '-'}的盘点申请 / ${instockOrder.coding || '-'}`,
+          totalTitle: '实际总数',
         };
       default:
         return {};
@@ -77,9 +85,9 @@ const InstockError = (
     </div>
     <div className={style.space} />
     <div className={style.data}>
-      <span className={style.label}>
+      <Title className={style.label}>
         关联单据
-      </span>
+      </Title>
       <span className={style.value}>
          {errorTypeData().receipts}
       </span>
