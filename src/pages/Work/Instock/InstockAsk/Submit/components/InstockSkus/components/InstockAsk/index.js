@@ -9,6 +9,8 @@ import MyNavBar from '../../../../../../../../components/MyNavBar';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import OtherData from '../OtherData';
+import { Dialog } from 'antd-mobile';
+import { ReceiptsEnums } from '../../../../../../../../Receipts';
 
 const InstockAsk = ({ skus, judge, createType }) => {
 
@@ -34,9 +36,16 @@ const InstockAsk = ({ skus, judge, createType }) => {
 
   const { loading: instockLoading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
-    onSuccess: () => {
-      Message.toast('创建入库申请成功!');
-      history.goBack();
+    onSuccess: (res) => {
+      Dialog.confirm({
+        content: '创建入库申请成功!',
+        confirmText: '查看详情',
+        cancelText: '返回列表',
+        onCancel: () => history.goBack(),
+        onConfirm: () => {
+          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${res.instockOrderId}`);
+        },
+      });
     },
     onError: () => {
       Message.toast('创建入库申请失败!');

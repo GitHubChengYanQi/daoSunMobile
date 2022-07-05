@@ -92,8 +92,6 @@ const ProcessList = (
       <MyList
         ref={listRef}
         api={api || startList}
-        params={{ auditType: 'audit' }}
-        sorter={{ field: 'createTime', order: 'ascend' }}
         data={data}
         getData={setData}
         response={(res) => {

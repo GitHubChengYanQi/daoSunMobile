@@ -24,9 +24,11 @@ export const Tasks = () => {
       case 'create':
         return <Create />;
       case 'audit':
-        return <MyAudit />;
+        return <MyAudit auditType='audit' />;
       case 'start':
         return <MyStart />;
+      case 'send':
+        return <MyAudit auditType='send' />;
       default:
         return <MyEmpty />;
     }
@@ -69,6 +71,10 @@ export const Tasks = () => {
           title: '我发起的',
           key: 'start',
           icon: <Icon type='icon-wofaqide1' />,
+        }, {
+          title: '抄送我的',
+          key: 'send',
+          icon: <Icon type='icon-caigou_chaosong' />,
         }]
       } />
 

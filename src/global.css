@@ -64,6 +64,10 @@ body {
   --font-size: 14px;
 }
 
+.adm-dialog-body .adm-dialog-footer .adm-dialog-action-row > .adm-dialog-button-bold {
+  font-weight: normal;
+}
+
 
 
 

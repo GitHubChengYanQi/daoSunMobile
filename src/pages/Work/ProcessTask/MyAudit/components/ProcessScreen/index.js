@@ -2,23 +2,30 @@ import React from 'react';
 import Screen from '../../../../../components/Screen';
 import State from '../../../../Sku/SkuList/components/SkuScreen/components/State';
 import { ReceiptsEnums } from '../../../../../Receipts';
+import User from '../../../../Sku/SkuList/components/SkuScreen/components/User';
 
 const ProcessScreen = (
   {
     screen,
     skuNumber,
     params = {},
-    onClose=()=>{},
-    onChange=()=>{},
-    onClear=()=>{},
+    onClose = () => {
+    },
+    onChange = () => {
+    },
+    onClear = () => {
+    },
   },
 ) => {
 
   const searchtype = [
-    { key: 'type', title: '单据类型', open: true },
+    { key: 'type', title: '任务类型', open: true },
+    { key: 'status', title: '状态', open: true },
+    { key: 'createUser', title: '发起人', open: true },
   ];
 
   const type = params.type;
+  const createUser = params.createUser;
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -29,6 +36,12 @@ const ProcessScreen = (
     switch (key) {
       case 'type':
         screened = type;
+        break;
+      case 'status':
+        screened = true;
+        break;
+      case 'createUser':
+        screened = createUser;
         break;
       default:
         break;
@@ -41,16 +54,36 @@ const ProcessScreen = (
       case 'type':
         return <State
           options={[
-            { label: '入库单', value: ReceiptsEnums.instockOrder },
-            { label: '出库单', value: ReceiptsEnums.outstockOrder },
-            { label: '异常单', value: ReceiptsEnums.instockError },
-            { label: '盘点单', value: ReceiptsEnums.stocktaking },
-            { label: '养护单', value: ReceiptsEnums.maintenance },
+            { label: '入库任务', value: ReceiptsEnums.instockOrder },
+            { label: '出库任务', value: ReceiptsEnums.outstockOrder },
+            { label: '异常任务', value: ReceiptsEnums.instockError },
+            { label: '盘点任务', value: ReceiptsEnums.stocktaking },
+            { label: '养护任务', value: ReceiptsEnums.maintenance },
           ]}
           title='单据类型'
           value={[params.type]}
           onChange={(types) => {
-            paramsOnChange({ ...params, type:types[0] });
+            paramsOnChange({ ...params, type: types[0] });
+          }}
+        />;
+      case 'status':
+        return <State
+          options={[
+            { label: '待处理', value: 0 },
+            { label: '已处理', value: 99 },
+          ]}
+          title='单据类型'
+          value={[params.status]}
+          onChange={(status) => {
+            paramsOnChange({ ...params, status: status[0] });
+          }}
+        />;
+      case 'createUser':
+        return <User
+          title={item.title}
+          value={params.createUser}
+          onChange={(createUser) => {
+            paramsOnChange({ ...params, createUser });
           }}
         />;
       default:

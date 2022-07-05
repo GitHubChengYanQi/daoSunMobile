@@ -7,7 +7,6 @@ import { AuditOutlined, CaretDownFilled, CaretUpFilled } from '@ant-design/icons
 import { Skeleton } from 'weui-react-v2';
 import style from './index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
-import moment from 'moment';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 import { MyDate } from '../../../../components/MyDate';
 import Title from '../../../../components/Title';
@@ -220,23 +219,6 @@ const Process = (
     }
   };
 
-
-  // 单据动作
-  const processType = (value) => {
-    const style = { paddingLeft: 8 };
-    switch (value) {
-      case 'quality_dispatch':
-        return <div style={style}>指派任务</div>;
-      case 'quality_perform':
-        return <div style={style}>执行任务</div>;
-      case 'quality_complete':
-        return <div style={style}>完成任务</div>;
-      case 'purchase_complete':
-        return <div style={style}>采购完成</div>;
-      default:
-        break;
-    }
-  };
 
   const visiable = (hidden, index) => {
     return hidden ? <CaretDownFilled

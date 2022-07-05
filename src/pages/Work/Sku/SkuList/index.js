@@ -1,14 +1,13 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { CopyFilled, FilterOutlined } from '@ant-design/icons';
+import { CopyFilled } from '@ant-design/icons';
 import { Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
-import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
-import Icon from '../../../components/Icon';
+import ListScreent from './components/ListScreent';
 
 const SkuList = (
   {
@@ -49,12 +48,12 @@ const SkuList = (
 
   const spuClassId = Array.isArray(params.spuClassIds) && params.spuClassIds[0];
 
-  const [screen, { setFalse, setTrue }] = useBoolean(false);
+  const [screen, setScreen] = useState(false);
   const [screening, setScreeing] = useState();
 
   const [refresh, setRefresh] = useState(false);
 
-  const [sort, setSort] = useState({ field:'createTime', order:'descend' });
+  const [sort, setSort] = useState({ field: 'createTime', order: 'descend' });
 
   const clear = () => {
     setSkuClass([]);
@@ -93,106 +92,29 @@ const SkuList = (
     });
   };
 
-  const sortAction = (field) => {
-    let order = 'descend';
-    if (sort.field === field) {
-      switch (sort.order) {
-        case 'ascend':
-          if (field === 'createTime'){
-            order = 'descend'
-          }else {
-            order = '';
-          }
-          break;
-        case 'descend':
-          order = 'ascend';
-          break;
-        default:
-          order = 'descend';
-          break;
-      }
-    }
-    setSort({ field, order });
-    submit({}, { field, order });
-  };
-
-  const sortShow = (field) => {
-
-    if (sort.field !== field) {
-      return <Icon type='icon-paixu' />;
-    }
-
-    switch (sort.order) {
-      case  'ascend' :
-        return <Icon type='icon-paixubeifen' />;
-      case  'descend' :
-        return <Icon type='icon-paixubeifen2' />;
-      default:
-        return <Icon type='icon-paixu' />;
-    }
-  };
-
   const skuListRef = useRef();
   const screenRef = useRef();
 
   return <>
-    <div
-      className={style.screen}
-      ref={screenRef}
-    >
-      <div className={style.stockNumber}>{numberTitle}：<span>{stock ? stockNumber : skuNumber}</span></div>
-      <div className={style.blank} />
-      <div className={style.checking} hidden={!openBatch} onClick={() => {
+
+    <ListScreent
+      setSort={setSort}
+      sort={sort}
+      screening={screening}
+      submit={submit}
+      onlySorts={['createTime']}
+      sorts={noSort ? [] : [{ field: 'stockNumber', title: '数量' }, { field: 'createTime', title: '时间' }]}
+      listRef={skuListRef}
+      screen={screen}
+      screenChange={setScreen}
+      screenRef={screenRef}
+      actions={<div className={style.checking} hidden={!openBatch} onClick={() => {
         onBatch(!batch);
       }}>
         {batch ? '单件' : '批量'}添加 <CopyFilled />
-      </div>
-      <div className={style.sort} hidden={noSort} onClick={() => {
-        sortAction('stockNumber');
-      }}>
-        库存数量
-        {sortShow('stockNumber')}
-      </div>
-      <div className={style.sort} hidden={noSort} onClick={() => {
-        sortAction('createTime');
-      }}>
-        创建时间
-        {sortShow('createTime')}
-      </div>
-      <div
-        className={ToolUtil.classNames(style.screenButton, screen && style.checked, screening && style.checking)}
-        onClick={() => {
-          if (screen) {
-            skuListRef.current.removeAttribute('style');
-            setFalse();
-          } else {
-            skuListRef.current.setAttribute('style', 'min-height:100vh');
-            screenRef.current.scrollIntoView();
-            setTrue();
-          }
-        }}
-      >
-        筛选 <Icon type='icon-shaixuan' />
-        <div>
-          <svg viewBox='0 0 30 30' className={style.leftCorner}>
-            <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-              <path d='M30,0 C13.4314575,3.04359188e-15 -2.02906125e-15,13.4314575 0,30 L0,30 L0,0 Z'
-                    fill='var(--adm-color-white)'
-                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) ' />
-            </g>
-          </svg>
-          <svg viewBox='0 0 30 30' className={style.rightCorner}>
-            <g stroke='none' strokeWidth='1' fill='none' fillRule='evenodd'>
-              <path d='M30,0 C13.4314575,3.04359188e-15 -2.02906125e-15,13.4314575 0,30 L0,30 L0,0 Z'
-                    fill='var(--adm-color-white)'
-                    transform='translate(15.000000, 15.000000) scale(-1, -1) translate(-15.000000, -15.000000) ' />
-            </g>
-          </svg>
-        </div>
-
-
-      </div>
-    </div>
+      </div>}
+      numberTitle={<>{numberTitle}：<span>{stock ? stockNumber : skuNumber}</span></>}
+    />
 
     <Tabs stretch={false} activeKey={spuClassId || 'all'} className={style.skuClass} onChange={(key) => {
       submit({ spuClassIds: key === 'all' ? [] : [key] });
@@ -277,7 +199,7 @@ const SkuList = (
       search={{ skuClass, supplys, brands, states, position, boms }}
       onClose={() => {
         skuListRef.current.removeAttribute('style');
-        setFalse();
+        setScreen(false);
       }}
       onChange={(value) => {
         setScreeing(true);

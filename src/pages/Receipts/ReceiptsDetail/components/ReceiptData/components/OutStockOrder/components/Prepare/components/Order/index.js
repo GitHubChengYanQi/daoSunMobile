@@ -8,6 +8,8 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import MyStepper from '../../../../../../../../../../components/MyStepper';
+import ShopNumber
+  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
@@ -174,12 +176,9 @@ const Order = (
                   }
                 }}>{positionItem.name} ({positionItem.number})</span>
                 <div hidden={!positionItem.checked}>
-                  <MyStepper
+                  <ShopNumber
                     min={0}
                     value={positionItem.outStockNumber || 0}
-                    style={{
-                      '--button-text-color': '#000',
-                    }}
                     onChange={(num) => {
                       let number = 0;
                       brands.map((pItem, pIndex) => {
@@ -196,8 +195,7 @@ const Order = (
                         return Message.toast('不能超过库存数量！');
                       }
                       positionChange(index, positionIndex, { outStockNumber: num });
-                    }}
-                  />
+                    }} />
                 </div>
 
               </div>;

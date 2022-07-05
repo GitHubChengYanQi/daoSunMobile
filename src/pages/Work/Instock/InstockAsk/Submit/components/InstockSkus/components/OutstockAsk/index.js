@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../../../util/Request';
@@ -11,6 +11,8 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import OtherData from '../OtherData';
+import { Dialog } from 'antd-mobile';
+import { ReceiptsEnums } from '../../../../../../../../Receipts';
 
 const OutstockAsk = ({ skus, judge, createType }) => {
 
@@ -37,9 +39,16 @@ const OutstockAsk = ({ skus, judge, createType }) => {
 
   const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
-    onSuccess: () => {
-      Message.toast('创建出库申请成功!');
-      history.goBack();
+    onSuccess: (res) => {
+      Dialog.confirm({
+        content: '创建出库申请成功!',
+        confirmText: '查看详情',
+        cancelText: '返回列表',
+        onCancel: () => history.goBack(),
+        onConfirm: () => {
+          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.outstockOrder}&formId=${res.pickListsId}`);
+        },
+      });
     },
     onError: () => {
       Message.toast('创建出库申请失败!');

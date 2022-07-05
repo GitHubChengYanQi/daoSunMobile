@@ -43,7 +43,6 @@ const dialogSuccess = (
     },
     actions: [actions],
   })
-  ;
 };
 
 

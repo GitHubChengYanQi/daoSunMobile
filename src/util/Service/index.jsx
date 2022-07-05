@@ -9,7 +9,7 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.111'
+  'http://192.168.1.215'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -50,6 +50,8 @@ ajaxService.interceptors.response.use((response) => {
           },
         });
       }
+    } else if (errCode === 1001) {
+      return response;
     } else if (response.errCode !== 200) {
       Dialog.alert({
         content: response.message,

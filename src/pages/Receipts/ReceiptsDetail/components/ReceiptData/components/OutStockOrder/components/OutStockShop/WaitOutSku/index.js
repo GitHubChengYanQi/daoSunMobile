@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import LinkButton from '../../../../../../../../../components/LinkButton';
 import MyCheck from '../../../../../../../../../components/MyCheck';
-import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { Button } from 'antd-mobile';
@@ -228,7 +227,15 @@ const WaitOutSku = (
           disabled={userIds.length === 0}
           color='primary'
           onClick={() => {
-            pickRun({ data: { userIds: userIds.toString() } });
+            const pickListsIds = [];
+            data.map(item => {
+              if (userIds.includes(item.userId)) {
+                const pickListsResults = item.pickListsResults || [];
+                pickListsResults.map(item => pickListsIds.push(item.pickListsId));
+              }
+              return null;
+            });
+            pickRun({ data: { userIds: userIds.toString(),pickListsIds } });
           }}
         >通知备料</Button>}
       </div>

@@ -3,7 +3,6 @@ import style from './index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { Button } from 'antd-mobile';
 import Icon from '../../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import { connect } from 'dva';
@@ -11,11 +10,10 @@ import { Message } from '../../../../../../../../components/Message';
 import Order from './components/Order';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
-import Bottom from '../../../../../Bottom';
 import BottomButton from '../../../../../../../../components/BottomButton';
+import { Dialog } from 'antd-mobile';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
-
 
 const Prepare = (
   {
@@ -41,13 +39,25 @@ const Prepare = (
   const [outStockSkus, setOutStockSkus] = useState([]);
 
   const { loading, run: addCart } = useRequest(cartAdd, {
+    response: true,
     manual: true,
-    onSuccess: () => {
-      Message.toast('添加成功！');
-      onSuccess();
+    onSuccess: (res) => {
+      if (res.errCode === 1001) {
+        Dialog.confirm({
+          content: '本次操作会影响其他出库单相同物料备料!',
+          confirmText: '继续备料',
+          cancelText: '取消备料',
+          onConfirm: () => {
+            addCart({ data: { productionPickListsCartParams: outStockSkus, warning: false } });
+          },
+        });
+      }else {
+        Message.toast('备料成功！');
+        onSuccess();
+      }
     },
-    onError: () => {
-      Message.toast('添加失败！');
+    onError: (res) => {
+      Message.toast('备料失败！');
     },
   });
 
@@ -119,7 +129,7 @@ const Prepare = (
         }}><Icon type='icon-dibudaohang-saoma' style={{ fontSize: 24 }} /></LinkButton>
       </div>
     </div>
-    <div style={{paddingBottom:60}}>
+    <div style={{ paddingBottom: 60 }}>
       {dimensionAction()}
     </div>
 
