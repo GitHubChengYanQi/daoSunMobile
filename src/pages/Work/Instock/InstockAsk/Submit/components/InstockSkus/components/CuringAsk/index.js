@@ -6,14 +6,12 @@ import { Message } from '../../../../../../../../components/Message';
 import Curing from '../Curing';
 import Condition from '../../../../../../../ProcessTask/Create/components/Inventory/compoennts/Condition';
 import MyNavBar from '../../../../../../../../components/MyNavBar';
-import style from '../../../PurchaseOrderInstock/index.less';
-import Careful from '../Careful';
-import MyTextArea from '../../../../../../../../components/MyTextArea';
-import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { maintenanceAdd } from '../../index';
 import OtherData from '../OtherData';
+import { Dialog } from 'antd-mobile';
+import { ReceiptsEnums } from '../../../../../../../../Receipts';
 
 const CuringAsk = ({ createType, state }) => {
 
@@ -23,9 +21,17 @@ const CuringAsk = ({ createType, state }) => {
 
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
     manual: true,
-    onSuccess: () => {
-      Message.toast('创建养护单成功!');
-      history.goBack();
+    onSuccess: (res) => {
+      console.log(res);
+      Dialog.confirm({
+        content: '创建养护单成功!',
+        confirmText: '查看详情',
+        cancelText: '返回列表',
+        onCancel: () => history.goBack(),
+        onConfirm: () => {
+          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${res.instockOrderId}`);
+        },
+      });
     },
     onError: () => {
       Message.toast('创建养护单失败!');
