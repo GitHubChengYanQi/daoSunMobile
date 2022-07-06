@@ -44,6 +44,7 @@ const ReceiptData = (
       case ReceiptsEnums.instockOrder:
       case ReceiptsEnums.outstockOrder:
         return <InstockOrder
+          taskId={data.processTaskId}
           permissions={permissions}
           data={data.receipts}
           getAction={getAction}

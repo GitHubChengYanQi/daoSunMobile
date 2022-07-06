@@ -18,6 +18,7 @@ const InstockOrder = (
       return {};
     },
     type,
+    taskId,
   }) => {
 
   let details = [];
@@ -56,6 +57,7 @@ const InstockOrder = (
         />;
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
+          taskId={taskId}
           loading={loading}
           data={details}
           actionId={getAction('outStock').id}

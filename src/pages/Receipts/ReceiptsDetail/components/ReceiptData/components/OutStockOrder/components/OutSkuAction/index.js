@@ -20,6 +20,7 @@ const OutSkuAction = (
     refresh = () => {
     },
     dimension = 'order',
+    taskId,
   },
 ) => {
 
@@ -109,6 +110,7 @@ const OutSkuAction = (
       destroyOnClose
     >
       <Prepare
+        taskId={taskId}
         id={pickListsId}
         skuItem={visible}
         dimension={dimension}

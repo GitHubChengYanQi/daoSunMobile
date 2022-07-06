@@ -24,6 +24,7 @@ const Prepare = (
     },
     onSuccess = () => {
     },
+    taskId,
     ...props
   },
 ) => {
@@ -138,7 +139,7 @@ const Prepare = (
       rightDisabled={outStockSkus.length === 0}
       rightText='确定'
       rightOnClick={() => {
-        addCart({ data: { productionPickListsCartParams: outStockSkus } });
+        addCart({ data: { productionPickListsCartParams: outStockSkus,taskId } });
       }}
     />
 
