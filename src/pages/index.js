@@ -6,6 +6,7 @@ import { connect } from 'dva';
 import style from './index.less';
 import MyEmpty from './components/MyEmpty';
 import { ToolUtil } from './components/ToolUtil';
+import Report from './Report';
 
 const iconSize = 20;
 
@@ -28,6 +29,8 @@ const Index = (props) => {
     switch (module) {
       case '/Home':
         return <Home {...props} />;
+      case '/Report':
+        return <Report />;
       default:
         return <MyEmpty height='100%' />;
     }
@@ -69,16 +72,16 @@ const Index = (props) => {
                   type: 'qrCode/wxCpScan',
                 });
               }}
-            /> : <Icon type='icon-shouye3' style={{ fontSize: iconSize }}/>}
+            /> : <Icon type='icon-shouye3' style={{ fontSize: iconSize }} />}
         />
         <TabBar.Item
           title='报表'
-          key='/Work'
+          key='/Report'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-baobiao1' />}
         />
         <TabBar.Item
           title='我的'
-          key='/Report'
+          key='/My'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-wode' />}
         />
       </TabBar>

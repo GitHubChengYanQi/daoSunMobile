@@ -82,9 +82,10 @@ const Home = (props) => {
           className={style.fontSize12}>￥8565.78</span></span>} />
         <MoreOutline className={style.allData} />
       </div>
-      <div className={style.dataShowRight}>
-        <DataShow />
-      </div>
+      <DataShow />
+      {/*<div className={style.dataShowRight}>*/}
+      {/* */}
+      {/*</div>*/}
     </Card>
     <Card
       className={style.dataCard}
