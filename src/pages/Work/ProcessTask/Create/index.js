@@ -3,7 +3,6 @@ import { Card, Grid } from 'antd-mobile';
 import style from '../../../Home/index.less';
 import Menus, { borderStyle } from '../../../Home/component/Menus';
 import { useModel } from 'umi';
-import CreateInStock from './components/CreateInStock';
 import Inventory from './components/Inventory';
 import CuringAsk from './components/CuringAsk';
 
@@ -21,7 +20,7 @@ const Create = () => {
   sysMenus.map(item => {
     if (item.id === 'process') {
       item.subMenus.map((item) => {
-        if (item.code !== 'action') {
+        if (!['action','error'].includes(item.code)) {
           receipts.push(item);
         }
         return null;

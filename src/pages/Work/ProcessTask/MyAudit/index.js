@@ -57,12 +57,6 @@ const MyAudit = (
   return <>
     <div hidden={type}>
       <MySearch placeholder='请输入相关单据信息' historyType='process' />
-      <Tabs activeKey={params.status} onChange={(key) => {
-        return submit({ status: key });
-      }} className={topStyle.tab}>
-        <Tabs.Tab title='待处理' key={0} />
-        <Tabs.Tab title='已处理' key={99} />
-      </Tabs>
     </div>
 
 
