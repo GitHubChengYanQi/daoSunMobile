@@ -361,7 +361,7 @@ const Error = (
               入库数量 {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
             </div>
             <div className={style.actual}>
-              <span>实际到货</span>
+              <span>实到数量</span>
               <MyStepper
                 min={allNumber}
                 value={data.number}

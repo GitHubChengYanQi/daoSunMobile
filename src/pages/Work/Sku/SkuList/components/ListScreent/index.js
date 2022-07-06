@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from '../../index.less';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import Icon from '../../../../../components/Icon';
@@ -24,6 +24,8 @@ const ListScreent = (
   },
 ) => {
 
+  const [finalSorts, setFinalSorts] = useState(sort.order);
+
   const sortAction = (field) => {
     let order = 'descend';
     if (sort.field === field) {
@@ -43,17 +45,22 @@ const ListScreent = (
           break;
       }
     }
+    if (onlySorts.includes(field)) {
+      setFinalSorts(order);
+    }
     setSort({ field, order });
     submit({}, { field, order });
   };
 
   const sortShow = (field) => {
 
-    if (sort.field !== field) {
+    if (sort.field !== field && !onlySorts.includes(field)) {
       return <Icon type='icon-paixu' />;
     }
 
-    switch (sort.order) {
+    const order = sort.field !== field ? finalSorts : sort.order
+
+    switch (order) {
       case  'ascend' :
         return <Icon type='icon-paixubeifen' />;
       case  'descend' :
@@ -64,7 +71,7 @@ const ListScreent = (
   };
 
   return <div
-    style={{top}}
+    style={{ top }}
     className={style.screen}
     ref={screenRef}
   >
