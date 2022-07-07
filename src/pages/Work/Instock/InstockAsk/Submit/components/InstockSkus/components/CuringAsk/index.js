@@ -28,9 +28,6 @@ const CuringAsk = ({ createType, state }) => {
         history.goBack();
       });
     },
-    onError: () => {
-      Message.errorToast('创建养护单失败!');
-    },
   });
 
   useEffect(() => {

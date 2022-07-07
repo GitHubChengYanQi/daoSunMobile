@@ -36,9 +36,6 @@ const SkuAction = (
 
   const { loading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
-    onError: () => {
-      refresh();
-    },
   });
 
   const [visible, setVisible] = useState();

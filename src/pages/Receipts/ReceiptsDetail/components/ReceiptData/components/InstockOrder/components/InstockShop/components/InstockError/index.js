@@ -45,9 +45,6 @@ const InstockError = (
         setData([]);
       });
     },
-    onError: () => {
-      Message.errorToast('添加异常单失败！');
-    },
   });
 
   // 退回
@@ -59,9 +56,6 @@ const InstockError = (
         refresh();
         setData([]);
       });
-    },
-    onError: () => {
-      Message.errorToast('退回失败！');
     },
   });
 

@@ -131,11 +131,7 @@ const Position = ({ scnaData, ...props }) => {
       });
       clear();
     },
-    onError: () => {
-      Toast.show({
-        content: '出库失败！',
-      });
-    },
+
   });
 
   useEffect(() => {

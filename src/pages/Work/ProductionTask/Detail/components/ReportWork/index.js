@@ -30,12 +30,6 @@ const ReportWork = (
       });
       onSuccess();
     },
-    onError: (err) => {
-      Toast.show({
-        content: '报工失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   const [outSkus, setOutSkus] = useState(skuData || []);

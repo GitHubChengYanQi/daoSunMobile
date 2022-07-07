@@ -143,9 +143,6 @@ const SkuError = (
         };
       }));
     },
-    onError: () => {
-
-    },
   });
 
   const { loading: saveLoading, run: saveRun } = useRequest(save, {
@@ -154,9 +151,6 @@ const SkuError = (
       Message.successToast('保存成功!', () => {
         refresh();
       });
-    },
-    onError: () => {
-      Message.errorToast('保存失败！');
     },
   });
 
@@ -167,11 +161,6 @@ const SkuError = (
         refresh();
       });
 
-    },
-    onError: () => {
-      Message.errorToast('操作失败！', () => {
-        refresh();
-      });
     },
   });
 

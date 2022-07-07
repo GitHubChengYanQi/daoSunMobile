@@ -27,11 +27,6 @@ const useRequest = (config, options = {}) => {
         ...params,
       });
     },
-    onError: (result) => {
-      // if (parseInt(result.errCode, 0) === 1502) {
-      //   history.push("/login");
-      // }
-    },
     formatResult,
     ...options,
   });

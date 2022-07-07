@@ -85,12 +85,6 @@ const EditChildTask = (props) => {
       setRefuse(false);
       history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
-    onError: () => {
-      Toast.show({
-        content: '驳回失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   if (!detail) {

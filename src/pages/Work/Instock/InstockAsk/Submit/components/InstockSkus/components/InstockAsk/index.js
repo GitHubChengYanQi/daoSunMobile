@@ -46,9 +46,6 @@ const InstockAsk = ({ skus, judge, createType }) => {
         },
       });
     },
-    onError: () => {
-      Message.errorToast('创建入库申请失败!');
-    },
   });
 
 

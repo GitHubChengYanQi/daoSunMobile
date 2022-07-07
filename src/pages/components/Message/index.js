@@ -17,7 +17,7 @@ const successToast = (
   }) => {
   Toast.show({
     content: title || '成功！',
-    position: 'bottom',
+    // position: 'bottom',
     icon: 'success',
     afterClose,
   });
@@ -30,7 +30,7 @@ const errorToast = (
 ) => {
   Toast.show({
     content: title || '失败！',
-    position: 'bottom',
+    // position: 'bottom',
     icon: 'fail',
     afterClose,
   });
@@ -64,6 +64,7 @@ const MyDialog = (
 
 const successDialog = (
   {
+    title,
     content,
     confirmText,
     cancelText,
@@ -74,11 +75,10 @@ const successDialog = (
     only,
   }) => {
 
-  const contentDom = <div className={style.successTitle}>
-    <CheckCircleOutline />
-    <div>
-      {content || '操作成功！'}
-    </div>
+  const contentDom = <div className={style.successContent}>
+    <div className={style.title}>{title || '成功'}</div>
+    <CheckCircleOutline className={style.successIcon} />
+    <div className={style.content}>{content}</div>
   </div>;
 
   MyDialog({
@@ -106,9 +106,9 @@ const warningDialog = (
   }) => {
 
   const contentDom = <div className={style.warningContent}>
-    <ExclamationTriangleOutline className={style.waringIcon} />
     <div className={style.title}>{title || '警告'}</div>
-    {content}
+    <ExclamationTriangleOutline className={style.waringIcon} />
+    <div className={style.content}>{content}</div>
   </div>;
 
   MyDialog({
@@ -136,9 +136,9 @@ const errorDialog = (
   }) => {
 
   const contentDom = <div className={style.errorContent}>
+    <div className={style.title}>{title || '错误'}</div>
     <CloseCircleOutline className={style.errorIcon} />
-    <div className={style.title}>{title || '异常'}</div>
-    {content}
+    <div className={style.content}>{content}</div>
   </div>;
 
   MyDialog({

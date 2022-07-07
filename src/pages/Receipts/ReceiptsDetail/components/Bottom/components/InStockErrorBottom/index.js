@@ -24,9 +24,6 @@ const InStockErrorBottom = (
         refresh();
       });
     },
-    onError: () => {
-      Message.errorToast('提交失败！');
-    },
   });
 
   const getAction = (action) => {

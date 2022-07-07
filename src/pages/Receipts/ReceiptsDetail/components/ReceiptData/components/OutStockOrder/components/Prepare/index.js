@@ -49,7 +49,7 @@ const Prepare = (
           confirmText: '继续备料',
           cancelText: '取消备料',
           onConfirm: () => {
-            addCart({ data: { productionPickListsCartParams: outStockSkus, warning: false } });
+            addCart({ data: { productionPickListsCartParams: outStockSkus,taskId, warning: true } });
           },
         });
       } else {
@@ -57,9 +57,6 @@ const Prepare = (
           onSuccess();
         });
       }
-    },
-    onError: (res) => {
-      Message.errorToast('备料失败！');
     },
   });
 

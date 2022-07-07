@@ -104,9 +104,6 @@ const QualityTask = (props) => {
         },
       });
     },
-    onError: (res) => {
-      Message.errorToast('自检失败！');
-    },
   });
 
   // 生产自检

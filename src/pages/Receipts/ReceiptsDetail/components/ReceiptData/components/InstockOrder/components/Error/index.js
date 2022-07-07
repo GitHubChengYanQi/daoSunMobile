@@ -60,26 +60,26 @@ const Error = (
 
   const [inkinds, setInkinds] = useState([]);
 
+  const error = data.number !== skuItem.number || inkinds.length > 0;
+
   let allNumber = 0;
   inkinds.map((item) => allNumber += item.number);
 
   const { loading: anomalyLoading, run: anomalyRun } = useRequest(instockError, {
     manual: true,
     onSuccess: () => {
-      onSuccess(skuItem);
       switch (type) {
         case ReceiptsEnums.instockOrder:
           addShop();
           break;
         case ReceiptsEnums.stocktaking:
-          Message.successToast('添加成功！');
+          Message.successToast('添加成功！', () => {
+            onSuccess(skuItem, error ? -1 : 1);
+          });
           break;
         default:
           break;
       }
-    },
-    onError: () => {
-      Message.errorToast('添加失败！');
     },
   });
 
@@ -87,11 +87,8 @@ const Error = (
     manual: true,
     onSuccess: () => {
       Message.successToast('暂存成功！', () => {
-        onSuccess(skuItem);
+        onSuccess(skuItem, 2);
       });
-    },
-    onError: () => {
-      Message.errorToast('暂存失败！');
     },
   });
 
@@ -100,11 +97,8 @@ const Error = (
     onSuccess: () => {
       Message.successToast('修改成功！', () => {
         onClose();
-        onEdit();
+        onEdit(skuItem, error ? -1 : 1);
       });
-    },
-    onError: () => {
-      Message.errorToast('修改失败！');
     },
   });
 
@@ -113,11 +107,8 @@ const Error = (
     onSuccess: () => {
       Message.successToast('删除成功！', () => {
         onClose(true);
-        refreshOrder();
+        refreshOrder(skuItem, 0);
       });
-    },
-    onError: () => {
-      Message.errorToast('删除失败！');
     },
   });
 
@@ -181,9 +172,6 @@ const Error = (
 
 
       setInkinds(inkinds);
-
-    },
-    onError: () => {
 
     },
   });
@@ -340,6 +328,7 @@ const Error = (
     const imgUrl = Array.isArray(skuItem.imgUrls) && skuItem.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', () => {
       Message.successToast('添加成功！', () => {
+        onSuccess(skuItem);
         refreshOrder();
       });
     });

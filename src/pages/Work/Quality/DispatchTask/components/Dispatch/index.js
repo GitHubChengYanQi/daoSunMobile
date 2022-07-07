@@ -101,13 +101,6 @@ const Dispatch = ({ detail, onSuccess }, ref) => {
       });
       history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
     },
-    onError: () => {
-      Toast.show({
-        content: '指派失败！',
-        position: 'bottom',
-      });
-      history.push(`/Work/Quality?id=${detail.detail && detail.detail.qualityTaskId}`);
-    },
   });
 
   useImperativeHandle(ref, () => ({

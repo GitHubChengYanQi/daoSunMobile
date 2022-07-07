@@ -92,7 +92,7 @@ const Login = (props) => {
       manual: true,
       onSuccess: async (res) => {
         if (res) {
-          Message.successToast('登录成功!',()=>{
+          Message.successToast('登录成功!', () => {
             props.dispatch({
               type: 'data/clearState',
             });
@@ -102,13 +102,12 @@ const Login = (props) => {
             } else {
               refresh();
             }
-          })
+          });
         } else {
-          Message.errorToast('登录失败!')
+          Message.errorToast('登录失败!');
         }
       },
-      onError: () => {
-        Message.errorToast('登录失败!')
+      onError: (res) => {
         codeChange();
       },
     },

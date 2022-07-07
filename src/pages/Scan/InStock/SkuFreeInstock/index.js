@@ -234,11 +234,6 @@ const SkuFreeInstock = ({ scanData }) => {
         ],
       });
     },
-    onError: () => {
-      Dialog.alert({
-        content: '入库失败！',
-      });
-    },
   });
 
   const searchComponemts = () => {

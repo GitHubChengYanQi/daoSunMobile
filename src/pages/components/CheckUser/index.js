@@ -41,9 +41,6 @@ const CheckUser = (
         Message.errorToast('系统无此用户，请先注册！');
       }
     },
-    onError: () => {
-      Message.errorToast('获取用户失败！');
-    },
   });
 
   const invoke = () => {

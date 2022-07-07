@@ -50,9 +50,6 @@ const OneInStock = (
         onClose(total === skuItem.number);
       });
     },
-    onError: () => {
-      Message.errorToast('入库失败！');
-    },
   });
 
   return <div className={style.content} style={{ height: 'auto', paddingBottom:50 }}>

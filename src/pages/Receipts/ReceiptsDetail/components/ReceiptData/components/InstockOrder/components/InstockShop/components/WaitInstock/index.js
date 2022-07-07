@@ -68,9 +68,6 @@ const WaitInstock = (
         refresh();
       });
     },
-    onError: () => {
-      Message.errorToast('入库失败！');
-    },
   });
 
   // 退回
@@ -81,9 +78,6 @@ const WaitInstock = (
         shopRefresh();
         refresh();
       });
-    },
-    onError: () => {
-      Message.errorToast('退回失败！');
     },
   });
 

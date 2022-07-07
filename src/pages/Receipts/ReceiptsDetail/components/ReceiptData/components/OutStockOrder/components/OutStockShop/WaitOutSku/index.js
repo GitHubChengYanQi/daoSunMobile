@@ -70,9 +70,6 @@ const WaitOutSku = (
     onSuccess: () => {
       Message.successToast('提醒成功!');
     },
-    onError: () => {
-      Message.errorToast('提醒失败!');
-    },
   });
 
   const { loading: backLoading, run: backRun } = useRequest(backSkus, {
@@ -82,9 +79,6 @@ const WaitOutSku = (
         listRefresh();
         refresh();
       });
-    },
-    onError: () => {
-      Message.errorToast('退回失败!');
     },
   });
 

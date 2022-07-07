@@ -50,9 +50,6 @@ const OutstockAsk = ({ skus, judge, createType }) => {
         },
       });
     },
-    onError: () => {
-      Message.errorToast('创建出库申请失败!');
-    },
   });
 
   const dataChange = (array = []) => {

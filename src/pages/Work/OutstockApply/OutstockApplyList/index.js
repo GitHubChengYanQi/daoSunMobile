@@ -25,9 +25,6 @@ const OutstockApplyList = ({ select }) => {
         setVisible(false);
         openNotificationWithIcon('success');
       },
-      onError: () => {
-        openNotificationWithIcon('error');
-      },
     });
 
   const [data, setData] = useState();
@@ -83,9 +80,6 @@ const OutstockApplyList = ({ select }) => {
     manual: true,
     onSuccess: () => {
       openNotificationWithIcon('success');
-    },
-    onError: () => {
-      openNotificationWithIcon('error');
     },
   });
 

@@ -194,11 +194,6 @@ const PositionFreeInstock = ({ scanData, ...props }) => {
         ],
       });
     },
-    onError: () => {
-      Dialog.alert({
-        content: '入库失败！',
-      });
-    },
   });
 
   const printAllCode = async () => {

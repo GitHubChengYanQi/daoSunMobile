@@ -47,12 +47,6 @@ const ProductionTask = () => {
       }
 
     },
-    onError: (err) => {
-      Toast.show({
-        content: '领取失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   const ref = useRef();

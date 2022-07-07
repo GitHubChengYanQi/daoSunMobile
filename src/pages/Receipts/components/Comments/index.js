@@ -36,9 +36,6 @@ const Comments = (
           setVisible(false);
         })
       },
-      onError: () => {
-        Message.errorToast('评论失败')
-      },
     },
   );
 

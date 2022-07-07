@@ -25,9 +25,6 @@ const CreateTask = (props) => {
           rightText: '继续分派任务',
         });
       },
-      onError: (err) => {
-       Message.errorToast('创建任务失败!')
-      },
     });
 
   const ref = useRef();

@@ -164,11 +164,6 @@ const Inventory = (props) => {
       setData(null);
       clearCode();
     },
-    onError: () => {
-      Toast.show({
-        content: '出库失败！',
-      });
-    },
   });
 
 

@@ -1,37 +1,27 @@
 import React from 'react';
-import { Chart, Interval, Legend } from '@antv/f2';
+import { Chart, Interval } from '@antv/f2';
 import Canvas from '@antv/f2-react'
 
 const DataShow = () => {
   const data = [
     {
       name: '长津湖',
-      percent: 0.4,
+      percent: 7256.36,
       a: '1',
     },
     {
       name: '我和我的父辈',
-      percent: 0.2,
+      percent: 3536.66,
       a: '1',
     },
     {
       name: '失控玩家',
-      percent: 0.18,
+      percent: 5000.00,
       a: '1',
     },
     {
       name: '宝可梦',
-      percent: 0.15,
-      a: '1',
-    },
-    {
-      name: '峰爆',
-      percent: 0.05,
-      a: '1',
-    },
-    {
-      name: '其他',
-      percent: 0.02,
+      percent: 8565.78,
       a: '1',
     },
   ];
@@ -53,7 +43,7 @@ const DataShow = () => {
             adjust="stack"
             color={{
               field: 'name',
-              range: ['#1890FF', '#13C2C2', '#2FC25B', '#FACC14', '#F04864', '#8543E0'],
+              range: ['#F04864','#1890FF', '#2FC25B', '#FACC14', ],
             }}
           />
         </Chart>

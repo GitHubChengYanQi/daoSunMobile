@@ -111,12 +111,6 @@ const SkuStockDetail = (
         position: 'bottom',
       });
     },
-    onError: () => {
-      Toast.show({
-        content: '出库失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   if (loading) {

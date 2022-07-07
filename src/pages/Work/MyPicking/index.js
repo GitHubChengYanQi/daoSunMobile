@@ -42,9 +42,6 @@ const MyPicking = () => {
         setRefresh(true);
       });
     },
-    onError: () => {
-      Message.errorToast('领取失败！');
-    },
   });
 
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
@@ -53,9 +50,6 @@ const MyPicking = () => {
       Message.successToast('领取成功！',()=>{
         setRefresh(true);
       });
-    },
-    onError: () => {
-      Message.errorToast('领取失败！');
     },
   });
 

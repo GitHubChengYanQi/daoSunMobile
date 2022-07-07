@@ -26,7 +26,7 @@ const BottomButton = (
         <Button
           loading={loading}
           disabled={disabled}
-          style={{ '--border-radius': '50px', width: '100%' }}
+          className={style.button}
           color={color || 'primary'}
           onClick={() => {
             typeof onClick === 'function' && onClick();

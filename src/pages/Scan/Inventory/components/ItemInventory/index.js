@@ -51,12 +51,6 @@ const ItemInventory = (
       clearCode();
       setData(null);
     },
-    onError: () => {
-      Toast.show({
-        content: '入库失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   const instockAction = (positionId, storeHouseId) => {

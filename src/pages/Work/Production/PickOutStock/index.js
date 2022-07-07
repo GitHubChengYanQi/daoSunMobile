@@ -35,12 +35,6 @@ const PickOutStock = (props) => {
         position: 'bottom',
       });
     },
-    onError: () => {
-      Toast.show({
-        content: '提醒领取失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   const { loading: deleteLoading, run: deleteRun } = useRequest(productionPickListsCartDelete, {

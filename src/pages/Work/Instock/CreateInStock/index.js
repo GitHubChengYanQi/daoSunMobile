@@ -57,9 +57,6 @@ const CreateInStock = ({ paramsSkus, source, sourceId, setModuleObject, setType 
       history.goBack();
       Toast.show({ content: '创建入库申请成功！', position: 'bottom' });
     },
-    onError: () => {
-      Toast.show({ content: '创建入库申请失败！', position: 'bottom' });
-    },
   });
 
   const submit = () => {

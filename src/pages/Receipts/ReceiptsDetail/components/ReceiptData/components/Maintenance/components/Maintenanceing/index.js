@@ -35,9 +35,6 @@ const Maintenanceing = (
             onSuccess();
           });
         },
-        onError: () => {
-          Message.errorToast('养护失败！');
-        },
       });
 
     const [files, setFiles] = useState([]);

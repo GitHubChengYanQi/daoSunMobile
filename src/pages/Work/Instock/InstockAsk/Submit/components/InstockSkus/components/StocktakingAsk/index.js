@@ -32,9 +32,6 @@ const StocktakingAsk = ({ state, skus, createType }) => {
         history.goBack();
       });
     },
-    onError: () => {
-      Message.errorToast('创建盘点单失败!');
-    },
   });
 
 
@@ -44,9 +41,6 @@ const StocktakingAsk = ({ state, skus, createType }) => {
       Message.successToast('创建盘点单成功!',()=>{
         history.goBack();
       });
-    },
-    onError: () => {
-      Message.errorToast('创建盘点单失败!');
     },
   });
 

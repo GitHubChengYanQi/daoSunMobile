@@ -62,10 +62,10 @@ export default {
       if (IsDev()) {
         let code = '';
         // code = '1476356885154385921'; // 入库
-        // code = '1503256535669456897'; // 库位
+        code = '1507158368427270145'; // 库位
         // code = '1475358083438198786'; // 出库
         // code = '1539124045801611265'; // 实物
-        code = '1539423628024688642'; // sku
+        // code = '1539423628024688642'; // sku
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -214,6 +214,7 @@ export default {
       const data = payload.data;
 
       if (codeId) {
+        yield put({ type: 'scanCodeState', payload: { loading: true } });
         const res = yield call(() => request({
           url: '/orCode/backObject',
           method: 'GET',
@@ -234,7 +235,7 @@ export default {
             // 质检任务
             // 出库
             // 库位
-            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res } });
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
             break;
           case 'scanStorehousePositon':
             // 扫描库位
@@ -243,14 +244,14 @@ export default {
           case 'scanInstock':
             // 扫码入库操作
             if (items) {
-              yield put({ type: 'scanCodeState', payload: { codeId } });
+              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
               yield put({ type: 'scanInstock', payload: { codeId, items, batch } });
             }
             break;
           case 'scanOutstock':
             // 扫码出库操作
             if (items) {
-              yield put({ type: 'scanCodeState', payload: { codeId } });
+              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
               yield put({ type: 'scanOutstock', payload: { codeId, items, data } });
             }
             break;
@@ -283,6 +284,9 @@ export default {
         case 'inventory':
         case 'quality':
           yield put({ type: 'scanCodeState', payload: { codeId } });
+          break;
+        case 'position':
+          yield put({ type: 'backObject', payload: { code: codeId, action } });
           break;
         default:
           // 没有动作跳路由

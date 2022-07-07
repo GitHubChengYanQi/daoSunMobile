@@ -9,7 +9,7 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.229'
+  'http://192.168.1.111'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -61,6 +61,9 @@ ajaxService.interceptors.response.use((response) => {
   }
   return response;
 }, (error) => {
+  Message.errorDialog({
+    content: '请求失败!',
+  });
   throw new Error(error);
 });
 

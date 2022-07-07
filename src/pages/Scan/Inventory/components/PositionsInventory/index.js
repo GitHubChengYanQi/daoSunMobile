@@ -39,12 +39,6 @@ const PositionsInventory = (
       setData(null);
       clearCode();
     },
-    onError: () => {
-      Toast.show({
-        content: '盘点失败！',
-        position: 'bottom',
-      });
-    },
   });
 
   const getSku = (skuResult, list) => {

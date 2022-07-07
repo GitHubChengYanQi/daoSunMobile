@@ -18,7 +18,7 @@ const Audit = (
   }) => {
 
   // 执行审批接口
-  const { loading:auditLoading, run: processLogRun } = useRequest(
+  const { loading: auditLoading, run: processLogRun } = useRequest(
     {
       url: '/audit/post',
       method: 'POST',
@@ -26,14 +26,12 @@ const Audit = (
     {
       manual: true,
       onSuccess: () => {
-        Message.successToast('审批完成!',()=>{
+        Message.successToast('审批完成!', () => {
           refresh();
-        })
+        });
       },
       onError: () => {
-        Message.errorToast('审批失败!',()=>{
-          refresh();
-        })
+        refresh();
       },
     },
   );
