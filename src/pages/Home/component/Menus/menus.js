@@ -65,7 +65,7 @@ export const menus = [
   { code: 'createUser', icon: 'icon-kehuliebiao2' },
   { code: 'instockAsk', icon: 'icon-rukuguanli2', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.instockOrder}` },
   { code: 'outstockAsk', icon: 'icon-chukuguanli2', url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.outstockOrder}` },
-  { code: 'error', icon: 'icon-yichangchuli', url: '/Work/Error' },
+  { code: 'error', icon: 'icon-yichangchuli', url: `/Work/Stock/Task?type=${ReceiptsEnums.error}` },
   { code: 'curingAsk', icon: 'icon-kucunyanghu' },
   { code: 'inventoryAsk', icon: 'icon-pandian1' },
   { code: 'allocationAsk', icon: 'icon-kujiantiaobo' },

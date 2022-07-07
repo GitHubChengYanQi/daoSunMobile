@@ -14,6 +14,7 @@ import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
+import { Message } from '../components/Message';
 
 export const Username = (props) => {
   return <div className={style.account}>
@@ -91,22 +92,23 @@ const Login = (props) => {
       manual: true,
       onSuccess: async (res) => {
         if (res) {
-          props.dispatch({
-            type: 'data/clearState',
-          });
-          Toast.show({ content: '登录成功！', position: 'bottom' });
-          cookie.set('cheng-token', res);
-          if (query.backUrl) {
-            window.location.href = query.backUrl;
-          } else {
-            refresh();
-          }
+          Message.successToast('登录成功!',()=>{
+            props.dispatch({
+              type: 'data/clearState',
+            });
+            cookie.set('cheng-token', res);
+            if (query.backUrl) {
+              window.location.href = query.backUrl;
+            } else {
+              refresh();
+            }
+          })
         } else {
-          Toast.show({ content: '登录失败！', position: 'bottom' });
+          Message.errorToast('登录失败!')
         }
       },
       onError: () => {
-        Toast.show({ content: '登录失败！', position: 'bottom' });
+        Message.errorToast('登录失败!')
         codeChange();
       },
     },

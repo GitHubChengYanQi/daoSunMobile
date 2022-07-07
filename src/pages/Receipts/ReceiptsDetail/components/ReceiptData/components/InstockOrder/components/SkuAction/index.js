@@ -15,6 +15,8 @@ import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import Title from '../../../../../../../../components/Title';
+import { Message } from '../../../../../../../../components/Message';
+import MyCard from '../../../../../../../../components/MyCard';
 
 
 const SkuAction = (
@@ -34,9 +36,6 @@ const SkuAction = (
 
   const { loading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
-    onSuccess: () => {
-      refresh();
-    },
     onError: () => {
       refresh();
     },
@@ -102,72 +101,77 @@ const SkuAction = (
   const addInstockShop = (formStatus, item, index, type) => {
     const skuResult = item.skuResult || {};
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
-    addShopCart(imgUrl, `skuImg${index}`, () => {
-      addShop({
-        data: {
-          formStatus,
-          type,
-          instockListId: item.instockListId,
-          skuId: item.skuId,
-          customerId: item.customerId,
-          brandId: item.brandId,
-          number: item.number,
-          formId: item.instockListId,
-        },
+    addShop({
+      data: {
+        formStatus,
+        type,
+        instockListId: item.instockListId,
+        skuId: item.skuId,
+        customerId: item.customerId,
+        brandId: item.brandId,
+        number: item.number,
+        formId: item.instockListId,
+      },
+    }).then(() => {
+      addShopCart(imgUrl, `skuImg${index}`, () => {
+        Message.successToast('添加成功！', () => {
+          refresh();
+        });
       });
     });
+
 
   };
 
   return <div style={{ backgroundColor: '#fff' }}>
-    <div className={style.skuHead}>
-      <Title className={style.headTitle}>
-        申请明细
-      </Title>
-      <div className={style.extra}>
+    <MyCard
+      title='申请明细'
+      className={style.cardStyle}
+      headerClassName={style.headerStyle}
+      bodyClassName={style.bodyStyle}
+      extra={<div className={style.extra}>
         合计：<span>{items.length}</span>类<span>{countNumber}</span>件
-      </div>
-    </div>
-    {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
-    {
-      items.map((item, index) => {
+      </div>}>
+      {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+      {
+        items.map((item, index) => {
 
-        if (!allSku && index >= 3) {
-          return null;
-        }
+          if (!allSku && index >= 3) {
+            return null;
+          }
 
-        if (!action || item.status !== 0) {
-          return <InSkuItem item={item} data={items} key={index} />;
-        }
+          if (!action || item.status !== 0) {
+            return <InSkuItem item={item} data={items} key={index} />;
+          }
 
-        return <div key={index}>
-          <Viewpager
-            currentIndex={index}
-            onLeft={() => {
-              addInstockShop(1, item, index, 'waitInStock');
-            }}
-            onRight={() => {
-              setVisible(item);
-            }}
-          >
-            <InSkuItem index={index} item={item} data={items} key={index} />
-          </Viewpager>
-        </div>;
-      })
-    }
-
-    {items.length > 3 && <Divider className={style.allSku}>
-      <div onClick={() => {
-        toggle();
-      }}>
-        {
-          allSku ?
-            <UpOutline />
-            :
-            <DownOutline />
-        }
-      </div>
-    </Divider>}
+          return <div key={index}>
+            <Viewpager
+              currentIndex={index}
+              onLeft={() => {
+                addInstockShop(1, item, index, 'waitInStock');
+              }}
+              onRight={() => {
+                setVisible(item);
+              }}
+            >
+              <InSkuItem index={index} item={item} data={items} key={index} />
+            </Viewpager>
+          </div>;
+        })
+      }
+      {items.length > 3 && <Divider className={style.allSku}>
+        <div onClick={() => {
+          toggle();
+        }}>
+          {
+            allSku ?
+              <UpOutline />
+              :
+              <DownOutline />
+          }
+        </div>
+      </Divider>}
+    </MyCard>
 
     <Popup
       onMaskClick={() => setVisible(false)}

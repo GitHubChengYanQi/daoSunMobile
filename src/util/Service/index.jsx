@@ -1,15 +1,15 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
-import { Dialog } from 'antd-mobile';
 import { history } from 'umi';
 import { ToolUtil } from '../../pages/components/ToolUtil';
+import { Message } from '../../pages/components/Message';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.111'
+  'http://192.168.1.229'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -53,10 +53,8 @@ ajaxService.interceptors.response.use((response) => {
     } else if (errCode === 1001) {
       return response;
     } else if (response.errCode !== 200) {
-      Dialog.alert({
+      Message.errorDialog({
         content: response.message,
-        closeOnMaskClick: true,
-        confirmText: '确认',
       });
     }
     throw new Error(response.message);

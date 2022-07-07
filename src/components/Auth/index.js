@@ -2,6 +2,7 @@ import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
 import { ToolUtil } from '../../pages/components/ToolUtil';
+import { history } from 'umi';
 
 
 export const wxTicket = async () => {
@@ -44,7 +45,7 @@ export const wxUrl = (wxLogin) => {
   search.delete('state');
   const url = window.location.protocol + '//' + window.location.host + window.location.pathname + search.toString() + window.location.hash;
   if (wxLogin) {
-    return url.replace('#/','#/wxLogin/');
+    return url.replace('#/', '#/wxLogin/');
   } else {
     return url.replace('wxLogin/', '');
   }
@@ -119,5 +120,16 @@ export const getUserMenus = async () => {
 };
 
 export const goToLogin = () => {
-
+  const backUrl = window.location.href;
+  console.log(!ToolUtil.queryString('login', backUrl) && !ToolUtil.queryString('sms', backUrl));
+  if (!ToolUtil.queryString('login', backUrl) && !ToolUtil.queryString('sms', backUrl)) {
+    history.push({
+      pathname: '/Login',
+      query: {
+        backUrl,
+      },
+    });
+  } else {
+    history.push('/Login');
+  }
 };

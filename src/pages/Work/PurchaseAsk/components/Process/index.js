@@ -10,6 +10,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 import { MyDate } from '../../../../components/MyDate';
 import Title from '../../../../components/Title';
+import MyCard from '../../../../components/MyCard';
 
 const Process = (
   {
@@ -359,10 +360,9 @@ const Process = (
 
 
   return <>
-    <div className={style.process}>
-      <Title className={style.cartTitle}>审批流程</Title>
+    <MyCard title='审批流程'>
       {allStep(auditData || data, true, 0)}
-    </div>
+    </MyCard>
   </>;
 
 };

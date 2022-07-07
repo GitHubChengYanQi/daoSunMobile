@@ -3,6 +3,7 @@ import style from '../../../PurchaseOrderInstock/index.less';
 import CheckUser from '../../../../../../../../components/CheckUser';
 import { RightOutline } from 'antd-mobile-icons';
 import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
 
 const User = (
   {
@@ -17,14 +18,14 @@ const User = (
   const userRef = useRef();
 
   return <>
-    <div className={style.dataItem}>
-      <Title className={style.title}>{title}<span>*</span></Title>
-      <div onClick={() => {
+    <MyCard
+      titleBom={<Title className={style.title}>{title}<span>*</span></Title>}
+      extra={<div onClick={() => {
         userRef.current.open();
       }}>
         {id ? name : '请选择'}<RightOutline />
-      </div>
-    </div>
+      </div>}
+    />
 
     <CheckUser ref={userRef} value={id} onChange={(id, name) => {
       onChange(id, name);

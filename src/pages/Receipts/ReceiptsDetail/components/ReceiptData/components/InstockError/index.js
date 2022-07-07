@@ -6,6 +6,7 @@ import SkuError from './components/SkuError';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import Title from '../../../../../../components/Title';
+import MyCard from '../../../../../../components/MyCard';
 
 const InstockError = (
   {
@@ -44,54 +45,53 @@ const InstockError = (
   };
 
   return <>
-    <div className={style.skuList}>
-      {
-        anomalyResults.map((item, index) => {
-          return <div key={index}>
-            <div className={style.skuItem} onClick={() => {
-              if (getAction('verify').id && permissions) {
-                setVisible(item.anomalyId);
-              }
-            }}>
-              <div className={style.sku}>
-                <SkuItem
-                  extraWidth='100px'
-                  skuResult={item.skuResult}
-                  otherData={[
-                    ToolUtil.isObject(item.customer).customerName,
-                    ToolUtil.isObject(item.brand).brandName || '无品牌',
-                  ]}
-                />
-              </div>
-              <div className={style.realNumber}>
-                <ShopNumber show value={item.realNumber} />
-                <div className={style.status}>
-                  · {item.status === 99 ? '已处理' : '处理中'}
+    <MyCard noHeader className={style.cardStyle}>
+      <div className={style.skuList}>
+        {
+          anomalyResults.map((item, index) => {
+            return <div key={index}>
+              <div className={style.skuItem} onClick={() => {
+                if (getAction('verify').id && permissions) {
+                  setVisible(item.anomalyId);
+                }
+              }}>
+                <div className={style.sku}>
+                  <SkuItem
+                    extraWidth='100px'
+                    skuResult={item.skuResult}
+                    otherData={[
+                      ToolUtil.isObject(item.customer).customerName,
+                      ToolUtil.isObject(item.brand).brandName || '无品牌',
+                    ]}
+                  />
+                </div>
+                <div className={style.realNumber}>
+                  <ShopNumber show value={item.realNumber} />
+                  <div className={style.status}>
+                    · {item.status === 99 ? '已处理' : '处理中'}
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className={style.error}>
-              <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
+              <div className={style.error}>
+                <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
+                </div>
+                <div hidden={!item.errorNumber}>数量 <span
+                  className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
+                </div>
+                <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
               </div>
-              <div hidden={!item.errorNumber}>数量 <span
-                className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
-              </div>
-              <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
-            </div>
-          </div>;
-        })
-      }
-    </div>
-    <div className={style.space} />
-    <div className={style.data}>
-      <Title className={style.label}>
-        关联单据
-      </Title>
+            </div>;
+          })
+        }
+      </div>
+    </MyCard>
+
+    <MyCard title='关联单据'>
       <span className={style.value}>
          {errorTypeData().receipts}
       </span>
-    </div>
+    </MyCard>
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError

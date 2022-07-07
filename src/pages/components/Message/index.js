@@ -1,11 +1,155 @@
 import { Dialog, Toast } from 'antd-mobile';
 import { history } from 'umi';
+import React from 'react';
+import style from './index.less';
+import { CheckCircleOutline, CloseCircleOutline, ExclamationTriangleOutline } from 'antd-mobile-icons';
 
 const toast = (title) => {
   Toast.show({
     content: title || '成功！',
     position: 'bottom',
   });
+};
+
+const successToast = (
+  title,
+  afterClose = () => {
+  }) => {
+  Toast.show({
+    content: title || '成功！',
+    position: 'bottom',
+    icon: 'success',
+    afterClose,
+  });
+};
+
+const errorToast = (
+  title,
+  afterClose = () => {
+  },
+) => {
+  Toast.show({
+    content: title || '失败！',
+    position: 'bottom',
+    icon: 'fail',
+    afterClose,
+  });
+};
+
+const MyDialog = (
+  {
+    only,
+    content,
+    confirmText = '确认',
+    onConfirm,
+    cancelText,
+    onCancel,
+  }) => {
+  if (only) {
+    Dialog.alert({
+      content,
+      confirmText,
+      onConfirm,
+    });
+  } else {
+    Dialog.confirm({
+      content,
+      confirmText,
+      cancelText,
+      onCancel,
+      onConfirm,
+    });
+  }
+};
+
+const successDialog = (
+  {
+    content,
+    confirmText,
+    cancelText,
+    onCancel = () => {
+    },
+    onConfirm = () => {
+    },
+    only,
+  }) => {
+
+  const contentDom = <div className={style.successTitle}>
+    <CheckCircleOutline />
+    <div>
+      {content || '操作成功！'}
+    </div>
+  </div>;
+
+  MyDialog({
+    confirmText,
+    cancelText,
+    onCancel,
+    onConfirm,
+    only,
+    content: contentDom,
+  });
+
+};
+
+const warningDialog = (
+  {
+    content,
+    confirmText,
+    cancelText,
+    onCancel = () => {
+    },
+    onConfirm = () => {
+    },
+    only = true,
+    title,
+  }) => {
+
+  const contentDom = <div className={style.warningContent}>
+    <ExclamationTriangleOutline className={style.waringIcon} />
+    <div className={style.title}>{title || '警告'}</div>
+    {content}
+  </div>;
+
+  MyDialog({
+    confirmText,
+    cancelText,
+    onCancel,
+    onConfirm,
+    only,
+    content: contentDom,
+  });
+
+};
+
+const errorDialog = (
+  {
+    content,
+    confirmText,
+    cancelText,
+    onCancel = () => {
+    },
+    onConfirm = () => {
+    },
+    only = true,
+    title,
+  }) => {
+
+  const contentDom = <div className={style.errorContent}>
+    <CloseCircleOutline className={style.errorIcon} />
+    <div className={style.title}>{title || '异常'}</div>
+    {content}
+  </div>;
+
+  MyDialog({
+    confirmText,
+    cancelText,
+    onCancel,
+    onConfirm,
+    only,
+    content: contentDom,
+  });
+
 };
 
 const dialogSuccess = (
@@ -42,13 +186,17 @@ const dialogSuccess = (
       }
     },
     actions: [actions],
-  })
+  });
 };
-
 
 
 export const Message = {
   toast,
+  successToast,
+  errorToast,
   dialogSuccess,
+  successDialog,
+  warningDialog,
+  errorDialog,
 };
 

@@ -39,13 +39,14 @@ const InstockError = (
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: () => {
-      refresh();
-      shopRefresh();
-      setData([]);
-      Message.toast('添加异常单成功！');
+      Message.successToast('添加异常单成功！',()=>{
+        refresh();
+        shopRefresh();
+        setData([]);
+      });
     },
     onError: () => {
-      Message.toast('添加异常单失败！');
+      Message.errorToast('添加异常单失败！');
     },
   });
 
@@ -53,13 +54,14 @@ const InstockError = (
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      shopRefresh();
-      refresh();
-      setData([]);
-      Message.toast('退回成功！');
+      Message.successToast('退回成功！',()=>{
+        shopRefresh();
+        refresh();
+        setData([]);
+      });
     },
     onError: () => {
-      Message.toast('退回失败！');
+      Message.errorToast('退回失败！');
     },
   });
 

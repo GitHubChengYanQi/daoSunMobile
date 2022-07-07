@@ -38,7 +38,7 @@ const Bottom = (
 
   if (actions.length > 0) {
     switch (detail.type) {
-      case ReceiptsEnums.instockError:
+      case ReceiptsEnums.error:
         return <InStockErrorBottom detail={detail} actions={actions} refresh={refresh} />;
       case ReceiptsEnums.stocktaking:
         return <StocktakingBottom detail={detail} actions={actions} refresh={refresh} />;

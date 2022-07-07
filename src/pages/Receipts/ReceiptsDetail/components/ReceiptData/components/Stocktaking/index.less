@@ -6,54 +6,48 @@
     background-color: #fff;
   }
 
-  .position {
-    background-color: #fff;
-    margin-bottom: 8px;
+  .skus {
+    //padding: 12px;
 
-    .skus {
-      padding: 12px;
+    .sku {
+      margin-bottom: 8px;
+      border-bottom: solid 1px #F5F5F5;
 
-      .sku {
-        margin-bottom: 8px;
-        border-bottom: solid 1px #F5F5F5;
+      .brands {
+        padding-bottom: 8px;
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
 
-        .brands {
-          padding-bottom: 8px;
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-
-          .brand {
-            width: 30%;
-            padding: 4px 8px;
-            justify-content: center;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-
-            .name {
-              text-overflow: ellipsis;
-              overflow: hidden;
-              white-space: nowrap;
-            }
-          }
-        }
-
-        .action {
-          padding: 8px 0;
+        .brand {
+          width: 30%;
+          padding: 4px 8px;
+          justify-content: center;
+          border-radius: 2px;
           display: flex;
           align-items: center;
+          gap: 4px;
 
-          .mediaIds {
-            flex-grow: 1;
-
+          .name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
           }
+        }
+      }
+
+      .action {
+        //padding: 8px 0;
+        display: flex;
+        align-items: center;
+
+        .mediaIds {
+          flex-grow: 1;
+
         }
       }
     }
   }
-
 
 }
 

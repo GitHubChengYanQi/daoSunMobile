@@ -4,6 +4,7 @@ import Careful from '../Careful';
 import MyTextArea from '../../../../../../../../components/MyTextArea';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
 
 const OtherData = (
   {
@@ -17,8 +18,7 @@ const OtherData = (
 
 
   return <>
-    <div className={style.careful}>
-      <Title className={style.title}>{careful} <span>*</span></Title>
+    <MyCard titleBom={<Title className={style.title}>{careful} <span>*</span></Title>}>
       <Careful
         type={createType}
         value={params.noticeIds}
@@ -26,10 +26,9 @@ const OtherData = (
           setParams({ ...params, noticeIds });
         }}
       />
-    </div>
+    </MyCard>
 
-    <div className={style.note}>
-      <Title className={style.title}>添加备注</Title>
+    <MyCard title='添加备注'>
       <MyTextArea
         value={params.remark}
         className={style.textArea}
@@ -37,10 +36,9 @@ const OtherData = (
           setParams({ ...params, remark, userIds: userIds.map(item => item.userId) });
         }}
       />
-    </div>
+    </MyCard>
 
-    <div className={style.file}>
-      <Title className={style.title}>上传附件</Title>
+    <MyCard title='上传附件'>
       <div className={style.files}>
         <UploadFile
           onChange={(mediaIds) => {
@@ -48,7 +46,7 @@ const OtherData = (
           }}
         />
       </div>
-    </div>
+    </MyCard>
   </>;
 };
 

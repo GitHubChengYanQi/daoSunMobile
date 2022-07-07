@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd-mobile';
 import style from './index.less';
+import { ToolUtil } from '../ToolUtil';
 
 const BottomButton = (
   {
@@ -16,11 +17,11 @@ const BottomButton = (
     disabled,
     onClick,
     text,
+    square,
   }) => {
 
 
-  return <div className={style.bottom}>
-    <div style={{ padding: '10px 12px' }}>
+  return <div className={ToolUtil.classNames(style.bottom,square && style.square)}>
       {only ?
         <Button
           loading={loading}
@@ -53,8 +54,6 @@ const BottomButton = (
             {rightText || '保存'}
           </Button>
         </>}
-    </div>
-    {/*<SafeArea position='bottom' />*/}
   </div>;
 };
 

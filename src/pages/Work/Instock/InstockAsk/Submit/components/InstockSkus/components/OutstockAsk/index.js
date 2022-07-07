@@ -40,7 +40,7 @@ const OutstockAsk = ({ skus, judge, createType }) => {
   const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
     onSuccess: (res) => {
-      Dialog.confirm({
+      Message.successDialog({
         content: '创建出库申请成功!',
         confirmText: '查看详情',
         cancelText: '返回列表',
@@ -51,7 +51,7 @@ const OutstockAsk = ({ skus, judge, createType }) => {
       });
     },
     onError: () => {
-      Message.toast('创建出库申请失败!');
+      Message.errorToast('创建出库申请失败!');
     },
   });
 

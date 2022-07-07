@@ -52,7 +52,7 @@ const ReceiptData = (
           loading={loading}
           type={data.type}
         />;
-      case ReceiptsEnums.instockError:
+      case ReceiptsEnums.error:
         return <InstockError
           permissions={permissions}
           data={data.receipts}

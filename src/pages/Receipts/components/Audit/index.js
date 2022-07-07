@@ -4,6 +4,7 @@ import { useRequest } from '../../../../util/Request';
 import style from '../../ReceiptsDetail/components/Bottom/index.less';
 import { MyLoading } from '../../../components/MyLoading';
 import { ToolUtil } from '../../../components/ToolUtil';
+import { Message } from '../../../components/Message';
 
 const Audit = (
   {
@@ -25,18 +26,14 @@ const Audit = (
     {
       manual: true,
       onSuccess: () => {
-        refresh();
-        Toast.show({
-          content: '审批完成！',
-          position: 'bottom',
-        });
+        Message.successToast('审批完成!',()=>{
+          refresh();
+        })
       },
       onError: () => {
-        Toast.show({
-          content: '审批失败！',
-          position: 'bottom',
-        });
-        refresh();
+        Message.errorToast('审批失败!',()=>{
+          refresh();
+        })
       },
     },
   );

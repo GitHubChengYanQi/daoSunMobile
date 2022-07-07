@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { Tabs } from 'antd-mobile';
-import topStyle from '../../../global.less';
 import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
 import ProcessScreen from './components/ProcessScreen';
@@ -21,7 +19,7 @@ const MyAudit = (
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, status: 0, type };
+  const defaultParams = { auditType, statusList: ['0'], type };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});

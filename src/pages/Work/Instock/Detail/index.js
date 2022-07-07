@@ -204,9 +204,10 @@ const Detail = ({ id, setModuleObject, moduleObject, currentNode = [], processRe
   const { loading: checkNumberLoading, run: checkNumberRun } = useRequest(checkNumberTrue, {
     manual: true,
     onSuccess: () => {
-      refresh();
-      processRefresh();
-      Message.toast('提报完成,请继续入库!');
+      Message.successToast('提报完成,请继续入库!',()=>{
+        refresh();
+        processRefresh();
+      });
     },
   });
 
@@ -221,7 +222,7 @@ const Detail = ({ id, setModuleObject, moduleObject, currentNode = [], processRe
     history.push({
       pathname: '/Receipts/ReceiptsCreate',
       query: {
-        type: ReceiptsEnums.instockError,
+        type: ReceiptsEnums.error,
       },
       state: {
         details,
@@ -231,7 +232,7 @@ const Detail = ({ id, setModuleObject, moduleObject, currentNode = [], processRe
     return;
     if (errors.length > 0) {
       history.push({
-        pathname: `/ReceiptsCreate?type=${ReceiptsEnums.instockError}`,
+        pathname: `/ReceiptsCreate?type=${ReceiptsEnums.error}`,
         state: {
           details,
           id,

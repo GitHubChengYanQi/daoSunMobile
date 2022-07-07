@@ -46,6 +46,7 @@ const Task = (
     </div>
 
     <MyAudit
+      top={query.type ? 45 : 0}
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {

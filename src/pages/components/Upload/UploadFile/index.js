@@ -10,6 +10,7 @@ import { ToolUtil } from '../../ToolUtil';
 import { CloseOutline } from 'antd-mobile-icons';
 import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
 import IsDev from '../../../../components/IsDev';
+import { Message } from '../../Message';
 
 const UploadFile = (
   {
@@ -68,7 +69,7 @@ const UploadFile = (
             });
             fileChange({ type: 'image', mediaId, url });
           } catch (e) {
-            Toast.show({ content: '上传失败！' });
+            Message.errorToast('上传失败!')
           }
           getLoading(false);
           setLoading(false);

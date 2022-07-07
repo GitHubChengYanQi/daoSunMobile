@@ -20,6 +20,8 @@ import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
 import MyStepper from '../../../../../../../../components/MyStepper';
+import MyCard from '../../../../../../../../components/MyCard';
+import { AddButton } from '../../../../../../../../components/MyButton';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -70,49 +72,52 @@ const Error = (
           addShop();
           break;
         case ReceiptsEnums.stocktaking:
-          Message.toast('添加成功！');
+          Message.successToast('添加成功！');
           break;
         default:
           break;
       }
     },
     onError: () => {
-      Message.toast('添加失败！');
+      Message.errorToast('添加失败！');
     },
   });
 
   const { loading: anomalyTemporaryLoading, run: anomalyTemporaryRun } = useRequest(anomalyTemporary, {
     manual: true,
     onSuccess: () => {
-      onSuccess(skuItem);
-      Message.toast('暂存成功！');
+      Message.successToast('暂存成功！', () => {
+        onSuccess(skuItem);
+      });
     },
     onError: () => {
-      Message.toast('暂存失败！');
+      Message.errorToast('暂存失败！');
     },
   });
 
   const { loading: editLoading, run: editRun } = useRequest(instockErrorEdit, {
     manual: true,
     onSuccess: () => {
-      onClose();
-      onEdit();
-      Message.toast('修改成功！');
+      Message.successToast('修改成功！', () => {
+        onClose();
+        onEdit();
+      });
     },
     onError: () => {
-      Message.toast('修改失败！');
+      Message.errorToast('修改失败！');
     },
   });
 
   const { loading: deleteLoading, run: deleteRun } = useRequest(instockErrorDelete, {
     manual: true,
     onSuccess: () => {
-      onClose(true);
-      refreshOrder();
-      Message.toast('删除成功！');
+      Message.successToast('删除成功！', () => {
+        onClose(true);
+        refreshOrder();
+      });
     },
     onError: () => {
-      Message.toast('删除失败！');
+      Message.errorToast('删除失败！');
     },
   });
 
@@ -334,8 +339,9 @@ const Error = (
   const addShop = () => {
     const imgUrl = Array.isArray(skuItem.imgUrls) && skuItem.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', () => {
-      refreshOrder();
-      Message.toast('添加成功！');
+      Message.successToast('添加成功！', () => {
+        refreshOrder();
+      });
     });
 
   };
@@ -353,7 +359,7 @@ const Error = (
             extraWidth={(id && !noDelete) ? '84px' : '24px'}
             otherData={[
               ToolUtil.isObject(sku.customerResult).customerName,
-              ToolUtil.isObject(sku.brandResult).brandName || '无品牌'
+              ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
             ]}
           />,
           actionNumber: <div className={style.actual}>
@@ -470,11 +476,11 @@ const Error = (
           <div className={style.skuShow}>
             <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
             <div>
-              <div className={style.smallSku}  style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
-                {SkuResultSkuJsons({ skuResult,spu:true })}
+              <div className={style.smallSku} style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
+                {SkuResultSkuJsons({ skuResult, spu: true })}
               </div>
-              <div className={style.smallSku}  style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
-              {SkuResultSkuJsons({ skuResult,sku:true })}
+              <div className={style.smallSku} style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
+                {SkuResultSkuJsons({ skuResult, sku: true })}
               </div>
             </div>
             <div className={style.number}>
@@ -500,24 +506,21 @@ const Error = (
       }}><CloseOutline /></span>
     </div>
 
-
-    <div style={{ padding: '0 12px' }} className={id ? style.skuItem : ''}>
-      {errorTypeData().skuItem}
-      {id && !noDelete && <LinkButton color='danger' onClick={() => {
-        deleteRun({
-          data: {
-            anomalyId: data.anomalyId,
-          },
-        });
-      }}>
-        删除异常
-      </LinkButton>}
-    </div>
-
-    {errorTypeData().actionNumber}
-
-
-    <div className={style.space} />
+    <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
+      <div style={{ padding: '0 12px' }} className={id ? style.skuItem : ''}>
+        {errorTypeData().skuItem}
+        {id && !noDelete && <LinkButton color='danger' onClick={() => {
+          deleteRun({
+            data: {
+              anomalyId: data.anomalyId,
+            },
+          });
+        }}>
+          删除异常
+        </LinkButton>}
+      </div>
+      {errorTypeData().actionNumber}
+    </MyCard>
 
     <div className={style.errors}>
       {
@@ -525,21 +528,20 @@ const Error = (
 
           const inkindId = item.inkindId || '';
 
-          return <div key={index} className={style.inkindItem}>
-            <div className={style.inkindTitle}>
-              <div className={style.inkind}>
-                <div className={style.index}>{index + 1}</div>
-                <span>识别码：{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
-                <SystemQRcodeOutline />
-              </div>
-
-              <MyRemoveButton onRemove={() => {
-                const newItem = inkinds.filter((item, currentIndex) => {
-                  return currentIndex !== index;
-                });
-                setInkinds(newItem);
-              }} />
-            </div>
+          return <MyCard
+            key={index}
+            titleBom={<div className={style.inkind}>
+              <div className={style.index}>{index + 1}</div>
+              <span>识别码：{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
+              <SystemQRcodeOutline />
+            </div>}
+            extra={<MyRemoveButton onRemove={() => {
+              const newItem = inkinds.filter((item, currentIndex) => {
+                return currentIndex !== index;
+              });
+              setInkinds(newItem);
+            }} />}
+          >
             <div className={style.stepper}>
               <span>数量</span>
               <MyStepper
@@ -565,7 +567,9 @@ const Error = (
               />
             </div>
             <div className={style.careful}>
-              原因
+              <div className={style.title}>
+                原因
+              </div>
               <Careful
                 type='inStockError'
                 value={item.noticeIds}
@@ -597,16 +601,12 @@ const Error = (
                 }}
               />
             </Space>
-          </div>;
+          </MyCard>;
         })
       }
 
       <Divider className={style.divider}>
-        <Button style={{ width: 100 }} color='danger' fill='outline' onClick={() => {
-
-          if (allNumber >= data.number) {
-            return Message.toast('不能超过实际数量！');
-          }
+        <AddButton danger disabled={allNumber >= data.number} onClick={() => {
 
           CodeRun({
             data: {
@@ -621,7 +621,7 @@ const Error = (
             },
           });
 
-        }}><AddOutline /></Button>
+        }}><AddOutline /></AddButton>
       </Divider>
     </div>
 

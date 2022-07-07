@@ -43,7 +43,8 @@ const classNames = (...props) => {
   if (!Array.isArray(props)) {
     return '';
   }
-  return props.map(item => item || '').join(' ');
+  const classNames = props.filter(item => item);
+  return classNames.join(' ');
 };
 
 // 监听键盘按下@事件
@@ -101,7 +102,7 @@ const createBall = (
   document.body.appendChild(bar);
   // 添加动画属性
   setTimeout(() => {
-   const {top,left} = getNodePosition();
+    const { top, left } = getNodePosition();
     bar.style.top = (top) + 'px';
     bar.style.left = (left) + 'px';
   }, 0);
@@ -121,13 +122,13 @@ const createBall = (
 
 // 计算时间差
 const timeDifference = (tmpTime) => {
-  var mm=1000;//1000毫秒 代表1秒
+  var mm = 1000;//1000毫秒 代表1秒
   var minute = mm * 60;
   var hour = minute * 60;
   var day = hour * 24;
   var month = day * 30;
-  var ansTimeDifference=0;//记录时间差
-  var tmpTimeStamp = tmpTime ? Date.parse(tmpTime.replace(/-/gi, "/")) : new Date().getTime();//将 yyyy-mm-dd H:m:s 进行正则匹配
+  var ansTimeDifference = 0;//记录时间差
+  var tmpTimeStamp = tmpTime ? Date.parse(tmpTime.replace(/-/gi, '/')) : new Date().getTime();//将 yyyy-mm-dd H:m:s 进行正则匹配
   var nowTime = new Date().getTime();//获取当前时间戳
   var tmpTimeDifference = nowTime - tmpTimeStamp;//计算当前与需要计算的时间的时间戳的差值
   if (tmpTimeDifference < 0) {//时间超出，不能计算
@@ -141,18 +142,18 @@ const timeDifference = (tmpTime) => {
   if (DifferebceMonth >= 1) {
     return tmpTime; //大于一个月 直接返回时间
   } else if (DifferebceWeek >= 1) {
-    ansTimeDifference= parseInt(DifferebceWeek) + "个星期前";
+    ansTimeDifference = parseInt(DifferebceWeek) + '个星期前';
   } else if (DifferebceDay >= 1) {
-    ansTimeDifference = parseInt(DifferebceDay) + "天前";
+    ansTimeDifference = parseInt(DifferebceDay) + '天前';
   } else if (DifferebceHour >= 1) {
-    ansTimeDifference = parseInt(DifferebceHour) + "小时前";
+    ansTimeDifference = parseInt(DifferebceHour) + '小时前';
   } else if (DifferebceMinute >= 1) {
-    ansTimeDifference = parseInt(DifferebceMinute) + "分钟前";
+    ansTimeDifference = parseInt(DifferebceMinute) + '分钟前';
   } else {
-    ansTimeDifference = "刚刚";
+    ansTimeDifference = '刚刚';
   }
   return ansTimeDifference;
-}
+};
 
 
 export const ToolUtil = {

@@ -15,6 +15,7 @@ import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import Positions from '../Positions';
+import LinkButton from '../../../../../../../../../../components/LinkButton';
 
 export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
 
@@ -62,12 +63,13 @@ const WaitInstock = (
   }, {
     manual: true,
     onSuccess: () => {
-      shopRefresh();
-      refresh();
-      Message.toast('入库成功！');
+      Message.successToast('入库成功！',()=>{
+        shopRefresh();
+        refresh();
+      });
     },
     onError: () => {
-      Message.toast('入库失败！');
+      Message.errorToast('入库失败！');
     },
   });
 
@@ -75,12 +77,13 @@ const WaitInstock = (
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      shopRefresh();
-      refresh();
-      Message.toast('退回成功！');
+      Message.successToast('退回成功！',()=>{
+        shopRefresh();
+        refresh();
+      });
     },
     onError: () => {
-      Message.toast('退回失败！');
+      Message.errorToast('退回失败！');
     },
   });
 
@@ -151,7 +154,10 @@ const WaitInstock = (
                 }}>
                   <SkuItem
                     skuResult={skuResult}
-                    title={positionsResult ? (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') : '请选择库位'}
+                    title={positionsResult ?
+                      (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') :
+                      <LinkButton>请选择库位</LinkButton>
+                    }
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({ skuResult })}
                     otherData={[customerName, brandName]}

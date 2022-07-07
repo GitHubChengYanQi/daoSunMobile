@@ -1,11 +1,14 @@
 
 .error {
-  background-color: #fff;
+  background-color: var(--body--background--color);
   display: flex;
   flex-direction: column;
   overflow: auto;
   margin-bottom: 60px;
 
+  .cardStyle,.bodyStyle {
+    padding: 0 !important;
+  }
 
   .header {
     display: flex;
@@ -128,121 +131,110 @@
   .divider {
     margin: 0;
     padding: 16px 0;
+    background-color: #fff;
   }
 
-  .errors {
+  .inkind {
     flex-grow: 1;
-    //overflow: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
-    .inkindItem {
-      padding: 16px;
-      border-bottom: 1px solid #D8D8D8;;
-
-      .inkindTitle {
-        display: flex;
-        align-items: center;
-
-        .inkind {
-          flex-grow: 1;
-          display: flex;
-          align-items: center;
-          gap: 8px;
-
-          .inkindNumber {
-            color: var(--adm-color-danger);
-            margin-left: 8px;
-          }
-
-          .prohibit {
-            color: var(--adm-color-danger);
-          }
-
-          .allow {
-            color: var(--adm-color-primary);
-          }
-
-          .index {
-            border-radius: 100%;
-            background-color: var(--adm-color-primary);
-            width: 16px;
-            height: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 12px;
-          }
-
-          svg {
-            font-size: 16px;
-            color: var(--adm-color-primary);
-          }
-        }
-      }
-
-      .stepper {
-        padding: 12px 0;
-        display: flex;
-        align-items: center;
-
-        span {
-          flex-grow: 1;
-        }
-      }
-
-      .careful {
-        //padding: 12px 0;
-
-        .notices {
-          font-size: 12px;
-          display: inline-block;
-          border-radius: 2px;
-          background: #F5F5F5;
-          border: 1px solid #D9D9D9;
-          padding: 2px 12px;
-          margin-left: 8px;
-        }
-      }
-
-      .imgs {
-        padding-bottom: 12px;
-      }
-
-      .opinion {
-        display: flex;
-        align-items: center;
-        padding: 8px 0;
-
-        span {
-          min-width: 70px;
-        }
-
-        .textArea {
-          padding: 4px;
-        }
-      }
-
-      .actions {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
-        padding: 12px;
-
-        .ok {
-          --border-color: #2EAF5D;
-          --text-color: #2EAF5D;
-          --border-radius: 2;
-        }
-      }
-
-      .textArea {
-        border-radius: 4px;
-        border: 1px solid #999999;
-        padding: 8px;
-        --font-size: 12px;
-      }
+    .inkindNumber {
+      color: var(--adm-color-danger);
+      margin-left: 8px;
     }
 
+    .prohibit {
+      color: var(--adm-color-danger);
+    }
+
+    .allow {
+      color: var(--adm-color-primary);
+    }
+
+    .index {
+      border-radius: 100%;
+      background-color: var(--adm-color-primary);
+      width: 16px;
+      height: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+    }
+
+    svg {
+      font-size: 16px;
+      color: var(--adm-color-primary);
+    }
+  }
+
+  .stepper {
+    padding: 12px 0;
+    display: flex;
+    align-items: center;
+
+    span {
+      flex-grow: 1;
+    }
+  }
+
+  .careful {
+    //padding: 12px 0;
+
+    .notices {
+      font-size: 12px;
+      display: inline-block;
+      border-radius: 2px;
+      background: #F5F5F5;
+      border: 1px solid #D9D9D9;
+      padding: 2px 12px;
+      margin-left: 8px;
+    }
+
+    .title {
+      padding: 8px 0;
+    }
+  }
+
+  .imgs {
+    padding: 12px 0;
+  }
+
+  .opinion {
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+
+    span {
+      min-width: 70px;
+    }
+
+    .textArea {
+      padding: 4px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 12px;
+
+    .ok {
+      --border-color: #2EAF5D;
+      --text-color: #2EAF5D;
+      --border-radius: 2;
+    }
+  }
+
+  .textArea {
+    border-radius: 4px;
+    border: 1px solid #999999;
+    padding: 8px;
+    --font-size: 12px;
   }
 
   .bottom {

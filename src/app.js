@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
 import { history } from 'umi';
-import { getUserInfo, loginBycode, userCustomer, wxTicket } from './components/Auth';
+import { getUserInfo, goToLogin, loginBycode, userCustomer, wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
@@ -45,7 +45,7 @@ export async function getInitialState() {
       return { isQiYeWeiXin: true };
     } else {
       // 不是企业微信直接走login
-      history.push('/Login');
+      goToLogin();
       return { ...publicInfo, init: true };
     }
   } else {
@@ -53,7 +53,7 @@ export async function getInitialState() {
     if (ToolUtil.isQiyeWeixin() && type) {
       // 是企业微信登录并且type存在
       if (userInfo.userId) {
-        history.push('/Login');
+        goToLogin();
       } else {
         history.push('/Sms');
       }

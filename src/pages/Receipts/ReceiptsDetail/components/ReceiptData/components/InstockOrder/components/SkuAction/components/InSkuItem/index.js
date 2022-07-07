@@ -20,11 +20,12 @@ const InSkuItem = (
   const complete = item.realNumber === 0 && item.status === 99;
   const waitInStock = item.status === 1;
   const errorInStock = item.status === -1;
+  const stopInStock = item.status === 50;
 
   return <div
     className={style.sku}
   >
-    <div hidden={!(waitInStock || complete || errorInStock)} className={style.mask} />
+    <div hidden={!(waitInStock || complete || errorInStock || stopInStock)} className={style.mask} />
     <div
       className={ToolUtil.classNames(
         style.skuItem,
@@ -54,6 +55,9 @@ const InSkuItem = (
     </div>
     <div hidden={!errorInStock} className={style.status}>
       异常件
+    </div>
+    <div hidden={!stopInStock} className={style.status}>
+      禁止入库
     </div>
   </div>;
 };

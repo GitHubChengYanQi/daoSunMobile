@@ -6,6 +6,7 @@ import User from '../User';
 import Number from '../../../../../../../../components/Number';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
 
 const Curing = (
   {
@@ -23,9 +24,9 @@ const Curing = (
       onChange({ ...value, userId: id, userName: name });
     }} title='负责人' />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>任务时间 <span>*</span></Title>
-      <div>
+    <MyCard
+      titleBom={<Title className={style.title}>任务时间 <span>*</span></Title>}
+      extra={<div>
         <StartEndDate
           split={<div>—</div>}
           value={[value.startTime, value.endTime]}
@@ -35,26 +36,26 @@ const Curing = (
             onChange({ ...value, startTime: dates[0], endTime: dates[1] });
           }}
         />
-      </div>
-    </div>
+      </div>}
+    />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>养护类型 <span>*</span></Title>
-      <div onClick={() => {
+    <MyCard
+      titleBom={ <Title className={style.title}>养护类型 <span>*</span></Title>}
+      extra={  <div onClick={() => {
         setTypeVisible(true);
       }}>
         {value.typeName || '请选择'}<RightOutline />
-      </div>
-    </div>
+      </div>}
+    />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>养护临近 <span>*</span></Title>
-      <div className={style.nearMaintenance}>
+    <MyCard
+      titleBom={<Title className={style.title}>养护临近 <span>*</span></Title>}
+      extra={<div className={style.nearMaintenance}>
         <Number width={70} noBorder value={value.nearMaintenance} onChange={(number) => {
           onChange({ ...value, nearMaintenance: number });
         }} />天
-      </div>
-    </div>
+      </div>}
+    />
 
     <Picker
       columns={[[{ label: '复检复调', value: 'check' }]]}

@@ -8,6 +8,7 @@ import { skuList } from '../../../Scan/Url';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
 import ListScreent from './components/ListScreent';
+import { Message } from '../../../components/Message';
 
 const SkuList = (
   {
@@ -141,7 +142,7 @@ const SkuList = (
         response={(res) => {
           setSkuNumber(res.count || 0);
           if (!res.count || res.count === 0) {
-            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000 });
+            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000,icon:'fail' });
           }
           const resSearch = res.search || [];
           let overs = {};

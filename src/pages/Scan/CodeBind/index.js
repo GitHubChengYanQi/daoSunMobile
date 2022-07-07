@@ -2,6 +2,7 @@ import React from 'react';
 import { request } from '../../../util/Request';
 import { Dialog, Toast } from 'antd-mobile';
 import { useDebounceEffect } from 'ahooks';
+import { Message } from '../../components/Message';
 
 const CodeBind = (
   {
@@ -20,7 +21,7 @@ const CodeBind = (
 
   useDebounceEffect(() => {
     if (visible && complete) {
-      Dialog.alert({
+      Message.warningDialog({
         content: '已经全部绑定完成',
       });
       onError();

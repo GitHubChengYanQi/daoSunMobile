@@ -6,6 +6,7 @@ import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import Title from '../../../../../../components/Title';
+import MyCard from '../../../../../../components/MyCard';
 
 const InstockOrder = (
   {
@@ -72,46 +73,37 @@ const InstockOrder = (
 
 
   return <>
-    <div className={style.skus}>
-      {action()}
-    </div>
+    {action()}
 
-    <div hidden={type !== ReceiptsEnums.outstockOrder} className={style.dataItem}>
-      <Title className={style.title}>领料负责人</Title>
-      <div>{ToolUtil.isObject(data.userResult).name}</div>
-    </div>
+    <MyCard
+      hidden={type !== ReceiptsEnums.outstockOrder} title='领料负责人'
+      extra={<div>{ToolUtil.isObject(data.userResult).name}</div>}
+    />
 
-    <div className={style.space} />
-
-    <div className={style.careful}>
-      <Title>注意事项</Title>
-      <div>
-        {announcementsList.length === 0 && <div style={{padding:8}}>无</div>}
+    <MyCard title='注意事项'>
+        {announcementsList.length === 0 && <div style={{ padding: 8 }}>无</div>}
         {announcementsList.map((item, index) => {
           return <div key={index} className={style.carefulShow}>
             {item.content}
           </div>;
         })}
-      </div>
-    </div>
+    </MyCard>
 
-    <div className={style.note}>
-      <Title>备注</Title>
+    <MyCard title='备注'>
       <div className={style.remake}>{remake || '无'}</div>
-    </div>
+    </MyCard>
 
-    <div className={style.file}>
-      <Title>附件</Title>
+    <MyCard title='附件'>
       <div className={style.files}>
         {fileUrls.length === 0 && '无'}
         <UploadFile show value={fileUrls.map(item => {
           return {
             url: item,
-            type:'image'
+            type: 'image',
           };
         })} />
       </div>
-    </div>
+    </MyCard>
   </>;
 };
 

@@ -16,6 +16,7 @@ import InStockLog from './components/Log/InStockLog';
 import OutStockLog from './components/Log/OutStockLog';
 import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
 import Dynamic from './components/Dynamic';
+import { Message } from '../../components/Message';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -38,7 +39,7 @@ const ReceiptsDetail = () => {
   const [type, setType] = useState();
 
   const error = () => {
-    Dialog.alert({
+    Message.errorDialog({
       content: '获取审批信息失败！',
       closeOnMaskClick: true,
       confirmText: '确认',
@@ -169,7 +170,7 @@ const ReceiptsDetail = () => {
   }
 
   switch (detail.type) {
-    case 'ErrorForWard':
+    case ReceiptsEnums.errorForWard:
       return <SkuError anomalyId={detail.formId} forward />;
     default:
       return <div className={style.receipts}>

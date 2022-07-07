@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Dialog } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { DeleteOutline } from 'antd-mobile-icons';
+import { Message } from '../Message';
 
 const MyRemoveButton = (
   {
@@ -14,9 +15,10 @@ const MyRemoveButton = (
 
   return <>
     <Button disabled={disabled} color='danger' fill='none' style={{ padding: 0 }} onClick={() => {
-      Dialog.confirm({
+      Message.warningDialog({
         content: '是否确认删除？',
         onConfirm:onRemove,
+        only:false,
       });
     }}>
       <DeleteOutline style={{ fontSize:14 }} /> {children}

@@ -11,7 +11,6 @@ import Order from './components/Order';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../components/BottomButton';
-import { Dialog } from 'antd-mobile';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
 
@@ -44,7 +43,8 @@ const Prepare = (
     manual: true,
     onSuccess: (res) => {
       if (res.errCode === 1001) {
-        Dialog.confirm({
+        Message.warningDialog({
+          only: false,
           content: '本次操作会影响其他出库单相同物料备料!',
           confirmText: '继续备料',
           cancelText: '取消备料',
@@ -52,13 +52,14 @@ const Prepare = (
             addCart({ data: { productionPickListsCartParams: outStockSkus, warning: false } });
           },
         });
-      }else {
-        Message.toast('备料成功！');
-        onSuccess();
+      } else {
+        Message.successToast('备料成功！', () => {
+          onSuccess();
+        });
       }
     },
     onError: (res) => {
-      Message.toast('备料失败！');
+      Message.errorToast('备料失败！');
     },
   });
 
@@ -72,6 +73,7 @@ const Prepare = (
           positionId: ToolUtil.isObject(inkindDetail.storehousePositions).storehousePositionsId,
           brandId: ToolUtil.isObject(inkindDetail.brand).brandId,
           number: inkind.number,
+          inkindId: inkind.inkindId,
         });
       } else {
         Message.toast('请扫描正确的实物码！');
@@ -139,7 +141,7 @@ const Prepare = (
       rightDisabled={outStockSkus.length === 0}
       rightText='确定'
       rightOnClick={() => {
-        addCart({ data: { productionPickListsCartParams: outStockSkus,taskId } });
+        addCart({ data: { productionPickListsCartParams: outStockSkus, taskId } });
       }}
     />
 

@@ -7,6 +7,7 @@ import { MinusCircleFilled } from '@ant-design/icons';
 import AllCondition from '../AllCondition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
+import MyCard from '../../../../../../../components/MyCard';
 
 const Condition = (
   {
@@ -108,6 +109,7 @@ const Condition = (
   };
 
   return <>
+
     <div className={style.body} style={{ paddingBottom }}>
       {taskType().dataItem}
 
@@ -136,6 +138,7 @@ const Condition = (
         </Divider>
       </div>
     </div>
+
 
     <Picker
       columns={[list]}

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import style from '../../../index.less';
 import { MyLoading } from '../../../../../../../../../../../components/MyLoading';
-import { AddOutline } from 'antd-mobile-icons';
-import { Button, Popup } from 'antd-mobile';
+import { Popup } from 'antd-mobile';
 import { Message } from '../../../../../../../../../../../components/Message';
 import Positions from '../../Positions';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { getPositionsBySkuIds } from '../index';
-import MyStepper from '../../../../../../../../../../../components/MyStepper';
 import MyRemoveButton from '../../../../../../../../../../../components/MyRemoveButton';
+import { AddButton } from '../../../../../../../../../../../components/MyButton';
+import ShopNumber
+  from '../../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 
 const AddPosition = (
   {
@@ -59,6 +61,17 @@ const AddPosition = (
 
   return <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
     <div className={style.position}>
+      <div className={ToolUtil.classNames(style.positionItem,style.border)}>
+
+        <div className={style.positionName}>
+          库位
+        </div>
+
+        <div className={style.positionAction}>
+         数量
+        </div>
+      </div>
+      <div className={style.space} />
       {
         getPositionsLoading ?
           <MyLoading skeleton title='正在获取库位信息，请稍后...' noLoadingTitle />
@@ -66,52 +79,53 @@ const AddPosition = (
           positions.map((item, index) => {
             return <div key={index} className={style.positionItem}>
 
-              <div className={style.action}>
+              <div className={style.positionName}>
                 {item.name}
               </div>
 
-              <div style={{ marginRight: 8 }}>
-                <MyStepper
-                  min={min}
-                  style={{
-                    '--button-text-color': '#000',
-                  }}
-                  value={item.number || 0}
-                  onChange={(number) => {
-                    let allNumber = 0;
-                    const newPositions = positions.map((item, currentIndex) => {
-                      if (currentIndex === index) {
-                        return { ...item, number };
+              <div className={style.positionAction}>
+                <div className={style.number}>
+                  <ShopNumber
+                    min={min}
+                    value={item.number || 0}
+                    onChange={(number) => {
+                      let allNumber = 0;
+                      const newPositions = positions.map((item, currentIndex) => {
+                        if (currentIndex === index) {
+                          return { ...item, number };
+                        }
+                        allNumber += (item.number || 0);
+                        return item;
+                      });
+                      if (total && (number + allNumber) > total) {
+                        return Message.toast('不能超过申请数量!');
+                      } else {
+                        setPositions(newPositions);
                       }
-                      allNumber += (item.number || 0);
-                      return item;
-                    });
-                    if (total && (number + allNumber) > total) {
-                      return Message.toast('不能超过申请数量!');
-                    } else {
-                      setPositions(newPositions);
-                    }
-                  }}
-                />
-              </div>
+                    }}
+                  />
+                </div>
 
-              <MyRemoveButton onRemove={() => {
-                setPositions(positions.filter((item, currentIndex) => currentIndex !== index));
-              }} />
+                <div className={style.remove}>
+                  <MyRemoveButton onRemove={() => {
+                    setPositions(positions.filter((item, currentIndex) => currentIndex !== index));
+                  }} />
+                </div>
+              </div>
             </div>;
           })
       }
     </div>
 
-    <Button
-      disabled={positions.length === maxNumber}
-      className={style.addPositions}
-      color='primary'
-      fill='outline'
-      onClick={() => {
-        setVisible(true);
-      }}
-    ><AddOutline /></Button>
+    <div className={style.addPosition}>
+      <AddButton
+        disabled={positions.length === maxNumber}
+        onClick={()=>{
+          setVisible(true);
+        }}
+      />
+    </div>
+
 
     <Popup visible={visible} destroyOnClose className={style.positionPopup}>
       <Positions

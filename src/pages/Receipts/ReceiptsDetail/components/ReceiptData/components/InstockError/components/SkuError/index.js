@@ -16,6 +16,7 @@ import { useModel } from 'umi';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { FormOutlined } from '@ant-design/icons';
+import MyCard from '../../../../../../../../components/MyCard';
 
 export const save = { url: '/anomaly/dealWithError', method: 'POST' };
 export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
@@ -86,7 +87,7 @@ const SkuError = (
           confirm = true;
           hidden = true;
         } else if (ToolUtil.isObject(checkUsers[checkUsers.length - 1]).userId === userInfo.id) {
-          hidden = true;
+          // hidden = true;
         }
       }
 
@@ -150,23 +151,27 @@ const SkuError = (
   const { loading: saveLoading, run: saveRun } = useRequest(save, {
     manual: true,
     onSuccess: () => {
-      Message.toast('保存成功!');
-      refresh();
+      Message.successToast('保存成功!', () => {
+        refresh();
+      });
     },
     onError: () => {
-      Message.toast('保存失败！');
+      Message.errorToast('保存失败！');
     },
   });
 
   const { loading: editLoading, run: editRun } = useRequest(edit, {
     manual: true,
     onSuccess: () => {
-      Message.toast('操作成功!');
-      refresh();
+      Message.successToast('操作成功!', () => {
+        refresh();
+      });
+
     },
     onError: () => {
-      Message.toast('操作失败！');
-      refresh();
+      Message.errorToast('操作失败！', () => {
+        refresh();
+      });
     },
   });
 
@@ -290,82 +295,84 @@ const SkuError = (
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
-  return <div className={style.error} style={{ height,margin:forward && 0 }} id='errors'>
+  return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
-    <div className={style.header} hidden={forward}>
+    <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
+      <div className={style.header} hidden={forward}>
 
-      {
-        over ?
-          <div className={style.skuShow}>
-            <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
-            <div>
-              <div className={style.smallSku} style={{ maxWidth: 210 }}>
-                {SkuResultSkuJsons({ skuResult, spu: true })}
-              </div>
-              <div className={style.smallSku} style={{ maxWidth: 210 }}>
-                {SkuResultSkuJsons({ skuResult, sku: true })}
+        {
+          over ?
+            <div className={style.skuShow}>
+              <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
+              <div>
+                <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                  {SkuResultSkuJsons({ skuResult, spu: true })}
+                </div>
+                <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                  {SkuResultSkuJsons({ skuResult, sku: true })}
+                </div>
               </div>
             </div>
-          </div>
-          :
-          <div className={style.title}>异常处理</div>
-      }
-      <span onClick={() => {
-        onClose();
-      }}><CloseOutline /></span>
-    </div>
-
-    <div className={style.skuItem} style={{ border: 'none' }}>
-      <SkuItem
-        skuResult={sku.skuResult}
-        className={style.sku}
-        extraWidth='64px'
-        otherData={[
-          ToolUtil.isObject(sku.customerResult).customerName,
-          ToolUtil.isObject(sku.brandResult).brandName || '无品牌'
-        ]}
-      />
-      <div className={style.showNumber}>
-        <span className={style.through} hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
-        <span>× {sku.confirm ? sku.checkNumber : sku.realNumber}</span>
+            :
+            <div className={style.title}>异常处理</div>
+        }
+        <span onClick={() => {
+          onClose();
+        }}><CloseOutline /></span>
       </div>
-    </div>
 
-    <div className={style.verify} hidden={forward}>
-      <span>到货数：<ShopNumber show value={sku.realNumber} /> {unitName} ({ToolUtil.isObject(sku.user).name || '-'})</span>
-      {
-        checkUsers.map((item, index) => {
-          if (index < checkUsers.length - 2){
-           return null;
-          }
-          return <span key={index}>复核数：
+      <div className={style.skuItem} style={{ border: 'none' }}>
+        <SkuItem
+          skuResult={sku.skuResult}
+          className={style.sku}
+          extraWidth='64px'
+          otherData={[
+            ToolUtil.isObject(sku.customerResult).customerName,
+            ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
+          ]}
+        />
+        <div className={style.showNumber}>
+          <span className={style.through}
+                hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
+          <span>× {sku.confirm ? sku.checkNumber : sku.realNumber}</span>
+        </div>
+      </div>
+
+      <div className={style.verify} hidden={forward}>
+        <span>到货数：<ShopNumber show
+                              value={sku.realNumber} /> {unitName} ({ToolUtil.isObject(sku.user).name || '-'})</span>
+        {
+          checkUsers.map((item, index) => {
+            if (index < checkUsers.length - 2) {
+              return null;
+            }
+            return <span key={index}>复核数：
             <ShopNumber show value={item.number} /> {unitName} ({item.name || ''})
           </span>;
-        })
-      }
-      <div hidden={sku.hidden} className={style.checkNumber}>
+          })
+        }
+        <div hidden={sku.hidden} className={style.checkNumber}>
         <span>复核数：<ShopNumber value={sku.checkNumber} onChange={(checkNumber) => {
           setSku({ ...sku, checkNumber });
         }} /> {unitName}</span>
-        <Button color='primary' fill='outline' onClick={() => {
-          const param = {
-            data: {
-              anomalyId,
-              checkNumber: JSON.stringify([...checkUsers, {
-                number: sku.checkNumber,
-                name: userInfo.name,
-                userId: userInfo.id,
-              }]),
-            },
-          };
+          <Button color='primary' fill='outline' onClick={() => {
+            const param = {
+              data: {
+                anomalyId,
+                checkNumber: JSON.stringify([...checkUsers, {
+                  number: sku.checkNumber,
+                  name: userInfo.name,
+                  userId: userInfo.id,
+                }]),
+              },
+            };
 
-          saveRun(param);
-        }}>确认</Button>
+            saveRun(param);
+          }}>确认</Button>
+        </div>
+
       </div>
-
-    </div>
-
-    <div className={style.space} />
+    </MyCard>
 
     <div className={style.errors}>
       {
@@ -381,16 +388,17 @@ const SkuError = (
             return null;
           }
 
-          return <div key={index} className={style.inkindItem}>
-            <div className={style.inkindTitle}>
-              <div className={style.inkind}>
-                <div className={style.index}>{index + 1}</div>
-                <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
-                <span className={style.inkindNumber}>× {item.number}</span>
-                <div hidden={item.status === 0}>
-                  {errorTypeData(item, index).showAction}
-                </div>
+          return <MyCard
+            key={index}
+            titleBom={<div className={style.inkind}>
+              <div className={style.index}>{index + 1}</div>
+              <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
+              <span className={style.inkindNumber}>× {item.number}</span>
+              <div hidden={item.status === 0}>
+                {errorTypeData(item, index).showAction}
               </div>
+            </div>}
+            extra={<>
               {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
                 if (item.userId) {
                   return;
@@ -399,12 +407,13 @@ const SkuError = (
               }}>
                 {item.userId ? `已转交：${item.userName}` : '转交处理'}
               </LinkButton>}
-              {item.status !== 0  && <LinkButton style={{marginLeft:8}} onClick={() => {
+              {item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
                 action(item, 0);
               }}>
                 <FormOutlined />
               </LinkButton>}
-            </div>
+            </>}
+          >
             <div className={style.careful} style={{ padding: '12px 0' }}>
               异常原因：{ToolUtil.isArray(item.notices).map((item, index) => {
               return <div key={index} className={style.notices}>
@@ -438,7 +447,7 @@ const SkuError = (
             <div hidden={handle} className={style.actions}>
               {errorTypeData(item, index).actions}
             </div>
-          </div>;
+          </MyCard>;
         })
       }
     </div>

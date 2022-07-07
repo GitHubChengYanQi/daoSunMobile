@@ -38,11 +38,11 @@ const CheckUser = (
       if (res && res.userId) {
         onChange(res.userId, res.name, params);
       } else {
-        Message.toast('系统无此用户，请先注册！');
+        Message.errorToast('系统无此用户，请先注册！');
       }
     },
     onError: () => {
-      Message.toast('获取用户失败！');
+      Message.errorToast('获取用户失败！');
     },
   });
 

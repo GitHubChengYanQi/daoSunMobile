@@ -38,22 +38,24 @@ const MyPicking = () => {
   const { loading: receiptsLoading, run: receiptsRun } = useRequest(outStockByReceipts, {
     manual: true,
     onSuccess: () => {
-      Message.toast('领取成功！');
-      setRefresh(true);
+      Message.successToast('领取成功！', () => {
+        setRefresh(true);
+      });
     },
     onError: () => {
-      Message.toast('领取失败！');
+      Message.errorToast('领取失败！');
     },
   });
 
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
     onSuccess: () => {
-      Message.toast('领取成功！');
-      setRefresh(true);
+      Message.successToast('领取成功！',()=>{
+        setRefresh(true);
+      });
     },
     onError: () => {
-      Message.toast('领取失败！');
+      Message.errorToast('领取失败！');
     },
   });
 

@@ -3,6 +3,7 @@ import { request } from '../util/Request';
 import { history } from 'umi';
 import { Dialog, Toast } from 'antd-mobile';
 import IsDev from '../components/IsDev';
+import { Message } from '../pages/components/Message';
 
 const scan = () => new Promise((resolve, reject) => {
   wx.ready(() => {
@@ -23,7 +24,7 @@ const scan = () => new Promise((resolve, reject) => {
         } else if (resultStr && resultStr.length === 19) {
           resolve(resultStr);
         } else {
-          Dialog.alert({
+          Message.warningDialog({
             content: '请扫正确二维码！',
           });
         }

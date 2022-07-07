@@ -45,24 +45,25 @@ const OneInStock = (
   }, {
     manual: true,
     onSuccess: () => {
-      Message.toast('入库成功！');
-      refresh();
-      onClose(total === skuItem.number);
+      Message.successToast('入库成功！',()=>{
+        refresh();
+        onClose(total === skuItem.number);
+      });
     },
     onError: () => {
-      Message.toast('入库失败！');
+      Message.errorToast('入库失败！');
     },
   });
 
-  return <div className={style.content} style={{ height: 'auto', padding: '0 12px 76px' }}>
+  return <div className={style.content} style={{ height: 'auto', paddingBottom:50 }}>
     <div className={style.header}>
       物料入库
       <span onClick={() => {
         onClose(false);
       }}><CloseOutline /></span>
     </div>
-    <div className={style.skuList} style={{ borderBottom: '1px solid #EEEEEE' }}>
-      <div className={style.skuItem}>
+    <div className={style.skuList}>
+      <div className={style.skuItem} style={{border:'none'}}>
         <div className={style.sku}>
           <SkuItem
             skuResult={skuResult}
@@ -94,10 +95,10 @@ const OneInStock = (
 
 
     <BottomButton
-      only
-      disabled={inStockSku.length === 0}
-      text='确认'
-      onClick={() => {
+      square
+      rightDisabled={inStockSku.length === 0}
+      rightText='确认'
+      rightOnClick={() => {
 
         const listParams = inStockSku.map((item) => {
           return {

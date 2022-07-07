@@ -1,8 +1,56 @@
 
-:global .adm-dialog-wrap {
-  width: auto;
+.successTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  flex-direction: column;
+
+  svg {
+    color: #52c41a;
+    font-size: 32px;
+  }
 }
 
-.dialogWarning {
-  padding: 10px;
+.dialogTitle {
+  text-align: center;
+
+  .waringIcon, .errorIcon {
+    text-align: right;
+    padding-right: 8px;
+    position: absolute;
+    top: 0;
+    left: -32px;
+
+    svg {
+      font-size: 24px;
+    }
+  }
+
+}
+
+.warningContent, .errorContent {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-direction: column;
+
+  .waringIcon {
+    color: rgb(250, 173, 20);
+    font-size: 32px;
+  }
+
+  .errorIcon {
+    color: var(--adm-color-danger);
+    font-size: 32px;
+  }
+
+  .title {
+    font-weight: bold;
+  }
+}
+
+.dialogContent {
+  text-align: center;
+  padding-top: 8px;
 }

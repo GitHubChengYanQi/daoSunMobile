@@ -14,7 +14,7 @@ const Header = ({ data = {} }) => {
   const receiptsData = () => {
     switch (data.type) {
       case ReceiptsEnums.instockOrder:
-      case ReceiptsEnums.instockError:
+      case ReceiptsEnums.error:
       case ReceiptsEnums.outstockOrder:
       case ReceiptsEnums.maintenance:
       case ReceiptsEnums.stocktaking:

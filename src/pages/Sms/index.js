@@ -10,6 +10,7 @@ import { Field } from '@formily/react';
 import Icon from '../components/Icon';
 import { createForm, onFieldReact } from '@formily/core';
 import { Code, Phone } from './components/Field';
+import { Message } from '../components/Message';
 
 const form = createForm({
   effects: () => {
@@ -41,9 +42,9 @@ const Sms = () => {
   const submit = () => {
     form.submit((values) => {
       if (!values.phone) {
-        return Dialog.alert({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true });
+        return Message.warningDialog({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true });
       } else if (!values.code) {
-        return Dialog.alert({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true });
+        return Message.warningDialog({ content: '请输入验证码!', confirmText: '重新输入', closeOnMaskClick: true });
       }
       run({ data: values });
     });

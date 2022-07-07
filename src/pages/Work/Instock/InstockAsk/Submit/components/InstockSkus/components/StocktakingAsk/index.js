@@ -8,10 +8,6 @@ import Stocktaking from '../Stocktaking';
 import Skus from '../Skus';
 import User from '../User';
 import MyNavBar from '../../../../../../../../components/MyNavBar';
-import style from '../../../PurchaseOrderInstock/index.less';
-import Careful from '../Careful';
-import MyTextArea from '../../../../../../../../components/MyTextArea';
-import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { inventoryAdd, inventorySelectCondition } from '../../index';
@@ -32,11 +28,12 @@ const StocktakingAsk = ({ state, skus, createType }) => {
   const { loading: inventoryLoading, run: inventory } = useRequest(inventoryAdd, {
     manual: true,
     onSuccess: () => {
-      Message.toast('创建盘点单成功!');
-      history.goBack();
+      Message.successToast('创建盘点单成功!',()=>{
+        history.goBack();
+      });
     },
     onError: () => {
-      Message.toast('创建盘点单失败!');
+      Message.errorToast('创建盘点单失败!');
     },
   });
 
@@ -44,11 +41,12 @@ const StocktakingAsk = ({ state, skus, createType }) => {
   const { loading: inventoryConditionLoading, run: inventoryCondition } = useRequest(inventorySelectCondition, {
     manual: true,
     onSuccess: () => {
-      Message.toast('创建盘点单成功!');
-      history.goBack();
+      Message.successToast('创建盘点单成功!',()=>{
+        history.goBack();
+      });
     },
     onError: () => {
-      Message.toast('创建盘点单失败!');
+      Message.errorToast('创建盘点单失败!');
     },
   });
 
@@ -158,7 +156,7 @@ const StocktakingAsk = ({ state, skus, createType }) => {
     return <>
       <Stocktaking value={params} onChange={setParams} />
       {state.condition ?
-        <Condition noTime type={createType} paddingBottom={8} value={params} onChange={(value) => {
+        <Condition noTime type={createType} paddingBottom={3} value={params} onChange={(value) => {
           setParams(value);
         }} />
         :

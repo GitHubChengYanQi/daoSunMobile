@@ -7,6 +7,7 @@ import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
+import { Message } from '../pages/components/Message';
 
 
 const BasicLayout = (props) => {
@@ -28,7 +29,7 @@ const BasicLayout = (props) => {
       } else if (code && code.length === 19) {
         codeId = code;
       } else {
-        Dialog.alert({
+        Message.warningDialog({
           content: '请扫正确二维码！',
         });
       }

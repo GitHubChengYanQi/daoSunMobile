@@ -6,6 +6,7 @@ import Icon from '../../../../../../../../components/Icon';
 import User from '../User';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
 
 const Stocktaking = (
   {
@@ -24,24 +25,22 @@ const Stocktaking = (
       onChange({ ...value, userId: id, userName: name });
     }} title='负责人' />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>盘点时间 <span>*</span></Title>
-      <div>
-        <StartEndDate
-          split={<div>——</div>}
-          value={[value.beginTime, value.endTime]}
-          startShow={value.beginTime || <Space align='center'><CalendarOutline />起始</Space>}
-          endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
-          onChange={(dates) => {
-            onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
-          }}
-        />
-      </div>
-    </div>
+    <MyCard
+      titleBom={<Title className={style.title}>盘点时间 <span>*</span></Title>}
+      extra={<StartEndDate
+        split={<div>——</div>}
+        value={[value.beginTime, value.endTime]}
+        startShow={value.beginTime || <Space align='center'><CalendarOutline />起始</Space>}
+        endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
+        onChange={(dates) => {
+          onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
+        }}
+      />}
+    />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>方法 <span>*</span></Title>
-      <div className={style.method}>
+    <MyCard
+      titleBom={ <Title className={style.title}>方法 <span>*</span></Title>}
+      extra={<div className={style.method}>
         {
           method.map((item, index) => {
             return <Radio
@@ -64,12 +63,12 @@ const Stocktaking = (
           })
         }
 
-      </div>
-    </div>
+      </div>}
+    />
 
-    <div className={style.dataItem}>
-      <Title className={style.title}>方式 <span>*</span></Title>
-      <div className={style.mode}>
+    <MyCard
+      titleBom={<Title className={style.title}>方式 <span>*</span></Title>}
+      extra={<div className={style.mode}>
         {
           mode.map((item, index) => {
             return <Radio
@@ -92,9 +91,8 @@ const Stocktaking = (
           })
         }
 
-      </div>
-    </div>
-
+      </div>}
+    />
   </>;
 };
 

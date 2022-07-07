@@ -15,6 +15,7 @@ import { connect } from 'dva';
 import DefaultMenus from '../component/DefaultMenus';
 import CreateInStock from '../../Work/ProcessTask/Create/components/CreateInStock';
 import MenusItem from '../component/MenusItem';
+import { Message } from '../../components/Message';
 
 
 const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
@@ -40,11 +41,12 @@ const MenusSetting = (props) => {
   const { loading: addLoading, run: addRun } = useRequest(menusAddApi, {
     manual: true,
     onSuccess: () => {
-      toggle();
-      props.dispatch({
-        type: 'data/getUserMenus',
-      });
-      Toast.show({ content: '保存成功！', position: 'bottom' });
+      Message.successToast('保存成功',()=>{
+        toggle();
+        props.dispatch({
+          type: 'data/getUserMenus',
+        });
+      })
     },
   });
 

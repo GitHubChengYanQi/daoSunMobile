@@ -13,6 +13,7 @@ import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import Title from '../../../../../../components/Title';
+import MyCard from '../../../../../../components/MyCard';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -70,11 +71,7 @@ const Stocktaking = (
       data.map((positionItem, positionIndex) => {
         const skuResultList = positionItem.skuResultList || [];
 
-        return <div key={positionIndex} className={style.position}>
-          <Title className={style.title}>
-            {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
-          </Title>
-
+        return <MyCard key={positionIndex} title={` ${positionItem.name} / ${ToolUtil.isObject(positionItem.storehouseResult).name || '-'}`}>
           <div className={style.skus}>
             {
               skuResultList.map((skuItem, skuIndex) => {
@@ -213,7 +210,7 @@ const Stocktaking = (
               </div>
             </Divider>}
           </div>
-        </div>;
+        </MyCard>
       })
     }
 

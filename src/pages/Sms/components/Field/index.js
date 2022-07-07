@@ -5,6 +5,7 @@ import { Dialog, Input, Toast } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import SendCode from '@jiumao/rc-send-code';
 import { PhoneOutlined } from '@ant-design/icons';
+import { Message } from '../../../components/Message';
 
 export const Phone = (props) => {
 
@@ -39,7 +40,7 @@ export const Code = ({ phone, ...props }) => {
       className={style.sendCode}
       onCaptcha={() => {
         if (!phone) {
-          Dialog.alert({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true });
+          Message.warningDialog({ content: '请输入手机号!', confirmText: '重新输入', closeOnMaskClick: true });
           return new Promise((resolve, reject) => {
             return reject();
           });

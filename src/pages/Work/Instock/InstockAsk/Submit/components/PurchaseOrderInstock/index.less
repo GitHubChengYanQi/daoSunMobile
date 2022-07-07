@@ -19,6 +19,24 @@
   border-bottom: 1px solid #F5F5F5;
 }
 
+.extra {
+  color: #000000;
+  display: flex;
+  gap: 4px;
+  align-items: center;
+
+  div {
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    span {
+      color: var(--adm-color-primary);
+    }
+  }
+}
+
 .skus {
   background-color: #fff;
   font-size: 14px;
@@ -32,24 +50,6 @@
 
     .headTitle {
       flex-grow: 1;
-    }
-
-    .extra {
-      color: #000000;
-      display: flex;
-      gap: 4px;
-      align-items: center;
-
-      div {
-        margin-left: 8px;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-
-        span {
-          color: var(--adm-color-primary);
-        }
-      }
     }
   }
 
@@ -118,7 +118,7 @@
 .allSku {
   color: #808080;
   font-size: 12px;
-  margin: 0 12px;
+  margin: 0;
   border-color: #F5F5F5;
 }
 
@@ -129,11 +129,18 @@
   .title {
     flex-grow: 1;
   }
+}
 
-  .method, .mode {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.method, .mode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.title {
+  span {
+    margin-left: 4px;
+    color: #EB0F0F;
   }
 }
 
@@ -143,31 +150,8 @@
   color: #333333;
   margin-bottom: 1px;
 
-  .carefulShow {
-    margin: 8px;
-    display: inline-block;
-    padding: 6px;
-    background: #F5F5F5;
-    max-width: 150px;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
   .remake {
     padding: 8px;
-  }
-
-  .title {
-    span {
-      //margin-left: 4px;
-      color: #EB0F0F;
-    }
-  }
-
-  .nearMaintenance {
-    display: flex;
-    align-items: center;
   }
 
   .files {
@@ -186,8 +170,24 @@
   }
 }
 
+.carefulShow {
+  margin: 0 8px;
+  display: inline-block;
+  padding: 6px;
+  background: #F5F5F5;
+  max-width: 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nearMaintenance {
+  display: flex;
+  align-items: center;
+}
+
 .carefulData {
-  padding: 14px 0;
+  //padding: 14px 0;
 
   .addCareful {
     margin-top: 8px;
@@ -309,5 +309,18 @@
     line-height: 18px;
   }
 }
+
+.cardStyle {
+  padding: 12px 0 !important;
+
+  .headerStyle {
+    padding: 0 12px !important;
+  }
+
+  .bodyStyle {
+    padding: 8px 0 !important;
+  }
+}
+
 
 

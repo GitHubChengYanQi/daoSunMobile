@@ -7,7 +7,6 @@ import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
-import MyStepper from '../../../../../../../../../../components/MyStepper';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
@@ -46,7 +45,7 @@ const Order = (
           ...item,
           show,
           positionsResults: positions.map(item => {
-            const checked = positions.length === 1;
+            const checked = show && positions.length === 1;
             const number = (checked && show) ? (item.number > outStockNumber ? outStockNumber : item.number) : 0;
             return { ...item, checked, outStockNumber: number };
           }),
@@ -72,7 +71,7 @@ const Order = (
             ...item, show: true, positionsResults: positions.map((item) => {
               if (item.storehousePositionsId === codeData.positionId) {
                 const num = (outStockNumber - (outNumber + codeData.number)) > 0 ? codeData.number : (outStockNumber - outNumber);
-                return { ...item, checked: true, outStockNumber: num };
+                return { ...item, checked: true, outStockNumber: num, inkindId: codeData.inkindId };
               }
               return item;
             }),
@@ -100,6 +99,7 @@ const Order = (
             customerId,
             number: positionItem.outStockNumber,
             pickListsId: id,
+            inkindId: positionItem.inkindId,
           });
         }
         return null;

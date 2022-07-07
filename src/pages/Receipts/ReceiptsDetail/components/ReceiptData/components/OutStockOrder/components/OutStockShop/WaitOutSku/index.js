@@ -68,22 +68,23 @@ const WaitOutSku = (
   const { loading: pickLoading, run: pickRun } = useRequest(productionPickListsSend, {
     manual: true,
     onSuccess: () => {
-      Message.toast('提醒成功!');
+      Message.successToast('提醒成功!');
     },
     onError: () => {
-      Message.toast('提醒失败!');
+      Message.errorToast('提醒失败!');
     },
   });
 
   const { loading: backLoading, run: backRun } = useRequest(backSkus, {
     manual: true,
     onSuccess: () => {
-      listRefresh();
-      refresh();
-      Message.toast('退回成功!');
+      Message.successToast('退回成功!',()=>{
+        listRefresh();
+        refresh();
+      });
     },
     onError: () => {
-      Message.toast('退回失败!');
+      Message.errorToast('退回失败!');
     },
   });
 

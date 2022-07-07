@@ -26,6 +26,7 @@ const ProcessScreen = (
 
   const type = params.type;
   const createUser = params.createUser;
+  const statusList = params.statusList || [];
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -38,7 +39,7 @@ const ProcessScreen = (
         screened = type;
         break;
       case 'status':
-        screened = true;
+        screened = statusList.length > 0;
         break;
       case 'createUser':
         screened = createUser;
@@ -56,12 +57,12 @@ const ProcessScreen = (
           options={[
             { label: '入库任务', value: ReceiptsEnums.instockOrder },
             { label: '出库任务', value: ReceiptsEnums.outstockOrder },
-            { label: '异常任务', value: ReceiptsEnums.instockError },
+            { label: '异常任务', value: ReceiptsEnums.error },
             { label: '盘点任务', value: ReceiptsEnums.stocktaking },
             { label: '养护任务', value: ReceiptsEnums.maintenance },
           ]}
           title='单据类型'
-          value={[params.type]}
+          value={[type]}
           onChange={(types) => {
             paramsOnChange({ ...params, type: types[0] });
           }}
@@ -69,19 +70,20 @@ const ProcessScreen = (
       case 'status':
         return <State
           options={[
-            { label: '待处理', value: 0 },
-            { label: '已处理', value: 99 },
+            { label: '待处理', value: '0' },
+            { label: '已处理', value: '99' },
           ]}
+          multiple
           title='单据类型'
-          value={[params.status]}
-          onChange={(status) => {
-            paramsOnChange({ ...params, status: status[0] });
+          value={statusList}
+          onChange={(statusList) => {
+            paramsOnChange({ ...params, statusList });
           }}
         />;
       case 'createUser':
         return <User
           title={item.title}
-          value={params.createUser}
+          value={createUser}
           onChange={(createUser) => {
             paramsOnChange({ ...params, createUser });
           }}

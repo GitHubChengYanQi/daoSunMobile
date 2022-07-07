@@ -9,117 +9,128 @@
     padding: 8px 0;
   }
 
-  .step {
-    :global .adm-step {
-      --line-to-next-color: var(--adm-color-primary);
+
+}
+
+.step {
+  padding:8px 0;
+
+  :global .adm-step {
+    --line-to-next-color: var(--adm-color-primary);
+  }
+
+  :global .adm-step-description {
+    padding-top: 8px !important;
+  }
+
+  //
+  //:global .adm-step-icon-container {
+  //  top: calc(var(--title-font-size) * 2.5 / 2) !important
+  //}
+  //
+  //:global .adm-step-description {
+  //  color: #000000 !important;
+  //}
+  //
+
+  :global .adm-step-content {
+    padding-left: 8px;
+  }
+
+  .wait {
+    :global .ant-avatar {
+      background-color: #ccc;
+    }
+  }
+
+  .action {
+    :global .ant-avatar {
+      background-color: var(--adm-color-primary);
+    }
+  }
+
+  .success {
+    :global .ant-avatar {
+      color: var(--adm-color-primary);
+      border: solid 1px var(--adm-color-primary);
+      background-color: #fff;
+    }
+  }
+
+  .error {
+    :global .ant-avatar {
+      background-color: var(--adm-color-danger);
+    }
+  }
+
+  .stepIcon {
+    :global .ant-avatar {
+      width: 24px;
+      height: 24px;
+      line-height: 24px;
+      font-size: 14px;
     }
 
-    :global .adm-step-description {
-      padding-top: 8px !important;
+    :global .ant-avatar-string {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
     }
+  }
 
-    //
-    //:global .adm-step-icon-container {
-    //  top: calc(var(--title-font-size) * 2.5 / 2) !important
-    //}
-    //
-    //:global .adm-step-description {
-    //  color: #000000 !important;
-    //}
-    //
+  .users {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
-    :global .adm-step-content {
-      padding-left: 8px;
-    }
+  .user {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #808080;
 
-    .wait {
-      :global .ant-avatar {
-        background-color: #ccc;
+    .nameAvatar {
+      flex-grow: 1;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+
+      :global .adm-badge-content {
+        padding: 0;
       }
-    }
 
-    .action {
-      :global .ant-avatar {
-        background-color: var(--adm-color-primary);
-      }
-    }
-
-    .success {
-      :global .ant-avatar {
+      .auditSuccess {
         color: var(--adm-color-primary);
-        border: solid 1px var(--adm-color-primary);
-        background-color: #fff;
+        font-size: 14px;
       }
-    }
 
-    .error {
-      :global .ant-avatar {
-        background-color: var(--adm-color-danger);
-      }
-    }
-
-    .stepIcon {
-      :global .ant-avatar {
-        width: 24px;
-        height: 24px;
-        line-height: 24px;
+      .auditError {
+        color: var(--adm-color-danger);
         font-size: 14px;
       }
     }
 
-    .users {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    :global .ant-avatar {
+      font-size: 12px !important;
     }
-
-    .user {
-      display: flex;
-      align-items: center;
-      font-size: 12px;
-      color: #808080;
-
-      .nameAvatar {
-        flex-grow: 1;
-        display: flex;
-        gap: 8px;
-        align-items: center;
-
-        :global .adm-badge-content {
-          padding: 0;
-        }
-
-        .auditSuccess {
-          color: var(--adm-color-primary);
-          font-size: 14px;
-        }
-
-        .auditError {
-          color: var(--adm-color-danger);
-          font-size: 14px;
-        }
-      }
-
-      :global .ant-avatar {
-        font-size: 12px !important;
-      }
-    }
-
-
-    .title {
-      font-size: 14px;
-      font-weight: bold;
-      color: #000000;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-
-      svg {
-        color: #D8D8D8;
-      }
-    }
-
   }
+
+
+  .title {
+    font-size: 14px;
+    font-weight: bold;
+    color: #000000;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+
+    svg {
+      color: #D8D8D8;
+    }
+  }
+
 }
 
 

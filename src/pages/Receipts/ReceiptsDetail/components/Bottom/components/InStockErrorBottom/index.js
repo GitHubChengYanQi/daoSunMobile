@@ -20,11 +20,12 @@ const InStockErrorBottom = (
   const { loading, run } = useRequest(submit, {
     manual: true,
     onSuccess: () => {
-      refresh();
-      Message.toast('提交成功！');
+      Message.successToast('提交成功！', () => {
+        refresh();
+      });
     },
     onError: () => {
-      Message.toast('提交失败！');
+      Message.errorToast('提交失败！');
     },
   });
 

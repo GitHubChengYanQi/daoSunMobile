@@ -11,7 +11,10 @@ export const ReceiptsEnums = {
 
 
   // 入库异常
-  instockError: 'ERROR',
+  error: 'ERROR',
+
+  // 异常转交
+  errorForWard: 'ErrorForWard',
   // 核实异常
   verifyError: 'verifyError',
 

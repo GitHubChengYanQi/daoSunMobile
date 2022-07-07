@@ -24,11 +24,12 @@ const CuringAsk = ({ createType, state }) => {
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
     manual: true,
     onSuccess: () => {
-      Message.toast('创建养护单成功!');
-      history.goBack();
+      Message.successToast('创建养护单成功!',()=>{
+        history.goBack();
+      });
     },
     onError: () => {
-      Message.toast('创建养护单失败!');
+      Message.errorToast('创建养护单失败!');
     },
   });
 
@@ -102,7 +103,7 @@ const CuringAsk = ({ createType, state }) => {
   const content = () => {
     return <>
       <Curing value={params} onChange={setParams} />
-      <Condition noTime type={createType} paddingBottom={8} value={params} onChange={(value) => {
+      <Condition noTime type={createType} paddingBottom={3} value={params} onChange={(value) => {
         setParams(value);
       }} />
     </>;

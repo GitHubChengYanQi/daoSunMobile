@@ -31,11 +31,12 @@ const Maintenanceing = (
       {
         manual: true,
         onSuccess: () => {
-          onSuccess();
-          Message.toast('养护成功！');
+          Message.successToast('养护成功！',()=>{
+            onSuccess();
+          });
         },
         onError: () => {
-          Message.toast('养护失败！');
+          Message.errorToast('养护失败！');
         },
       });
 

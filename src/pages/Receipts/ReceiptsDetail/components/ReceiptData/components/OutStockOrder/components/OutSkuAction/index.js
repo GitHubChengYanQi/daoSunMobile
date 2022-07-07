@@ -10,6 +10,7 @@ import Prepare from '../Prepare';
 import OutStockShop from '../OutStockShop';
 import OutSkuItem from './compoennts/OutSkuItem';
 import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
 
 
 const OutSkuAction = (
@@ -23,7 +24,6 @@ const OutSkuAction = (
     taskId,
   },
 ) => {
-
 
   const [visible, setVisible] = useState();
 
@@ -50,59 +50,59 @@ const OutSkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-
   return <div style={{ backgroundColor: '#fff' }}>
-    <div className={style.skuHead}>
-      <Title className={style.headTitle}>
-        申请明细
-      </Title>
-      <div className={style.extra}>
+    <MyCard
+      className={style.cardStyle}
+      headerClassName={style.headerStyle}
+      bodyClassName={style.bodyStyle}
+      title='申请明细'
+      extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
-      </div>
-    </div>
-    {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
-    {
-      outSkus.map((item, index) => {
+      </div>}>
+      {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+      {
+        outSkus.map((item, index) => {
 
-        const complete = item.complete;
-        const prepare = item.prepare;
+          const complete = item.complete;
+          const prepare = item.prepare;
 
-        if (!allSku && index >= 3) {
-          return null;
-        }
+          if (!allSku && index >= 3) {
+            return null;
+          }
 
-        if (!action || complete || prepare || !item.stockNumber) {
-          return <OutSkuItem data={data} item={item} key={index} />;
-        }
+          if (!action || complete || prepare || !item.stockNumber) {
+            return <OutSkuItem data={data} item={item} key={index} />;
+          }
 
-        return <div key={index}>
-          <Viewpager
-            currentIndex={index}
-            onLeft={() => {
-              setVisible(item);
-            }}
-            onRight={() => {
-              setVisible(item);
-            }}
-          >
-            <OutSkuItem data={data} item={item} key={index} />
-          </Viewpager>
-        </div>;
-      })
-    }
+          return <div key={index}>
+            <Viewpager
+              currentIndex={index}
+              onLeft={() => {
+                setVisible(item);
+              }}
+              onRight={() => {
+                setVisible(item);
+              }}
+            >
+              <OutSkuItem data={data} item={item} key={index} />
+            </Viewpager>
+          </div>;
+        })
+      }
 
-    {data.length > 3 && <Divider className={style.allSku}>
-      <div onClick={() => {
-        toggle();
-      }}>
-        {
-          allSku ?
-            <UpOutline />
-            :
-            <DownOutline />
-        }
-      </div>
-    </Divider>}
+      {data.length > 3 && <Divider className={style.allSku}>
+        <div onClick={() => {
+          toggle();
+        }}>
+          {
+            allSku ?
+              <UpOutline />
+              :
+              <DownOutline />
+          }
+        </div>
+      </Divider>}
+    </MyCard>
 
     <Popup
       onMaskClick={() => setVisible(false)}

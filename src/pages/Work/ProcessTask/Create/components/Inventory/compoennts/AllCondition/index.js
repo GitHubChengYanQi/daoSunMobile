@@ -36,8 +36,9 @@ const AllCondition = (
     manual: true,
     onSuccess: (res) => {
       if (ToolUtil.isArray(res).length === 0) {
-        Message.toast('请添加材质！');
-        onSuccess();
+        Message.errorToast('请添加材质！', () => {
+          onSuccess();
+        });
       } else {
         setVisible('material');
       }
@@ -48,8 +49,9 @@ const AllCondition = (
     manual: true,
     onSuccess: (res) => {
       if (ToolUtil.isArray(res).length === 0) {
-        Message.toast('请添加品牌！');
-        onSuccess();
+        Message.errorToast('请添加品牌！',()=>{
+          onSuccess();
+        });
       } else {
         setVisible('brand');
       }
@@ -91,8 +93,8 @@ const AllCondition = (
     }
   };
 
-  if (materialLoading || brandLoading){
-    return  <MyLoading />
+  if (materialLoading || brandLoading) {
+    return <MyLoading />;
   }
 
   return <>

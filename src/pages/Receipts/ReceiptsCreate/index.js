@@ -33,7 +33,7 @@ const ReceiptsCreate = () => {
       return <InventoryAsk />;
     case 'purchaseAsk':
       return <AskAdd />;
-    case ReceiptsEnums.instockError:
+    case ReceiptsEnums.error:
       return <Errors
         params={query.params}
         setModuleObject={setModuleObject}

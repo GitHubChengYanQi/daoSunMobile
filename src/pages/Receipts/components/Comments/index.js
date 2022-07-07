@@ -5,6 +5,7 @@ import { useRequest } from '../../../../util/Request';
 import style from './index.less';
 import { MyLoading } from '../../../components/MyLoading';
 import Note from './components/Note';
+import { Message } from '../../../components/Message';
 
 const Comments = (
   {
@@ -29,19 +30,14 @@ const Comments = (
     {
       manual: true,
       onSuccess: () => {
-        refresh();
-        Toast.show({
-          content: '评论完成！',
-          position: 'bottom',
-        });
-        onInput(false);
-        setVisible(false);
+        Message.successToast('评论完成',()=>{
+          refresh();
+          onInput(false);
+          setVisible(false);
+        })
       },
       onError: () => {
-        Toast.show({
-          content: '评论失败！',
-          position: 'bottom',
-        });
+        Message.errorToast('评论失败')
       },
     },
   );

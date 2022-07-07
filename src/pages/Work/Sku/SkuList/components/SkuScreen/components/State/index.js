@@ -6,6 +6,7 @@ const State = (
   {
     options = [],
     title,
+    multiple,
     value = [],
     onChange = () => {
     },
@@ -30,6 +31,7 @@ const State = (
         }}
         showCheckMark={false}
         options={options}
+        multiple={multiple}
         value={value}
         onChange={(v) => {
           onChange(v);
