@@ -27,18 +27,28 @@ const ProcessList = (
 
   const [data, setData] = useState([]);
 
+  const dataChange = (param, currentIndex) => {
+    const newData = data.map((item, index) => {
+      if (index === currentIndex) {
+        return { ...item, ...param };
+      }
+      return item;
+    });
+    setData(newData);
+  };
+
   const receiptsData = (item, index) => {
     switch (item.type) {
       case ReceiptsEnums.instockOrder:
-        return <InStockItem item={item} index={index} />;
+        return <InStockItem item={item} index={index} onChange={dataChange} />;
       case ReceiptsEnums.outstockOrder:
-        return <OutStockItem item={item} index={index} />;
+        return <OutStockItem item={item} index={index} onChange={dataChange} />;
       case ReceiptsEnums.maintenance:
         return <MaintenaceItem item={item} index={index} />;
       case ReceiptsEnums.stocktaking:
         return <StocktakingItem item={item} index={index} />;
       case ReceiptsEnums.error:
-        return <ErrorItem item={item} />;
+        return <ErrorItem item={item} onChange={dataChange} />;
       case ReceiptsEnums.errorForWard:
         return <ForwardItem item={item} />;
       default:

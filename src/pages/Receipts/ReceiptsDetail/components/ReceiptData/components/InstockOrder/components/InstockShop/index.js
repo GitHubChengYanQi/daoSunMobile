@@ -6,7 +6,6 @@ import WaitInstock from './components/WaitInstock';
 import OneInStock from './components/OneInStock';
 import InstockError from './components/InstockError';
 import Error from '../Error';
-import { WarningOutlined } from '@ant-design/icons';
 import { ReceiptsEnums } from '../../../../../../../index';
 
 const InstockShop = (
@@ -90,17 +89,22 @@ const InstockShop = (
           wait();
         }}>
           <div className={style.actionButton}>
-            <Badge content={order.waitInStockNum || null}  style={{ '--right': '5%','--top':'5%' }}><Icon type='icon-rukuguanli2' /></Badge>
+            <Badge
+              content={order.waitInStockNum || null}
+              style={{ '--right': '5%', '--top': '5%' }}>
+              <Icon type='icon-dairukuang' /></Badge>
           </div>
-          <span className={style.text}>待入</span>
         </div>
         <div className={style.action} onClick={() => {
           error();
         }}>
           <div className={style.actionButton}>
-            <Badge content={order.instockErrorNum || null}  style={{ '--right': '5%','--top':'5%' }}> <WarningOutlined style={{ color: 'red' }} /></Badge>
+            <Badge
+              content={order.instockErrorNum || null}
+              style={{ '--right': '5%', '--top': '5%' }}>
+              <Icon type='icon-yichangkuang' />
+            </Badge>
           </div>
-          <span className={style.text}>异常</span>
         </div>
       </div>
     </FloatingBubble>

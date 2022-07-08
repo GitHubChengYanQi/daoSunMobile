@@ -6,8 +6,7 @@ import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Button, Popup } from 'antd-mobile';
-import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url';
 import { Message } from '../../../../../../../../../../components/Message';
@@ -87,6 +86,8 @@ const WaitInstock = (
   const inStockChecked = instockList.filter(item => item.checked);
 
   const instockSkus = inStockChecked.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
+
+  const backSkus = inStockChecked.filter(item=>item.type !== 'instockByAnomaly');
 
   const allChecked = inStockChecked.length === 0 ? false : instockList.length === inStockChecked.length;
 
@@ -179,9 +180,9 @@ const WaitInstock = (
           }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {inStockChecked.length} 类</span>
         </div>
         <div className={style.buttons}>
-          <Button color='danger' disabled={inStockChecked.length === 0} fill='outline' onClick={() => {
+          <Button color='danger' disabled={backSkus.length === 0} fill='outline' onClick={() => {
             backRun({
-              data: { ids: inStockChecked.map(item => item.cartId) },
+              data: { ids: backSkus.map(item => item.cartId) },
             });
           }}>退回</Button>
           <Button color='primary' disabled={instockSkus.length === 0} onClick={() => {

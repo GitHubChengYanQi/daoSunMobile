@@ -56,6 +56,7 @@ const SkuAction = (
     return {
       ...item,
       number: item.realNumber,
+      askNumber: item.number,
     };
   });
 

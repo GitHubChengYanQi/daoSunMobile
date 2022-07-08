@@ -1,12 +1,11 @@
 import React from 'react';
 import style from '../../../../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
 import { history } from 'umi';
-import { DownOutline,RightOutline, UpOutline } from 'antd-mobile-icons';
+import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../../../components/MyDate';
-import InSkuItem
-  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/SkuAction/components/InSkuItem';
 import { Divider } from 'antd-mobile';
 import MyEmpty from '../../../../../../../components/MyEmpty';
+import Item from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockError/components/ErrorItem';
 
 const ErrorItem = (
   {
@@ -18,7 +17,7 @@ const ErrorItem = (
 
   const receipts = item.receipts || {};
 
-  const instockListResults = receipts.instockListResults || [];
+  const anomalyResults = receipts.anomalyResults || [];
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
@@ -37,20 +36,20 @@ const ErrorItem = (
       </div>
     </div>
     <div onClick={onClick}>
-      {instockListResults.length === 0 && <MyEmpty description='暂无物料' />}
+      {anomalyResults.length === 0 && <MyEmpty description='暂无物料' />}
       {
-        instockListResults.map((skuItem, skuIndex) => {
+        anomalyResults.map((skuItem, skuIndex) => {
 
           if (!item.allSku && skuIndex > 1) {
             return null;
           }
 
-          return <InSkuItem item={skuItem} data={instockListResults} key={skuIndex} />;
+          return <div key={index} style={{padding:'0 12px'}}><Item totalTitle='123' item={skuItem} index={index} /></div>;
         })
       }
     </div>
 
-    {instockListResults.length > 2 && <Divider className={style.allSku}>
+    {anomalyResults.length > 2 && <Divider className={style.allSku}>
       <div onClick={() => {
         onChange({ allSku: !item.allSku }, index);
       }}>

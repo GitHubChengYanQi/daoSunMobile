@@ -64,7 +64,6 @@ const MyDialog = (
 
 const successDialog = (
   {
-    title,
     content,
     confirmText,
     cancelText,
@@ -76,7 +75,6 @@ const successDialog = (
   }) => {
 
   const contentDom = <div className={style.successContent}>
-    <div className={style.title}>{title || '成功'}</div>
     <CheckCircleOutline className={style.successIcon} />
     <div className={style.content}>{content}</div>
   </div>;
@@ -102,11 +100,9 @@ const warningDialog = (
     onConfirm = () => {
     },
     only = true,
-    title,
   }) => {
 
   const contentDom = <div className={style.warningContent}>
-    <div className={style.title}>{title || '警告'}</div>
     <ExclamationTriangleOutline className={style.waringIcon} />
     <div className={style.content}>{content}</div>
   </div>;
@@ -132,11 +128,9 @@ const errorDialog = (
     onConfirm = () => {
     },
     only = true,
-    title,
   }) => {
 
   const contentDom = <div className={style.errorContent}>
-    <div className={style.title}>{title || '错误'}</div>
     <CloseCircleOutline className={style.errorIcon} />
     <div className={style.content}>{content}</div>
   </div>;

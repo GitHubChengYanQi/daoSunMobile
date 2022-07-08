@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import style from './index.less';
-import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { Popup } from 'antd-mobile';
 import SkuError from './components/SkuError';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import ShopNumber from '../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import Title from '../../../../../../components/Title';
 import MyCard from '../../../../../../components/MyCard';
+import LinkButton from '../../../../../../components/LinkButton';
+import { useHistory } from 'react-router-dom';
+import { ReceiptsEnums } from '../../../../../index';
+import ErrorItem from './components/ErrorItem';
 
 const InstockError = (
   {
@@ -25,16 +26,25 @@ const InstockError = (
   const anomalyResults = data.anomalyResults || [];
   const instockOrder = data.instockOrder || {};
 
+  const history = useHistory();
+
   const masterUser = ToolUtil.isObject(data.masterUser);
 
   const errorTypeData = () => {
     switch (data.type) {
       case 'instock':
         return {
-          receipts: masterUser.name && `${masterUser.name || '-'}的入库申请 / ${instockOrder.coding || '-'}`,
+          receipts: <LinkButton
+            className={style.value}
+            onClick={() => {
+              history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${data.instockOrderId}`);
+            }}
+          >
+            {masterUser.name && `${masterUser.name || '-'}的入库申请 / ${instockOrder.coding || '-'}`}
+          </LinkButton>,
           totalTitle: '申请总数',
         };
-        case 'Stocktaking':
+      case 'Stocktaking':
         return {
           receipts: masterUser.name && `${masterUser.name || '-'}的盘点申请 / ${instockOrder.coding || '-'}`,
           totalTitle: '实际总数',
@@ -45,52 +55,22 @@ const InstockError = (
   };
 
   return <>
-    <MyCard noHeader className={style.cardStyle}>
+    <MyCard title='物料明细'>
       <div className={style.skuList}>
         {
           anomalyResults.map((item, index) => {
-            return <div key={index}>
-              <div className={style.skuItem} onClick={() => {
-                if (getAction('verify').id && permissions) {
-                  setVisible(item.anomalyId);
-                }
-              }}>
-                <div className={style.sku}>
-                  <SkuItem
-                    extraWidth='100px'
-                    skuResult={item.skuResult}
-                    otherData={[
-                      ToolUtil.isObject(item.customer).customerName,
-                      ToolUtil.isObject(item.brand).brandName || '无品牌',
-                    ]}
-                  />
-                </div>
-                <div className={style.realNumber}>
-                  <ShopNumber show value={item.realNumber} />
-                  <div className={style.status}>
-                    · {item.status === 99 ? '已处理' : '处理中'}
-                  </div>
-                </div>
-              </div>
-
-              <div className={style.error}>
-                <div><span>{errorTypeData().totalTitle}：<span>{item.needNumber}</span></span>
-                </div>
-                <div hidden={!item.errorNumber}>数量 <span
-                  className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
-                </div>
-                <div hidden={!item.otherNumber}>质量 <span className={style.yellow}>{item.otherNumber}</span></div>
-              </div>
-            </div>;
+            return <ErrorItem totalTitle={errorTypeData().totalTitle} item={item} key={index} index={index} onClick={() => {
+              if (getAction('verify').id && permissions) {
+                setVisible(item.anomalyId);
+              }
+            }} />;
           })
         }
       </div>
     </MyCard>
 
-    <MyCard title='关联单据'>
-      <span className={style.value}>
-         {errorTypeData().receipts}
-      </span>
+    <MyCard title='来源'>
+      {errorTypeData().receipts}
     </MyCard>
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>

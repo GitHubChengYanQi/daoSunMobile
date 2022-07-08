@@ -55,11 +55,11 @@ const ProcessScreen = (
       case 'type':
         return <State
           options={[
-            { label: '入库任务', value: ReceiptsEnums.instockOrder },
-            { label: '出库任务', value: ReceiptsEnums.outstockOrder },
-            { label: '异常任务', value: ReceiptsEnums.error },
-            { label: '盘点任务', value: ReceiptsEnums.stocktaking },
-            { label: '养护任务', value: ReceiptsEnums.maintenance },
+            { label: '入库', value: ReceiptsEnums.instockOrder },
+            { label: '出库', value: ReceiptsEnums.outstockOrder },
+            { label: '异常', value: ReceiptsEnums.error },
+            { label: '盘点', value: ReceiptsEnums.stocktaking },
+            { label: '养护', value: ReceiptsEnums.maintenance },
           ]}
           title='单据类型'
           value={[type]}

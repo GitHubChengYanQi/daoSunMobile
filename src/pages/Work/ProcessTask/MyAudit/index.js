@@ -54,7 +54,14 @@ const MyAudit = (
 
   return <>
     <div hidden={type}>
-      <MySearch placeholder='请输入相关单据信息' historyType='process' />
+      <MySearch
+        placeholder='请输入相关单据信息'
+        historyType='process'
+        onSearch={(value) => {
+          submit({ skuName: value });
+        }} onClear={() => {
+        submit({ skuName: '' });
+      }} />
     </div>
 
 

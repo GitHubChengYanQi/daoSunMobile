@@ -9,14 +9,15 @@ import style from './index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 import { MyDate } from '../../../../components/MyDate';
-import Title from '../../../../components/Title';
 import MyCard from '../../../../components/MyCard';
+import UploadFile from '../../../../components/Upload/UploadFile';
 
 const Process = (
   {
     type,
     createUser = {},
     auditData,
+    remarks = [],
   }) => {
 
   const { loading, data, run } = useRequest({
@@ -42,7 +43,7 @@ const Process = (
   const status = (step) => {
     switch (step.auditType) {
       case 'start':
-        return <Avatar><Icon type='icon-caigou_faqiren' /></Avatar>;
+        return <Avatar><Icon type='icon-faqiren' /></Avatar>;
       case 'send':
         return <Avatar><Icon type='icon-caigou_chaosong' /></Avatar>;
       case 'route':
@@ -133,6 +134,11 @@ const Process = (
     }
     const logResult = step.logResult || {};
 
+    const logRemark = remarks.filter(item => item.logId === logResult.logId)[0];
+
+    const imgs = (logRemark && logRemark.photoId) ? logRemark.photoId.split(',').map(item => {
+      return { url: item };
+    }) : [];
 
     return users.map((items, index) => {
       let stepsStatus;
@@ -171,6 +177,10 @@ const Process = (
         </div>
         <div hidden={!stepsStatus}>
           {nodeStatusName(auditType, stepsStatus, true)} · {MyDate.Show(logResult.updateTime || new Date())}
+          {logRemark && <div>
+            {logRemark.content}
+            <UploadFile imgSize={14} show value={imgs} />
+          </div>}
         </div>
       </div>;
     });

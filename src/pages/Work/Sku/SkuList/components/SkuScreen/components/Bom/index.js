@@ -101,7 +101,7 @@ const Bom = (
               }
             }}
           >
-            显示下一级
+            下一级
           </Radio>
           <Radio
             icon={(checked) => {
@@ -121,7 +121,7 @@ const Bom = (
               }
             }}
           >
-            显示全部
+            全部
           </Radio>
         </div>
 
@@ -129,34 +129,7 @@ const Bom = (
           setBoms(boms.filter((item, index) => {
             return index !== boms.length - 1;
           }));
-        }}><LeftOutline /> 返回至第{boms.length - 1}级</LinkButton>}
-      </div>
-
-      <div className={style.bomSteps}>
-        <Steps
-          current={1}
-          style={{
-            '--title-font-size': '14px',
-            '--description-font-size': '15px',
-            '--indicator-margin-right': '12px',
-            '--icon-size': '14px',
-          }}
-        >
-          {
-            boms.map((item, index) => {
-              return <Steps.Step
-                key={index}
-                icon={<div
-                  className={ToolUtil.classNames(
-                    style.stepIcon,
-                    index === boms.length - 1 ? style.stepCurrentIcon : style.stepOtherIcon,
-                  )}
-                >{index + 1}</div>}
-                status='process'
-              />;
-            })
-          }
-        </Steps>
+        }}><LeftOutline /> 返回{boms.length - 1}级</LinkButton>}
       </div>
 
       {(loading || listLoading) ? <MyLoading skeleton /> : <List>

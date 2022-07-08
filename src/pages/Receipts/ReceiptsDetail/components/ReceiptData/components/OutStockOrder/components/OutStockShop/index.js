@@ -37,7 +37,6 @@ const OutStockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}><Icon type='icon-chukuguanli2' /></div>
-          <span className={style.text}>待出</span>
         </div>
       </div>
     </FloatingBubble>

@@ -25,7 +25,7 @@ const ForwardItem = (
     <div className={style.data}>
       <div className={style.customer} onClick={onClick}>
         <div className={style.name}>
-          <span className={style.title}>{item.taskName} / {receipts.coding || '--'}</span>
+          <span className={style.title}>{item.taskName}</span>
           <RightOutline style={{ color: '#B9B9B9' }} />
         </div>
       </div>

@@ -38,17 +38,22 @@ const ReceiptsDetail = () => {
 
   const [type, setType] = useState();
 
+
+  const goBack = () => {
+    if (history.length <= 2) {
+      history.push('/');
+    } else {
+      history.goBack();
+    }
+  };
+
   const error = () => {
     Message.errorDialog({
       content: '获取审批信息失败！',
       closeOnMaskClick: true,
       confirmText: '确认',
       onConfirm: () => {
-        if (history.length <= 2) {
-          history.push('/');
-        } else {
-          history.goBack();
-        }
+        goBack();
       },
     });
   };
@@ -92,7 +97,7 @@ const ReceiptsDetail = () => {
         }
       },
       onError: () => {
-        error();
+        goBack();
       },
     },
   );
@@ -100,7 +105,7 @@ const ReceiptsDetail = () => {
   const { loading: getTaskIdLoading, run: getTaskIdRun } = useRequest(getTaskIdApi, {
     manual: true,
     onError: () => {
-      error();
+      goBack();
     },
   });
 
@@ -134,7 +139,7 @@ const ReceiptsDetail = () => {
           data={detail}
           currentNode={currentNode}
           refresh={refresh}
-          loading={detailLoading}
+          loading={getTaskIdLoading || detailLoading}
           addComments={setHidden}
         />;
       case 'dynamic':
@@ -194,6 +199,7 @@ const ReceiptsDetail = () => {
         {!hidden && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
 
         {(getTaskIdLoading || detailLoading) && <MyLoading />}
+
       </div>;
   }
 };

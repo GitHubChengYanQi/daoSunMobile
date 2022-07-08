@@ -82,10 +82,14 @@ const ReceiptData = (
 
   return <>
     {receiptType()}
-    <Process auditData={data.stepsResult} createUser={data.user} card />
+    <Process
+      remarks={remarks.filter(item => 'audit' === item.type)}
+      auditData={data.stepsResult}
+      createUser={data.user}
+    />
     <Comments detail={data} id={data.processTaskId} refresh={refresh} onInput={addComments} />
     <div className={style.comments}>
-      <StepList remarks={remarks.filter(item => ['comments'].includes(item.type))} />
+      <StepList remarks={remarks.filter(item => 'comments' === item.type)} />
     </div>
   </>;
 };

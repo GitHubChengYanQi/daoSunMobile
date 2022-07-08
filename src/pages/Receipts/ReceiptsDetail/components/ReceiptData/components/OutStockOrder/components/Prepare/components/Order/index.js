@@ -151,13 +151,13 @@ const Order = (
             color={item.show ? 'primary' : 'default'}
             fill='outline'
             onClick={() => {
-              let brandResults = item.brandResults || [];
+              let positionsResults = item.positionsResults || [];
               if (item.show) {
-                brandResults = brandResults.map(item => {
+                positionsResults = positionsResults.map(item => {
                   return { ...item, outStockNumber: 0, checked: false };
                 });
               }
-              brandChange(index, { show: !item.show, brandResults });
+              brandChange(index, { show: !item.show, positionsResults });
             }}
           >
             <LinkOutline /> {item.brandName} ({item.num})

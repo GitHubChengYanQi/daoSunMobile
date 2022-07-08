@@ -47,7 +47,7 @@ const InSkuItem = (
         />
       </div>
       <div className={style.skuNumber}>
-        <ShopNumber value={item.number} show />
+        <ShopNumber value={complete ? item.askNumber : item.number} show />
       </div>
     </div>
     <div hidden={!waitInStock} className={style.status}>

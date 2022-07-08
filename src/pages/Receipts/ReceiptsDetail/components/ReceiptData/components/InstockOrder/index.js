@@ -5,7 +5,6 @@ import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
-import Title from '../../../../../../components/Title';
 import MyCard from '../../../../../../components/MyCard';
 
 const InstockOrder = (
@@ -48,7 +47,6 @@ const InstockOrder = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return <SkuAction
-          loading={loading}
           order={data}
           data={details}
           actionId={getAction('performInstock').id}
@@ -59,7 +57,6 @@ const InstockOrder = (
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
           taskId={taskId}
-          loading={loading}
           data={details}
           actionId={getAction('outStock').id}
           action={getAction('outStock').id}

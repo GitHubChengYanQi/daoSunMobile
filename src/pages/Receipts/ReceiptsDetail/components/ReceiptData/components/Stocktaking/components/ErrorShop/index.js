@@ -5,12 +5,14 @@ import { WarningOutlined } from '@ant-design/icons';
 import InstockError from '../../../InstockOrder/components/InstockShop/components/InstockError';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
+import Icon from '../../../../../../../../components/Icon';
 
 const ErrorShop = (
   {
     id,
-    refresh=()=>{}
-  }
+    refresh = () => {
+    },
+  },
 ) => {
 
   const [content, setContent] = useState();
@@ -58,8 +60,7 @@ const ErrorShop = (
         <div className={style.action} onClick={() => {
           error();
         }}>
-          <div className={style.actionButton}><WarningOutlined style={{ color: 'red' }} /></div>
-          <span className={style.text}>异常</span>
+          <div className={style.actionButton}><Icon type='icon-yichangkuang' /></div>
         </div>
       </div>
     </FloatingBubble>

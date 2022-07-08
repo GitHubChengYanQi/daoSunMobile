@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2837038 */
-  src: url('iconfont.woff2?t=1657087637424') format('woff2'),
-       url('iconfont.woff?t=1657087637424') format('woff'),
-       url('iconfont.ttf?t=1657087637424') format('truetype');
+  src: url('iconfont.woff2?t=1657244603416') format('woff2'),
+       url('iconfont.woff?t=1657244603416') format('woff'),
+       url('iconfont.ttf?t=1657244603416') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,18 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yichangkuang:before {
+  content: "\e6c5";
+}
+
+.icon-dairukuang:before {
+  content: "\e6c6";
+}
+
+.icon-faqiren:before {
+  content: "\e6c4";
 }
 
 .icon-dian:before {

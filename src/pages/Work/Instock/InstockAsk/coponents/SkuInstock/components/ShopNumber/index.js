@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import style from './index.less';
-import MyStepper from '../../../../../../../components/MyStepper';
 import MyKeybord from '../../../../../../../components/MyKeybord';
 
 const ShopNumber = (

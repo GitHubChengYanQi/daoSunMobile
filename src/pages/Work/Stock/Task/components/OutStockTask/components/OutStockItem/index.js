@@ -2,7 +2,6 @@ import React from 'react';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import style from '../../../../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
 import { history } from 'umi';
-import { ReceiptsEnums } from '../../../../../../../Receipts';
 import { DownOutline, ExclamationCircleOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../../../components/MyDate';
 import OutSkuItem
