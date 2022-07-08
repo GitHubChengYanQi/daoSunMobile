@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
 import { useLocation } from 'react-router-dom';
-import StocktaskigAction from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskigAction';
+import StocktaskigAction
+  from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskigAction';
 import BottomButton from '../../../../components/BottomButton';
 import MyNavBar from '../../../../components/MyNavBar';
 import { ToolUtil } from '../../../../components/ToolUtil';
@@ -28,14 +29,14 @@ const PositionInventory = () => {
   }, []);
 
 
-  const brandStatusChange = ({ skuId, brandId, positionId, status }) => {
+  const brandStatusChange = ({ skuId, brandId, positionId, status, anomalyId }) => {
     const newData = data.map(posiItem => {
       if (posiItem.storehousePositionsId === positionId) {
         const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
           if (skuItem.skuId === skuId) {
             const brandResults = ToolUtil.isArray(skuItem.brandResults).map(brandItem => {
               if (brandItem.brandId === brandId) {
-                return { ...brandItem, inventoryStatus: status };
+                return { ...brandItem, inventoryStatus: status, anomalyId };
               } else {
                 return brandItem;
               }
@@ -88,12 +89,13 @@ const PositionInventory = () => {
       addPhoto={(data) => {
         console.log(data);
       }}
-      refresh={(skuItem, error) => {
+      refresh={(skuItem, error, anomalyId) => {
         brandStatusChange({
           skuId: skuItem.skuId,
           brandId: skuItem.brandId,
           positionId: skuItem.positionId,
           status: error,
+          anomalyId: [1, -1].includes(error) && anomalyId,
         });
       }}
       data={data}

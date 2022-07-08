@@ -67,14 +67,14 @@ const Error = (
 
   const { loading: anomalyLoading, run: anomalyRun } = useRequest(instockError, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       switch (type) {
         case ReceiptsEnums.instockOrder:
           addShop();
           break;
         case ReceiptsEnums.stocktaking:
           Message.successToast('添加成功！', () => {
-            onSuccess(skuItem, error ? -1 : 1);
+            onSuccess(skuItem, error ? -1 : 1, res.anomalyId);
           });
           break;
         default:
@@ -85,19 +85,19 @@ const Error = (
 
   const { loading: anomalyTemporaryLoading, run: anomalyTemporaryRun } = useRequest(anomalyTemporary, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       Message.successToast('暂存成功！', () => {
-        onSuccess(skuItem, 2);
+        onSuccess(skuItem, 2, res.anomalyId);
       });
     },
   });
 
   const { loading: editLoading, run: editRun } = useRequest(instockErrorEdit, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       Message.successToast('修改成功！', () => {
         onClose();
-        onEdit(skuItem, error ? -1 : 1);
+        onEdit(skuItem, error ? -1 : 1, res.anomalyId);
       });
     },
   });
@@ -287,7 +287,7 @@ const Error = (
         inkind: sku.inkindId,
         positionId: sku.positionId,
         formId: sku.inventoryTaskId,
-        anomalyType: 'StocktakingError',
+        anomalyType: sku.inventoryTaskId ? 'StocktakingError' : 'timelyInventory',
       };
     }
 
@@ -353,11 +353,11 @@ const Error = (
           />,
           actionNumber: <div className={style.actual}>
             <div className={style.number}>
-              入库数量 {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
+              <span>入库数量</span> {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
             </div>
             <div className={style.actual}>
               <span>实到数量</span>
-              <MyStepper
+              <ShopNumber
                 min={allNumber}
                 value={data.number}
                 onChange={(number) => {
@@ -376,9 +376,12 @@ const Error = (
           </div>,
           button: <div>
             <BottomButton
-              disabled={required}
-              only
-              onClick={() => {
+              square
+              rightDisabled={required}
+              leftOnClick={()=>{
+                onClose();
+              }}
+              rightOnClick={() => {
                 if (!getParams()) {
                   return;
                 }
@@ -519,25 +522,27 @@ const Error = (
 
           return <MyCard
             key={index}
+            className={style.inKindCard}
+            headerClassName={style.headerStyle}
             titleBom={<div className={style.inkind}>
+              异常编码
               <div className={style.index}>{index + 1}</div>
-              <span>识别码：{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
-              <SystemQRcodeOutline />
+              <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
             </div>}
-            extra={<MyRemoveButton onRemove={() => {
-              const newItem = inkinds.filter((item, currentIndex) => {
-                return currentIndex !== index;
-              });
-              setInkinds(newItem);
-            }} />}
+            extra={<Space>
+              <LinkButton><SystemQRcodeOutline /></LinkButton>
+              <MyRemoveButton onRemove={() => {
+                const newItem = inkinds.filter((item, currentIndex) => {
+                  return currentIndex !== index;
+                });
+                setInkinds(newItem);
+              }} />
+            </Space>}
           >
-            <div className={style.stepper}>
-              <span>数量</span>
-              <MyStepper
+            <div className={style.inKindRow}>
+              <div className={style.inKindTitle}>数量：</div>
+              <ShopNumber
                 min={1}
-                style={{
-                  '--button-text-color': '#000',
-                }}
                 value={item.number}
                 onChange={(number) => {
                   let allNumber = 0;
@@ -555,15 +560,29 @@ const Error = (
                 }}
               />
             </div>
-            <div className={style.careful}>
-              <div className={style.title}>
-                原因
+            <div className={style.inKindRow}>
+              <div className={style.inKindTitle}>
+                原因 <span>*</span>：
               </div>
               <Careful
                 type='inStockError'
                 value={item.noticeIds}
                 onChange={(noticeIds) => {
                   inkinsChange(index, { noticeIds });
+                }}
+              />
+            </div>
+            <div className={style.inKindRow}>
+              <div className={style.inKindTitle}>
+                描述<span>*</span>：
+              </div>
+              <TextArea
+                className={style.textArea}
+                rows={1}
+                placeholder='请输入具体异常情况'
+                value={item.description}
+                onChange={(description) => {
+                  inkinsChange(index, { description });
                 }}
               />
             </div>
@@ -579,40 +598,32 @@ const Error = (
                 }}
               />
             </div>
-            <Space direction='vertical' style={{ width: '100%' }}>
-              描述
-              <TextArea
-                className={style.textArea}
-                placeholder='请输入具体异常情况'
-                value={item.description}
-                onChange={(description) => {
-                  inkinsChange(index, { description });
-                }}
-              />
-            </Space>
           </MyCard>;
         })
       }
 
-      <Divider className={style.divider}>
-        <AddButton danger disabled={allNumber >= data.number} onClick={() => {
+      <div className={style.divider}>
+      <AddButton danger disabled={allNumber >= data.number} onClick={() => {
 
-          CodeRun({
-            data: {
-              codeRequests: [{
-                source: batch ? 'inErrorBatch' : 'inErrorSingle',
-                brandId: sku.brandId,
-                customerId: sku.customerId,
-                id: sku.skuId,
-                number: 1,
-                inkindType: '入库异常',
-              }],
-            },
-          });
+        CodeRun({
+          data: {
+            codeRequests: [{
+              source: batch ? 'inErrorBatch' : 'inErrorSingle',
+              brandId: sku.brandId,
+              customerId: sku.customerId,
+              id: sku.skuId,
+              number: 1,
+              inkindType: '入库异常',
+            }],
+          },
+        });
 
-        }}><AddOutline /></AddButton>
-      </Divider>
+      }}><AddOutline /></AddButton>
     </div>
+    </div>
+
+
+
 
     {(
       CodeLoading

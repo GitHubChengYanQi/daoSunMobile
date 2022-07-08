@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../InstockOrder/components/Error/index.less';
-import { CloseOutline } from 'antd-mobile-icons';
+import { CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import { Button, TextArea } from 'antd-mobile';
+import { Button, Space, TextArea } from 'antd-mobile';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { instockErrorDetail } from '../../../InstockOrder/components/Error';
@@ -15,8 +15,9 @@ import { Message } from '../../../../../../../../components/Message';
 import { useModel } from 'umi';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { FormOutlined } from '@ant-design/icons';
+import { FormOutlined, PaperClipOutlined } from '@ant-design/icons';
 import MyCard from '../../../../../../../../components/MyCard';
+import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
 
 export const save = { url: '/anomaly/dealWithError', method: 'POST' };
 export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
@@ -40,6 +41,9 @@ const SkuError = (
   const [sku, setSku] = useState({});
 
   const [errorItems, setErrorItems] = useState([]);
+
+  const [mediaIds, setMediaIds] = useState([]);
+  const [note, setNote] = useState();
 
   const [over, setOver] = useState();
 
@@ -149,6 +153,8 @@ const SkuError = (
     manual: true,
     onSuccess: () => {
       Message.successToast('保存成功!', () => {
+        setMediaIds([]);
+        setNote('');
         refresh();
       });
     },
@@ -284,6 +290,8 @@ const SkuError = (
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
+  const addFileRef = useRef();
+
   return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
     <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
@@ -321,30 +329,65 @@ const SkuError = (
           ]}
         />
         <div className={style.showNumber}>
-          <span className={style.through}
-                hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
+          <span
+            className={style.through}
+            hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
           <span>× {sku.confirm ? sku.checkNumber : sku.realNumber}</span>
         </div>
       </div>
 
       <div className={style.verify} hidden={forward}>
-        <span>到货数：<ShopNumber show
-                              value={sku.realNumber} /> {unitName} ({ToolUtil.isObject(sku.user).name || '-'})</span>
+        <div hidden={sku.hidden} className={style.checkNumber}>
+           <span><span className={style.title}>到货数：</span>
+          <ShopNumber show value={sku.realNumber} /> {unitName} ({ToolUtil.isObject(sku.user).name || '-'})
+           </span>
+        </div>
         {
           checkUsers.map((item, index) => {
             if (index < checkUsers.length - 2) {
               return null;
             }
-            return <span key={index}>复核数：
+            return <span key={index}><span className={style.title}>复核数：</span>
             <ShopNumber show value={item.number} /> {unitName} ({item.name || ''})
           </span>;
           })
         }
         <div hidden={sku.hidden} className={style.checkNumber}>
-        <span>复核数：<ShopNumber value={sku.checkNumber} onChange={(checkNumber) => {
-          setSku({ ...sku, checkNumber });
-        }} /> {unitName}</span>
-          <Button color='primary' fill='outline' onClick={() => {
+          <span><span className={style.title}>复核数：</span>
+            <ShopNumber
+              value={sku.checkNumber}
+              onChange={(checkNumber) => {
+                setSku({ ...sku, checkNumber });
+              }} /> {unitName}</span>
+        </div>
+        <div hidden={sku.hidden} className={style.checkNumber}>
+          <span><span className={style.title}>上传附件：</span> <PaperClipOutlined onClick={() => {
+            addFileRef.current.addFile();
+          }} /> </span>
+        </div>
+        <div>
+          {!saveLoading && <UploadFile
+            uploadId='verifyImg'
+            noAddButton
+            ref={addFileRef}
+            onChange={(mediaIds) => {
+              setMediaIds(mediaIds);
+            }}
+          />}
+        </div>
+        <div hidden={sku.hidden} className={style.checkNumber}>
+          <span><span className={style.title}>备注说明：</span>
+            <TextArea
+              rows={1}
+              value={note}
+              className={style.textArea}
+              placeholder=''
+              onChange={(value) => {
+                setNote(value);
+              }}
+            />
+          </span>
+          <Button style={{ marginLeft: 16 }} color='primary' fill='outline' onClick={() => {
             const param = {
               data: {
                 anomalyId,
@@ -352,6 +395,8 @@ const SkuError = (
                   number: sku.checkNumber,
                   name: userInfo.name,
                   userId: userInfo.id,
+                  mediaIds,
+                  note,
                 }]),
               },
             };
@@ -378,8 +423,11 @@ const SkuError = (
           }
 
           return <MyCard
+            className={style.inKindCard}
+            headerClassName={style.headerStyle}
             key={index}
             titleBom={<div className={style.inkind}>
+              异常编码
               <div className={style.index}>{index + 1}</div>
               <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
               <span className={style.inkindNumber}>× {item.number}</span>
@@ -388,19 +436,14 @@ const SkuError = (
               </div>
             </div>}
             extra={<>
-              {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
-                if (item.userId) {
-                  return;
-                }
-                userRef.current.open({ detailId: item.detailId });
-              }}>
-                {item.userId ? `已转交：${item.userName}` : '转交处理'}
-              </LinkButton>}
-              {item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
-                action(item, 0);
-              }}>
-                <FormOutlined />
-              </LinkButton>}
+              <Space>
+                <LinkButton><SystemQRcodeOutline /></LinkButton>
+                {item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
+                  action(item, 0);
+                }}>
+                  <FormOutlined />
+                </LinkButton>}
+              </Space>
             </>}
           >
             <div className={style.careful} style={{ padding: '12px 0' }}>
@@ -434,7 +477,15 @@ const SkuError = (
             </div>
 
             <div hidden={handle} className={style.actions}>
-              {errorTypeData(item, index).actions}
+              <div className={style.actionButton}>{errorTypeData(item, index).actions}</div>
+              {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
+                if (item.userId) {
+                  return;
+                }
+                userRef.current.open({ detailId: item.detailId });
+              }}>
+                {item.userId ? `已转交：${item.userName}` : '转交处理'}
+              </LinkButton>}
             </div>
           </MyCard>;
         })

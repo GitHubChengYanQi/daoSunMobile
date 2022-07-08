@@ -29,6 +29,8 @@ export async function getInitialState() {
     const res = await request({ url: '/rest/refreshToken', method: 'GET' });
     if (res) {
       cookie.set('cheng-token', res);
+    }else {
+      return { init: false };
     }
   }
   const publicInfo = await request({ url: '/getPublicInfo', method: 'GET' });

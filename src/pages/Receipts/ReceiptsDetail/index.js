@@ -6,7 +6,7 @@ import MyNavBar from '../../components/MyNavBar';
 import Header from './components/Header';
 import topStyle from '../../global.less';
 import { ToolUtil } from '../../components/ToolUtil';
-import { Dialog, Tabs } from 'antd-mobile';
+import { Tabs } from 'antd-mobile';
 import MyEmpty from '../../components/MyEmpty';
 import Bottom from './components/Bottom';
 import style from './index.less';

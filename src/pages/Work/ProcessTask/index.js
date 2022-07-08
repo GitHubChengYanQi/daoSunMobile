@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import Icon from '../../components/Icon';
-import MyEmpty from '../../components/MyEmpty';
 import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
 import Create from './Create';
 import MyStart from './MyStart';
-import KeepAlive from '../../../components/KeepAlive';
 import { useLocation } from 'react-router-dom';
 
 
@@ -30,7 +28,7 @@ export const Tasks = () => {
       case 'send':
         return <MyAudit auditType='send' />;
       default:
-        return <MyEmpty />;
+        return <Create />;
     }
   };
 

@@ -6,9 +6,32 @@
   overflow: auto;
   margin-bottom: 60px;
 
+  .cardStyle {
+    margin-bottom: 8px;
+  }
+
   .cardStyle,.bodyStyle {
     padding: 0 !important;
   }
+
+  .errors {
+    background-color: #fff;
+  }
+
+  .inKindCard {
+    padding: 0;
+    margin: 12px;
+    border: solid 1px var(--body--background--color);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .headerStyle {
+    background-color: var(--body--background--color);
+    height: 33px;
+    padding: 8px 12px;
+  }
+
 
   .header {
     display: flex;
@@ -52,7 +75,7 @@
     padding: 0 12px;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #D8D8D8;
+    //border-bottom: 1px solid #D8D8D8;
 
     .sku {
       border: none;
@@ -71,10 +94,10 @@
   }
 
   .verify {
-    padding: 0 12px;
+    padding: 12px 12px 0;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     margin-bottom: 12px;
     //max-height: 100px;
     //overflow: auto;
@@ -92,13 +115,17 @@
       span {
         flex-grow: 1;
       }
+      .title {
+        min-width: 70px;
+        flex-grow: 0;
+      }
     }
   }
 
   .sku {
-    padding: 12px 0;
+    padding-top:12px;
     flex-grow: 1;
-    border-bottom: 1px solid #D8D8D8;
+    //border-bottom: 1px solid #D8D8D8;
   }
 
   .actual {
@@ -130,8 +157,9 @@
 
   .divider {
     margin: 0;
-    padding: 16px 0;
+    padding: 12px 0;
     background-color: #fff;
+    text-align: center;
   }
 
   .inkind {
@@ -171,18 +199,26 @@
     }
   }
 
-  .stepper {
+  .inKindRow {
     padding: 12px 0;
-    display: flex;
     align-items: center;
+    display: flex;
 
-    span {
-      flex-grow: 1;
+    .inKindTitle {
+      color: #666666;
+      min-width: 50px;
+
+      span {
+        color: var(--adm-color-danger);
+      }
     }
   }
 
+
+
   .careful {
     //padding: 12px 0;
+    display: flex;
 
     .notices {
       font-size: 12px;
@@ -220,8 +256,14 @@
   .actions {
     display: flex;
     align-items: center;
-    justify-content: space-around;
-    padding: 12px;
+    padding: 12px 0;
+    border-top: #F5F5F5 solid 1px;
+
+    .actionButton {
+      flex-grow: 1;
+      display: flex;
+      gap: 8px;
+    }
 
     .ok {
       --border-color: #2EAF5D;
@@ -231,9 +273,9 @@
   }
 
   .textArea {
-    border-radius: 4px;
-    border: 1px solid #999999;
-    padding: 8px;
+    border-radius: 2px;
+    border: 1px solid #D9D9D9;
+    padding: 4px;
     --font-size: 12px;
   }
 

@@ -10,6 +10,7 @@ import Screen from '../../../../../components/Screen';
 import Time from './components/Time';
 import User from './components/User';
 import StockNumber from './components/StockNumber';
+import Material from './components/Material';
 
 const SkuScreen = (
   {
@@ -29,7 +30,8 @@ const SkuScreen = (
   const searchtype = [
     { key: 'skuClass', title: '分类', open: true },
     { key: 'brand', title: '品牌', open: true },
-    { key: 'state', title: '状态', open: false },
+    { key: 'material', title: '材质', open: true },
+    // { key: 'state', title: '状态', open: false },
     { key: 'position', title: '库位', open: true },
     { key: 'supply', title: '供应商', open: true },
     // { key: 'user', title: '创建人', open: false },
@@ -104,6 +106,9 @@ const SkuScreen = (
       case 'number':
         screened = number;
         break;
+      case 'material':
+        screened = false;
+        break;
       default:
         break;
     }
@@ -121,6 +126,7 @@ const SkuScreen = (
       case 'bom':
       case 'time':
       case 'user':
+      case 'material':
         return false;
       default:
         return false;
@@ -167,6 +173,15 @@ const SkuScreen = (
           overLength={overLengths.brand && brand.length === 0}
           onChange={(brandIds) => {
             paramsOnChange({ ...params, brandIds });
+          }}
+        />;
+      case 'material':
+        return <Material
+          refresh={refresh}
+          title={item.title}
+          value={params.Material}
+          onChange={(materialId) => {
+            paramsOnChange({ ...params, materialId });
           }}
         />;
       case 'state':

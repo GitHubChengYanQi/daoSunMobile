@@ -39,7 +39,7 @@ const InstockError = (
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('添加异常单成功！',()=>{
+      Message.successToast('添加异常单成功！', () => {
         refresh();
         shopRefresh();
         setData([]);
@@ -51,7 +51,7 @@ const InstockError = (
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('退回成功！',()=>{
+      Message.successToast('退回成功！', () => {
         shopRefresh();
         refresh();
         setData([]);
@@ -81,20 +81,20 @@ const InstockError = (
       case ReceiptsEnums.instockOrder:
         return {
           totalTitle: '申请数量',
-          type:'instock',
+          type: 'instock',
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
             otherData={[
               customerName,
-              brandName || '无品牌'
+              brandName || '无品牌',
             ]}
           />,
         };
       case ReceiptsEnums.stocktaking:
         return {
           totalTitle: '实际总数',
-          type:'Stocktaking',
+          type: 'Stocktaking',
           skuItem: <SkuItem
             skuResult={skuResult}
             extraWidth='80px'
@@ -122,7 +122,7 @@ const InstockError = (
         errorShop({
           data: {
             receiptsEnum: ReceiptsEnums.stocktaking,
-            type: 'StocktakingError',
+            type: formId ? 'StocktakingError' : 'timelyInventory',
             sourceId: formId,
             status: 0,
           },

@@ -21,6 +21,7 @@ export const AddButton = (
 
   return <Button
     color={danger ? 'danger' : 'primary'}
+    fill='outline'
     disabled={disabled}
     onClick={onClick}
     className={style.add}
