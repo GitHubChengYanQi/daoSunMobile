@@ -40,7 +40,7 @@ const OutSkuItem = ({item,data}) => {
         data.length <= 3 && style.skuBorderBottom,
       )}
     >
-      <div hidden={!complete} className={style.logo}>
+      <div hidden={!complete} className={style.outLogo}>
         <img src={outStockLogo} alt='' />
       </div>
       <div className={style.item}>

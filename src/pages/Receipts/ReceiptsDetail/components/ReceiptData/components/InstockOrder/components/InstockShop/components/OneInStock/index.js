@@ -95,6 +95,7 @@ const OneInStock = (
       square
       rightDisabled={inStockSku.length === 0}
       rightText='确认'
+      leftOnClick={onClose}
       rightOnClick={() => {
 
         const listParams = inStockSku.map((item) => {

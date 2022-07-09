@@ -176,7 +176,10 @@ const ReceiptsDetail = () => {
 
   switch (detail.type) {
     case ReceiptsEnums.errorForWard:
-      return <SkuError anomalyId={detail.formId} forward />;
+      return <>
+        <MyNavBar title='异常处理' />
+        <SkuError anomalyId={detail.formId} forward />
+      </>;
     default:
       return <div className={style.receipts}>
         <div className={style.content}>

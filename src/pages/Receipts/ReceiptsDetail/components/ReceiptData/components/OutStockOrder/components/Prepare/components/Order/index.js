@@ -9,6 +9,7 @@ import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import MyCheck from '../../../../../../../../../../components/MyCheck';
 
 const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
@@ -168,11 +169,14 @@ const Order = (
           {
             positions.map((positionItem, positionIndex) => {
 
-              return <div className={style.brands} key={positionIndex}>
+              return <div className={ToolUtil.classNames(style.brands,positionItem.checked && style.checked)} key={positionIndex}>
+                <MyCheck checked={positionItem.checked} />
                 <span onClick={() => {
                   if (!positionItem.checked) {
                     const num = (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber);
                     positionChange(index, positionIndex, { checked: true, outStockNumber: num });
+                  }else {
+                    positionChange(index, positionIndex, { checked: false, outStockNumber: 0 });
                   }
                 }}>{positionItem.name} ({positionItem.number})</span>
                 <div hidden={!positionItem.checked}>

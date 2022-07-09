@@ -2,10 +2,10 @@ import React from 'react';
 import style
   from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import inStockLogo from '../../../../../../../../../../../assets/instockLogo.png';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import moment from 'moment';
 
 const InSkuItem = (
   {
@@ -18,22 +18,44 @@ const InSkuItem = (
   const skuResult = item.skuResult || {};
 
   const complete = item.realNumber === 0 && item.status === 99;
-  const waitInStock = item.status === 1;
-  const errorInStock = item.status === -1;
-  const stopInStock = item.status === 50;
+
+  let text = '';
+  let error = false;
+
+  switch (item.status) {
+    case 99:
+      if (item.realNumber === 0) {
+        text = '已入';
+      }
+      break;
+    case 1:
+      text = '待入';
+      break;
+    case -1:
+      text = '异常';
+      error = true;
+      break;
+    case 50:
+      text = '禁止入库';
+      error = true;
+      break;
+    default:
+      break;
+  }
+
 
   return <div
     className={style.sku}
   >
-    <div hidden={!(waitInStock || complete || errorInStock || stopInStock)} className={style.mask} />
     <div
       className={ToolUtil.classNames(
         style.skuItem,
+        text && style.inStockSkuItem,
         data.length <= 3 && style.skuBorderBottom,
       )}
     >
-      <div hidden={!complete} className={style.logo}>
-        <img src={inStockLogo} alt='' />
+      <div hidden={!text} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
+        <span>{moment(item.updateTime).format('YYYY-MM-DD')}</span>
       </div>
       <div className={style.item}>
         <SkuItem
@@ -47,17 +69,9 @@ const InSkuItem = (
         />
       </div>
       <div className={style.skuNumber}>
-        <ShopNumber value={complete ? item.askNumber : item.number} show />
+        <div style={{ color: error ? 'var(--adm-color-danger)' : 'var(--adm-color-primary)' }}>{text}</div>
+        <ShopNumber value={complete ? item.instockNumber : item.number} show />
       </div>
-    </div>
-    <div hidden={!waitInStock} className={style.status}>
-      待入库
-    </div>
-    <div hidden={!errorInStock} className={style.status}>
-      异常件
-    </div>
-    <div hidden={!stopInStock} className={style.status}>
-      禁止入库
     </div>
   </div>;
 };

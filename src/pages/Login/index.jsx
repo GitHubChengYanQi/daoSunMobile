@@ -75,6 +75,7 @@ const Login = (props) => {
   const { initialState, refresh, loading } = useModel('@@initialState');
 
   const state = initialState || {};
+  const userInfo = initialState || {};
 
   const [count, setCount] = useState(0);
 
@@ -97,7 +98,7 @@ const Login = (props) => {
               type: 'data/clearState',
             });
             cookie.set('cheng-token', res);
-            if (query.backUrl) {
+            if (query.backUrl && userInfo.id) {
               window.location.href = query.backUrl;
             } else {
               refresh();

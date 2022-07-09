@@ -166,10 +166,10 @@ const InstockError = (
                     {errorType(item).skuItem}
                   </div>
                   <div className={style.edit}>
-                    <ShopNumber show value={anomalyResult.realNumber} />
                     <FormOutlined style={{ fontSize: 18 }} onClick={() => {
                       onEdit(anomalyResult.anomalyId, errors.length);
                     }} />
+                    <ShopNumber show value={anomalyResult.realNumber} />
                   </div>
 
                 </div>

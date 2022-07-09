@@ -10,7 +10,7 @@
     margin-bottom: 8px;
   }
 
-  .cardStyle,.bodyStyle {
+  .cardStyle, .bodyStyle {
     padding: 0 !important;
   }
 
@@ -39,7 +39,7 @@
     border-bottom: 1px solid #EEEEEE;
     align-items: center;
     position: sticky;
-    top:0;
+    top: 0;
     background-color: #fff;
     z-index: 1;
     height: 60px;
@@ -102,19 +102,25 @@
     //max-height: 100px;
     //overflow: auto;
 
-    span {
+    .verifyAction {
+      border: solid 1px #EEEEEE;
+      padding: 12px;
       display: flex;
-      align-items: center;
-      gap: 8px;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .checkUser {
+      display: flex;
+      gap: 12px;
+      flex-direction: column;
+      align-items: flex-start;
     }
 
     .checkNumber {
       display: flex;
       align-items: center;
 
-      span {
-        flex-grow: 1;
-      }
       .title {
         min-width: 70px;
         flex-grow: 0;
@@ -123,7 +129,7 @@
   }
 
   .sku {
-    padding-top:12px;
+    padding-top: 12px;
     flex-grow: 1;
     //border-bottom: 1px solid #D8D8D8;
   }
@@ -215,7 +221,6 @@
   }
 
 
-
   .careful {
     //padding: 12px 0;
     display: flex;
@@ -296,22 +301,29 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    padding: 12px;
     background-color: #FFFFFF;
     box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
     display: flex;
     align-items: center;
+    height: 40px;
 
     .action {
       flex-grow: 1;
       gap: 8px;
       display: flex;
       align-items: center;
+      padding-left: 12px;
 
       .instockNumber {
         display: flex;
         align-items: center;
       }
+    }
+
+    button {
+      height: 100%;
+      width: 102px;
+      border-radius: 0;
     }
   }
 

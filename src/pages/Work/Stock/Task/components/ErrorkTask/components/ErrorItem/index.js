@@ -44,7 +44,7 @@ const ErrorItem = (
             return null;
           }
 
-          return <div key={index} style={{padding:'0 12px'}}><Item totalTitle='123' item={skuItem} index={index} /></div>;
+          return <div key={skuIndex} style={{padding:'0 12px'}}><Item totalTitle='123' item={skuItem} index={index} /></div>;
         })
       }
     </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import { Button, Divider, Space, Stepper, TextArea } from 'antd-mobile';
+import { Space, TextArea } from 'antd-mobile';
 import { AddOutline, CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
 import Icon from '../../../../../../../../components/Icon';
 import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
@@ -49,6 +49,8 @@ const Error = (
   },
 ) => {
 
+  console.log(skuItem);
+
   const [sku, setSku] = useState(skuItem);
 
 
@@ -70,6 +72,7 @@ const Error = (
     onSuccess: (res) => {
       switch (type) {
         case ReceiptsEnums.instockOrder:
+          onSuccess(skuItem);
           addShop();
           break;
         case ReceiptsEnums.stocktaking:
@@ -81,6 +84,9 @@ const Error = (
           break;
       }
     },
+    onError:()=>{
+      refreshOrder();
+    }
   });
 
   const { loading: anomalyTemporaryLoading, run: anomalyTemporaryRun } = useRequest(anomalyTemporary, {
@@ -325,10 +331,9 @@ const Error = (
   };
 
   const addShop = () => {
-    const imgUrl = Array.isArray(skuItem.imgUrls) && skuItem.imgUrls[0] || state.homeLogo;
+    const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', () => {
       Message.successToast('添加成功！', () => {
-        onSuccess(skuItem);
         refreshOrder();
       });
     });

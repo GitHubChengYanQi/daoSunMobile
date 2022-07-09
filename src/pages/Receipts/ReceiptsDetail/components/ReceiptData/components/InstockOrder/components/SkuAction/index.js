@@ -14,7 +14,6 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import Title from '../../../../../../../../components/Title';
 import { Message } from '../../../../../../../../components/Message';
 import MyCard from '../../../../../../../../components/MyCard';
 
@@ -36,6 +35,9 @@ const SkuAction = (
 
   const { loading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
+    onError: () => {
+      refresh();
+    },
   });
 
   const [visible, setVisible] = useState();

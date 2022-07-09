@@ -17,7 +17,7 @@ const ShopNumber = (
 
   return <>
     <div className={style.shopNumber}>
-      <div className={style.number} style={show && { border: 'none', padding: 0 }} onClick={() => {
+      <div className={style.number} style={show ? { border: 'none', padding: 0 } : {}} onClick={() => {
         if (!show) {
           setVisible(true);
         }
