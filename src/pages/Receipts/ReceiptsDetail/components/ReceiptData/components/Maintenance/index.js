@@ -7,6 +7,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import Maintenanceing from './components/Maintenanceing';
 import MyAntPopup from '../../../../../../components/MyAntPopup';
+import MyCard from '../../../../../../components/MyCard';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -54,11 +55,7 @@ const Maintenance = (
       data.map((positionItem, positionIndex) => {
         const skuList = positionItem.object || [];
 
-        return <div key={positionIndex} className={style.position}>
-          <div className={style.title}>
-            {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
-          </div>
-
+        return <MyCard key={positionIndex} title={ <>{positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}</>}>
           <div className={style.skus}>
             {
               skuList.map((skuItem, skuIndex) => {
@@ -112,7 +109,7 @@ const Maintenance = (
               </div>
             </Divider>}
           </div>
-        </div>;
+        </MyCard>
       })
     }
 

@@ -5,65 +5,57 @@
     padding: 12px;
     background-color: #fff;
   }
+  .skus {
 
-  .position {
-    background-color: #fff;
-    margin-bottom: 8px;
+    .skuItem {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
 
-    .skus {
-      padding: 12px;
+      .skuRow {
+        flex-grow: 1;
+      }
+    }
 
-      .skuItem {
+    .sku {
+      margin-bottom: 8px;
+      border-bottom: solid 1px #F5F5F5;
+
+      .brands {
+        padding-bottom: 8px;
         display: flex;
-        align-items: center;
-        margin-bottom: 8px;
+        gap: 8px;
+        flex-wrap: wrap;
 
-        .skuRow {
-          flex-grow: 1;
+        .brand {
+          width: 30%;
+          padding: 4px 8px;
+          justify-content: center;
+          border-radius: 2px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          .name {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+          }
         }
       }
 
-      .sku {
-        margin-bottom: 8px;
-        border-bottom: solid 1px #F5F5F5;
+      .action {
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
 
-        .brands {
-          padding-bottom: 8px;
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
+        .mediaIds {
+          flex-grow: 1;
 
-          .brand {
-            width: 30%;
-            padding: 4px 8px;
-            justify-content: center;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-
-            .name {
-              text-overflow: ellipsis;
-              overflow: hidden;
-              white-space: nowrap;
-            }
-          }
-        }
-
-        .action {
-          padding: 8px 0;
-          display: flex;
-          align-items: center;
-
-          .mediaIds {
-            flex-grow: 1;
-
-          }
         }
       }
     }
   }
-
 
 }
 
