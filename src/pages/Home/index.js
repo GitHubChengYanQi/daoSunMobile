@@ -52,7 +52,7 @@ const Home = (props) => {
           {state.enterpriseName || '企业名称'}
         </span>
           <span className={style.enterpriseDescribe}>
-          因为信任，所以简单
+          {state.slogan || 'slogan'}
        </span>
         </div>
       </div>

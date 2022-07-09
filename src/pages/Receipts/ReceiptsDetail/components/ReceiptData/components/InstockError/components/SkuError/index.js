@@ -286,8 +286,12 @@ const SkuError = (
       onClose={onClose}
       forward={forward}
       over={over}
+      loading={saveLoading}
       initialState={initialState}
-      saveRun={saveRun}
+      saveRun={(params) => {
+        setSku({ ...sku, checkUsers: [] });
+        saveRun(params);
+      }}
       userInfo={userInfo}
     />
 

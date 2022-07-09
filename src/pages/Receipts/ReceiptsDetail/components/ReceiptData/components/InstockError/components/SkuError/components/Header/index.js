@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../../../InstockOrder/components/Error/index.less';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { CloseOutline } from 'antd-mobile-icons';
@@ -25,6 +25,7 @@ const Header = (
     },
     anomalyId,
     userInfo,
+    loading,
   },
 ) => {
 
@@ -37,11 +38,17 @@ const Header = (
 
   const checkUsers = ToolUtil.isArray(sku.checkUsers);
   const checkUser = checkUsers[checkUsers.length - 1];
+  const urls = ToolUtil.isArray(checkUser && checkUser.mediaUrls);
 
   const addFileRef = useRef();
 
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+
+  useEffect(()=>{
+    setMediaIds([]);
+    setNote('');
+  },[loading])
 
   return <>
     <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
@@ -96,18 +103,18 @@ const Header = (
         {checkUser && <div className={style.checkUser}>
           <div className={style.checkNumber}>
             <div className={style.title}>复核数：</div>
-           <ShopNumber show value={checkUser.number} /> {unitName}
+            <ShopNumber show value={checkUser.number} /> {unitName}
             <div style={{ padding: '0 8px' }}>({checkUser.name || ''})</div>
           </div>
           <div>
-            附件： <div style={{paddingTop:8}}>
-            <UploadFile show value={ToolUtil.isArray(checkUser.mediaUrls).map(item => {
+            附件： {urls.length === 0 && '无'}<div hidden={urls.length === 0} style={{ paddingTop: 8 }}>
+           <UploadFile refresh={loading} show value={urls.map(item => {
               return { url: item };
             })} />
           </div>
           </div>
           <div>
-            备注说明： {checkUser.note}
+            备注说明： {checkUser.note || '无'}
           </div>
         </div>}
 
@@ -132,14 +139,14 @@ const Header = (
             </div>
           </div>
           <div hidden={mediaIds.length === 0}>
-            <UploadFile
+            {!loading && <UploadFile
               uploadId='verifyImg'
               noAddButton
               ref={addFileRef}
               onChange={(mediaIds) => {
                 setMediaIds(mediaIds);
               }}
-            />
+            />}
           </div>
           <div className={style.checkNumber}>
             <div className={style.title}>添加备注：</div>

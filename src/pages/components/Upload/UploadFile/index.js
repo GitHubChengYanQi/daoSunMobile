@@ -1,8 +1,8 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import style from './index.less';
 import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
-import { ActionSheet, ImageViewer, Toast } from 'antd-mobile';
+import { ActionSheet, ImageViewer } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
@@ -25,6 +25,7 @@ const UploadFile = (
     noAddButton,
     loading: getLoading = () => {
     },
+    refresh,
   }, ref,
 ) => {
 
@@ -69,7 +70,7 @@ const UploadFile = (
             });
             fileChange({ type: 'image', mediaId, url });
           } catch (e) {
-            Message.errorToast('上传失败!')
+            Message.errorToast('上传失败!');
           }
           getLoading(false);
           setLoading(false);
@@ -176,9 +177,9 @@ const UploadFile = (
 
     <UpLoadImg
       hidden
-      uploadLoading={(loading)=>{
+      uploadLoading={(loading) => {
         getLoading(loading);
-        setLoading(loading)
+        setLoading(loading);
       }}
       maxCount={5}
       type='picture'
