@@ -8,6 +8,7 @@ import { ToolUtil } from '../ToolUtil';
 export const MyLoading = (
   {
     skeleton,
+    skeletonStyle,
     title,
     noLoadingTitle,
     loaderWidth,
@@ -60,7 +61,7 @@ export const MyLoading = (
   };
 
   if (skeleton) {
-    return <div className={style.skeleton}>
+    return <div className={style.skeleton} style={skeletonStyle}>
       {Loading()}
     </div>;
   }

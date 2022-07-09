@@ -18,60 +18,86 @@ const InstockShop = (
   }) => {
 
 
-  const [content, setContent] = useState();
+  const [visible, setVisible] = useState();
 
-  const wait = () => {
-    setContent(<WaitInstock
-      refresh={refresh}
-      actionId={actionId}
-      instockOrderId={id}
-      onClose={() => {
-        setContent(null);
-      }}
-      onInstock={(item, remainingQuantity) => {
+  const [refreshOrder, setRefreshOrder] = useState();
 
-        // 单个入库
-        setContent(<OneInStock
-          refresh={refresh}
+  const [type, setType] = useState();
+
+  const [params, setParams] = useState({});
+
+  const content = () => {
+    switch (type) {
+      case 'waitInStock':
+        return <WaitInstock
+          refresh={() => setRefreshOrder(true)}
           actionId={actionId}
           instockOrderId={id}
-          skuItem={item}
-          onClose={(complete) => {
-            if (complete && (remainingQuantity === 1)) {
-              setContent(null);
-            } else {
-              wait();
+          onClose={() => {
+            if (refreshOrder) {
+              refresh();
             }
-          }} />);
-      }} />);
-  };
+            setVisible(false);
+          }}
+          onInstock={(item, remainingQuantity) => {
 
-  const error = () => {
-    setContent(<InstockError
-      type={ReceiptsEnums.instockOrder}
-      formId={id}
-      refresh={refresh}
-      onClose={() => setContent(null)}
-      onEdit={(id, remainingQuantity) => {
-
-        // 修改入库异常
-        setContent(<Error
-          type={ReceiptsEnums.instockOrder}
-          id={id}
-          onClose={(deleteAction) => {
-            if (deleteAction && (remainingQuantity === 1)) {
-              setContent(null);
+            // 单个入库
+            setType('oneInStock');
+            setParams({ item, remainingQuantity });
+          }} />;
+      case 'oneInStock':
+        return <OneInStock
+          refresh={() => setRefreshOrder(true)}
+          actionId={actionId}
+          instockOrderId={id}
+          skuItem={params.item}
+          onClose={(complete) => {
+            if (complete && (params.remainingQuantity === 1)) {
+              refresh();
+              setVisible(false);
             } else {
-              error();
+              setType('waitInStock');
+            }
+          }} />;
+      case 'instockError':
+        return <InstockError
+          type={ReceiptsEnums.instockOrder}
+          formId={id}
+          refresh={() => setRefreshOrder(true)}
+          onClose={() => {
+            if (refreshOrder) {
+              refresh();
+            }
+            setVisible(false);
+          }}
+          onEdit={(id, remainingQuantity) => {
+
+            // 修改入库异常
+            setType('error');
+            setParams({ id, remainingQuantity });
+          }}
+        />;
+      case 'error':
+        return <Error
+          type={ReceiptsEnums.instockOrder}
+          id={params.id}
+          onClose={(deleteAction) => {
+            if (deleteAction && (params.remainingQuantity === 1)) {
+              refresh();
+              setVisible(false);
+            } else {
+              setType('instockError');
             }
           }}
           refreshOrder={() => {
-            refresh();
+            setRefreshOrder(true);
           }}
-        />);
-      }}
-    />);
+        />;
+      default:
+        return <></>;
+    }
   };
+
 
   return <div>
     <FloatingBubble
@@ -86,7 +112,8 @@ const InstockShop = (
     >
       <div className={style.actions}>
         <div id='waitInstock' className={style.action} onClick={() => {
-          wait();
+          setType('waitInStock');
+          setVisible(true);
         }}>
           <div className={style.actionButton}>
             <Badge
@@ -96,7 +123,8 @@ const InstockShop = (
           </div>
         </div>
         <div className={style.action} onClick={() => {
-          error();
+          setType('instockError');
+          setVisible(true);
         }}>
           <div className={style.actionButton}>
             <Badge
@@ -112,12 +140,15 @@ const InstockShop = (
 
     <Popup
       onMaskClick={() => {
-        setContent(null);
+        if (refreshOrder) {
+          refresh();
+        }
+        setVisible(false);
       }}
       mask
-      visible={content}
+      visible={visible}
     >
-      {content}
+      {content()}
     </Popup>
   </div>;
 };

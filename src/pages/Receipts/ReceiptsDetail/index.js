@@ -201,8 +201,6 @@ const ReceiptsDetail = () => {
 
         {!hidden && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
 
-        {(getTaskIdLoading || detailLoading) && <MyLoading />}
-
       </div>;
   }
 };

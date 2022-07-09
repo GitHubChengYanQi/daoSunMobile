@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
-import { WarningOutlined } from '@ant-design/icons';
 import InstockError from '../../../InstockOrder/components/InstockShop/components/InstockError';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
@@ -15,34 +14,57 @@ const ErrorShop = (
   },
 ) => {
 
-  const [content, setContent] = useState();
+  const [visible, setVisible] = useState();
 
-  const error = () => {
-    setContent(<InstockError
-      formId={id}
-      refresh={refresh}
-      type={ReceiptsEnums.stocktaking}
-      onClose={() => setContent(null)}
-      onEdit={(id, remainingQuantity) => {
+  const [type, setType] = useState();
 
-        // 修改入库异常
-        setContent(<Error
+  const [params, setParams] = useState();
+
+  const [refreshOrder, setRefreshOrder] = useState();
+
+  const content = () => {
+    switch (type) {
+      case 'stockTaskingErrror':
+        return <InstockError
+          formId={id}
+          refresh={() => setRefreshOrder(true)}
           type={ReceiptsEnums.stocktaking}
-          id={id}
+          onClose={() => {
+            if (refreshOrder) {
+              refresh();
+            }
+            setVisible(false);
+          }}
+          onEdit={(id, remainingQuantity) => {
+
+            // 修改入库异常
+            setType('error');
+            setParams({ id, remainingQuantity });
+          }}
+        />;
+      case 'error':
+        return <Error
+          type={ReceiptsEnums.stocktaking}
+          id={params.id}
           onClose={(deleteAction) => {
-            if (deleteAction && (remainingQuantity === 1)) {
-              setContent(null);
+            if (deleteAction && (params.remainingQuantity === 1)) {
+              if (refreshOrder) {
+                refresh();
+              }
+              setVisible(false);
             } else {
-              error();
+              setType('stockTaskingErrror');
             }
           }}
           refreshOrder={() => {
-            refresh();
+            setRefreshOrder(true);
           }}
-        />);
-      }}
-    />);
+        />;
+      default:
+        return <></>;
+    }
   };
+
 
   return <>
 
@@ -58,7 +80,8 @@ const ErrorShop = (
     >
       <div className={style.actions}>
         <div className={style.action} onClick={() => {
-          error();
+          setType('stockTaskingErrror');
+          setVisible(true);
         }}>
           <div className={style.actionButton}><Icon type='icon-yichangkuang' /></div>
         </div>
@@ -67,12 +90,15 @@ const ErrorShop = (
 
     <Popup
       onMaskClick={() => {
-        setContent(null);
+        if (refreshOrder) {
+          refresh();
+        }
+        setVisible(false);
       }}
       mask
-      visible={content}
+      visible={visible}
     >
-      {content}
+      {content()}
     </Popup>
 
   </>;

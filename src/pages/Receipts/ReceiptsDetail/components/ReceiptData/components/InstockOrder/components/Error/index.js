@@ -38,6 +38,8 @@ const Error = (
     },
     onEdit = () => {
     },
+    onHidden = () => {
+    },
     onSuccess = () => {
     },
     refreshOrder = () => {
@@ -49,10 +51,8 @@ const Error = (
   },
 ) => {
 
-  console.log(skuItem);
 
   const [sku, setSku] = useState(skuItem);
-
 
   useEffect(() => {
     setSku(skuItem);
@@ -72,7 +72,7 @@ const Error = (
     onSuccess: (res) => {
       switch (type) {
         case ReceiptsEnums.instockOrder:
-          onSuccess(skuItem);
+          onHidden();
           addShop();
           break;
         case ReceiptsEnums.stocktaking:
@@ -84,9 +84,9 @@ const Error = (
           break;
       }
     },
-    onError:()=>{
+    onError: () => {
       refreshOrder();
-    }
+    },
   });
 
   const { loading: anomalyTemporaryLoading, run: anomalyTemporaryRun } = useRequest(anomalyTemporary, {
@@ -334,7 +334,7 @@ const Error = (
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', () => {
       Message.successToast('添加成功！', () => {
-        refreshOrder();
+        onSuccess(skuItem);
       });
     });
 
@@ -383,7 +383,7 @@ const Error = (
             <BottomButton
               square
               rightDisabled={required}
-              leftOnClick={()=>{
+              leftOnClick={() => {
                 onClose();
               }}
               rightOnClick={() => {
@@ -608,26 +608,24 @@ const Error = (
       }
 
       <div className={style.divider}>
-      <AddButton danger disabled={allNumber >= data.number} onClick={() => {
+        <AddButton danger disabled={allNumber >= data.number} onClick={() => {
 
-        CodeRun({
-          data: {
-            codeRequests: [{
-              source: batch ? 'inErrorBatch' : 'inErrorSingle',
-              brandId: sku.brandId,
-              customerId: sku.customerId,
-              id: sku.skuId,
-              number: 1,
-              inkindType: '入库异常',
-            }],
-          },
-        });
+          CodeRun({
+            data: {
+              codeRequests: [{
+                source: batch ? 'inErrorBatch' : 'inErrorSingle',
+                brandId: sku.brandId,
+                customerId: sku.customerId,
+                id: sku.skuId,
+                number: 1,
+                inkindType: '入库异常',
+              }],
+            },
+          });
 
-      }}><AddOutline /></AddButton>
+        }}><AddOutline /></AddButton>
+      </div>
     </div>
-    </div>
-
-
 
 
     {(

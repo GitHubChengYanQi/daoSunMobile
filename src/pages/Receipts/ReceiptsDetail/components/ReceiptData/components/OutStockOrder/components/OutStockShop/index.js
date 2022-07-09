@@ -15,6 +15,8 @@ const OutStockShop = (
 
   const [visible, setVisible] = useState();
 
+  const [refreshOrder, setRefreshOrder] = useState();
+
   return <div>
     <FloatingBubble
       axis='xy'
@@ -27,12 +29,6 @@ const OutStockShop = (
       className={style.float}
     >
       <div className={style.actions}>
-        {/*<div className={style.action} onClick={() => {*/}
-
-        {/*}}>*/}
-        {/*  <div className={style.actionButton}>单据</div>*/}
-        {/*  <span className={style.text} />*/}
-        {/*</div>*/}
         <div className={style.action} onClick={() => {
           setVisible(true);
         }}>
@@ -44,13 +40,16 @@ const OutStockShop = (
 
     <Popup
       onMaskClick={() => {
+        if (refreshOrder) {
+          refresh();
+        }
         setVisible(false);
       }}
       mask
       destroyOnClose
       visible={visible}
     >
-      <WaitOutSku id={id} refresh={refresh} />
+      <WaitOutSku id={id} refresh={() => setRefreshOrder(true)} />
     </Popup>
   </div>;
 };

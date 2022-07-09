@@ -123,6 +123,8 @@ const SkuAction = (
 
   };
 
+  const [refreshOrder, setRefreshOrder] = useState();
+
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       title='申请明细'
@@ -174,7 +176,12 @@ const SkuAction = (
     </MyCard>
 
     <Popup
-      onMaskClick={() => setVisible(false)}
+      onMaskClick={() => {
+        if (refreshOrder) {
+          refresh();
+        }
+        setVisible(false);
+      }}
       visible={visible}
       destroyOnClose
     >
@@ -182,10 +189,15 @@ const SkuAction = (
         type={ReceiptsEnums.instockOrder}
         skuItem={visible}
         onClose={() => {
+          if (refreshOrder) {
+            refresh();
+          }
           setVisible(false);
         }}
-        refreshOrder={refresh}
+        onHidden={() => setVisible(false)}
+        refreshOrder={() => setRefreshOrder(true)}
         onSuccess={(item) => {
+          refresh();
           setVisible(false);
         }}
       />

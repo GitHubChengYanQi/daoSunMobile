@@ -9,6 +9,7 @@ import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
 import StepList from '../Dynamic/components/StepList';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const ReceiptData = (
   {
@@ -79,6 +80,10 @@ const ReceiptData = (
   };
 
   const remarks = data.remarks || [];
+
+  if (loading) {
+    return <MyLoading skeleton skeletonStyle={{backgroundColor:'#fff',height:'calc(100% - 166px)'}} />;
+  }
 
   return <>
     {receiptType()}

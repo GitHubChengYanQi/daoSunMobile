@@ -12,7 +12,6 @@ const InstockOrder = (
     data = {},
     refresh = () => {
     },
-    loading,
     permissions,
     getAction = () => {
       return {};
