@@ -1,10 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import MySearch from '../../components/MySearch';
 import Icon from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
-import { Button, Tabs } from 'antd-mobile';
+import { Button, Dialog, Image, Tabs } from 'antd-mobile';
 import topStyle from '../../global.less';
 import { ToolUtil } from '../../components/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
@@ -15,9 +15,12 @@ import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import { Message } from '../../components/Message';
 import Sku from './components/Sku';
+import jrQrcode from 'jr-qrcode';
+import PrintCode from '../../components/PrintCode';
 
 const outStockByReceipts = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
 const outStockBySku = { url: '/productionPickLists/createOutStockOrderBySku', method: 'POST' };
+const getCode = { url: '/productionPickCode/getCode', method: 'GET' };
 
 const MyPicking = () => {
 
@@ -35,6 +38,8 @@ const MyPicking = () => {
 
   const [refresh, setRefresh] = useState();
 
+  const [code, setCode] = useState();
+
   const { loading: receiptsLoading, run: receiptsRun } = useRequest(outStockByReceipts, {
     manual: true,
     onSuccess: () => {
@@ -50,6 +55,14 @@ const MyPicking = () => {
       Message.successToast('领取成功！',()=>{
         setRefresh(true);
       });
+    },
+  });
+
+
+  const { loading: selectCodeLoading, run: selectCode } = useRequest(getCode, {
+    manual: true,
+    onSuccess: (res) => {
+      setCode(res);
     },
   });
 
@@ -94,6 +107,16 @@ const MyPicking = () => {
         return <MyEmpty />;
     }
   };
+
+  useEffect(() => {
+    selectCode();
+  }, []);
+
+  const codeImg = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`)
+
+  if (selectCodeLoading) {
+    return <MyLoading skeleton />;
+  }
 
   return <div className={style.myPicking}>
     <MyNavBar title='领料中心' />
@@ -211,6 +234,30 @@ const MyPicking = () => {
         >确认</Button>
       </div>
     </div>
+
+    <Dialog
+      visible={code}
+      content={<>
+        <div style={{ textAlign: 'center' }}>已有领取物料</div>
+        <div style={{ textAlign: 'center' }}>领料码：{code}</div>
+        {codeImg}
+      </>}
+      actions={[[
+        { text: '重新领料', key: 'refresh' },
+        { text: '打印二维码', key: 'print', disabled: ToolUtil.isQiyeWeixin() },
+      ]]}
+      onAction={(action) => {
+        switch (action.key) {
+          case 'refresh':
+            return;
+          case 'print':
+            PrintCode.print([codeImg], 0);
+            return;
+          default:
+            return;
+        }
+      }}
+    />
 
     {(skuLoading || receiptsLoading) && <MyLoading />}
   </div>;
