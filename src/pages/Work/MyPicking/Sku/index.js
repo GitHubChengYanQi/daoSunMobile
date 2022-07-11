@@ -19,7 +19,7 @@ const getCarts = { url: '/productionPickListsCart/getSelfCartsBySku', method: 'P
 const outStockBySku = { url: '/productionPickLists/createCode', method: 'POST' };
 
 export const receivedColor = '#5ABAFF';
-export const collectableColor = 'red';
+export const collectableColor = '#257BDE';
 export const notPreparedColor = '#D3E7FD';
 
 const Sku = () => {
@@ -224,7 +224,7 @@ const Sku = () => {
       visible={code}
       content={<div style={{ textAlign: 'center' }}>
         <div>领料码</div>
-        {code && <>失效剩余时间：<Clock seconds={3600} /></>}
+        {code && <>失效剩余时间：<Clock seconds={600} /></>}
         <img src={codeImg} alt='' />
         <div>{code}</div>
       </div>}
