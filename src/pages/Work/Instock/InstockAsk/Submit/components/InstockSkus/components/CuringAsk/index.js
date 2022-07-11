@@ -23,7 +23,7 @@ const CuringAsk = ({ createType, state }) => {
     onSuccess: (res) => {
 
       Message.successDialog({
-        content: '创建入库申请成功!',
+        content: '创建养护申请成功!',
         confirmText: '查看详情',
         cancelText: '返回列表',
         onCancel: () => history.goBack(),
