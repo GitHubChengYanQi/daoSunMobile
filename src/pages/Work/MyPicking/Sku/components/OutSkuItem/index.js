@@ -51,6 +51,7 @@ const OutSkuItem = (
         <SkuItem
           skuResult={skuItem}
           extraWidth='58px'
+          otherData={['任意品牌']}
         />
       </div>
       <div className={style.skuData}>
