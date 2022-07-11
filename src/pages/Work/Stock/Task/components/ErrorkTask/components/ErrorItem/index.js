@@ -5,7 +5,8 @@ import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../../../components/MyDate';
 import { Divider } from 'antd-mobile';
 import MyEmpty from '../../../../../../../components/MyEmpty';
-import Item from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockError/components/ErrorItem';
+import Item
+  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockError/components/ErrorItem';
 
 const ErrorItem = (
   {
@@ -44,7 +45,25 @@ const ErrorItem = (
             return null;
           }
 
-          return <div key={skuIndex} style={{padding:'0 12px'}}><Item totalTitle='123' item={skuItem} index={index} /></div>;
+          let totalTitle = '';
+          switch (receipts.type) {
+            case 'instock':
+              totalTitle = '申请总数';
+              break;
+            case 'Stocktaking':
+              totalTitle = '实际总数';
+              break;
+            default:
+              break;
+          }
+
+          return <div key={skuIndex} style={{ padding: '0 12px' }}>
+            <Item
+              totalTitle={totalTitle}
+              item={skuItem}
+              index={index}
+            />
+          </div>;
         })
       }
     </div>

@@ -37,18 +37,17 @@ const Header = (
   const unitName = ToolUtil.isObject(spuResult.unitResult).unitName;
 
   const checkUsers = ToolUtil.isArray(sku.checkUsers);
-  const checkUser = checkUsers[checkUsers.length - 1];
-  const urls = ToolUtil.isArray(checkUser && checkUser.mediaUrls);
+
 
   const addFileRef = useRef();
 
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
-  useEffect(()=>{
+  useEffect(() => {
     setMediaIds([]);
     setNote('');
-  },[loading])
+  }, [loading]);
 
   return <>
     <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
@@ -100,23 +99,27 @@ const Header = (
           <div style={{ padding: '0 8px' }}>({ToolUtil.isObject(sku.user).name || '-'})</div>
         </div>
 
-        {checkUser && <div className={style.checkUser}>
-          <div className={style.checkNumber}>
-            <div className={style.title}>复核数：</div>
-            <ShopNumber show value={checkUser.number} /> {unitName}
-            <div style={{ padding: '0 8px' }}>({checkUser.name || ''})</div>
-          </div>
-          <div>
-            附件： {urls.length === 0 && '无'}<div hidden={urls.length === 0} style={{ paddingTop: 8 }}>
-           <UploadFile refresh={loading} show value={urls.map(item => {
-              return { url: item };
-            })} />
-          </div>
-          </div>
-          <div>
-            备注说明： {checkUser.note || '无'}
-          </div>
-        </div>}
+        {checkUsers.map((item, index) => {
+          const urls = ToolUtil.isArray(item && item.mediaUrls);
+          return <div key={index} className={style.checkUser}>
+            <div className={style.checkNumber}>
+              <div className={style.title}>复核数：</div>
+              <ShopNumber show value={item.number} /> {unitName}
+              <div style={{ padding: '0 8px' }}>({item.name || ''})</div>
+            </div>
+            <div>
+              附件： {urls.length === 0 && '无'}
+              <div hidden={urls.length === 0} style={{ paddingTop: 8 }}>
+                <UploadFile refresh={loading} show value={urls.map(item => {
+                  return { url: item };
+                })} />
+              </div>
+            </div>
+            <div>
+              备注说明： {item.note || '无'}
+            </div>
+          </div>;
+        })}
 
         <div hidden={sku.hidden} className={style.verifyAction}>
           <div className={style.checkNumber}>

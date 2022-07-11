@@ -60,7 +60,7 @@ const InstockError = (
         {
           anomalyResults.map((item, index) => {
             return <ErrorItem totalTitle={errorTypeData().totalTitle} item={item} key={index} index={index} onClick={() => {
-              if ((getAction('verify').id && permissions) || item.status === 99) {
+              if ((getAction('verify').id && permissions) || data.complete === 99) {
                 setVisible(item.anomalyId);
               }
             }} />;
@@ -75,7 +75,7 @@ const InstockError = (
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError
-        permissions
+        permissions={data.complete !== 99}
         height='80vh'
         anomalyOrderId={data.orderId}
         anomalyId={visible}

@@ -3,9 +3,8 @@ import { history } from 'umi';
 import style from '../../../../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../../../components/MyDate';
-import MyEmpty from '../../../../../../../components/MyEmpty';
-import InSkuItem
-  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/SkuAction/components/InSkuItem';
+import SkuItem from '../../../../../../Sku/SkuItem';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ForwardItem = (
   {
@@ -14,8 +13,6 @@ const ForwardItem = (
 ) => {
 
   const receipts = item.receipts || {};
-
-  const instockListResults = receipts.instockListResults || [];
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
@@ -33,18 +30,10 @@ const ForwardItem = (
         {MyDate.Show(receipts.createTime)}
       </div>
     </div>
-    <div onClick={onClick}>
-      {instockListResults.length === 0 && <MyEmpty description='暂无物料' />}
-      {
-        instockListResults.map((skuItem, skuIndex) => {
-
-          if (!item.allSku && skuIndex > 1) {
-            return null;
-          }
-
-          return <InSkuItem item={skuItem} data={instockListResults} key={skuIndex} />;
-        })
-      }
+    <div onClick={onClick} style={{ padding: '0 12px' }}>
+      <SkuItem skuResult={receipts.skuResult} otherData={[
+        ToolUtil.isObject(receipts.customer).customerName,
+      ]} />
     </div>
   </div>;
 };

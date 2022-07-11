@@ -575,7 +575,7 @@ const Error = (
             </div>
             <div className={style.inKindRow}>
               <div className={style.inKindTitle}>
-                描述<span>*</span>：
+                描述：
               </div>
               <TextArea
                 className={style.textArea}
