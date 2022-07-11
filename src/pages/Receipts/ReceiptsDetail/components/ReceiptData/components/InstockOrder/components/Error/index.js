@@ -19,7 +19,6 @@ import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
-import MyStepper from '../../../../../../../../components/MyStepper';
 import MyCard from '../../../../../../../../components/MyCard';
 import { AddButton } from '../../../../../../../../components/MyButton';
 
@@ -62,7 +61,7 @@ const Error = (
 
   const [inkinds, setInkinds] = useState([]);
 
-  const error = data.number !== skuItem.number || inkinds.length > 0;
+  const error = data.number !== sku.number || inkinds.length > 0;
 
   let allNumber = 0;
   inkinds.map((item) => allNumber += item.number);
@@ -77,7 +76,7 @@ const Error = (
           break;
         case ReceiptsEnums.stocktaking:
           Message.successToast('添加成功！', () => {
-            onSuccess(skuItem, error ? -1 : 1, res.anomalyId);
+            onSuccess(sku, error ? -1 : 1, res.anomalyId);
           });
           break;
         default:
@@ -93,7 +92,7 @@ const Error = (
     manual: true,
     onSuccess: (res) => {
       Message.successToast('暂存成功！', () => {
-        onSuccess(skuItem, 2, res.anomalyId);
+        onSuccess(sku, 2, res);
       });
     },
   });
@@ -103,7 +102,7 @@ const Error = (
     onSuccess: (res) => {
       Message.successToast('修改成功！', () => {
         onClose();
-        onEdit(skuItem, error ? -1 : 1, res.anomalyId);
+        onEdit(sku, error ? -1 : 1, res.anomalyId);
       });
     },
   });
@@ -113,7 +112,7 @@ const Error = (
     onSuccess: () => {
       Message.successToast('删除成功！', () => {
         onClose(true);
-        refreshOrder(skuItem, 0);
+        refreshOrder(sku, 0);
       });
     },
   });
@@ -130,6 +129,7 @@ const Error = (
         customerResult: res.customer,
         brandResult: res.brand,
         brandId: res.brandId,
+        positionId:res.positionId,
       };
 
       let data = {
@@ -240,12 +240,12 @@ const Error = (
   useEffect(() => {
     if (codeId) {
       props.dispatch({ type: 'qrCode/clearCode' });
-      const sku = backObject.inkindResult || backObject.result || {};
-      if (['item', 'sku'].includes(backObject.type) && sku.skuId === skuItem.skuId) {
-        if (ToolUtil.isObject(sku.inkindDetail).stockDetails) {
+      const inkind = backObject.inkindResult || backObject.result || {};
+      if (['item', 'sku'].includes(backObject.type) && inkind.skuId === sku.skuId) {
+        if (ToolUtil.isObject(inkind.inkindDetail).stockDetails) {
           return Message.toast('物料已入库！');
         } else {
-          setData({ ...data, number: sku.number || 1 });
+          setData({ ...data, number: inkind.number || 1 });
         }
       } else {
         return Message.toast('扫描物料不符！');
@@ -291,12 +291,11 @@ const Error = (
       return {
         ...getParams(),
         inkind: sku.inkindId,
-        positionId: sku.positionId,
+        positionId: `${sku.positionId}`,
         formId: sku.inventoryTaskId,
         anomalyType: sku.inventoryTaskId ? 'StocktakingError' : 'timelyInventory',
       };
     }
-
   };
 
   const addShopCart = (
@@ -334,7 +333,7 @@ const Error = (
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', () => {
       Message.successToast('添加成功！', () => {
-        onSuccess(skuItem);
+        onSuccess(sku);
       });
     });
 
@@ -420,11 +419,8 @@ const Error = (
             <div className={style.number}>
               <div className={style.actual} style={{ padding: 0 }}>
                 <span>实际库存</span>
-                <MyStepper
+                <ShopNumber
                   min={allNumber}
-                  style={{
-                    '--button-text-color': '#000',
-                  }}
                   value={data.number}
                   onChange={(number) => {
                     setData({ ...data, number });

@@ -128,9 +128,16 @@ const Stock = (props) => {
     <MyTablBar
       className={style.tab}
       onChange={(key) => {
-        if (key !== 'scan' && key !== 'report') {
-          setStockDetail({ ...stockDetail, task: null });
-          setKey(key);
+        switch (key) {
+          case 'scan':
+            props.dispatch({
+              type: 'qrCode/wxCpScan',
+            });
+            return;
+          default:
+            setStockDetail({ ...stockDetail, task: null });
+            setKey(key);
+            return
         }
       }}
       activeKey={key}

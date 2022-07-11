@@ -9,7 +9,6 @@ import { useModel } from 'umi';
 import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
 import MenusItem from './component/MenusItem';
-import { useRequest } from '../../util/Request';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
@@ -25,7 +24,6 @@ const Home = (props) => {
 
   const [commonlyMenus, setCommonlyMenus] = useState([]);
 
-  const {data:userAvatar} = useRequest(getUserInfo);
 
   useEffect(() => {
     setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
@@ -60,7 +58,7 @@ const Home = (props) => {
         <Avatar
           style={{ backgroundColor: '#98BFEB' }}
           size={46}
-          src={userAvatar}>{userInfo.name && userInfo.name.substring(0, 1)}</Avatar>
+          src={userInfo.avatar}>{userInfo.name && userInfo.name.substring(0, 1)}</Avatar>
       </div>
     </div>
     <Card

@@ -121,7 +121,6 @@ export const getUserMenus = async () => {
 
 export const goToLogin = () => {
   const backUrl = window.location.href;
-  console.log(!ToolUtil.queryString('login', backUrl) && !ToolUtil.queryString('sms', backUrl));
   if (!ToolUtil.queryString('login', backUrl) && !ToolUtil.queryString('sms', backUrl)) {
     history.push({
       pathname: '/Login',
