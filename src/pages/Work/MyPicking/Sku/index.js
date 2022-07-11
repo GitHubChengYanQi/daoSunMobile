@@ -30,11 +30,12 @@ const Sku = () => {
 
   const [code, setCode] = useState('');
 
+  const [count, setCount] = useState(0);
+
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
-      setCode(54321);
+      setCode(res);
       Message.successToast('领取成功！', () => {
         cartRefresh();
       });
@@ -79,6 +80,7 @@ const Sku = () => {
         });
         return count += skuResults.length;
       });
+      setCount(count);
       setDetails(keys);
       setData(newData);
     },
@@ -143,7 +145,7 @@ const Sku = () => {
         }}
       />
       <div className={style.top}>
-        <div className={style.skuNumber}>可领物料：<span>{1}</span>类</div>
+        <div className={style.skuNumber}>可领物料：<span>{count}</span>类</div>
         <div className={style.status}>
           <div className={style.statusItem}>
             <div className={style.radius} style={{ backgroundColor: receivedColor }} />
