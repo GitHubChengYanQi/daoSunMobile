@@ -15,6 +15,7 @@ const MySearch = (
   {
     id = 'searchBar',
     placeholder,
+    style:searchStyle,
     searchIcon = <SearchOutline /> ,
     extraIcon,
     className,
@@ -112,7 +113,7 @@ const MySearch = (
     onSearch(value);
   };
 
-  return <div className={ToolUtil.classNames(style.searchDiv, className)}>
+  return <div style={searchStyle} className={ToolUtil.classNames(style.searchDiv, className)}>
     <div className={style.search}>
       <Popover
         className={style.popover}

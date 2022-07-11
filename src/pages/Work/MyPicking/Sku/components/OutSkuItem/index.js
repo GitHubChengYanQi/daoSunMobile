@@ -60,6 +60,7 @@ const OutSkuItem = (
 
     {
       cartResults.map((detailItem, detailIndex) => {
+
         const detail = detailItem.productionPickListsDetailResult || {};
         const pickListsResult = detail.pickListsResult || {};
 
@@ -102,7 +103,7 @@ const OutSkuItem = (
                 format={() => {
                   return detail.number + '  (申请数)';
                 }}
-                percent={percent}
+                percent={percent+successPercent}
                 success={{ percent: successPercent, strokeColor: receivedColor }}
                 trailColor={notPreparedColor}
                 strokeColor={collectableColor}
@@ -112,9 +113,19 @@ const OutSkuItem = (
           </div>
           <div>
             <ShopNumber
+              max={detailItem.number}
+              min={1}
               value={detailItem.outNumber}
               onChange={(outNumber) => {
                 detailChange(storeHouseIndex, skuIndex, detailIndex, { outNumber });
+                const newCheckSku = checkSku.map(item => {
+                  if (item.key === detailItem.key) {
+                    return { ...item, outNumber };
+                  } else {
+                    return item;
+                  }
+                });
+                skuChange(newCheckSku);
               }}
             />
           </div>

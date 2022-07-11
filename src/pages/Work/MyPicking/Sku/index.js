@@ -11,31 +11,41 @@ import jrQrcode from 'jr-qrcode';
 import MySearch from '../../../components/MySearch';
 import Icon from '../../../components/Icon';
 import OutSkuItem from './components/OutSkuItem';
+import MyNavBar from '../../../components/MyNavBar';
+import { Clock } from '../../../components/MyDate';
+import { useHistory, useLocation } from 'react-router-dom';
 
 const getCarts = { url: '/productionPickListsCart/getSelfCartsBySku', method: 'POST' };
-const outStockBySku = { url: '/productionPickLists/createOutStockOrderBySku', method: 'POST' };
+const outStockBySku = { url: '/productionPickLists/createCode', method: 'POST' };
 
 export const receivedColor = '#5ABAFF';
-export const collectableColor = '#257BDE';
+export const collectableColor = 'red';
 export const notPreparedColor = '#D3E7FD';
 
 const Sku = () => {
 
+  const { query } = useLocation();
+
+  const history = useHistory();
+
+  const [code, setCode] = useState('');
+
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      console.log(res);
+      setCode(54321);
       Message.successToast('领取成功！', () => {
-
+        cartRefresh();
       });
     },
   });
 
-  const [code, setCode] = useState();
-
   const codeImg = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
   const [data, setData] = useState([]);
-  console.log(data);
+
+  const [details, setDetails] = useState([]);
 
   const [checkSku, setCheckSku] = useState([]);
 
@@ -43,35 +53,52 @@ const Sku = () => {
     setCheckSku(newCheckSku);
   };
 
-  const { loading, refresh: cartRefresh } = useRequest(getCarts, {
+  const { loading, refresh: cartRefresh, run } = useRequest(getCarts, {
+    manual: true,
     onSuccess: (res) => {
       let count = 0;
       const newData = [];
+      const keys = [];
       ToolUtil.isArray(res).map(item => {
         const skuResults = item.skuResults || [];
-        const storehouseResult = item.storehouseResult || {};
         newData.push({
           ...item,
-          key: storehouseResult.storehouseId,
           skuResults: skuResults.map(skuItem => {
             const cartResults = skuItem.cartResults || [];
             return {
               ...skuItem,
               cartResults: cartResults.map(item => {
-                return { ...item, key: skuItem.skuId + item.pickListsId, outNumber: item.number };
+                const key = skuItem.skuId + item.pickListsId;
+                const detailItem = { ...item, key, outNumber: item.number };
+                keys.push(detailItem);
+                return detailItem;
               }),
               key: skuItem.skuId,
-              storehouseId: storehouseResult.storehouseId,
             };
           }),
         });
         return count += skuResults.length;
       });
+      setDetails(keys);
       setData(newData);
     },
   });
 
+  useEffect(() => {
+    if (!query.storehouseId) {
+      return Message.errorDialog({
+        content: '请选择仓库！',
+        onConfirm: () => {
+          history.goBack();
+        },
+      });
+    }
+    run({ data: { storehouseId: query.storehouseId } });
+  }, []);
+
   const checkSkuKey = checkSku.map(item => item.key);
+
+  const allChecked = details.length === checkSkuKey.length;
 
   const detailChange = (storeHouseIndex, skuIndex, detailIndex, params) => {
     const newData = data.map((item, index) => {
@@ -92,7 +119,7 @@ const Sku = () => {
             return item;
           }
         });
-        return { ...item, skuResults:newSkuResults };
+        return { ...item, skuResults: newSkuResults };
       } else {
         return item;
       }
@@ -102,6 +129,7 @@ const Sku = () => {
 
   return <div className={style.myPicking}>
 
+    <MyNavBar title='领料中心' />
     <div className={style.content}>
 
       <MySearch
@@ -134,7 +162,6 @@ const Sku = () => {
 
       {
         data.map((item, index) => {
-
           const skuResults = item.skuResults || [];
 
           return <div key={index} className={style.outSku}>
@@ -161,24 +188,26 @@ const Sku = () => {
 
     <div className={style.bottom}>
       <div className={style.all}>
-        <MyCheck onChange={() => {
-
-        }}>{true ? '取消全选' : '全选'}</MyCheck> <span>已选中 {0} 类</span>
+        <MyCheck checked={allChecked} onChange={() => {
+          if (allChecked) {
+            setCheckSku([]);
+          } else {
+            setCheckSku(details);
+          }
+        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {checkSkuKey.length} 类</span>
       </div>
       <div className={style.buttons}>
         <Button
+          disabled={checkSku.length === 0}
           color='primary'
           onClick={() => {
             const cartsParams = [];
-            [].map(skuItem => {
-              const cartResults = skuItem.cartResults || [];
-              return cartResults.map(item => {
-                return cartsParams.push({
-                  'storehouseId': skuItem.storehouseId,
-                  'skuId': skuItem.skuId,
-                  'pickListsId': item.pickListsId,
-                  'number': item.number,
-                });
+            checkSku.map(skuItem => {
+              return cartsParams.push({
+                'storehouseId': skuItem.storehouseId,
+                'skuId': skuItem.skuId,
+                'pickListsId': skuItem.pickListsId,
+                'number': skuItem.outNumber,
               });
             });
             skuRun({
@@ -193,11 +222,12 @@ const Sku = () => {
 
     <Dialog
       visible={code}
-      content={<>
-        <div style={{ textAlign: 'center' }}>领料码</div>
-        {codeImg}
-        <div style={{ textAlign: 'center' }}>{code}</div>
-      </>}
+      content={<div style={{ textAlign: 'center' }}>
+        <div>领料码</div>
+        {code && <>失效剩余时间：<Clock seconds={3600} /></>}
+        <img src={codeImg} alt='' />
+        <div>{code}</div>
+      </div>}
       actions={[[
         { text: '取消', key: 'close' },
         { text: '打印二维码', key: 'print', disabled: ToolUtil.isQiyeWeixin() },
@@ -205,6 +235,7 @@ const Sku = () => {
       onAction={(action) => {
         switch (action.key) {
           case 'close':
+            setCode('');
             return;
           case 'print':
             PrintCode.print([codeImg], 0);
@@ -215,7 +246,7 @@ const Sku = () => {
       }}
     />
 
-    {loading && <MyLoading />}
+    {(loading || skuLoading) && <MyLoading />}
 
   </div>;
 };
