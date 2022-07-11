@@ -17,8 +17,12 @@ const secondsToMinutes = sec => {
   sec = Number(sec);
   let minutes = moment.duration(sec, 'seconds').minutes();
   let seconds = moment.duration(sec, 'seconds').seconds();
-  minutes < 10 ? (minutes = '0' + minutes) : minutes;
-  seconds < 10 ? (seconds = '0' + seconds) : seconds;
+  if (minutes < 10){
+    minutes = '0' + minutes
+  }
+  if (seconds < 10){
+    seconds = '0' + seconds
+  }
   return minutes + ':' + seconds;
 };
 
