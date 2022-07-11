@@ -4,9 +4,9 @@ import React from 'react';
 
 const ErrorSku = () => {
 
-  const types = [{ type: '入库', values: [21, 42, 13, 34, 15, 22] }, { type: '盘点', values: [12, 32, 51, 56, 14, 23] }];
+  const types = [{ type: '数量', values: [128, 32] }, { type: '其他', values: [32, 12] }];
 
-  const months = ['1月', '2月', '3月', '4月', '5月', '6月'];
+  const months = ['入库', '盘点'];
 
   const data = [];
   types.forEach(typeItem => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Canvas from '@antv/f2-react';
-import { PieLabel, Chart, Interval, Line } from '@antv/f2';
+import { Chart, Interval,  Axis, Legend } from '@antv/f2';
 
 const InventoryRotation = () => {
 
@@ -14,52 +14,46 @@ const InventoryRotation = () => {
   const date = ['1个月内', '3个月内', '6个月内', '长期呆滞'];
 
   const data = [];
-  // date.forEach((item, index) => {
-  //   skuClass.forEach(skuClassItem => {
-  //     data.push({ date: item, type: skuClassItem.type, value: skuClassItem.values[index] });
-  //   });
-  // });
-  skuClass.forEach(item=>{
-    data.push({name:item.type,y:item.values[0],const: 'const',})
-  })
+  skuClass.forEach(typeItem => {
+    date.forEach((item, index) => {
+      data.push({ date:typeItem.type , name: item, value: typeItem.values[index] });
+    });
+  });
 
-  return  <Canvas  pixelRatio={window.devicePixelRatio}>
-    <Chart
-      data={data}
-      coord={{
-        transposed: true,
-        type: 'polar',
-        radius: 0.75,
-      }}
-    >
-      <Interval
-        x="const"
-        y="y"
-        adjust="stack"
-        color={{
-          field: 'name',
-          range: ['#1890FF', '#13C2C2', '#1c0df3', '#FACC14', '#F04864'],
+  return <Canvas pixelRatio={window.devicePixelRatio}>
+    <Chart data={data}>
+      <Axis field='date' />
+      <Axis field='value' />
+      <Legend
+        position='top'
+        style={{
+          justifyContent: 'space-around',
+        }}
+        triggerMap={{
+          press: (items, records, legend) => {
+            const map = {};
+            items.forEach((item) => (map[item.name] = this.clone(item)));
+            records.forEach((record) => {
+              map[record.type].value = record.value;
+            });
+            legend.setItems(this.values(map));
+          },
+          pressend: (items, records, legend) => {
+            legend.setItems(items);
+          },
         }}
       />
-      <PieLabel
-        sidePadding={10}
-        label1={(data, color) => {
-          return {
-            text: data.name,
-            fill: color,
-          };
-        }}
-        label2={(data) => {
-          return {
-            fill: '#000000',
-            text: String(Math.floor(data.y * 100) / 100).replace(/\B(?=(\d{3})+(?!\d))/g, ',')+'类',
-            fontWeight: 500,
-            fontSize: 10,
-          };
+      <Interval
+        x='date'
+        y='value'
+        color='name'
+        adjust={{
+          type: 'dodge',
+          marginRatio: 0.05, // 设置分组间柱子的间距
         }}
       />
     </Chart>
-  </Canvas>
+  </Canvas>;
 };
 
 export default InventoryRotation;
