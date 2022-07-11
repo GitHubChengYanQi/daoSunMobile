@@ -6,14 +6,16 @@ import StocktaskigAction
 import BottomButton from '../../../../components/BottomButton';
 import MyNavBar from '../../../../components/MyNavBar';
 import { ToolUtil } from '../../../../components/ToolUtil';
+import { MyLoading } from '../../../../components/MyLoading';
 
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
 
 const PositionInventory = () => {
 
   const [data, setData] = useState([]);
+  console.log(data);
 
-  const { run } = useRequest(positionInventory, {
+  const { loading, run } = useRequest(positionInventory, {
     manual: true,
     onSuccess: (res) => {
       setData(res);
@@ -52,6 +54,28 @@ const PositionInventory = () => {
     setData(newData);
   };
 
+  const skuReturnChange = (skus = [], status) => {
+    const newData = data.map(posiItem => {
+      const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
+        let back = false;
+        const brandResults = ToolUtil.isArray(skuItem.brandResults).map(brandItem => {
+          const backSkus = skus.filter(item =>
+            item.positionId === posiItem.storehousePositionsId && item.skuId === skuItem.skuId && item.brandId === brandItem.brandId,
+          );
+          if (backSkus.length > 0) {
+            back = true;
+            return { ...brandItem, inventoryStatus: status, anomalyId: status === 0 ? null : brandItem.anomalyId };
+          } else {
+            return brandItem;
+          }
+        });
+        return { ...skuItem, brandResults, lockStatus: back ? 0 : skuItem.lockStatus };
+      });
+      return { ...posiItem, skuResultList };
+    });
+    setData(newData);
+  };
+
   const skuStatusChange = ({ skuId, positionId, status }) => {
     const newData = data.map(posiItem => {
       if (posiItem.storehousePositionsId === positionId) {
@@ -76,6 +100,10 @@ const PositionInventory = () => {
     return complete.length !== skuResultList.length;
   });
 
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
   return <>
     <MyNavBar title='即时盘点' />
     <StocktaskigAction
@@ -86,17 +114,21 @@ const PositionInventory = () => {
           status: 98,
         });
       }}
+      errorReturn={skuReturnChange}
       addPhoto={(data) => {
         console.log(data);
       }}
       refresh={(skuItem, error, anomalyId) => {
-        brandStatusChange({
-          skuId: skuItem.skuId,
-          brandId: skuItem.brandId,
-          positionId: skuItem.positionId,
-          status: error,
-          anomalyId: [1, -1].includes(error) && anomalyId,
-        });
+        console.log(skuItem, error, anomalyId);
+        if (skuItem) {
+          brandStatusChange({
+            skuId: skuItem.skuId,
+            brandId: skuItem.brandId,
+            positionId: skuItem.positionId,
+            status: error,
+            anomalyId: [2, -1].includes(error) && anomalyId,
+          });
+        }
       }}
       data={data}
       setData={setData}

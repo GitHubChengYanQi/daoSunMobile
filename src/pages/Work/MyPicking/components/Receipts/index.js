@@ -47,7 +47,7 @@ const Receipts = (
           const brandIds = [];
           carts.map(item => {
             if (!brandIds.includes(item.brandId)) {
-              brandIds.push(item.brandId);
+              brandIds.push(item.brandId || '0');
             }
             return perpareNumber += item.number;
           });
@@ -257,8 +257,13 @@ const Receipts = (
             </div>
           </Divider>}
           <div className={style.data}>
-            <span
-              className={style.icon}><ExclamationCircleOutline /></span>{ToolUtil.isArray(item.announcementsResults).map(item => item.content).join('、')}
+            <div className={style.icon}>
+              <ExclamationCircleOutline />
+            </div>
+            <div className={style.announcements}>
+              {ToolUtil.isArray(item.announcementsResults).map(item => item.content).join('、')}
+            </div>
+
           </div>
         </div>;
       })

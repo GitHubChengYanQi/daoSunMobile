@@ -1,78 +1,63 @@
 .myPicking {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 
-  .content {
-    flex-grow: 1;
-    overflow: auto;
-  }
-}
+  .storeHouseItem {
+    border-radius: 4px;
+    background: #FFFFFF;
+    box-sizing: border-box;
+    border: 1px solid #6D6D6D;
+    margin: 12px;
+    padding: 0 16px;
 
-.tab {
-  //position: sticky;
-  //top: 0;
-  background-color: #fff;
-  --title-font-size: 14px;
+    .storeHouseData {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #D8D8D8;
+      padding: 8px 0;
 
+      .img {
+        margin-right: 8px;
+      }
 
-  :global .adm-tabs-tab-line {
-    display: none;
-  }
+      .data {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
 
-  :global .adm-tabs-tab-active {
-    color: #fff;
-  }
+        .name {
+          font-size: 18px;
+          font-weight: bold;
+          color: #3D3D3D;
+        }
 
-  :global .adm-tabs-header {
-    border-bottom: solid 1px var(--adm-color-primary);
-  }
+        .address, .pickData {
+          font-size: 14px;
+          color: #3D3D3D;
 
-  :global .adm-tabs-tab {
-    padding: 8px 0;
-    width: 100%;
-    text-align: center;
-    line-height: normal;
-  }
-
-  .checkTabItem {
-    background-color: var(--adm-color-primary);
-    border-radius: 8px 8px 0 0;
-  }
-
-  .tabItem {
-    background-color: var(--body--background--color);
-    border-radius: 8px 8px 0 0;
-  }
-}
-
-
-.bottom {
-  background-color: var(--body--background--color);
-  display: flex;
-  padding: 12px;
-
-  .all {
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    font-size: 14px;
-    gap: 8px;
-
-    :global .adm-checkbox {
-      --icon-size: 18px;
-      --font-size: 14px;
+          span {
+            color: var(--adm-color-primary);
+            margin: 0 4px;
+          }
+        }
+      }
     }
-  }
 
-  .buttons {
-    display: flex;
-    gap: 8px;
+    .skuClassData {
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      gap: 8px;
 
-    button {
-      padding: 4px 12px;
-      font-size: 12px;
-      border-radius: 2px;
+      .classItem {
+        font-size: 14px;
+        color: #3D3D3D;
+
+        span {
+          color: var(--adm-color-primary);
+          margin: 0 4px;
+        }
+      }
     }
+
+
   }
 }

@@ -29,7 +29,7 @@ export async function getInitialState() {
     const res = await request({ url: '/rest/refreshToken', method: 'GET' });
     if (res) {
       cookie.set('cheng-token', res);
-    }else {
+    } else {
       return { init: false };
     }
   }
@@ -65,14 +65,17 @@ export async function getInitialState() {
       await wxTicket();
       const userInfo = await getUserInfo();
       const customer = await userCustomer();
-      console.log('userInfo',userInfo);
 
       // type不存在
       if (!IsDev() && userInfo.name === '程彦祺') {
         new VConsole();
       }
 
-      if (history.location.pathname === '/Login') {
+      const location = history.location || {};
+      const query = location.query || {};
+      if (query.backUrl) {
+        window.location.href = query.backUrl;
+      } else if (location.pathname === '/Login') {
         history.push('/');
       }
 

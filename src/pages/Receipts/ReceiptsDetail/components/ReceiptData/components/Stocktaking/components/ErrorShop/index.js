@@ -11,6 +11,10 @@ const ErrorShop = (
     id,
     refresh = () => {
     },
+    onChange = () => {
+    },
+    errorReturn = () => {
+    },
   },
 ) => {
 
@@ -27,7 +31,10 @@ const ErrorShop = (
       case 'stockTaskingErrror':
         return <InstockError
           formId={id}
-          refresh={() => setRefreshOrder(true)}
+          refresh={(data, status) => {
+            errorReturn(data, status);
+            setRefreshOrder(true);
+          }}
           type={ReceiptsEnums.stocktaking}
           onClose={() => {
             if (refreshOrder) {
@@ -48,16 +55,15 @@ const ErrorShop = (
           id={params.id}
           onClose={(deleteAction) => {
             if (deleteAction && (params.remainingQuantity === 1)) {
-              if (refreshOrder) {
-                refresh();
-              }
+              id && refresh();
               setVisible(false);
             } else {
               setType('stockTaskingErrror');
             }
           }}
-          refreshOrder={() => {
+          refreshOrder={(data) => {
             setRefreshOrder(true);
+            !id && onChange(data);
           }}
         />;
       default:
@@ -97,6 +103,7 @@ const ErrorShop = (
       }}
       mask
       visible={visible}
+      destroyOnClose
     >
       {content()}
     </Popup>

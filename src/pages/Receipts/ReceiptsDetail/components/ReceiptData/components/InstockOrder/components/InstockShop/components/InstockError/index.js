@@ -38,9 +38,9 @@ const InstockError = (
 
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       Message.successToast('添加异常单成功！', () => {
-        refresh();
+        refresh(res,99);
         shopRefresh();
         setData([]);
       });
@@ -50,10 +50,17 @@ const InstockError = (
   // 退回
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      const skus = ToolUtil.isArray(res).map(item => {
+        const positions = ToolUtil.isArray(item.storehousePositions)[0] || {};
+        return {
+          ...item,
+          positionId: positions.storehousePositionsId,
+        };
+      });
       Message.successToast('退回成功！', () => {
         shopRefresh();
-        refresh();
+        refresh(skus,0);
         setData([]);
       });
     },

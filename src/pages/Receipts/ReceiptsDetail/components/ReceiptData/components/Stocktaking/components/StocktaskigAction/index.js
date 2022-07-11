@@ -27,6 +27,8 @@ const StocktaskigAction = (
     addPhoto = () => {
 
     },
+    errorReturn = () => {
+    },
   },
 ) => {
 
@@ -197,7 +199,7 @@ const StocktaskigAction = (
 
     <Popup
       onMaskClick={() => {
-        setVisible(false)
+        setVisible(false);
       }}
       visible={visible}
       destroyOnClose
@@ -212,14 +214,19 @@ const StocktaskigAction = (
         }}
         onEdit={refresh}
         refreshOrder={refresh}
-        onSuccess={(skuItem,error) => {
-          refresh(skuItem,error);
+        onSuccess={(skuItem, error, id) => {
+          refresh(skuItem, error, id);
           setVisible(false);
         }}
       />
     </Popup>
 
-    {actionPermissions && <ErrorShop id={inventoryTaskId} refresh={refresh} />}
+    {actionPermissions && <ErrorShop
+      errorReturn={errorReturn}
+      id={inventoryTaskId}
+      onChange={!inventoryTaskId && refresh}
+      refresh={inventoryTaskId && refresh}
+    />}
 
   </div>;
 };

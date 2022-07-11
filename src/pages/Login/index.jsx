@@ -15,6 +15,7 @@ import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
 import { Message } from '../components/Message';
+import { ToolUtil } from '../components/ToolUtil';
 
 export const Username = (props) => {
   return <div className={style.account}>
@@ -75,7 +76,6 @@ const Login = (props) => {
   const { initialState, refresh, loading } = useModel('@@initialState');
 
   const state = initialState || {};
-  const userInfo = initialState || {};
 
   const [count, setCount] = useState(0);
 
@@ -98,11 +98,7 @@ const Login = (props) => {
               type: 'data/clearState',
             });
             cookie.set('cheng-token', res);
-            if (query.backUrl && userInfo.id) {
-              window.location.href = query.backUrl;
-            } else {
-              refresh();
-            }
+            refresh();
           });
         } else {
           Message.errorToast('登录失败!');
@@ -135,7 +131,7 @@ const Login = (props) => {
   useEffect(() => {
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
     const token = GetUserInfo().token;
-    if (token && query.backUrl) {
+    if (token && query.backUrl && ToolUtil.queryString('login', history.location.pathname)) {
       history.push('/');
     }
   }, []);
