@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
@@ -21,6 +21,7 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
 import MyCard from '../../../../../../../../components/MyCard';
 import { AddButton } from '../../../../../../../../components/MyButton';
+import ShowCode from '../../../../../../../../components/ShowCode';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -129,7 +130,7 @@ const Error = (
         customerResult: res.customer,
         brandResult: res.brand,
         brandId: res.brandId,
-        positionId:res.positionId,
+        positionId: res.positionId,
       };
 
       let data = {
@@ -188,6 +189,8 @@ const Error = (
 
   const batch = skuResult.batch === 1;
 
+  const showCodeRef = useRef();
+
   const inkinsChange = (currentIndex, data) => {
     const newInkinds = inkinds.map((item, index) => {
       if (currentIndex === index) {
@@ -204,7 +207,12 @@ const Error = (
       manual: true,
       onSuccess: (res) => {
         const inkind = res[0] || {};
-        setInkinds([...inkinds, { inkindId: inkind.inkindId, number: 1, inkindType: inkind.source }]);
+        setInkinds([...inkinds, {
+          codeId: inkind.codeId,
+          inkindId: inkind.inkindId,
+          number: 1,
+          inkindType: inkind.source,
+        }]);
       },
     },
   );
@@ -225,9 +233,9 @@ const Error = (
       errors.addEventListener('scroll', (event) => {
         const scrollTop = event.target.scrollTop;
         if (scrollTop > 135) {
-          setOver(true);
+          setOver(scrollTop);
         } else {
-          setOver(false);
+          setOver(0);
         }
       });
     }
@@ -257,7 +265,7 @@ const Error = (
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
-  const [over, setOver] = useState();
+  const [over, setOver] = useState(0);
 
   let required = inkinds.filter((item) => {
     return ToolUtil.isArray(item.noticeIds).length === 0;
@@ -316,7 +324,7 @@ const Error = (
       imgUrl,
       transitionEnd,
       getNodePosition: () => {
-        const waitInstock = document.getElementById('waitInstock');
+        const waitInstock = document.getElementById('instockError');
         const parent = waitInstock.offsetParent;
         const translates = document.defaultView.getComputedStyle(parent, null).transform;
         let translateX = parseFloat(translates.substring(6).split(',')[4]);
@@ -462,7 +470,7 @@ const Error = (
 
   return <div className={style.error} style={{ maxHeight }} id='errors'>
 
-    <div className={style.header}>
+    <div className={style.header} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
 
       {
         over ?
@@ -531,7 +539,7 @@ const Error = (
               <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
             </div>}
             extra={<Space>
-              <LinkButton><SystemQRcodeOutline /></LinkButton>
+              <LinkButton onClick={() => showCodeRef.current.openCode(item.codeId)}><SystemQRcodeOutline /></LinkButton>
               <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;
@@ -623,6 +631,7 @@ const Error = (
       </div>
     </div>
 
+    <ShowCode ref={showCodeRef} />
 
     {(
       CodeLoading

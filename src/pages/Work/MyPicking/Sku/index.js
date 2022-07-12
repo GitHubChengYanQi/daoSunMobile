@@ -42,8 +42,6 @@ const Sku = () => {
     },
   });
 
-  const codeImg = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
-
   const [data, setData] = useState([]);
 
   const [details, setDetails] = useState([]);
@@ -128,6 +126,8 @@ const Sku = () => {
     });
     setData(newData);
   };
+
+  const imgSrc = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
   return <div className={style.myPicking}>
 
@@ -227,7 +227,7 @@ const Sku = () => {
       content={<div style={{ textAlign: 'center' }}>
         <div>领料码</div>
         {code && <>失效剩余时间：<Clock seconds={600} /></>}
-        <img src={codeImg} alt='' />
+        <img src={imgSrc} alt='' />
         <div>{code}</div>
       </div>}
       actions={[[
@@ -240,7 +240,7 @@ const Sku = () => {
             setCode('');
             return;
           case 'print':
-            PrintCode.print([codeImg], 0);
+            PrintCode.print([`<img src={${imgSrc}} alt='' />`], 0);
             return;
           default:
             return;

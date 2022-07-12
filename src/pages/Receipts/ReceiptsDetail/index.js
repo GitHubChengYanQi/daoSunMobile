@@ -97,7 +97,7 @@ const ReceiptsDetail = () => {
         }
       },
       onError: () => {
-        goBack();
+        error();
       },
     },
   );
@@ -105,7 +105,7 @@ const ReceiptsDetail = () => {
   const { loading: getTaskIdLoading, run: getTaskIdRun } = useRequest(getTaskIdApi, {
     manual: true,
     onError: () => {
-      goBack();
+      error();
     },
   });
 

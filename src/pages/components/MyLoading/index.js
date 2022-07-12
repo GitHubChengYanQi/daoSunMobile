@@ -1,9 +1,10 @@
-import { Dialog } from 'antd-mobile';
+import { Button, Dialog } from 'antd-mobile';
 import style from './index.less';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { useDebounceEffect } from 'ahooks';
 import { ToolUtil } from '../ToolUtil';
+import Icon from '../Icon';
 
 export const MyLoading = (
   {
@@ -14,6 +15,7 @@ export const MyLoading = (
     loaderWidth,
     imgWidth = 46,
     downLoading,
+    refresh,
   },
 ) => {
 
@@ -23,6 +25,7 @@ export const MyLoading = (
 
   const [loadingTitle, setLoadingTitle] = useState(title);
 
+  const [error, setError] = useState();
 
   useDebounceEffect(() => {
     if (!noLoadingTitle) {
@@ -32,7 +35,31 @@ export const MyLoading = (
     wait: 3000,
   });
 
+  useDebounceEffect(() => {
+    setError(true);
+  }, [], {
+    wait: 30000,
+  });
+
   const Loading = () => {
+    if (error) {
+      return <div className={style.error}>
+        <Icon type='icon-Wifi-Error' />
+        <div>网络不给力</div>
+        <Button
+          color='danger'
+          fill='outline'
+          onClick={() => {
+            if (typeof refresh === 'function') {
+              return refresh();
+            }
+            window.location.reload();
+          }}
+        >
+          重试
+        </Button>
+      </div>;
+    }
     return <div className={ToolUtil.classNames(style.center, downLoading ? style.downLoading : '')}>
       <div className={style.loading}>
         <div className={style.loader} style={{ width: loaderWidth || 100 }}>

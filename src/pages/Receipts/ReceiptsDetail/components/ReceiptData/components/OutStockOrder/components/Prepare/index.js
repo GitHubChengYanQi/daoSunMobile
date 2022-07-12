@@ -11,6 +11,7 @@ import Order from './components/Order';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../components/BottomButton';
+import { useModel } from 'umi';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
 
@@ -28,8 +29,10 @@ const Prepare = (
   },
 ) => {
 
-  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
 
+  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const codeId = ToolUtil.isObject(props.qrCode).codeId;
   const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
@@ -37,6 +40,52 @@ const Prepare = (
   const [codeData, setCodeData] = useState();
 
   const [outStockSkus, setOutStockSkus] = useState([]);
+
+  const skuResult = skuItem.skuResult || {};
+
+  const addShopCart = (
+    imgUrl,
+    imgId,
+    transitionEnd = () => {
+    }) => {
+
+    const skuImg = document.getElementById(imgId);
+    if (!skuImg) {
+      transitionEnd();
+      return;
+    }
+    const top = skuImg.getBoundingClientRect().top;
+    const left = skuImg.getBoundingClientRect().left;
+    ToolUtil.createBall({
+      top: top > 0 ? top : 0,
+      left,
+      imgUrl,
+      transitionEnd,
+      getNodePosition: () => {
+        const waitInstock = document.getElementById('pickShop');
+        const parent = waitInstock.offsetParent;
+        const translates = document.defaultView.getComputedStyle(parent, null).transform;
+        let translateX = parseFloat(translates.substring(6).split(',')[4]);
+        let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
+        return {
+          top: parent.offsetTop + tanslateY,
+          left: parent.offsetLeft + translateX,
+        };
+      },
+    });
+  };
+
+  const addShop = () => {
+    onClose();
+    const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
+    addShopCart(imgUrl, 'pickSkuImg', () => {
+      Message.successToast('备料成功！', () => {
+        onSuccess();
+      });
+    });
+
+  };
+
 
   const { loading, run: addCart } = useRequest(cartAdd, {
     response: true,
@@ -49,13 +98,11 @@ const Prepare = (
           confirmText: '继续备料',
           cancelText: '取消备料',
           onConfirm: () => {
-            addCart({ data: { productionPickListsCartParams: outStockSkus,taskId, warning: true } });
+            addCart({ data: { productionPickListsCartParams: outStockSkus, taskId, warning: true } });
           },
         });
       } else {
-        Message.successToast('备料成功！', () => {
-          onSuccess();
-        });
+        addShop();
       }
     },
   });
@@ -110,9 +157,10 @@ const Prepare = (
     >
       <div className={style.item}>
         <SkuItem
+          imgId='pickSkuImg'
           number={skuItem.stockNumber}
           imgSize={60}
-          skuResult={skuItem.skuResult}
+          skuResult={skuResult}
           extraWidth='124px'
           otherData={[ToolUtil.isObject(skuItem.brandResult).brandName || '任意品牌']}
         />

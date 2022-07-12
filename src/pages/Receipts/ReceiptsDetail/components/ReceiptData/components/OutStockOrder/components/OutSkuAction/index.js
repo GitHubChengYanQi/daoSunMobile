@@ -32,6 +32,9 @@ const OutSkuAction = (
   const noAction = [];
 
   let countNumber = 0;
+
+  let allPerpareNumber = 0;
+
   data.map(item => {
     let perpareNumber = 0;
     ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
@@ -44,6 +47,7 @@ const OutSkuAction = (
     } else {
       actions.push({ ...item, complete, prepare, perpareNumber });
     }
+    allPerpareNumber += perpareNumber;
     return countNumber += (item.number || 0);
   });
 
@@ -133,7 +137,6 @@ const OutSkuAction = (
         dimension={dimension}
         onSuccess={() => {
           refresh();
-          setVisible(false);
         }}
         onClose={() => {
           setVisible(false);
@@ -141,7 +144,7 @@ const OutSkuAction = (
       />
     </Popup>
 
-    {action && <OutStockShop id={pickListsId} refresh={refresh} />}
+    {action && <OutStockShop allPerpareNumber={allPerpareNumber} id={pickListsId} refresh={refresh} />}
 
 
   </div>;

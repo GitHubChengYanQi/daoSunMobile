@@ -61,9 +61,6 @@ ajaxService.interceptors.response.use((response) => {
   }
   return response;
 }, (error) => {
-  Message.errorDialog({
-    content: '请求失败!',
-  });
   throw new Error(error);
 });
 

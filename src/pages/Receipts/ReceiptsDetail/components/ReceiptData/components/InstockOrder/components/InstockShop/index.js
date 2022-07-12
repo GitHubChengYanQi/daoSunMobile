@@ -14,7 +14,7 @@ const InstockShop = (
     id,
     refresh = () => {
     },
-    order,
+    order = {},
   }) => {
 
 
@@ -122,7 +122,7 @@ const InstockShop = (
               <Icon type='icon-dairukuang' /></Badge>
           </div>
         </div>
-        <div className={style.action} onClick={() => {
+        <div id='instockError' className={style.action} onClick={() => {
           setType('instockError');
           setVisible(true);
         }}>
