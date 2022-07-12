@@ -21,6 +21,7 @@ const OutStockConfirm = () => {
 
   const [code, setCode] = useState(initialCode);
 
+
   const [outSkus, setOutSkus] = useState([]);
 
   const [visible, setVisible] = useState();

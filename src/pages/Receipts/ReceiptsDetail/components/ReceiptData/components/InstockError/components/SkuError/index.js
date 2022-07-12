@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../InstockOrder/components/Error/index.less';
-import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { Button, Space, TextArea } from 'antd-mobile';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
@@ -246,6 +245,7 @@ const SkuError = (
           </div>,
         };
       case 'StocktakingError':
+      case 'timelyInventory':
         return {
           showAction: <>
             {item.status === -1 && <span className={style.allow}>· 维修</span>}
@@ -324,7 +324,6 @@ const SkuError = (
             </div>}
             extra={<>
               <Space>
-                <LinkButton><SystemQRcodeOutline /></LinkButton>
                 {permissions && item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
                   action(item, 0);
                 }}>
@@ -379,7 +378,7 @@ const SkuError = (
       }
     </div>
 
-    <CheckUser ref={userRef} onChange={(id, name, param) => {
+    <CheckUser hiddenCurrentUser ref={userRef} onChange={(id, name, param) => {
       editRun({
         data: {
           anomalyOrderId,

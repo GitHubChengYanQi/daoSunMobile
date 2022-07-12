@@ -27,8 +27,6 @@ const AddPosition = (
   },
 ) => {
 
-  console.log(total);
-
   const [visible, setVisible] = useState();
 
   const positionResults = (data, array = [], item) => {
@@ -49,7 +47,7 @@ const AddPosition = (
         const results = positionResults(res);
         const positions = [];
         if (results.length === 1) {
-          positions.push([ { ...results[0], number: total || min }]);
+          positions.push({ ...results[0], number: total || min });
         }else {
           results.map((item, index) => {
             if (!total || index <= total) {
@@ -58,7 +56,6 @@ const AddPosition = (
             return null;
           });
         }
-
         setPositions(positions);
       },
     });

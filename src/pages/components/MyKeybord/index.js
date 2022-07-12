@@ -80,7 +80,7 @@ const MyKeybord = (
       }}>
       <div className={style.content}>
         <div hidden={noStepper} className={style.calculation}>
-          <Button onClick={() => {
+          <Button disabled={number === min} onClick={() => {
             const newValue = Number((Number(number) - Number(step)).toFixed(decimalLength));
             setNumber(newValue);
           }}>
@@ -89,7 +89,7 @@ const MyKeybord = (
           <div className={style.value}>
             {number || ''}<span className={style.line}>|</span>
           </div>
-          <Button onClick={() => {
+          <Button disabled={number === max} onClick={() => {
             const newValue = Number((Number(number) + Number(step)).toFixed(decimalLength));
             setNumber(newValue);
           }}>
@@ -120,6 +120,9 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
+                      if (number > 999999999){
+                        return;
+                      }
                       numberClick(item);
                       if (!decimal || decimalLength < decimal) {
                         setNumber(`${number || ''}` + item);

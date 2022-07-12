@@ -9,9 +9,6 @@ import pickStyle from '../../../../../../../../../../Work/MyPicking/Sku/index.le
 const OutSkuItem = ({item,data}) => {
   const skuResult = item.skuResult || {};
 
-  const complete = item.complete;
-  const prepare = item.prepare;
-
   let stockNumberColor = '';
   let stockNumberText = '';
 
@@ -42,7 +39,6 @@ const OutSkuItem = ({item,data}) => {
   return <div
     className={style.sku}
   >
-    <div hidden={!(complete || prepare)} className={style.mask} />
     <div
       className={ToolUtil.classNames(
         style.skuItem,
@@ -71,7 +67,7 @@ const OutSkuItem = ({item,data}) => {
       <Progress
         className={pickStyle.progress}
         format={() => {
-          return item.number + '  (申请数)';
+          return <span style={{color:'#000'}}>{item.number + '  (申请数)'}</span>;
         }}
         percent={percent+successPercent}
         success={{ percent: successPercent, strokeColor: receivedColor }}

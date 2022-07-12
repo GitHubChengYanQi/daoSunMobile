@@ -7,6 +7,7 @@ import { ToolUtil } from '../ToolUtil';
 import { UserIdSelect } from '../../Work/Customer/CustomerUrl';
 import { MyLoading } from '../MyLoading';
 import IsDev from '../../../components/IsDev';
+import { useModel } from 'umi';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
@@ -17,17 +18,28 @@ const CheckUser = (
     },
     onClose = () => {
     },
+    hiddenCurrentUser,
   },
   ref,
 ) => {
+
+  const { initialState } = useModel('@@initialState');
+  const userInfo = ToolUtil.isObject(initialState).userInfo || {};
 
   const [visible, setVisible] = useState();
 
   const [params, setParams] = useState({});
 
-  const { loading, data, run } = useRequest(UserIdSelect, {
+  const [data, setData] = useState();
+
+  const { loading, run } = useRequest(UserIdSelect, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      if (hiddenCurrentUser) {
+        setData(res.filter(item => item.value !== userInfo.id));
+      }else {
+        setData(res);
+      }
       setVisible(true);
     },
   });

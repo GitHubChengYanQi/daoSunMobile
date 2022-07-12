@@ -39,7 +39,7 @@ const InstockError = (
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: (res) => {
-      Message.successToast('添加异常单成功！', () => {
+      Message.successToast('提报成功！', () => {
         refresh(res,99);
         shopRefresh();
         setData([]);

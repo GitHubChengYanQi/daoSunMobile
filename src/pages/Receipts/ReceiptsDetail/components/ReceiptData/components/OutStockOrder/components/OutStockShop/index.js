@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { FloatingBubble, Popup } from 'antd-mobile';
+import { Badge, FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
 import Icon from '../../../../../../../../components/Icon';
 import WaitOutSku from './WaitOutSku';
 
 const OutStockShop = (
   {
-    actionId,
     id,
     refresh = () => {
     },
+    allPerpareNumber = 0,
   }) => {
-
 
   const [visible, setVisible] = useState();
 
@@ -28,11 +27,17 @@ const OutStockShop = (
       }}
       className={style.float}
     >
-      <div className={style.actions}>
+      <div id='pickShop' className={style.actions}>
         <div className={style.action} onClick={() => {
           setVisible(true);
         }}>
-          <div className={style.actionButton}><Icon type='icon-chukuguanli2' /></div>
+          <div className={style.actionButton}>
+            <Badge
+              content={allPerpareNumber || null}
+              style={{ '--right': '5%', '--top': '5%' }}>
+              <Icon type='icon-chukuguanli2' />
+            </Badge>
+          </div>
         </div>
       </div>
     </FloatingBubble>
