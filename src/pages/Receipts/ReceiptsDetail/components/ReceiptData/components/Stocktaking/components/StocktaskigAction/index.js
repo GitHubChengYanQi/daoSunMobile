@@ -94,6 +94,7 @@ const StocktaskigAction = (
                             icon = <CheckOutlined style={{ color: '#2EAF5D' }} />;
                             break;
                           case -1:
+                          case 99:
                             color = '#FF0000';
                             icon = <WarningOutlined style={{ color: '#FF0000' }} />;
                             break;

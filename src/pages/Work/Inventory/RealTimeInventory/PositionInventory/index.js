@@ -1,24 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import StocktaskigAction
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskigAction';
 import BottomButton from '../../../../components/BottomButton';
 import MyNavBar from '../../../../components/MyNavBar';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import { MyLoading } from '../../../../components/MyLoading';
+import { Message } from '../../../../components/Message';
+import MyEmpty from '../../../../components/MyEmpty';
 
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
+export const complete = { url: '/inventory/timelyAdd', method: 'POST' };
 
 const PositionInventory = () => {
 
+  const history = useHistory();
+
   const [data, setData] = useState([]);
-  console.log(data);
 
   const { loading, run } = useRequest(positionInventory, {
     manual: true,
     onSuccess: (res) => {
       setData(res);
+    },
+  });
+
+  const { loading: completeLoading, run: completeRun } = useRequest(complete, {
+    manual: true,
+    onSuccess: () => {
+      Message.successToast('盘点完成！', () => {
+        history.push('/Work/Inventory/RealTimeInventory');
+      });
     },
   });
 
@@ -76,12 +89,12 @@ const PositionInventory = () => {
     setData(newData);
   };
 
-  const skuStatusChange = ({ skuId, positionId, status }) => {
+  const skuStatusChange = ({ skuId, positionId, params = {} }) => {
     const newData = data.map(posiItem => {
       if (posiItem.storehousePositionsId === positionId) {
         const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
           if (skuItem.skuId === skuId) {
-            return { ...skuItem, lockStatus: status };
+            return { ...skuItem, ...params };
           }
           return skuItem;
         });
@@ -104,22 +117,33 @@ const PositionInventory = () => {
     return <MyLoading skeleton />;
   }
 
-  return <>
+  if (data.length === 0){
+    return <MyEmpty description='此库位木有物料' />
+  }
+
+  return <div style={{ height: '100%', backgroundColor: '#fff' }}>
     <MyNavBar title='即时盘点' />
     <StocktaskigAction
       temporaryLockRun={(data) => {
         skuStatusChange({
           skuId: data.skuId,
           positionId: data.positionId,
-          status: 98,
+          params: {
+            lockStatus: 98,
+          },
         });
       }}
       errorReturn={skuReturnChange}
       addPhoto={(data) => {
-        console.log(data);
+        skuStatusChange({
+          skuId: data.skuId,
+          positionId: data.positionId,
+          data: {
+            enclosure: data.enclosure,
+          },
+        });
       }}
       refresh={(skuItem, error, anomalyId) => {
-        console.log(skuItem, error, anomalyId);
         if (skuItem) {
           brandStatusChange({
             skuId: skuItem.skuId,
@@ -135,18 +159,38 @@ const PositionInventory = () => {
       actionPermissions
       showStock
     />
+    <div style={{ height: 60 }} />
     <BottomButton
       disabled={stocktakings.length > 0}
       only
       text='盘点完成'
       onClick={() => {
-
+        const detailParams = [];
+        data.forEach(positionItem => {
+          const skuResultList = positionItem.skuResultList || [];
+          skuResultList.forEach(skuItem => {
+            const brandResults = skuItem.brandResults || [];
+            brandResults.forEach(brandItem => {
+              detailParams.push({
+                inkindId: brandItem.inkind,
+                status: brandItem.inventoryStatus,
+                skuId: skuItem.skuId,
+                brandId: brandItem.brand,
+                positionId: positionItem.storehousePositionsId,
+                number: brandItem.number,
+                anomalyId: brandItem.anomalyId,
+                enclosure: skuItem.enclosure,
+                lockStatus: skuItem.lockStatus,
+              });
+            });
+          });
+        });
+        completeRun({ data: { positionId:query.positionId,detailParams } });
       }}
     />
 
-  </>;
-
-
+    {completeLoading && <MyLoading />}
+  </div>;
 };
 
 export default PositionInventory;

@@ -16,7 +16,12 @@ import { useModel } from 'umi';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { Message } from '../../../../../../../../components/Message';
 import MyCard from '../../../../../../../../components/MyCard';
+import Title from '../../../../../../../../components/Title';
+import LinkButton from '../../../../../../../../components/LinkButton';
+import Details from './components/Details';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
+export const instockHandle = { url: '/instockHandle/list', method: 'POST' };
 
 const SkuAction = (
   {
@@ -41,6 +46,8 @@ const SkuAction = (
   });
 
   const [visible, setVisible] = useState();
+
+  const [showDetail, setShowDetail] = useState();
 
   const actions = [];
   const noAction = [];
@@ -127,7 +134,12 @@ const SkuAction = (
 
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
-      title='申请明细'
+      titleBom={<div className={style.header}>
+        <Title>申请明细</Title>
+        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+          setShowDetail(true);
+        }}>详情</LinkButton>
+      </div>}
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={style.bodyStyle}
@@ -196,17 +208,30 @@ const SkuAction = (
         }}
         onHidden={() => setVisible(false)}
         refreshOrder={() => setRefreshOrder(true)}
-        onSuccess={(item) => {
+        onSuccess={() => {
           refresh();
           setVisible(false);
         }}
       />
     </Popup>
 
+    <MyAntPopup
+      title='入库详情'
+      onClose={() => {
+        setShowDetail(false);
+      }}
+      visible={showDetail}
+      destroyOnClose
+    >
+      <Details
+        instockOrderId={instockOrderId}
+      />
+    </MyAntPopup>
+
 
     {action && <InstockShop order={order} actionId={actionId} id={instockOrderId} refresh={refresh} />}
 
-    {loading && <MyLoading />}
+    {(loading) && <MyLoading />}
 
   </div>;
 };

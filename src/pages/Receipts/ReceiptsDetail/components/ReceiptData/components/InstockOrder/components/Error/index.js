@@ -73,16 +73,18 @@ const Error = (
       switch (type) {
         case ReceiptsEnums.instockOrder:
           onHidden();
-          addShop();
           break;
         case ReceiptsEnums.stocktaking:
-          Message.successToast('添加成功！', () => {
-            onSuccess(sku, error ? -1 : 1, res.anomalyId);
-          });
+          onClose();
           break;
         default:
           break;
       }
+      addShop(() => {
+        Message.successToast('添加成功！', () => {
+          onSuccess(sku, error ? -1 : 1, res.anomalyId);
+        });
+      });
     },
     onError: () => {
       refreshOrder();
@@ -176,7 +178,6 @@ const Error = (
       setSku(sku);
 
       setData(data);
-
 
       setInkinds(inkinds);
 
@@ -314,6 +315,7 @@ const Error = (
 
     const skuImg = document.getElementById(imgId);
     if (!skuImg) {
+      transitionEnd();
       return;
     }
     const top = skuImg.getBoundingClientRect().top;
@@ -324,27 +326,25 @@ const Error = (
       imgUrl,
       transitionEnd,
       getNodePosition: () => {
-        const waitInstock = document.getElementById('instockError');
+        const waitInstock = document.getElementById(errorTypeData().shopId);
         const parent = waitInstock.offsetParent;
         const translates = document.defaultView.getComputedStyle(parent, null).transform;
         let translateX = parseFloat(translates.substring(6).split(',')[4]);
         let tanslateY = parseFloat(translates.substring(6).split(',')[5]);
         return {
-          top: parent.offsetTop + tanslateY + 65,
+          top: parent.offsetTop + tanslateY + (errorTypeData().shopId === 'instockError' ? 65 : 0),
           left: parent.offsetLeft + translateX,
         };
       },
     });
   };
 
-  const addShop = () => {
+  const addShop = (
+    transitionEnd = () => {
+    },
+  ) => {
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
-    addShopCart(imgUrl, 'errorSku', () => {
-      Message.successToast('添加成功！', () => {
-        onSuccess(sku);
-      });
-    });
-
+    addShopCart(imgUrl, 'errorSku', transitionEnd);
   };
 
   const errorTypeData = () => {
@@ -353,6 +353,7 @@ const Error = (
       case ReceiptsEnums.instockOrder:
         return {
           title: '异常描述',
+          shopId: 'instockError',
           skuItem: <SkuItem
             imgId='errorSku'
             skuResult={sku.skuResult}
@@ -416,7 +417,9 @@ const Error = (
       case ReceiptsEnums.stocktaking:
         return {
           title: '异常描述',
+          shopId: 'stocktakingError',
           skuItem: <SkuItem
+            imgId='errorSku'
             number={showStock && sku.stockNumber}
             skuResult={sku.skuResult}
             className={style.sku}

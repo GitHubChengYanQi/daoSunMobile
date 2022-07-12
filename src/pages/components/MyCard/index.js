@@ -14,11 +14,14 @@ const MyCard = (
     className,
     noHeader,
     hidden,
+    onClick = () => {
+    },
+    style:cardStyle,
   },
 ) => {
 
 
-  return <div hidden={hidden} className={ToolUtil.classNames(className, style.card)}>
+  return <div style={cardStyle} onClick={onClick} hidden={hidden} className={ToolUtil.classNames(className, style.card)}>
     <div hidden={noHeader} className={ToolUtil.classNames(headerClassName, style.header)}>
       <div className={style.title}>{titleBom || <Title>{title}</Title>}</div>
       <div className={style.extra}>
