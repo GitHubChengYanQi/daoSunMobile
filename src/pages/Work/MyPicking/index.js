@@ -10,6 +10,7 @@ import MyEmpty from '../../components/MyEmpty';
 
 const getStoreHouse = { url: '/productionPickListsCart/listPickListsStorehouse', method: 'POST' };
 
+
 const MyPicking = () => {
 
   const { initialState } = useModel('@@initialState');
@@ -29,7 +30,7 @@ const MyPicking = () => {
 
   return <div className={style.myPicking}>
     <MyNavBar title='领料中心' />
-
+    {data.length === 0 && <MyEmpty />}
     {
       data.map((item, index) => {
         const storehouseResult = item.storehouseResult || {};
