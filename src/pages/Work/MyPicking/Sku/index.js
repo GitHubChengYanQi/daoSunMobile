@@ -35,9 +35,9 @@ const Sku = () => {
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
     onSuccess: (res) => {
-      setCode(res);
       Message.successToast('领取成功！', () => {
         cartRefresh();
+        setCode(res);
       });
     },
   });

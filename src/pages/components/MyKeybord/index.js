@@ -7,6 +7,10 @@ import { ToolUtil } from '../ToolUtil';
 
 const MyKeybord = (
   {
+    popupClassName,
+    noStepper,
+    numberClick = () => {
+    },
     visible,
     setVisible = () => {
     },
@@ -16,6 +20,10 @@ const MyKeybord = (
     min = 0,
     max = 999999999,
     decimal = 0,
+    onConfirm = () => {
+    },
+    onBack = () => {
+    },
   },
 ) => {
 
@@ -66,12 +74,12 @@ const MyKeybord = (
       afterClose={() => {
         save();
       }}
-      className={style.popup}
+      className={ToolUtil.classNames(style.popup, popupClassName)}
       onMaskClick={() => {
         setVisible(false);
       }}>
       <div className={style.content}>
-        <div className={style.calculation}>
+        <div hidden={noStepper} className={style.calculation}>
           <Button onClick={() => {
             const newValue = Number((Number(number) - Number(step)).toFixed(decimalLength));
             setNumber(newValue);
@@ -112,7 +120,8 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      if (!decimal || decimalLength < decimal){
+                      numberClick(item);
+                      if (!decimal || decimalLength < decimal) {
                         setNumber(`${number || ''}` + item);
                       }
                     }}>{item}</Button>
@@ -123,6 +132,7 @@ const MyKeybord = (
           <div className={style.actions}>
             <div className={style.numberButton}>
               <Button onClick={() => {
+                onBack();
                 const numbers = `${number}`.split('');
                 const newValue = numbers.filter((item, index) => {
                   return index !== numbers.length - 1;
@@ -134,6 +144,7 @@ const MyKeybord = (
             </div>
             <div className={ToolUtil.classNames(style.numberButton, style.ok)}>
               <Button onClick={() => {
+                onConfirm();
                 setVisible(false);
                 save();
               }}>

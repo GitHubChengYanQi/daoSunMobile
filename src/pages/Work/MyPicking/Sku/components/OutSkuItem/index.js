@@ -22,15 +22,12 @@ const OutSkuItem = (
 
   const cartResults = skuItem.cartResults || [];
 
-  let receivedNumber = 0;
   let perpareNumber = 0;
 
   const detailKeys = [];
 
   cartResults.map(item => {
     detailKeys.push(item.key);
-    const detail = item.productionPickListsDetailResult || {};
-    receivedNumber += parseInt(detail.receivedNumber || 0);
     perpareNumber += (item.number || 0);
     return null;
   });
@@ -67,7 +64,7 @@ const OutSkuItem = (
 
         const received = detail.receivedNumber || 0;
         const collectable = detailItem.number || 0;
-        const notPrepared = detail.number - collectable - receivedNumber;
+        const notPrepared = detail.number - collectable - received;
 
         const successPercent = Number(((received / detail.number)).toFixed(2)) * 100;
         const percent = Number(((collectable / detail.number)).toFixed(2)) * 100;

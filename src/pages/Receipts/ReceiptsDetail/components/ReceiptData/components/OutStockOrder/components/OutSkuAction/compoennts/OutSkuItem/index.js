@@ -1,9 +1,10 @@
 import React from 'react';
 import style from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import outStockLogo from '../../../../../../../../../../../assets/outStockLogo.png';
-import Slash from '../../../../../../../../../../Work/MyPicking/components/Slash';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
+import { Progress } from 'antd';
+import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../../../Work/MyPicking/Sku';
+import pickStyle from '../../../../../../../../../../Work/MyPicking/Sku/index.less';
 
 const OutSkuItem = ({item,data}) => {
   const skuResult = item.skuResult || {};
@@ -30,6 +31,14 @@ const OutSkuItem = ({item,data}) => {
       break;
   }
 
+  const received = item.receivedNumber;
+  const collectable = item.perpareNumber;
+  const notPrepared = item.number - collectable - received;
+
+  const successPercent = Number(((received / item.number)).toFixed(2)) * 100;
+  const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
+  const trail = Number(((notPrepared / item.number)).toFixed(2)) * 100;
+
   return <div
     className={style.sku}
   >
@@ -40,9 +49,6 @@ const OutSkuItem = ({item,data}) => {
         data.length <= 3 && style.skuBorderBottom,
       )}
     >
-      <div hidden={!complete} className={style.outLogo}>
-        <img src={outStockLogo} alt='' />
-      </div>
       <div className={style.item}>
         <SkuItem
           number={item.stockNumber}
@@ -52,15 +58,26 @@ const OutSkuItem = ({item,data}) => {
           otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
         />
       </div>
-      <div className={style.outStockNumber} style={{
-        paddingRight: prepare && 20,
-      }}>
-        <Slash leftText={item.receivedNumber || 0} rightText={item.number} rightStyle={{color:stockNumberColor}} />
-        <div>已备料：{item.perpareNumber}</div>
+      <div className={style.outStockNumber} style={{color:stockNumberColor}}>
+        {stockNumberText}
       </div>
     </div>
-    <div hidden={!prepare} className={style.status}>
-      已备料
+    <div className={pickStyle.dataNumber}>
+      <div className={pickStyle.number}>
+        <div hidden={successPercent <= 0} style={{ width: `${successPercent}%` }}>{received}</div>
+        <div hidden={percent <= 0} style={{ width: `${percent}%` }}>{collectable}</div>
+        <div hidden={trail <= 0} style={{ width: `${trail}%` }}>{notPrepared}</div>
+      </div>
+      <Progress
+        className={pickStyle.progress}
+        format={() => {
+          return item.number + '  (申请数)';
+        }}
+        percent={percent+successPercent}
+        success={{ percent: successPercent, strokeColor: receivedColor }}
+        trailColor={notPreparedColor}
+        strokeColor={collectableColor}
+      />
     </div>
   </div>;
 };

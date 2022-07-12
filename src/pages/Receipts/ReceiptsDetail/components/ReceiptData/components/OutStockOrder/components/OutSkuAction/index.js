@@ -10,6 +10,8 @@ import Prepare from '../Prepare';
 import OutStockShop from '../OutStockShop';
 import OutSkuItem from './compoennts/OutSkuItem';
 import MyCard from '../../../../../../../../components/MyCard';
+import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../Work/MyPicking/Sku';
+import Title from '../../../../../../../../components/Title';
 
 
 const OutSkuAction = (
@@ -54,7 +56,23 @@ const OutSkuAction = (
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={style.bodyStyle}
-      title='申请明细'
+      titleBom={<div className={style.skuTitle}>
+        <Title>申请明细</Title>
+        <div className={style.status}>
+          <div className={style.statusItem}>
+            <div className={style.radius} style={{ backgroundColor: receivedColor }} />
+            已领
+          </div>
+          <div className={style.statusItem}>
+            <div className={style.radius} style={{ backgroundColor: collectableColor }} />
+            可领
+          </div>
+          <div className={style.statusItem}>
+            <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
+            未备
+          </div>
+        </div>
+      </div>}
       extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>}>
