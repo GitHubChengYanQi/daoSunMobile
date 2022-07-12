@@ -84,7 +84,7 @@ const ErrorShop = (
       }}
       className={style.float}
     >
-      <div className={style.actions}>
+      <div id='stocktakingError' className={style.actions}>
         <div className={style.action} onClick={() => {
           setType('stockTaskingErrror');
           setVisible(true);

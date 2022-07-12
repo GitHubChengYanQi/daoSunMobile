@@ -44,11 +44,15 @@ const InStockItem = (
       {
         instockListResults.map((skuItem, skuIndex) => {
 
+          if (!skuItem){
+            return null;
+          }
+
           if (!item.allSku && skuIndex > 1) {
             return null;
           }
 
-          return <InSkuItem item={skuItem} data={instockListResults} key={skuIndex} />;
+          return <InSkuItem item={{ ...skuItem,number:skuItem.realNumber,askNumber:skuItem.number }} data={instockListResults} key={skuIndex} />;
         })
       }
     </div>

@@ -9,26 +9,53 @@ import moment from 'moment';
 
 const InSkuItem = (
   {
-    item,
-    data,
+    item = {},
+    data = [],
     index,
+    detail,
   }) => {
 
   const skuResult = item.skuResult || {};
 
-  const complete = item.status !== 0;
+  let complete;
 
   let error = false;
 
-  switch (item.status) {
-    case -1:
-      error = true;
-      break;
-    case 50:
-      error = true;
-      break;
-    default:
-      break;
+  let text = '';
+
+  let number = 0;
+
+  if (detail) {
+    number = item.number;
+    complete = true;
+    switch (item.type) {
+      case 'inStock':
+        text = '已入';
+        break;
+      case 'ErrorCanInstock':
+        text = '允许入库';
+        error = true;
+        break;
+      case 'ErrorStopInstock':
+        text = '禁止入库';
+        error = true;
+        break;
+      default:
+        break;
+    }
+  } else {
+    complete = item.status !== 0;
+    number = complete ? item.askNumber : item.number;
+    switch (item.status) {
+      case -1:
+        error = true;
+        break;
+      case 50:
+        error = true;
+        break;
+      default:
+        break;
+    }
   }
 
 
@@ -43,7 +70,7 @@ const InSkuItem = (
       )}
     >
       <div hidden={!complete} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
-        <span>{moment(item.updateTime).format('YYYY-MM-DD')}</span>
+        <span>{moment(detail ? item.createTime : item.updateTime).format('YYYY-MM-DD')}</span>
       </div>
       <div className={style.item}>
         <SkuItem
@@ -57,7 +84,10 @@ const InSkuItem = (
         />
       </div>
       <div className={style.skuNumber}>
-        <ShopNumber value={item.number} show />
+        <div className={error ? style.error : style.success}>
+          {text}
+        </div>
+        <ShopNumber value={number} show />
       </div>
     </div>
   </div>;
