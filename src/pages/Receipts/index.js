@@ -23,4 +23,7 @@ export const ReceiptsEnums = {
 
   // 养护单
   maintenance: 'MAINTENANCE',
+
+  // 调拨单
+  allocation: 'allocation',
 };

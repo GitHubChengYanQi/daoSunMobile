@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../../../util/Request';
@@ -11,7 +11,6 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import OtherData from '../OtherData';
-import { Dialog } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
 
 const OutstockAsk = ({ skus, judge, createType }) => {

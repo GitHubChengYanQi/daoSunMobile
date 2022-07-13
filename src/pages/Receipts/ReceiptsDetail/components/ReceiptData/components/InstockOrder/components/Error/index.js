@@ -428,7 +428,8 @@ const Error = (
           shopId: 'stocktakingError',
           skuItem: <SkuItem
             imgId='errorSku'
-            number={showStock && sku.stockNumber}
+            hiddenNumber={!showStock}
+            number={sku.stockNumber}
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}

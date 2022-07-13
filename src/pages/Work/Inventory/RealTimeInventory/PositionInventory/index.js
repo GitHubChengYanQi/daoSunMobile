@@ -10,7 +10,6 @@ import StocktaskingHandle
 import MyCard from '../../../../components/MyCard';
 import style from '../index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
-import { Space } from 'antd-mobile';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import { inventoryPageList } from '../index';
@@ -38,8 +37,11 @@ const PositionInventory = () => {
     manual: true,
     onSuccess: () => {
       Message.successToast('盘点完成！', () => {
-        history.push('/Work/Inventory/RealTimeInventory');
+        history.goBack();
       });
+    },
+    onError: () => {
+      Message.errorToast('盘点失败！');
     },
   });
 

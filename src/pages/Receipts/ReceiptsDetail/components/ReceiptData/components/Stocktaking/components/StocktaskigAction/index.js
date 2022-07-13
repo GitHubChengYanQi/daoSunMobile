@@ -81,7 +81,12 @@ const StocktaskigAction = (
                   className={style.sku}
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
-                  <SkuItem skuResult={skuItem} extraWidth='24px' number={showStock && skuItem.stockNumber} />
+                  <SkuItem
+                    skuResult={skuItem}
+                    extraWidth='24px'
+                    hiddenNumber={!showStock}
+                    number={skuItem.stockNumber}
+                  />
                   <Divider style={{ margin: '8px 0' }} />
                   <div className={style.brands}>
                     {

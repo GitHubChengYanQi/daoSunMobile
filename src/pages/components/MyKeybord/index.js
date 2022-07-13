@@ -29,6 +29,8 @@ const MyKeybord = (
 
   const [number, setNumber] = useState(value || '');
 
+  const [ok, setOk] = useState();
+
   let decimalLength;
 
   try {
@@ -71,8 +73,13 @@ const MyKeybord = (
   return <>
     <Popup
       visible={visible}
+      afterShow={() => {
+        setOk(false);
+      }}
       afterClose={() => {
-        save();
+        if (!ok) {
+          save();
+        }
       }}
       className={ToolUtil.classNames(style.popup, popupClassName)}
       onMaskClick={() => {
@@ -120,7 +127,7 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      if (number > 999999999){
+                      if (number > 999999999) {
                         return;
                       }
                       numberClick(item);
@@ -150,6 +157,7 @@ const MyKeybord = (
                 onConfirm();
                 setVisible(false);
                 save();
+                setOk(true);
               }}>
                 确定
               </Button>

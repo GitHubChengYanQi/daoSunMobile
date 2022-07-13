@@ -12,9 +12,11 @@ import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
 import MyCheck from '../../../../../components/MyCheck';
 import { ERPEnums } from '../../../../Stock/ERPEnums';
+import { useLocation } from 'react-router-dom';
 
 export const SkuContent = (
   {
+    query,
     data,
     addSku,
     batch,
@@ -57,7 +59,7 @@ export const SkuContent = (
             />
           </div>
           {buttonHidden ? '已添加' : (!batch && <LinkButton onClick={() => {
-            addSku.current.openSkuAdd({ ...item,imgId:`stocktakingImg${index}` });
+            addSku.current.openSkuAdd({ ...item, imgId: `stocktakingImg${index}`, storehouseId: query.storehouseId });
           }}>
             <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
           </LinkButton>)}
@@ -72,6 +74,8 @@ const SkuInstock = ({ type, title, judge }) => {
   const addSku = useRef();
 
   const ref = useRef();
+
+  const { query } = useLocation();
 
   const [skus, setSkus] = useState([]);
 
@@ -108,7 +112,7 @@ const SkuInstock = ({ type, title, judge }) => {
         }}
       />
       <SkuList
-        openBatch={type ===  ERPEnums.stocktaking}
+        openBatch={type === ERPEnums.stocktaking}
         noSort
         batch={batch}
         onBatch={setBatch}
@@ -117,6 +121,7 @@ const SkuInstock = ({ type, title, judge }) => {
         ref={ref}
         SkuContent={SkuContent}
         skuContentProps={{
+          query,
           addSku,
           checkSkus,
           skus,

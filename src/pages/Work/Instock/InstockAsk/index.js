@@ -4,7 +4,6 @@ import SkuInstock from './coponents/SkuInstock';
 const InStockAsk = (
   {
     title = '入库申请',
-    numberTitle = '入库',
     type = 'inStock',
     judge,
   }) => {

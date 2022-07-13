@@ -12,6 +12,7 @@ import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
+import { Message } from '../../../../../../../components/Message';
 
 const AddSku = (
   {
@@ -122,6 +123,7 @@ const AddSku = (
       skuId: sku.skuId,
       skuResult: sku,
       stockNumber: sku.stockNumber,
+      storehouseId: sku.storehouseId,
       number: type === ERPEnums.directInStock ? 0 : 1,
       brandId: brands.length === 1 ? brands[0].brandId : null,
       brandName: brands.length === 1 ? brands[0].brandName : null,
@@ -130,8 +132,6 @@ const AddSku = (
     setData(newData);
     disabledChange({ newData });
     switch (type) {
-      case ERPEnums.allocation:
-        break;
       case ERPEnums.curing:
         break;
       case ERPEnums.stocktaking:
@@ -144,6 +144,13 @@ const AddSku = (
         addShopBall(cartId, newData, type);
         break;
       case ERPEnums.outStock:
+        setVisible(true);
+        break;
+      case ERPEnums.allocation:
+        if (!newData.storehouseId){
+          Message.warningDialog({content:'请选择仓库！'})
+          return;
+        }
         setVisible(true);
         break;
       case ERPEnums.inStock:
@@ -168,7 +175,8 @@ const AddSku = (
         return {
           title: '调拨',
           disabledText,
-          otherBrand: '请选择品牌',
+          customerDisabled: true,
+          otherBrand: '任意品牌',
         };
       case ERPEnums.curing:
         return {
@@ -245,19 +253,14 @@ const AddSku = (
       number: data.number,
       storehousePositionsId: data.positionId,
       positionNums,
+      storehouseId: data.storehouseId,
     };
 
-    switch (snameAction) {
-      case 'add':
-        addShop({ data: params });
-        break;
-      case 'edit':
-        shopEdit({ data: { cartId: data.cartId || disabled.cartId, ...params } });
-        break;
-      default:
-        addShop({ data: params });
-        break;
+    if (snameAction === 'edit') {
+      shopEdit({ data: { cartId: data.cartId || disabled.cartId, ...params } });
+      return;
     }
+    addShop({ data: params });
   };
 
   const createBall = (top, left, cartId, newData = {}, type) => {

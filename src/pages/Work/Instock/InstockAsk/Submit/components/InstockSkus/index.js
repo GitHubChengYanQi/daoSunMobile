@@ -5,6 +5,7 @@ import MyEmpty from '../../../../../../components/MyEmpty';
 import InstockAsk from './components/InstockAsk';
 import CuringAsk from './components/CuringAsk';
 import StocktakingAsk from './components/StocktakingAsk';
+import AllocationAsk from './components/AllocationAsk';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
@@ -20,9 +21,11 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     case ERPEnums.directInStock:
       return <InstockAsk skus={skus} judge={judge} createType={createType} />;
     case ERPEnums.curing:
-      return <CuringAsk createType={createType} state={state}  />;
+      return <CuringAsk createType={createType} state={state} />;
     case ERPEnums.stocktaking:
       return <StocktakingAsk skus={skus} createType={createType} state={state} />;
+    case ERPEnums.allocation:
+      return <AllocationAsk skus={skus} createType={createType} />;
     default:
       return <MyEmpty />;
   }

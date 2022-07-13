@@ -5,6 +5,7 @@ import Menus, { borderStyle } from '../../../Home/component/Menus';
 import { useModel } from 'umi';
 import Inventory from './components/Inventory';
 import CuringAsk from './components/CuringAsk';
+import AllocationAsk from './components/AllocationAsk';
 
 const Create = () => {
 
@@ -20,7 +21,7 @@ const Create = () => {
   sysMenus.map(item => {
     if (item.id === 'process') {
       item.subMenus.map((item) => {
-        if (!['action','error'].includes(item.code)) {
+        if (!['action', 'error'].includes(item.code)) {
           receipts.push(item);
         }
         return null;
@@ -51,6 +52,7 @@ const Create = () => {
                   switch (code) {
                     case 'inventoryAsk':
                     case 'curingAsk':
+                    case 'allocationAsk':
                       setVisible(code);
                       return true;
                     default:
@@ -65,6 +67,7 @@ const Create = () => {
 
     <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
     <CuringAsk open={visible === 'curingAsk'} onClose={() => setVisible(false)} />
+    <AllocationAsk open={visible === 'allocationAsk'} onClose={() => setVisible(false)} />
 
   </div>;
 };

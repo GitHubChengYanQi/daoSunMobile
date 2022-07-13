@@ -8,6 +8,7 @@ import InStockAsk from '../../Work/Instock/InstockAsk';
 import OutStockAsk from '../../Work/OutStock/OutStockAsk';
 import InventoryAsk from '../../Work/Inventory/InventoryAsk';
 import { ERPEnums } from '../../Work/Stock/ERPEnums';
+import AllocationAsk from '../../Work/Allocation/AllocationAsk';
 
 
 const ReceiptsCreate = () => {
@@ -31,6 +32,8 @@ const ReceiptsCreate = () => {
       return <OutStockAsk />;
     case ReceiptsEnums.stocktaking:
       return <InventoryAsk />;
+    case ReceiptsEnums.allocation:
+      return <AllocationAsk />;
     case 'purchaseAsk':
       return <AskAdd />;
     case ReceiptsEnums.error:

@@ -153,6 +153,7 @@ const SkuShop = (
         return {
           title: '调拨任务明细',
           type: '调拨申请',
+          otherData: [item.brandName || '任意品牌'],
         };
       case ERPEnums.curing:
         return {
@@ -168,7 +169,7 @@ const SkuShop = (
       case ERPEnums.outStock:
         return {
           title: '出库任务明细',
-          otherData: [ item.brandName || '任意品牌'],
+          otherData: [item.brandName || '任意品牌'],
           type: '出库申请',
         };
       case ERPEnums.inStock:
@@ -331,6 +332,8 @@ const SkuShop = (
           onClick={() => {
             switch (type) {
               case ERPEnums.allocation:
+                history.push('/Work/Allocation/SelectStoreHouse');
+                break;
               case ERPEnums.curing:
                 break;
               case ERPEnums.stocktaking:

@@ -7,6 +7,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 
 const SkuItem = (
   {
+    hiddenNumber,
     number,
     unitName,
     skuResult = {},
@@ -35,9 +36,10 @@ const SkuItem = (
       <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }}>
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
         <div
-          hidden={typeof number !== 'number'}
+          hidden={hiddenNumber}
           className={style.number}
-        >{number}{unitName || unitResult.unitName}
+        >
+          {number || skuResult.stockNumber}{unitName || unitResult.unitName}
         </div>
       </div>
       <div
@@ -59,9 +61,9 @@ const SkuItem = (
                 return null;
               }
               return <div key={index} className={style.otherData}>
-                <MyEllipsis width='100%'>
+                {typeof item === 'string' ? <MyEllipsis width='100%'>
                   {item}
-                </MyEllipsis>
+                </MyEllipsis> : item}
               </div>;
             })
           }

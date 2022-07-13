@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "554472",
+      "name": "向右箭头",
+      "font_class": "iconset0438",
+      "unicode": "e73d",
+      "unicode_decimal": 59197
+    },
+    {
       "icon_id": "6804196",
       "name": "Wifi-Error 2",
       "font_class": "Wifi-Error",

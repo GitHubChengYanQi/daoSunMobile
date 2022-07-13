@@ -65,13 +65,13 @@ const Maintenanceing = (
       setBrands(newBrands);
     };
 
-    return <div style={{ paddingBottom: 60 }}>
+    return <div style={{ paddingBottom: 60,maxWidth:'80vh',overflow:'hidden' }}>
       <div className={style.skuItem}>
         <div className={style.sku}>
           <SkuItem extraWidth='94px' skuResult={skuItem} otherData={[skuItem.positionName]} />
         </div>
         <div className={style.actions}>
-          <div className={style.sop}>
+          <div hidden className={style.sop}>
             <LinkButton>养护指导</LinkButton>
           </div>
           <div>

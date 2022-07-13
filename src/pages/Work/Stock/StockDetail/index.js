@@ -64,7 +64,6 @@ export const SkuContent = (
               <SkuItem
                 imgId={`skuImg${index}`}
                 extraWidth='84px'
-                number={item.stockNumber}
                 unitName={unit.unitName}
                 skuResult={item}
                 otherData={[positions.map((item) => {

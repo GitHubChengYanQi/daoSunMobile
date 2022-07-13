@@ -8,7 +8,6 @@ import { Divider } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
-import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
 
 const Skus = (

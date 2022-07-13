@@ -23,6 +23,12 @@ export const TaskBottom = ({ taskKey,task }) => {
           history.push('/Work/Inventory/AllInventory');
         }}>开始盘点</Button>
       </div>;
+    case ReceiptsEnums.maintenance:
+      return <div className={ToolUtil.classNames(style.maintenanceButtom,task && style.bottom)}>
+        <Button color='primary' onClick={()=>{
+          history.push('/Work/Maintenance/AllMaintenance');
+        }}>开始养护</Button>
+      </div>;
     default:
       return <></>;
   }
