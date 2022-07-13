@@ -4,7 +4,6 @@ import LinkButton from '../../../../../../../../components/LinkButton';
 import Icon from '../../../../../../../../components/Icon';
 import style from './index.less';
 import MyCheck from '../../../../../../../../components/MyCheck';
-import { Stepper } from 'antd-mobile';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { CameraOutline } from 'antd-mobile-icons';
 import BottomButton from '../../../../../../../../components/BottomButton';
@@ -17,6 +16,7 @@ export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
 const Maintenanceing = (
     {
+      maintenanceId,
       skuItem = {},
       onSuccess = () => {
       },
@@ -123,6 +123,7 @@ const Maintenanceing = (
       <BottomButton disabled={completeBrands.length === 0} only onClick={() => {
         maintenanceLogRun({
           data: {
+            maintenanceId,
             enclosure: files,
             maintenanceLogParams: completeBrands.map(item => {
               return {

@@ -62,6 +62,7 @@ export const SkuContent = (
           <div className={style.skuItem}>
             <div className={style.sku}>
               <SkuItem
+                imgId={`skuImg${index}`}
                 extraWidth='84px'
                 number={item.stockNumber}
                 unitName={unit.unitName}
@@ -73,7 +74,7 @@ export const SkuContent = (
             </div>
             <div>
               {buttonHidden ? <span style={{ fontSize: 14 }}>已添加</span> : <LinkButton onClick={() => {
-                openTask(item);
+                openTask({ ...item,imgId: `skuImg${index}` });
               }}>
                 <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
               </LinkButton>}
@@ -140,7 +141,7 @@ const StockDetail = (
         skus: stockDetail.skus,
         openTask: (item) => {
           if (stockDetail.task) {
-            addSku.current.openSkuAdd(item);
+            addSku.current.openSkuAdd(item,stockDetail.task);
           } else {
             setVisible(true);
             setSkuItem(item);

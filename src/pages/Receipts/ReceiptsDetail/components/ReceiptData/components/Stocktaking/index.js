@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import StocktaskigAction from './components/StocktaskigAction';
 import { useRequest } from '../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import { Message } from '../../../../../../components/Message';
+import StocktaskingHandle from './components/StocktaskingHandle';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
+export const inventoryComplete = { url: '/inventoryDetail/complete', method: 'POST' };
 
 const Stocktaking = (
   {
@@ -23,11 +25,17 @@ const Stocktaking = (
 
   const showStock = receipts.method !== 'DarkDisk';
 
-  const { loading: temporaryLockLoading, run: temporaryLockRun } = useRequest(temporaryLock, {
+  const { loading, run } = useRequest(inventoryComplete, {
     manual: true,
     onSuccess: () => {
-      refresh();
+      Message.successToast('提交成功！', () => {
+        refresh();
+      });
     },
+  });
+
+  const { loading: temporaryLockLoading, run: temporaryLockRun } = useRequest(temporaryLock, {
+    manual: true,
   });
 
   const { run: addPhoto } = useRequest(inventoryAddPhoto, { manual: true });
@@ -38,22 +46,21 @@ const Stocktaking = (
   }, [receipts.taskList]);
 
   return <>
-    <StocktaskigAction
-      data={data}
-      setData={setData}
-      inventoryTaskId={receipts.inventoryTaskId}
-      refresh={refresh}
+    <StocktaskingHandle
+      anomalyType='StocktakingError'
+      temporaryLockRun={(data) => temporaryLockRun({ data })}
       actionPermissions={actionPermissions}
+      addPhoto={(data) => addPhoto({ data })}
       showStock={showStock}
-      temporaryLockRun={(data) => {
-        temporaryLockRun({ data });
+      inventoryTaskId={receipts.inventoryTaskId}
+      setData={setData}
+      complete={() => {
+        run({ data: { inventoryIds: [receipts.inventoryTaskId] } });
       }}
-      addPhoto={(data) => {
-        addPhoto(data);
-      }}
+      data={data}
     />
 
-    {temporaryLockLoading && <MyLoading />}
+    {(temporaryLockLoading || loading) && <MyLoading />}
   </>;
 
 

@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
 import { useHistory, useLocation } from 'react-router-dom';
-import StocktaskigAction
-  from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskigAction';
-import BottomButton from '../../../../components/BottomButton';
 import MyNavBar from '../../../../components/MyNavBar';
-import { ToolUtil } from '../../../../components/ToolUtil';
 import { MyLoading } from '../../../../components/MyLoading';
 import { Message } from '../../../../components/Message';
 import MyEmpty from '../../../../components/MyEmpty';
+import StocktaskingHandle
+  from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskingHandle';
+import MyCard from '../../../../components/MyCard';
+import style from '../index.less';
+import { ToolUtil } from '../../../../components/ToolUtil';
+import { Space } from 'antd-mobile';
+import { ClockCircleOutline } from 'antd-mobile-icons';
+import MyList from '../../../../components/MyList';
+import { inventoryPageList } from '../index';
+import { MyDate } from '../../../../components/MyDate';
 
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
 export const complete = { url: '/inventory/timelyAdd', method: 'POST' };
@@ -18,6 +24,8 @@ const PositionInventory = () => {
   const history = useHistory();
 
   const [data, setData] = useState([]);
+
+  const [logs, setLogs] = useState([]);
 
   const { loading, run } = useRequest(positionInventory, {
     manual: true,
@@ -44,127 +52,23 @@ const PositionInventory = () => {
   }, []);
 
 
-  const brandStatusChange = ({ skuId, brandId, positionId, status, anomalyId }) => {
-    const newData = data.map(posiItem => {
-      if (posiItem.storehousePositionsId === positionId) {
-        const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
-          if (skuItem.skuId === skuId) {
-            const brandResults = ToolUtil.isArray(skuItem.brandResults).map(brandItem => {
-              if (brandItem.brandId === brandId) {
-                return { ...brandItem, inventoryStatus: status, anomalyId };
-              } else {
-                return brandItem;
-              }
-            });
-            return { ...skuItem, brandResults, lockStatus: 0 };
-          }
-          return skuItem;
-        });
-        return { ...posiItem, skuResultList };
-      }
-      return posiItem;
-    });
-    setData(newData);
-  };
-
-  const skuReturnChange = (skus = [], status) => {
-    const newData = data.map(posiItem => {
-      const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
-        let back = false;
-        const brandResults = ToolUtil.isArray(skuItem.brandResults).map(brandItem => {
-          const backSkus = skus.filter(item =>
-            item.positionId === posiItem.storehousePositionsId && item.skuId === skuItem.skuId && item.brandId === brandItem.brandId,
-          );
-          if (backSkus.length > 0) {
-            back = true;
-            return { ...brandItem, inventoryStatus: status, anomalyId: status === 0 ? null : brandItem.anomalyId };
-          } else {
-            return brandItem;
-          }
-        });
-        return { ...skuItem, brandResults, lockStatus: back ? 0 : skuItem.lockStatus };
-      });
-      return { ...posiItem, skuResultList };
-    });
-    setData(newData);
-  };
-
-  const skuStatusChange = ({ skuId, positionId, params = {} }) => {
-    const newData = data.map(posiItem => {
-      if (posiItem.storehousePositionsId === positionId) {
-        const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
-          if (skuItem.skuId === skuId) {
-            return { ...skuItem, ...params };
-          }
-          return skuItem;
-        });
-        return { ...posiItem, skuResultList };
-      }
-      return posiItem;
-    });
-    setData(newData);
-  };
-
-  const stocktakings = data.filter((item) => {
-    const skuResultList = item.skuResultList || [];
-    const complete = skuResultList.filter(item => {
-      return item.lockStatus === 98;
-    });
-    return complete.length !== skuResultList.length;
-  });
-
   if (loading) {
     return <MyLoading skeleton />;
   }
 
-  if (data.length === 0){
-    return <MyEmpty description='此库位木有物料' />
+  if (data.length === 0) {
+    return <MyEmpty description='此库位木有物料' />;
   }
 
   return <div style={{ height: '100%', backgroundColor: '#fff' }}>
     <MyNavBar title='即时盘点' />
-    <StocktaskigAction
-      temporaryLockRun={(data) => {
-        skuStatusChange({
-          skuId: data.skuId,
-          positionId: data.positionId,
-          params: {
-            lockStatus: 98,
-          },
-        });
-      }}
-      errorReturn={skuReturnChange}
-      addPhoto={(data) => {
-        skuStatusChange({
-          skuId: data.skuId,
-          positionId: data.positionId,
-          data: {
-            enclosure: data.enclosure,
-          },
-        });
-      }}
-      refresh={(skuItem, error, anomalyId) => {
-        if (skuItem) {
-          brandStatusChange({
-            skuId: skuItem.skuId,
-            brandId: skuItem.brandId,
-            positionId: skuItem.positionId,
-            status: error,
-            anomalyId: [2, -1].includes(error) && anomalyId,
-          });
-        }
-      }}
+    <StocktaskingHandle
+      anomalyType='timelyInventory'
+      showStock
       data={data}
       setData={setData}
       actionPermissions
-      showStock
-    />
-    <div style={{ height: 60 }} />
-    <BottomButton
-      disabled={stocktakings.length > 0}
-      only
-      text='盘点完成'
-      onClick={() => {
+      complete={() => {
         const detailParams = [];
         data.forEach(positionItem => {
           const skuResultList = positionItem.skuResultList || [];
@@ -175,7 +79,7 @@ const PositionInventory = () => {
                 inkindId: brandItem.inkind,
                 status: brandItem.inventoryStatus,
                 skuId: skuItem.skuId,
-                brandId: brandItem.brand,
+                brandId: brandItem.brandId,
                 positionId: positionItem.storehousePositionsId,
                 number: brandItem.number,
                 anomalyId: brandItem.anomalyId,
@@ -185,9 +89,27 @@ const PositionInventory = () => {
             });
           });
         });
-        completeRun({ data: { positionId:query.positionId,detailParams } });
-      }}
-    />
+        completeRun({ data: { positionId: query.positionId, detailParams } });
+      }} />
+
+    <MyCard title='库位盘点记录'>
+      <MyList api={inventoryPageList} params={{ positionId: query.positionId }} getData={setLogs} data={logs}>
+        <div className={style.logs}>
+          {
+            logs.map((item, index) => {
+              return <div key={index} className={style.logData}>
+                <div>
+                  盘点人员：{ToolUtil.isObject(item.user).name}
+                </div>
+                <div>
+                  <ClockCircleOutline /> {MyDate.Show(item.createTime)}
+                </div>
+              </div>;
+            })
+          }
+        </div>
+      </MyList>
+    </MyCard>
 
     {completeLoading && <MyLoading />}
   </div>;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from '../../../../../InstockOrder/components/Error/index.less';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { CloseOutline } from 'antd-mobile-icons';
@@ -43,11 +43,6 @@ const Header = (
 
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
-
-  useEffect(() => {
-    setMediaIds([]);
-    setNote('');
-  }, [loading]);
 
   return <>
     <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
@@ -178,7 +173,8 @@ const Header = (
                   }]),
                 },
               };
-
+              setMediaIds([]);
+              setNote('');
               saveRun(param);
             }}>确认</Button>
           </div>

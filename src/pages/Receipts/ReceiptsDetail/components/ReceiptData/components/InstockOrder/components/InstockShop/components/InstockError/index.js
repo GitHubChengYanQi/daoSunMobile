@@ -18,6 +18,7 @@ import ShopNumber
 
 const InstockError = (
   {
+    anomalyType,
     formId,
     onClose = () => {
     },
@@ -129,7 +130,7 @@ const InstockError = (
         errorShop({
           data: {
             receiptsEnum: ReceiptsEnums.stocktaking,
-            type: formId ? 'StocktakingError' : 'timelyInventory',
+            type:anomalyType,
             sourceId: formId,
             status: 0,
           },

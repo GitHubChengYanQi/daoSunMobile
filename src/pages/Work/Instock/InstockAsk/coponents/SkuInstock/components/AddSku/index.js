@@ -35,15 +35,15 @@ const AddSku = (
 
   const [dataVisible, setDataVisible] = useState();
 
-  const addShopBall = (cartId, newData = data) => {
+  const addShopBall = (cartId, newData = data, newType = type) => {
     const skuImg = document.getElementById(newData.imgId || 'skuImg');
     if (skuImg) {
       const top = skuImg.getBoundingClientRect().top;
       const left = skuImg.getBoundingClientRect().left;
       setVisible(false);
-      createBall(top, left, cartId, newData);
+      createBall(top, left, cartId, newData, newType);
     } else {
-      onChange({ ...newData, cartId }, type);
+      onChange({ ...newData, cartId }, newType);
     }
 
   };
@@ -53,6 +53,7 @@ const AddSku = (
     onSuccess: (res) => {
       switch (type) {
         case ERPEnums.stocktaking:
+          onClose();
           return;
         default:
           addShopBall(res);
@@ -140,8 +141,7 @@ const AddSku = (
             skuId: sku.skuId,
           },
         });
-        addShopBall(cartId,
-          newData);
+        addShopBall(cartId, newData, type);
         break;
       case ERPEnums.outStock:
         setVisible(true);
@@ -260,11 +260,12 @@ const AddSku = (
     }
   };
 
-  const createBall = (top, left, cartId, newData = {}) => {
+  const createBall = (top, left, cartId, newData = {}, type) => {
 
     const shop = document.getElementById('shop');
 
     if (!shop) {
+      onChange({ ...newData, cartId }, type);
       return;
     }
     let i = 0;

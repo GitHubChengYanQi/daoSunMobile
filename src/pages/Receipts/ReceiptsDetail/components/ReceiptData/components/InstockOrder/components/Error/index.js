@@ -31,6 +31,7 @@ const instockErrorDelete = { url: '/anomaly/delete', method: 'POST' };
 
 const Error = (
   {
+    anomalyType,
     id,
     noDelete,
     skuItem = {},
@@ -79,6 +80,12 @@ const Error = (
           break;
         default:
           break;
+      }
+      if (!error){
+        Message.successToast('添加成功！', () => {
+          onSuccess(sku, error ? -1 : 1, res.anomalyId);
+        });
+        return;
       }
       addShop(() => {
         Message.successToast('添加成功！', () => {
@@ -302,7 +309,8 @@ const Error = (
         inkind: sku.inkindId,
         positionId: `${sku.positionId}`,
         formId: sku.inventoryTaskId,
-        anomalyType: sku.inventoryTaskId ? 'StocktakingError' : 'timelyInventory',
+        // anomalyType: sku.inventoryTaskId ? '' : '',
+        anomalyType
       };
     }
   };

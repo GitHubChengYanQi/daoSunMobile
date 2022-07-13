@@ -7,18 +7,13 @@ import MyNavBar from '../../components/MyNavBar';
 import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 import Dynamic from './Dynamic';
-import Task from './Task';
-import { Button } from 'antd-mobile';
-import { ReceiptsEnums } from '../../Receipts';
+import Task, { TaskBottom } from './Task';
 import { useRequest } from '../../../util/Request';
 import { ToolUtil } from '../../components/ToolUtil';
 import { ERPEnums } from './ERPEnums';
 import { MyLoading } from '../../components/MyLoading';
-import { useHistory } from 'react-router-dom';
 
 const Stock = (props) => {
-
-  const history = useHistory();
 
   const [key, setKey] = useState('stock');
 
@@ -98,17 +93,7 @@ const Stock = (props) => {
           type={stockDetail.task}
         />;
       case 'Message':
-        switch (taskKey) {
-          case ReceiptsEnums.stocktaking:
-            return <div className={style.stocktakingButtom}>
-              <Button onClick={() => {
-                history.push('/Work/Inventory/RealTimeInventory');
-              }}>即时盘点</Button>
-              <Button color='primary'>开始盘点</Button>
-            </div>;
-          default:
-            return <></>;
-        }
+       return <TaskBottom taskKey={taskKey} />
       default:
         return <></>;
     }

@@ -83,11 +83,9 @@ const BasicLayout = (props) => {
 
 
   setInterval(() => {
-
     if (GetUserInfo().token && ToolUtil.queryString('wxLogin', history.location.pathname)) {
       window.location.href = wxUrl(false);
     }
-
   }, 1000);
 
   useEffect(() => {

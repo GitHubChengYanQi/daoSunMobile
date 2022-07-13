@@ -12,6 +12,7 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { inventoryAdd, inventorySelectCondition } from '../../index';
 import OtherData from '../OtherData';
+import { ReceiptsEnums } from '../../../../../../../../Receipts';
 
 const StocktakingAsk = ({ state, skus, createType }) => {
 
@@ -27,9 +28,15 @@ const StocktakingAsk = ({ state, skus, createType }) => {
 
   const { loading: inventoryLoading, run: inventory } = useRequest(inventoryAdd, {
     manual: true,
-    onSuccess: () => {
-      Message.successToast('创建盘点单成功!',()=>{
-        history.goBack();
+    onSuccess: (res) => {
+      Message.successDialog({
+        content: '创建盘点申请成功!',
+        confirmText: '查看详情',
+        cancelText: '返回列表',
+        onCancel: () => history.goBack(),
+        onConfirm: () => {
+          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.stocktaking}&formId=${res.inventoryTaskId}`);
+        },
       });
     },
   });
@@ -37,7 +44,7 @@ const StocktakingAsk = ({ state, skus, createType }) => {
 
   const { loading: inventoryConditionLoading, run: inventoryCondition } = useRequest(inventorySelectCondition, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
       Message.successToast('创建盘点单成功!',()=>{
         history.goBack();
       });

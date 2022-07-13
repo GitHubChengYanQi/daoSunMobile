@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { Divider } from 'antd';
-import { Button, Popup } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import Maintenanceing from './components/Maintenanceing';
@@ -119,7 +119,7 @@ const Maintenance = (
       visible={visible}
       destroyOnClose
     >
-      <Maintenanceing skuItem={visible} onSuccess={() => {
+      <Maintenanceing maintenanceId={receipts.maintenanceId} skuItem={visible} onSuccess={() => {
         refresh();
         setVisible(false);
       }} />

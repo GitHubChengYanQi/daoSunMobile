@@ -248,8 +248,8 @@ const SkuError = (
       case 'timelyInventory':
         return {
           showAction: <>
-            {item.status === -1 && <span className={style.allow}>· 维修</span>}
-            {item.status === 1 && <span className={style.prohibit}>· 忽略异常</span>}
+            {item.status === -1 && <span className={style.allow}>· 忽略异常</span>}
+            {item.status === 1 && <span className={style.prohibit}>· 维修</span>}
             {item.status === 2 && <span className={style.allow}>· 报损</span>}
           </>,
           actions: <>

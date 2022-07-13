@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FloatingBubble, Popup } from 'antd-mobile';
+import { Badge, FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
 import InstockError from '../../../InstockOrder/components/InstockShop/components/InstockError';
 import Error from '../../../InstockOrder/components/Error';
@@ -8,6 +8,8 @@ import Icon from '../../../../../../../../components/Icon';
 
 const ErrorShop = (
   {
+    anomalyType,
+    errorNumber,
     id,
     refresh = () => {
     },
@@ -30,6 +32,7 @@ const ErrorShop = (
     switch (type) {
       case 'stockTaskingErrror':
         return <InstockError
+          anomalyType={anomalyType}
           formId={id}
           refresh={(data, status) => {
             errorReturn(data, status);
@@ -89,7 +92,12 @@ const ErrorShop = (
           setType('stockTaskingErrror');
           setVisible(true);
         }}>
-          <div className={style.actionButton}><Icon type='icon-yichangkuang' /></div>
+          <div className={style.actionButton}>
+            <Badge
+              content={errorNumber || null}
+              style={{ '--right': '5%', '--top': '5%' }}>
+              <Icon type='icon-yichangkuang' />
+            </Badge></div>
         </div>
       </div>
     </FloatingBubble>

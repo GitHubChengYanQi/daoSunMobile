@@ -11,9 +11,12 @@ import { Button, Popup } from 'antd-mobile';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
 import ErrorShop from '../ErrorShop';
+import { Message } from '../../../../../../../../components/Message';
 
 const StocktaskigAction = (
   {
+    anomalyType,
+    errorNumber,
     actionPermissions,
     inventoryTaskId,
     showStock,
@@ -112,6 +115,10 @@ const StocktaskigAction = (
                           className={style.brand}
                           style={{ border: `1px solid ${color}` }}
                           onClick={() => {
+                            if (brandItem.inventoryStatus === 99) {
+                              Message.warningDialog({ content: '已提交异常，不可更改！' });
+                              return;
+                            }
                             if (actionPermissions) {
                               setVisible({
                                 skuId: skuItem.skuId,
@@ -206,6 +213,7 @@ const StocktaskigAction = (
       destroyOnClose
     >
       <Error
+        anomalyType={anomalyType}
         showStock={showStock}
         id={visible && visible.anomalyId}
         type={ReceiptsEnums.stocktaking}
@@ -223,6 +231,8 @@ const StocktaskigAction = (
     </Popup>
 
     {actionPermissions && <ErrorShop
+      anomalyType={anomalyType}
+      errorNumber={errorNumber}
       errorReturn={errorReturn}
       id={inventoryTaskId}
       onChange={!inventoryTaskId && refresh}

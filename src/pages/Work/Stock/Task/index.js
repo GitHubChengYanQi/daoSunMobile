@@ -1,13 +1,32 @@
 import React, { useState } from 'react';
-import { Tabs } from 'antd-mobile';
+import { Button, Tabs } from 'antd-mobile';
 import style from './index.less';
 import MySearch from '../../../components/MySearch';
 import { ReceiptsEnums } from '../../../Receipts';
 import MyAudit from '../../ProcessTask/MyAudit';
 import { useLocation } from 'umi';
 import MyNavBar from '../../../components/MyNavBar';
+import { useHistory } from 'react-router-dom';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
+
+export const TaskBottom = ({ taskKey,task }) => {
+  const history = useHistory();
+  switch (taskKey) {
+    case ReceiptsEnums.stocktaking:
+      return <div className={ToolUtil.classNames(style.stocktakingButtom,task && style.bottom)}>
+        <Button onClick={() => {
+          history.push('/Work/Inventory/RealTimeInventory');
+        }}>即时盘点</Button>
+        <Button color='primary' onClick={()=>{
+          history.push('/Work/Inventory/AllInventory');
+        }}>开始盘点</Button>
+      </div>;
+    default:
+      return <></>;
+  }
+};
 
 const Task = (
   {
@@ -53,6 +72,9 @@ const Task = (
         setKey(param.type);
       }}
     />
+
+
+    <TaskBottom taskKey={key} task />
 
   </div>;
 };

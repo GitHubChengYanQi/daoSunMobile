@@ -3,7 +3,7 @@ import MyNavBar from '../../../components/MyNavBar';
 import MySearch from '../../../components/MySearch';
 import Positions
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
-import { Popup, Space } from 'antd-mobile';
+import { Popup } from 'antd-mobile';
 import scanImg from '../../../../assets/scan.png';
 import style from './index.less';
 import { useHistory } from 'react-router-dom';
@@ -15,6 +15,7 @@ import { Message } from '../../../components/Message';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyCard from '../../../components/MyCard';
 import MyList from '../../../components/MyList';
+import { MyDate } from '../../../components/MyDate';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
@@ -79,30 +80,31 @@ const RealTimeInventory = (props) => {
     </div>
 
     <div className={style.inventoryLog}>
-      <div>盘点记录</div>
-      <MyList api={inventoryPageList} getData={setData} data={data}>
-        <div className={style.logs}>
-          {
-            data.map((item, index) => {
-              return <MyCard style={{padding:0}} noHeader key={index} onClick={() => {
-                history.push(`/Work/Inventory/RealTimeInventory/Detail?inventoryTaskId=${item.inventoryTaskId}`);
-              }}>
-                <div>
-                  库位：{ToolUtil.isObject(item.positionsResult).name}
-                </div>
-                <Space>
-                  <div>
-                    盘点人员：{ToolUtil.isObject(item.positionsResult).name}
+      <MyCard title='盘点记录'>
+        <MyList api={inventoryPageList} getData={setData} data={data}>
+          <div className={style.logs}>
+            {
+              data.map((item, index) => {
+                return <div key={index} onClick={() => {
+                  history.push(`/Work/Inventory/RealTimeInventory/Detail?inventoryTaskId=${item.inventoryTaskId}`);
+                }}>
+                  <div style={{paddingTop:8}}>
+                    库位：{ToolUtil.isObject(item.positionsResult).name}
                   </div>
-                  <div>
-                    <ClockCircleOutline /> {item.createTime}
+                  <div className={style.logData}>
+                    <div>
+                      盘点人员：{ToolUtil.isObject(item.user).name}
+                    </div>
+                    <div>
+                      <ClockCircleOutline /> {MyDate.Show(item.createTime)}
+                    </div>
                   </div>
-                </Space>
-              </MyCard>;
-            })
-          }
-        </div>
-      </MyList>
+                </div>;
+              })
+            }
+          </div>
+        </MyList>
+      </MyCard>
     </div>
 
 
