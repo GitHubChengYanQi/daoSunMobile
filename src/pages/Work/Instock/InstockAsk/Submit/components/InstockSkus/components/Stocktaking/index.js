@@ -28,10 +28,7 @@ const Stocktaking = (
     <MyCard
       titleBom={<Title className={style.title}>盘点时间 <span>*</span></Title>}
       extra={<StartEndDate
-        split={<div>——</div>}
         value={[value.beginTime, value.endTime]}
-        startShow={value.beginTime || <Space align='center'><CalendarOutline />起始</Space>}
-        endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
         onChange={(dates) => {
           onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
         }}

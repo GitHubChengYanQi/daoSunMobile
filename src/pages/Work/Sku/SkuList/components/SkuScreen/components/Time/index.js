@@ -82,18 +82,6 @@ const Time = (
         <div className={style.checkDate}>
           <StartEndDate
             value={[startDate, endDate]}
-            startShow={
-              <div className={style.timeShow}>
-                <ClockCircleOutline />
-                <span>{startDate ? startDate.split(' ')[0] : '起始时间'}</span>
-              </div>
-            }
-            endShow={
-              <div className={style.timeShow}>
-                <ClockCircleOutline />
-                <span>{endDate ? endDate.split(' ')[0] : '截止时间'}</span>
-              </div>
-            }
             onChange={(dates) => {
               setDate(dates[0], dates[1]);
               setKey(null);

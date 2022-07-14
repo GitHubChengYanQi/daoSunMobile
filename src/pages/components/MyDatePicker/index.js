@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useImperativeHandle, useState } from 'react';
 import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
@@ -14,9 +14,14 @@ const MyDatePicker = (
     style,
     onChange = () => {
     },
+    onClose = () => {
+    },
+    afterClose = () => {
+    },
     show,
+    filter,
     ...props
-  }) => {
+  }, ref) => {
 
 
   const now = new Date();
@@ -26,11 +31,11 @@ const MyDatePicker = (
   const labelRenderer = useCallback((type, data) => {
     switch (type) {
       case 'year':
-        return data;
+        return data + '年';
       case 'month':
         return data + '月';
       case 'day':
-        return data + '日';
+        return <div style={{ marginRight: 16 }}>{data + '日'}</div>;
       case 'hour':
         return data + '时';
       case 'minute':
@@ -41,6 +46,14 @@ const MyDatePicker = (
         return data;
     }
   }, []);
+
+  const open = () => {
+    setVisible(true);
+  };
+
+  useImperativeHandle(ref, () => ({
+    open,
+  }));
 
   return (
     <div>
@@ -58,12 +71,14 @@ const MyDatePicker = (
         {...props}
         destroyOnClose
         precision={precision || 'day'}
-        title='时间选择'
+        title={title || '时间选择'}
         value={value && new Date(value)}
         min={min && new Date(min)}
         max={max && new Date(max)}
         visible={visible}
+        afterClose={afterClose}
         onClose={() => {
+          onClose();
           setVisible(false);
         }}
         defaultValue={now}
@@ -89,9 +104,10 @@ const MyDatePicker = (
           }
         }}
         renderLabel={labelRenderer}
+        filter={filter}
       />
     </div>
   );
 };
 
-export default MyDatePicker;
+export default React.forwardRef(MyDatePicker);

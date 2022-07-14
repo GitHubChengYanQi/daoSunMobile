@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
-import MyDatePicker from '../../../../../../../components/MyDatePicker';
-import { CalendarOutline, RightOutline } from 'antd-mobile-icons';
-import { Button, Divider, Picker, Space } from 'antd-mobile';
+import { RightOutline } from 'antd-mobile-icons';
+import { Button, Divider, Picker } from 'antd-mobile';
 import { MinusCircleFilled } from '@ant-design/icons';
 import AllCondition from '../AllCondition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
-import MyCard from '../../../../../../../components/MyCard';
 
 const Condition = (
   {
@@ -64,10 +62,8 @@ const Condition = (
               <div className={style.title}>盘点时间 <span>*</span></div>
               <div>
                 <StartEndDate
-                  split={<div>—</div>}
+                  min={new Date()}
                   value={[value.beginTime, value.endTime]}
-                  startShow={value.beginTime || <Space align='center'><CalendarOutline />起始</Space>}
-                  endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
                   onChange={(dates) => {
                     onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
                   }}
@@ -83,10 +79,7 @@ const Condition = (
               <div className={style.title}>任务时间 <span>*</span></div>
               <div>
                 <StartEndDate
-                  split={<div>—</div>}
                   value={[value.startTime, value.endTime]}
-                  startShow={value.startTime || <Space align='center'><CalendarOutline />起始</Space>}
-                  endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
                   onChange={(dates) => {
                     onChange({ ...value, startTime: dates[0], endTime: dates[1] });
                   }}

@@ -1,43 +1,63 @@
-import React from 'react';
-import { Space } from 'antd-mobile';
+import React, { useRef, useState } from 'react';
 import MyDatePicker from '../../../../../components/MyDatePicker';
+import { CalendarOutline } from 'antd-mobile-icons';
+import { MyDate } from '../../../../../components/MyDate';
 
 const StartEndDate = (
   {
     value = [],
     onChange = () => {
     },
-    startShow,
-    endShow,
-    className,
     min,
-    split,
+    className,
   }) => {
 
+  const ref = useRef();
+
+  const [startDate, setStartDate] = useState();
+
   return <>
-    <Space>
-      <MyDatePicker
-        className={className}
-        show={startShow}
-        title='开始时间'
-        min={min}
-        value={value[0]}
-        precision='minute'
-        onChange={(startDate) => {
-          onChange([startDate]);
-        }} />
-      {split}
-      <MyDatePicker
-        className={className}
-        show={endShow}
-        title='结束时间'
-        min={value[0]}
-        value={value[1]}
-        precision='minute'
-        onChange={(endDate) => {
-          onChange([value[0], endDate]);
-        }} />
-    </Space>
+    <div
+      style={{ display: 'inline-block' }}
+      className={className}
+      onClick={() => {
+        ref.current.open();
+      }}
+    >
+      {
+        value[0] && value[1] ?
+          <>
+            {MyDate.Show(value[0])} - {MyDate.Show(value[1])}
+          </>
+          :
+          <CalendarOutline />
+      }
+    </div>
+    <MyDatePicker
+      filter={{
+        'minute': (number) => {
+          return [0, 15, 30, 45].includes(number);
+        },
+      }}
+      title={startDate ? '终止时间' : '起始时间'}
+      value={value[0]}
+      ref={ref}
+      show
+      min={startDate || min}
+      precision='minute'
+      afterClose={() => {
+        if (startDate) {
+          ref.current.open();
+        }
+      }}
+      onChange={(date) => {
+        if (startDate) {
+          onChange([startDate, date]);
+          setStartDate();
+        } else {
+          setStartDate(date);
+        }
+      }} />
   </>;
 };
 

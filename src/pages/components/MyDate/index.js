@@ -2,7 +2,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 const Show = (date) => {
-  return moment(date).format('YYYY-MM-DD HH:mm');
+  return moment(date).format('YYYY/MM/DD HH:mm');
 };
 
 
@@ -11,8 +11,6 @@ export const MyDate = {
 };
 
 // 时间倒计时
-
-
 const secondsToMinutes = sec => {
   sec = Number(sec);
   let minutes = moment.duration(sec, 'seconds').minutes();

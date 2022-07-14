@@ -28,10 +28,7 @@ const Curing = (
       titleBom={<Title className={style.title}>任务时间 <span>*</span></Title>}
       extra={<div>
         <StartEndDate
-          split={<div>—</div>}
           value={[value.startTime, value.endTime]}
-          startShow={value.startTime || <Space align='center'><CalendarOutline />起始</Space>}
-          endShow={value.endTime || <Space align={'center'}><CalendarOutline />结束</Space>}
           onChange={(dates) => {
             onChange({ ...value, startTime: dates[0], endTime: dates[1] });
           }}
