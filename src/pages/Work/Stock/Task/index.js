@@ -16,12 +16,12 @@ export const TaskBottom = ({ taskKey,task }) => {
   switch (taskKey) {
     case ReceiptsEnums.stocktaking:
       return <div className={ToolUtil.classNames(style.stocktakingButtom,task && style.bottom)}>
-        <Button onClick={() => {
+        <Button color='primary' onClick={() => {
           history.push('/Work/Inventory/RealTimeInventory');
         }}>即时盘点</Button>
-        <Button color='primary' onClick={()=>{
-          history.push('/Work/Inventory/AllInventory');
-        }}>开始盘点</Button>
+        {/*<Button color='primary' onClick={()=>{*/}
+        {/*  history.push('/Work/Inventory/AllInventory');*/}
+        {/*}}>开始盘点</Button>*/}
       </div>;
     case ReceiptsEnums.maintenance:
       return <div className={ToolUtil.classNames(style.maintenanceButtom,task && style.bottom)}>

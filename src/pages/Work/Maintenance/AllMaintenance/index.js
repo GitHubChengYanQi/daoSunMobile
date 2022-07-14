@@ -67,7 +67,6 @@ const AllMaintenance = () => {
             }],
           });
         }
-
       });
 
       setData(newData);

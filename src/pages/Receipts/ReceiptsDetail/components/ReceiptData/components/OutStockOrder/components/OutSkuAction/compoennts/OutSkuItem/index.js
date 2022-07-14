@@ -1,12 +1,13 @@
 import React from 'react';
-import style from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
+import style
+  from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../../../Work/MyPicking/Sku';
 import pickStyle from '../../../../../../../../../../Work/MyPicking/Sku/index.less';
 
-const OutSkuItem = ({item,data}) => {
+const OutSkuItem = ({ item, data }) => {
   const skuResult = item.skuResult || {};
 
   let stockNumberColor = '';
@@ -37,13 +38,12 @@ const OutSkuItem = ({item,data}) => {
   const trail = Number(((notPrepared / item.number)).toFixed(2)) * 100;
 
   return <div
-    className={style.sku}
+    className={ToolUtil.classNames(style.sku, data.length <= 3 && style.skuBorderBottom)}
+    style={{paddingBottom:8}}
   >
     <div
-      className={ToolUtil.classNames(
-        style.skuItem,
-        data.length <= 3 && style.skuBorderBottom,
-      )}
+      className={style.skuItem}
+      style={{paddingBottom:0}}
     >
       <div className={style.item}>
         <SkuItem
@@ -54,7 +54,7 @@ const OutSkuItem = ({item,data}) => {
           otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
         />
       </div>
-      <div className={style.outStockNumber} style={{color:stockNumberColor}}>
+      <div className={style.outStockNumber} style={{ color: stockNumberColor }}>
         {stockNumberText}
       </div>
     </div>
@@ -67,9 +67,9 @@ const OutSkuItem = ({item,data}) => {
       <Progress
         className={pickStyle.progress}
         format={() => {
-          return <span style={{color:'#000'}}>{item.number + '  (申请数)'}</span>;
+          return <span style={{ color: '#000' }}>{item.number + '  (申请数)'}</span>;
         }}
-        percent={percent+successPercent}
+        percent={percent + successPercent}
         success={{ percent: successPercent, strokeColor: receivedColor }}
         trailColor={notPreparedColor}
         strokeColor={collectableColor}
