@@ -73,31 +73,34 @@
     display: flex;
 
     .orderData {
-      display: flex;
-      align-items: center;
       flex-grow: 1;
 
-      .show {
-        flex-grow: 1;
-        padding: 16px;
-        border: solid 1px #F5F5F5;
+      .dateShow {
         display: flex;
         align-items: center;
-        justify-content: center;
 
-        .showNumber {
+        .show {
+          flex-grow: 1;
+          padding: 16px;
+          border: solid 1px #F5F5F5;
           display: flex;
-          flex-direction: column;
-          padding-left: 16px;
+          align-items: center;
+          justify-content: center;
 
-          .number {
-            color: var(--adm-color-primary);
+          .showNumber {
+            display: flex;
+            flex-direction: column;
+            padding-left: 16px;
+
+            .number {
+              color: var(--adm-color-primary);
+            }
           }
-        }
 
-        svg {
-          font-size: 32px;
-          color: var(--body--background--color);
+          svg {
+            font-size: 32px;
+            color: var(--body--background--color);
+          }
         }
       }
     }
@@ -105,6 +108,13 @@
     .timeBar {
       width: 14px;
       line-height: 100%;
+      position: relative;
+
+      .maks {
+        position: absolute;
+        background: #E7E6E6;
+        width: 100%;
+      }
     }
 
   }

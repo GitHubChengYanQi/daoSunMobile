@@ -2,74 +2,77 @@ import React from 'react';
 import style from './index.less';
 import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
-import moment from 'moment';
 
 const TaskItem = (
   {
-    item,
+    taskName,
+    createTime,
+    beginTime,
+    endTime,
+    coding,
+    positionSize,
+    skuSize,
     onClick = () => {
     },
     index,
+    otherData,
   },
 ) => {
-  const receipts = item.receipts || {};
 
   const getHour = (begin, end) => {
     const dateDiff = new Date(begin).getTime() - new Date(end).getTime();
     return Math.floor(dateDiff / 3600000);
   };
 
-  console.log('当前时间 =>', moment(new Date()).format('YYYY-MM-DD HH:mm:ss'));
-  console.log('开始时间 =>', receipts.beginTime);
-  console.log('结束时间 =>', receipts.endTime);
 
-  const totalHour = getHour(receipts.endTime, receipts.beginTime);
-  console.log('总攻时间=>', totalHour);
-  const pastTimes = getHour(new Date(), receipts.beginTime);
-  console.log('过去时间=>', pastTimes);
+  const totalHour = getHour(endTime, beginTime);
+  const total = totalHour + (totalHour * 0.1);
+  const pastTimes = getHour(new Date(), beginTime);
+  const pastTimesPercent = pastTimes > 0 ? parseInt((pastTimes / total) * 100) : 0;
+
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.data}>
       <div className={style.taskData}>
         <div className={style.name}>
-          <span className={style.title}>{item.taskName} / {receipts.coding}</span>
+          <span className={style.title}>{taskName} / {coding}</span>
           <RightOutline style={{ color: '#B9B9B9' }} />
         </div>
       </div>
       <div className={style.status} style={{ color: '#555555', width: 130, textAlign: 'right' }}>
-        {MyDate.Show(item.createTime)}
-        {/*{moment(item.beginTime).format('MM.DD')} — {moment(item.endTime).format('MM.DD')}*/}
+        {MyDate.Show(createTime)}
       </div>
     </div>
     <div className={style.content}>
       <div className={style.orderData}>
-        <div className={style.show}>
-          <AppstoreOutline />
-          <div className={style.showNumber}>
-            <span className={style.number}>{receipts.positionSize}</span>
-            <span>涉及库位</span>
+        <div className={style.dateShow}>
+          <div className={style.show}>
+            <AppstoreOutline />
+            <div className={style.showNumber}>
+              <span className={style.number}>{positionSize}</span>
+              <span>涉及库位</span>
+            </div>
+          </div>
+          <div className={style.show} style={{ borderLeft: 'none' }}>
+            <AppstoreOutline />
+            <div className={style.showNumber}>
+              <span className={style.number}>{skuSize}</span>
+              <span>涉及物料</span>
+            </div>
           </div>
         </div>
-        <div className={style.show} style={{ borderLeft: 'none' }}>
-          <AppstoreOutline />
-          <div className={style.showNumber}>
-            <span className={style.number}>{receipts.skuSize}</span>
-            <span>涉及物料</span>
-          </div>
-        </div>
+        {otherData}
       </div>
 
       <div
+        hidden={!beginTime}
         className={style.timeBar}
         style={{
-          background: `linear-gradient(to bottom,
-          ${true ? `rgba(191, 192, 191, 0.7) ${0}%,` : ''}
-           ${true ? `rgba(27, 231, 0, 0.7) ${40}%,` : ''}
-            ${false ? `rgba(238, 183, 1, 0.7) ${0}%,` : ''}
-             ${true ? `rgba(223, 0, 0, 0.7)) ${60}%` : ''}
-           `,
+          background: `linear-gradient(to bottom,#35E11F 0%,#FFFC62 80%,#F72323 95%)`,
         }}
-      />
+      >
+        <div className={style.maks} style={{ height: `${pastTimesPercent > 95 ? 95 : pastTimesPercent}%` }} />
+      </div>
     </div>
   </div>;
 };
