@@ -12,10 +12,13 @@ import OutSkuItem from './compoennts/OutSkuItem';
 import MyCard from '../../../../../../../../components/MyCard';
 import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../Work/MyPicking/Sku';
 import Title from '../../../../../../../../components/Title';
+import BottomButton from '../../../../../../../../components/BottomButton';
+import { useModel } from 'umi';
 
 
 const OutSkuAction = (
   {
+    order = {},
     pickListsId,
     data = [],
     action,
@@ -25,6 +28,10 @@ const OutSkuAction = (
     taskId,
   },
 ) => {
+
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
 
   const [visible, setVisible] = useState();
 
@@ -145,6 +152,11 @@ const OutSkuAction = (
     </Popup>
 
     {action && <OutStockShop allPerpareNumber={allPerpareNumber} id={pickListsId} refresh={refresh} />}
+
+    {action && userInfo.id === order.userId && <BottomButton
+      only
+      text='领料'
+    />}
 
 
   </div>;

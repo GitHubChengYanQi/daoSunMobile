@@ -55,6 +55,7 @@ const InstockOrder = (
         />;
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
+          order={data}
           taskId={taskId}
           data={details}
           actionId={getAction('outStock').id}

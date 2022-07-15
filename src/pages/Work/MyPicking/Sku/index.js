@@ -18,9 +18,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 const getCarts = { url: '/productionPickListsCart/getSelfCartsBySku', method: 'POST' };
 const outStockBySku = { url: '/productionPickLists/createCode', method: 'POST' };
 
-export const receivedColor = '#5ABAFF';
-export const collectableColor = '#257BDE';
-export const notPreparedColor = '#D3E7FD';
+export const receivedColor = '#257BDE';
+export const collectableColor = '#D3E7FD';
+export const notPreparedColor = '#E8E8E8';
 
 const Sku = () => {
 
