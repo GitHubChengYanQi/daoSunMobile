@@ -19,6 +19,7 @@ const Stocktaking = (
     <MyCard
       titleBom={<Title className={style.title}>时间 <span>*</span></Title>}
       extra={<StartEndDate
+        min={new Date()}
         value={[value.beginTime, value.endTime]}
         onChange={(dates) => {
           onChange({ ...value, beginTime: dates[0], endTime: dates[1] });
