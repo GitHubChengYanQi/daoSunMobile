@@ -96,7 +96,6 @@ const SelectSkus = (
           }
           const filterText = [];
           params.name && filterText.push(params.name);
-
           const skuClasses = ToolUtil.isArray(params.skuClasses);
           const brands = ToolUtil.isArray(params.brands);
           const positions = ToolUtil.isArray(params.positions);
@@ -104,7 +103,7 @@ const SelectSkus = (
 
           const sku = await run({
             data: {
-              spuId: params.spuId,
+              spuIds: [params.spuId],
               classIds: skuClasses.map(item => {
                 filterText.push(item.label);
                 return item.value;
