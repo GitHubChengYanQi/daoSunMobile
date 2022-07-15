@@ -1,0 +1,112 @@
+.orderItem {
+  background-color: #fff;
+  margin-bottom: 8px;
+  padding-bottom: 20px;
+
+  .data {
+    display: flex;
+    padding: 3px 12px;
+    font-size: 14px;
+    align-items: center;
+
+
+    .taskData {
+      padding: 10px 0;
+      font-weight: bold;
+      color: #333333;
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .name {
+        display: flex;
+        align-items: center;
+      }
+
+      .title {
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 50vw;
+      }
+    }
+
+    .status {
+      padding: 10px 0;
+      font-weight: normal;
+      color: #555555;
+      width: 130px;
+      text-align: right;
+    }
+
+    .coding {
+      color: #000000;
+      flex-grow: 1;
+    }
+
+    .button {
+      padding: 0;
+      font-size: 14px;
+      --border-radius: 2px;
+      width: 72px;
+      height: 30px;
+      line-height: 28px;
+    }
+
+    .createTime {
+      color: #555555;
+      flex-grow: 1;
+    }
+
+    .money {
+      color: #000000;
+
+      span {
+        font-weight: bold;
+      }
+    }
+  }
+
+  .content {
+    display: flex;
+
+    .orderData {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+
+      .show {
+        flex-grow: 1;
+        padding: 16px;
+        border: solid 1px #F5F5F5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .showNumber {
+          display: flex;
+          flex-direction: column;
+          padding-left: 16px;
+
+          .number {
+            color: var(--adm-color-primary);
+          }
+        }
+
+        svg {
+          font-size: 32px;
+          color: var(--body--background--color);
+        }
+      }
+    }
+
+    .timeBar {
+      width: 14px;
+      line-height: 100%;
+    }
+
+  }
+
+}
