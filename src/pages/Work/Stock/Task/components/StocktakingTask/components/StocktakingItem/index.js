@@ -27,8 +27,12 @@ const StocktakingItem = ({ item, index }) => {
       onClick={onClick}
       otherData={<div>
         <div className={style.status}>
-          <div>明盘</div>
-          <div>静态</div>
+          <div>
+            方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
+          </div>
+          <div>
+            方式：{receipts.method === 'dynamic' ? '动态' : '静态'}
+          </div>
         </div>
         <div className={style.progress}>
           <Progress
