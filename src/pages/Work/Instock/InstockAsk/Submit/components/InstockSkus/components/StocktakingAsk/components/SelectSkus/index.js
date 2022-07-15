@@ -103,7 +103,7 @@ const SelectSkus = (
 
           const sku = await run({
             data: {
-              spuIds: [params.spuId],
+              spuIds: params.spuId && [params.spuId],
               classIds: skuClasses.map(item => {
                 filterText.push(item.label);
                 return item.value;

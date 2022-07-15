@@ -85,7 +85,7 @@ const StocktakingAsk = ({ createType }) => {
       const positions = ToolUtil.isArray(params.positions);
       const bom = ToolUtil.isObject(params.bom);
       return {
-        spuIds: [item.spuId],
+        spuIds: item.spuId && [item.spuId],
         classIds: skuClasses.map(item=>item.value),
         brandIds: brands.map(item => item.value),
         positionIds: positions.map(item => item.id),
