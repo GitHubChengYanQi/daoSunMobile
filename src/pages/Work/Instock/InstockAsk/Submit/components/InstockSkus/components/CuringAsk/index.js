@@ -11,6 +11,8 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { maintenanceAdd } from '../../index';
 import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
+import Title from '../../../../../../../../components/Title';
+import style from '../../../PurchaseOrderInstock/index.less';
 
 const CuringAsk = ({ createType, state }) => {
 
@@ -55,7 +57,6 @@ const CuringAsk = ({ createType, state }) => {
     return {
       title: '养护申请明细',
       type: '养护',
-      careful: '养护缘由',
       buttonHidden: true,
       disabled: maintenanceDisabled(),
     };
@@ -114,7 +115,12 @@ const CuringAsk = ({ createType, state }) => {
     <MyNavBar title={createTypeData().title} />
     {content()}
 
-    <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
+    <OtherData
+      createType={createType}
+      careful={<Title className={style.title}>养护缘由 <span>*</span></Title>}
+      params={params}
+      setParams={setParams}
+    />
 
     <BottomButton
       leftOnClick={() => {
