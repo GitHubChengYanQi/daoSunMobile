@@ -41,10 +41,10 @@ const StocktakingItem = ({item,index}) => {
     </div>
     <div className={style.methodAndMode}>
       <div className={style.method}>
-        方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
+        方式：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
       </div>
       <div className={style.mode}>
-        方式：{receipts.method === 'dynamic' ? '动态' : '静态'}
+        方法：{receipts.method === 'dynamic' ? '动态' : '静态'}
       </div>
     </div>
     <div className={style.data}>
