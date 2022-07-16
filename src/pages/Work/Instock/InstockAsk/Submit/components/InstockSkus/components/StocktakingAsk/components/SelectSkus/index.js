@@ -51,7 +51,7 @@ const SelectSkus = (
           <div className={style.skuData}>
             <div className={style.skuAction}>
               <div className={style.sku}>
-                <SkuItem skuResult={item.skuResult} />
+                <SkuItem skuResult={item.skuResult} otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']} />
               </div>
               <MyRemoveButton onRemove={() => {
                 skusChange(skus.filter((item, removeIndex) => removeIndex !== index));
