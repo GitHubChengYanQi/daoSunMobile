@@ -21,7 +21,6 @@ const OutStockConfirm = () => {
 
   const [code, setCode] = useState(initialCode);
 
-
   const [outSkus, setOutSkus] = useState([]);
 
   const [visible, setVisible] = useState();
@@ -120,7 +119,12 @@ const OutStockConfirm = () => {
       {
         outSkus.map((item, index) => {
           return <div key={index} className={style.skuItem}>
-            <SkuItem className={style.sku} extraWidth='74px' skuResult={item.skuResult} otherData={['任意品牌']} />
+            <SkuItem
+              className={style.sku}
+              extraWidth='74px'
+              skuResult={item.skuResult}
+              otherData={[item.brandResult ? item.brandResult.brandName : '任意品牌']}
+            />
             <div>
               <ShopNumber show value={item.number} />
             </div>
@@ -138,10 +142,16 @@ const OutStockConfirm = () => {
             'storehouseId': item.storehouseId,
             'skuId': item.skuId,
             'pickListsId': item.pickListsId,
-            'number': 1,
+            'number': item.number,
+            brandId: item.brandId,
           };
         });
-        outStockRun({ data: { cartsParams } });
+        outStockRun({
+          data: {
+            code: query.code || code.map(item => item.number).join(''),
+            cartsParams,
+          },
+        });
       }}
     />
 

@@ -13,7 +13,6 @@ import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
 import { connect } from 'dva';
 import DefaultMenus from '../component/DefaultMenus';
-import CreateInStock from '../../Work/ProcessTask/Create/components/CreateInStock';
 import MenusItem from '../component/MenusItem';
 import { Message } from '../../components/Message';
 
@@ -41,12 +40,15 @@ const MenusSetting = (props) => {
   const { loading: addLoading, run: addRun } = useRequest(menusAddApi, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('保存成功',()=>{
+      Message.successToast('保存成功', () => {
         toggle();
         props.dispatch({
           type: 'data/getUserMenus',
+          payload: {
+            sysMenus,
+          },
         });
-      })
+      });
     },
   });
 
@@ -60,6 +62,9 @@ const MenusSetting = (props) => {
     if (!userMenus) {
       props.dispatch({
         type: 'data/getUserMenus',
+        payload: {
+          sysMenus,
+        },
       });
     }
   }, []);
@@ -245,6 +250,10 @@ const MenusSetting = (props) => {
               break;
             default:
               break;
+          }
+
+          if (subMenus.length === 0) {
+            return null;
           }
 
           return <Card

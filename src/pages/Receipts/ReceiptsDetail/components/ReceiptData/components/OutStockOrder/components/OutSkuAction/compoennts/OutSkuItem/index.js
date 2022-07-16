@@ -4,8 +4,8 @@ import style
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Progress } from 'antd';
-import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../../../Work/MyPicking/Sku';
-import pickStyle from '../../../../../../../../../../Work/MyPicking/Sku/index.less';
+import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
+import pickStyle from '../MyPicking/index.less';
 
 const OutSkuItem = ({ item, data }) => {
   const skuResult = item.skuResult || {};
@@ -43,7 +43,6 @@ const OutSkuItem = ({ item, data }) => {
   >
     <div
       className={style.skuItem}
-      style={{paddingBottom:0}}
     >
       <div className={style.item}>
         <SkuItem

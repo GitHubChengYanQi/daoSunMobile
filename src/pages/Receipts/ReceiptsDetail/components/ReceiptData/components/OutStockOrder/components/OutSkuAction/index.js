@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Divider, Popup } from 'antd-mobile';
+import { Dialog, Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
@@ -10,10 +10,15 @@ import Prepare from '../Prepare';
 import OutStockShop from '../OutStockShop';
 import OutSkuItem from './compoennts/OutSkuItem';
 import MyCard from '../../../../../../../../components/MyCard';
-import { collectableColor, notPreparedColor, receivedColor } from '../../../../../../../../Work/MyPicking/Sku';
 import Title from '../../../../../../../../components/Title';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { useModel } from 'umi';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
+import MyPicking, { collectableColor, notPreparedColor, receivedColor } from './compoennts/MyPicking';
+import { Clock } from '../../../../../../../../components/MyDate';
+import PrintCode from '../../../../../../../../components/PrintCode';
+import { Message } from '../../../../../../../../components/Message';
+import jrQrcode from 'jr-qrcode';
 
 
 const OutSkuAction = (
@@ -34,6 +39,11 @@ const OutSkuAction = (
   const userInfo = state.userInfo || {};
 
   const [visible, setVisible] = useState();
+
+  const [picking, setPicking] = useState();
+
+  const [code, setCode] = useState('');
+  const imgSrc = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
   const actions = [];
   const noAction = [];
@@ -153,11 +163,57 @@ const OutSkuAction = (
 
     {action && <OutStockShop allPerpareNumber={allPerpareNumber} id={pickListsId} refresh={refresh} />}
 
-    {action && userInfo.id === order.userId && <BottomButton
+    {action && userInfo.id === order.userId
+    &&
+    <BottomButton
       only
       text='领料'
+      onClick={() => {
+        setPicking(true);
+      }}
     />}
 
+    <MyAntPopup
+      title='领料'
+      onClose={() => setPicking(false)}
+      visible={picking}
+      destroyOnClose
+    >
+      <MyPicking
+        pickListsId={pickListsId}
+        onSuccess={(res) => {
+          Message.successToast('领取成功！', () => {
+            setPicking(false);
+            setCode(res);
+          });
+        }}
+      />
+    </MyAntPopup>
+
+    <Dialog
+      visible={code}
+      content={<div style={{ textAlign: 'center' }}>
+        <div>领料码</div>
+        {code && <>失效剩余时间：<Clock seconds={600} /></>}
+        <img src={imgSrc} alt='' />
+        <div className={style.code}>{code}</div>
+      </div>}
+      actions={[[
+        { text: '取消', key: 'close' },
+      ]]}
+      onAction={(action) => {
+        switch (action.key) {
+          case 'close':
+            setCode('');
+            return;
+          case 'print':
+            PrintCode.print([`<img src={${imgSrc}} alt='' />`], 0);
+            return;
+          default:
+            return;
+        }
+      }}
+    />
 
   </div>;
 };

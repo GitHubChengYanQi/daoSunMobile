@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import style from './index.less';
 import { Card, Grid } from 'antd-mobile';
 import { MoreOutline, SetOutline } from 'antd-mobile-icons';
@@ -20,19 +20,17 @@ const Home = (props) => {
 
   const userMenus = props.data && props.data.userMenus;
 
-  const sysMenus = userInfo.menus || [];
+  const sysMenus = userInfo.mobielMenus || [];
 
-  const [commonlyMenus, setCommonlyMenus] = useState([]);
-
-
-  useEffect(() => {
-    setCommonlyMenus(DefaultMenus({ userMenus, sysMenus }));
-  }, [userMenus]);
+  const commonlyMenus = DefaultMenus({ userMenus, sysMenus });
 
   useEffect(() => {
     if (!userMenus) {
       props.dispatch({
         type: 'data/getUserMenus',
+        payload: {
+          sysMenus,
+        },
       });
     }
     window.document.title = state.systemName ? `首页-${state.systemName}` : '首页';

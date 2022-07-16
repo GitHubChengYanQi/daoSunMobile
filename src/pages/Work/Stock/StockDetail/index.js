@@ -11,6 +11,7 @@ import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/Add
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { ERPEnums } from '../ERPEnums';
+import MyActionSheet from '../../../components/MyActionSheet';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
@@ -162,9 +163,7 @@ const StockDetail = (
       }}
     />
 
-    <ActionSheet
-      className={style.action}
-      cancelText='取消'
+    <MyActionSheet
       visible={visible}
       actions={tasks}
       onClose={() => {

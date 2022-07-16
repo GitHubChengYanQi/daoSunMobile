@@ -10,7 +10,7 @@ import ErrorItem from '../../Stock/Task/components/ErrorkTask/components/ErrorIt
 import ForwardItem from '../../Stock/Task/components/ErrorkTask/components/ForwardItem';
 
 
-const startList = {
+export const startList = {
   url: '/activitiProcessTask/auditList',
   method: 'POST',
 };
