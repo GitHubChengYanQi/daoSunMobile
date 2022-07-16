@@ -7,19 +7,28 @@
 .bottom {
   position: fixed;
   bottom: 0;
-  width: 100%
+  left: calc(50% - 40px);
 }
 
-.stocktakingButtom {
-  display: flex;
-  align-items: center;
-  padding: 4px 16px;
-  background-color: #fff;
-  border-top: 1px solid #F5F5F5;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+.bottomButton {
+  text-align: center;
+  padding: 12px;
 
-  button {
-    flex-grow: 1;
+  .stocktakingButtom {
+    width: 80px;
+    height: 80px;
+    background: var(--adm-color-primary);
+    border-radius: 50px;
+    box-shadow: 0px -4px 10px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+
+    svg {
+      font-size: 30px;
+      color: #fff;
+    }
   }
 }
 

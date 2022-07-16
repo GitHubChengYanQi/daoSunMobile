@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Icon from '../../components/Icon';
+import Icon, { ScanIcon } from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
 import StockDetail, { shopCartShow } from './StockDetail';
@@ -7,11 +7,13 @@ import MyNavBar from '../../components/MyNavBar';
 import MyTablBar from '../../components/MyTablBar';
 import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
 import Dynamic from './Dynamic';
-import Task, { TaskBottom } from './Task';
+import Task from './Task';
 import { useRequest } from '../../../util/Request';
 import { ToolUtil } from '../../components/ToolUtil';
 import { ERPEnums } from './ERPEnums';
 import { MyLoading } from '../../components/MyLoading';
+import { connect } from 'dva';
+import TaskBottom from './Task/components/TaskBottom';
 
 const Stock = (props) => {
 
@@ -93,7 +95,7 @@ const Stock = (props) => {
           type={stockDetail.task}
         />;
       case 'Message':
-       return <TaskBottom taskKey={taskKey} />
+        return <TaskBottom taskKey={taskKey} />;
       default:
         return <></>;
     }
@@ -122,7 +124,7 @@ const Stock = (props) => {
           default:
             setStockDetail({ ...stockDetail, task: null });
             setKey(key);
-            return
+            return;
         }
       }}
       activeKey={key}
@@ -137,7 +139,7 @@ const Stock = (props) => {
           icon: <Icon type='icon-xiaoxi2' />,
         }, {
           key: 'scan',
-          icon: <Icon type='icon-dibudaohang-saoma' />,
+          icon: <ScanIcon />,
           className: style.scan,
         }, {
           title: '报表',
@@ -154,4 +156,4 @@ const Stock = (props) => {
   </div>;
 };
 
-export default Stock;
+export default connect(({ qrCode }) => ({ qrCode }))(Stock);

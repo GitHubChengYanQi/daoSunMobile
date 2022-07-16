@@ -28,7 +28,8 @@ const TaskItem = (
   const totalHour = getHour(endTime, beginTime);
   const total = totalHour + (totalHour * 0.1);
   const pastTimes = getHour(new Date(), beginTime);
-  const pastTimesPercent = pastTimes > 0 ? parseInt((pastTimes / total) * 100) : 0;
+  const overtime = getHour(new Date(), endTime);
+  const pastTimesPercent = overtime > 0 ? 95 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
 
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
