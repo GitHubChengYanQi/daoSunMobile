@@ -2,6 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
+import { Progress } from 'antd';
 
 const TaskItem = (
   {
@@ -16,14 +17,15 @@ const TaskItem = (
     },
     index,
     otherData,
+    orderData,
+    percent = 50,
   },
 ) => {
 
   const getHour = (begin, end) => {
     const dateDiff = new Date(begin).getTime() - new Date(end).getTime();
-    return Math.floor(dateDiff / 3600000);
+    return Number((dateDiff / 3600000).toFixed(2));
   };
-
 
   const totalHour = getHour(endTime, beginTime);
   const total = totalHour + (totalHour * 0.1);
@@ -31,12 +33,11 @@ const TaskItem = (
   const overtime = getHour(new Date(), endTime);
   const pastTimesPercent = overtime > 0 ? 95 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
 
-
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.data}>
       <div className={style.taskData}>
         <div className={style.name}>
-          <span className={style.title}>{taskName} / {coding}</span>
+          <span className={style.title}>{taskName} {coding && '/' }{coding}</span>
           <RightOutline style={{ color: '#B9B9B9' }} />
         </div>
       </div>
@@ -61,6 +62,15 @@ const TaskItem = (
               <span>涉及物料</span>
             </div>
           </div>
+        </div>
+        {orderData}
+        <div className={style.progress}>
+          <Progress
+            format={(number) => {
+              return <span className={style.blue}>{number + '%'}</span>;
+            }}
+            percent={percent}
+          />
         </div>
         {otherData}
       </div>

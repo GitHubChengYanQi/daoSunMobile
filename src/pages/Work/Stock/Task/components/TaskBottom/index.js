@@ -11,14 +11,12 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
   const history = useHistory();
   switch (taskKey) {
     case ReceiptsEnums.stocktaking:
-      return task ? <div className={ToolUtil.classNames(style.bottomButton, style.bottom)}>
-        <div className={style.stocktakingButtom} onClick={() => {
-          props.dispatch({
-            type: 'qrCode/wxCpScan',
-          });
-        }}>
-          <ScanIcon />
-        </div>
+      return task ? <div className={ToolUtil.classNames(style.stocktakingButtom, style.bottom)} onClick={() => {
+        props.dispatch({
+          type: 'qrCode/wxCpScan',
+        });
+      }}>
+        <ScanIcon />
       </div> : <></>;
     case ReceiptsEnums.maintenance:
       return <div className={ToolUtil.classNames(style.maintenanceButtom, task && style.bottom)}>
