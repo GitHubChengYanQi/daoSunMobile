@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
-import { Message } from '../../../../../../../../../../components/Message';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import jrQrcode from 'jr-qrcode';
 import style from './index.less';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import { Button } from 'antd-mobile';
@@ -52,6 +50,7 @@ const MyPicking = (
 
 
   const [storehouse, setStorehouse] = useState({});
+  console.log(storehouse);
 
   const [stores, setStores] = useState([]);
 
@@ -60,22 +59,38 @@ const MyPicking = (
   const initData = (res, storehouseId) => {
     const newData = [];
     const newStorehouse = [];
+    let total = 0;
     ToolUtil.isArray(res).forEach(item => {
       const cartResults = item.cartResults || [];
       let collectable = 0;
-      cartResults.forEach(item => {
+      cartResults.forEach(cartItem => {
         if (storehouseId) {
-          if (storehouseId === item.storehouseId) {
-            collectable += item.number;
+          if (storehouseId === cartItem.storehouseId) {
+            collectable += cartItem.number;
           }
         } else {
-          if (!newStorehouse.map(item => item.storehouseId).includes(item.storehouseId)) {
-            newStorehouse.push(item.storehouseResult);
+          const storeIds = newStorehouse.map(item => item.storehouseId);
+          const storeIndex = storeIds.indexOf(cartItem.storehouseId);
+          if (storeIndex === -1) {
+            newStorehouse.push({
+              ...cartItem.storehouseResult,
+              type: [item.pickListsDetailId],
+              number: cartItem.number,
+            });
+          } else {
+            const store = newStorehouse[storeIndex];
+            const type = store.type || [];
+            newStorehouse[storeIndex] = {
+              ...store,
+              type: type.includes(item.pickListsDetailId) ? type : [...type, item.pickListsDetailId],
+              number: store.number + cartItem.number,
+            };
           }
-          collectable += item.number;
+          collectable += cartItem.number;
         }
       });
       if (collectable > 0) {
+        total += collectable;
         newData.push({
           ...item,
           key: item.pickListsDetailId,
@@ -89,10 +104,14 @@ const MyPicking = (
       return setData(newData);
     }
     if (newStorehouse.length === 1) {
-      setStorehouse(newStorehouse);
+      setStorehouse(newStorehouse[0]);
     }
     setStores(newStorehouse);
     setData(newData);
+    return {
+      type: newData.length,
+      total,
+    };
   };
 
   const { loading, data: details, run } = useRequest(getCarts, {
@@ -124,7 +143,11 @@ const MyPicking = (
 
     <div className={style.content}>
       <div className={style.top}>
-        <div className={style.skuNumber}>可领物料：<span>{data.length}</span>类 <span>{total}</span>件</div>
+        <div className={style.skuNumber}>
+          可领物料：
+          <span className={style.blue}>{data.length}</span>类
+          <span className={style.blue}>{total}</span>件
+        </div>
         <div>
           <LinkButton onClick={() => {
             setVisible(true);
@@ -187,12 +210,20 @@ const MyPicking = (
       visible={visible}
       onAction={(action) => {
         initData(details, action.key);
-        setStorehouse({ name: action.text, storehouseId: action.key });
+        setStorehouse({ name: action.name, storehouseId: action.key });
         setVisible(false);
       }}
       onClose={() => setVisible(false)}
       actions={stores.map(item => {
-        return { text: item.name, key: item.storehouseId };
+        const type = item.type || [];
+        return {
+          text: <>
+            {item.name}（可领
+            <span className={style.blue}>{type.length} </span>类
+            <span className={style.blue}>{item.number}</span> 件）
+          </>,
+          key: item.storehouseId, name: item.name,
+        };
       })}
     />
 
