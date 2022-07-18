@@ -99,7 +99,12 @@ const Stocktaking = (
     </MyCard>
 
     <MyCard title='任务预览'>
-      <TaskItem skuSize={receipts.skuSize} positionSize={receipts.positionSize} noBorder />
+      <TaskItem
+        percent={parseInt((receipts.handle / receipts.total) * 100)}
+        skuSize={receipts.skuSize}
+        positionSize={receipts.positionSize}
+        noBorder
+      />
     </MyCard>
 
     <MyCard title='任务时间' extra={<div>

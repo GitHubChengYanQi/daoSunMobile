@@ -102,7 +102,7 @@ const SelectSkus = (
           const skuClasses = ToolUtil.isArray(params.skuClasses);
           const brands = ToolUtil.isArray(params.brands);
           const positions = ToolUtil.isArray(params.positions);
-          const bom = ToolUtil.isObject(params.bom);
+          const boms = ToolUtil.isArray(params.boms);
 
           const sku = await run({
             data: {
@@ -119,11 +119,13 @@ const SelectSkus = (
                 filterText.push(item.name);
                 return item.id;
               }),
-              bomIds: bom.key && [bom.key],
+              bomIds: boms.map(item => {
+                filterText.push(item.title);
+                return item.key;
+              }),
             },
           });
           if (sku) {
-            bom.key && filterText.push(bom.title);
 
             if (params.key !== undefined) {
               const newSkus = skus.map((item, index) => {

@@ -20,6 +20,7 @@ export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST'
 const StocktakingAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
+  console.log(params);
 
   const history = useHistory();
 
@@ -74,33 +75,32 @@ const StocktakingAsk = ({ createType }) => {
       userIds: ToolUtil.isArray(params.userIds).toString(),
     };
     const detailParams = [];
-    if (params.all){
-      detailParams.push({type:'all'})
-    }else {
+    if (params.all) {
+      detailParams.push({ type: 'all' });
+    } else {
       ToolUtil.isArray(params.skuList).forEach(item => {
         const params = item.params;
         if (!params) {
-          return {
-            skuIds: [item.skuId],
-          };
+          detailParams.push({
+            skuIds: item.skuResult && [item.skuResult.skuId],
+          });
+          return;
         }
 
         const skuClasses = ToolUtil.isArray(params.skuClasses);
         const brands = ToolUtil.isArray(params.brands);
         const positions = ToolUtil.isArray(params.positions);
-        const bom = ToolUtil.isObject(params.bom);
+        const boms = ToolUtil.isArray(params.boms);
         detailParams.push({
           spuIds: params.spuId && [params.spuId],
           classIds: skuClasses.map(item => item.value),
           brandIds: brands.map(item => item.value),
           positionIds: positions.map(item => item.id),
-          bomIds: bom.key && [bom.key],
-          skuId: item.skuResult && item.skuResult.skuId,
+          bomIds: boms.map(item => item.key),
           brandId: item.brandId || 0,
         });
       });
     }
-
     inventory({
       data: {
         ...data,

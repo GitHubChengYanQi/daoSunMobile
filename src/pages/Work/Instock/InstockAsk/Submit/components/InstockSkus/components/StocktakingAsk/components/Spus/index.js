@@ -58,7 +58,7 @@ const Spus = (
   const skuClasses = params.skuClasses || [];
   const brands = params.brands || [];
   const positions = params.positions || [];
-  const bom = params.bom || {};
+  const boms = params.boms || [];
 
   const filters = [
     { title: '材质', key: 'material' },
@@ -100,7 +100,7 @@ const Spus = (
       materialIds: materials.map(item => item.value),
       spuClassIds: skuClasses.map(item => item.value),
       brandIds: brands.map(item => item.value),
-      partsSkuId: bom.key,
+      partsSkuId: boms[0] && boms[0].key,
       selectBom: params.selectBom,
       storehousePositionsIds: positions.map(item => item.id),
       skuName: params.skuName,
@@ -149,16 +149,16 @@ const Spus = (
                 title = brands.map(item => item.label).join(',');
                 break;
               case 'bom':
-                content = <Bom value={bom} selectBom={params.selectBom} onChange={(bom, selectBom) => {
-                  submit({ bom, selectBom }, { partsSkuId: bom.key, selectBom });
+                content = <Bom value={boms} selectBom={params.selectBom} onChange={(boms, selectBom) => {
+                  submit({ boms, selectBom }, { partsSkuId: boms[0] && boms[0].key, selectBom });
                 }} />;
-                title = bom.title;
+                title = boms.map(item => item.title).join(',');
                 break;
               case 'position':
                 content = <Positions value={positions} onChange={(positions) => {
                   submit({ positions }, { storehousePositionsIds: positions.map(item => item.id) });
                 }} />;
-                title = positions.map(item => item.name).join(',')
+                title = positions.map(item => item.name).join(',');
                 break;
               default:
                 content = <></>;

@@ -19,7 +19,7 @@ import BottomButton from '../../../../../../../../../../../../components/BottomB
 
 const Bom = (
   {
-    value = {},
+    value = [],
     onChange = () => {
     },
     selectBom,
@@ -75,6 +75,8 @@ const Bom = (
 
   const [bomItem, setBomItem] = useState(value);
 
+  const keys = bomItem.map(item => item.key);
+
   return <div style={{ padding: 12 }}>
     <MySearch
       className={spuStyle.filterSearch}
@@ -114,9 +116,14 @@ const Bom = (
             >
               <div className={style.listItem}>
                 <MyCheck
-                  checked={bomItem.key === item.key}
+                  checked={keys.includes(item.key)}
                   onChange={(checked) => {
-                    setBomItem(checked ? item : {});
+                    if (checked) {
+                      setBomItem([...bomItem, item]);
+                    } else {
+                      setBomItem(bomItem.filter(bomItem => bomItem.key !== item.key));
+                    }
+
                   }}
                 >
                   <MyEllipsis width='100%'>{item.title}</MyEllipsis>
@@ -132,7 +139,7 @@ const Bom = (
         svg
         className={style.bottom}
         rightOnClick={() => {
-          onChange(bomItem,all ? 'All' : 'Present');
+          onChange(bomItem, all ? 'All' : 'Present');
         }}
         leftOnClick={() => {
           onChange({});
