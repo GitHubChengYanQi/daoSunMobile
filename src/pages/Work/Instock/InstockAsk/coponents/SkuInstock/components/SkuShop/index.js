@@ -154,6 +154,8 @@ const SkuShop = (
           title: '调拨任务明细',
           type: '调拨申请',
           otherData: [item.brandName || '任意品牌'],
+          max:true,
+          min:0,
         };
       case ERPEnums.curing:
         return {
@@ -264,10 +266,17 @@ const SkuShop = (
                   <ShopNumber
                     show={taskData().judge}
                     id={`stepper${index}`}
+                    min={taskData().min}
                     value={taskData().judge ? taskData(item).number : item.number}
                     onChange={async (number) => {
-                      const res = await shopEdit({ data: { cartId: item.cartId, number } });
-                      skuChange(res, number);
+                      let newNumber = 0;
+                      if (taskData().max) {
+                        newNumber = number > skuResult.stockNumber ? skuResult.stockNumber : number;
+                      }else {
+                        newNumber = number;
+                      }
+                      const res = await shopEdit({ data: { cartId: item.cartId, number:newNumber } });
+                      skuChange(res, newNumber);
                     }}
                   />
                 </div>

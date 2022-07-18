@@ -14,7 +14,7 @@ const Details = (
   });
 
   useEffect(() => {
-    run({ data: { instockOrderId } });
+    run({ params: { instockOrderId } });
   }, []);
 
   if (loading) {

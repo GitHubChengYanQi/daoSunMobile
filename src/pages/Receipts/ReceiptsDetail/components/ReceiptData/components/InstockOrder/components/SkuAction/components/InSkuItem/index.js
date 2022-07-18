@@ -40,6 +40,10 @@ const InSkuItem = (
         text = '禁止入库';
         error = true;
         break;
+      case 'ErrorNumber':
+        text = '异常数量';
+        error = true;
+        break;
       default:
         break;
     }

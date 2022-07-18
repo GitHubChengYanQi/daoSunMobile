@@ -14,11 +14,20 @@ import LinkButton from '../../../components/LinkButton';
 import BottomButton from '../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
 
+export const selectStoreHouse = { url: '/stockDetails/getStockAndNumberBySkuId', method: 'POST' };
+
 const SelectStoreHouse = () => {
 
   const history = useHistory();
 
   const [data, setData] = useState([]);
+
+  const { loading: storeLoading, run: getStoreHouse } = useRequest(selectStoreHouse, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
 
   const { loading: shopLoading } = useRequest({
     ...shopCartApplyList,
@@ -68,7 +77,9 @@ const SelectStoreHouse = () => {
               <ShopNumber value={item.number} onChange={number => {
                 dataChange(item.cartId, { number });
               }} />
-              <Button color='primary' fill='outline'>选择仓库</Button>
+              <Button color='primary' fill='outline' onClick={() => {
+                getStoreHouse({ data: { skuId: item.skuId } });
+              }}>选择仓库</Button>
             </div>
           </div>;
         })
@@ -105,7 +116,7 @@ const SelectStoreHouse = () => {
             createType: ERPEnums.allocation,
           },
           state: {
-            skus:data,
+            skus: data,
           },
         });
       }}

@@ -115,7 +115,6 @@ const StartStockTaking = () => {
       showStock={query.showStock === '1'}
       data={data}
       setData={setData}
-      actionPermissions
       complete={() => {
         run({ data: { inventoryIds: [query.id] } });
       }} />

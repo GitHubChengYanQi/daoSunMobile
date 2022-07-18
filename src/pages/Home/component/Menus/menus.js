@@ -71,9 +71,17 @@ export const menus = [
     url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.outstockOrder}`,
   },
   { code: 'error', icon: 'icon-yichangchuli', url: `/Work/Stock/Task?type=${ReceiptsEnums.error}` },
-  { code: 'maintenance',  icon: 'icon-kucunyanghu',url: `/Work/Stock/Task?type=${ReceiptsEnums.maintenance}` },
-  { code: 'curingAsk', icon: 'icon-kucunyanghu' },
-  { code: 'inventoryAsk', icon: 'icon-pandian1',url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.stocktaking}` },
+  { code: 'maintenance', icon: 'icon-kucunyanghu', url: `/Work/Stock/Task?type=${ReceiptsEnums.maintenance}` },
+  {
+    code: 'curingAsk',
+    icon: 'icon-kucunyanghu',
+    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.curing}`,
+  },
+  {
+    code: 'inventoryAsk',
+    icon: 'icon-pandian1',
+    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.stocktaking}`,
+  },
   { code: 'allocationAsk', icon: 'icon-kujiantiaobo' },
   { code: 'OutStockConfirm', url: '/Work/OutStockConfirm' },
 ];

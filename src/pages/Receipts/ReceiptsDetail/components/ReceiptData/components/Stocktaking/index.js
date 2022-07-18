@@ -53,6 +53,7 @@ const Stocktaking = (
       <div className={skuStyle.skus}>
         {
           data.map((item, index) => {
+            const condition = ToolUtil.isArray(item.condition);
             if (!allSku && index >= 3) {
               return null;
             }
@@ -73,9 +74,9 @@ const Stocktaking = (
                   </div>
                 </div>
                 <Divider style={{ margin: '0 24px' }} />
-                <div className={skuStyle.text} hidden={!item.params}>
-                  <MyEllipsis maxWidth='70vw' width='auto'>{item.filterText}</MyEllipsis>
-                  ({item.skuNum})
+                <div className={skuStyle.text} hidden={condition.length === 0}>
+                  <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
+                  &nbsp;&nbsp;&nbsp;&nbsp;({item.skuNum})
                 </div>
               </div>
 

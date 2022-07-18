@@ -21,7 +21,7 @@ import LinkButton from '../../../../../../../../components/LinkButton';
 import Details from './components/Details';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
-export const instockHandle = { url: '/instockHandle/list', method: 'POST' };
+export const instockHandle = { url: '/instockHandle/listByInstockOrderId', method: 'GET' };
 
 const SkuAction = (
   {

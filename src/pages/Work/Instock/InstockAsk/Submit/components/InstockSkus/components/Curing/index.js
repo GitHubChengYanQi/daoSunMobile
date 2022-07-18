@@ -28,6 +28,7 @@ const Curing = (
       titleBom={<Title className={style.title}>任务时间 <span>*</span></Title>}
       extra={<div>
         <StartEndDate
+          min={new Date()}
           value={[value.startTime, value.endTime]}
           onChange={(dates) => {
             onChange({ ...value, startTime: dates[0], endTime: dates[1] });

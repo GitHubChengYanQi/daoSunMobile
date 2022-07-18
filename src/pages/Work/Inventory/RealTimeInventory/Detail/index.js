@@ -7,7 +7,7 @@ import StocktaskigAction
 import MyEmpty from '../../../../components/MyEmpty';
 import MyNavBar from '../../../../components/MyNavBar';
 
-export const inventoryPageList = { url: '/inventory/detail', method: 'POST' };
+export const inventoryPageList = { url: '/inventoryStock/taskList', method: 'POST' };
 
 const Detail = () => {
 
@@ -17,7 +17,7 @@ const Detail = () => {
 
   useEffect(() => {
     if (query.inventoryTaskId) {
-      run({ data: { inventoryTaskId: query.inventoryTaskId } });
+      run({ data: { inventoryId: query.inventoryTaskId } });
     }
   }, []);
 
@@ -32,8 +32,9 @@ const Detail = () => {
   return <>
     <MyNavBar title='盘点详情' />
     <StocktaskigAction
-      data={data.taskList}
+      data={data}
       showStock
+      show
     />
   </>;
 };

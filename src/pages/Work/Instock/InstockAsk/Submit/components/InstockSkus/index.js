@@ -13,7 +13,6 @@ export const inventorySelectCondition = { url: '/inventory/selectCondition', met
 export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
-
   switch (createType) {
     case ERPEnums.outStock:
       return <OutstockAsk skus={skus} judge={judge} createType={createType} />;

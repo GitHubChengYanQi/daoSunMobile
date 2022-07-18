@@ -16,6 +16,7 @@ export const getOne = { url: '/inventory/conditionGetOne', method: 'POST' };
 
 const SelectSkus = (
   {
+    noChecked,
     value = [],
     onChange = () => {
     },
@@ -51,7 +52,8 @@ const SelectSkus = (
           <div className={style.skuData}>
             <div className={style.skuAction}>
               <div className={style.sku}>
-                <SkuItem skuResult={item.skuResult} otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']} />
+                <SkuItem skuResult={item.skuResult}
+                         otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']} />
               </div>
               <MyRemoveButton onRemove={() => {
                 skusChange(skus.filter((item, removeIndex) => removeIndex !== index));
@@ -77,6 +79,7 @@ const SelectSkus = (
 
     <Popup visible={visible} position='right' destroyOnClose>
       <Spus
+        noChecked={noChecked}
         value={visible}
         onClose={() => setVisible(null)}
         onChange={async (params, checkSkus = []) => {
@@ -120,7 +123,7 @@ const SelectSkus = (
             },
           });
           if (sku) {
-            bom.key && filterText.push(bom.key);
+            bom.key && filterText.push(bom.title);
 
             if (params.key !== undefined) {
               const newSkus = skus.map((item, index) => {

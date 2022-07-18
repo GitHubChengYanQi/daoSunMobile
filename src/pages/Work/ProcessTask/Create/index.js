@@ -50,7 +50,6 @@ const Create = () => {
                 fontSize={50}
                 onClick={(code) => {
                   switch (code) {
-                    case 'curingAsk':
                     case 'allocationAsk':
                       setVisible(code);
                       return true;
@@ -64,7 +63,6 @@ const Create = () => {
       </Grid>
     </Card>
 
-    <CuringAsk open={visible === 'curingAsk'} onClose={() => setVisible(false)} />
     <AllocationAsk open={visible === 'allocationAsk'} onClose={() => setVisible(false)} />
 
   </div>;

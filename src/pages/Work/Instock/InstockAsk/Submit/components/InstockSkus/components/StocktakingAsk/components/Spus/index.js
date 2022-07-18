@@ -17,6 +17,7 @@ import MyCheck from '../../../../../../../../../../components/MyCheck';
 
 const Spus = (
   {
+    noChecked,
     value = {},
     onClose = () => {
     },
@@ -195,17 +196,17 @@ const Spus = (
               return <div key={index} className={style.spuItem}>
                 <div className={style.spu}>
                   <div className={style.name}>{item.name}</div>
-                  <Button color='primary' fill='outline' onClick={() => {
+                  {!noChecked && <Button color='primary' fill='outline' onClick={() => {
                     onChange({ ...params, spuId: item.spuId, name: item.name });
-                  }}>选择</Button>
+                  }}>选择</Button>}
                 </div>
                 {
                   skus.map((item, index) => {
                     const checked = skuIds.includes(item.skuId);
                     return <div key={index} className={style.skuItem}>
-                      <MyCheck checked={checked} fontSize={22} onChange={() => {
+                      {!noChecked && <MyCheck checked={checked} fontSize={22} onChange={() => {
                         setCheckSkus(checked ? checkSkus.filter(skuItem => skuItem.skuId !== item.skuId) : [...checkSkus, item]);
-                      }} />
+                      }} />}
                       <SkuItem
                         extraWidth='60px'
                         skuResult={item}

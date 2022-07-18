@@ -15,6 +15,7 @@ const StocktakingItem = ({ item, index }) => {
 
   return <>
     <TaskItem
+      percent={parseInt((receipts.handle  / receipts.total ) * 100)}
       coding={receipts.coding}
       endTime={receipts.endTime}
       createTime={item.createTime}

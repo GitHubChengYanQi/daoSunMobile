@@ -95,7 +95,7 @@ const StocktakingAsk = ({ createType }) => {
           brandIds: brands.map(item => item.value),
           positionIds: positions.map(item => item.id),
           bomIds: bom.key && [bom.key],
-          skuId: item.skuId,
+          skuId: item.skuResult && item.skuResult.skuId,
           brandId: item.brandId || 0,
         });
       });

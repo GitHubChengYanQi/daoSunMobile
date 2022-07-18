@@ -18,6 +18,7 @@ const StocktaskigAction = (
     errorNumber,
     inventoryTaskId,
     showStock,
+    show,
     data,
     setData = () => {
     },
@@ -88,6 +89,9 @@ const StocktaskigAction = (
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
                   <div className={style.skuItem} onClick={() => {
+                    if (show){
+                      return;
+                    }
                     if (skuItem.lockStatus === 99) {
                       Message.warningDialog({ content: '已提交，不可更改！' });
                       return;
@@ -169,14 +173,14 @@ const StocktaskigAction = (
       />
     </Popup>
 
-    <ErrorShop
+    {!show && <ErrorShop
       anomalyType={anomalyType}
       errorNumber={errorNumber}
       errorReturn={errorReturn}
       id={inventoryTaskId}
       onChange={!inventoryTaskId && refresh}
       refresh={inventoryTaskId && refresh}
-    />
+    />}
 
   </div>;
 };

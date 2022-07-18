@@ -71,27 +71,21 @@ const PositionInventory = () => {
       setData={setData}
       actionPermissions
       complete={() => {
-        const detailParams = [];
+        const stockParams = [];
         data.forEach(positionItem => {
           const skuResultList = positionItem.skuResultList || [];
           skuResultList.forEach(skuItem => {
-            const brandResults = skuItem.brandResults || [];
-            brandResults.forEach(brandItem => {
-              detailParams.push({
-                inkindId: brandItem.inkind,
-                status: brandItem.inventoryStatus,
-                skuId: skuItem.skuId,
-                brandId: brandItem.brandId,
-                positionId: positionItem.storehousePositionsId,
-                number: brandItem.number,
-                anomalyId: brandItem.anomalyId,
-                enclosure: skuItem.enclosure,
-                lockStatus: skuItem.lockStatus,
-              });
+            stockParams.push({
+              status: skuItem.inventoryStatus,
+              skuId: skuItem.skuId,
+              positionId: positionItem.storehousePositionsId,
+              number: skuItem.stockNumber,
+              anomalyId: skuItem.anomalyId,
+              lockStatus: skuItem.lockStatus,
             });
           });
         });
-        completeRun({ data: { positionId: query.positionId, detailParams } });
+        completeRun({ data: { positionId: query.positionId, stockParams } });
       }} />
 
     <MyCard title='库位盘点记录'>

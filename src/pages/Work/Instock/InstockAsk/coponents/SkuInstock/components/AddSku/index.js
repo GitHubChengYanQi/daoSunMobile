@@ -117,6 +117,17 @@ const AddSku = (
     setType(type);
     setSku(sku);
     const brands = ToolUtil.isArray(sku.brandResults);
+    let number = 1;
+    switch (type) {
+      case ERPEnums.allocation:
+        number = sku.stockNumber > 0 ? 1 : 0
+        break;
+      case ERPEnums.directInStock:
+        number = 0;
+        break;
+      default:
+        break;
+    }
     const newData = {
       imgUrl,
       imgId: sku.imgId,
@@ -124,7 +135,7 @@ const AddSku = (
       skuResult: sku,
       stockNumber: sku.stockNumber,
       storehouseId: sku.storehouseId,
-      number: type === ERPEnums.directInStock ? 0 : 1,
+      number,
       brandId: brands.length === 1 ? brands[0].brandId : null,
       brandName: brands.length === 1 ? brands[0].brandName : null,
       ...other,
@@ -147,8 +158,8 @@ const AddSku = (
         setVisible(true);
         break;
       case ERPEnums.allocation:
-        if (!newData.storehouseId){
-          Message.warningDialog({content:'请选择仓库！'})
+        if (!newData.storehouseId) {
+          Message.warningDialog({ content: '请选择仓库！' });
           return;
         }
         setVisible(true);
@@ -177,6 +188,8 @@ const AddSku = (
           disabledText,
           customerDisabled: true,
           otherBrand: '任意品牌',
+          max: data.stockNumber,
+          disabled: data.stockNumber === 0
         };
       case ERPEnums.curing:
         return {
@@ -369,7 +382,7 @@ const AddSku = (
               <div hidden={taskData().judge || (disabled && !snameAction)} className={style.flex}>
                 <div className={style.instockNumber}>
                   {taskData().title}数量
-                  <ShopNumber value={data.number} onChange={(number) => {
+                  <ShopNumber value={data.number} max={taskData().max} onChange={(number) => {
                     setData({ ...data, number });
                   }} />
                 </div>

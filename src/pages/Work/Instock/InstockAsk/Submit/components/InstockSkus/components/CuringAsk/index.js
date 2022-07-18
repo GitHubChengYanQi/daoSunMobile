@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
 import Curing from '../Curing';
-import Condition from '../../../../../../../ProcessTask/Create/components/Inventory/compoennts/Condition';
 import MyNavBar from '../../../../../../../../components/MyNavBar';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
@@ -13,10 +12,13 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
 import Title from '../../../../../../../../components/Title';
 import style from '../../../PurchaseOrderInstock/index.less';
+import MyCard from '../../../../../../../../components/MyCard';
+import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
 const CuringAsk = ({ createType, state }) => {
 
   const [params, setParams] = useState({});
+  console.log(params);
 
   const history = useHistory();
 
@@ -40,19 +42,15 @@ const CuringAsk = ({ createType, state }) => {
     setParams({ ...ToolUtil.isObject(state.data) });
   }, []);
 
-  const createTypeData = (item = {}) => {
+  const createTypeData = () => {
     const maintenanceDisabled = () => {
       if (!(params.userId && params.startTime && params.endTime && params.nearMaintenance && params.type && ToolUtil.isArray(params.noticeIds).length > 0)) {
         return true;
       }
 
-      const conditions = params.conditions || [];
-      if (conditions.length === 0) {
+      if (ToolUtil.isArray(params.skuList).length === 0) {
         return true;
       }
-
-      const newConditions = conditions.filter(item => item.data && item.data.key);
-      return newConditions.length !== conditions.length;
     };
     return {
       title: '养护申请明细',
@@ -63,57 +61,52 @@ const CuringAsk = ({ createType, state }) => {
   };
 
   const curingAsk = () => {
+    const selectParams = [];
+    ToolUtil.isArray(params.skuList).forEach(item => {
+      const params = item.params || {};
+
+      const materials = ToolUtil.isArray(params.materials);
+      const skuClasses = ToolUtil.isArray(params.skuClasses);
+      const brands = ToolUtil.isArray(params.brands);
+      const positions = ToolUtil.isArray(params.positions);
+      const bom = ToolUtil.isObject(params.bom);
+      selectParams.push({
+        materialIds: materials.map(item => item.value),
+        spuClassificationIds: skuClasses.map(item => item.value),
+        brandIds: brands.map(item => item.value),
+        storehousePositionsIds: positions.map(item => item.id),
+        partsIds: bom.key && [bom.key],
+      });
+    });
+
     let data = {
       ...params,
       notice: params.noticeIds,
       enclosure: params.mediaIds,
       userIds: ToolUtil.isArray(params.userIds).toString(),
       note: params.remark,
+      selectParams,
     };
-    ToolUtil.isArray(params.conditions).map(item => {
-      const dataValue = item.data || {};
-      switch (item.value) {
-        case 'material':
-          data = {
-            ...data,
-            materialId: dataValue.key,
-          };
-          break;
-        case 'brand':
-          data = {
-            ...data,
-            brandId: dataValue.key,
-          };
-          break;
-        case 'position':
-          data = {
-            ...data,
-            storehousePositionsId: dataValue.key,
-          };
-          break;
-        default:
-          return [];
-      }
-      return null;
-    });
 
     maintenanceRun({
       data,
     });
   };
 
-  const content = () => {
-    return <>
-      <Curing value={params} onChange={setParams} />
-      <Condition noTime type={createType} paddingBottom={3} value={params} onChange={(value) => {
-        setParams(value);
-      }} />
-    </>;
-  };
 
   return <div style={{ marginBottom: 60 }}>
     <MyNavBar title={createTypeData().title} />
-    {content()}
+    <MyCard
+      title='添加养护内容'
+      className={style.noPadding}
+      headerClassName={style.cardHeader}
+      bodyClassName={style.noPadding}>
+      <SelectSkus noChecked value={params.skuList} onChange={(skuList) => {
+        setParams({ ...params, skuList });
+      }} />
+    </MyCard>
+
+    <Curing value={params} onChange={setParams} />
 
     <OtherData
       createType={createType}

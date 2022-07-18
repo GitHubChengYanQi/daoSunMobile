@@ -7,8 +7,8 @@ export const ERPEnums = {
   directInStock: 'directInStock',
   // 盘点
   stocktaking: 'stocktaking',
-  // 养护
-  allocation: 'allocation',
   // 调拨
+  allocation: 'allocation',
+// 养护
   curing: 'curing',
 };
