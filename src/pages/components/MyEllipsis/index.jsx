@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './index.css'
+import styles from './index.css';
 
 const MyEllipsis = (
   {
@@ -7,14 +7,16 @@ const MyEllipsis = (
     children,
     width,
     style,
+    maxWidth,
   }) => {
 
   return <div
     className={styles.ellipsis}
     style={{
-    width: width || '90%',
-    ...style
-  }}>
+      maxWidth,
+      width: width || '90%',
+      ...style,
+    }}>
     {value || children}
   </div>;
 };

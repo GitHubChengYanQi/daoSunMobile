@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Checkbox, Divider, List, Radio, Steps } from 'antd-mobile';
+import { Card, Checkbox, Divider, List, Radio } from 'antd-mobile';
 import LinkButton from '../../../../../../../components/LinkButton';
 import style from './index.less';
 import Icon from '../../../../../../../components/Icon';
@@ -8,7 +8,6 @@ import MyEllipsis from '../../../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../../../util/Request';
 import { backDetails, partsList } from '../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import MySearch from '../../../../../../../components/MySearch';
 import { SkuResultSkuJsons } from '../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 

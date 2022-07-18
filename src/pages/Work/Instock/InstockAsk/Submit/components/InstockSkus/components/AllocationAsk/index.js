@@ -80,7 +80,6 @@ const AllocationAsk = ({ skus, createType }) => {
       otherData: [item.brandName || '任意品牌', <div>
         南坡大库 <Icon type='icon-iconset0438' style={{color:'var(--adm-color-primary)'}} /> 车间现场库
       </div>],
-      careful: '注意事项',
       disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
     };
   };
@@ -108,7 +107,12 @@ const AllocationAsk = ({ skus, createType }) => {
         dataChange={dataChange}
       />
 
-      <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
+      <OtherData
+        createType={createType}
+        careful={<Title className={style.title}>注意事项 <span>*</span></Title>}
+        params={params}
+        setParams={setParams}
+      />
 
       <BottomButton
         leftOnClick={() => {

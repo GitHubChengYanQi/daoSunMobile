@@ -10,7 +10,7 @@ import Icon from '../../../../../../../../../../components/Icon';
 import { connect } from 'dva';
 import { Message } from '../../../../../../../../../../components/Message';
 
-const positions = { url: '/storehousePositions/treeViewByName', method: 'POST' };
+export const positions = { url: '/storehousePositions/treeViewByName', method: 'POST' };
 
 const Positions = (
   {

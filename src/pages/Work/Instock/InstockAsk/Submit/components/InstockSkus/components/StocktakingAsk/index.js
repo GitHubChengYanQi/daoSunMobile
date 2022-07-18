@@ -3,30 +3,27 @@ import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
-import Condition from '../../../../../../../ProcessTask/Create/components/Inventory/compoennts/Condition';
 import Stocktaking from '../Stocktaking';
-import Skus from '../Skus';
-import User from '../User';
 import MyNavBar from '../../../../../../../../components/MyNavBar';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
-import { inventoryAdd, inventorySelectCondition } from '../../index';
 import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
+import style from '../../../PurchaseOrderInstock/index.less';
+import Title from '../../../../../../../../components/Title';
+import MyCard from '../../../../../../../../components/MyCard';
+import { Switch } from 'antd-mobile';
+import SelectSkus from './components/SelectSkus';
 
-const StocktakingAsk = ({ state, skus, createType }) => {
+export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST' };
 
-  const [data, setData] = useState([]);
+const StocktakingAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
 
   const history = useHistory();
 
-  const skuList = data.map((item, index) => {
-    return { ...item, key: index };
-  });
-
-  const { loading: inventoryLoading, run: inventory } = useRequest(inventoryAdd, {
+  const { loading: inventoryLoading, run: inventory } = useRequest(InventoryApply, {
     manual: true,
     onSuccess: (res) => {
       Message.successDialog({
@@ -42,55 +39,27 @@ const StocktakingAsk = ({ state, skus, createType }) => {
   });
 
 
-  const { loading: inventoryConditionLoading, run: inventoryCondition } = useRequest(inventorySelectCondition, {
-    manual: true,
-    onSuccess: (res) => {
-      Message.successToast('创建盘点单成功!',()=>{
-        history.goBack();
-      });
-    },
-  });
-
-  const dataChange = (array = []) => {
-    if (array.length === 0) {
-      if (history.length <= 2) {
-        history.push('/');
-      } else {
-        history.goBack();
-      }
-    }
-    setData(array);
-  };
-
-
   useEffect(() => {
-    setParams({ method: 'OpenDisc', mode: 'dynamic', ...ToolUtil.isObject(state.data) });
-    if (!state.condition) {
-      dataChange(skus);
-    }
+    setParams({ method: 'OpenDisc', mode: 'staticState' });
   }, []);
 
   const createTypeData = (item = {}) => {
     const stocktakingDisabled = () => {
-      if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId && ToolUtil.isArray(params.noticeIds).length > 0)) {
+      if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId)) {
         return true;
       }
 
-      if (!state.condition) {
-        return skuList.length <= 0;
-      }
-      const conditions = params.conditions || [];
-      if (conditions.length === 0) {
+      if (params.all) {
+        return false;
+      } else if (ToolUtil.isArray(params.skuList).length === 0) {
         return true;
       }
 
-      const newConditions = conditions.filter(item => item.data && item.data.key);
-      return newConditions.length !== conditions.length;
+      return false;
     };
     return {
       title: '盘点申请明细',
       type: '盘点',
-      careful: '盘点缘由',
       buttonHidden: true,
       disabled: stocktakingDisabled(),
     };
@@ -104,80 +73,70 @@ const StocktakingAsk = ({ state, skus, createType }) => {
       enclosure: params.mediaIds,
       userIds: ToolUtil.isArray(params.userIds).toString(),
     };
-    if (state.condition) {
-      ToolUtil.isArray(params.conditions).map(item => {
-        const dataValue = item.data || {};
-        switch (item.value) {
-          case 'sys':
-            data = {
-              ...data,
-              allSku: dataValue.key === 'all',
-              AllBom: dataValue.key === 'bom',
-            };
-            break;
-          case 'material':
-            break;
-          case 'brand':
-            data = {
-              ...data,
-              brandId: dataValue.key,
-            };
-            break;
-          case 'position':
-            data = {
-              ...data,
-              positionId: dataValue.key,
-            };
-            break;
-          default:
-            return [];
+    const detailParams = [];
+    if (params.all){
+      detailParams.push({type:'all'})
+    }else {
+      ToolUtil.isArray(params.skuList).forEach(item => {
+        const params = item.params;
+        if (!params) {
+          return {
+            skuIds: [item.skuId],
+          };
         }
-        return null;
-      });
 
-      inventoryCondition({
-        data,
-      });
-    } else {
-      inventory({
-        data: {
-          ...data,
-          detailParams: skuList.map(item => {
-            return {
-              skuId: item.skuId,
-            };
-          }),
-        },
+        const skuClasses = ToolUtil.isArray(params.skuClasses);
+        const brands = ToolUtil.isArray(params.brands);
+        const positions = ToolUtil.isArray(params.positions);
+        const bom = ToolUtil.isObject(params.bom);
+        detailParams.push({
+          spuIds: params.spuId && [params.spuId],
+          classIds: skuClasses.map(item => item.value),
+          brandIds: brands.map(item => item.value),
+          positionIds: positions.map(item => item.id),
+          bomIds: bom.key && [bom.key],
+          skuId: item.skuId,
+          brandId: item.brandId || 0,
+        });
       });
     }
+
+    inventory({
+      data: {
+        ...data,
+        detailParams,
+      },
+    });
   };
 
-
-  const content = () => {
-    return <>
-      <Stocktaking value={params} onChange={setParams} />
-      {state.condition ?
-        <Condition noTime type={createType} paddingBottom={3} value={params} onChange={(value) => {
-          setParams(value);
-        }} />
-        :
-        <Skus
-          skus={skus}
-          createTypeData={createTypeData}
-          skuList={skuList}
-          dataChange={dataChange}
-        />}
-      <User title='参与人' id={params.participantsId} name={params.participantsName} onChange={(id, name) => {
-        setParams({ ...params, participantsId: id, participantsName: name });
-      }} />
-    </>;
-  };
 
   return <div style={{ marginBottom: 60 }}>
     <MyNavBar title={createTypeData().title} />
-    {content()}
 
-    <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
+    <MyCard
+      title='添加盘点内容'
+      className={style.noPadding}
+      headerClassName={style.cardHeader}
+      bodyClassName={style.noPadding}
+      extra={
+        <Switch checked={params.all} checkedText='全局' uncheckedText='全局' onChange={(checked) => {
+          setParams({ ...params, all: checked });
+        }}
+        />
+      }>
+      {!params.all && <SelectSkus value={params.skuList} onChange={(skuList) => {
+        setParams({ ...params, skuList });
+      }} />}
+    </MyCard>
+
+    <Stocktaking value={params} onChange={setParams} />
+
+    <OtherData
+      createType={createType}
+      careful={<Title>盘点缘由</Title>}
+      params={params}
+      setParams={setParams}
+    />
 
     <BottomButton
       leftOnClick={() => {
@@ -190,7 +149,7 @@ const StocktakingAsk = ({ state, skus, createType }) => {
       }}
     />
 
-    {(inventoryLoading || inventoryConditionLoading) && <MyLoading />}
+    {(inventoryLoading) && <MyLoading />}
 
   </div>;
 };
