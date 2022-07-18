@@ -26,7 +26,6 @@ const Stocktaking = (
     getAction = () => {
       return {};
     },
-    refresh,
   },
 ) => {
 

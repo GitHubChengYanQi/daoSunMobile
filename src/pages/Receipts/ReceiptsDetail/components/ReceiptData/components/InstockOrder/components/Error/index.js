@@ -52,6 +52,7 @@ const Error = (
   },
 ) => {
 
+  console.log(skuItem);
 
   const [sku, setSku] = useState(skuItem);
 

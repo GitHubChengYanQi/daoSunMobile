@@ -65,7 +65,7 @@ const StocktaskigAction = (
 
                 let color = '';
                 let icon = <></>;
-                switch (1) {
+                switch (skuItem.inventoryStatus) {
                   case 1:
                     color = '#2EAF5D';
                     icon = <CheckOutlined />;
@@ -88,8 +88,8 @@ const StocktaskigAction = (
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
                   <div className={style.skuItem} onClick={() => {
-                    if (skuItem.inventoryStatus === 99) {
-                      Message.warningDialog({ content: '已提交异常，不可更改！' });
+                    if (skuItem.lockStatus === 99) {
+                      Message.warningDialog({ content: '已提交，不可更改！' });
                       return;
                     }
                     setVisible({

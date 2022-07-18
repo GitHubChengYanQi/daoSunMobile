@@ -24,7 +24,7 @@ const StocktaskingHandle = (
   let errorNumber = 0;
   data.forEach(posiItem => {
     ToolUtil.isArray(posiItem.skuResultList).forEach(skuItem => {
-      if (skuItem.inventoryStatus === -1) {
+      if (skuItem.inventoryStatus === -1 && skuItem.lockStatus !== 99) {
         errorNumber++;
       }
     });
@@ -37,7 +37,12 @@ const StocktaskingHandle = (
           item.positionId === posiItem.storehousePositionsId && item.skuId === skuItem.skuId,
         );
         if (backSkus.length > 0) {
-          return { ...skuItem, inventoryStatus: status, anomalyId: status === 0 ? null : skuItem.anomalyId };
+          return {
+            ...skuItem,
+            inventoryStatus: status,
+            anomalyId: status === 0 ? null : skuItem.anomalyId,
+            lockStatus: status === 99 ? 99 : skuItem.lockStatus,
+          };
         } else {
           return skuItem;
         }
@@ -95,7 +100,7 @@ const StocktaskingHandle = (
       setData={setData}
       showStock={showStock}
     />
-    {!inventoryTaskId && <div style={{ height: 60 }} />}
+    <div style={{ height: 60 }} />
     <BottomButton
       leftText='暂停'
       leftOnClick={() => {

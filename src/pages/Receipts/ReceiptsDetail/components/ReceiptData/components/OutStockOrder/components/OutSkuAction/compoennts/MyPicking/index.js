@@ -50,7 +50,6 @@ const MyPicking = (
 
 
   const [storehouse, setStorehouse] = useState({});
-  console.log(storehouse);
 
   const [stores, setStores] = useState([]);
 
