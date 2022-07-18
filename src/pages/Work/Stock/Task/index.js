@@ -7,32 +7,10 @@ import MyAudit from '../../ProcessTask/MyAudit';
 import { useLocation } from 'umi';
 import MyNavBar from '../../../components/MyNavBar';
 import { useHistory } from 'react-router-dom';
-import { ToolUtil } from '../../../components/ToolUtil';
+import TaskBottom from './components/TaskBottom';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
-export const TaskBottom = ({ taskKey,task }) => {
-  const history = useHistory();
-  switch (taskKey) {
-    case ReceiptsEnums.stocktaking:
-      return <div className={ToolUtil.classNames(style.stocktakingButtom,task && style.bottom)}>
-        <Button color='primary' onClick={() => {
-          history.push('/Work/Inventory/RealTimeInventory');
-        }}>即时盘点</Button>
-        {/*<Button color='primary' onClick={()=>{*/}
-        {/*  history.push('/Work/Inventory/AllInventory');*/}
-        {/*}}>开始盘点</Button>*/}
-      </div>;
-    case ReceiptsEnums.maintenance:
-      return <div className={ToolUtil.classNames(style.maintenanceButtom,task && style.bottom)}>
-        <Button color='primary' onClick={()=>{
-          history.push('/Work/Maintenance/AllMaintenance');
-        }}>开始养护</Button>
-      </div>;
-    default:
-      return <></>;
-  }
-};
 
 const Task = (
   {
@@ -44,6 +22,8 @@ const Task = (
 
   const { query } = useLocation();
 
+  const history = useHistory();
+
   const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
 
   const tabs = [
@@ -54,9 +34,24 @@ const Task = (
     { title: '盘点任务', key: ReceiptsEnums.stocktaking },
   ];
 
+  const extraIcon = () => {
+    switch (key) {
+      case ReceiptsEnums.stocktaking:
+        return <Button fill='outline' color='primary' onClick={() => {
+          history.push('/Work/Inventory/RealTimeInventory');
+        }}>
+          即时盘点
+        </Button>;
+      default:
+        return null;
+    }
+  };
+
   return <div>
     {query.type && <MyNavBar title='任务列表' />}
-    <MySearch placeholder='请输入物料相关信息' />
+    <MySearch
+      placeholder='请输入物料相关信息'
+      extraIcon={extraIcon()} />
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
         setKey(key);
@@ -80,7 +75,7 @@ const Task = (
     />
 
 
-    <TaskBottom taskKey={key} task />
+    {query.type && <TaskBottom taskKey={key} task />}
 
   </div>;
 };

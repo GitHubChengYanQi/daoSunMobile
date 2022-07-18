@@ -1,58 +1,44 @@
 import React from 'react';
-import style from '../../../../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
 import { history } from 'umi';
-import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
-import moment from 'moment';
+import TaskItem from '../../../TaskItem';
+import style from './index.less';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { MyDate } from '../../../../../../../components/MyDate';
 
-const StocktakingItem = ({item,index}) => {
-  const receipts = item.receipts || {};
+const StocktakingItem = ({ item, index }) => {
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-  }
+  };
 
-  return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
-    <div className={style.data}>
-      <div className={style.customer}>
-        <div className={style.name}>
-          <span className={style.title}>{item.taskName} / {receipts.coding}</span>
-          <RightOutline style={{ color: '#B9B9B9' }} />
+  const receipts = item.receipts;
+
+  return <>
+    <TaskItem
+      coding={receipts.coding}
+      endTime={receipts.endTime}
+      createTime={item.createTime}
+      taskName={item.taskName}
+      index={index}
+      skuSize={receipts.skuSize}
+      positionSize={receipts.positionSize}
+      beginTime={receipts.beginTime}
+      onClick={onClick}
+      orderData={<div className={style.status}>
+        <div>
+          方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
         </div>
-      </div>
-      <div className={style.status} style={{ color: '#555555', width: 130, textAlign: 'right' }}>
-        {moment(item.beginTime).format('MM.DD')} — {moment(item.endTime).format('MM.DD')}
-      </div>
-    </div>
-    <div className={style.content}>
-      <div className={style.show}>
-        <AppstoreOutline />
-        <div className={style.showNumber}>
-          <span className={style.number}>{receipts.positionSize}</span>
-          <span>涉及库位</span>
+        <div>
+          方式：{receipts.method === 'dynamic' ? '动态' : '静态'}
         </div>
-      </div>
-      <div className={style.show} style={{ borderLeft: 'none' }}>
-        <AppstoreOutline />
-        <div className={style.showNumber}>
-          <span className={style.number}>{receipts.skuSize}</span>
-          <span>涉及物料</span>
-        </div>
-      </div>
-    </div>
-    <div className={style.methodAndMode}>
-      <div className={style.method}>
-        方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
-      </div>
-      <div className={style.mode}>
-        方式：{receipts.method === 'dynamic' ? '动态' : '静态'}
-      </div>
-    </div>
-    <div className={style.data}>
-      <div style={{ padding: '8px 0' }}>
-        备注说明：{receipts.remark}
-      </div>
-    </div>
-  </div>;
+      </div>}
+      otherData={
+        <div className={style.orderData}>
+          <div className={style.user}>负责人：{ToolUtil.isObject(receipts.user).name}</div>
+          <div>{MyDate.Show(receipts.beginTime)} - {MyDate.Show(receipts.endTime)}</div>
+        </div>}
+    />
+  </>;
 };
 
 export default StocktakingItem;

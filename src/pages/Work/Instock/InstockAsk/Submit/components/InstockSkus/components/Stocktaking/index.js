@@ -1,7 +1,6 @@
 import React from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
-import { CalendarOutline } from 'antd-mobile-icons';
-import { Radio, Space } from 'antd-mobile';
+import { Radio } from 'antd-mobile';
 import Icon from '../../../../../../../../components/Icon';
 import User from '../User';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
@@ -15,7 +14,6 @@ const Stocktaking = (
     },
   },
 ) => {
-
 
   const method = [{ title: '明盘', key: 'OpenDisc' }, { title: '暗盘', key: 'DarkDisk' }];
   const mode = [{ title: '动态', key: 'dynamic' }, { title: '静态', key: 'staticState' }];
