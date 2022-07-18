@@ -25,13 +25,13 @@ const Details = (
     return <MyEmpty description='暂无入库详情数据' />;
   }
 
-  return <>
-    {data.map((item,index)=>{
+  return <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+    {data.map((item, index) => {
       return <div key={index}>
         <InSkuItem detail item={item} key={index} />
-      </div>
+      </div>;
     })}
-  </>;
+  </div>;
 };
 
 export default Details;

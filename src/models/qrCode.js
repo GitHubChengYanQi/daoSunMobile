@@ -1,7 +1,7 @@
 import wx from 'populee-weixin-js-sdk';
 import { request } from '../util/Request';
 import { history } from 'umi';
-import { Dialog, Toast } from 'antd-mobile';
+import { Toast } from 'antd-mobile';
 import IsDev from '../components/IsDev';
 import { Message } from '../pages/components/Message';
 
@@ -18,6 +18,11 @@ const scan = () => new Promise((resolve, reject) => {
         const resultStr = res.resultStr;
         const search = new URLSearchParams(resultStr.split('?')[1]);
         const id = search.get('id');
+        const code = search.get('code');
+        if (code) {
+          window.location.href = resultStr;
+          return;
+        }
 
         if (id && id.length === 19) {
           resolve(id);

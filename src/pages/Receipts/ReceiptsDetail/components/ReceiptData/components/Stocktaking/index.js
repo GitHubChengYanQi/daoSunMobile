@@ -12,6 +12,8 @@ import { useBoolean } from 'ahooks';
 import { MyDate } from '../../../../../../components/MyDate';
 import { Avatar } from 'antd';
 import BottomButton from '../../../../../../components/BottomButton';
+import TaskItem from '../../../../../../Work/Stock/Task/components/TaskItem';
+import { useHistory } from 'react-router-dom';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -27,6 +29,8 @@ const Stocktaking = (
     refresh,
   },
 ) => {
+
+  const history = useHistory();
 
   const actionPermissions = getAction('check').id && permissions;
 
@@ -95,7 +99,7 @@ const Stocktaking = (
     </MyCard>
 
     <MyCard title='任务预览'>
-
+      <TaskItem skuSize={receipts.skuSize} positionSize={receipts.positionSize} noBorder />
     </MyCard>
 
     <MyCard title='任务时间' extra={<div>
@@ -103,7 +107,11 @@ const Stocktaking = (
     </div>} />
 
     <MyCard title='负责人' extra={ToolUtil.isObject(receipts.user).name ? <div className={style.alignCenter}>
-      <Avatar size={20}>{ToolUtil.isObject(receipts.user).name.substring(0,1)}</Avatar> {ToolUtil.isObject(receipts.user).name}
+      <Avatar
+        size={20}
+      >
+        {ToolUtil.isObject(receipts.user).name.substring(0, 1)}
+      </Avatar> {ToolUtil.isObject(receipts.user).name}
     </div> : '无'} />
 
     <MyCard title='参与人员'>
@@ -112,7 +120,7 @@ const Stocktaking = (
 
     <MyCard title='方式' extra={receipts.method === 'OpenDisc' ? '明盘' : '暗盘'} />
 
-    <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'}/>
+    <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'} />
 
     <MyCard title='盘点缘由'>
       {[].length === 0 && <div>无</div>}
@@ -132,7 +140,9 @@ const Stocktaking = (
     </MyCard>
 
 
-    {actionPermissions && <BottomButton only text='开始盘点' />}
+    {actionPermissions && <BottomButton only text='开始盘点' onClick={() => {
+      history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}`);
+    }} />}
 
   </>;
 

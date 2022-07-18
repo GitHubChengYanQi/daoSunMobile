@@ -17,13 +17,14 @@ const OutStockItem = (
   };
 
   return <TaskItem
+    percent={parseInt((receipts.receivedCount / receipts.numberCount) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
-    skuSize={receipts.skuSize}
-    positionSize={receipts.positionSize}
+    skuSize={receipts.skuCount || 0}
+    positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
     onClick={onClick}
     otherData={

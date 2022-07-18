@@ -1,34 +1,27 @@
 import React, { useState } from 'react';
 import style from '../../index.less';
-import MyCard from '../../../../../../../../components/MyCard';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { Divider } from 'antd';
 import { CheckOutlined, PauseCircleFilled, WarningOutlined } from '@ant-design/icons';
-import UploadFile from '../../../../../../../../components/Upload/UploadFile';
-import { CameraOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
-import { Button, Popup } from 'antd-mobile';
+import { DownOutline, ExclamationOutline, UpOutline } from 'antd-mobile-icons';
+import { Popup } from 'antd-mobile';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
 import ErrorShop from '../ErrorShop';
 import { Message } from '../../../../../../../../components/Message';
+import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const StocktaskigAction = (
   {
     anomalyType,
     errorNumber,
-    actionPermissions,
     inventoryTaskId,
     showStock,
     data,
     setData = () => {
     },
-    temporaryLockRun = () => {
-    },
     refresh = () => {
-    },
-    addPhoto = () => {
-
     },
     errorReturn = () => {
     },
@@ -49,27 +42,20 @@ const StocktaskigAction = (
   };
 
   return <div className={style.stocktaking}>
-
-    <div className={style.title}>
-      库位：{data.length}
-    </div>
-
     {
       data.map((positionItem, positionIndex) => {
         const skuResultList = positionItem.skuResultList || [];
 
-        return <MyCard
+        return <div
           key={positionIndex}
-          title={` ${positionItem.name} / ${ToolUtil.isObject(positionItem.storehouseResult).name || '-'}`}
+          className={style.positionItem}
         >
+          <div className={style.positionName}>
+            {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
+          </div>
           <div className={style.skus}>
             {
               skuResultList.map((skuItem, skuIndex) => {
-                const brandResults = skuItem.brandResults || [];
-
-                const noComplete = brandResults.filter(item => {
-                  return [0, 2].includes(item.inventoryStatus) || !item.inventoryStatus;
-                });
 
                 if (!positionItem.show && skuIndex >= 2) {
                   return null;
@@ -77,118 +63,65 @@ const StocktaskigAction = (
 
                 const border = (positionItem.show || skuResultList.length <= 2) ? skuIndex === skuResultList.length - 1 : skuIndex === 1;
 
+                let color = '';
+                let icon = <></>;
+                switch (1) {
+                  case 1:
+                    color = '#2EAF5D';
+                    icon = <CheckOutlined />;
+                    break;
+                  case -1:
+                  case 99:
+                    color = '#FF0000';
+                    icon = <ExclamationOutline />;
+                    break;
+                  case 2:
+                    color = '#FA8F2B';
+                    icon = <PauseCircleFilled />;
+                    break;
+                  default:
+                    break;
+                }
+
                 return <div
                   className={style.sku}
                   key={skuIndex}
                   style={{ border: border ? 'none' : '' }}>
-                  <SkuItem
-                    skuResult={skuItem}
-                    extraWidth='24px'
-                    hiddenNumber={!showStock}
-                    number={skuItem.stockNumber}
-                  />
-                  <Divider style={{ margin: '8px 0' }} />
-                  <div className={style.brands}>
-                    {
-                      brandResults.map((brandItem, brandIndex) => {
-                        let color = '';
-                        let icon = <></>;
-                        switch (brandItem.inventoryStatus) {
-                          case 0:
-                            color = '#D9D9D9';
-                            break;
-                          case 1:
-                            color = '#2EAF5D';
-                            icon = <CheckOutlined style={{ color: '#2EAF5D' }} />;
-                            break;
-                          case -1:
-                          case 99:
-                            color = '#FF0000';
-                            icon = <WarningOutlined style={{ color: '#FF0000' }} />;
-                            break;
-                          case 2:
-                            color = '#FA8F2B';
-                            icon = <PauseCircleFilled style={{ color: '#FA8F2B' }} />;
-                            break;
-                          default:
-                            color = '#D9D9D9';
-                            break;
-                        }
-
-                        return <div
-                          key={brandIndex}
-                          className={style.brand}
-                          style={{ border: `1px solid ${color}` }}
-                          onClick={() => {
-                            if (brandItem.inventoryStatus === 99) {
-                              Message.warningDialog({ content: '已提交异常，不可更改！' });
-                              return;
-                            }
-                            if (actionPermissions) {
-                              setVisible({
-                                skuId: skuItem.skuId,
-                                skuResult: skuItem,
-                                inkindId: brandItem.inkind,
-                                brandId: brandItem.brandId,
-                                brandResult: { brandName: brandItem.brandName || '其他品牌' },
-                                stockNumber: brandItem.number,
-                                number: brandItem.number,
-                                inventoryTaskId: inventoryTaskId,
-                                positionId: positionItem.storehousePositionsId,
-                                anomalyId: brandItem.anomalyId || false,
-                              });
-                            }
-                          }}
-                        >
-                          <div className={style.name}>{brandItem.brandName || '其他品牌'}({brandItem.number})</div>
-                          {icon}
-                        </div>;
-                      })
+                  <div className={style.skuItem} onClick={() => {
+                    if (skuItem.inventoryStatus === 99) {
+                      Message.warningDialog({ content: '已提交异常，不可更改！' });
+                      return;
                     }
+                    setVisible({
+                      skuId: skuItem.skuId,
+                      skuResult: skuItem,
+                      // inkindId: brandItem.inkind,
+                      // brandId: brandItem.brandId,
+                      // brandResult: { brandName: brandItem.brandName || '其他品牌' },
+                      stockNumber: skuItem.stockNumber,
+                      number: skuItem.stockNumber,
+                      inventoryTaskId: inventoryTaskId,
+                      positionId: positionItem.storehousePositionsId,
+                      anomalyId: skuItem.anomalyId || false,
+                      sourceId: skuItem.inventoryStockId,
+                    });
+                  }}>
+                    <SkuItem
+                      skuResult={skuItem}
+                      extraWidth='100px'
+                      hiddenNumber={!showStock}
+                      number={skuItem.stockNumber}
+                    />
                   </div>
-                  <div className={style.action}>
-                    <div className={style.mediaIds}>
-                      <UploadFile
-                        show={!actionPermissions}
-                        value={ToolUtil.isArray(skuItem.mediaIds).map((item, index) => {
-                          return {
-                            mediaId: item,
-                            url: ToolUtil.isArray(skuItem.inventoryUrls)[index],
-                            type: 'image',
-                            inventoryTaskId: inventoryTaskId,
-                          };
-                        })}
-                        uploadId={`errorUpload${positionIndex}${skuIndex}`}
-                        imgSize={36}
-                        icon={<CameraOutline />}
-                        noFile
-                        onChange={(mediaIds) => {
-                          addPhoto({
-                            positionId: positionItem.storehousePositionsId,
-                            enclosure: mediaIds,
-                            skuId: skuItem.skuId,
-                            inventoryId: inventoryTaskId,
-                          });
-                        }}
-                      />
+                  <div>
+                    <ShopNumber show value={skuItem.stockNumber} />
+                    <div className={style.position} hidden={!color}>
+                      <div className={style.status} style={{ borderTop: `solid 40px ${color}` }}>
+                        {icon}
+                      </div>
                     </div>
-                    {actionPermissions &&
-                    <Button
-                      disabled={noComplete.length > 0 || skuItem.lockStatus === 98}
-                      color='primary'
-                      fill='outline'
-                      onClick={() => {
-                        temporaryLockRun({
-                          positionId: positionItem.storehousePositionsId,
-                          skuId: skuItem.skuId,
-                          inventoryId: inventoryTaskId,
-                        });
-                      }}
-                    >
-                      {skuItem.lockStatus === 98 ? '已盘点' : '确定'}
-                    </Button>}
-                  </div>
 
+                  </div>
                 </div>;
               })
             }
@@ -206,7 +139,8 @@ const StocktaskigAction = (
               </div>
             </Divider>}
           </div>
-        </MyCard>;
+          <div className={style.space} />
+        </div>;
       })
     }
 
@@ -235,14 +169,14 @@ const StocktaskigAction = (
       />
     </Popup>
 
-    {actionPermissions && <ErrorShop
+    <ErrorShop
       anomalyType={anomalyType}
       errorNumber={errorNumber}
       errorReturn={errorReturn}
       id={inventoryTaskId}
       onChange={!inventoryTaskId && refresh}
       refresh={inventoryTaskId && refresh}
-    />}
+    />
 
   </div>;
 };

@@ -11,14 +11,15 @@ const TaskItem = (
     beginTime,
     endTime,
     coding,
-    positionSize,
-    skuSize,
+    positionSize = 0,
+    skuSize = 0,
     onClick = () => {
     },
     index,
     otherData,
     orderData,
     percent = 50,
+    noBorder,
   },
 ) => {
 
@@ -34,10 +35,10 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 95 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
-    <div className={style.data}>
+    <div className={style.data} hidden={!taskName}>
       <div className={style.taskData}>
         <div className={style.name}>
-          <span className={style.title}>{taskName} {coding && '/' }{coding}</span>
+          <span className={style.title}>{taskName} {coding && '/'}{coding}</span>
           <RightOutline style={{ color: '#B9B9B9' }} />
         </div>
       </div>
@@ -48,14 +49,14 @@ const TaskItem = (
     <div className={style.content}>
       <div className={style.orderData}>
         <div className={style.dateShow}>
-          <div className={style.show}>
+          <div className={style.show} style={{border:noBorder && 'none'}}>
             <AppstoreOutline />
             <div className={style.showNumber}>
               <span className={style.number}>{positionSize}</span>
               <span>涉及库位</span>
             </div>
           </div>
-          <div className={style.show} style={{ borderLeft: 'none' }}>
+          <div className={style.show} style={{ borderLeft: 'none',border:noBorder && 'none' }}>
             <AppstoreOutline />
             <div className={style.showNumber}>
               <span className={style.number}>{skuSize}</span>

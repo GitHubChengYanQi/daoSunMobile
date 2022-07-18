@@ -8,7 +8,6 @@ import { skuList } from '../../../Scan/Url';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
 import ListScreent from './components/ListScreent';
-import { Message } from '../../../components/Message';
 
 const SkuList = (
   {

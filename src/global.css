@@ -27,6 +27,14 @@ body {
   --adm-font-size-main: 14px;
 }
 
+.blue {
+  color: var(--adm-color-primary);
+}
+
+.red {
+  color: var(--adm-color-danger);
+}
+
 .adm-button {
   font-size: 14px;
   padding: 4px 12px;

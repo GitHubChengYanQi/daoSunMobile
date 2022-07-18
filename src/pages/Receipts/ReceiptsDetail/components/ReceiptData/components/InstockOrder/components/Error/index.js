@@ -81,7 +81,7 @@ const Error = (
         default:
           break;
       }
-      if (!error){
+      if (!error) {
         Message.successToast('添加成功！', () => {
           onSuccess(sku, error ? -1 : 1, res.anomalyId);
         });
@@ -309,8 +309,9 @@ const Error = (
         inkind: sku.inkindId,
         positionId: `${sku.positionId}`,
         formId: sku.inventoryTaskId,
+        sourceId: sku.sourceId,
         // anomalyType: sku.inventoryTaskId ? '' : '',
-        anomalyType
+        anomalyType,
       };
     }
   };

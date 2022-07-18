@@ -1,54 +1,57 @@
 .stocktaking {
 
-  .title {
-    border-bottom: solid 1px #F5F5F5;
-    padding: 12px;
+  .positionItem {
     background-color: #fff;
   }
 
+  .positionName {
+    border-bottom: solid 1px #F5F5F5;
+    padding: 12px;
+  }
+
   .skus {
-    //padding: 12px;
 
     .sku {
-      margin-bottom: 8px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
       border-bottom: solid 1px #F5F5F5;
+      position: relative;
 
-      .brands {
-        padding-bottom: 8px;
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-
-        .brand {
-          width: 30%;
-          padding: 4px 8px;
-          justify-content: center;
-          border-radius: 2px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-
-          .name {
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-          }
-        }
-      }
-
-      .action {
-        //padding: 8px 0;
-        display: flex;
-        align-items: center;
-
-        .mediaIds {
-          flex-grow: 1;
-
-        }
+      .skuItem {
+        flex-grow: 1;
       }
     }
   }
 
+  .space {
+    height: 3px;
+    background-color: var(--body--background--color);
+  }
+
 }
+
+.position {
+  position: absolute;
+  top: 0;
+  right: 0;
+
+  .status {
+    height: 0;
+    width: 0;
+    display: inline-block;
+    border-left: solid 40px rgba(0, 0, 0, 0);
+    position: relative;
+
+    svg {
+      position: absolute;
+      top: -37px;
+      right: 3px;
+      color: #fff;
+      font-size: 16px;
+    }
+  }
+}
+
 
 
