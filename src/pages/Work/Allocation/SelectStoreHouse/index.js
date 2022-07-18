@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { shopCartApplyList } from '../../Instock/Url';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import MyNavBar from '../../../components/MyNavBar';
@@ -14,7 +13,7 @@ import LinkButton from '../../../components/LinkButton';
 import BottomButton from '../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
 
-export const selectStoreHouse = { url: '/stockDetails/getStockAndNumberBySkuId', method: 'POST' };
+export const selectStoreHouse = { url: '/maintenance/findSkuInStoreHouse', method: 'POST' };
 
 const SelectStoreHouse = () => {
 
@@ -22,19 +21,8 @@ const SelectStoreHouse = () => {
 
   const [data, setData] = useState([]);
 
-  const { loading: storeLoading, run: getStoreHouse } = useRequest(selectStoreHouse, {
-    manual: true,
-    onSuccess: (res) => {
-      console.log(res);
-    },
-  });
 
-  const { loading: shopLoading } = useRequest({
-    ...shopCartApplyList,
-    data: {
-      type: ERPEnums.allocation,
-    },
-  }, {
+  const { loading: shopLoading } = useRequest(selectStoreHouse, {
     onSuccess: (res) => {
       setData(ToolUtil.isArray(res).map((item) => {
         return {
@@ -78,7 +66,7 @@ const SelectStoreHouse = () => {
                 dataChange(item.cartId, { number });
               }} />
               <Button color='primary' fill='outline' onClick={() => {
-                getStoreHouse({ data: { skuId: item.skuId } });
+                // getStoreHouse({ data: { skuId: item.skuId } });
               }}>选择仓库</Button>
             </div>
           </div>;
