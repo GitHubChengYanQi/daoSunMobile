@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Menus from '../Menus';
-import CreateInStock from '../../../Work/ProcessTask/Create/components/CreateInStock';
-import Inventory from '../../../Work/ProcessTask/Create/components/Inventory';
 
 const MenusItem = (
   {
@@ -25,7 +23,6 @@ const MenusItem = (
       fontSize={fontSize}
       onClick={(code) => {
         switch (code) {
-          case 'inventoryAsk':
           case 'curingAsk':
             setVisible(code);
             return true;
@@ -34,8 +31,6 @@ const MenusItem = (
         }
       }}
     />
-
-    <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
 
   </>;
 };

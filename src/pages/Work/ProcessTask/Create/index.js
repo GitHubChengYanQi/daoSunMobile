@@ -50,7 +50,6 @@ const Create = () => {
                 fontSize={50}
                 onClick={(code) => {
                   switch (code) {
-                    case 'inventoryAsk':
                     case 'curingAsk':
                     case 'allocationAsk':
                       setVisible(code);
@@ -65,7 +64,6 @@ const Create = () => {
       </Grid>
     </Card>
 
-    <Inventory open={visible === 'inventoryAsk'} onClose={() => setVisible(false)} />
     <CuringAsk open={visible === 'curingAsk'} onClose={() => setVisible(false)} />
     <AllocationAsk open={visible === 'allocationAsk'} onClose={() => setVisible(false)} />
 

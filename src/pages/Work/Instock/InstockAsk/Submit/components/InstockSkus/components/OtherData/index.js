@@ -3,7 +3,6 @@ import style from '../../../PurchaseOrderInstock/index.less';
 import Careful from '../Careful';
 import MyTextArea from '../../../../../../../../components/MyTextArea';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
-import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
 
 const OtherData = (
@@ -18,7 +17,8 @@ const OtherData = (
 
 
   return <>
-    <MyCard titleBom={<Title className={style.title}>{careful} <span>*</span></Title>}>
+    <MyCard
+      titleBom={careful}>
       <Careful
         type={createType}
         value={params.noticeIds}

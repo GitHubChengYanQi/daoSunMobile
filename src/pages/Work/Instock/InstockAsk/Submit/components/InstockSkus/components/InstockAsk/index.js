@@ -10,6 +10,8 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
+import Title from '../../../../../../../../components/Title';
+import style from '../../../PurchaseOrderInstock/index.less';
 
 const InstockAsk = ({ skus, judge, createType }) => {
 
@@ -126,7 +128,12 @@ const InstockAsk = ({ skus, judge, createType }) => {
     <MyNavBar title={createTypeData().title} />
     {content()}
 
-    <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
+    <OtherData
+      createType={createType}
+      careful={<Title className={style.title}>注意事项 <span>*</span></Title>}
+      params={params}
+      setParams={setParams}
+    />
 
     {!hiddenBottom && <BottomButton
       leftOnClick={() => {

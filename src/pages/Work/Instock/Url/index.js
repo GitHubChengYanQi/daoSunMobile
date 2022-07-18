@@ -10,6 +10,12 @@ export const spuClassList = {
   rowKey: 'spuClassificationId',
 };
 
+export const spuClassListSelect = {
+  url: '/spuClassification/listSelect',
+  method: 'POST',
+  rowKey: 'spuClassificationId',
+};
+
 export const announcementsListSelect = {
   url: '/announcements/listSelect',
   method: 'POST',

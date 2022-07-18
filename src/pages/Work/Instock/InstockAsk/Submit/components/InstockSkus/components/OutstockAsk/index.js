@@ -12,6 +12,8 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { useModel } from 'umi';
 import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
+import Title from '../../../../../../../../components/Title';
+import style from '../../../PurchaseOrderInstock/index.less';
 
 const OutstockAsk = ({ skus, judge, createType }) => {
 
@@ -73,7 +75,6 @@ const OutstockAsk = ({ skus, judge, createType }) => {
       title: '出库申请',
       type: '出库',
       otherData: [item.brandName || '任意品牌'],
-      careful: '注意事项',
       disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
     };
   };
@@ -100,7 +101,12 @@ const OutstockAsk = ({ skus, judge, createType }) => {
     <MyNavBar title={createTypeData().title} />
     {content()}
 
-    <OtherData createType={createType} careful={createTypeData().careful} params={params} setParams={setParams} />
+    <OtherData
+      createType={createType}
+      careful={<Title className={style.title}>注意事项 <span>*</span></Title>}
+      params={params}
+      setParams={setParams}
+    />
 
     <BottomButton
       leftOnClick={() => {

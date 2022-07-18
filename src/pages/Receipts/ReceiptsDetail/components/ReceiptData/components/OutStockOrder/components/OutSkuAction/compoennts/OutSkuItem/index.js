@@ -46,7 +46,7 @@ const OutSkuItem = ({ item, data }) => {
     >
       <div className={style.item}>
         <SkuItem
-          number={item.stockNumber}
+          number={item.stockNumber || 0}
           imgSize={60}
           skuResult={skuResult}
           extraWidth='124px'

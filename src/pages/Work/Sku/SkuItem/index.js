@@ -39,7 +39,7 @@ const SkuItem = (
           hidden={hiddenNumber}
           className={style.number}
         >
-          {number || skuResult.stockNumber}{unitName || unitResult.unitName}
+          {typeof number === 'number' ? number : skuResult.stockNumber}{unitName || unitResult.unitName}
         </div>
       </div>
       <div
