@@ -192,10 +192,11 @@ const OutSkuAction = (
 
     <Dialog
       visible={code}
+      className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
-        <div>领料码</div>
-        {code && <>失效剩余时间：<Clock seconds={600} /></>}
-        <img src={imgSrc} alt='' />
+        <div className={style.codeTitle}>领料码</div>
+        {code && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
+        <img src={imgSrc} alt='' width={187} />
         <div className={style.code}>{code}</div>
       </div>}
       actions={[[

@@ -54,9 +54,6 @@ const Menus = (
         if (disabled) {
           return;
         }
-        if (code === 'LogOut') {
-          cookie.remove('cheng-token');
-        }
         if (!url) {
           return Toast.show({ content: '暂未开通~', position: 'bottom' });
         }

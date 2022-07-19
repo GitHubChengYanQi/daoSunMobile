@@ -1,5 +1,6 @@
 import pako from 'pako';
 import { getLastMeasureIndex } from '../MentionsNote/LastMention';
+import { MyDate } from '../MyDate';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {
@@ -122,25 +123,25 @@ const createBall = (
 
 // 计算时间差
 const timeDifference = (tmpTime) => {
-  var mm = 1000;//1000毫秒 代表1秒
-  var minute = mm * 60;
-  var hour = minute * 60;
-  var day = hour * 24;
-  var month = day * 30;
-  var ansTimeDifference = 0;//记录时间差
-  var tmpTimeStamp = tmpTime ? Date.parse(tmpTime.replace(/-/gi, '/')) : new Date().getTime();//将 yyyy-mm-dd H:m:s 进行正则匹配
-  var nowTime = new Date().getTime();//获取当前时间戳
-  var tmpTimeDifference = nowTime - tmpTimeStamp;//计算当前与需要计算的时间的时间戳的差值
+  const mm = 1000;//1000毫秒 代表1秒
+  const minute = mm * 60;
+  const hour = minute * 60;
+  const day = hour * 24;
+  const month = day * 30;
+  let ansTimeDifference = 0;//记录时间差
+  const tmpTimeStamp = tmpTime ? Date.parse(tmpTime.replace(/-/gi, '/')) : new Date().getTime();//将 yyyy-mm-dd H:m:s 进行正则匹配
+  const nowTime = new Date().getTime();//获取当前时间戳
+  const tmpTimeDifference = nowTime - tmpTimeStamp;//计算当前与需要计算的时间的时间戳的差值
   if (tmpTimeDifference < 0) {//时间超出，不能计算
     return '刚刚';
   }
-  var DifferebceMonth = tmpTimeDifference / month; //进行月份取整
-  var DifferebceWeek = tmpTimeDifference / (7 * day);//进行周取整
-  var DifferebceDay = tmpTimeDifference / day;//进行天取整
-  var DifferebceHour = tmpTimeDifference / hour;//进行小时取整
-  var DifferebceMinute = tmpTimeDifference / minute;//进行分钟取整
+  const DifferebceMonth = tmpTimeDifference / month; //进行月份取整
+  const DifferebceWeek = tmpTimeDifference / (7 * day);//进行周取整
+  const DifferebceDay = tmpTimeDifference / day;//进行天取整
+  const DifferebceHour = tmpTimeDifference / hour;//进行小时取整
+  const DifferebceMinute = tmpTimeDifference / minute;//进行分钟取整
   if (DifferebceMonth >= 1) {
-    return tmpTime; //大于一个月 直接返回时间
+    return MyDate.Show(tmpTime); //大于一个月 直接返回时间
   } else if (DifferebceWeek >= 1) {
     ansTimeDifference = parseInt(DifferebceWeek) + '个星期前';
   } else if (DifferebceDay >= 1) {

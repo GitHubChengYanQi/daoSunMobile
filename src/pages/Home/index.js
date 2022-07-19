@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
-import { Card, Grid } from 'antd-mobile';
-import { MoreOutline, SetOutline } from 'antd-mobile-icons';
+import { Card, Grid, Swiper } from 'antd-mobile';
+import { SetOutline } from 'antd-mobile-icons';
 import DataShow from './component/DatsShow';
 import { Avatar, Badge } from 'antd';
 import Menus, { borderStyle } from './component/Menus';
@@ -9,6 +9,10 @@ import { useModel } from 'umi';
 import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
 import MenusItem from './component/MenusItem';
+import MaterialAnalysis from '../Report/components/MaterialAnalysis';
+import InventoryRotation from '../Report/components/InventoryRotation';
+import WorkEfficiency from '../Report/components/WorkEfficiency';
+import ErrorSku from '../Report/components/ErrorSku';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
@@ -23,6 +27,8 @@ const Home = (props) => {
   const sysMenus = userInfo.mobielMenus || [];
 
   const commonlyMenus = DefaultMenus({ userMenus, sysMenus });
+
+  const [dataTitle, setDataTitle] = useState('资产状况数据看板');
 
   useEffect(() => {
     if (!userMenus) {
@@ -61,27 +67,64 @@ const Home = (props) => {
     </div>
     <Card
       className={style.dataCard}
-      title={<div className={style.cardTitle}>资产状况数据看板</div>}
+      title={<div className={style.cardTitle}>{dataTitle}</div>}
       extra={<SetOutline style={{ color: '#257BDE', fontSize: 16 }} />}
       bodyClassName={style.cardBody}
       headerClassName={style.cardHeader}
     >
-      <div className={style.dataShowLeft}>
-        <span>总资产：<span className={style.red}>￥1023200.00</span></span>
-        <Badge color='#F04864' text={<span className={style.dataValue}><span>账户余额</span><span
-          className={style.fontSize12}>￥7256.36</span></span>} />
-        <Badge color='#1890FF' text={<span className={style.dataValue}><span>库存总额</span><span
-          className={style.fontSize12}>￥3536.66</span></span>} />
-        <Badge color='#13C2C2' text={<span className={style.dataValue}><span>固定资产</span><span
-          className={style.fontSize12}>￥5000.00</span></span>} />
-        <Badge color='#FACC14' text={<span className={style.dataValue}><span>应付欠款</span><span
-          className={style.fontSize12}>￥8565.78</span></span>} />
-        <MoreOutline className={style.allData} />
-      </div>
-      <DataShow />
-      {/*<div className={style.dataShowRight}>*/}
-      {/* */}
-      {/*</div>*/}
+      <Swiper loop autoplay onIndexChange={(index) => {
+        let title = '';
+        switch (index) {
+          case 0:
+            title = '资产状况数据看板';
+            break;
+          case 1:
+            title = '物料分析';
+            break;
+          case 2:
+            title = '库存轮转';
+            break;
+          case 3:
+            title = '工作效率';
+            break;
+          case 4:
+            title = '异常物料';
+            break;
+          default:
+            break;
+        }
+        setDataTitle(title);
+      }}>
+        <Swiper.Item key='0'>
+          <div className={style.data}>
+            <div className={style.dataShowLeft}>
+              <span>总资产：<span className={style.red}>￥1023200.00</span></span>
+              <Badge color='#F04864' text={<span className={style.dataValue}><span>账户余额</span><span
+                className={style.fontSize12}>￥7256.36</span></span>} />
+              <Badge color='#1890FF' text={<span className={style.dataValue}><span>库存总额</span><span
+                className={style.fontSize12}>￥3536.66</span></span>} />
+              <Badge color='#13C2C2' text={<span className={style.dataValue}><span>固定资产</span><span
+                className={style.fontSize12}>￥5000.00</span></span>} />
+              <Badge color='#FACC14' text={<span className={style.dataValue}><span>应付欠款</span><span
+                className={style.fontSize12}>￥8565.78</span></span>} />
+              {/*<MoreOutline className={style.allData} />*/}
+            </div>
+            <DataShow />
+          </div>
+        </Swiper.Item>
+        <Swiper.Item key='1'>
+          <MaterialAnalysis />
+        </Swiper.Item>
+        <Swiper.Item key='2'>
+          <InventoryRotation />
+        </Swiper.Item>
+        <Swiper.Item key='3'>
+          <WorkEfficiency />
+        </Swiper.Item>
+        <Swiper.Item key='4'>
+          <ErrorSku />
+        </Swiper.Item>
+      </Swiper>
     </Card>
     <Card
       className={style.dataCard}

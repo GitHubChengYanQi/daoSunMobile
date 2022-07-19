@@ -7,6 +7,9 @@ import style from './index.less';
 import MyEmpty from './components/MyEmpty';
 import { ToolUtil } from './components/ToolUtil';
 import Report from './Report';
+import Message from './Message';
+import Notice from './Notice';
+import User from './User';
 
 const iconSize = 20;
 
@@ -31,6 +34,12 @@ const Index = (props) => {
         return <Home {...props} />;
       case '/Report':
         return <Report />;
+      case '/Message':
+        return <Message />;
+      case '/Notice':
+        return <Notice />;
+      case '/User':
+        return <User />;
       default:
         return <MyEmpty height='100%' />;
     }
@@ -81,7 +90,7 @@ const Index = (props) => {
         />
         <TabBar.Item
           title='我的'
-          key='/My'
+          key='/User'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-wode' />}
         />
       </TabBar>

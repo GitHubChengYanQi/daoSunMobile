@@ -3,6 +3,7 @@ import style from './index.less';
 import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import { Progress } from 'antd';
+import Icon from '../../../../../components/Icon';
 
 const TaskItem = (
   {
@@ -50,19 +51,20 @@ const TaskItem = (
       <div className={style.orderData}>
         <div className={style.dateShow}>
           <div className={style.show} style={{border:noBorder && 'none'}}>
-            <AppstoreOutline />
-            <div className={style.showNumber}>
-              <span className={style.number}>{positionSize}</span>
-              <span>涉及库位</span>
-            </div>
-          </div>
-          <div className={style.show} style={{ borderLeft: 'none',border:noBorder && 'none' }}>
-            <AppstoreOutline />
+            <Icon type='icon-pandianwuliao' />
             <div className={style.showNumber}>
               <span className={style.number}>{skuSize}</span>
               <span>涉及物料</span>
             </div>
           </div>
+          <div className={style.show} style={{ borderLeft: 'none',border:noBorder && 'none' }}>
+            <Icon type='icon-pandiankuwei' />
+            <div className={style.showNumber}>
+              <span className={style.number}>{positionSize}</span>
+              <span>涉及库位</span>
+            </div>
+          </div>
+
         </div>
         {orderData}
         <div className={style.progress}>

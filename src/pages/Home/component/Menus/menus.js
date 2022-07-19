@@ -19,7 +19,7 @@ export const menus = [
   { code: 'outstockApply', icon: 'icon-fahuoshenqing1', url: '/Work/OutstockApply' },
   { code: 'SalesOrder', icon: 'icon-xiaoshoudingdan', url: '/Work/Order?type=2' },
   { code: 'stock', icon: 'icon-cangchuguanli', url: '/Work/Stock' },
-  { code: 'storeHouse', icon: 'icon-gengduo', url: '/Work/StoreHouse' },
+  { code: 'storeHouse', icon: 'icon-cangkuguanli1', url: '/Work/StoreHouse' },
   { code: 'instock', icon: 'icon-rukuguanli2', url: `/Work/Stock/Task?type=${ReceiptsEnums.instockOrder}` },
   { code: 'outstock', icon: 'icon-chukuguanli2', url: `/Work/Stock/Task?type=${ReceiptsEnums.outstockOrder}` },
   { code: 'freeInstock', icon: 'icon-gengduo', url: '/Scan/InStock/FreeInstock' },
@@ -33,7 +33,6 @@ export const menus = [
   { code: 'procurementOrder', icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' },
   { code: 'Repair', icon: 'icon-gongdanguanli2', url: '/Repair' },
   { code: 'CreateRepair', icon: 'icon-chuangjianbaoxiu2', url: '/CreateRepair' },
-  { code: 'LogOut', icon: 'icon-tuichudenglu', url: '/Login' },
   { code: 'action', icon: 'icon-shenpi2', url: '/Work/ProcessTask' },
   { code: 'EXCEL_PROCESS', icon: 'icon-excelbiao' },
   { code: 'data_source', icon: 'icon-shujurongqi' },
@@ -83,5 +82,5 @@ export const menus = [
     url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.stocktaking}`,
   },
   { code: 'allocationAsk', icon: 'icon-kujiantiaobo' },
-  { code: 'OutStockConfirm', url: '/Work/OutStockConfirm' },
+  { code: 'OutStockConfirm',icon:'icon-chukuqueren', url: '/Work/OutStockConfirm' },
 ];

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Chart, Interval } from '@antv/f2';
-import Canvas from '@antv/f2-react'
+import Canvas from '@antv/f2-react';
 
 const DataShow = () => {
+
   const data = [
     {
       name: '长津湖',
@@ -28,8 +29,8 @@ const DataShow = () => {
 
 
   return (
-    <>
-      <Canvas pixelRatio={window.devicePixelRatio} width={250}>
+    <div style={{ marginLeft: '-30px' }}>
+      <Canvas pixelRatio={window.devicePixelRatio} height={160}>
         <Chart
           data={data}
           coord={{
@@ -38,17 +39,18 @@ const DataShow = () => {
           }}
         >
           <Interval
-            x="a"
-            y="percent"
-            adjust="stack"
+            x='a'
+            y='percent'
+            adjust='stack'
             color={{
               field: 'name',
-              range: ['#F04864','#1890FF', '#2FC25B', '#FACC14', ],
+              range: ['#F04864', '#1890FF', '#2FC25B', '#FACC14'],
             }}
           />
         </Chart>
       </Canvas>
-    </>
+    </div>
+
   );
 };
 

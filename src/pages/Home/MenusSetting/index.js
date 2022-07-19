@@ -281,25 +281,6 @@ const MenusSetting = (props) => {
           </Card>;
         })
       }
-
-      <Card
-        className={style.card}
-        title={<div className={style.cardTitle}>
-          登录设置
-        </div>}
-        bodyClassName={style.menuCardBody}
-        headerClassName={style.cardHeader}
-      >
-        <Grid columns={4} gap={0}>
-          <Grid.Item className={style.menus} style={{ ...borderStyle(0, 4, 1) }}>
-            <Badge className={style.badge} content={addButton('LogOut', '退出登录')} color='var(--adm-color-primary)'>
-              {menus({ code: 'LogOut', name: '退出登录' })}
-            </Badge>
-          </Grid.Item>
-        </Grid>
-      </Card>
-
-
       {addLoading && <MyLoading />}
     </div>
   </div>;

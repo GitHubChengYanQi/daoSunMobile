@@ -13,7 +13,7 @@ const MaterialAnalysis = () => {
     { name: '标件', values: [10, 10, 10, 10, 10, 10, 10, 10, 10] },
   ];
 
-  const skus = ['T510-A8','T510-A11','T510-D11','T515-A8','T518-A11','T510-A12', 'T520-A8', 'T520-A11', 'T520-D11']
+  const skus = ['T510-A8']
 
   const data ={};
 
@@ -85,7 +85,7 @@ const MaterialAnalysis = () => {
               animation={{
                 appear: {
                   easing: 'linear',
-                  duration: 300,
+                  duration: 0,
                   property: ['width'],
                   start: {
                     width: 0,
@@ -93,7 +93,7 @@ const MaterialAnalysis = () => {
                 },
                 update: {
                   easing: 'linear',
-                  duration: 3000,
+                  duration: 0,
                   delay: 0,
                   property: ['width'],
                   start: {

@@ -92,7 +92,7 @@ const ReceiptData = (
       auditData={data.stepsResult}
       createUser={data.user}
     />
-    <Comments detail={data} id={data.processTaskId} refresh={refresh} onInput={addComments} />
+    <Comments title='添加评论' detail={data} id={data.processTaskId} refresh={refresh} onInput={addComments} />
     <div className={style.comments}>
       <StepList remarks={remarks.filter(item => 'comments' === item.type)} />
     </div>

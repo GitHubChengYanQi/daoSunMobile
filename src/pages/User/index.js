@@ -1,47 +1,56 @@
 import React from 'react';
-import { Button, Preview, PreviewItem } from 'weui-react-v2';
-import { Affix, Avatar, Col, Row } from 'antd';
-import { Card, NavBar } from 'antd-mobile';
-
+import { history, useModel } from 'umi';
+import MyNavBar from '../components/MyNavBar';
+import MyCard from '../components/MyCard';
+import { Avatar } from 'antd-mobile';
+import style from './index.less';
+import { useRequest } from '../../util/Request';
+import { MyLoading } from '../components/MyLoading';
+import cookie from 'js-cookie';
+import Icon from '../components/Icon';
 
 const User = () => {
 
-  return (
-    <>
-      <Affix offsetTop={0}>
-        <NavBar
-          mode='light'
-        >我的</NavBar>
-      </Affix>
-      <Row gutter={24} style={{ backgroundColor: '#fff' }}>
-        <Col span={18}>
-          <Preview style={{ padding: 16 }} align='left' subTitle='个人信息'>
-            <Card.Header
-              style={{ padding: 0 }}
-              title={<h3>程彦祺</h3>}
-              extra={<Button style={{ padding: 0 }} size={'small'} type='link'>设置工作状态</Button>} />
-            <PreviewItem title='部门'>
-              <div>666</div>
-            </PreviewItem>
-            <PreviewItem title='位置'>
-              <div>辽宁省沈阳市</div>
-            </PreviewItem>
-            <PreviewItem title='职务'>
-              <div>很长很长的名字很长很长的名字很长很长的名字很长很长的名字很长很长的名字</div>
-            </PreviewItem>
-          </Preview>
-        </Col>
-        <Col span={6} style={{ textAlign: 'center' }}>
-          <Avatar size={64} style={{ margin: '16px 0' }}>LOGO</Avatar>
-          <div>个人设置</div>
-        </Col>
-      </Row>
-      <Card>
-        <Card.Header title='我的工作' />
-        <Card.Body />
-      </Card>
-    </>
-  );
+  const { loading, data } = useRequest({ url: '/rest/system/currentUserInfo', method: 'POST' });
+
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+
+  const customer = state.customer || {};
+  const userInfo = state.userInfo || {};
+
+  if (loading) {
+    return <MyLoading />;
+  }
+
+  return <div>
+    <MyNavBar title='个人中心' />
+    <div style={{ padding: 12 }}>
+      <div className={style.card}>
+        <div className={style.flexStart}>
+          <Avatar src={userInfo.avatar} style={{'--size':'60px'}} />
+          <div className={style.customerName}>
+            {customer.customerName}
+          </div>
+        </div>
+        <div className={style.userInfo}>
+          <div className={style.name}>{userInfo.name}</div>
+          <div className={style.dept}>
+            {data.deptName} - {data.positionNames}
+          </div>
+        </div>
+      </div>
+      <div hidden className={style.actions}>
+        <div className={style.loginOut} onClick={() => {
+          cookie.remove('cheng-token');
+          history.push('/Login');
+        }}>
+          <Icon type='icon-tuichudenglu' style={{ fontSize: 54 }} />
+          退出登录
+        </div>
+      </div>
+    </div>
+  </div>;
 };
 
 export default User;

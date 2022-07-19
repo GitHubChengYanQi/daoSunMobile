@@ -46,7 +46,7 @@ const Stocktaking = (
 
   return <>
     <MyCard
-      title='添加盘点内容'
+      title='盘点内容'
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
@@ -127,7 +127,7 @@ const Stocktaking = (
 
     <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'} />
 
-    <MyCard title='盘点缘由'>
+    <MyCard title='盘点原由'>
       {[].length === 0 && <div>无</div>}
       {[].map((item, index) => {
         return <div key={index} className={style.carefulShow}>

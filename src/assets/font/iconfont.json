@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "30687518",
+      "name": "盘点物料",
+      "font_class": "pandianwuliao",
+      "unicode": "e6c9",
+      "unicode_decimal": 59081
+    },
+    {
+      "icon_id": "30687519",
+      "name": "盘点库位",
+      "font_class": "pandiankuwei",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
+      "icon_id": "30687407",
+      "name": "出库确认",
+      "font_class": "chukuqueren",
+      "unicode": "e6c8",
+      "unicode_decimal": 59080
+    },
+    {
+      "icon_id": "30686482",
+      "name": "仓库管理",
+      "font_class": "cangkuguanli1",
+      "unicode": "e6c7",
+      "unicode_decimal": 59079
+    },
+    {
       "icon_id": "554472",
       "name": "向右箭头",
       "font_class": "iconset0438",

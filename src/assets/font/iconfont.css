@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2837038 */
-  src: url('iconfont.woff2?t=1657696452751') format('woff2'),
-       url('iconfont.woff?t=1657696452751') format('woff'),
-       url('iconfont.ttf?t=1657696452751') format('truetype');
+  src: url('iconfont.woff2?t=1658203181650') format('woff2'),
+       url('iconfont.woff?t=1658203181650') format('woff'),
+       url('iconfont.ttf?t=1658203181650') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,22 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-pandianwuliao:before {
+  content: "\e6c9";
+}
+
+.icon-pandiankuwei:before {
+  content: "\e6ca";
+}
+
+.icon-chukuqueren:before {
+  content: "\e6c8";
+}
+
+.icon-cangkuguanli1:before {
+  content: "\e6c7";
 }
 
 .icon-iconset0438:before {
