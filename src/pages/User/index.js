@@ -1,7 +1,5 @@
 import React from 'react';
 import { history, useModel } from 'umi';
-import MyNavBar from '../components/MyNavBar';
-import MyCard from '../components/MyCard';
 import { Avatar } from 'antd-mobile';
 import style from './index.less';
 import { useRequest } from '../../util/Request';
@@ -24,7 +22,6 @@ const User = () => {
   }
 
   return <div>
-    <MyNavBar title='个人中心' />
     <div style={{ padding: 12 }}>
       <div className={style.card}>
         <div className={style.flexStart}>

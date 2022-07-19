@@ -14,6 +14,8 @@ import { Avatar } from 'antd';
 import BottomButton from '../../../../../../components/BottomButton';
 import TaskItem from '../../../../../../Work/Stock/Task/components/TaskItem';
 import { useHistory } from 'react-router-dom';
+import { UserName } from '../../../../../../components/User';
+import UploadFile from '../../../../../../components/Upload/UploadFile';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -76,7 +78,7 @@ const Stocktaking = (
                 <Divider style={{ margin: '0 24px' }} />
                 <div className={skuStyle.text} hidden={condition.length === 0}>
                   <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
-                  &nbsp;&nbsp;&nbsp;&nbsp;({item.skuNum})
+                  &nbsp;&nbsp;&nbsp;&nbsp;({item.realNumber})
                 </div>
               </div>
 
@@ -111,16 +113,14 @@ const Stocktaking = (
       {MyDate.Show(receipts.beginTime)} - {MyDate.Show(receipts.endTime)}
     </div>} />
 
-    <MyCard title='负责人' extra={ToolUtil.isObject(receipts.user).name ? <div className={style.alignCenter}>
-      <Avatar
-        size={20}
-      >
-        {ToolUtil.isObject(receipts.user).name.substring(0, 1)}
-      </Avatar> {ToolUtil.isObject(receipts.user).name}
-    </div> : '无'} />
+    <MyCard title='负责人' extra={<UserName user={receipts.principal} />} />
 
     <MyCard title='参与人员'>
-
+      {
+        ToolUtil.isArray(receipts.participantList).map((item, index) => {
+          return <UserName key={index} user={item} />;
+        })
+      }
     </MyCard>
 
     <MyCard title='方式' extra={receipts.method === 'OpenDisc' ? '明盘' : '暗盘'} />
@@ -128,8 +128,8 @@ const Stocktaking = (
     <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'} />
 
     <MyCard title='盘点原由'>
-      {[].length === 0 && <div>无</div>}
-      {[].map((item, index) => {
+      {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
+      {ToolUtil.isArray(receipts.announcements).map((item, index) => {
         return <div key={index} className={style.carefulShow}>
           {item.content}
         </div>;
@@ -137,11 +137,19 @@ const Stocktaking = (
     </MyCard>
 
     <MyCard title='备注'>
-      无
+      {receipts.remark || '无'}
     </MyCard>
 
     <MyCard title='附件'>
-
+      <div className={style.files}>
+        {ToolUtil.isArray(receipts.mediaUrls).length === 0 && '无'}
+        <UploadFile show value={ToolUtil.isArray(receipts.mediaUrls).map(item => {
+          return {
+            url: item,
+            type: 'image',
+          };
+        })} />
+      </div>
     </MyCard>
 
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { useHistory, useLocation } from 'react-router-dom';
 import MyEmpty from '../../../components/MyEmpty';
@@ -11,8 +11,11 @@ import { MyLoading } from '../../../components/MyLoading';
 import Icon from '../../../components/Icon';
 import { inventoryComplete } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking';
 import { Message } from '../../../components/Message';
+import { ToolUtil } from '../../../components/ToolUtil';
+import { Dropdown, Selector } from 'antd-mobile';
+import State from '../../Sku/SkuList/components/SkuScreen/components/State';
 
-export const taskList = { url: '/inventoryStock/taskList', method: 'POST' };
+export const taskList = { url: '/inventoryStock/list', method: 'POST' };
 
 const StartStockTaking = () => {
 
@@ -20,15 +23,10 @@ const StartStockTaking = () => {
 
   const history = useHistory();
 
+  const listRef = useRef();
+
   const [data, setData] = useState([]);
   console.log(data);
-
-  const { loading: getTaskLoading, run: getTaskList } = useRequest(taskList, {
-    manual: true,
-    onSuccess: (res) => {
-      setData(res);
-    },
-  });
 
   const { loading, run } = useRequest(inventoryComplete, {
     manual: true,
@@ -39,44 +37,21 @@ const StartStockTaking = () => {
     },
   });
 
-  useEffect(() => {
-    if (query.id) {
-      getTaskList({ data: { inventoryId: query.id } });
-    }
-  }, []);
+  const [params, setParams] = useState({ positionSort: 'asc', inventoryId: query.id });
 
-  const [sort, setSort] = useState({});
+  const [searchValue, setSearchValue] = useState();
 
-  const sortAction = (field) => {
-    let order = 'descend';
-    if (sort.field === field) {
-      switch (sort.order) {
-        case 'ascend':
-          order = '';
-          break;
-        case 'descend':
-          order = 'ascend';
-          break;
-        default:
-          order = 'descend';
-          break;
-      }
-    }
-    setSort({ field, order });
+  const submit = (newParams = {}) => {
+    setParams({ ...params, ...newParams });
+    listRef.current.submit({ ...params, ...newParams });
   };
 
-  const sortShow = (field) => {
-
-    if (sort.field !== field) {
-      return <Icon type='icon-paixu' />;
-    }
-
-    const order = sort.order;
+  const sortShow = (order) => {
 
     switch (order) {
-      case  'ascend' :
+      case  'asc' :
         return <Icon type='icon-paixubeifen' />;
-      case  'descend' :
+      case  'desc' :
         return <Icon type='icon-paixubeifen2' />;
       default:
         return <Icon type='icon-paixu' />;
@@ -87,29 +62,54 @@ const StartStockTaking = () => {
     return <MyEmpty />;
   }
 
-  if (getTaskLoading) {
-    return <MyLoading skeleton />;
-  }
-
   return <div style={{ backgroundColor: '#fff', height: '100%' }}>
     <MyNavBar title='盘点任务' />
-    <MySearch />
-    <div className={style.header}>
+    <MySearch
+      value={searchValue}
+      placeholder='搜索物料信息'
+      onChange={setSearchValue}
+      onSearch={(value) => {
+        submit({ skuName: value });
+      }} onClear={() => {
+      submit({ skuName: null });
+    }} />
+    <div className={style.header} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
       <div className={style.number}>涉及 <span className='blue'>{data.length}</span> 个库位 <span className='blue'>22</span>类物料
       </div>
       <div className={style.screen}>
         <div onClick={() => {
-          sortAction('position');
+          submit({ positionSort: params.positionSort === 'asc' ? 'desc' : 'asc' });
         }}>
-          库位 {sortShow('position')}
+          库位 {sortShow(params.positionSort)}
         </div>
-        <div>
-          状态
-        </div>
+        <Dropdown className={style.dropdown}>
+          <Dropdown.Item key='sorter' title='状态'>
+            <div style={{ padding: 12 }}>
+              <Selector
+                columns={3}
+                style={{
+                  fontSize: 12,
+                  '--border': 'solid transparent 1px',
+                  '--checked-border': 'solid var(--adm-color-primary) 1px',
+                  '--padding': '4px 15px',
+                }}
+                showCheckMark={false}
+                options={[{ label: '进行中', value: 0 },{ label: '暂存中', value: 2 }, { label: '正常物料', value: 1 }, { label: '异常物料', value: -1 }]}
+                value={[params.status]}
+                onChange={(v = []) => {
+                  submit({ status: v[0] });
+                }}
+              />
+            </div>
+          </Dropdown.Item>
+        </Dropdown>
       </div>
     </div>
 
     <StocktaskingHandle
+      listRef={listRef}
+      api={taskList}
+      params={params}
       inventoryTaskId={query.id}
       anomalyType='StocktakingError'
       showStock={query.showStock === '1'}

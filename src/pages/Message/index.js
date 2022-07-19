@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import MyNavBar from '../components/MyNavBar';
 import MyList from '../components/MyList';
-import MyEllipsis from '../components/MyEllipsis';
 import MyCard from '../components/MyCard';
 import { useHistory } from 'react-router-dom';
 import { ToolUtil } from '../components/ToolUtil';
@@ -18,7 +17,6 @@ const Message = () => {
   const [data, setData] = useState([]);
 
   return <>
-    <MyNavBar title='消息中心' />
     <MyList data={data} getData={setData} api={messageList}>
       {
         data.map((item, index) => {
@@ -61,7 +59,9 @@ const Message = () => {
               }}
               key={index}
             >
-              <div className={ToolUtil.classNames(style.flexCenter, style.fontColor)}>
+              <div
+                className={ToolUtil.classNames(style.flexCenter, style.fontColor)}
+              >
                 {item.content}
               </div>
             </MyCard>

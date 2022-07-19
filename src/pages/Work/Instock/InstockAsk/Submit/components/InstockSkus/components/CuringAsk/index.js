@@ -18,7 +18,6 @@ import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 const CuringAsk = ({ createType, state }) => {
 
   const [params, setParams] = useState({});
-  console.log(params);
 
   const history = useHistory();
 
@@ -62,20 +61,34 @@ const CuringAsk = ({ createType, state }) => {
 
   const curingAsk = () => {
     const selectParams = [];
+
     ToolUtil.isArray(params.skuList).forEach(item => {
-      const params = item.params || {};
+      const params = item.params;
+
+      if (!params) {
+        selectParams.push({
+          skuId: item.skuResult && item.skuResult.skuId,
+          skuIds: item.skuResult && [item.skuResult.skuId],
+          realNumber: item.skuNum || 1,
+        });
+        return;
+      }
 
       const materials = ToolUtil.isArray(params.materials);
       const skuClasses = ToolUtil.isArray(params.skuClasses);
       const brands = ToolUtil.isArray(params.brands);
       const positions = ToolUtil.isArray(params.positions);
-      const bom = ToolUtil.isObject(params.bom);
+      const boms = ToolUtil.isArray(params.boms);
       selectParams.push({
         materialIds: materials.map(item => item.value),
         spuClassificationIds: skuClasses.map(item => item.value),
         brandIds: brands.map(item => item.value),
         storehousePositionsIds: positions.map(item => item.id),
-        partsIds: bom.key && [bom.key],
+        partsIds: boms.map(item => item.key),
+        brandId: item.brandId || 0,
+        skuId: item.skuResult && item.skuResult.skuId,
+        realNumber: item.skuNum,
+        spuIds: params.spuId && [params.spuId],
       });
     });
 

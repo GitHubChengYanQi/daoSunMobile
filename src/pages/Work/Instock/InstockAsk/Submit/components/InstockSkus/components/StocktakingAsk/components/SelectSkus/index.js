@@ -11,6 +11,7 @@ import LinkButton from '../../../../../../../../../../components/LinkButton';
 import style from './index.less';
 import MyRemoveButton from '../../../../../../../../../../components/MyRemoveButton';
 import MyEllipsis from '../../../../../../../../../../components/MyEllipsis';
+import { useHistory } from 'react-router-dom';
 
 export const getOne = { url: '/inventory/conditionGetOne', method: 'POST' };
 
@@ -25,6 +26,8 @@ const SelectSkus = (
 
   const [visible, setVisible] = useState();
 
+  const history = useHistory();
+
   const { loading, run } = useRequest(getOne, {
     manual: true,
     onError: () => {
@@ -33,6 +36,16 @@ const SelectSkus = (
   });
 
   const [skus, setSkus] = useState(value);
+
+  const open = () => {
+    history.push({
+      pathname: history.location.pathname,
+      query: {
+        ...history.location.query,
+        popup: 1,
+      },
+    });
+  }
 
   const skusChange = (newSkus) => {
     setSkus(newSkus);
@@ -63,6 +76,7 @@ const SelectSkus = (
             <div className={style.text} hidden={!item.params}>
               <MyEllipsis maxWidth='70vw' width='auto'>{item.filterText}</MyEllipsis>
               <LinkButton onClick={() => {
+                open();
                 setVisible({ ...item.params, key: index });
               }}>({item.skuNum}) >></LinkButton>
             </div>
@@ -73,11 +87,21 @@ const SelectSkus = (
     }
     <Divider style={{ margin: 0, padding: 12, backgroundColor: '#fff' }}>
       <AddButton onClick={() => {
+        open();
         setVisible({});
       }} />
     </Divider>
 
-    <Popup visible={visible} position='right' destroyOnClose>
+    <Popup
+      afterClose={() => {
+        if (history.location.query.popup === 1) {
+          history.goBack();
+        }
+      }}
+      visible={visible}
+      position='right'
+      destroyOnClose
+    >
       <Spus
         noChecked={noChecked}
         value={visible}

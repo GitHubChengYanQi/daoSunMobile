@@ -51,7 +51,8 @@ const Task = (
     {query.type && <MyNavBar title='任务列表' />}
     <MySearch
       placeholder='请输入物料相关信息'
-      extraIcon={extraIcon()} />
+      extraIcon={extraIcon()}
+    />
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
         setKey(key);

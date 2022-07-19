@@ -10,7 +10,6 @@ import ErrorSku from './components/ErrorSku';
 const Report = () => {
 
   return <div className={style.report}>
-    <MyNavBar title='报表' />
     <div className={style.Item}>
       <div>
         <Title>物料分析</Title>

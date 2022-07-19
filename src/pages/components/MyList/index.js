@@ -52,7 +52,7 @@ const MyList = (
           return array.push(items);
         });
         setContents(array);
-        getData(array.filter(() => true));
+        getData(array.filter(() => true), resData);
         setPage(pages + 1);
         setHasMore(true);
       } else {

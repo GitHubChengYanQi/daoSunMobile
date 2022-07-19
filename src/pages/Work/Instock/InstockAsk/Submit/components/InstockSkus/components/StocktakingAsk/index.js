@@ -20,7 +20,6 @@ export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST'
 const StocktakingAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
-  console.log(params);
 
   const history = useHistory();
 
@@ -82,7 +81,9 @@ const StocktakingAsk = ({ createType }) => {
         const params = item.params;
         if (!params) {
           detailParams.push({
+            skuId: item.skuResult && item.skuResult.skuId,
             skuIds: item.skuResult && [item.skuResult.skuId],
+            realNumber: item.skuNum || 1,
           });
           return;
         }
@@ -98,6 +99,8 @@ const StocktakingAsk = ({ createType }) => {
           positionIds: positions.map(item => item.id),
           bomIds: boms.map(item => item.key),
           brandId: item.brandId || 0,
+          skuId: item.skuResult && item.skuResult.skuId,
+          realNumber: item.skuNum,
         });
       });
     }

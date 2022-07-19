@@ -16,6 +16,9 @@ const StocktaskingHandle = (
     inventoryTaskId,
     showStock,
     anomalyType,
+    params,
+    api,
+    listRef,
   },
 ) => {
 
@@ -24,7 +27,7 @@ const StocktaskingHandle = (
   let errorNumber = 0;
   data.forEach(posiItem => {
     ToolUtil.isArray(posiItem.skuResultList).forEach(skuItem => {
-      if (skuItem.inventoryStatus === -1 && skuItem.lockStatus !== 99) {
+      if (skuItem.status === -1 && skuItem.status !== 99) {
         errorNumber++;
       }
     });
@@ -34,12 +37,12 @@ const StocktaskingHandle = (
     const newData = data.map(posiItem => {
       const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
         const backSkus = skus.filter(item =>
-          item.positionId === posiItem.storehousePositionsId && item.skuId === skuItem.skuId,
+          item.positionId === posiItem.positionId && item.skuId === skuItem.skuId && item.brandId === skuItem.brandId,
         );
         if (backSkus.length > 0) {
           return {
             ...skuItem,
-            inventoryStatus: status,
+            status,
             anomalyId: status === 0 ? null : skuItem.anomalyId,
             lockStatus: status === 99 ? 99 : skuItem.lockStatus,
           };
@@ -52,12 +55,12 @@ const StocktaskingHandle = (
     setData(newData);
   };
 
-  const skuStatusChange = ({ skuId, positionId, params = {} }) => {
+  const skuStatusChange = ({ skuId, positionId, brandId, params = {} }) => {
     temporaryLockRun({ skuId, positionId, params });
     const newData = data.map(posiItem => {
-      if (posiItem.storehousePositionsId === positionId) {
+      if (posiItem.positionId === positionId) {
         const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
-          if (skuItem.skuId === skuId) {
+          if (skuItem.skuId === skuId && skuItem.brandId === brandId) {
             return { ...skuItem, ...params };
           }
           return skuItem;
@@ -72,7 +75,7 @@ const StocktaskingHandle = (
   const stocktakings = data.filter((item) => {
     const skuResultList = item.skuResultList || [];
     const complete = skuResultList.filter(item => {
-      return ![0, 2].includes(item.inventoryStatus || 0);
+      return ![0, 2].includes(item.status || 0);
     });
     return complete.length !== skuResultList.length;
   });
@@ -80,6 +83,9 @@ const StocktaskingHandle = (
 
   return <>
     <StocktaskigAction
+      listRef={listRef}
+      params={params}
+      api={api}
       anomalyType={anomalyType}
       inventoryTaskId={inventoryTaskId}
       errorNumber={errorNumber}
@@ -88,11 +94,13 @@ const StocktaskingHandle = (
         if (skuItem) {
           skuStatusChange({
             params: {
-              inventoryStatus: error,
+              status: error,
               anomalyId: [2, -1].includes(error) && anomalyId,
+              realNumber: skuItem.realNumber,
             },
             skuId: skuItem.skuId,
             positionId: skuItem.positionId,
+            brandId: skuItem.brandId,
           });
         }
       }}
@@ -102,18 +110,9 @@ const StocktaskingHandle = (
     />
     <div style={{ height: 60 }} />
     <BottomButton
-      leftText='暂停'
-      leftOnClick={() => {
-        history.goBack();
-      }}
-      rightDisabled={stocktakings.length > 0}
-      rightText='盘点完成'
-      rightOnClick={() => {
-        complete();
-      }}
       disabled={stocktakings.length > 0}
-      only={!inventoryTaskId}
-      text='盘点完成'
+      only
+      text='提交'
       onClick={() => {
         complete();
       }}

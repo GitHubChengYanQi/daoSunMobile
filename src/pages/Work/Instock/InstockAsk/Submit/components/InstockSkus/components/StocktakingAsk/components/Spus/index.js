@@ -14,6 +14,7 @@ import Bom from './components/Bom';
 import Positions from './components/Positions';
 import { DownFill } from 'antd-mobile-icons';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
+import { history } from 'umi';
 
 const Spus = (
   {
@@ -25,6 +26,21 @@ const Spus = (
     },
   },
 ) => {
+
+
+  window.addEventListener('popstate', (e) => {
+    if (history.location.query.popup === 1) {
+      onClose();
+    }
+  }, false);
+
+  useEffect(() => {
+    return () => {
+      window.removeEventListener('popstate', () => {
+      });
+    };
+  }, []);
+
 
   const listRef = useRef();
 

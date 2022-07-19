@@ -199,7 +199,7 @@ const ReceiptsDetail = () => {
           {content()}
         </div>
 
-        {!hidden && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
+        {!hidden && !(getTaskIdLoading || detailLoading) && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
 
       </div>;
   }

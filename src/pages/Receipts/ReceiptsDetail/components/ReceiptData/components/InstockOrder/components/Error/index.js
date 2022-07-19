@@ -52,19 +52,15 @@ const Error = (
   },
 ) => {
 
-  console.log(skuItem);
-
-  const [sku, setSku] = useState(skuItem);
+  const [sku, setSku] = useState({ ...skuItem, realNumber: skuItem.number });
 
   useEffect(() => {
-    setSku(skuItem);
+    setSku({ ...skuItem, realNumber: skuItem.number });
   }, [skuItem.skuId]);
-
-  const [data, setData] = useState({ number: skuItem.number });
 
   const [inkinds, setInkinds] = useState([]);
 
-  const error = data.number !== sku.number || inkinds.length > 0;
+  const error = sku.realNumber !== sku.number || inkinds.length > 0;
 
   let allNumber = 0;
   inkinds.map((item) => allNumber += item.number);
@@ -141,11 +137,8 @@ const Error = (
         brandResult: res.brand,
         brandId: res.brandId,
         positionId: res.positionId,
-      };
-
-      let data = {
         anomalyId: res.anomalyId,
-        number: res.realNumber,
+        realNumber: res.realNumber,
       };
 
       let inkinds = ToolUtil.isArray(res.details).map((item) => {
@@ -184,8 +177,6 @@ const Error = (
       }
 
       setSku(sku);
-
-      setData(data);
 
       setInkinds(inkinds);
 
@@ -262,7 +253,7 @@ const Error = (
         if (ToolUtil.isObject(inkind.inkindDetail).stockDetails) {
           return Message.toast('物料已入库！');
         } else {
-          setData({ ...data, number: inkind.number || 1 });
+          setSku({ ...sku, realNumber: inkind.number || 1 });
         }
       } else {
         return Message.toast('扫描物料不符！');
@@ -293,12 +284,12 @@ const Error = (
     });
 
     return {
-      anomalyId: data.anomalyId,
+      anomalyId: sku.anomalyId || null,
       skuId: sku.skuId,
       brandId: sku.brandId,
       customerId: sku.customerId,
       needNumber: sku.number,
-      realNumber: data.number,
+      realNumber: sku.realNumber,
       detailParams,
     };
   };
@@ -382,9 +373,9 @@ const Error = (
               <span>实到数量</span>
               <ShopNumber
                 min={allNumber}
-                value={data.number}
-                onChange={(number) => {
-                  setData({ ...data, number });
+                value={sku.realNumber}
+                onChange={(realNumber) => {
+                  setSku({ ...sku, realNumber });
                 }}
               />
               <Icon type='icon-dibudaohang-saoma' onClick={() => {
@@ -443,9 +434,9 @@ const Error = (
                 <span>实际库存</span>
                 <ShopNumber
                   min={allNumber}
-                  value={data.number}
-                  onChange={(number) => {
-                    setData({ ...data, number });
+                  value={sku.realNumber}
+                  onChange={(realNumber) => {
+                    setSku({ ...sku, realNumber });
                   }}
                 />
               </div>
@@ -499,14 +490,14 @@ const Error = (
               </div>
             </div>
             <div className={style.number}>
-              <ShopNumber min={allNumber} value={data.number} onChange={(number) => {
-                setData({ ...data, number });
+              <ShopNumber min={allNumber} value={sku.realNumber} onChange={(realNumber) => {
+                setSku({ ...sku, realNumber });
               }} />
             </div>
             {id && !noDelete && <LinkButton color='danger' onClick={() => {
               deleteRun({
                 data: {
-                  anomalyId: data.anomalyId,
+                  anomalyId: sku.anomalyId,
                 },
               });
             }}>
@@ -527,7 +518,7 @@ const Error = (
         {id && !noDelete && <LinkButton color='danger' onClick={() => {
           deleteRun({
             data: {
-              anomalyId: data.anomalyId,
+              anomalyId: sku.anomalyId,
             },
           });
         }}>
@@ -576,7 +567,7 @@ const Error = (
                     return null;
                   });
 
-                  if ((number + allNumber) > data.number) {
+                  if ((number + allNumber) > sku.realNumber) {
                     return Message.toast('不能超过实际数量！');
                   }
                   inkinsChange(index, { number });
@@ -626,7 +617,7 @@ const Error = (
       }
 
       <div className={style.divider}>
-        <AddButton danger disabled={allNumber >= data.number} onClick={() => {
+        <AddButton danger disabled={allNumber >= sku.realNumber} onClick={() => {
 
           CodeRun({
             data: {

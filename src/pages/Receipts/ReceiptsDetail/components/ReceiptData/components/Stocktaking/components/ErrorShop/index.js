@@ -32,6 +32,7 @@ const ErrorShop = (
     switch (type) {
       case 'stockTaskingErrror':
         return <InstockError
+          noBack
           anomalyType={anomalyType}
           formId={id}
           refresh={(data, status) => {
@@ -54,6 +55,7 @@ const ErrorShop = (
         />;
       case 'error':
         return <Error
+          noDelete
           type={ReceiptsEnums.stocktaking}
           id={params.id}
           onClose={(deleteAction) => {

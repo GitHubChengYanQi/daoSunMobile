@@ -18,6 +18,7 @@ import ShopNumber
 
 const InstockError = (
   {
+    noBack,
     anomalyType,
     formId,
     onClose = () => {
@@ -219,11 +220,11 @@ const InstockError = (
           }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
         </div>
         <div className={style.buttons}>
-          <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
+          {!noBack && <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
             backRun({
               data: { ids: data.map(item => item.cartId) },
             });
-          }}>退回</Button>
+          }}>退回</Button>}
           <Button
             disabled={data.length === 0}
             color='primary'
