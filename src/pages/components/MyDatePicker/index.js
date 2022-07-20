@@ -18,6 +18,10 @@ const MyDatePicker = (
     },
     afterClose = () => {
     },
+    afterShow = () => {
+    },
+    onCancel = () => {
+    },
     show,
     filter,
     ...props
@@ -69,6 +73,7 @@ const MyDatePicker = (
 
       <DatePicker
         {...props}
+        afterShow={afterShow}
         destroyOnClose
         precision={precision || 'day'}
         title={title || '时间选择'}
@@ -81,6 +86,7 @@ const MyDatePicker = (
           onClose();
           setVisible(false);
         }}
+        onCancel={onCancel}
         defaultValue={now}
         onConfirm={val => {
           switch (precision) {

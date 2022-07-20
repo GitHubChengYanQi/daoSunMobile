@@ -19,6 +19,7 @@ const StocktaskingHandle = (
     params,
     api,
     listRef,
+    show,
   },
 ) => {
 
@@ -83,6 +84,7 @@ const StocktaskingHandle = (
 
   return <>
     <StocktaskigAction
+      show={show}
       listRef={listRef}
       params={params}
       api={api}
@@ -108,15 +110,18 @@ const StocktaskingHandle = (
       setData={setData}
       showStock={showStock}
     />
-    <div style={{ height: 60 }} />
-    <BottomButton
-      disabled={stocktakings.length > 0}
-      only
-      text='提交'
-      onClick={() => {
-        complete();
-      }}
-    />
+    <div hidden={show}>
+      <div style={{ height: 60 }} />
+      <BottomButton
+        disabled={stocktakings.length > 0 || errorNumber > 0}
+        only
+        text='提交'
+        onClick={() => {
+          complete();
+        }}
+      />
+    </div>
+
   </>;
 };
 

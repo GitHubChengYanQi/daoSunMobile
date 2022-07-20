@@ -14,7 +14,7 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
   const qrCode = ToolUtil.isObject(props.qrCode);
 
   const codeId = qrCode.codeId;
-  console.log(props);
+
   useEffect(()=>{
     if (codeId) {
       const backObject = qrCode.backObject || {};

@@ -12,6 +12,15 @@ const StartEndDate = (
     className,
   }) => {
 
+  const getMinTime = (minTime) => {
+    if (minTime.getMinutes() >= 45) {
+      minTime = new Date(minTime.setHours(minTime.getHours() + 1));
+      minTime = new Date(minTime.setMinutes(0));
+    }
+    return minTime;
+  };
+
+
   const ref = useRef();
 
   const [startDate, setStartDate] = useState();
@@ -43,8 +52,11 @@ const StartEndDate = (
       value={value[0]}
       ref={ref}
       show
-      min={startDate || min}
+      min={getMinTime(startDate ? new Date(new Date(startDate).setMinutes(new Date(startDate).getMinutes() + 1)) : min)}
       precision='minute'
+      onCancel={() => {
+        setStartDate();
+      }}
       afterClose={() => {
         if (startDate) {
           ref.current.open();

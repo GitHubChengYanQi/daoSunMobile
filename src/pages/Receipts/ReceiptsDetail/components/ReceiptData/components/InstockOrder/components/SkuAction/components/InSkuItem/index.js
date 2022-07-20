@@ -23,7 +23,7 @@ const InSkuItem = (
 
   let text = '';
 
-  let number = 0;
+  let number;
 
   if (detail) {
     number = item.number;
@@ -48,10 +48,15 @@ const InSkuItem = (
         break;
     }
   } else {
-    complete = item.status !== 0;
-    number = complete ? item.askNumber : item.number;
+    complete = item.realNumber === 0 && item.status !== 0;
+    number = item.askNumber;
     switch (item.status) {
+      case 1:
+        text = '待入';
+        error = false;
+        break;
       case -1:
+        text = '异常';
         error = true;
         break;
       case 50:
@@ -59,6 +64,10 @@ const InSkuItem = (
         break;
       default:
         break;
+    }
+
+    if (complete) {
+      text = '';
     }
   }
 

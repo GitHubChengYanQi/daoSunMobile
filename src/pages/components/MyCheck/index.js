@@ -28,8 +28,8 @@ const MyCheck = (
       style={{ '--font-size': `${fontSize}px`, '--icon-size': `${fontSize}px` }}
       checked={checked}
       icon={(checked) => {
-        return checked ? <Icon type='icon-a-jianqudingceng2' /> :
-          <Icon type='icon-jizhumimamoren' />;
+        return checked ? <Icon type='icon-duoxuanxuanzhong1' /> :
+          <Icon type='icon-a-44-110' style={{color:'#D8D8D8'}} />;
       }}
     >
       {children}

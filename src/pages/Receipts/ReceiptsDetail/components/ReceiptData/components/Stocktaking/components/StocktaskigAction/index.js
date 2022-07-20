@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import style from '../../index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import { Divider } from 'antd';
-import { DownOutline, ExclamationTriangleOutline, UpOutline } from 'antd-mobile-icons';
+import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 import { Popup } from 'antd-mobile';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
 import ErrorShop from '../ErrorShop';
-import { Message } from '../../../../../../../../components/Message';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyList from '../../../../../../../../components/MyList';
 import Icon from '../../../../../../../../components/Icon';
@@ -34,17 +32,6 @@ const StocktaskigAction = (
 ) => {
 
   const [visible, setVisible] = useState();
-
-  const positionChange = (params, currentIndex) => {
-    const newData = data.map((item, index) => {
-      if (index === currentIndex) {
-        return { ...item, ...params };
-      } else {
-        return item;
-      }
-    });
-    setData(newData);
-  };
 
   return <div className={style.stocktaking}>
     <MyList
@@ -87,10 +74,6 @@ const StocktaskigAction = (
               {
                 skuResultList.map((skuItem, skuIndex) => {
 
-                  if (!positionItem.show && skuIndex >= 2) {
-                    return null;
-                  }
-
                   const border = (positionItem.show || skuResultList.length <= 2) ? skuIndex === skuResultList.length - 1 : skuIndex === 1;
 
                   let color = '';
@@ -131,11 +114,8 @@ const StocktaskigAction = (
                       if (show) {
                         return;
                       }
-                      if (skuItem.lockStatus === 99) {
-                        Message.warningDialog({ content: '已提交，不可更改！' });
-                        return;
-                      }
                       setVisible({
+                        show:skuItem.lockStatus === 99,
                         skuId: skuItem.skuId,
                         skuResult: skuItem.skuResult,
                         // inkindId: brandItem.inkind,
@@ -161,25 +141,13 @@ const StocktaskigAction = (
                       <div style={{ color }}>
                         <Icon type='icon-dian' /> {text}
                       </div>
-                      {skuItem.realNumber > 0 && <ShopNumber show value={skuItem.realNumber} />}
+                      {typeof skuItem.realNumber === 'number' &&
+                      <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
                       <div className={style.icon}>{icon}</div>
                     </div>
                   </div>;
                 })
               }
-
-              {skuResultList.length > 2 && <Divider style={{ margin: 0 }}>
-                <div onClick={() => {
-                  positionChange({ show: !positionItem.show }, positionIndex);
-                }}>
-                  {
-                    positionItem.show ?
-                      <UpOutline />
-                      :
-                      <DownOutline />
-                  }
-                </div>
-              </Divider>}
             </div>
             <div className={style.space} />
           </div>;

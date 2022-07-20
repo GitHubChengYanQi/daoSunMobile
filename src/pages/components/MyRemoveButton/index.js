@@ -9,19 +9,22 @@ const MyRemoveButton = (
     onRemove = () => {
     },
     disabled,
+    icon,
+    className,
+    content,
   },
 ) => {
 
 
   return <>
-    <Button disabled={disabled} color='danger' fill='none' style={{ padding: 0 }} onClick={() => {
+    <Button className={className} disabled={disabled} color='danger' fill='none' style={{ padding: 0 }} onClick={() => {
       Message.warningDialog({
-        content: '是否确认删除？',
-        onConfirm:onRemove,
-        only:false,
+        content: content || '是否确认删除？',
+        onConfirm: onRemove,
+        only: false,
       });
     }}>
-      <DeleteOutline style={{ fontSize:14 }} /> {children}
+      {icon || <DeleteOutline style={{ fontSize: 14 }} />} {children}
     </Button>
   </>;
 };

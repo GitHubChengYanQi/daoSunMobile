@@ -17,8 +17,8 @@
       .spu {
         display: flex;
         align-items: center;
-        padding: 12px;
-        border-bottom: solid 1px #D8D8D8;
+        padding: 8px 12px;
+        border-bottom: solid 1px #F5F5F5;
 
         .name {
           flex-grow: 1;
@@ -47,22 +47,28 @@
   }
 
   .dropDown {
-    margin: 3px 0;
+    margin-bottom: 1px;
     padding: 8px 0;
+    z-index: 1;
+    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.1);
 
     :global .adm-dropdown-nav {
       border: none;
+    }
+
+    :global .adm-dropdown-item {
+      flex: none;
+      margin-left: 4px;
     }
 
     :global .adm-dropdown-item-title {
       padding: 0 8px;
       height: 20px;
       line-height: 20px;
-      max-width: 80px;
       min-width: 54px;
       background-color: #F7F7F7;
       border-radius: 50px;
-      font-size: 12px;
+      font-size: 14px;
       display: inline-block;
       text-align: center;
     }
@@ -134,7 +140,7 @@
 
   svg {
     font-size: 6px;
-    color: #ccc;
+    color: #000;
     margin-left: 4px;
   }
 
@@ -143,7 +149,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 65px;
+    max-width: 56px;
   }
 }
 

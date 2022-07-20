@@ -6,6 +6,7 @@ import { useRequest } from '../../util/Request';
 import { MyLoading } from '../components/MyLoading';
 import cookie from 'js-cookie';
 import Icon from '../components/Icon';
+import MyRemoveButton from '../components/MyRemoveButton';
 
 const User = () => {
 
@@ -29,21 +30,21 @@ const User = () => {
           <div className={style.customerName}>
             {customer.customerName}
           </div>
+          <MyRemoveButton
+            className={style.outLogin}
+            icon={ <Icon type='icon-tuichudenglu' style={{ fontSize: 24 }} />}
+            content='是否退出登录'
+            onRemove={()=>{
+              cookie.remove('cheng-token');
+              history.push('/Login');
+            }}
+          />
         </div>
         <div className={style.userInfo}>
           <div className={style.name}>{userInfo.name}</div>
           <div className={style.dept}>
             {data.deptName} - {data.positionNames}
           </div>
-        </div>
-      </div>
-      <div hidden className={style.actions}>
-        <div className={style.loginOut} onClick={() => {
-          cookie.remove('cheng-token');
-          history.push('/Login');
-        }}>
-          <Icon type='icon-tuichudenglu' style={{ fontSize: 54 }} />
-          退出登录
         </div>
       </div>
     </div>

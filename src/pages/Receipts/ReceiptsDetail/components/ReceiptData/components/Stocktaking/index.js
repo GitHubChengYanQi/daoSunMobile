@@ -31,9 +31,27 @@ const Stocktaking = (
   },
 ) => {
 
+  const nowInDateBetwen = (d1, d2) => {
+    const dateBegin = new Date(d1);
+    const dateEnd = new Date(d2);
+    const dateNow = new Date();
+
+    const beginDiff = dateNow.getTime() - dateBegin.getTime();//时间差的毫秒数
+    const beginDayDiff = Math.floor(beginDiff / (24 * 3600 * 1000));//计算出相差天数
+
+    const endDiff = dateEnd.getTime() - dateNow.getTime();//时间差的毫秒数
+    const endDayDiff = Math.floor(endDiff / (24 * 3600 * 1000));//计算出相差天数
+    if (endDayDiff < 0) {//已过期
+      // return false;
+    }
+    return beginDayDiff >= 0;
+
+  };
+
+
   const history = useHistory();
 
-  const actionPermissions = getAction('check').id && permissions;
+  const actionPermissions = getAction('check').id && permissions && nowInDateBetwen(receipts.beginTime,receipts.endTime);
 
   const [data, setData] = useState([]);
 
@@ -100,7 +118,9 @@ const Stocktaking = (
       </div>
     </MyCard>
 
-    <MyCard title='任务预览'>
+    <MyCard title='任务预览' onClick={() => {
+      history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}&show`);
+    }}>
       <TaskItem
         percent={parseInt((receipts.handle / receipts.total) * 100)}
         skuSize={receipts.skuSize}

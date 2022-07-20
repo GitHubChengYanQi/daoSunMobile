@@ -17,6 +17,8 @@ import OutStockLog from './components/Log/OutStockLog';
 import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
 import Dynamic from './components/Dynamic';
 import { Message } from '../../components/Message';
+import MyError from '../../components/MyError';
+import LinkButton from '../../components/LinkButton';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -38,25 +40,6 @@ const ReceiptsDetail = () => {
 
   const [type, setType] = useState();
 
-
-  const goBack = () => {
-    if (history.length <= 2) {
-      history.push('/');
-    } else {
-      history.goBack();
-    }
-  };
-
-  const error = () => {
-    Message.errorDialog({
-      content: '获取审批信息失败！',
-      closeOnMaskClick: true,
-      confirmText: '确认',
-      onConfirm: () => {
-        goBack();
-      },
-    });
-  };
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -93,11 +76,11 @@ const ReceiptsDetail = () => {
           const currentNode = Array.isArray(node) ? node : [node];
           setCurrentNode(currentNode);
         } else {
-          error();
+
         }
       },
       onError: () => {
-        error();
+
       },
     },
   );
@@ -105,7 +88,7 @@ const ReceiptsDetail = () => {
   const { loading: getTaskIdLoading, run: getTaskIdRun } = useRequest(getTaskIdApi, {
     manual: true,
     onError: () => {
-      error();
+
     },
   });
 
@@ -123,9 +106,11 @@ const ReceiptsDetail = () => {
         },
       });
     } else {
-      error();
+
     }
   };
+
+  const loading = getTaskIdLoading || detailLoading;
 
   useEffect(() => {
     getTaskId();
@@ -139,7 +124,7 @@ const ReceiptsDetail = () => {
           data={detail}
           currentNode={currentNode}
           refresh={refresh}
-          loading={getTaskIdLoading || detailLoading}
+          loading={loading}
           addComments={setHidden}
         />;
       case 'dynamic':
@@ -171,7 +156,14 @@ const ReceiptsDetail = () => {
   };
 
   if (!detail) {
-    return <MyLoading skeleton />;
+    if (loading) {
+      return <MyLoading skeleton />;
+    }
+    return <MyError title='获取审批信息失败' description={
+      <LinkButton onClick={() => {
+        history.push('/');
+      }}>返回主页</LinkButton>
+    } />;
   }
 
   switch (detail.type) {
@@ -199,7 +191,7 @@ const ReceiptsDetail = () => {
           {content()}
         </div>
 
-        {!hidden && !(getTaskIdLoading || detailLoading) && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
+        {!hidden && !loading && <Bottom currentNode={currentNode} detail={detail} refresh={refresh} />}
 
       </div>;
   }

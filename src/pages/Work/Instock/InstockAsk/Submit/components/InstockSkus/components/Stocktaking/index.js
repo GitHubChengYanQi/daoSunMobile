@@ -31,27 +31,33 @@ const Stocktaking = (
       onChange({ ...value, userId: id, userName: name });
     }} title='负责人' />
 
-    <User title='参与人' id={value.participantsId} name={value.participantsName} onChange={(id, name) => {
+    <User noRequired title='参与人' id={value.participantsId} name={value.participantsName} onChange={(id, name) => {
       onChange({ ...value, participantsId: id, participantsName: name });
     }} />
 
     <MyCard
-      title='方式'
+      title='明盘'
       extra={<div className={style.method}>
-        <Switch checked={value.method === 'OpenDisc'} checkedText='明盘' uncheckedText='暗盘' onChange={(checked) => {
-          onChange({ ...value, method: checked ? 'OpenDisc' : 'DarkDisk' });
-        }} />
+        <Switch
+          checked={value.method === 'OpenDisc'}
+          style={{ '--height': '24px', '--width': '64px' }}
+          onChange={(checked) => {
+            onChange({ ...value, method: checked ? 'OpenDisc' : 'DarkDisk' });
+          }} />
       </div>}
     />
 
-    <MyCard
-      title='方法'
+    {value.all && <MyCard
+      title='静态'
       extra={<div className={style.mode}>
-        <Switch checked={value.mode === 'staticState'} checkedText='静态' uncheckedText='动态' onChange={(checked) => {
-          onChange({ ...value, mode: checked ? 'staticState' : 'dynamic' });
-        }} />
+        <Switch
+          checked={value.mode === 'staticState'}
+          style={{ '--height': '24px', '--width': '64px' }}
+          onChange={(checked) => {
+            onChange({ ...value, mode: checked ? 'staticState' : 'dynamic' });
+          }} />
       </div>}
-    />
+    />}
   </>;
 };
 

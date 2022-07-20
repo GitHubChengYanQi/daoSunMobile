@@ -4,6 +4,7 @@ import MyKeybord from '../../../../../../../components/MyKeybord';
 
 const ShopNumber = (
   {
+    textAlign = 'center',
     value,
     onChange = () => {
     },
@@ -17,11 +18,14 @@ const ShopNumber = (
 
   return <>
     <div className={style.shopNumber}>
-      <div className={style.number} style={show ? { border: 'none', padding: 0 } : {}} onClick={() => {
-        if (!show) {
-          setVisible(true);
-        }
-      }}>
+      <div
+        className={style.number}
+        style={{ border: show && 'none', padding: show && 0, textAlign }}
+        onClick={() => {
+          if (!show) {
+            setVisible(true);
+          }
+        }}>
         × {value}
       </div>
     </div>

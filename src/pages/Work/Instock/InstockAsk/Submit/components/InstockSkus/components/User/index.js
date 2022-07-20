@@ -13,6 +13,7 @@ const User = (
     title,
     onChange = () => {
     },
+    noRequired,
   },
 ) => {
 
@@ -20,7 +21,7 @@ const User = (
 
   return <>
     <MyCard
-      titleBom={<Title className={style.title}>{title}<span>*</span></Title>}
+      titleBom={<Title className={style.title}>{title}<span hidden={noRequired}>*</span></Title>}
       extra={<div className={style.alignCenter} onClick={() => {
         userRef.current.open();
       }}>

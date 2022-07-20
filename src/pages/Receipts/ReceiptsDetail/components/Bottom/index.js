@@ -6,6 +6,7 @@ import { ActionSheet } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../index';
 import InStockErrorBottom from './components/InStockErrorBottom';
 import Note from '../../../components/Comments/components/Note';
+import MyActionSheet from '../../../../components/MyActionSheet';
 
 const Bottom = (
   {
@@ -45,7 +46,16 @@ const Bottom = (
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <Note noAdd className={style.note} value={params} uploadId='auditImg' onChange={setParams} loading={setLoading} />
+    <Note
+      textAreaId='auditTextArea'
+      autoFocus={false}
+      noAdd
+      className={style.note}
+      value={params}
+      uploadId='auditImg'
+      onChange={setParams}
+      loading={setLoading}
+    />
     <div className={style.actions}>
       <div className={style.all} onClick={() => {
         setVisible(true);
@@ -56,22 +66,11 @@ const Bottom = (
       <Audit loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
     </div>
 
-    <ActionSheet
-      className={style.action}
-      cancelText='取消'
-      visible={visible}
-      actions={[
-        { text: '转审', key: 'outStock', disabled: true },
-        { text: '加签', key: 'inStock', disabled: true },
-        { text: '退回', key: 'allocation', disabled: true },
-      ]}
-      onClose={() => {
-        setVisible(false);
-      }}
-      onAction={() => {
-        setVisible(false);
-      }}
-    />
+    <MyActionSheet onAction={() => setVisible(false)} visible={visible} actions={[
+      { text: '转审', key: 'outStock', disabled: true },
+      { text: '加签', key: 'inStock', disabled: true },
+      { text: '退回', key: 'allocation', disabled: true },
+    ]} onClose={() => setVisible(false)} />
 
   </div>;
 };

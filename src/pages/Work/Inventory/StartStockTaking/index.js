@@ -13,7 +13,6 @@ import { inventoryComplete } from '../../../Receipts/ReceiptsDetail/components/R
 import { Message } from '../../../components/Message';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
-import State from '../../Sku/SkuList/components/SkuScreen/components/State';
 
 export const taskList = { url: '/inventoryStock/list', method: 'POST' };
 
@@ -21,12 +20,13 @@ const StartStockTaking = () => {
 
   const { query } = useLocation();
 
+  const show = { ...query }.hasOwnProperty('show');
+
   const history = useHistory();
 
   const listRef = useRef();
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   const { loading, run } = useRequest(inventoryComplete, {
     manual: true,
@@ -62,7 +62,7 @@ const StartStockTaking = () => {
     return <MyEmpty />;
   }
 
-  return <div style={{ backgroundColor: '#fff', height: '100%' }}>
+  return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto' }}>
     <MyNavBar title='盘点任务' />
     <MySearch
       value={searchValue}
@@ -94,7 +94,10 @@ const StartStockTaking = () => {
                   '--padding': '4px 15px',
                 }}
                 showCheckMark={false}
-                options={[{ label: '进行中', value: 0 },{ label: '暂存中', value: 2 }, { label: '正常物料', value: 1 }, { label: '异常物料', value: -1 }]}
+                options={[{ label: '进行中', value: 0 }, { label: '暂存中', value: 2 }, {
+                  label: '正常物料',
+                  value: 1,
+                }, { label: '异常物料', value: -1 }]}
                 value={[params.status]}
                 onChange={(v = []) => {
                   submit({ status: v[0] });
@@ -107,6 +110,7 @@ const StartStockTaking = () => {
     </div>
 
     <StocktaskingHandle
+      show={show}
       listRef={listRef}
       api={taskList}
       params={params}

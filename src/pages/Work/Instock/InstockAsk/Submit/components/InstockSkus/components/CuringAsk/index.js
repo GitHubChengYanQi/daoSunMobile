@@ -114,7 +114,7 @@ const CuringAsk = ({ createType, state }) => {
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
-      <SelectSkus noChecked value={params.skuList} onChange={(skuList) => {
+      <SelectSkus value={params.skuList} onChange={(skuList) => {
         setParams({ ...params, skuList });
       }} />
     </MyCard>

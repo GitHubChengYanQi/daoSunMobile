@@ -2,7 +2,7 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 const Show = (date) => {
-  return moment(date).format('YYYY/MM/DD HH:mm');
+  return moment(new Date(date)).format('YYYY/MM/DD HH:mm');
 };
 
 

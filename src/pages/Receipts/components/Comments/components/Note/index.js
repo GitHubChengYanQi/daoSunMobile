@@ -17,6 +17,8 @@ const Note = (
     noAdd,
     className,
     loading=()=>{},
+    autoFocus,
+    textAreaId,
   },
 ) => {
 
@@ -49,9 +51,9 @@ const Note = (
         <MyTextArea
           className={style.textarea}
           value={note}
-          id='comments'
+          id={textAreaId}
           placeholder='添加备注，可@相关人员...'
-          autoFocus
+          autoFocus={autoFocus}
           onFocus={() => onInput(true)}
           onChange={(note, users = []) => {
             const userIds = users.map(item => item.userId);

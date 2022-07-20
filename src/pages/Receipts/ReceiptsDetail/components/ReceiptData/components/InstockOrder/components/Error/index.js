@@ -54,6 +54,8 @@ const Error = (
 
   const [sku, setSku] = useState({ ...skuItem, realNumber: skuItem.number });
 
+  const show = sku.show;
+
   useEffect(() => {
     setSku({ ...skuItem, realNumber: skuItem.number });
   }, [skuItem.skuId]);
@@ -417,7 +419,7 @@ const Error = (
         };
       case ReceiptsEnums.stocktaking:
         return {
-          title: '异常描述',
+          title: '盘点',
           shopId: 'stocktakingError',
           skuItem: <SkuItem
             imgId='errorSku'
@@ -433,6 +435,7 @@ const Error = (
               <div className={style.actual} style={{ padding: 0 }}>
                 <span>实际库存</span>
                 <ShopNumber
+                  show={show}
                   min={allNumber}
                   value={sku.realNumber}
                   onChange={(realNumber) => {
@@ -473,7 +476,7 @@ const Error = (
     }
   };
 
-  return <div className={style.error} style={{ maxHeight }} id='errors'>
+  return <div className={style.error} style={{ maxHeight, margin: show && 0 }} id='errors'>
 
     <div className={style.header} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
 
@@ -545,17 +548,18 @@ const Error = (
             </div>}
             extra={<Space>
               <LinkButton onClick={() => showCodeRef.current.openCode(item.codeId)}><SystemQRcodeOutline /></LinkButton>
-              <MyRemoveButton onRemove={() => {
+              {!show && <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;
                 });
                 setInkinds(newItem);
-              }} />
+              }} />}
             </Space>}
           >
             <div className={style.inKindRow}>
               <div className={style.inKindTitle}>数量：</div>
               <ShopNumber
+                show={show}
                 min={1}
                 value={item.number}
                 onChange={(number) => {
@@ -579,6 +583,7 @@ const Error = (
                 原因 <span>*</span>：
               </div>
               <Careful
+                show={show}
                 type='inStockError'
                 value={item.noticeIds}
                 onChange={(noticeIds) => {
@@ -590,7 +595,7 @@ const Error = (
               <div className={style.inKindTitle}>
                 描述：
               </div>
-              <TextArea
+              {show ? `${item.description || '无'}` : <TextArea
                 className={style.textArea}
                 rows={1}
                 placeholder='请输入具体异常情况'
@@ -598,10 +603,11 @@ const Error = (
                 onChange={(description) => {
                   inkinsChange(index, { description });
                 }}
-              />
+              />}
             </div>
             <div className={style.imgs}>
               <UploadFile
+                show={show}
                 value={item.media}
                 uploadId={`errorUpload${index}`}
                 imgSize={36}
@@ -616,7 +622,7 @@ const Error = (
         })
       }
 
-      <div className={style.divider}>
+      <div hidden={show} className={style.divider}>
         <AddButton danger disabled={allNumber >= sku.realNumber} onClick={() => {
 
           CodeRun({
@@ -653,7 +659,7 @@ const Error = (
     <MyLoading />}
 
 
-    {errorTypeData().button}
+    {!show && errorTypeData().button}
 
   </div>;
 };

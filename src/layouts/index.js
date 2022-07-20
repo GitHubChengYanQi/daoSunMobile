@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { connect } from 'dva';
-import { Dialog, ErrorBlock } from 'antd-mobile';
+import { ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
+import MyError from '../pages/components/MyError';
 
 
 const BasicLayout = (props) => {
@@ -89,7 +90,6 @@ const BasicLayout = (props) => {
   }, 1000);
 
   useEffect(() => {
-    qrCodeAction();
     if (!GetUserInfo().token) {
       if (ToolUtil.queryString('Login', history.location.pathname) || ToolUtil.queryString('Sms', history.location.pathname)) {
         return;
@@ -118,15 +118,10 @@ const BasicLayout = (props) => {
   if (state.init === true) {
     return <div className={styles.safeArea}>
       {props.children}
-    </div>
-    // return <AliveScope>
-    //   <div className={styles.safeArea}>
-    //     {props.children}
-    //   </div>
-    // </AliveScope>;
+    </div>;
   } else {
     return <div>
-      <ErrorBlock fullPage title='系统初始化失败' />
+      <MyError title='系统初始化失败' />
     </div>;
   }
 

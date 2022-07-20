@@ -12,7 +12,7 @@ import Brand from './components/Brand';
 import Material from './components/Material';
 import Bom from './components/Bom';
 import Positions from './components/Positions';
-import { DownFill } from 'antd-mobile-icons';
+import { DownFill, DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import { history } from 'umi';
 
@@ -27,20 +27,11 @@ const Spus = (
   },
 ) => {
 
-
   window.addEventListener('popstate', (e) => {
     if (history.location.query.popup === 1) {
       onClose();
     }
   }, false);
-
-  useEffect(() => {
-    return () => {
-      window.removeEventListener('popstate', () => {
-      });
-    };
-  }, []);
-
 
   const listRef = useRef();
 
@@ -188,7 +179,7 @@ const Spus = (
               title={<>
                 <div className={style.titleBox}>
                   <div className={style.title}>{title || item.title}</div>
-                  <DownFill />
+                  {dropKey === item.key ? <UpOutline /> : <DownOutline />}
                 </div>
                 {dropTitles(item.key)}
               </>}>

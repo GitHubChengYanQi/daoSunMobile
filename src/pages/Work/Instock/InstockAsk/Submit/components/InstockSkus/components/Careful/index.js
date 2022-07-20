@@ -11,6 +11,7 @@ import FocusInput from './components/FocusInput';
 
 const Careful = (
   {
+    show,
     type,
     value = [],
     onChange = () => {
@@ -44,6 +45,7 @@ const Careful = (
   return <>
     <div className={style.carefulData} id='careful'>
       <Selector
+        disabled={show}
         value={value}
         className={style.selector}
         options={[...ToolUtil.isArray(announcemens).filter((item, index) => allCareful || index < 6), {

@@ -30,11 +30,11 @@ const Comments = (
     {
       manual: true,
       onSuccess: () => {
-        Message.successToast('评论完成',()=>{
+        Message.successToast('评论完成', () => {
           refresh();
           onInput(false);
           setVisible(false);
-        })
+        });
       },
     },
   );
@@ -65,6 +65,8 @@ const Comments = (
       setVisible(false);
     }}>
       <Note
+        textAreaId='commetsTextArea'
+        autoFocus
         uploadId='commentImgs'
         onInput={onInput}
         onChange={({ userIds, mediaIds, note }) => {

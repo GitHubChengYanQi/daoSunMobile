@@ -15,7 +15,7 @@ const StocktakingItem = ({ item, index }) => {
 
   return <>
     <TaskItem
-      percent={parseInt((receipts.handle  / receipts.total ) * 100)}
+      percent={parseInt((receipts.handle / receipts.total) * 100)}
       coding={receipts.coding}
       endTime={receipts.endTime}
       createTime={item.createTime}
@@ -30,7 +30,7 @@ const StocktakingItem = ({ item, index }) => {
           方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
         </div>
         <div>
-          方式：{receipts.method === 'dynamic' ? '动态' : '静态'}
+          方式：{receipts.mode === 'staticState' ? '静态' : '动态'}
         </div>
       </div>}
       otherData={

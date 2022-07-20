@@ -14,7 +14,6 @@ const scan = () => new Promise((resolve, reject) => {
       success: (res) => {
         console.log('wxScanSuccess', res.resultStr);
         // 回调
-
         const resultStr = res.resultStr;
         const search = new URLSearchParams(resultStr.split('?')[1]);
         const id = search.get('id');
@@ -76,6 +75,112 @@ export default {
         const result = yield call(scan);
         yield put({ type: 'backObject', payload: { code: result, ...payload } });
       }
+    },
+
+    // wxCp获取二维码数据
+    * backObject({ payload }, { call, put }) {
+      console.log('backObject', payload);
+      const codeId = payload.code;
+      const action = payload.action;
+      // 入库参数
+      const items = payload.items;
+      const batch = payload.batch;
+
+      // 选择库位参数
+      const data = payload.data;
+
+      if (codeId) {
+        yield put({ type: 'scanCodeState', payload: { loading: true } });
+        const res = yield call(() => request({
+          url: '/orCode/backObject',
+          method: 'GET',
+          params: {
+            id: codeId,
+          },
+        }), codeId);
+        switch (action) {
+          case 'getBackObject':
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
+            break;
+          case 'freeInstock':
+          case 'freeOutstock':
+          case 'inventory':
+          case 'quality':
+          case 'outStock':
+          case 'position':
+            // 自由入库
+            // 自由出库
+            // 盘点
+            // 质检任务
+            // 出库
+            // 库位
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
+            break;
+          case 'scanStorehousePositon':
+            // 扫描库位
+            yield put({ type: 'scanStorehousePositon', payload: { res, data } });
+            break;
+          case 'scanInstock':
+            // 扫码入库操作
+            if (items) {
+              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
+              yield put({ type: 'scanInstock', payload: { codeId, items, batch } });
+            }
+            break;
+          case 'scanOutstock':
+            // 扫码出库操作
+            if (items) {
+              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
+              yield put({ type: 'scanOutstock', payload: { codeId, items, data } });
+            }
+            break;
+          default:
+            // 没有动作跳路由
+            // 获取数据
+            yield put({ type: 'router', payload: { codeId, type: res.type } });
+            break;
+        }
+
+      } else {
+        Toast.show({
+          content: '请扫描正确的二维码！',
+          position: 'bottom',
+        });
+      }
+
+    },
+
+    // app获取二维码数据
+    * appAction({ payload }, { select, call, put }) {
+      const states = yield select(states => states['qrCode']);
+      const codeId = payload.code;
+      const action = states.action;
+      switch (action) {
+        case 'getBackObject':
+          yield put({ type: 'backObject', payload: { code: codeId, action } });
+          break;
+        case 'instock':
+        case 'outstock':
+        case 'freeInstock':
+        case 'freeOutstock':
+        case 'inventory':
+        case 'quality':
+          yield put({ type: 'scanCodeState', payload: { codeId } });
+          break;
+        default:
+          // 没有动作跳路由
+          // 获取数据
+          const res = yield call(() => request({
+            url: '/orCode/backObject',
+            method: 'GET',
+            params: {
+              id: codeId,
+            },
+          }));
+          yield put({ type: 'router', payload: { codeId, type: res.type } });
+          break;
+      }
+
     },
 
     // 扫码跳路由
@@ -206,107 +311,5 @@ export default {
       }
     },
 
-    // wxCp获取二维码数据
-    * backObject({ payload }, { call, put }) {
-      console.log('wxCpbackObject', payload);
-      const codeId = payload.code;
-      const action = payload.action;
-      // 入库参数
-      const items = payload.items;
-      const batch = payload.batch;
-
-      // 选择库位参数
-      const data = payload.data;
-
-      if (codeId) {
-        yield put({ type: 'scanCodeState', payload: { loading: true } });
-        const res = yield call(() => request({
-          url: '/orCode/backObject',
-          method: 'GET',
-          params: {
-            id: codeId,
-          },
-        }), codeId);
-        switch (action) {
-          case 'freeInstock':
-          case 'freeOutstock':
-          case 'inventory':
-          case 'quality':
-          case 'outStock':
-          case 'position':
-            // 自由入库
-            // 自由出库
-            // 盘点
-            // 质检任务
-            // 出库
-            // 库位
-            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
-            break;
-          case 'scanStorehousePositon':
-            // 扫描库位
-            yield put({ type: 'scanStorehousePositon', payload: { res, data } });
-            break;
-          case 'scanInstock':
-            // 扫码入库操作
-            if (items) {
-              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
-              yield put({ type: 'scanInstock', payload: { codeId, items, batch } });
-            }
-            break;
-          case 'scanOutstock':
-            // 扫码出库操作
-            if (items) {
-              yield put({ type: 'scanCodeState', payload: { codeId, loading: false } });
-              yield put({ type: 'scanOutstock', payload: { codeId, items, data } });
-            }
-            break;
-          default:
-            // 没有动作跳路由
-            // 获取数据
-            yield put({ type: 'router', payload: { codeId, type: res.type } });
-            break;
-        }
-
-      } else {
-        Toast.show({
-          content: '请扫描正确的二维码！',
-          position: 'bottom',
-        });
-      }
-
-    },
-
-    // app获取二维码数据
-    * appAction({ payload }, { select, call, put }) {
-      const states = yield select(states => states['qrCode']);
-      const codeId = payload.code;
-      const action = states.action;
-      switch (action) {
-        case 'instock':
-        case 'outstock':
-        case 'freeInstock':
-        case 'freeOutstock':
-        case 'inventory':
-        case 'quality':
-          yield put({ type: 'scanCodeState', payload: { codeId } });
-          break;
-        case 'position':
-          yield put({ type: 'backObject', payload: { code: codeId, action } });
-          break;
-        default:
-          // 没有动作跳路由
-          // 获取数据
-          const res = yield call(() => request({
-            url: '/orCode/backObject',
-            method: 'GET',
-            params: {
-              id: codeId,
-            },
-          }));
-          yield put({ type: 'router', payload: { codeId, type: res.type } });
-          break;
-      }
-
-    },
   },
 };

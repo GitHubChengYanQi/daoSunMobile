@@ -3,6 +3,7 @@ import Screen from '../../../../../components/Screen';
 import State from '../../../../Sku/SkuList/components/SkuScreen/components/State';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import User from '../../../../Sku/SkuList/components/SkuScreen/components/User';
+import OutTime from '../../../../Sku/SkuList/components/SkuScreen/components/OutTime';
 
 const ProcessScreen = (
   {
@@ -22,10 +23,12 @@ const ProcessScreen = (
     { key: 'type', title: '任务类型', open: true },
     { key: 'status', title: '状态', open: true },
     { key: 'createUser', title: '发起人', open: true },
+    { key: 'outTime', title: '是否超期', open: true },
   ];
 
   const type = params.type;
   const createUser = params.createUser;
+  const outTime = params.outTime;
   const statusList = params.statusList || [];
 
   const paramsOnChange = (data) => {
@@ -44,6 +47,9 @@ const ProcessScreen = (
       case 'createUser':
         screened = createUser;
         break;
+      case 'time':
+        screened = outTime;
+        break;
       default:
         break;
     }
@@ -61,7 +67,7 @@ const ProcessScreen = (
             { label: '盘点', value: ReceiptsEnums.stocktaking },
             { label: '养护', value: ReceiptsEnums.maintenance },
           ]}
-          title='单据类型'
+          title={item.title}
           value={[type]}
           onChange={(types) => {
             paramsOnChange({ ...params, type: types[0] });
@@ -74,7 +80,7 @@ const ProcessScreen = (
             { label: '已处理', value: '99' },
           ]}
           multiple
-          title='单据类型'
+          title={item.title}
           value={statusList}
           onChange={(statusList) => {
             paramsOnChange({ ...params, statusList });
@@ -86,6 +92,14 @@ const ProcessScreen = (
           value={createUser}
           onChange={(createUser) => {
             paramsOnChange({ ...params, createUser });
+          }}
+        />;
+      case 'outTime':
+        return <OutTime
+          title={item.title}
+          value={outTime}
+          onChange={(outTime) => {
+            paramsOnChange({ ...params, outTime });
           }}
         />;
       default:

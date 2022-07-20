@@ -40,12 +40,12 @@ const StocktakingAsk = ({ createType }) => {
 
 
   useEffect(() => {
-    setParams({ method: 'OpenDisc', mode: 'staticState' });
+    setParams({ method: 'OpenDisc' });
   }, []);
 
   const createTypeData = (item = {}) => {
     const stocktakingDisabled = () => {
-      if (!(params.userId && params.beginTime && params.endTime && params.method && params.mode && params.participantsId)) {
+      if (!(params.userId && params.beginTime && params.endTime && params.method)) {
         return true;
       }
 
@@ -94,6 +94,7 @@ const StocktakingAsk = ({ createType }) => {
         const boms = ToolUtil.isArray(params.boms);
         detailParams.push({
           spuIds: params.spuId && [params.spuId],
+          spuId: params.spuId && params.spuId,
           classIds: skuClasses.map(item => item.value),
           brandIds: brands.map(item => item.value),
           positionIds: positions.map(item => item.id),
@@ -117,13 +118,13 @@ const StocktakingAsk = ({ createType }) => {
     <MyNavBar title={createTypeData().title} />
 
     <MyCard
-      title='添加盘点内容'
+      title='全局'
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}
       extra={
-        <Switch checked={params.all} checkedText='全局' uncheckedText='全局' onChange={(checked) => {
-          setParams({ ...params, all: checked });
+        <Switch style={{ '--height': '24px', '--width': '64px' }} checked={params.all} onChange={(checked) => {
+          setParams({ ...params, all: checked, mode: checked ? 'staticState' : 'dynamic' });
         }}
         />
       }>
