@@ -48,7 +48,6 @@ const Stocktaking = (
 
   };
 
-
   const history = useHistory();
 
   const actionPermissions = getAction('check').id && permissions && nowInDateBetwen(receipts.beginTime, receipts.endTime);
