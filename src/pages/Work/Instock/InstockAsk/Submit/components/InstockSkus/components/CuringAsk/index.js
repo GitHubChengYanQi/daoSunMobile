@@ -123,7 +123,7 @@ const CuringAsk = ({ createType, state }) => {
 
     <OtherData
       createType={createType}
-      careful={<Title className={style.title}>养护缘由 <span>*</span></Title>}
+      careful={<Title className={style.title}>养护原由 <span>*</span></Title>}
       params={params}
       setParams={setParams}
     />

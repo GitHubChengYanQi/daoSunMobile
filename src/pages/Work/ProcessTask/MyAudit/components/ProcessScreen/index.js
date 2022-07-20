@@ -26,7 +26,7 @@ const ProcessScreen = (
     { key: 'outTime', title: '是否超期', open: true },
   ];
 
-  const type = params.type;
+  const types = params.types || [];
   const createUser = params.createUser;
   const outTime = params.outTime;
   const statusList = params.statusList || [];
@@ -39,7 +39,7 @@ const ProcessScreen = (
     let screened = false;
     switch (key) {
       case 'type':
-        screened = type;
+        screened = types.length > 0;
         break;
       case 'status':
         screened = statusList.length > 0;
@@ -60,6 +60,7 @@ const ProcessScreen = (
     switch (item.key) {
       case 'type':
         return <State
+          multiple
           options={[
             { label: '入库', value: ReceiptsEnums.instockOrder },
             { label: '出库', value: ReceiptsEnums.outstockOrder },
@@ -68,9 +69,9 @@ const ProcessScreen = (
             { label: '养护', value: ReceiptsEnums.maintenance },
           ]}
           title={item.title}
-          value={[type]}
+          value={[types]}
           onChange={(types) => {
-            paramsOnChange({ ...params, type: types[0] });
+            paramsOnChange({ ...params, types: types });
           }}
         />;
       case 'status':
