@@ -68,7 +68,7 @@ export default {
         // code = '1476356885154385921'; // 入库
         code = '1546731644352798722'; // 库位
         // code = '1475358083438198786'; // 出库
-        // code = '1539124045801611265'; // 实物
+        // code = '1549679718172053527'; // 实物
         // code = '1539423628024688642'; // sku
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
@@ -100,7 +100,7 @@ export default {
         }), codeId);
         switch (action) {
           case 'getBackObject':
-            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false, action } });
             break;
           case 'freeInstock':
           case 'freeOutstock':
@@ -108,13 +108,14 @@ export default {
           case 'quality':
           case 'outStock':
           case 'position':
+          case 'addError':
             // 自由入库
             // 自由出库
             // 盘点
             // 质检任务
             // 出库
             // 库位
-            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false } });
+            yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false, action } });
             break;
           case 'scanStorehousePositon':
             // 扫描库位

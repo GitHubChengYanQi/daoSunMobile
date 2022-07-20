@@ -52,7 +52,7 @@ const OutStockConfirm = () => {
   if (outSkus.length === 0) {
     return <div style={{ backgroundColor: '#fff', height: '100%' }}>
       <MyNavBar title='出库确认' />
-      <CodeNumber onSuccess={(code) => {
+      <CodeNumber title='请输入领料码' onSuccess={(code) => {
         setCode(code);
         run({ params: { code } });
       }} />

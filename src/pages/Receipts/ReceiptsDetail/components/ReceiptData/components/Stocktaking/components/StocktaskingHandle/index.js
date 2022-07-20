@@ -11,8 +11,6 @@ const StocktaskingHandle = (
     },
     complete = () => {
     },
-    temporaryLockRun = () => {
-    },
     inventoryTaskId,
     showStock,
     anomalyType,
@@ -57,7 +55,6 @@ const StocktaskingHandle = (
   };
 
   const skuStatusChange = ({ skuId, positionId, brandId, params = {} }) => {
-    temporaryLockRun({ skuId, positionId, params });
     const newData = data.map(posiItem => {
       if (posiItem.positionId === positionId) {
         const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
@@ -80,7 +77,6 @@ const StocktaskingHandle = (
     });
     return complete.length !== skuResultList.length;
   });
-
 
   return <>
     <StocktaskigAction

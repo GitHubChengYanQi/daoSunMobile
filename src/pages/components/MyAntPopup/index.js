@@ -8,7 +8,7 @@ const MyAntPopup = (
     visible,
     children,
     title,
-    destroyOnClose,
+    destroyOnClose = true,
     className,
     onClose = () => {
     },

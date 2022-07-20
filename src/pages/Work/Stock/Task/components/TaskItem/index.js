@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.less';
-import { AppstoreOutline, RightOutline } from 'antd-mobile-icons';
+import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import { Progress } from 'antd';
 import Icon from '../../../../../components/Icon';
@@ -19,7 +19,7 @@ const TaskItem = (
     index,
     otherData,
     orderData,
-    percent = 50,
+    percent = 0,
     noBorder,
   },
 ) => {

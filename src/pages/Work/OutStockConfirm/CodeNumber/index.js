@@ -3,12 +3,17 @@ import style from '../index.less';
 import MyKeybord from '../../../components/MyKeybord';
 import { ScanIcon } from '../../../components/Icon';
 import { connect } from 'dva';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const CodeNumber = (
   {
     onSuccess = () => {
     },
     codeNumber = 4,
+    onScanResult = () => {
+
+    },
+    title,
     ...props
   },
 ) => {
@@ -27,6 +32,19 @@ const CodeNumber = (
 
   const numbers = code.map(item => item.number).join('');
 
+  const qrCode = ToolUtil.isObject(props.qrCode);
+
+  const codeId = qrCode.codeId;
+  const action = qrCode.action;
+  const backObject = qrCode.backObject || {};
+
+  useEffect(() => {
+    if (codeId && action === 'getBackObject') {
+      props.dispatch({ type: 'qrCode/clearCode' });
+      onScanResult(codeId,backObject);
+    }
+  }, [codeId]);
+
   useEffect(() => {
     props.dispatch({
       type: 'qrCode/scanCodeState',
@@ -39,7 +57,7 @@ const CodeNumber = (
 
   return <>
     <div className={style.codeInput}>
-      <div className={style.title}>请输入领料码</div>
+      <div className={style.title}>{title}</div>
       <div className={style.inputNumber} onClick={() => {
         setVisible(true);
       }}>

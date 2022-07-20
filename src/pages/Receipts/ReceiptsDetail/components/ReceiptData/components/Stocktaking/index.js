@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { Divider } from 'antd-mobile';
+import { Divider, ErrorBlock } from 'antd-mobile';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
@@ -10,12 +10,12 @@ import skuStyle
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import { MyDate } from '../../../../../../components/MyDate';
-import { Avatar } from 'antd';
 import BottomButton from '../../../../../../components/BottomButton';
 import TaskItem from '../../../../../../Work/Stock/Task/components/TaskItem';
 import { useHistory } from 'react-router-dom';
 import { UserName } from '../../../../../../components/User';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
+import Icon from '../../../../../../components/Icon';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -51,7 +51,7 @@ const Stocktaking = (
 
   const history = useHistory();
 
-  const actionPermissions = getAction('check').id && permissions && nowInDateBetwen(receipts.beginTime,receipts.endTime);
+  const actionPermissions = getAction('check').id && permissions && nowInDateBetwen(receipts.beginTime, receipts.endTime);
 
   const [data, setData] = useState([]);
 
@@ -70,52 +70,57 @@ const Stocktaking = (
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
-      <div className={skuStyle.skus}>
-        {
-          data.map((item, index) => {
-            const condition = ToolUtil.isArray(item.condition);
-            if (!allSku && index >= 3) {
-              return null;
-            }
-            return <div key={index} className={skuStyle.skuItem}>
-              <div className={skuStyle.nav} style={{
-                background: index % 2 === 0 ? 'rgb(57 116 199 / 20%)' : 'rgb(57 116 199 / 50%)',
-                color: index % 2 === 0 ? 'rgb(57 116 199 / 80%)' : '#fff',
-              }}>
-                物 <br /> 料 <br />{index + 1}
-              </div>
-              <div className={skuStyle.skuData}>
-                <div className={skuStyle.skuAction}>
-                  <div className={skuStyle.sku}>
-                    <SkuItem
-                      skuResult={item.skuResult}
-                      otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
-                    />
+      {(data.length === 1 && data[0].type === 'all') ?
+        <div style={{padding:8}}>
+          <ErrorBlock status='empty' title='全局盘点' image={<Icon type='icon-pandian1' style={{fontSize:100}} />} description />
+        </div>
+        :
+        <div className={skuStyle.skus}>
+          {
+            data.map((item, index) => {
+              const condition = ToolUtil.isArray(item.condition);
+              if (!allSku && index >= 3) {
+                return null;
+              }
+              return <div key={index} className={skuStyle.skuItem}>
+                <div className={skuStyle.nav} style={{
+                  background: index % 2 === 0 ? 'rgb(57 116 199 / 20%)' : 'rgb(57 116 199 / 50%)',
+                  color: index % 2 === 0 ? 'rgb(57 116 199 / 80%)' : '#fff',
+                }}>
+                  物 <br /> 料 <br />{index + 1}
+                </div>
+                <div className={skuStyle.skuData}>
+                  <div className={skuStyle.skuAction}>
+                    <div className={skuStyle.sku}>
+                      <SkuItem
+                        skuResult={item.skuResult}
+                        otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
+                      />
+                    </div>
+                  </div>
+                  <Divider style={{ margin: '0 24px' }} />
+                  <div className={skuStyle.text} hidden={condition.length === 0}>
+                    <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
+                    &nbsp;&nbsp;&nbsp;&nbsp;({item.realNumber})
                   </div>
                 </div>
-                <Divider style={{ margin: '0 24px' }} />
-                <div className={skuStyle.text} hidden={condition.length === 0}>
-                  <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
-                  &nbsp;&nbsp;&nbsp;&nbsp;({item.realNumber})
-                </div>
-              </div>
 
-            </div>;
-          })
-        }
-        {data.length > 3 && <Divider className={style.allSku}>
-          <div onClick={() => {
-            toggle();
-          }}>
-            {
-              allSku ?
-                <UpOutline />
-                :
-                <DownOutline />
-            }
-          </div>
-        </Divider>}
-      </div>
+              </div>;
+            })
+          }
+          {data.length > 3 && <Divider className={style.allSku}>
+            <div onClick={() => {
+              toggle();
+            }}>
+              {
+                allSku ?
+                  <UpOutline />
+                  :
+                  <DownOutline />
+              }
+            </div>
+          </Divider>}
+        </div>}
     </MyCard>
 
     <MyCard title='任务预览' onClick={() => {

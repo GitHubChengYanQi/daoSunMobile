@@ -29,7 +29,23 @@ const PositionInventory = () => {
   const { loading, run } = useRequest(positionInventory, {
     manual: true,
     onSuccess: (res) => {
-      setData(res);
+      const newData = [];
+      res.forEach(item => {
+        const newPositionIds = newData.map(item => item.positionId);
+        const newPositionIndex = newPositionIds.indexOf(item.positionId);
+        if (newPositionIndex !== -1) {
+          const newPosition = newData[newPositionIndex];
+          newData[newPositionIndex] = { ...newPosition, skuResultList: [...newPosition.skuResultList, item] };
+        } else {
+          newData.push({
+            positionId: item.positionId,
+            name: ToolUtil.isObject(item.positionsResult).name,
+            storehouseResult: ToolUtil.isObject(item.positionsResult).storehouseResult,
+            skuResultList: [item],
+          });
+        }
+      });
+      setData(newData);
     },
   });
 
@@ -69,19 +85,20 @@ const PositionInventory = () => {
       showStock
       data={data}
       setData={setData}
-      actionPermissions
       complete={() => {
         const stockParams = [];
         data.forEach(positionItem => {
           const skuResultList = positionItem.skuResultList || [];
           skuResultList.forEach(skuItem => {
             stockParams.push({
-              status: skuItem.inventoryStatus,
+              status: skuItem.status,
               skuId: skuItem.skuId,
-              positionId: positionItem.storehousePositionsId,
-              number: skuItem.stockNumber,
+              positionId: positionItem.positionId,
+              number: skuItem.number,
+              realNumber: skuItem.realNumber,
               anomalyId: skuItem.anomalyId,
               lockStatus: skuItem.lockStatus,
+              brandId: skuItem.brandId,
             });
           });
         });

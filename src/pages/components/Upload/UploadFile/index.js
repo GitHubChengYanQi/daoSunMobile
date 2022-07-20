@@ -39,6 +39,12 @@ const UploadFile = (
 
   const [files, setFiles] = useState(value);
 
+  useEffect(() => {
+    if (files.length === 0 && value.length > 0) {
+      setFiles(value);
+    }
+  }, [value]);
+
   const [loading, setLoading] = useState();
 
   const imgs = files.filter(item => item.type !== 'other').map(item => item.url);

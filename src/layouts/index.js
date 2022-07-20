@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { history, useModel } from 'umi';
 import { connect } from 'dva';
-import { ErrorBlock } from 'antd-mobile';
 import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
@@ -9,6 +8,7 @@ import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
+import LinkButton from '../pages/components/LinkButton';
 
 
 const BasicLayout = (props) => {
@@ -21,14 +21,19 @@ const BasicLayout = (props) => {
   window.scrollTo(0, 0);
 
   const receive = () => {
-    window.receive = (code) => {
-      const search = new URLSearchParams(code.split('?')[1]);
-      const id = search.get('id');
+    window.receive = (codeInfo = '') => {
+      const search = new URLSearchParams(codeInfo.split('?')[1]);
+      const id = search.get('id') || '';
+      const code = search.get('code');
+      if (code) {
+        window.location.href = codeInfo;
+        return;
+      }
       let codeId = '';
-      if (id && id.length === 19) {
+      if (id.length === 19) {
         codeId = id;
-      } else if (code && code.length === 19) {
-        codeId = code;
+      } else if (codeInfo.length === 19) {
+        codeId = codeInfo;
       } else {
         Message.warningDialog({
           content: '请扫正确二维码！',
