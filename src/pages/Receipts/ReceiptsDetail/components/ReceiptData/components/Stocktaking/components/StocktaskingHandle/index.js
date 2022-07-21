@@ -2,7 +2,6 @@ import React from 'react';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import StocktaskigAction from '../StocktaskigAction';
 import BottomButton from '../../../../../../../../components/BottomButton';
-import { useHistory } from 'react-router-dom';
 
 const StocktaskingHandle = (
   {
@@ -18,10 +17,11 @@ const StocktaskingHandle = (
     api,
     listRef,
     show,
+    shopCartNum,
+    refresh = () => {
+    },
   },
 ) => {
-
-  const history = useHistory();
 
   let errorNumber = 0;
   data.forEach(posiItem => {
@@ -52,6 +52,7 @@ const StocktaskingHandle = (
       return { ...posiItem, skuResultList };
     });
     setData(newData);
+    refresh();
   };
 
   const skuStatusChange = ({ skuId, positionId, brandId, params = {} }) => {
@@ -68,6 +69,7 @@ const StocktaskingHandle = (
       return posiItem;
     });
     setData(newData);
+    refresh();
   };
 
   const stocktakings = data.filter((item) => {
@@ -86,7 +88,7 @@ const StocktaskingHandle = (
       api={api}
       anomalyType={anomalyType}
       inventoryTaskId={inventoryTaskId}
-      errorNumber={errorNumber}
+      errorNumber={shopCartNum || errorNumber}
       errorReturn={skuReturnChange}
       refresh={(skuItem, error, anomalyId) => {
         if (skuItem) {
@@ -109,7 +111,7 @@ const StocktaskingHandle = (
     <div hidden={show}>
       <div style={{ height: 60 }} />
       <BottomButton
-        disabled={stocktakings.length > 0 || errorNumber > 0}
+        disabled={stocktakings.length > 0 || shopCartNum > 0}
         only
         text='提交'
         onClick={() => {

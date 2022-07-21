@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { useHistory, useLocation } from 'react-router-dom';
 import MyEmpty from '../../../components/MyEmpty';
@@ -15,6 +15,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
 
 export const taskList = { url: '/inventoryStock/list', method: 'POST' };
+export const getStatistics = { url: '/inventoryStock/speedProgress', method: 'POST' };
 
 const StartStockTaking = () => {
 
@@ -28,6 +29,8 @@ const StartStockTaking = () => {
 
   const [data, setData] = useState([]);
 
+  const [statistics, setStatistics] = useState({});
+
   const { loading, run } = useRequest(inventoryComplete, {
     manual: true,
     onSuccess: () => {
@@ -36,6 +39,17 @@ const StartStockTaking = () => {
       });
     },
   });
+
+  const { loading: statisticsLoading, run: statisticsRun, refresh: statisticsRefresh } = useRequest(getStatistics, {
+    manual: true,
+    onSuccess: (res) => {
+      setStatistics(res);
+    },
+  });
+
+  useEffect(() => {
+    statisticsRun({ data: { inventoryId: query.id } });
+  }, []);
 
   const [params, setParams] = useState({ positionSort: 'asc', inventoryId: query.id });
 
@@ -75,8 +89,9 @@ const StartStockTaking = () => {
     }} />
     <div className={style.header} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
       <div className={style.number}>
-        涉及 <span className='blue'>{query.positionSize || 0}</span> 个库位 <span
-        className='blue'>{query.skuSize || 0}</span>类物料
+        涉及
+        <span className='blue'>{statistics.positionNum || 0}</span> 个库位
+        <span className='blue'>{statistics.skuNum || 0}</span>类物料
       </div>
       <div className={style.screen}>
         <div className={style.screenItem} onClick={() => {
@@ -112,6 +127,8 @@ const StartStockTaking = () => {
     </div>
 
     <StocktaskingHandle
+      refresh={statisticsRefresh}
+      shopCartNum={statistics.shopCartNum}
       show={show}
       listRef={listRef}
       api={taskList}
@@ -123,9 +140,10 @@ const StartStockTaking = () => {
       setData={setData}
       complete={() => {
         run({ data: { inventoryIds: [query.id] } });
-      }} />
+      }}
+    />
 
-    {loading && <MyLoading />}
+    {(loading || statisticsLoading) && <MyLoading />}
   </div>;
 };
 

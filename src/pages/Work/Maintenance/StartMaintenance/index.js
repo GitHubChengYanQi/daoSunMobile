@@ -22,7 +22,7 @@ const StartMaintenance = () => {
 
   const [data, setData] = useState([]);
 
-  const [params, setParams] = useState({ sort: 'asc', maintenanceId: query.id });
+  const [params, setParams] = useState({ maintenanceId: query.id });
 
   const [searchValue, setSearchValue] = useState();
 
@@ -51,6 +51,7 @@ const StartMaintenance = () => {
     <MyNavBar title='养护任务' />
     <MySearch
       value={searchValue}
+      historyType='maintenance'
       placeholder='搜索物料信息'
       onChange={setSearchValue}
       onSearch={(value) => {
@@ -61,14 +62,11 @@ const StartMaintenance = () => {
       }}
     />
     <div className={style.header} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
-      <div className={style.number}>涉及 <span className='blue'>{data.length}</span> 个库位 <span className='blue'>22</span>类物料
+      <div className={style.number}>涉及
+        <span className='blue'>{query.positionCount}</span> 个库位
+        <span className='blue'>{query.skuCount}</span>类物料
       </div>
       <div className={style.screen}>
-        <div className={style.screenItem} onClick={() => {
-          submit({ sort: params.sort === 'asc' ? 'desc' : 'asc' });
-        }}>
-          进度 {sortShow(params.sort)}
-        </div>
         <Dropdown className={style.dropdown}>
           <Dropdown.Item key='sorter' title='状态'>
             <div style={{ padding: 12 }}>
@@ -81,7 +79,7 @@ const StartMaintenance = () => {
                   '--padding': '4px 15px',
                 }}
                 showCheckMark={false}
-                options={[{ label: '进行中', value: 0 }, { label: '已完成', value: 2 }]}
+                options={[{ label: '进行中', value: 0 }, { label: '已完成', value: 99 }]}
                 value={[params.status]}
                 onChange={(v = []) => {
                   submit({ status: v[0] });
@@ -94,6 +92,9 @@ const StartMaintenance = () => {
     </div>
 
     <MaintenanceAction
+      params={params}
+      show={show}
+      listRef={listRef}
       api={curingList}
       data={data}
       setData={setData}

@@ -10,6 +10,7 @@ import ErrorShop from '../ErrorShop';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyList from '../../../../../../../../components/MyList';
 import Icon from '../../../../../../../../components/Icon';
+import { Message } from '../../../../../../../../components/Message';
 
 const StocktaskigAction = (
   {
@@ -87,6 +88,10 @@ const StocktaskigAction = (
                 <div className={style.skuItem} onClick={() => {
                   if (show) {
                     return;
+                  }
+
+                  if (skuItem.lockStatus === 99){
+                    Message.toast('此物料存在异常，正在处理中');
                   }
                   setVisible({
                     show: skuItem.lockStatus === 99,

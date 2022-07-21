@@ -17,12 +17,12 @@ const MaintenanceAction = (
     },
     maintenanceId,
     show,
+    listRef,
+    params,
   },
 ) => {
 
   const [visible, setVisible] = useState();
-
-  console.log(data);
 
   const dataList = () => {
     return data.map((positionItem, positionIndex) => {
@@ -62,7 +62,7 @@ const MaintenanceAction = (
                       }).join(' 、 ')]}
                     />
                   </div>
-                  <div className={style.info}>
+                  <div hidden={show} className={style.info}>
                     <Button
                       color='primary'
                       fill='outline'
@@ -105,7 +105,7 @@ const MaintenanceAction = (
   };
 
   return <div className={style.stocktaking}>
-    <MyList api={api} data={data} getData={(list = [], newList = []) => {
+    <MyList params={params} ref={listRef} api={api} data={data} getData={(list = [], newList = []) => {
       const positionIds = list.map(item => item.storehousePositionsId);
       const newData = data.filter(item => positionIds.includes(item.positionId));
       newList.forEach(item => {
@@ -130,7 +130,7 @@ const MaintenanceAction = (
                   brandName: brand.brandName || '无品牌',
                   brandId: brand.brandId || 0,
                   number: item.number || 0,
-                  doneNumber: sku.doneNumber || 0,
+                  doneNumber: item.doneNumber || 0,
                 },
               ],
             };
@@ -197,7 +197,7 @@ const MaintenanceAction = (
                   const brandResults = newBrandResults.map(brandItem => {
                     const brandIndex = brandIds.indexOf(brandItem.brandId);
                     if (brandIndex !== -1) {
-                      return { ...brandItem, doneNumber: brands[brandIndex].number };
+                      return { ...brandItem, doneNumber: brandItem.doneNumber + brands[brandIndex].number };
                     } else {
                       return brandItem;
                     }

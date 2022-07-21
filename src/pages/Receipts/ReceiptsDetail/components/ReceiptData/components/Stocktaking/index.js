@@ -144,8 +144,6 @@ const Stocktaking = (
           id: receipts.inventoryTaskId,
           showStock: showStock ? 1 : 0,
           show: true,
-          skuSize: receipts.skuSize,
-          positionSize: receipts.positionSize,
         },
       });
     }}>
@@ -211,8 +209,6 @@ const Stocktaking = (
           query: {
             id: receipts.inventoryTaskId,
             showStock: showStock ? 1 : 0,
-            skuSize: receipts.skuSize,
-            positionSize: receipts.positionSize,
           },
         });
       }} />}

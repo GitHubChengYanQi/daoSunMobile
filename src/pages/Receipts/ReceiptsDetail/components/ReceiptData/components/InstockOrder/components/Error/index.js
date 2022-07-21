@@ -598,6 +598,9 @@ const Error = (
         }}>
           删除异常
         </LinkButton>}
+        {show && <LinkButton color='danger'>
+          处理中
+        </LinkButton>}
       </div>
       {errorTypeData().actionNumber}
     </MyCard>
