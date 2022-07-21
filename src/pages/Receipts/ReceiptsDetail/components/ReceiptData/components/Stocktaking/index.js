@@ -22,6 +22,23 @@ export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'PO
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
 export const inventoryComplete = { url: '/inventoryDetail/complete', method: 'POST' };
 
+export const nowInDateBetwen = (d1, d2) => {
+  const dateBegin = new Date(d1);
+  const dateEnd = new Date(d2);
+  const dateNow = new Date();
+
+  const beginDiff = dateNow.getTime() - dateBegin.getTime();//时间差的毫秒数
+  const beginDayDiff = Math.floor(beginDiff / (24 * 3600 * 1000));//计算出相差天数
+
+  const endDiff = dateEnd.getTime() - dateNow.getTime();//时间差的毫秒数
+  const endDayDiff = Math.floor(endDiff / (24 * 3600 * 1000));//计算出相差天数
+  if (endDayDiff < 0) {//已过期
+    // return false;
+  }
+  return beginDayDiff >= 0;
+
+};
+
 const Stocktaking = (
   {
     permissions,
@@ -36,32 +53,13 @@ const Stocktaking = (
   const state = initialState || {};
   const userInfo = state.userInfo || {};
 
-  const nowInDateBetwen = (d1, d2) => {
-    const dateBegin = new Date(d1);
-    const dateEnd = new Date(d2);
-    const dateNow = new Date();
-
-    const beginDiff = dateNow.getTime() - dateBegin.getTime();//时间差的毫秒数
-    const beginDayDiff = Math.floor(beginDiff / (24 * 3600 * 1000));//计算出相差天数
-
-    const endDiff = dateEnd.getTime() - dateNow.getTime();//时间差的毫秒数
-    const endDayDiff = Math.floor(endDiff / (24 * 3600 * 1000));//计算出相差天数
-    if (endDayDiff < 0) {//已过期
-      // return false;
-    }
-    return beginDayDiff >= 0;
-
-  };
-
   const history = useHistory();
 
   const participantList = receipts.participantList || [];
 
   const actionPermissions = getAction('check').id
     &&
-    permissions
-    &&
-    (userInfo.id === receipts.userId || participantList.filter(item => item.userId === userInfo.id).length > 0);
+    (permissions || userInfo.id === receipts.userId || participantList.filter(item => item.userId === userInfo.id).length > 0);
 
   const [data, setData] = useState([]);
 

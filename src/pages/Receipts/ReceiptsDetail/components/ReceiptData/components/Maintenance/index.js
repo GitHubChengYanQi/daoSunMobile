@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import MaintenanceAction from './components/MaintenanceAction';
 import MyCard from '../../../../../../components/MyCard';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { Divider } from 'antd-mobile';
@@ -17,6 +16,8 @@ import BottomButton from '../../../../../../components/BottomButton';
 import { useBoolean } from 'ahooks';
 import { useHistory } from 'react-router-dom';
 import { SkuResultSkuJsons } from '../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { useModel } from 'umi';
+import { nowInDateBetwen } from '../Stocktaking';
 
 const Maintenance = (
   {
@@ -25,11 +26,16 @@ const Maintenance = (
     getAction = () => {
       return {};
     },
-    refresh,
   },
 ) => {
 
-  const actionPermissions = getAction('maintenanceing').id && permissions;
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
+
+  const actionPermissions = getAction('maintenanceing').id &&  (permissions || userInfo.id === receipts.userId);
+
+  const outTime = !nowInDateBetwen(receipts.startTime, receipts.endTime);
 
   const [data, setData] = useState([]);
 
@@ -44,7 +50,7 @@ const Maintenance = (
 
   return <>
     <MyCard
-      title='盘点内容'
+      title='养护内容'
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
@@ -166,7 +172,11 @@ const Maintenance = (
       </div>
     </MyCard>
 
-    {actionPermissions && <BottomButton only text='开始养护' onClick={() => {
+    {actionPermissions && <BottomButton
+      only
+      disabled={outTime}
+      text={outTime ? '任务未开始' : '开始养护'}
+      onClick={() => {
       history.push({
         pathname: '/Work/Maintenance/StartMaintenance',
         query: {

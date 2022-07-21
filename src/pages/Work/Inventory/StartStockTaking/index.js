@@ -135,7 +135,7 @@ const StartStockTaking = () => {
       params={params}
       inventoryTaskId={query.id}
       anomalyType='StocktakingError'
-      showStock={query.showStock === '1'}
+      showStock={query.showStock === 1}
       data={data}
       setData={setData}
       complete={() => {
