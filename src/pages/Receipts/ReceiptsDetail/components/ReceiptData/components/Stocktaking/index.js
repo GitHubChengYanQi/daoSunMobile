@@ -70,8 +70,9 @@ const Stocktaking = (
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
       {(data.length === 1 && data[0].type === 'all') ?
-        <div style={{padding:8}}>
-          <ErrorBlock status='empty' title='全局盘点' image={<Icon type='icon-pandian1' style={{fontSize:100}} />} description />
+        <div style={{ padding: 8 }}>
+          <ErrorBlock status='empty' title='全局盘点' image={<Icon type='icon-pandian1' style={{ fontSize: 100 }} />}
+                      description />
         </div>
         :
         <div className={skuStyle.skus}>
@@ -123,7 +124,16 @@ const Stocktaking = (
     </MyCard>
 
     <MyCard title='任务预览' onClick={() => {
-      history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}&show`);
+      history.push({
+        pathname: '/Work/Inventory/StartStockTaking',
+        query: {
+          id: receipts.inventoryTaskId,
+          showStock: showStock ? 1 : 0,
+          show: true,
+          skuSize: receipts.skuSize,
+          positionSize: receipts.positionSize,
+        },
+      });
     }}>
       <TaskItem
         percent={parseInt((receipts.handle / receipts.total) * 100)}
@@ -178,7 +188,15 @@ const Stocktaking = (
 
 
     {actionPermissions && <BottomButton only text='开始盘点' onClick={() => {
-      history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}`);
+      history.push({
+        pathname: '/Work/Inventory/StartStockTaking',
+        query: {
+          id: receipts.inventoryTaskId,
+          showStock: showStock ? 1 : 0,
+          skuSize: receipts.skuSize,
+          positionSize: receipts.positionSize,
+        },
+      });
     }} />}
 
   </>;

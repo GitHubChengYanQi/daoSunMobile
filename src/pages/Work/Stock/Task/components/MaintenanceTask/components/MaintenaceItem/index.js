@@ -19,6 +19,7 @@ const MaintenaceItem = (
   };
 
   return <TaskItem
+    percent={parseInt((receipts.doneNumberCount || 0 / receipts.numberCount || 1) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}

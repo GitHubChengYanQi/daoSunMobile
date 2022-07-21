@@ -142,7 +142,7 @@ const Bom = (
           onChange(bomItem, all ? 'All' : 'Present');
         }}
         leftOnClick={() => {
-          onChange({});
+          onChange([]);
         }}
       />
     </div>

@@ -67,7 +67,6 @@ const CuringAsk = ({ createType, state }) => {
 
       if (!params) {
         selectParams.push({
-          skuId: item.skuResult && item.skuResult.skuId,
           skuIds: item.skuResult && [item.skuResult.skuId],
           realNumber: item.skuNum || 1,
         });
@@ -79,14 +78,16 @@ const CuringAsk = ({ createType, state }) => {
       const brands = ToolUtil.isArray(params.brands);
       const positions = ToolUtil.isArray(params.positions);
       const boms = ToolUtil.isArray(params.boms);
+      if (item.brandId) {
+        brands.push(item.brandId);
+      }
       selectParams.push({
         materialIds: materials.map(item => item.value),
         spuClassificationIds: skuClasses.map(item => item.value),
         brandIds: brands.map(item => item.value),
         storehousePositionsIds: positions.map(item => item.id),
         partsIds: boms.map(item => item.key),
-        brandId: item.brandId || 0,
-        skuId: item.skuResult && item.skuResult.skuId,
+        skuIds: item.skuResult && [item.skuResult.skuId],
         realNumber: item.skuNum,
         spuIds: params.spuId && [params.spuId],
       });
@@ -94,8 +95,8 @@ const CuringAsk = ({ createType, state }) => {
 
     let data = {
       ...params,
-      notice: params.noticeIds,
-      enclosure: params.mediaIds,
+      notice: ToolUtil.isArray(params.noticeIds).toString(),
+      enclosure: ToolUtil.isArray(params.mediaIds).toString(),
       userIds: ToolUtil.isArray(params.userIds).toString(),
       note: params.remark,
       selectParams,

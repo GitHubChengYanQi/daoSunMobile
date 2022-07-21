@@ -16,6 +16,7 @@ import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
 import { useBoolean } from 'ahooks';
 import { useHistory } from 'react-router-dom';
+import { SkuResultSkuJsons } from '../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const Maintenance = (
   {
@@ -53,7 +54,22 @@ const Maintenance = (
 
             const skuResults = item.skuResults || [];
 
-            const condition = ToolUtil.isArray(item.condition);
+            const brands = item.brandResults || [];
+            const materials = item.materialResults || [];
+            const parts = item.partsResults || [];
+            const spuClass = item.spuClassificationResults || [];
+            const posotions = item.storehousePositionsResults || [];
+            const spus = item.spuResults || [];
+
+            const condition = [];
+
+            brands.map(item=>condition.push(item.brandName))
+            materials.map(item=>condition.push(item.name))
+            parts.map(item=>condition.push(SkuResultSkuJsons({skuResult:item,sku:true})))
+            spuClass.map(item=>condition.push(item.name))
+            posotions.map(item=>condition.push(item.name))
+            spus.map(item=>condition.push(item.name))
+
             if (!allSku && index >= 3) {
               return null;
             }
@@ -102,17 +118,17 @@ const Maintenance = (
       // history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}&show`);
     }}>
       <TaskItem
-        percent={parseInt((receipts.handle / receipts.total) * 100)}
+        percent={parseInt((receipts.doneNumberCount || 0 / receipts.numberCount || 1) * 100)}
         skuSize={receipts.skuSize}
         positionSize={receipts.positionSize}
         noBorder
       />
     </MyCard>
 
-    <MyCard title='负责人' extra={<UserName user={receipts.principal} />} />
+    <MyCard title='负责人' extra={<UserName user={receipts.userResult} />} />
 
     <MyCard title='任务时间' extra={<div>
-      {MyDate.Show(receipts.beginTime)} - {MyDate.Show(receipts.endTime)}
+      {MyDate.Show(receipts.createTime)} - {MyDate.Show(receipts.endTime)}
     </div>} />
 
     <MyCard title='养护类型' extra={receipts.type === 'check' ? '复检复调' : '无'} />
@@ -127,13 +143,13 @@ const Maintenance = (
     </MyCard>
 
     <MyCard title='备注'>
-      {receipts.remark || '无'}
+      {receipts.note || '无'}
     </MyCard>
 
     <MyCard title='附件'>
       <div className={style.files}>
-        {ToolUtil.isArray(receipts.mediaUrls).length === 0 && '无'}
-        <UploadFile show value={ToolUtil.isArray(receipts.mediaUrls).map(item => {
+        {ToolUtil.isArray(receipts.enclosureUrl).length === 0 && '无'}
+        <UploadFile show value={ToolUtil.isArray(receipts.enclosureUrl).map(item => {
           return {
             url: item,
             type: 'image',
@@ -142,9 +158,8 @@ const Maintenance = (
       </div>
     </MyCard>
 
-
-    {actionPermissions && <BottomButton only text='开始盘点' onClick={() => {
-      // history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}`);
+    {actionPermissions && <BottomButton only text='开始养护' onClick={() => {
+      history.push(`/Work/Maintenance/StartMaintenance?id=${receipts.maintenanceId}`);
     }} />}
 
   </>;
