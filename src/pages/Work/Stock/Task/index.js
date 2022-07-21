@@ -71,7 +71,8 @@ const Task = (
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {
-        setKey(param.type);
+        const types = param.types || []
+        setKey(types[0]);
       }}
     />
 

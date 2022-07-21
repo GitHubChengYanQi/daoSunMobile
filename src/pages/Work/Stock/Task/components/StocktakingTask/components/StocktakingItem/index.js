@@ -27,10 +27,10 @@ const StocktakingItem = ({ item, index }) => {
       onClick={onClick}
       orderData={<div className={style.status}>
         <div>
-          方法：{receipts.method === 'OpenDisc' ? '明盘' : '暗盘'}
+          明盘：{receipts.method === 'OpenDisc' ? '是' : '否'}
         </div>
         <div>
-          方式：{receipts.mode === 'staticState' ? '静态' : '动态'}
+          静态：{receipts.mode === 'staticState' ? '是' : '否'}
         </div>
       </div>}
       otherData={

@@ -16,17 +16,18 @@ const ProcessScreen = (
     },
     onClear = () => {
     },
+    open = {},
   },
 ) => {
 
   const searchtype = [
-    { key: 'type', title: '任务类型', open: true },
+    { key: 'type', title: '任务类型', open: open.type },
     { key: 'status', title: '状态', open: true },
     { key: 'createUser', title: '发起人', open: true },
     { key: 'outTime', title: '是否超期', open: true },
   ];
 
-  const type = params.type;
+  const types = params.types;
   const createUser = params.createUser;
   const outTime = params.outTime;
   const statusList = params.statusList || [];
@@ -39,7 +40,7 @@ const ProcessScreen = (
     let screened = false;
     switch (key) {
       case 'type':
-        screened = type;
+        screened = types.length;
         break;
       case 'status':
         screened = statusList.length > 0;
@@ -69,9 +70,9 @@ const ProcessScreen = (
             { label: '养护', value: ReceiptsEnums.maintenance },
           ]}
           title={item.title}
-          value={[type]}
-          onChange={(type) => {
-            paramsOnChange({ ...params, type });
+          value={types}
+          onChange={(types) => {
+            paramsOnChange({ ...params, types });
           }}
         />;
       case 'status':

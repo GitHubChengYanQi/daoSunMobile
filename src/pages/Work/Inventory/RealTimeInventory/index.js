@@ -118,7 +118,6 @@ const RealTimeInventory = (props) => {
       }}
     >
       <Positions
-        showAll
         single
         autoFocus
         ids={[position]}

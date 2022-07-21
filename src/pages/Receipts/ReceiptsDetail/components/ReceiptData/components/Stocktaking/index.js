@@ -16,6 +16,7 @@ import { useHistory } from 'react-router-dom';
 import { UserName } from '../../../../../../components/User';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import Icon from '../../../../../../components/Icon';
+import { useModel } from 'umi';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -30,6 +31,10 @@ const Stocktaking = (
     },
   },
 ) => {
+
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
 
   const nowInDateBetwen = (d1, d2) => {
     const dateBegin = new Date(d1);
@@ -50,7 +55,13 @@ const Stocktaking = (
 
   const history = useHistory();
 
-  const actionPermissions = getAction('check').id && permissions && nowInDateBetwen(receipts.beginTime, receipts.endTime);
+  const participantList = receipts.participantList || [];
+
+  const actionPermissions = getAction('check').id
+    &&
+    permissions
+    &&
+    (userInfo.id === receipts.userId || participantList.filter(item => item.userId === userInfo.id).length > 0);
 
   const [data, setData] = useState([]);
 
@@ -62,6 +73,8 @@ const Stocktaking = (
     const taskList = receipts.taskList || [];
     setData(taskList);
   }, [receipts.taskList]);
+
+  const outTime = !nowInDateBetwen(receipts.beginTime, receipts.endTime);
 
   return <>
     <MyCard
@@ -93,6 +106,7 @@ const Stocktaking = (
                   <div className={skuStyle.skuAction}>
                     <div className={skuStyle.sku}>
                       <SkuItem
+                        hiddenNumber={!showStock}
                         skuResult={item.skuResult}
                         otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
                       />
@@ -151,15 +165,15 @@ const Stocktaking = (
 
     <MyCard title='参与人员'>
       {
-        ToolUtil.isArray(receipts.participantList).map((item, index) => {
+        participantList.map((item, index) => {
           return <UserName key={index} user={item} />;
         })
       }
     </MyCard>
 
-    <MyCard title='方式' extra={receipts.method === 'OpenDisc' ? '明盘' : '暗盘'} />
+    <MyCard title='明盘' extra={receipts.method === 'OpenDisc' ? '是' : '否'} />
 
-    <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'} />
+    <MyCard title='静态' extra={receipts.mode === 'dynamic' ? '否' : '是'} />
 
     <MyCard title='盘点原由'>
       {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
@@ -187,17 +201,21 @@ const Stocktaking = (
     </MyCard>
 
 
-    {actionPermissions && <BottomButton only text='开始盘点' onClick={() => {
-      history.push({
-        pathname: '/Work/Inventory/StartStockTaking',
-        query: {
-          id: receipts.inventoryTaskId,
-          showStock: showStock ? 1 : 0,
-          skuSize: receipts.skuSize,
-          positionSize: receipts.positionSize,
-        },
-      });
-    }} />}
+    {actionPermissions && <BottomButton
+      only
+      disabled={outTime}
+      text={outTime ? '任务未开始' : '开始盘点'}
+      onClick={() => {
+        history.push({
+          pathname: '/Work/Inventory/StartStockTaking',
+          query: {
+            id: receipts.inventoryTaskId,
+            showStock: showStock ? 1 : 0,
+            skuSize: receipts.skuSize,
+            positionSize: receipts.positionSize,
+          },
+        });
+      }} />}
 
   </>;
 

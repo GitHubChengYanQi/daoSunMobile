@@ -19,7 +19,7 @@ const MyAudit = (
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], type };
+  const defaultParams = { auditType, statusList: ['0'], types: type && [type] };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});
@@ -83,6 +83,7 @@ const MyAudit = (
     <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen
+      open={{ type: !type }}
       skuNumber={number}
       onClose={() => {
         setScreen(false);

@@ -8,6 +8,7 @@ import Icon from '../../../../../../../../components/Icon';
 
 const ErrorShop = (
   {
+    showStock,
     anomalyType,
     errorNumber,
     id,
@@ -32,6 +33,7 @@ const ErrorShop = (
     switch (type) {
       case 'stockTaskingErrror':
         return <InstockError
+          showStock={showStock}
           noBack
           anomalyType={anomalyType}
           formId={id}
@@ -55,6 +57,7 @@ const ErrorShop = (
         />;
       case 'error':
         return <Error
+          showStock={showStock}
           noDelete
           type={ReceiptsEnums.stocktaking}
           id={params.id}
