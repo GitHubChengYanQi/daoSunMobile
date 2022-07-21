@@ -7,6 +7,7 @@ import OutTime from '../../../../Sku/SkuList/components/SkuScreen/components/Out
 
 const ProcessScreen = (
   {
+    top,
     screen,
     skuNumber,
     params = {},
@@ -111,7 +112,7 @@ const ProcessScreen = (
 
   return <>
     <Screen
-      top={78}
+      noNavBar={top === 0}
       screen={screen}
       buttonTitle={skuNumber === 0 ? '完成' : `查看 ${skuNumber} 个单据`}
       onClose={onClose}

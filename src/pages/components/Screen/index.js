@@ -19,6 +19,7 @@ const Screen = (
     },
     SideBarDisabled = () => {
     },
+    noNavBar,
   }) => {
 
 
@@ -74,8 +75,8 @@ const Screen = (
       position='top'
       bodyStyle={{ height: '40vh' }}
     >
-      <div className={style.screenDiv} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 40 }}>
-        <div className={style.top} style={{ height: ToolUtil.isQiyeWeixin() ? 40 : 85 }} onClick={onClose} />
+      <div className={style.screenDiv} style={{ top: (noNavBar || ToolUtil.isQiyeWeixin()) ? 0 : 40 }}>
+        <div className={style.top} style={{ height: (noNavBar || ToolUtil.isQiyeWeixin()) ? 40 : 85 }} onClick={onClose} />
         <div className={style.space} />
         <div className={style.content}>
           <SideBar
