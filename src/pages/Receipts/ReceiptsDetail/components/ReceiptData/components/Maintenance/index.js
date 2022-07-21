@@ -142,8 +142,8 @@ const Maintenance = (
     <MyCard title='养护类型' extra={receipts.type === 'check' ? '复检复调' : '无'} />
 
     <MyCard title='养护原由'>
-      {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
-      {ToolUtil.isArray(receipts.announcements).map((item, index) => {
+      {ToolUtil.isArray(receipts.announcementsResults).length === 0 && <div>无</div>}
+      {ToolUtil.isArray(receipts.announcementsResults).map((item, index) => {
         return <div key={index} className={style.carefulShow}>
           {item.content}
         </div>;
