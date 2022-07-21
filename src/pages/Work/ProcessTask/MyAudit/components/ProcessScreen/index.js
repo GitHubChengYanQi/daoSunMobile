@@ -16,11 +16,12 @@ const ProcessScreen = (
     },
     onClear = () => {
     },
+    open = {},
   },
 ) => {
 
   const searchtype = [
-    { key: 'type', title: '任务类型', open: true },
+    { key: 'type', title: '任务类型', open: open.type },
     { key: 'status', title: '状态', open: true },
     { key: 'createUser', title: '发起人', open: true },
     { key: 'outTime', title: '是否超期', open: true },

@@ -25,6 +25,7 @@ const Task = (
   const history = useHistory();
 
   const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
+  console.log(key);
 
   const tabs = [
     { title: '调拨任务', key: 'allocation' },
@@ -71,7 +72,8 @@ const Task = (
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {
-        setKey(param.type);
+        const types = param.types || []
+        setKey(types[0]);
       }}
     />
 

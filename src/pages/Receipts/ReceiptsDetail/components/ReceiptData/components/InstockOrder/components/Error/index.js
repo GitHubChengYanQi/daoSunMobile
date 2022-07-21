@@ -476,6 +476,7 @@ const Error = (
               <div className={style.actual} style={{ padding: 0 }}>
                 <span>盘点数量</span>
                 <ShopNumber
+                  hiddenNumber={!showStock}
                   show={show}
                   min={allNumber}
                   value={sku.realNumber}

@@ -191,6 +191,7 @@ const StocktaskigAction = (
     </Popup>
 
     {!show && <ErrorShop
+      showStock
       noBack
       anomalyType={anomalyType}
       errorNumber={errorNumber}

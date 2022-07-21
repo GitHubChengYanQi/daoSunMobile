@@ -18,6 +18,7 @@ import ShopNumber
 
 const InstockError = (
   {
+    showStock,
     noBack,
     anomalyType,
     formId,
@@ -105,6 +106,7 @@ const InstockError = (
           totalTitle: '账面库存',
           type: 'Stocktaking',
           skuItem: <SkuItem
+            hiddenNumber={!showStock}
             skuResult={skuResult}
             extraWidth='80px'
             otherData={[brandName]}

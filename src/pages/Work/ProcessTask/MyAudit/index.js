@@ -83,6 +83,7 @@ const MyAudit = (
     <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen
+      open={{ type: !type }}
       skuNumber={number}
       onClose={() => {
         setScreen(false);
