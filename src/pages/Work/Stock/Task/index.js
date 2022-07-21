@@ -8,6 +8,7 @@ import { useLocation } from 'umi';
 import MyNavBar from '../../../components/MyNavBar';
 import { useHistory } from 'react-router-dom';
 import TaskBottom from './components/TaskBottom';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
@@ -67,7 +68,7 @@ const Task = (
     </div>
 
     <MyAudit
-      top={query.type ? 45 : 0}
+      top={(query.type && !ToolUtil.isQiyeWeixin()) ? 45 : 0}
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {

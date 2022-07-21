@@ -4,6 +4,7 @@ import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import { Progress } from 'antd';
 import Icon from '../../../../../components/Icon';
+import moment from 'moment';
 
 const TaskItem = (
   {
@@ -25,7 +26,9 @@ const TaskItem = (
 ) => {
 
   const getHour = (begin, end) => {
-    const dateDiff = new Date(begin).getTime() - new Date(end).getTime();
+    const beginTime = moment(begin).format('YYYY/MM/DD HH:mm:ss');
+    const endTime = moment(end).format('YYYY/MM/DD HH:mm:ss');
+    const dateDiff = new Date(beginTime).getTime() - new Date(endTime).getTime();
     return Number((dateDiff / 3600000).toFixed(2));
   };
 
@@ -50,14 +53,14 @@ const TaskItem = (
     <div className={style.content}>
       <div className={style.orderData}>
         <div className={style.dateShow}>
-          <div className={style.show} style={{border:noBorder && 'none'}}>
+          <div className={style.show} style={{ border: noBorder && 'none' }}>
             <Icon type='icon-pandianwuliao' />
             <div className={style.showNumber}>
               <span className={style.number}>{skuSize}</span>
               <span>涉及物料</span>
             </div>
           </div>
-          <div className={style.show} style={{ borderLeft: 'none',border:noBorder && 'none' }}>
+          <div className={style.show} style={{ borderLeft: 'none', border: noBorder && 'none' }}>
             <Icon type='icon-pandiankuwei' />
             <div className={style.showNumber}>
               <span className={style.number}>{positionSize}</span>
