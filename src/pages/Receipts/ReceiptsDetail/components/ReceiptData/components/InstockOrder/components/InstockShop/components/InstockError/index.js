@@ -102,7 +102,7 @@ const InstockError = (
         };
       case ReceiptsEnums.stocktaking:
         return {
-          totalTitle: '实际总数',
+          totalTitle: '账面库存',
           type: 'Stocktaking',
           skuItem: <SkuItem
             skuResult={skuResult}

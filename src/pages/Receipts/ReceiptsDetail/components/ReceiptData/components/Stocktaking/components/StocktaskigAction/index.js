@@ -108,7 +108,7 @@ const StocktaskigAction = (
                     extraWidth='100px'
                     hiddenNumber={!showStock}
                     number={skuItem.number}
-                    otherData={[ToolUtil.isObject(skuItem.brandResult).brandName]}
+                    otherData={[ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌']}
                   />
                 </div>
                 <div className={style.info}>

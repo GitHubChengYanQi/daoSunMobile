@@ -148,9 +148,9 @@ const Stocktaking = (
       }
     </MyCard>
 
-    <MyCard title='方式' extra={receipts.method === 'OpenDisc' ? '明盘' : '暗盘'} />
+    <MyCard title='明盘' extra={receipts.method === 'OpenDisc' ? '是' : '否'} />
 
-    <MyCard title='方法' extra={receipts.method === 'dynamic' ? '动态' : '静态'} />
+    <MyCard title='静态' extra={receipts.mode === 'dynamic' ? '否' : '是'} />
 
     <MyCard title='盘点原由'>
       {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
