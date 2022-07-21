@@ -63,12 +63,12 @@ const Maintenance = (
 
             const condition = [];
 
-            brands.map(item=>condition.push(item.brandName))
-            materials.map(item=>condition.push(item.name))
-            parts.map(item=>condition.push(SkuResultSkuJsons({skuResult:item,sku:true})))
-            spuClass.map(item=>condition.push(item.name))
-            posotions.map(item=>condition.push(item.name))
-            spus.map(item=>condition.push(item.name))
+            brands.map(item => condition.push(item.brandName));
+            materials.map(item => condition.push(item.name));
+            parts.map(item => condition.push(SkuResultSkuJsons({ skuResult: item, sku: true })));
+            spuClass.map(item => condition.push(item.name));
+            posotions.map(item => condition.push(item.name));
+            spus.map(item => condition.push(item.name));
 
             if (!allSku && index >= 3) {
               return null;
@@ -115,12 +115,20 @@ const Maintenance = (
     </MyCard>
 
     <MyCard title='任务预览' onClick={() => {
-      // history.push(`/Work/Inventory/StartStockTaking?id=${receipts.inventoryTaskId}&showStock=${showStock ? 1 : 0}&show`);
+      history.push({
+        pathname: '/Work/Maintenance/StartMaintenance',
+        query: {
+          id: receipts.maintenanceId,
+          skuCount: receipts.skuCount,
+          positionCount: receipts.positionCount,
+          show: true,
+        },
+      });
     }}>
       <TaskItem
-        percent={parseInt((receipts.doneNumberCount || 0 / receipts.numberCount || 1) * 100)}
-        skuSize={receipts.skuSize}
-        positionSize={receipts.positionSize}
+        percent={parseInt(((receipts.doneNumberCount || 0) / (receipts.numberCount || 1)) * 100)}
+        skuSize={receipts.skuCount}
+        positionSize={receipts.positionCount}
         noBorder
       />
     </MyCard>
@@ -159,18 +167,17 @@ const Maintenance = (
     </MyCard>
 
     {actionPermissions && <BottomButton only text='开始养护' onClick={() => {
-      history.push(`/Work/Maintenance/StartMaintenance?id=${receipts.maintenanceId}`);
+      history.push({
+        pathname: '/Work/Maintenance/StartMaintenance',
+        query: {
+          id: receipts.maintenanceId,
+          skuCount: receipts.skuCount,
+          positionCount: receipts.positionCount,
+        },
+      });
     }} />}
 
   </>;
-
-  return <MaintenanceAction
-    data={data}
-    setData={setData}
-    actionPermissions={actionPermissions}
-    maintenanceId={receipts.maintenanceId}
-    refresh={refresh}
-  />;
 };
 
 export default Maintenance;
