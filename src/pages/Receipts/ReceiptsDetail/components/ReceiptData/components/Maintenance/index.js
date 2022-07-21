@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MaintenanceAction from './components/MaintenanceAction';
 import MyCard from '../../../../../../components/MyCard';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { Divider, ErrorBlock } from 'antd-mobile';
-import Icon from '../../../../../../components/Icon';
+import { Divider } from 'antd-mobile';
 import skuStyle
   from '../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/StocktakingAsk/components/SelectSkus/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
