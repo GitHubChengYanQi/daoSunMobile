@@ -74,7 +74,9 @@ const StartStockTaking = () => {
       submit({ skuName: null });
     }} />
     <div className={style.header} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
-      <div className={style.number}>涉及 <span className='blue'>{data.length}</span> 个库位 <span className='blue'>22</span>类物料
+      <div className={style.number}>
+        涉及 <span className='blue'>{query.positionSize || 0}</span> 个库位 <span
+        className='blue'>{query.skuSize || 0}</span>类物料
       </div>
       <div className={style.screen}>
         <div onClick={() => {

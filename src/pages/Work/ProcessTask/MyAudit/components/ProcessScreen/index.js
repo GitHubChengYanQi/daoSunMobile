@@ -27,7 +27,7 @@ const ProcessScreen = (
     { key: 'outTime', title: '是否超期', open: true },
   ];
 
-  const types = params.types;
+  const types = params.types || [];
   const createUser = params.createUser;
   const outTime = params.outTime;
   const statusList = params.statusList || [];
@@ -40,7 +40,7 @@ const ProcessScreen = (
     let screened = false;
     switch (key) {
       case 'type':
-        screened = types.length;
+        screened = types.length > 0;
         break;
       case 'status':
         screened = statusList.length > 0;
@@ -61,7 +61,7 @@ const ProcessScreen = (
     switch (item.key) {
       case 'type':
         return <State
-          multiple={false}
+          multiple
           options={[
             { label: '入库', value: ReceiptsEnums.instockOrder },
             { label: '出库', value: ReceiptsEnums.outstockOrder },
