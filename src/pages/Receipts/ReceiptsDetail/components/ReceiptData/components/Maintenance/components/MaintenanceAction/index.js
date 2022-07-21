@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import style from '../../index.less';
-import MyCard from '../../../../../../../../components/MyCard';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { Button } from 'antd-mobile';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import Maintenanceing from '../Maintenanceing';
 import MyList from '../../../../../../../../components/MyList';
+import style from '../../../Stocktaking/index.less';
+import { Progress } from 'antd';
 
 const MaintenanceAction = (
   {
@@ -16,70 +16,167 @@ const MaintenanceAction = (
     setData = () => {
     },
     maintenanceId,
-    refresh = () => {
-    },
+    show,
   },
 ) => {
 
   const [visible, setVisible] = useState();
 
-  return <div className={style.stocktaking}>
-    <div className={style.title}>
-      库位：{data.length}
-    </div>
+  console.log(data);
 
-    <MyList api={api} data={data} getData={setData}>
-      {
-        data.map((positionItem, positionIndex) => {
-          const skuList = positionItem.object || [];
+  const dataList = () => {
+    return data.map((positionItem, positionIndex) => {
 
-          return <MyCard
-            key={positionIndex}
-            title={<>{positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
-            </>}>
-            <div className={style.skus}>
-              {
-                skuList.map((skuItem, skuIndex) => {
-                  const brandResults = skuItem.brandResults || [];
+      const skuResultList = positionItem.skuResultList || [];
 
-                  if (!positionItem.show && skuIndex >= 2) {
-                    return null;
-                  }
+      return <div
+        key={positionIndex}
+        className={style.positionItem}
+      >
+        <div className={style.positionName}>
+          {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
+        </div>
+        <div className={style.skus}>
+          {
+            skuResultList.map((skuItem, skuIndex) => {
+              const brandResults = skuItem.brandResults || [];
 
-                  const border = (positionItem.show || skuList.length <= 2) ? skuIndex === skuList.length - 1 : skuIndex === 1;
+              let total = 0;
+              let complete = 0;
+              brandResults.forEach(item => {
+                total += item.number;
+                complete += item.doneNumber;
+              });
 
-                  return <div
-                    className={style.skuItem}
-                    key={skuIndex}
-                    style={{ border: border ? 'none' : '' }}>
-                    <div className={style.skuRow}>
-                      <SkuItem
-                        extraWidth={actionPermissions ? '110px' : '40px'}
-                        skuResult={skuItem}
-                        otherData={[brandResults.map(item => {
-                          return `${item.brandName} (${item.number})`;
-                        }).join(' 、 ')]}
-                      />
-                    </div>
-                    <div hidden={!actionPermissions}>
-                      <Button
-                        color='primary'
-                        fill='outline'
-                        onClick={() => setVisible({
+              return <div key={skuIndex} className={style.skuAction}>
+                <div
+                  className={style.sku}
+                  style={{ border: 'none' }}
+                >
+                  <div className={style.skuItem}>
+                    <SkuItem
+                      extraWidth={actionPermissions ? '110px' : '40px'}
+                      skuResult={skuItem.skuResult}
+                      otherData={[brandResults.map(item => {
+                        return `${item.brandName || '无品牌'} (${item.number})`;
+                      }).join(' 、 ')]}
+                    />
+                  </div>
+                  <div className={style.info}>
+                    <Button
+                      color='primary'
+                      fill='outline'
+                      onClick={() => {
+                        const newBrandResults = [];
+                        brandResults.forEach(item => {
+                          const number = item.number - item.doneNumber;
+                          if (number <= 0) {
+                            return;
+                          }
+                          newBrandResults.push({ ...item, number: number });
+                        });
+
+                        setVisible({
                           ...skuItem,
-                          positionId: positionItem.storehousePositionsId,
+                          positionId: positionItem.positionId,
                           positionName: positionItem.name,
-                        })}>
-                        养护
-                      </Button>
-                    </div>
-                  </div>;
-                })
-              }
-            </div>
-          </MyCard>;
-        })
-      }
+                          brandResults: newBrandResults,
+                        });
+                      }}>
+                      养护
+                    </Button>
+                  </div>
+                </div>
+                <div className={style.progress}>
+                  <Progress
+                    format={(number) => {
+                      return <span className={style.blue}>{number + '%'}</span>;
+                    }}
+                    percent={parseInt((complete / total) * 100)}
+                  />
+                </div>
+              </div>;
+            })
+          }
+        </div>
+        <div className={style.space} />
+      </div>;
+    });
+  };
+
+  return <div className={style.stocktaking}>
+    <MyList api={api} data={data} getData={(list = [], newList = []) => {
+      const positionIds = list.map(item => item.storehousePositionsId);
+      const newData = data.filter(item => positionIds.includes(item.positionId));
+      newList.forEach(item => {
+        const newPositionIds = newData.map(item => item.positionId);
+        const newPositionIndex = newPositionIds.indexOf(item.storehousePositionsId);
+
+        const brand = item.brandResult || {};
+
+        if (newPositionIndex !== -1) {
+          const newPosition = newData[newPositionIndex];
+
+          const skus = newPosition.skuResultList || [];
+          const skuIds = skus.map(item => item.skuId);
+          const skuIndex = skuIds.indexOf(item.skuId);
+          if (skuIndex !== -1) {
+            const sku = skus[skuIndex];
+            skus[skuIndex] = {
+              ...sku,
+              brandResults: [
+                ...sku.brandResults,
+                {
+                  brandName: brand.brandName || '无品牌',
+                  brandId: brand.brandId || 0,
+                  number: item.number || 0,
+                  doneNumber: sku.doneNumber || 0,
+                },
+              ],
+            };
+            newData[newPositionIndex] = {
+              ...newPosition,
+              skuResultList: skus,
+            };
+          } else {
+            newData[newPositionIndex] = {
+              ...newPosition,
+              skuResultList: [
+                ...skus,
+                {
+                  skuResult: item.skuResult,
+                  skuId: item.skuId,
+                  brandResults: [{
+                    brandName: brand.brandName || '无品牌',
+                    brandId: brand.brandId || 0,
+                    number: item.number || 0,
+                    doneNumber: item.doneNumber || 0,
+                  }],
+                },
+              ],
+            };
+          }
+        } else {
+          newData.push({
+            positionId: item.storehousePositionsId,
+            name: ToolUtil.isObject(item.storehousePositionsResult).name,
+            storehouseResult: ToolUtil.isObject(item.storehousePositionsResult).storehouseResult,
+            skuResultList: [{
+              skuResult: item.skuResult,
+              skuId: item.skuId,
+              brandResults: [{
+                brandName: brand.brandName || '无品牌',
+                brandId: brand.brandId || 0,
+                number: item.number || 0,
+                doneNumber: item.doneNumber || 0,
+              }],
+            }],
+          });
+        }
+      });
+      setData(newData);
+    }}>
+      {dataList()}
     </MyList>
 
     <MyAntPopup
@@ -88,8 +185,35 @@ const MaintenanceAction = (
       visible={visible}
       destroyOnClose
     >
-      <Maintenanceing maintenanceId={maintenanceId} skuItem={visible} onSuccess={() => {
-        refresh();
+      <Maintenanceing maintenanceId={maintenanceId} skuItem={visible} onSuccess={(res) => {
+        const brands = res.brands || [];
+        const brandIds = brands.map(item => item.brandId);
+        const newData = data.map(positionItem => {
+            if (positionItem.positionId === res.positionId) {
+              const newSkuResultList = positionItem.skuResultList || [];
+              const skuResultList = newSkuResultList.map(skuItem => {
+                if (skuItem.skuId === res.skuId) {
+                  const newBrandResults = skuItem.brandResults || [];
+                  const brandResults = newBrandResults.map(brandItem => {
+                    const brandIndex = brandIds.indexOf(brandItem.brandId);
+                    if (brandIndex !== -1) {
+                      return { ...brandItem, doneNumber: brands[brandIndex].number };
+                    } else {
+                      return brandItem;
+                    }
+                  });
+                  return { ...skuItem, brandResults };
+                } else {
+                  return skuItem;
+                }
+              });
+              return { ...positionItem, skuResultList };
+            } else {
+              return positionItem;
+            }
+          },
+        );
+        setData(newData);
         setVisible(false);
       }} />
     </MyAntPopup>

@@ -1,14 +1,14 @@
 import React, { useRef, useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
 import MySearch from '../../../components/MySearch';
-import style from './index.less';
 import Icon from '../../../components/Icon';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
 import MaintenanceAction
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Maintenance/components/MaintenanceAction';
+import style from '../../Inventory/StartStockTaking/index.less';
 
 export const curingList = { url: '/maintenanceDetail/list', method: 'POST' };
 
@@ -22,7 +22,7 @@ const StartMaintenance = () => {
 
   const [data, setData] = useState([]);
 
-  const [params, setParams] = useState({ positionSort: 'asc', inventoryId: query.id });
+  const [params, setParams] = useState({ sort: 'asc', maintenanceId: query.id });
 
   const [searchValue, setSearchValue] = useState();
 
@@ -54,18 +54,20 @@ const StartMaintenance = () => {
       placeholder='搜索物料信息'
       onChange={setSearchValue}
       onSearch={(value) => {
-        submit({ skuName: value });
-      }} onClear={() => {
-      submit({ skuName: null });
-    }} />
+        submit({ queryParam: value });
+      }}
+      onClear={() => {
+        submit({ queryParam: null });
+      }}
+    />
     <div className={style.header} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
       <div className={style.number}>涉及 <span className='blue'>{data.length}</span> 个库位 <span className='blue'>22</span>类物料
       </div>
       <div className={style.screen}>
-        <div onClick={() => {
-          submit({ positionSort: params.positionSort === 'asc' ? 'desc' : 'asc' });
+        <div className={style.screenItem} onClick={() => {
+          submit({ sort: params.sort === 'asc' ? 'desc' : 'asc' });
         }}>
-          库位 {sortShow(params.positionSort)}
+          进度 {sortShow(params.sort)}
         </div>
         <Dropdown className={style.dropdown}>
           <Dropdown.Item key='sorter' title='状态'>
@@ -96,8 +98,7 @@ const StartMaintenance = () => {
       data={data}
       setData={setData}
       actionPermissions
-      maintenanceId
-      refresh
+      maintenanceId={query.id}
     />;
   </div>;
 };

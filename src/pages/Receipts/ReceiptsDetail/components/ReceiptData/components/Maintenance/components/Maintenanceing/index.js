@@ -31,10 +31,20 @@ const Maintenanceing = (
       {
         manual: true,
         onSuccess: () => {
-          Message.successToast('养护成功！',()=>{
-            onSuccess();
+          Message.successToast('养护成功！', () => {
+            onSuccess({
+              positionId: skuItem.positionId,
+              skuId: skuItem.skuId,
+              brands: completeBrands.map(item => {
+                return {
+                  brandId: item.brandId,
+                  number: item.curingNumber,
+                };
+              }),
+            });
           });
         },
+        onError:()=> Message.errorToast('养护成功！')
       });
 
     const [files, setFiles] = useState([]);
@@ -65,10 +75,10 @@ const Maintenanceing = (
       setBrands(newBrands);
     };
 
-    return <div style={{ paddingBottom: 60,maxWidth:'80vh',overflow:'hidden' }}>
+    return <div style={{ paddingBottom: 60, maxWidth: '80vh', overflow: 'hidden' }}>
       <div className={style.skuItem}>
         <div className={style.sku}>
-          <SkuItem extraWidth='94px' skuResult={skuItem} otherData={[skuItem.positionName]} />
+          <SkuItem extraWidth='94px' skuResult={skuItem.skuResult} otherData={[skuItem.positionName]} />
         </div>
         <div className={style.actions}>
           <div hidden className={style.sop}>

@@ -19,7 +19,7 @@ const MyAudit = (
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], types: type && [type] };
+  const defaultParams = { auditType, statusList: ['0'], types: type && [type],type };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});

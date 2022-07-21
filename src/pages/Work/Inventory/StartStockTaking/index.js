@@ -79,7 +79,7 @@ const StartStockTaking = () => {
         className='blue'>{query.skuSize || 0}</span>类物料
       </div>
       <div className={style.screen}>
-        <div onClick={() => {
+        <div className={style.screenItem} onClick={() => {
           submit({ positionSort: params.positionSort === 'asc' ? 'desc' : 'asc' });
         }}>
           库位 {sortShow(params.positionSort)}

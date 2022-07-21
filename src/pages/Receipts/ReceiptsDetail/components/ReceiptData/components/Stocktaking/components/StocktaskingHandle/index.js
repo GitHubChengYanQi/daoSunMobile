@@ -26,7 +26,7 @@ const StocktaskingHandle = (
   let errorNumber = 0;
   data.forEach(posiItem => {
     ToolUtil.isArray(posiItem.skuResultList).forEach(skuItem => {
-      if (skuItem.status === -1 && skuItem.status !== 99) {
+      if (skuItem.status === -1 && skuItem.lockStatus !== 99) {
         errorNumber++;
       }
     });
