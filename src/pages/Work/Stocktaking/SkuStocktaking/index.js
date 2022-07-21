@@ -5,7 +5,7 @@ import React from 'react';
 const SkuStocktaking = () => {
 
 
-  return <>物料盘点11</>;
+  return <>物料盘点111</>;
 };
 
 export default SkuStocktaking;
