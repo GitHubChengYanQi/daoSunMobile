@@ -45,15 +45,15 @@ const InstockError = (
           setErrorList(list);
           break;
         case ReceiptsEnums.stocktaking:
-          // if (showStock) {
+          if (showStock) {
             setErrorList(list);
-          // } else {
-          //   const newList = list.filter(item => {
-          //     const anomalyResult = item.anomalyResult || {};
-          //     return anomalyResult.otherNumber !== 0
-          //   });
-          //   setErrorList(newList);
-          // }
+          } else {
+            const newList = list.filter(item => {
+              const anomalyResult = item.anomalyResult || {};
+              return anomalyResult.otherNumber !== 0
+            });
+            setErrorList(newList);
+          }
           break;
         default:
           break;

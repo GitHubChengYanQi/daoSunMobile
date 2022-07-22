@@ -88,7 +88,7 @@ const StocktaskingHandle = (
       api={api}
       anomalyType={anomalyType}
       inventoryTaskId={inventoryTaskId}
-      errorNumber={shopCartNum || errorNumber}
+      errorNumber={typeof shopCartNum === 'number' ? shopCartNum : errorNumber}
       errorReturn={skuReturnChange}
       refresh={(skuItem, error, anomalyId) => {
         if (skuItem) {

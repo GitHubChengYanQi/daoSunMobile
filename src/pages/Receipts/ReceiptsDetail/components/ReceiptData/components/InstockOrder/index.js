@@ -6,6 +6,7 @@ import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import MyCard from '../../../../../../components/MyCard';
+import { UserName } from '../../../../../../components/User';
 
 const InstockOrder = (
   {
@@ -73,8 +74,9 @@ const InstockOrder = (
     {action()}
 
     <MyCard
-      hidden={type !== ReceiptsEnums.outstockOrder} title='领料负责人'
-      extra={<div>{ToolUtil.isObject(data.userResult).name}</div>}
+      hidden={type !== ReceiptsEnums.outstockOrder}
+      title='领料负责人'
+      extra={<UserName user={data.userResult} />}
     />
 
     <MyCard title='注意事项'>
