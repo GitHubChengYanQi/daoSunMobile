@@ -68,7 +68,6 @@ const Task = (
     </div>
 
     <MyAudit
-      top={(query.type && !ToolUtil.isQiyeWeixin()) ? 45 : 0}
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {

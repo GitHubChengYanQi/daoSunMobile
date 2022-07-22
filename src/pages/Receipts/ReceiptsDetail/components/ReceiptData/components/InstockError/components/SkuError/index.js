@@ -109,7 +109,7 @@ const SkuError = (
         checkUsers: checkUsers,
         realNumber: res.realNumber,
         needNumber: res.needNumber,
-        skuResult: res.skuSimpleResult,
+        skuResult: res.skuResult,
         customerResult: res.customer,
         user: res.user,
         type: res.type,
