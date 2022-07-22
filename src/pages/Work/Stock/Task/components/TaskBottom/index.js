@@ -15,7 +15,7 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
 
   const codeId = qrCode.codeId;
 
-  useEffect(()=>{
+  useEffect(() => {
     if (codeId) {
       const backObject = qrCode.backObject || {};
       props.dispatch({
@@ -32,7 +32,7 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
         Message.errorToast('请扫描库位码!');
       }
     }
-  },[codeId])
+  }, [codeId]);
 
   switch (taskKey) {
     case ReceiptsEnums.stocktaking:
@@ -46,12 +46,6 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
       }}>
         <ScanIcon />
       </div> : <></>;
-    case ReceiptsEnums.maintenance:
-      return <div className={ToolUtil.classNames(style.maintenanceButtom, task && style.bottom)}>
-        <Button color='primary' onClick={() => {
-          history.push('/Work/Maintenance/AllMaintenance');
-        }}>开始养护</Button>
-      </div>;
     default:
       return <></>;
   }
