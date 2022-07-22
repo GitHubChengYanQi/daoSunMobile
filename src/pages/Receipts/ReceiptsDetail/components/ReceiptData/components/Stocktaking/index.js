@@ -82,8 +82,12 @@ const Stocktaking = (
       bodyClassName={style.noPadding}>
       {(data.length === 1 && data[0].type === 'all') ?
         <div style={{ padding: 8 }}>
-          <ErrorBlock status='empty' title='全局盘点' image={<Icon type='icon-pandian1' style={{ fontSize: 100 }} />}
-                      description />
+          <ErrorBlock
+            status='empty'
+            title='全局盘点'
+            image={<Icon type='icon-pandian1' style={{ fontSize: 100 }} />}
+            description
+          />
         </div>
         :
         <div className={skuStyle.skus}>
@@ -140,7 +144,6 @@ const Stocktaking = (
         pathname: '/Work/Inventory/StartStockTaking',
         query: {
           id: receipts.inventoryTaskId,
-          showStock: showStock ? 1 : 0,
           show: true,
         },
       });
@@ -206,7 +209,6 @@ const Stocktaking = (
           pathname: '/Work/Inventory/StartStockTaking',
           query: {
             id: receipts.inventoryTaskId,
-            showStock: showStock ? 1 : 0,
           },
         });
       }} />}

@@ -41,7 +41,6 @@ const ReceiptsDetail = () => {
 
   const [type, setType] = useState();
 
-
   // 获取当前节点
   const getCurrentNode = (data) => {
     if (!data) {

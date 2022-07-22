@@ -15,6 +15,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
 
 export const taskList = { url: '/inventoryStock/list', method: 'POST' };
+export const detail = { url: '/inventory/detail', method: 'POST' };
 export const getStatistics = { url: '/inventoryStock/speedProgress', method: 'POST' };
 
 const StartStockTaking = () => {
@@ -30,6 +31,8 @@ const StartStockTaking = () => {
   const [data, setData] = useState([]);
 
   const [statistics, setStatistics] = useState({});
+
+  const { loading: detailLoading, data: detailInfo, run: detailRun } = useRequest(detail, { manual: true });
 
   const { loading, run } = useRequest(inventoryComplete, {
     manual: true,
@@ -49,6 +52,7 @@ const StartStockTaking = () => {
 
   useEffect(() => {
     statisticsRun({ data: { inventoryId: query.id } });
+    detailRun({ data: { inventoryTaskId: query.id } });
   }, []);
 
   const [params, setParams] = useState({ positionSort: 'asc', inventoryId: query.id });
@@ -72,7 +76,11 @@ const StartStockTaking = () => {
     }
   };
 
-  if (!query.id) {
+  if (detailLoading) {
+    return <MyLoading skeleton />;
+  }
+
+  if (!query.id || !detailInfo) {
     return <MyEmpty />;
   }
 
@@ -135,7 +143,7 @@ const StartStockTaking = () => {
       params={params}
       inventoryTaskId={query.id}
       anomalyType='StocktakingError'
-      showStock={query.showStock === 1}
+      showStock={detailInfo.method === 'OpenDisc'}
       data={data}
       setData={setData}
       complete={() => {

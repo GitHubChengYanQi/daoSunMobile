@@ -13,10 +13,13 @@ import MaterialAnalysis from '../Report/components/MaterialAnalysis';
 import InventoryRotation from '../Report/components/InventoryRotation';
 import WorkEfficiency from '../Report/components/WorkEfficiency';
 import ErrorSku from '../Report/components/ErrorSku';
+import { useHistory } from 'react-router-dom';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
 const Home = (props) => {
+
+  const history = useHistory();
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -58,7 +61,15 @@ const Home = (props) => {
        </span>
         </div>
       </div>
-      <div>
+      <div onClick={() => {
+        // props.dispatch({
+        //   type: 'qrCode/scanCodeState',
+        //   payload: {
+        //     route: '/User',
+        //   },
+        // });
+        // history.push('/');
+      }}>
         <Avatar
           style={{ backgroundColor: '#98BFEB' }}
           size={46}
@@ -163,4 +174,4 @@ const Home = (props) => {
   </div>;
 };
 
-export default connect(({ data }) => ({ data }))(Home);
+export default connect(({ qrCode,data }) => ({ qrCode,data }))(Home);

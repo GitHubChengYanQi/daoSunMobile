@@ -7,6 +7,7 @@ import { ToolUtil } from '../ToolUtil';
 
 const MyKeybord = (
   {
+    noMask,
     popupClassName,
     noStepper,
     numberClick = () => {

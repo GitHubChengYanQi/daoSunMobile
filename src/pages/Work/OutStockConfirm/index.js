@@ -9,6 +9,7 @@ import ShopNumber from '../Instock/InstockAsk/coponents/SkuInstock/components/Sh
 import BottomButton from '../../components/BottomButton';
 import { Message } from '../../components/Message';
 import CodeNumber from './CodeNumber';
+import { NoticeBar } from 'antd-mobile';
 
 const listByCode = { url: '/productionPickLists/listByCode', method: 'GET' };
 const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
@@ -21,10 +22,16 @@ const OutStockConfirm = () => {
 
   const [code, setCode] = useState([]);
 
+  const [error, setError] = useState();
+
   const { loading, run } = useRequest(listByCode, {
     manual: true,
+    noError: true,
     onSuccess: (res) => {
       setOutSkus(res);
+    },
+    onError: () => {
+      setError(true);
     },
   });
 
@@ -45,17 +52,26 @@ const OutStockConfirm = () => {
     }
   }, []);
 
-  if (loading || outStockLoading) {
+  if ((loading && query.code) || outStockLoading) {
     return <MyLoading />;
   }
 
   if (outSkus.length === 0) {
     return <div style={{ backgroundColor: '#fff', height: '100%' }}>
       <MyNavBar title='出库确认' />
-      <CodeNumber title='请输入领料码' onSuccess={(code) => {
+      {error &&
+      <NoticeBar
+        closeable
+        onClose={() => setError(false)}
+        className={style.noticeBar}
+        content='此领料码未查询到物料或码已被使用'
+        color='error'
+      />}
+      <CodeNumber open title='请输入领料码' onSuccess={(code) => {
         setCode(code);
         run({ params: { code } });
       }} />
+      {loading && <MyLoading />}
     </div>;
   }
 

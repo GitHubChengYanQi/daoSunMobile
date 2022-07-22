@@ -32,18 +32,40 @@ const InstockError = (
   },
 ) => {
 
+  const [errorList, setErrorList] = useState([]);
+
   const {
-    loading,
-    data: errorList,
-    run: errorShop,
-    refresh: shopRefresh,
-  } = useRequest(shopCartAllList, { manual: true });
+    loading, run: errorShop, refresh: shopRefresh,
+  } = useRequest(shopCartAllList, {
+    manual: true,
+    onSuccess: (res) => {
+      const list = ToolUtil.isArray(res);
+      switch (type) {
+        case ReceiptsEnums.instockOrder:
+          setErrorList(list);
+          break;
+        case ReceiptsEnums.stocktaking:
+          // if (showStock) {
+            setErrorList(list);
+          // } else {
+          //   const newList = list.filter(item => {
+          //     const anomalyResult = item.anomalyResult || {};
+          //     return anomalyResult.otherNumber !== 0
+          //   });
+          //   setErrorList(newList);
+          // }
+          break;
+        default:
+          break;
+      }
+    },
+  });
 
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: (res) => {
       Message.successToast('提报成功！', () => {
-        refresh(res,99);
+        refresh(res, 99);
         shopRefresh();
         setData([]);
       });
@@ -63,17 +85,15 @@ const InstockError = (
       });
       Message.successToast('退回成功！', () => {
         shopRefresh();
-        refresh(skus,0);
+        refresh(skus, 0);
         setData([]);
       });
     },
   });
 
-  const errors = ToolUtil.isArray(errorList);
-
   const [data, setData] = useState([]);
 
-  const allChecked = data.length === 0 ? false : errors.length === data.length;
+  const allChecked = data.length === 0 ? false : errorList.length === data.length;
 
   const check = (checked, item) => {
     if (!checked) {
@@ -133,7 +153,7 @@ const InstockError = (
         errorShop({
           data: {
             receiptsEnum: ReceiptsEnums.stocktaking,
-            type:anomalyType,
+            type: anomalyType,
             sourceId: formId,
             status: 0,
           },
@@ -154,13 +174,13 @@ const InstockError = (
         }}><CloseOutline /></span>
       </div>
       <div className={style.screen}>
-        数量：{errors.length} 类
+        数量：{errorList.length} 类
       </div>
       <div className={style.skuList}>
         {loading ? <MyLoading skeleton /> : <>
-          {errors.length === 0 && <MyEmpty description='暂无异常物料' />}
+          {errorList.length === 0 && <MyEmpty description='暂无异常物料' />}
           {
-            errors.map((item, index) => {
+            errorList.map((item, index) => {
 
               const checked = data.map(item => item.cartId).includes(item.cartId);
 
@@ -178,7 +198,7 @@ const InstockError = (
                   </div>
                   <div className={style.edit}>
                     <FormOutlined style={{ fontSize: 18 }} onClick={() => {
-                      onEdit(anomalyResult.anomalyId, errors.length);
+                      onEdit(anomalyResult.anomalyId, errorList.length);
                     }} />
                     <ShopNumber show value={anomalyResult.realNumber} />
                   </div>
@@ -217,7 +237,7 @@ const InstockError = (
             if (allChecked) {
               setData([]);
             } else {
-              setData(errors);
+              setData(errorList);
             }
           }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
         </div>

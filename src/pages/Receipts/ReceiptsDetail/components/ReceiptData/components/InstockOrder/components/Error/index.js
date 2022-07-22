@@ -55,12 +55,21 @@ const Error = (
   },
 ) => {
 
-  const [sku, setSku] = useState({ ...skuItem, realNumber: skuItem.number });
+  const [sku, setSku] = useState({});
 
   const show = sku.show;
 
   useEffect(() => {
-    setSku({ ...skuItem, realNumber: skuItem.number });
+    switch (type) {
+      case ReceiptsEnums.instockOrder:
+        setSku({ ...skuItem, realNumber: skuItem.number });
+        break;
+      case ReceiptsEnums.stocktaking:
+        setSku({ ...skuItem, realNumber: showStock ? skuItem.number : 0 });
+        break;
+      default:
+        break;
+    }
   }, [skuItem.skuId]);
 
   const [inkinds, setInkinds] = useState([]);
@@ -469,7 +478,7 @@ const Error = (
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}
-            otherData={[ToolUtil.isObject(sku.brandResult).brandName]}
+            otherData={[ToolUtil.isObject(sku.brandResult).brandName || '无品牌']}
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
@@ -725,8 +734,15 @@ const Error = (
 
     <ShowCode ref={showCodeRef} />
 
-    <MyAntPopup title='获取实物' visible={getInkind} onClose={() => setGetInkind(false)} className={style.getInkind}>
+    <MyAntPopup
+      title='获取实物'
+      visible={getInkind}
+      onClose={() => setGetInkind(false)} className={style.getInkind}
+    >
       <CodeNumber
+        inputSize={50}
+        spaceSize={6}
+        fontSize={16}
         title='请输入实物码后6位'
         codeNumber={6}
         onSuccess={(code) => {

@@ -4,9 +4,11 @@ import MyKeybord from '../../../components/MyKeybord';
 import { ScanIcon } from '../../../components/Icon';
 import { connect } from 'dva';
 import { ToolUtil } from '../../../components/ToolUtil';
+import { Divider } from 'antd-mobile';
 
 const CodeNumber = (
   {
+    open,
     onSuccess = () => {
     },
     codeNumber = 4,
@@ -14,11 +16,16 @@ const CodeNumber = (
 
     },
     title,
+    inputSize = 60,
+    fontSize = 20,
+    spaceSize = 11,
     ...props
   },
 ) => {
 
   const [code, setCode] = useState([]);
+
+  const [visible, setVisible] = useState();
 
   const initialCode = () => {
     const array = [];
@@ -27,8 +34,6 @@ const CodeNumber = (
     }
     setCode(array);
   };
-
-  const [visible, setVisible] = useState();
 
   const numbers = code.map(item => item.number).join('');
 
@@ -41,7 +46,7 @@ const CodeNumber = (
   useEffect(() => {
     if (codeId && action === 'getBackObject') {
       props.dispatch({ type: 'qrCode/clearCode' });
-      onScanResult(codeId,backObject);
+      onScanResult(codeId, backObject);
     }
   }, [codeId]);
 
@@ -58,24 +63,49 @@ const CodeNumber = (
   return <>
     <div className={style.codeInput}>
       <div className={style.title}>{title}</div>
-      <div className={style.inputNumber} onClick={() => {
-        setVisible(true);
-      }}>
+      <div className={style.inputNumber}>
         {
           code.map((item, index) => {
-            return <div key={index} className={style.box}>
-              {item.number}
+            return <div key={index} className={style.codeItem} onClick={() => {
+              setVisible(true);
+            }}>
+              <div
+                className={style.box}
+                style={{
+                  width: inputSize,
+                  height: inputSize,
+                  lineHeight: `${inputSize}px`,
+                  fontSize: fontSize,
+                }}
+              >
+                {item.number}
+              </div>
+              <div hidden={code.length === index + 1} className={style.space}
+                   style={{ margin: spaceSize, width: spaceSize }} />
             </div>;
           })
         }
-
+      </div>
+      <Divider className={style.divider}>或</Divider>
+      <div className={style.scan}>
+        <div className={style.scanStyle} onClick={() => {
+          props.dispatch({
+            type: 'qrCode/wxCpScan',
+            payload: {
+              action: 'getBackObject',
+            },
+          });
+        }}>
+          <ScanIcon />
+        </div>
       </div>
     </div>
 
     <MyKeybord
       noStepper
-      popupClassName={style.popup}
-      visible={visible}
+      popupClassName={open ? style.openPopup : style.popup}
+      visible={open || visible}
+      setVisible={setVisible}
       numberClick={(number) => {
         let ok = 0;
         const newCode = code.map((item, index) => {
@@ -90,7 +120,6 @@ const CodeNumber = (
         }
         setCode(newCode);
       }}
-      setVisible={setVisible}
       onConfirm={() => {
         onSuccess(code.map(item => item.number).join(''));
       }}
@@ -104,17 +133,6 @@ const CodeNumber = (
         setCode(newCode);
       }}
     />
-
-    <div className={style.scan} onClick={() => {
-      props.dispatch({
-        type: 'qrCode/wxCpScan',
-        payload: {
-          action: 'getBackObject',
-        },
-      });
-    }}>
-      <ScanIcon />
-    </div>
   </>;
 };
 

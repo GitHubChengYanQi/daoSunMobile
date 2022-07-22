@@ -1,29 +1,57 @@
+.noticeBar {
+  position: fixed;
+  width: 100%;
+}
 
 .codeInput {
   text-align: center;
   padding: 20% 24px;
 
   .title {
-    padding: 12px;
+    font-size: 20px;
+    color: #808080;
+  }
+
+  .divider {
+    font-size: 20px;
+    color: #808080;
+    margin: 0;
+    border-color: #F5F5F5;
   }
 
   .inputNumber {
+    padding: 61px 0;
     display: flex;
-    gap: 12px;
     justify-content: center;
 
-    .box {
-      width: 50px;
-      height: 50px;
-      background-color: #eee;
-      text-align: center;
-      line-height: 50px;
-      font-size: 16px;
-      font-weight: bold;
+    .codeItem {
+      display: flex;
+      align-items: center;
+
+      .box {
+        text-align: center;
+        font-weight: bold;
+        border-radius: 2px;
+        background: #F8F8F8;
+        box-shadow: inset 0px -3px 16px 0px rgba(143, 143, 143, 0.2);
+        color: #3D3D3D;
+      }
+
+      .space {
+        height: 1px;
+        background-color: #E8E8E8;
+      }
     }
+
+
   }
 }
 
+.openPopup {
+  :global .adm-mask {
+    display: none
+  }
+}
 
 .popup {
   :global .adm-mask {
@@ -47,25 +75,26 @@
 }
 
 .scan {
-  position: fixed;
-  text-align: center;
-  bottom: 16px;
-  padding: 12px;
-  left: calc(50% - 40px);
-  width: 80px;
-  height: 80px;
-  background: #c9c9c9;
-  border-radius: 50px;
-  box-shadow: 0px -4px 10px 0px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: auto;
+  margin-top: 31px;
 
-  svg {
-    font-size: 30px;
-    color: #fff;
+  .scanStyle {
+    width: 80px;
+    height: 80px;
+    background: #D9D9D9;
+    border-radius: 50px;
+    box-shadow: 0px -4px 10px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+
+    svg {
+      font-size: 30px;
+      color: #fff;
+    }
   }
+
+
 }
 
 

@@ -1,8 +1,5 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
-import { history } from 'umi';
-import { ToolUtil } from '../../pages/components/ToolUtil';
-import { Message } from '../../pages/components/Message';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
@@ -36,29 +33,6 @@ ajaxService.interceptors.response.use((response) => {
     throw new Error('网络错误');
   }
   response = response.data;
-  const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
-  if (errCode !== 0) {
-    if (errCode === 1502) {
-      cookie.remove('cheng-token');
-
-      const backUrl = window.location.href;
-      if (!ToolUtil.queryString('login', backUrl)) {
-        history.push({
-          pathname: '/Login',
-          query: {
-            backUrl,
-          },
-        });
-      }
-    } else if (errCode === 1001) {
-      return response;
-    } else if (response.errCode !== 200) {
-      Message.errorDialog({
-        content: response.message,
-      });
-    }
-    throw new Error(response.message);
-  }
   return response;
 }, (error) => {
   throw new Error(error);
