@@ -19,6 +19,7 @@ import Dynamic from './components/Dynamic';
 import { Message } from '../../components/Message';
 import MyError from '../../components/MyError';
 import LinkButton from '../../components/LinkButton';
+import Relation from './components/Relation';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -114,6 +115,9 @@ const ReceiptsDetail = () => {
 
   useEffect(() => {
     getTaskId();
+    setDetail();
+    setKey('data');
+    setHidden(false);
   }, [query.id, query.formId, query.type]);
 
   const content = () => {
@@ -133,6 +137,8 @@ const ReceiptsDetail = () => {
         return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
       case 'outStockLog':
         return <OutStockLog outstockOrderId={ToolUtil.isObject(detail.receipts).pickListsId} />;
+      case 'relation':
+        return <Relation type={type} receipts={detail.receipts} />;
       default:
         return <MyEmpty />;
     }

@@ -5,9 +5,15 @@ const Show = (date) => {
   return moment(date).format('YYYY/MM/DD HH:mm');
 };
 
+const formatDate = (date) => {
+  const newDate = moment(date).format('YYYY/MM/DD HH:mm:ss');
+  return new Date(newDate);
+};
+
 
 export const MyDate = {
   Show,
+  formatDate,
 };
 
 // 时间倒计时

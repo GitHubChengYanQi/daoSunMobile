@@ -14,8 +14,8 @@ const StartEndDate = (
 
   const getMinTime = (minTime) => {
     if (minTime.getMinutes() >= 45) {
-      minTime = new Date(minTime.setHours(minTime.getHours() + 1));
-      minTime = new Date(minTime.setMinutes(0));
+      minTime = MyDate.formatDate(minTime.setHours(minTime.getHours() + 1))
+      minTime = MyDate.formatDate(minTime.setMinutes(0));
     }
     return minTime;
   };
@@ -52,7 +52,7 @@ const StartEndDate = (
       value={value[0]}
       ref={ref}
       show
-      min={getMinTime(startDate ? new Date(new Date(startDate).setMinutes(new Date(startDate).getMinutes() + 1)) : min)}
+      min={getMinTime(startDate ? MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)) : min)}
       precision='minute'
       onCancel={() => {
         setStartDate();

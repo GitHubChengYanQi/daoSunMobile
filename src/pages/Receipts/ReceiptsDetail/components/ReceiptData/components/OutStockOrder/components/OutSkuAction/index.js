@@ -182,10 +182,8 @@ const OutSkuAction = (
       <MyPicking
         pickListsId={pickListsId}
         onSuccess={(res) => {
-          Message.successToast('领取成功！', () => {
-            setPicking(false);
-            setCode(res);
-          });
+          setPicking(false);
+          setCode(res);
         }}
       />
     </MyAntPopup>
@@ -195,12 +193,12 @@ const OutSkuAction = (
       className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
         <div className={style.codeTitle}>领料码</div>
+        <div className={style.code}>{code}</div>
         {code && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
         <img src={imgSrc} alt='' width={187} />
-        <div className={style.code}>{code}</div>
       </div>}
       actions={[[
-        { text: '取消', key: 'close' },
+        { text: '关闭', key: 'close' },
       ]]}
       onAction={(action) => {
         switch (action.key) {

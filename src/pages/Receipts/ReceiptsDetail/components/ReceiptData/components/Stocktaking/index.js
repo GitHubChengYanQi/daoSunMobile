@@ -23,8 +23,8 @@ export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'P
 export const inventoryComplete = { url: '/inventoryDetail/complete', method: 'POST' };
 
 export const nowInDateBetwen = (d1, d2) => {
-  const dateBegin = new Date(d1);
-  const dateEnd = new Date(d2);
+  const dateBegin = MyDate.formatDate(d1);
+  const dateEnd = MyDate.formatDate(d2);
   const dateNow = new Date();
 
   const beginDiff = dateNow.getTime() - dateBegin.getTime();//时间差的毫秒数

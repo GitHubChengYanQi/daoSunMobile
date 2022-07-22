@@ -2,6 +2,7 @@ import React, { useCallback, useImperativeHandle, useState } from 'react';
 import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
+import { MyDate } from '../MyDate';
 
 const MyDatePicker = (
   {
@@ -77,9 +78,9 @@ const MyDatePicker = (
         destroyOnClose
         precision={precision || 'day'}
         title={title || '时间选择'}
-        value={value && new Date(value)}
-        min={min && new Date(min)}
-        max={max && new Date(max)}
+        value={value && MyDate.formatDate(value)}
+        min={min && MyDate.formatDate(min)}
+        max={max && MyDate.formatDate(max)}
         visible={visible}
         afterClose={afterClose}
         onClose={() => {

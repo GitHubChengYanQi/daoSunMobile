@@ -4,7 +4,6 @@ import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import { Progress } from 'antd';
 import Icon from '../../../../../components/Icon';
-import moment from 'moment';
 
 const TaskItem = (
   {
@@ -26,9 +25,7 @@ const TaskItem = (
 ) => {
 
   const getHour = (begin, end) => {
-    const beginTime = moment(begin).format('YYYY/MM/DD HH:mm:ss');
-    const endTime = moment(end).format('YYYY/MM/DD HH:mm:ss');
-    const dateDiff = new Date(beginTime).getTime() - new Date(endTime).getTime();
+    const dateDiff = MyDate.formatDate(begin).getTime() - MyDate.formatDate(end).getTime();
     return Number((dateDiff / 3600000).toFixed(2));
   };
 
@@ -72,6 +69,7 @@ const TaskItem = (
         {orderData}
         <div className={style.progress}>
           <Progress
+            strokeColor='var(--adm-color-primary)'
             format={(number) => {
               return <span className={style.blue}>{number + '%'}</span>;
             }}
