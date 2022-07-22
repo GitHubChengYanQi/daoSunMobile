@@ -10,7 +10,7 @@ import { Avatar } from 'antd-mobile';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
-export const inStockRelation = { url: '/instockOrder/document', method: 'POST' };
+export const inStockRelation = { url: '/instockOrder/document', method: 'GET' };
 
 const Relation = ({ type, receipts = {} }) => {
 
@@ -36,10 +36,10 @@ const Relation = ({ type, receipts = {} }) => {
   useEffect(() => {
     switch (type) {
       case ReceiptsEnums.instockOrder:
-        inStockRun({ data: { instockOrderId: receipts.instockOrderId } });
+        inStockRun({ params: { id: receipts.instockOrderId } });
         break;
         case ReceiptsEnums.stocktaking:
-        inStockRun({ data: { inventoryTaskId: receipts.inventoryTaskId } });
+        inStockRun({ params: { id: receipts.inventoryTaskId } });
         break;
       default:
         break;
