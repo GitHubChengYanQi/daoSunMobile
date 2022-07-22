@@ -147,7 +147,7 @@ const StartStockTaking = () => {
       data={data}
       setData={setData}
       complete={() => {
-        run({ data: { inventoryIds: [query.id] } });
+        run({ data: { inventoryId: query.id } });
       }}
     />
 
