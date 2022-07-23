@@ -4,8 +4,8 @@ import style from '../../index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useModel } from 'umi';
-import { Avatar } from 'antd';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
+import { Avatar } from 'antd-mobile';
 
 const StepList = (
   {
@@ -63,14 +63,7 @@ const StepList = (
         return <div key={index} className={style.dynamic} style={{ borderTop: index === 0 && 'none' }}>
 
           <div className={style.avatar}>
-            <Avatar
-              size={32}
-              shape='square'
-              key={index}
-              src={user.avatar}
-            >
-              {user.name && user.name.substring(0, 1)}
-            </Avatar>
+            <Avatar src={user.avatar} style={{'--size':'32px'}} />
           </div>
 
           <div>

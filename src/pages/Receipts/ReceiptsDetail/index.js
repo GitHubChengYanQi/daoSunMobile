@@ -16,7 +16,6 @@ import InStockLog from './components/Log/InStockLog';
 import OutStockLog from './components/Log/OutStockLog';
 import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
 import Dynamic from './components/Dynamic';
-import { Message } from '../../components/Message';
 import MyError from '../../components/MyError';
 import LinkButton from '../../components/LinkButton';
 import Relation from './components/Relation';

@@ -85,7 +85,7 @@ const ReceiptData = (
     return <MyLoading skeleton skeletonStyle={{backgroundColor:'#fff',height:'calc(100% - 166px)'}} />;
   }
 
-  return <div style={{paddingBottom:60}}>
+  return <div>
     {receiptType()}
     <Process
       remarks={remarks.filter(item => 'audit' === item.type)}
@@ -96,6 +96,7 @@ const ReceiptData = (
     <div className={style.comments}>
       <StepList remarks={remarks.filter(item => 'comments' === item.type)} />
     </div>
+    <div style={{backgroundColor:'#fff',height:60,marginTop:3}} />
   </div>;
 };
 

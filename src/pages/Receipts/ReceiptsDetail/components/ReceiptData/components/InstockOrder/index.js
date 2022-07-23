@@ -82,7 +82,7 @@ const InstockOrder = (
     <MyCard title='注意事项'>
         {announcementsList.length === 0 && <div style={{ padding: 8 }}>无</div>}
         {announcementsList.map((item, index) => {
-          return <div key={index} className={style.carefulShow}>
+          return <div key={index} className={style.carefulShow} style={{margin:index === 0 && 0}}>
             {item.content}
           </div>;
         })}

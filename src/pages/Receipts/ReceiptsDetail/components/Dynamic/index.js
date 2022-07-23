@@ -17,7 +17,7 @@ const Dynamic = (
 
   const ref = useRef();
 
-  return <div style={{ paddingTop: 24, backgroundColor: '#fff' }}>
+  return <div style={{ backgroundColor: '#fff' }}>
     <StepList remarks={remarks} onChange={setRemarks} addComments={(remarksId) => {
       ref.current.addComments(remarksId);
     }} />

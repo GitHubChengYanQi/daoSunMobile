@@ -65,7 +65,7 @@ const ErrorDom = (
         return {
           label: item.orCodeId,
           value: item.formId,
-          number: item.number,
+          number: item.num || 1,
         };
       }));
     },
@@ -301,9 +301,9 @@ const ErrorDom = (
       onClose={() => setGetInkind(false)} className={style.getInkind}
     >
       <CodeNumber
-        inputSize={50}
-        spaceSize={6}
-        fontSize={16}
+        inputSize={40}
+        spaceSize={5}
+        fontSize={14}
         title='请输入实物码后6位'
         codeNumber={6}
         other={<div className={style.otehrActions}>

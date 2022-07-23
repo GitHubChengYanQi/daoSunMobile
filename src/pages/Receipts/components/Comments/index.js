@@ -51,7 +51,7 @@ const Comments = (
   return <>
     <div style={{ padding: 12, backgroundColor: '#fff' }}>
       <Button
-        style={{ width: '100%' }}
+        style={{ width: '100%',height:40 }}
         onClick={() => {
           setVisible(true);
         }}
