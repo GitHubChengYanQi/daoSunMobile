@@ -68,6 +68,9 @@ const StocktaskigAction = (
                 case 99:
                   text = '已完成';
                   color = '#257BDE';
+                  if (!showStock && skuItem.errorNum === 0) {
+                    break;
+                  }
                   icon = <ExclamationTriangleOutline />;
                   break;
                 case 2:
@@ -90,7 +93,7 @@ const StocktaskigAction = (
                     return;
                   }
 
-                  if (skuItem.lockStatus === 99){
+                  if (skuItem.lockStatus === 99) {
                     Message.toast('此物料存在异常，正在处理中');
                   }
                   setVisible({
@@ -106,6 +109,7 @@ const StocktaskigAction = (
                     positionId: positionItem.positionId,
                     anomalyId: skuItem.anomalyId || false,
                     sourceId: skuItem.inventoryStockId,
+                    customerId:skuItem.customerId
                   });
                 }}>
                   <SkuItem

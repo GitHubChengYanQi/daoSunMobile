@@ -38,7 +38,7 @@ export const MyLoading = (
   useDebounceEffect(() => {
     setError(true);
   }, [], {
-    wait: 30000,
+    wait: 60000,
   });
 
   const Loading = () => {

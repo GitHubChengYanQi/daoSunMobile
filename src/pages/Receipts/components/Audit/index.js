@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Toast } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import style from '../../ReceiptsDetail/components/Bottom/index.less';
 import { MyLoading } from '../../../components/MyLoading';
@@ -53,7 +53,7 @@ const Audit = (
 
   return <>
     <div className={style.buttons}>
-      <Button disabled={loading} color='primary' fill='none' onClick={() => {
+      <Button disabled={loading} className={style.reject} color='primary' fill='outline' onClick={() => {
         audit(0);
       }}>
         驳回

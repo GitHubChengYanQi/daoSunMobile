@@ -21,6 +21,9 @@ const TaskItem = (
     orderData,
     percent = 0,
     noBorder,
+    noSku,
+    noPosition,
+    noProgress,
   },
 ) => {
 
@@ -49,7 +52,7 @@ const TaskItem = (
     </div>
     <div className={style.content}>
       <div className={style.orderData}>
-        <div className={style.dateShow}>
+        <div hidden={noSku} className={style.dateShow}>
           <div className={style.show} style={{ border: noBorder && 'none' }}>
             <Icon type='icon-pandianwuliao' />
             <div className={style.showNumber}>
@@ -57,7 +60,7 @@ const TaskItem = (
               <span>涉及物料</span>
             </div>
           </div>
-          <div className={style.show} style={{ borderLeft: 'none', border: noBorder && 'none' }}>
+          <div hidden={noPosition} className={style.show} style={{ borderLeft: 'none', border: noBorder && 'none' }}>
             <Icon type='icon-pandiankuwei' />
             <div className={style.showNumber}>
               <span className={style.number}>{positionSize}</span>
@@ -67,7 +70,7 @@ const TaskItem = (
 
         </div>
         {orderData}
-        <div className={style.progress}>
+        <div className={style.progress} hidden={noProgress}>
           <Progress
             strokeColor='var(--adm-color-primary)'
             format={(number) => {

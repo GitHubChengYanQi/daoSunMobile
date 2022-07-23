@@ -3,6 +3,7 @@ import { DatePicker } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
 import { MyDate } from '../MyDate';
+import { CalendarOutline } from 'antd-mobile-icons';
 
 const MyDatePicker = (
   {
@@ -67,7 +68,7 @@ const MyDatePicker = (
       }}>
         {show || <LinkButton
           style={{ color: '#000', width: width || '100%', textAlign: 'left', ...style }}
-          title={<div>{value || (title || '选择日期')}</div>}
+          title={<div>{value || (title ||  <CalendarOutline />)}</div>}
         />}
       </div>
 

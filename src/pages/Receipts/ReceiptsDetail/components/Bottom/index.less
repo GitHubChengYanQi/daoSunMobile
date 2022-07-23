@@ -15,7 +15,6 @@
     box-shadow: none;
   }
 
-
   .all {
     display: flex;
     align-items: center;
@@ -33,7 +32,11 @@
     display: flex;
     border-radius: 50px;
     overflow: hidden;
-    border: 1px solid var(--adm-color-primary);
+
+    .reject {
+      border-top-left-radius: 50px;
+      border-bottom-left-radius: 50px;
+    }
 
     button {
       flex-grow: 1;

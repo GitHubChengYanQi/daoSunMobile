@@ -54,7 +54,7 @@ const MyList = (
         setContents(array);
         getData(array.filter(() => true), resData);
         setPage(pages + 1);
-        setHasMore(true);
+        setHasMore(resData.length === 10);
       } else {
         setHasMore(false);
         if (pages === 1) {

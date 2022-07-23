@@ -248,7 +248,7 @@ const SkuScreen = (
   return <>
     <Screen
       screen={screen}
-      buttonTitle={skuNumber === 0 ? '完成' : `查看 ${skuNumber} 件物料`}
+      buttonTitle={skuNumber === 0 ? '完成' : `查看 ${skuNumber} 类物料`}
       onClose={onClose}
       onClear={onClear}
       searchtype={searchtype.filter(item => item.open)}

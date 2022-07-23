@@ -2,35 +2,26 @@ import React, { useEffect, useRef, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import { Space, TextArea } from 'antd-mobile';
-import { AddOutline, CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
+import { Button, TextArea } from 'antd-mobile';
+import { AddOutline, CameraOutline } from 'antd-mobile-icons';
 import Icon from '../../../../../../../../components/Icon';
-import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { useRequest } from '../../../../../../../../../util/Request';
-import { batchBind } from '../../../../../../../../Scan/InStock/components/Url';
 import { useModel } from 'umi';
-import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import LinkButton from '../../../../../../../../components/LinkButton';
 import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
-import MyRemoveButton from '../../../../../../../../components/MyRemoveButton';
-import MyCard from '../../../../../../../../components/MyCard';
-import { AddButton } from '../../../../../../../../components/MyButton';
-import ShowCode from '../../../../../../../../components/ShowCode';
-import MyAntPopup from '../../../../../../../../components/MyAntPopup';
-import CodeNumber from '../../../../../../../../Work/OutStockConfirm/CodeNumber';
+import ErrorDom from './components/ErrorDom';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
 export const instockErrorDetail = { url: '/anomaly/detail', method: 'POST' };
 const instockErrorEdit = { url: '/anomaly/edit', method: 'POST' };
 const instockErrorDelete = { url: '/anomaly/delete', method: 'POST' };
-const getInkInd = { url: '/stockDetails/getInkind', method: 'POST' };
+export const getInkInd = { url: '/stockDetails/getInkind', method: 'POST' };
 
 const Error = (
   {
@@ -96,13 +87,13 @@ const Error = (
       }
       if (!error) {
         Message.successToast('添加成功！', () => {
-          onSuccess(sku, error ? -1 : 1, res.anomalyId);
+          onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
         });
         return;
       }
       addShop(() => {
         Message.successToast('添加成功！', () => {
-          onSuccess(sku, error ? -1 : 1, res.anomalyId);
+          onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
         });
       });
     },
@@ -115,7 +106,7 @@ const Error = (
     manual: true,
     onSuccess: (res) => {
       Message.successToast('暂存成功！', () => {
-        onSuccess(sku, 2, res);
+        onSuccess({ ...sku, errorNumber: inkinds.length }, 2, res);
       });
     },
   });
@@ -125,7 +116,7 @@ const Error = (
     onSuccess: (res) => {
       Message.successToast('修改成功！', () => {
         onClose();
-        onEdit(sku, error ? -1 : 1, res.anomalyId);
+        onEdit({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
       });
     },
   });
@@ -135,32 +126,10 @@ const Error = (
     onSuccess: () => {
       Message.successToast('删除成功！', () => {
         onClose(true);
-        refreshOrder(sku, 0);
+        refreshOrder({ ...sku, errorNumber: inkinds.length }, 0);
       });
     },
   });
-
-  const { loading: getInkindLoading, run: getInkindRun } = useRequest(getInkInd, {
-    manual: true,
-    onSuccess: (res) => {
-      if (!res) {
-        Message.errorToast('实物码不正确！');
-        return;
-      }
-      const ids = inkinds.map(item => item.inkindId);
-      if (ids.includes(res.inkindId)) {
-        Message.errorToast('请勿重复添加实物！');
-        return;
-      }
-      setInkinds([...inkinds, {
-        codeId: res.qrCodeId,
-        inkindId: res.inkindId,
-        number: res.number,
-      }]);
-      setGetInkind(false);
-    },
-  });
-
   const { loading: detailLoading, run: detailRun } = useRequest(instockErrorDetail, {
     manual: true,
     onSuccess: (res) => {
@@ -247,22 +216,6 @@ const Error = (
     setInkinds(newInkinds);
   };
 
-  const { loading: CodeLoading, run: CodeRun } = useRequest(
-    batchBind,
-    {
-      manual: true,
-      onSuccess: (res) => {
-        const inkind = res[0] || {};
-        setInkinds([...inkinds, {
-          codeId: inkind.codeId,
-          inkindId: inkind.inkindId,
-          number: 1,
-          inkindType: inkind.source,
-        }]);
-      },
-    },
-  );
-
   useEffect(() => {
 
     if (id) {
@@ -321,7 +274,7 @@ const Error = (
   const getParams = () => {
     const detailParams = inkinds.map((item) => {
       return {
-        pidInKind: item.inkindId,
+        inkindId: item.inkindId,
         description: item.description,
         reasonImg: item.mediaIds,
         noticeIds: item.noticeIds,
@@ -407,6 +360,8 @@ const Error = (
         return {
           title: '异常描述',
           shopId: 'instockError',
+          addErrorHidden: show,
+          errorNumberShow: show,
           skuItem: <SkuItem
             imgId='errorSku'
             skuResult={sku.skuResult}
@@ -471,6 +426,8 @@ const Error = (
         return {
           title: '盘点',
           shopId: 'stocktakingError',
+          addErrorHidden: show || inkinds.length === 0,
+          errorNumberShow: show || !batch,
           skuItem: <SkuItem
             imgId='errorSku'
             hiddenNumber={!showStock}
@@ -482,8 +439,10 @@ const Error = (
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
-              <div className={style.actual} style={{ padding: 0 }}>
-                <span>盘点数量</span>
+              <div className={style.inKindRow}>
+                <div className={style.inKindTitle}>
+                  盘点数量
+                </div>
                 <ShopNumber
                   hiddenNumber={!showStock}
                   show={show}
@@ -493,18 +452,21 @@ const Error = (
                     setSku({ ...sku, realNumber });
                   }}
                 />
-                <Icon type='icon-dibudaohang-saoma' onClick={() => {
-                  props.dispatch({
-                    type: 'qrCode/wxCpScan',
-                    payload: {
-                      action: 'addError',
-                    },
-                  });
-                }} />
+                <div style={{ flexGrow: 1, textAlign: 'right' }}>
+                  <Icon type='icon-dibudaohang-saoma' onClick={() => {
+                    props.dispatch({
+                      type: 'qrCode/wxCpScan',
+                      payload: {
+                        action: 'addError',
+                      },
+                    });
+                  }} />
+                </div>
+
               </div>
               <div className={style.inKindRow}>
                 <div className={style.inKindTitle}>
-                  上传照片：
+                  上传照片
                 </div>
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
@@ -521,7 +483,7 @@ const Error = (
               </div>
               <div className={style.inKindRow} style={{ padding: 0 }}>
                 <div className={style.inKindTitle}>
-                  备注：
+                  备注
                 </div>
                 {show ? `${sku.remark || '无'}` : <TextArea
                   className={style.textArea}
@@ -533,10 +495,22 @@ const Error = (
                   }}
                 />}
               </div>
+              <div hidden={inkinds.length > 0} className={style.inKindRow}>
+                <div className={style.inKindTitle}>
+                  添加异常
+                </div>
+                <Button
+                  className={style.addError}
+                  color='danger'
+                  onClick={() => setGetInkind(true)}
+                >
+                  <AddOutline />
+                </Button>
+              </div>
             </div>
           </div>,
           button: <BottomButton
-            disabled={required}
+            rightDisabled={required}
             leftDisabled={id}
             leftText='暂存'
             rightText='确定'
@@ -558,242 +532,38 @@ const Error = (
 
   return <div className={style.error} style={{ maxHeight, margin: show && 0 }} id='errors'>
 
-    <div className={style.header} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
-
-      {
-        over ?
-          <div className={style.skuShow}>
-            <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
-            <div>
-              <div className={style.smallSku} style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
-                {SkuResultSkuJsons({ skuResult, spu: true })}
-              </div>
-              <div className={style.smallSku} style={{ maxWidth: `calc(100vw - ${(id && !noDelete) ? 270 : 210}px)` }}>
-                {SkuResultSkuJsons({ skuResult, sku: true })}
-              </div>
-            </div>
-            <div className={style.number}>
-              <ShopNumber min={allNumber} value={sku.realNumber} onChange={(realNumber) => {
-                setSku({ ...sku, realNumber });
-              }} />
-            </div>
-            {id && !noDelete && <LinkButton color='danger' onClick={() => {
-              deleteRun({
-                data: {
-                  anomalyId: sku.anomalyId,
-                },
-              });
-            }}>
-              删除异常
-            </LinkButton>}
-          </div>
-          :
-          <div className={style.title}>{errorTypeData().title}</div>
-      }
-      <span onClick={() => {
-        onClose();
-      }}><CloseOutline /></span>
-    </div>
-
-    <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
-      <div style={{ padding: '0 12px' }} className={id ? style.skuItem : ''}>
-        {errorTypeData().skuItem}
-        {id && !noDelete && <LinkButton color='danger' onClick={() => {
-          deleteRun({
-            data: {
-              anomalyId: sku.anomalyId,
-            },
-          });
-        }}>
-          删除异常
-        </LinkButton>}
-        {show && <LinkButton color='danger'>
-          处理中
-        </LinkButton>}
-      </div>
-      {errorTypeData().actionNumber}
-    </MyCard>
-
-    <div className={style.errors}>
-      {
-        inkinds.map((item, index) => {
-
-          const inkindId = item.inkindId || '';
-
-          return <MyCard
-            key={index}
-            className={style.inKindCard}
-            headerClassName={style.headerStyle}
-            titleBom={<div className={style.inkind}>
-              异常编码
-              <div className={style.index}>{index + 1}</div>
-              <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
-            </div>}
-            extra={<Space>
-              <LinkButton onClick={() => showCodeRef.current.openCode(item.codeId)}><SystemQRcodeOutline /></LinkButton>
-              {!show && <MyRemoveButton onRemove={() => {
-                const newItem = inkinds.filter((item, currentIndex) => {
-                  return currentIndex !== index;
-                });
-                setInkinds(newItem);
-              }} />}
-            </Space>}
-          >
-            <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>数量：</div>
-              <ShopNumber
-                show={show}
-                min={1}
-                value={item.number}
-                onChange={(number) => {
-                  let allNumber = 0;
-                  inkinds.map((item, currentIndex) => {
-                    if (currentIndex !== index) {
-                      allNumber += item.number;
-                    }
-                    return null;
-                  });
-
-                  if ((number + allNumber) > sku.realNumber) {
-                    return Message.toast('不能超过实际数量！');
-                  }
-                  inkinsChange(index, { number });
-                }}
-              />
-            </div>
-            <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>
-                原因 <span>*</span>：
-              </div>
-              <Careful
-                show={show}
-                type='inStockError'
-                value={item.noticeIds}
-                onChange={(noticeIds) => {
-                  inkinsChange(index, { noticeIds });
-                }}
-              />
-            </div>
-            <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>
-                描述：
-              </div>
-              {show ? `${item.description || '无'}` : <TextArea
-                className={style.textArea}
-                rows={1}
-                placeholder='请输入具体异常情况'
-                value={item.description}
-                onChange={(description) => {
-                  inkinsChange(index, { description });
-                }}
-              />}
-            </div>
-            <div className={style.imgs}>
-              <UploadFile
-                show={show}
-                value={item.media}
-                uploadId={`errorUpload${index}`}
-                imgSize={36}
-                icon={<CameraOutline />}
-                noFile
-                onChange={(mediaIds) => {
-                  inkinsChange(index, { mediaIds });
-                }}
-              />
-            </div>
-          </MyCard>;
-        })
-      }
-
-      <div hidden={show} className={style.divider}>
-        <AddButton danger disabled={allNumber >= sku.realNumber} onClick={() => {
-          switch (type) {
-            case ReceiptsEnums.instockOrder:
-              CodeRun({
-                data: {
-                  codeRequests: [{
-                    source: batch ? 'inErrorBatch' : 'inErrorSingle',
-                    brandId: sku.brandId,
-                    customerId: sku.customerId,
-                    id: sku.skuId,
-                    number: 1,
-                    inkindType: '入库异常',
-                  }],
-                },
-              });
-              break;
-            case ReceiptsEnums.stocktaking:
-              setGetInkind(true);
-              break;
-            default:
-              break;
-          }
-        }}><AddOutline /></AddButton>
-      </div>
-    </div>
-
-    <ShowCode ref={showCodeRef} />
-
-    <MyAntPopup
-      title='获取实物'
-      visible={getInkind}
-      onClose={() => setGetInkind(false)} className={style.getInkind}
-    >
-      <CodeNumber
-        inputSize={50}
-        spaceSize={6}
-        fontSize={16}
-        title='请输入实物码后6位'
-        codeNumber={6}
-        onSuccess={(code) => {
-          getInkindRun({
-            data: {
-              storehousePositionsId: sku.positionId,
-              skuId: sku.skuId,
-              brandId: sku.brandId,
-              inkind: code + '',
-            },
-          });
-        }}
-        onScanResult={(codeId, backObject = {}) => {
-          if (backObject.type === 'item') {
-            const inkind = backObject.inkindResult || {};
-            const details = ToolUtil.isObject(inkind.inkindDetail).stockDetails || {};
-            if (details.brandId === sku.brandId && details.skuId === sku.skuId && details.storehousePositionsId === sku.positionId) {
-              const ids = inkinds.map(item => item.inkindId);
-              if (ids.includes(inkind.inkindId)) {
-                Message.errorToast('请勿重复添加实物！');
-                return;
-              }
-              setInkinds([...inkinds, {
-                codeId,
-                inkindId: inkind.inkindId,
-                number: details.number,
-                inkindType: inkind.source,
-              }]);
-              setGetInkind(false);
-            } else {
-              Message.errorToast('请扫描正确的实物码！');
-            }
-          } else {
-            Message.errorToast('请扫描实物码！');
-          }
-        }}
-      />
-    </MyAntPopup>
-
+    <ErrorDom
+      over={over}
+      imgUrl={imgUrl}
+      state={state}
+      id={id}
+      noDelete={noDelete}
+      skuResult={skuResult}
+      allNumber={allNumber}
+      sku={sku}
+      setSku={setSku}
+      deleteRun={deleteRun}
+      errorTypeData={errorTypeData}
+      onClose={onClose}
+      show={show}
+      inkinds={inkinds}
+      showCodeRef={showCodeRef}
+      setInkinds={setInkinds}
+      inkinsChange={inkinsChange}
+      type={type}
+      setGetInkind={setGetInkind}
+      batch={batch}
+      getInkind={getInkind}
+    />
 
     {(
-      CodeLoading
-      ||
-      getInkindLoading
-      ||
       anomalyLoading
       ||
       editLoading
       ||
       deleteLoading
-      || anomalyTemporaryLoading
+      ||
+      anomalyTemporaryLoading
     ) &&
     <MyLoading />}
 

@@ -163,6 +163,7 @@ const Stocktaking = (
     <MyCard title='负责人' extra={<UserName user={receipts.principal} />} />
 
     <MyCard title='参与人员'>
+      {participantList.length === 0 && '无'}
       {
         participantList.map((item, index) => {
           return <UserName key={index} user={item} />;

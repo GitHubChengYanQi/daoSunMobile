@@ -15,6 +15,8 @@ import style from '../../../PurchaseOrderInstock/index.less';
 import MyCard from '../../../../../../../../components/MyCard';
 import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
+export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: 'POST' };
+
 const CuringAsk = ({ createType, state }) => {
 
   const [params, setParams] = useState({});
@@ -34,6 +36,24 @@ const CuringAsk = ({ createType, state }) => {
           history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.maintenance}&formId=${res.maintenanceId}`);
         },
       });
+
+    },
+  });
+
+  const [skuView, setSkuView] = useState([]);
+
+  const [skuTotal, setSkuTotal] = useState(0);
+
+  const { loading: viewLoading, run: viewRun } = useRequest(maintenanceViewDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      const skuList = ToolUtil.isArray(res);
+      let total = 0;
+      skuList.forEach(item => {
+        total += item.number;
+      });
+      setSkuView(skuList);
+      setSkuTotal(total);
     },
   });
 
@@ -43,7 +63,7 @@ const CuringAsk = ({ createType, state }) => {
 
   const createTypeData = () => {
     const maintenanceDisabled = () => {
-      if (!(params.userId && params.startTime && params.endTime && params.nearMaintenance && params.type && ToolUtil.isArray(params.noticeIds).length > 0)) {
+      if (!(params.userId && params.startTime && params.endTime && params.type)) {
         return true;
       }
 
@@ -59,14 +79,15 @@ const CuringAsk = ({ createType, state }) => {
     };
   };
 
-  const curingAsk = () => {
+  const getSelectParams = (skuList) => {
     const selectParams = [];
 
-    ToolUtil.isArray(params.skuList).forEach(item => {
+    ToolUtil.isArray(skuList).forEach(item => {
       const params = item.params;
 
       if (!params) {
         selectParams.push({
+          skuId: item.skuResult && item.skuResult.skuId,
           skuIds: item.skuResult && [item.skuResult.skuId],
           realNumber: item.skuNum || 1,
         });
@@ -87,11 +108,17 @@ const CuringAsk = ({ createType, state }) => {
         brandIds: brands.map(item => item.value),
         storehousePositionsIds: positions.map(item => item.id),
         partsIds: boms.map(item => item.key),
-        skuIds: item.skuResult && [item.skuResult.skuId],
-        realNumber: item.skuNum,
         spuIds: params.spuId && [params.spuId],
+        brandId: item.brandId || 0,
+        skuId: item.skuResult && item.skuResult.skuId,
+        realNumber: item.skuNum,
       });
     });
+    return selectParams;
+  };
+
+  const curingAsk = () => {
+
 
     let data = {
       ...params,
@@ -99,7 +126,7 @@ const CuringAsk = ({ createType, state }) => {
       enclosure: ToolUtil.isArray(params.mediaIds).toString(),
       userIds: ToolUtil.isArray(params.userIds).toString(),
       note: params.remark,
-      selectParams,
+      selectParams: getSelectParams(params.skuList),
     };
 
     maintenanceRun({
@@ -116,15 +143,23 @@ const CuringAsk = ({ createType, state }) => {
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
       <SelectSkus value={params.skuList} onChange={(skuList) => {
+        viewRun({ data: { selectParams: getSelectParams(skuList), nearMaintenance: params.nearMaintenance } });
         setParams({ ...params, skuList });
       }} />
     </MyCard>
 
-    <Curing value={params} onChange={setParams} />
+    <Curing
+      skuView={skuView}
+      skuTotal={skuTotal}
+      value={params}
+      onChange={setParams}
+      nearMaintenanceChange={(nearMaintenance) => {
+        viewRun({ data: { selectParams: getSelectParams(params.skuList), nearMaintenance } });
+      }} />
 
     <OtherData
       createType={createType}
-      careful={<Title className={style.title}>养护原由 <span>*</span></Title>}
+      careful={<Title className={style.title}>养护原由</Title>}
       params={params}
       setParams={setParams}
     />
@@ -140,7 +175,7 @@ const CuringAsk = ({ createType, state }) => {
       }}
     />
 
-    {(maintenanceLoading) && <MyLoading />}
+    {(maintenanceLoading || viewLoading) && <MyLoading />}
 
   </div>;
 };

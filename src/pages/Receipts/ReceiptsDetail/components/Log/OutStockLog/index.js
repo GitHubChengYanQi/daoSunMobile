@@ -19,18 +19,17 @@ const OutStockLog = (
 ) => {
 
   const { loading, data, run } = useRequest(logList, { manual: true });
-  console.log(data);
 
   useEffect(() => {
     if (outstockOrderId) {
-      run({data: { sourceId: outstockOrderId },});
+      run({ data: { sourceId: outstockOrderId } });
     }
   }, []);
 
   // const [data, setData] = useState([]);
 
-  if (loading){
-    return <MyLoading skeleton />
+  if (loading) {
+    return <MyLoading skeleton />;
   }
 
   if (!outstockOrderId) {
@@ -50,8 +49,7 @@ const OutStockLog = (
                   skuResult={item.skuResult}
                   extraWidth='90px'
                   otherData={[
-                    ToolUtil.isObject(item.customer).customerName,
-                    ToolUtil.isObject(item.brandResult).brandName,
+                    ToolUtil.isObject(item.brandResult).brandName || '任意品牌',
                   ]}
                 />
               </div>

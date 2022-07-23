@@ -19,6 +19,7 @@ const CodeNumber = (
     inputSize = 60,
     fontSize = 20,
     spaceSize = 11,
+    other,
     ...props
   },
 ) => {
@@ -99,6 +100,7 @@ const CodeNumber = (
           <ScanIcon />
         </div>
       </div>
+      <div>{other}</div>
     </div>
 
     <MyKeybord

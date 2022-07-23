@@ -140,7 +140,6 @@
     padding: 6px 12px;
     font-size: 14px;
     display: flex;
-    gap: 8px;
     align-items: center;
 
     .number {
@@ -214,11 +213,17 @@
 
     .inKindTitle {
       color: #666666;
-      min-width: 50px;
+      min-width: 70px;
 
       span {
         color: var(--adm-color-danger);
       }
+    }
+
+    .addError {
+      width: 22px;
+      height: 22px;
+      padding: 0;
     }
   }
 
@@ -333,5 +338,15 @@
 .getInkind {
   :global .adm-popup-body {
     min-height: 80vh;
+  }
+}
+
+.otehrActions {
+  display: flex;
+  padding: 24px 0;
+
+  button {
+    flex-grow: 1;
+    text-align: center;
   }
 }

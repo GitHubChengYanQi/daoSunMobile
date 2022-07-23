@@ -45,7 +45,7 @@ const SelectSkus = (
         popup: 1,
       },
     });
-  }
+  };
 
   const skusChange = (newSkus) => {
     setSkus(newSkus);

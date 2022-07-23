@@ -1,12 +1,15 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
+import { ToolUtil } from '../../pages/components/ToolUtil';
+import { history } from 'umi';
+import { Message } from '../../pages/components/Message';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://192.168.1.229'
+  'http://192.168.1.230'
   // 'https://api.daoxin.gf2025.com'
   // 'https://api.hh.gf2025.com'
   :
@@ -38,9 +41,36 @@ ajaxService.interceptors.response.use((response) => {
   throw new Error(error);
 });
 
+export const errorAction = ({ options = {}, response, noError }) => {
+  const errCode = typeof response.errCode !== 'undefined' ? parseInt(response.errCode, 0) : 0;
+  if (![0, 1001].includes(errCode)) {
+    if (errCode === 1502) {
+      cookie.remove('cheng-token');
+
+      const backUrl = window.location.href;
+      if (!ToolUtil.queryString('login', backUrl)) {
+        history.push({
+          pathname: '/Login',
+          query: {
+            backUrl,
+          },
+        });
+      }
+    } else if (errCode !== 200 && !options.noError) {
+      Message.errorDialog({
+        content: response.message,
+      });
+    }
+    if (!noError) {
+      throw new Error(response.message);
+    }
+  }
+};
+
 export const request = async (config) => {
   return new Promise((resolve) => {
     ajaxService(config).then((response) => {
+      errorAction({ response, noError: true });
       resolve(response);
     }).catch((e) => {
       resolve({

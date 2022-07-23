@@ -3,6 +3,14 @@ import MyDatePicker from '../../../../../components/MyDatePicker';
 import { CalendarOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 
+export const getMinTime = (minTime) => {
+  if (minTime.getMinutes() >= 45) {
+    minTime = MyDate.formatDate(minTime.setHours(minTime.getHours() + 1))
+    minTime = MyDate.formatDate(minTime.setMinutes(0));
+  }
+  return minTime;
+};
+
 const StartEndDate = (
   {
     value = [],
@@ -12,13 +20,7 @@ const StartEndDate = (
     className,
   }) => {
 
-  const getMinTime = (minTime) => {
-    if (minTime.getMinutes() >= 45) {
-      minTime = MyDate.formatDate(minTime.setHours(minTime.getHours() + 1))
-      minTime = MyDate.formatDate(minTime.setMinutes(0));
-    }
-    return minTime;
-  };
+
 
 
   const ref = useRef();

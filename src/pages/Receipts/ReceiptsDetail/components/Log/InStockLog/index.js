@@ -51,7 +51,7 @@ const InStockLog = (
                   extraWidth='90px'
                   otherData={[
                     ToolUtil.isObject(item.customer).customerName,
-                    ToolUtil.isObject(item.brandResult).brandName,
+                    ToolUtil.isObject(item.brandResult).brandName || '无品牌',
                   ]}
                 />
               </div>
