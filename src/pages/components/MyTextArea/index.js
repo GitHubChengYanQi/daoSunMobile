@@ -127,7 +127,6 @@ const MyTextArea = (
       onChange={(textArea) => {
         const currentValue = textArea.nativeEvent.data;
         const textAreaValue = textArea.target.value;
-
         if (currentValue === null) {
           const clickUserPos = clickUser(true);
           if (clickUserPos) {
@@ -146,12 +145,9 @@ const MyTextArea = (
           const currentValueLength = textAreaValue.length - value.length;
           userPosChange(currentValueLength, userPos);
           if (currentValue === '@') {
-            const textArea = document.getElementById(id);
-            if (textArea) {
-              textArea.blur();
-            }
             userRef.current.open();
           }
+
           valueChange(textAreaValue, userPos);
         }
 
@@ -159,6 +155,10 @@ const MyTextArea = (
     />
 
     <CheckUser
+      afterShow={()=>{
+        const textArea = document.getElementById(id);
+        textArea.blur();
+      }}
       onClose={() => {
         setCaretPosition(cursor + 1);
       }}
@@ -178,6 +178,7 @@ const MyTextArea = (
         }];
         userPosChange(newPos - caretPos, newUserPos, caretPos);
         valueChange(newValue, newUserPos, newPos);
+        setCaretPosition(cursor + 1);
       }} />
   </>;
 };

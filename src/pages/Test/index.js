@@ -1,17 +1,12 @@
 import React, { useState } from 'react';
-import StartEndDate from '../Work/Production/CreateTask/components/StartEndDate';
+import MyTextArea from '../components/MyTextArea';
 
 const Test = () => {
 
-  const [value, onChange] = useState([]);
+  const [value, setValue] = useState();
 
   return <div style={{ textAlign: 'center' }}>
-    <StartEndDate
-      value={value}
-      onChange={(dates) => {
-        onChange(dates);
-      }}
-    />
+    <MyTextArea value={value} onChange={setValue} />
   </div>;
 };
 

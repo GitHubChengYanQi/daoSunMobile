@@ -8,6 +8,9 @@ import { UserIdSelect } from '../../Work/Customer/CustomerUrl';
 import { MyLoading } from '../MyLoading';
 import IsDev from '../../../components/IsDev';
 import { useModel } from 'umi';
+import MyAntPopup from '../MyAntPopup';
+import UserList from './components/UserList';
+import style from './index.less';
 
 const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 
@@ -18,31 +21,16 @@ const CheckUser = (
     },
     onClose = () => {
     },
+    afterShow = () => {
+    },
     hiddenCurrentUser,
   },
   ref,
 ) => {
 
-  const { initialState } = useModel('@@initialState');
-  const userInfo = ToolUtil.isObject(initialState).userInfo || {};
-
   const [visible, setVisible] = useState();
 
   const [params, setParams] = useState({});
-
-  const [data, setData] = useState();
-
-  const { loading, run } = useRequest(UserIdSelect, {
-    manual: true,
-    onSuccess: (res) => {
-      if (hiddenCurrentUser) {
-        setData(res.filter(item => item.value !== userInfo.id));
-      }else {
-        setData(res);
-      }
-      setVisible(true);
-    },
-  });
 
   const { loading: getUserLoading, run: getUser } = useRequest(getUserByCpUserId, {
     manual: true,
@@ -95,7 +83,7 @@ const CheckUser = (
     if (ToolUtil.isQiyeWeixin() && !IsDev()) {
       invoke();
     } else {
-      run();
+      setVisible(true);
     }
   };
 
@@ -103,26 +91,22 @@ const CheckUser = (
     open,
   }));
 
-  if (loading) {
-    return <MyLoading />;
-  }
-
   return <>
     {getUserLoading && <MyLoading />}
-    <Picker
-      value={[value]}
-      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
-      columns={[data || []]}
+    <MyAntPopup
+      afterShow={afterShow}
+      title='选择人员'
+      className={style.popup}
       visible={visible}
       onClose={() => {
         onClose();
         setVisible(false);
-      }}
-      onConfirm={(value, options) => {
-        const user = ToolUtil.isObject(options.items)[0] || {};
-        onChange(user.value, user.label, params);
-      }}
-    />
+      }}>
+      <UserList value={value} hiddenCurrentUser={hiddenCurrentUser} onChange={(items) => {
+        onChange(items.id, items.name, params);
+        setVisible(false);
+      }} />
+    </MyAntPopup>
   </>;
 };
 

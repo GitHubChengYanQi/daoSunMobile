@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popup } from 'antd-mobile';
-import style from './index.less'
+import style from './index.less';
 import { CloseOutline } from 'antd-mobile-icons';
 
 const MyAntPopup = (
@@ -12,12 +12,20 @@ const MyAntPopup = (
     className,
     onClose = () => {
     },
+    afterShow = () => {
+    },
   },
 ) => {
 
 
   return <>
-    <Popup visible={visible} onMaskClick={onClose} destroyOnClose={destroyOnClose} className={className}>
+    <Popup
+      afterShow={afterShow}
+      visible={visible}
+      onMaskClick={onClose}
+      destroyOnClose={destroyOnClose}
+      className={className}
+    >
       <div className={style.header}>
         {title || '无题'}
         <span onClick={() => {
