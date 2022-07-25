@@ -85,6 +85,10 @@ export const menus = [
     code: 'allocationAsk',
     icon: 'icon-kujiantiaobo',
     url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.allocation}`,
+  }, {
+    code: 'allocation',
+    icon: 'icon-kujiantiaobo',
+    url:  `/Work/Stock/Task?type=${ReceiptsEnums.allocation}`,
   },
   { code: 'OutStockConfirm',icon:'icon-chukuqueren', url: '/Work/OutStockConfirm' },
 ];

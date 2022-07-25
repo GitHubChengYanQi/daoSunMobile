@@ -5,7 +5,7 @@ import MyNavBar from '../../../components/MyNavBar';
 import MyCard from '../../../components/MyCard';
 import SkuItem from '../../Sku/SkuItem';
 import ShopNumber from '../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { Button } from 'antd-mobile';
+import { Button, Popup } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';
@@ -14,8 +14,13 @@ import MyCheck from '../../../components/MyCheck';
 import MyEmpty from '../../../components/MyEmpty';
 import { PositionShow } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
 import { ToolUtil } from '../../../components/ToolUtil';
+import Distribution from './components/Distribution';
+import BottomButton from '../../../components/BottomButton';
+import { Message } from '../../../components/Message';
 
 export const detailApi = { url: '/allocation/detail', method: 'POST' };
+export const checkCart = { url: '/allocation/checkCart', method: 'POST' };
+export const allocationCartDelete = { url: '/allocationCart/delete', method: 'POST' };
 
 const SelectStoreHouse = () => {
 
@@ -28,23 +33,30 @@ const SelectStoreHouse = () => {
   const [params, setParams] = useState({});
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   const [storeHouses, setStoreHouses] = useState([]);
 
-  const info = (detail, out) => {
+  const [visible, setVisible] = useState();
+
+  const [fixedSkus, setFixedSkus] = useState([]);
+
+  const info = (skus = [], out) => {
     let newParams;
-    const detailSkus = detail.detailResults || [];
     const newData = [];
     const stores = [];
+    const fixedSku = [];
     newParams = {
+      out,
       title: `选择调${out ? '出' : '入'}仓库`,
       distribution: `分配调${out ? '出' : '入'}物料`,
       batch: !out,
       storeHouseTitle: `调${out ? '出' : '入'}仓库`,
     };
-    detailSkus.forEach(item => {
+    skus.forEach(item => {
       if (out ? item.positionsResult : item.toPositionsResult) {
+        if (!item.allocationCartId) {
+          fixedSku.push(item);
+        }
         const storeHouse = (out ? item.storehouseResult : item.toStorehouseResult) || {};
         const storeIds = stores.map(item => item.id);
         const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
@@ -65,24 +77,60 @@ const SelectStoreHouse = () => {
         newData.push(item);
       }
     });
+    setFixedSkus(fixedSku);
     setParams(newParams);
     setData(newData);
     setStoreHouses(stores);
   };
 
-  const { loading: detailLoading, run: getDetail } = useRequest(detailApi, {
+  const { loading: deleteLoading, run: deleteRun } = useRequest(allocationCartDelete, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+    },
+  });
+
+
+  const { loading: checkCartLoading, run: checkCartRun } = useRequest(checkCart, {
+    manual: true,
+    onSuccess: () => {
+      Message.successToast('分派成功！', () => {
+        history.goBack();
+      });
+    },
+  });
+
+  const { loading: detailLoading, run: getDetail, refresh } = useRequest(detailApi, {
+    manual: true,
     onSuccess: (res) => {
       const detail = res || {};
+      const detailResults = res.detailResults || [];
+      const allocationCartResults = res.allocationCartResults || [];
+
+      const skus = allocationCartResults;
+
+      detailResults.forEach(item => {
+        let cartNumber = 0;
+        allocationCartResults.forEach(cartItem => {
+          if (cartItem.allocationDetailId === item.allocationDetailId) {
+            cartNumber += cartItem.number;
+          }
+        });
+        if ((item.number - cartNumber) > 0) {
+          skus.push({ ...item, number: item.number - cartNumber });
+        }
+      });
+
       switch (detail.type) {
         case 'allocation':
           if (detail.allocationType === 1) {
-            info(detail, true);
+            info(skus, true);
           } else {
-            info(detail, false);
+            info(skus, false);
           }
           break;
         case 'transfer':
-          info(res, false);
+          info(skus, false);
           break;
         default:
           break;
@@ -100,31 +148,15 @@ const SelectStoreHouse = () => {
     return <MyEmpty />;
   }
 
-  if (detailLoading) {
-    return <MyLoading skeleton />;
-  }
-
-  const dataChange = (cartId, params) => {
-    const newData = data.map(item => {
-      if (item.cartId === cartId) {
-        return { ...item, ...params };
-      } else {
-        return item;
-      }
-    });
-    setData(newData);
-  };
-
   return <div style={{ paddingBottom: 60, backgroundColor: '#fff', height: '100%' }}>
     <MyNavBar title={params.title} />
     <div className={style.content}>
       <User id={user.id} title='负责人' name={user.name} onChange={(id, name) => {
         setUser({ id, name });
       }} />
-      <MyCard title={params.distribution}>
+      <MyCard hidden={data.length === 0} title={params.distribution}>
         {
           data.map((item, index) => {
-            console.log(item);
             const outName = ToolUtil.isObject(item.positionsResult).name;
             const inName = ToolUtil.isObject(item.toPositionsResult).name;
             return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
@@ -140,13 +172,11 @@ const SelectStoreHouse = () => {
               </div>
               <div className={style.action}>
                 <ShopNumber
+                  show
                   value={item.number}
-                  onChange={number => {
-                    dataChange(item.cartId, { number });
-                  }}
                 />
                 <Button color='primary' fill='outline' onClick={() => {
-                  // getStoreHouse({ data: { skuId: item.skuId } });
+                  setVisible(item);
                 }}>选择仓库</Button>
               </div>
             </div>;
@@ -178,10 +208,14 @@ const SelectStoreHouse = () => {
                     />
                   </div>
                   <div className={style.newAction}>
-                    <LinkButton color='danger'>重新选择</LinkButton>
-                    <ShopNumber value={item.number} onChange={number => {
-                      dataChange(item.cartId, { number });
-                    }} />
+                    <LinkButton
+                      color={item.allocationCartId ? 'danger' : 'default'}
+                      disabled={!item.allocationCartId}
+                      onClick={() => {
+                        deleteRun({ data: { allocationCartId: item.allocationCartId } });
+                      }}
+                    >重新选择</LinkButton>
+                    <ShopNumber show value={item.number} />
                   </div>
                 </div>;
               })
@@ -191,6 +225,18 @@ const SelectStoreHouse = () => {
       }
     </div>
 
+    <Popup visible={visible} onMaskClick={() => setVisible(false)} destroyOnClose>
+      <Distribution
+        skuItem={visible}
+        out={params.out}
+        onClose={() => setVisible(false)}
+        refresh={() => {
+          setVisible(false);
+          refresh();
+        }}
+      />
+    </Popup>
+
     <div className={style.bottom}>
       <div className={style.all}>
         <MyCheck checked onChange={() => {
@@ -199,7 +245,6 @@ const SelectStoreHouse = () => {
       </div>
       <div className={style.buttons}>
         <Button
-          disabled={data.length === 0}
           color='primary'
           onClick={() => {
 
@@ -207,6 +252,25 @@ const SelectStoreHouse = () => {
         >确定仓库</Button>
       </div>
     </div>
+
+    <BottomButton
+      leftOnClick={() => {
+        history.goBack();
+      }}
+      rightDisabled={data.length !== 0 || !user.id}
+      rightOnClick={() => {
+
+        checkCartRun({
+          data: {
+            allocationId: query.id,
+            userId: user.id,
+            detailParams: fixedSkus,
+          },
+        });
+      }}
+    />
+
+    {(detailLoading || deleteLoading || checkCartLoading) && <MyLoading />}
 
   </div>;
 };

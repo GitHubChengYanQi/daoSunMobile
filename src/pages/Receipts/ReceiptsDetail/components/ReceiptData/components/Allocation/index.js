@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -11,7 +11,12 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
-import { PositionShow } from './components/PositionShow';
+import Title from '../../../../../../components/Title';
+import LinkButton from '../../../../../../components/LinkButton';
+import MyAntPopup from '../../../../../../components/MyAntPopup';
+import MyEmpty from '../../../../../../components/MyEmpty';
+import Viewpager from '../InstockOrder/components/Viewpager';
+import AllocationSkuItem from './components/AllocationSkuItem';
 
 const Allocation = (
   {
@@ -27,56 +32,63 @@ const Allocation = (
 
   let countNumber = 0;
 
-  const skuList = data.detailResults || [];
-
   const [allSku, { toggle }] = useBoolean();
 
   const assign = getAction('assign').id && permissions;
   const carryAllocation = getAction('carryAllocation').id && permissions;
 
-  return <>
-    <MyCard title='申请明细' extra={<div className={style.extra}>
-      合计：
-      <div>{skuList.length}</div>类
-      <div hidden={!countNumber}><span>{countNumber}</span>件</div>
-    </div>}>
-      {
-        skuList.map((item, index) => {
+  const detailList = (carryAllocation ? data.allocationCartResults : data.detailResults) || [];
+  const showList = (carryAllocation ? data.detailResults : data.allocationCartResults) || [];
 
-          const outPosition = ToolUtil.isObject(item.positionsResult).name;
-          const inPosition = ToolUtil.isObject(item.toPositionsResult).name;
+  const [detailShow, setDetailShow] = useState();
+
+  const [visible, setVisible] = useState();
+
+  return <>
+    <MyCard
+      titleBom={<div className={style.header}>
+        <Title>任务明细</Title>
+        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+          setDetailShow(true);
+        }}>详情</LinkButton>
+      </div>}
+      className={style.cardStyle}
+      headerClassName={style.headerStyle}
+      bodyClassName={style.bodyStyle}
+      extra={<div className={style.extra}>
+        合计：
+        <div>{detailList.length}</div>类
+        <div hidden={!countNumber}><span>{countNumber}</span>件</div>
+      </div>}>
+      {
+        detailList.map((item, index) => {
+
+          const view = item.allocationCartId && item.storehouseId === item.toStorehouseId;
 
           if (!allSku && index >= 3) {
             return null;
           }
 
-          return <div
-            key={index}
-            style={{ padding: '8px 0' }}
-            className={ToolUtil.classNames(
-              style.skuItem,
-            )}
-          >
-            <div className={style.item}>
-              <SkuItem
-                skuResult={item.skuResult}
-                otherData={[
-                  item.brandName || '任意品牌',
-                  <PositionShow outPositionName={outPosition} inPositionName={inPosition} />,
-                ]} />
-            </div>
-            <div className={style.action}>
-              <div>
-                <ShopNumber
-                  show
-                  value={item.number}
-                />
-              </div>
-            </div>
+          if (!view) {
+            return <AllocationSkuItem item={item} key={index} />;
+          }
+
+          return <div key={index}>
+            <Viewpager
+              currentIndex={index}
+              onLeft={() => {
+                setVisible(true);
+              }}
+              onRight={() => {
+                setVisible(true);
+              }}
+            >
+              <AllocationSkuItem item={item} key={index} />
+            </Viewpager>
           </div>;
         })
       }
-      {skuList.length > 3 && <Divider className={style.allSku}>
+      {detailList.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
         }}>
@@ -117,6 +129,24 @@ const Allocation = (
         })} />
       </div>
     </MyCard>
+
+    <MyAntPopup
+      title={carryAllocation ? '调拨申请' : '调拨详情'}
+      onClose={() => {
+        setDetailShow(false);
+      }}
+      visible={detailShow}
+      destroyOnClose
+    >
+      <div className={style.details}>
+        {showList.length === 0 && <MyEmpty />}
+        {
+          showList.map((item, index) => {
+            return <AllocationSkuItem item={item} key={index} />;
+          })
+        }
+      </div>
+    </MyAntPopup>
 
     {assign && <BottomButton
       only

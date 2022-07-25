@@ -24,6 +24,7 @@ const Positions = (
     autoFocus,
     maxNumber,
     verification,
+    storehouseId,
     ...props
   },
 ) => {
@@ -38,6 +39,7 @@ const Positions = (
   const disabled = verification && value.length >= maxNumber;
 
   const { loading, data, run } = useRequest(positions, {
+    manual:true,
     onSuccess: () => {
       if (focus) {
         const positionSearch = document.querySelector('#positionSearch input');
@@ -50,6 +52,14 @@ const Positions = (
   });
 
   const [name, setName] = useState();
+
+  const submit = (data = {}) => {
+    run({ data: { storehouseId, ...data } });
+  };
+
+  useEffect(() => {
+    submit();
+  }, []);
 
   useEffect(() => {
     if (codeId) {
@@ -86,10 +96,10 @@ const Positions = (
         });
       }}
       onSearch={() => {
-        run({ data: { name } });
+        submit({ name });
       }}
       onClear={() => {
-        run();
+        submit();
       }} />
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>

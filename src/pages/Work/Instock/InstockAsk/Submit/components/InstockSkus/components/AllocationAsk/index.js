@@ -105,8 +105,8 @@ const AllocationAsk = ({ skus, createType }) => {
     return <MyLoading skeleton />;
   }
 
-  if (ToolUtil.isArray(storeHouses).length === 0){
-    return <MyEmpty description='暂无仓库' />
+  if (ToolUtil.isArray(storeHouses).length === 0) {
+    return <MyEmpty description='暂无仓库' />;
   }
 
   return <>
@@ -185,7 +185,7 @@ const AllocationAsk = ({ skus, createType }) => {
         setParams={setParams}
       />}
 
-      <div hidden={query.storeHouseId} className={style.center}>说明：选择移库后，移库的物料将与所在库位解除绑定关系</div>
+      <div hidden={query.storeHouseId} className={style.explain}>说明：选择移库后，移库的物料将与所在库位解除绑定关系</div>
 
       <Picker
         popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
@@ -202,7 +202,7 @@ const AllocationAsk = ({ skus, createType }) => {
         leftOnClick={() => {
           history.goBack();
         }}
-        rightText='提交'
+        rightText={query.storeHouseId ? '提交' : '下一步'}
         rightDisabled={createTypeData().disabled}
         rightOnClick={() => {
           if (query.storeHouseId) {
@@ -215,10 +215,10 @@ const AllocationAsk = ({ skus, createType }) => {
                 skuId: item.skuId,
                 number: item.number,
                 storehousePositionsId: storehousePositions.storehousePositionsId,
-                storehouseId: storehousePositions.storehouseId,
+                storehouseId: params.allocationType === 'out' ? query.storeHouseId : storehousePositions.storehouseId,
                 brandId: item.brandId,
                 toStorehousePositionsId: toStorehousePositions.storehousePositionsId,
-                toStorehouseId: toStorehousePositions.storehouseId,
+                toStorehouseId: params.allocationType === 'in' ? query.storeHouseId : toStorehousePositions.storehouseId,
               });
             });
             addAllocation({
@@ -230,7 +230,7 @@ const AllocationAsk = ({ skus, createType }) => {
                 remark: params.remark,
                 type: params.askType === 'allocation' ? 'allocation' : 'transfer',
                 allocationType: params.allocationType === 'in' ? 1 : 2,
-                storehouseId:ToolUtil.isObject(params.storeHouse).value
+                storehouseId: ToolUtil.isObject(params.storeHouse).value,
               },
             });
             return;

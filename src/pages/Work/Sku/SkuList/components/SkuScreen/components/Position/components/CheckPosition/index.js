@@ -79,11 +79,12 @@ const CheckPosition = (
                   onChange(value.filter(position => position.id !== item.key));
                 } else {
                   onChange(single ?
-                    [{ id: item.key, name: item.title }]
+                    [{ id: item.key, name: item.title,storehouseId:item.storeHouseId }]
                     :
                     [...value, {
                       id: item.key,
                       name: item.title,
+                      storehouseId:item.storeHouseId
                     }]);
                 }
               }}

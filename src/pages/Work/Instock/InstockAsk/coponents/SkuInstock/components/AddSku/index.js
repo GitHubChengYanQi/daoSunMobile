@@ -500,6 +500,11 @@ const AddSku = (
 
     <Popup visible={['outPosition', 'inPosition'].includes(dataVisible)} destroyOnClose className={style.positionPopup}>
       <Positions
+        storehouseId={(
+          query.allocationType === 'out' && dataVisible === 'outPosition'
+          ||
+          query.allocationType === 'in' && dataVisible === 'inPosition') ? query.storeHouseId : null
+        }
         single
         ids={dataVisible === 'outPosition' ? (data.outPosition && [data.outPosition]) : (data.inPosition && [data.inPosition])}
         onClose={() => setDataVisible(null)}

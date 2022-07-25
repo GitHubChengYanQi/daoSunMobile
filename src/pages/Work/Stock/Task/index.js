@@ -28,7 +28,7 @@ const Task = (
   const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
 
   const tabs = [
-    { title: '调拨任务', key: 'allocation' },
+    { title: '调拨任务', key: ReceiptsEnums.allocation },
     { title: '出库任务', key: ReceiptsEnums.outstockOrder },
     { title: '入库任务', key: ReceiptsEnums.instockOrder },
     { title: '养护任务', key: ReceiptsEnums.maintenance },
