@@ -15,13 +15,14 @@ const ErrorItem = (
   };
 
   return <TaskItem
+    percent={parseInt((receipts.handle / receipts.total) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
-    skuSize={receipts.skuSize}
-    positionSize={receipts.positionSize}
+    skuSize={receipts.skuNumber}
+    noPosition
     beginTime={receipts.beginTime}
     onClick={onClick}
   />;
