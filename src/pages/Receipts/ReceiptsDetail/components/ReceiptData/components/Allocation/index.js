@@ -62,7 +62,7 @@ const Allocation = (
                 skuResult={item.skuResult}
                 otherData={[
                   item.brandName || '任意品牌',
-                  PositionShow({ outPosition, inPosition }),
+                  <PositionShow outPositionName={outPosition} inPositionName={inPosition} />,
                 ]} />
             </div>
             <div className={style.action}>

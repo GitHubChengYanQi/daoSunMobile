@@ -8,8 +8,7 @@ export const PositionShow = (
     inPositionName,
   }) => {
 
-
-  return   <div className={style.skuPosition}>
+  return  <div className={style.skuPosition}>
     <div className={style.positionItem} hidden={!outPositionName}>{outPositionName}</div>
     <Icon type='icon-iconset0438' style={{ color: 'var(--adm-color-primary)' }} />
     <div className={style.positionItem} hidden={!inPositionName}>{inPositionName}</div>

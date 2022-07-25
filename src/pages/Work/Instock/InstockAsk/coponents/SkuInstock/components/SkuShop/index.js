@@ -161,7 +161,7 @@ const SkuShop = (
           type: '调拨申请',
           otherData: [
             item.brandName || '任意品牌',
-            PositionShow({ outPositionName, inPositionName }),
+            <PositionShow outPositionName={outPositionName} inPositionName={inPositionName} />,
           ],
           numberHidden: query.askType === 'moveLibrary',
           min: 1,

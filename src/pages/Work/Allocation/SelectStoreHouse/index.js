@@ -32,112 +32,61 @@ const SelectStoreHouse = () => {
 
   const [storeHouses, setStoreHouses] = useState([]);
 
+  const info = (detail, out) => {
+    let newParams;
+    const detailSkus = detail.detailResults || [];
+    const newData = [];
+    const stores = [];
+    newParams = {
+      title: `选择调${out ? '出' : '入'}仓库`,
+      distribution: `分配调${out ? '出' : '入'}物料`,
+      batch: !out,
+      storeHouseTitle: `调${out ? '出' : '入'}仓库`,
+    };
+    detailSkus.forEach(item => {
+      if (out ? item.positionsResult : item.toPositionsResult) {
+        const storeHouse = (out ? item.storehouseResult : item.toStorehouseResult) || {};
+        const storeIds = stores.map(item => item.id);
+        const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
+        if (storeIndex === -1) {
+          stores.push({
+            id: storeHouse.storehouseId,
+            name: storeHouse.name,
+            skus: [item],
+          });
+        } else {
+          const store = stores[storeIndex];
+          stores[storeIndex] = {
+            ...store,
+            skus: [...store.skus, item],
+          };
+        }
+      } else {
+        newData.push(item);
+      }
+    });
+    setParams(newParams);
+    setData(newData);
+    setStoreHouses(stores);
+  };
+
   const { loading: detailLoading, run: getDetail } = useRequest(detailApi, {
     onSuccess: (res) => {
       const detail = res || {};
-      let params = {};
-      const detailSkus = detail.detailResults || [];
-
-      const newData = [];
-      const stores = [];
-
       switch (detail.type) {
         case 'allocation':
           if (detail.allocationType === 1) {
-            params = {
-              title: '选择调出仓库',
-              distribution: '分配调出物料',
-              storeHouseTitle: '调出仓库',
-            };
-            detailSkus.forEach(item => {
-              if (!item.positionsResult) {
-                newData.push(item);
-              } else {
-                const storeHouse = item.storehouseResult || {};
-                const storeIds = stores.map(item => item.id);
-                const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
-                if (storeIndex === -1) {
-                  stores.push({
-                    id: storeHouse.storehouseId,
-                    name: storeHouse.name,
-                    skus: [item],
-                  });
-                } else {
-                  const store = stores[storeIndex];
-                  stores[storeIndex] = {
-                    ...store,
-                    skus: [...store.skus, item],
-                  };
-                }
-              }
-            });
+            info(detail, true);
           } else {
-            params = {
-              title: '选择调入仓库',
-              distribution: '分配调入物料',
-              batch: true,
-              storeHouseTitle: '调入仓库',
-            };
-            detailSkus.forEach(item => {
-              if (!item.toPositionsResult) {
-                newData.push(item);
-              } else {
-                const storeHouse = item.toStorehouseResult || {};
-                const storeIds = stores.map(item => item.id);
-                const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
-                if (storeIndex === -1) {
-                  stores.push({
-                    id: storeHouse.storehouseId,
-                    name: storeHouse.name,
-                    skus: [item],
-                  });
-                } else {
-                  const store = stores[storeIndex];
-                  stores[storeIndex] = {
-                    ...store,
-                    skus: [...store.skus, item],
-                  };
-                }
-              }
-            });
+            info(detail, false);
           }
           break;
         case 'transfer':
-          params = {
-            title: '选择调入仓库',
-            distribution: '分配调入物料',
-            batch: true,
-            storeHouseTitle: '调入仓库',
-          };
-          detailSkus.forEach(item => {
-            if (!item.toPositionsResult) {
-              newData.push(item);
-            } else {
-              const storeHouse = item.toStorehouseResult || {};
-              const storeIds = stores.map(item => item.id);
-              const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
-              if (storeIndex === -1) {
-                stores.push({
-                  id: storeHouse.storehouseId,
-                  name: storeHouse.name,
-                  skus: [item],
-                });
-              } else {
-                const store = stores[storeIndex];
-                stores[storeIndex] = {
-                  ...store,
-                  skus: [...store.skus, item],
-                };
-              }
-            }
-          });
+          info(res, false);
           break;
         default:
           break;
       }
-      setParams(params);
-      setData(newData);
-      setStoreHouses(stores);
     },
   });
 
@@ -184,7 +133,7 @@ const SelectStoreHouse = () => {
                   skuResult={item.skuResult}
                   otherData={[
                     item.brandName || '任意品牌',
-                    PositionShow({ outName, inName }),
+                    <PositionShow outPositionName={outName} inPositionName={inName} />,
                   ]}
                   extraWidth='140px'
                 />
@@ -223,7 +172,7 @@ const SelectStoreHouse = () => {
                       skuResult={item.skuResult}
                       otherData={[
                         item.brandName || '任意品牌',
-                        PositionShow({ outName, inName }),
+                        <PositionShow outPositionName={outName} inPositionName={inName} />,
                       ]}
                       extraWidth='140px'
                     />

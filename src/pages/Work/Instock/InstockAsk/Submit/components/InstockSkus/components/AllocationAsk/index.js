@@ -93,7 +93,7 @@ const AllocationAsk = ({ skus, createType }) => {
       type: '调拨',
       otherData: [
         item.brandName || '任意品牌',
-        PositionShow({ outPositionName, inPositionName }),
+        <PositionShow outPositionName={outPositionName} inPositionName={inPositionName} />,
       ],
       careful: '注意事项',
       disabled: query.storeHouseId ? ToolUtil.isArray(params.noticeIds).length === 0 : !params.storeHouse,
