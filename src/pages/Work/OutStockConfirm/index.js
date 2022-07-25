@@ -99,20 +99,8 @@ const OutStockConfirm = () => {
       only
       text='确认'
       onClick={() => {
-        const cartsParams = outSkus.map(item => {
-          return {
-            'storehouseId': item.storehouseId,
-            'skuId': item.skuId,
-            'pickListsId': item.pickListsId,
-            'number': item.number,
-            brandId: item.brandId,
-          };
-        });
         outStockRun({
-          data: {
-            code,
-            cartsParams,
-          },
+          data: {code},
         });
       }}
     />

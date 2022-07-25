@@ -6,7 +6,6 @@ import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../../../../../components/Icon';
-import LinkButton from '../../../../../../../components/LinkButton';
 import ShopNumber from '../ShopNumber';
 import { useRequest } from '../../../../../../../../util/Request';
 import { shopCartAddList, shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../Url';
@@ -16,6 +15,7 @@ import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import { judgeLoginUser } from '../../../../Submit/components/InstockSkus';
 import MyRemoveButton from '../../../../../../../components/MyRemoveButton';
 import AddSku from '../AddSku';
+import { PositionShow } from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
 
 const SkuShop = (
   {
@@ -48,6 +48,8 @@ const SkuShop = (
 
   const history = useHistory();
 
+  const query = history.location.query;
+
   const skuChange = (cartId, number) => {
     const newSkus = skus.map(item => {
       if (item.cartId === cartId) {
@@ -78,6 +80,7 @@ const SkuShop = (
           brandName: ToolUtil.isObject(item.brandResult).brandName,
           brandId: item.brandId,
           number: item.number,
+          positionNums: item.positionNums,
           positions: ToolUtil.isArray(item.storehousePositions).map(item => {
             return {
               id: item.storehousePositionsId,
@@ -150,23 +153,18 @@ const SkuShop = (
   const taskData = (item = {}) => {
     switch (type) {
       case ERPEnums.allocation:
+        const position = ToolUtil.isArray(item.positionNums)[0] || {};
+        const outPositionName = ToolUtil.isObject(position.positionsResult).name;
+        const inPositionName = ToolUtil.isObject(position.toPositionsResult).name;
         return {
           title: '调拨任务明细',
           type: '调拨申请',
-          otherData: [item.brandName || '任意品牌'],
-          max:true,
-          min:0,
-        };
-      case ERPEnums.curing:
-        return {
-          title: '养护任务明细',
-          type: '养护申请',
-        };
-      case ERPEnums.stocktaking:
-        return {
-          title: '盘点任务明细',
-          type: '盘点申请',
-          numberHidden: true,
+          otherData: [
+            item.brandName || '任意品牌',
+            PositionShow({ outPositionName, inPositionName }),
+          ],
+          numberHidden: query.askType === 'moveLibrary',
+          min: 1,
         };
       case ERPEnums.outStock:
         return {
@@ -272,10 +270,10 @@ const SkuShop = (
                       let newNumber = 0;
                       if (taskData().max) {
                         newNumber = number > skuResult.stockNumber ? skuResult.stockNumber : number;
-                      }else {
+                      } else {
                         newNumber = number;
                       }
-                      const res = await shopEdit({ data: { cartId: item.cartId, number:newNumber } });
+                      const res = await shopEdit({ data: { cartId: item.cartId, number: newNumber } });
                       skuChange(res, newNumber);
                     }}
                   />
@@ -341,11 +339,17 @@ const SkuShop = (
           onClick={() => {
             switch (type) {
               case ERPEnums.allocation:
-                history.push('/Work/Allocation/SelectStoreHouse');
+                history.push({
+                  pathname: '/Work/Instock/InstockAsk/Submit',
+                  query: {
+                    createType: type,
+                    ...history.location.query,
+                  },
+                  state: {
+                    skus,
+                  },
+                });
                 break;
-              case ERPEnums.curing:
-                break;
-              case ERPEnums.stocktaking:
               case ERPEnums.outStock:
               case ERPEnums.inStock:
               case ERPEnums.directInStock:

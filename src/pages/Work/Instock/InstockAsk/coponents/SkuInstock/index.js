@@ -10,7 +10,6 @@ import SkuList from '../../../../Sku/SkuList';
 import { ScanningOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
-import MyCheck from '../../../../../components/MyCheck';
 import { ERPEnums } from '../../../../Stock/ERPEnums';
 import { useLocation } from 'react-router-dom';
 
@@ -19,35 +18,12 @@ export const SkuContent = (
     query,
     data,
     addSku,
-    batch,
-    onCheck = () => {
-    },
-    checkSkus = [],
-    skus = [],
-    type,
   }) => {
-
-  const skuIds = checkSkus.map(item => item.skuId);
-  const shopSkuIds = skus.map(item => item.skuId);
 
   return <div className={style.skuList}>
     {
       data.map((item, index) => {
-        const checked = skuIds.includes(item.skuId);
-        const isShop = shopSkuIds.includes(item.skuId);
-        let buttonHidden = false;
-        switch (type) {
-          case 'stocktaking':
-            buttonHidden = isShop;
-            break;
-          default:
-            break;
-        }
         return <div key={index} className={style.skuItem}>
-          {batch &&
-          <MyCheck disabled={buttonHidden} checked={checked} fontSize={20} className={style.check} onChange={() => {
-            onCheck(checked ? checkSkus.filter(sku => sku.skuId !== item.skuId) : [...checkSkus, item]);
-          }} />}
           <div className={style.sku}>
             <SkuItem
               skuResult={item}
@@ -58,11 +34,11 @@ export const SkuContent = (
               otherData={[ToolUtil.isArray(item.brandResults).map(item => item.brandName).join(' / ')]}
             />
           </div>
-          {buttonHidden ? '已添加' : (!batch && <LinkButton onClick={() => {
+          <LinkButton onClick={() => {
             addSku.current.openSkuAdd({ ...item, imgId: `stocktakingImg${index}`, storehouseId: query.storehouseId });
           }}>
             <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
-          </LinkButton>)}
+          </LinkButton>
         </div>;
       })
     }
@@ -123,12 +99,6 @@ const SkuInstock = ({ type, title, judge }) => {
         skuContentProps={{
           query,
           addSku,
-          checkSkus,
-          skus,
-          onCheck: (skus) => {
-            setCheckSkus(skus);
-          },
-          type,
         }}
         defaultParams={{ stockView: true }}
         open={{ time: true, user: true }}

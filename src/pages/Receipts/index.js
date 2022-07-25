@@ -25,5 +25,5 @@ export const ReceiptsEnums = {
   maintenance: 'MAINTENANCE',
 
   // 调拨单
-  allocation: 'allocation',
+  allocation: 'ALLOCATION',
 };

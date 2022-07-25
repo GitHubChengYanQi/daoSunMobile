@@ -12,7 +12,9 @@ import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import AddPosition
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
-import { Message } from '../../../../../../../components/Message';
+import Positions
+  from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
+import { useLocation } from 'react-router-dom';
 
 const AddSku = (
   {
@@ -30,21 +32,23 @@ const AddSku = (
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
+  const { query } = useLocation();
+
   const [sku, setSku] = useState({});
 
   const [visible, setVisible] = useState();
 
   const [dataVisible, setDataVisible] = useState();
 
-  const addShopBall = (cartId, newData = data, newType = type) => {
-    const skuImg = document.getElementById(newData.imgId || 'skuImg');
+  const addShopBall = (cartId) => {
+    const skuImg = document.getElementById(data.imgId || 'skuImg');
     if (skuImg) {
       const top = skuImg.getBoundingClientRect().top;
       const left = skuImg.getBoundingClientRect().left;
       setVisible(false);
-      createBall(top, left, cartId, newData, newType);
+      createBall(top, left, cartId, data, type);
     } else {
-      onChange({ ...newData, cartId }, newType);
+      onChange({ ...data, cartId }, type);
     }
 
   };
@@ -52,14 +56,7 @@ const AddSku = (
   const { loading: addLoading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onSuccess: (res) => {
-      switch (type) {
-        case ERPEnums.stocktaking:
-          onClose();
-          return;
-        default:
-          addShopBall(res);
-          return;
-      }
+      addShopBall(res);
     },
   });
 
@@ -97,6 +94,9 @@ const AddSku = (
   const [disabled, setDisabled] = useState();
 
   const disabledChange = ({ customerId, brandId, newData = data }) => {
+    if (type === ERPEnums.allocation) {
+      return;
+    }
     const newCustomerId = customerId === undefined ? newData.customerId : customerId;
     const newBrandId = brandId === undefined ? newData.brandId : brandId;
     const snameSku = skus.filter((item) => {
@@ -120,7 +120,7 @@ const AddSku = (
     let number = 1;
     switch (type) {
       case ERPEnums.allocation:
-        number = sku.stockNumber > 0 ? 1 : 0
+        number = query.askType === 'moveLibrary' ? 0 : 1;
         break;
       case ERPEnums.directInStock:
         number = 0;
@@ -145,23 +145,8 @@ const AddSku = (
     switch (type) {
       case ERPEnums.curing:
         break;
-      case ERPEnums.stocktaking:
-        const cartId = await addShop({
-          data: {
-            type,
-            skuId: sku.skuId,
-          },
-        });
-        addShopBall(cartId, newData, type);
-        break;
       case ERPEnums.outStock:
-        setVisible(true);
-        break;
       case ERPEnums.allocation:
-        if (!newData.storehouseId) {
-          Message.warningDialog({ content: '请选择仓库！' });
-          return;
-        }
         setVisible(true);
         break;
       case ERPEnums.inStock:
@@ -188,18 +173,13 @@ const AddSku = (
           disabledText,
           customerDisabled: true,
           otherBrand: '任意品牌',
-          max: data.stockNumber,
-          disabled: data.stockNumber === 0
+          brandDisabled: query.askType === 'moveLibrary',
+          numberDisabled: query.askType === 'moveLibrary',
+          disabled: query.askType === 'moveLibrary' && !data.outPosition,
         };
       case ERPEnums.curing:
         return {
           title: '养护',
-          disabledText,
-          otherBrand: '请选择品牌',
-        };
-      case ERPEnums.stocktaking:
-        return {
-          title: '盘点',
           disabledText,
           otherBrand: '请选择品牌',
         };
@@ -251,12 +231,20 @@ const AddSku = (
 
   const add = () => {
     const positionNums = [];
-    ToolUtil.isArray(data.positions).map(item => {
-      if (item.number) {
-        return positionNums.push({ positionId: item.id, num: item.number });
-      }
-      return null;
-    });
+    if (type === ERPEnums.allocation) {
+      positionNums.push({
+        positionId: ToolUtil.isObject(data.outPosition).id,
+        toPositionId: ToolUtil.isObject(data.inPosition).id,
+        storehouseId: query.storeHouseId,
+      });
+    } else {
+      ToolUtil.isArray(data.positions).map(item => {
+        if (item.number) {
+          return positionNums.push({ positionId: item.id, num: item.number });
+        }
+        return null;
+      });
+    }
 
     const params = {
       type,
@@ -351,7 +339,33 @@ const AddSku = (
                 otherData={[ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')]}
                 extraWidth={'calc(25vw + 24px)'}
               />
-              <div className={style.flex}>
+              <div className={style.flex} hidden={type !== ERPEnums.allocation}>
+                <div className={style.checkLabel}>
+                  调出库位 <span hidden={query.askType !== 'moveLibrary'}>*</span>
+                </div>
+                <Button
+                  color='primary'
+                  fill='outline'
+                  className={style.check}
+                  onClick={() => {
+                    setDataVisible('outPosition');
+                  }}
+                >{ToolUtil.isObject(data.outPosition).name || '请选择库位'}</Button>
+              </div>
+              <div className={style.flex} hidden={type !== ERPEnums.allocation}>
+                <div className={style.checkLabel}>
+                  调入库位
+                </div>
+                <Button
+                  color='primary'
+                  fill='outline'
+                  className={style.check}
+                  onClick={() => {
+                    setDataVisible('inPosition');
+                  }}
+                >{ToolUtil.isObject(data.inPosition).name || '请选择库位'}</Button>
+              </div>
+              <div className={style.flex} hidden={taskData().brandDisabled}>
                 <div className={style.checkLabel}>
                   品牌
                 </div>
@@ -379,7 +393,8 @@ const AddSku = (
                   }}
                 >{data.customerName || '请选择供应商'}</Button>
               </div>
-              <div hidden={taskData().judge || (disabled && !snameAction)} className={style.flex}>
+              <div hidden={taskData().judge || (disabled && !snameAction) || taskData().numberDisabled}
+                   className={style.flex}>
                 <div className={style.instockNumber}>
                   {taskData().title}数量
                   <ShopNumber value={data.number} max={taskData().max} onChange={(number) => {
@@ -429,7 +444,6 @@ const AddSku = (
                 </Button>
               </div>
             </>
-
         }
       </div>
     </Popup>
@@ -483,6 +497,28 @@ const AddSku = (
         disabledChange({ customerId: customer.value });
       }}
     />
+
+    <Popup visible={['outPosition', 'inPosition'].includes(dataVisible)} destroyOnClose className={style.positionPopup}>
+      <Positions
+        single
+        ids={dataVisible === 'outPosition' ? (data.outPosition && [data.outPosition]) : (data.inPosition && [data.inPosition])}
+        onClose={() => setDataVisible(null)}
+        onSuccess={(value = []) => {
+          const position = value[0] || {};
+          if (dataVisible === 'outPosition') {
+            setData({
+              ...data,
+              outPosition: position,
+            });
+          } else {
+            setData({
+              ...data,
+              inPosition: position,
+            });
+          }
+          setDataVisible(null);
+        }} />
+    </Popup>
   </>;
 };
 

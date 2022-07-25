@@ -10,6 +10,7 @@ import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
 import StepList from '../Dynamic/components/StepList';
 import { MyLoading } from '../../../../components/MyLoading';
+import Allocation from './components/Allocation';
 
 const ReceiptData = (
   {
@@ -74,6 +75,12 @@ const ReceiptData = (
           permissions={permissions}
           receipts={data.receipts}
         />;
+      case ReceiptsEnums.allocation:
+        return <Allocation
+          permissions={permissions}
+          getAction={getAction}
+          data={data.receipts}
+        />;
       default:
         return <MyEmpty />;
     }
@@ -82,7 +89,7 @@ const ReceiptData = (
   const remarks = data.remarks || [];
 
   if (loading) {
-    return <MyLoading skeleton skeletonStyle={{backgroundColor:'#fff',height:'calc(100% - 166px)'}} />;
+    return <MyLoading skeleton skeletonStyle={{ backgroundColor: '#fff', height: 'calc(100% - 166px)' }} />;
   }
 
   return <div>
@@ -96,7 +103,7 @@ const ReceiptData = (
     <div className={style.comments}>
       <StepList remarks={remarks.filter(item => 'comments' === item.type)} />
     </div>
-    <div style={{backgroundColor:'#fff',height:60,marginTop:3}} />
+    <div style={{ backgroundColor: '#fff', height: 60, marginTop: 3 }} />
   </div>;
 };
 

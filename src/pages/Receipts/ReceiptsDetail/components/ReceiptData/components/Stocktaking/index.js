@@ -110,7 +110,7 @@ const Stocktaking = (
                       <SkuItem
                         hiddenNumber={!showStock}
                         skuResult={item.skuResult}
-                        otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
+                        otherData={[ToolUtil.isObject(item.brandResult).brandName || '所有品牌']}
                       />
                     </div>
                   </div>

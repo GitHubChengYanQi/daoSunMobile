@@ -89,6 +89,7 @@ const MaintenanceAction = (
                 </div>
                 <div className={style.progress}>
                   <Progress
+                    strokeColor='var(--adm-color-primary)'
                     format={(number) => {
                       return <span className={style.blue}>{number + '%'}</span>;
                     }}

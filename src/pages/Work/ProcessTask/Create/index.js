@@ -48,22 +48,12 @@ const Create = () => {
                 code={item.code}
                 name={item.name}
                 fontSize={50}
-                onClick={(code) => {
-                  switch (code) {
-                    case 'allocationAsk':
-                      setVisible(code);
-                      return true;
-                    default:
-                      break;
-                  }
-                }} />
+              />
             </Grid.Item>;
           })
         }
       </Grid>
     </Card>
-
-    <AllocationAsk open={visible === 'allocationAsk'} onClose={() => setVisible(false)} />
 
   </div>;
 };

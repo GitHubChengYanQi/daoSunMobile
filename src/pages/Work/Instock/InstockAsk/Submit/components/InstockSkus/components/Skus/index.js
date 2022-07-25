@@ -27,7 +27,7 @@ const Skus = (
   const [allSku, { toggle }] = useBoolean();
 
   return <>
-    <MyCard title='物料明细' extra={ <div className={style.extra}>
+    <MyCard title='物料明细' extra={<div className={style.extra}>
       合计：
       <div>{skus.length}</div>类
       <div hidden={!countNumber}><span>{countNumber}</span>件</div>
@@ -58,7 +58,7 @@ const Skus = (
               <MyRemoveButton onRemove={() => {
                 dataChange(skuList.filter(item => item.key !== index));
               }} />
-              <div hidden={createTypeData().buttonHidden}>
+              <div hidden={createTypeData(item).buttonHidden}>
                 <ShopNumber
                   value={item.number}
                   onChange={async (number) => {

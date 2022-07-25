@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
-import { ToolUtil } from '../../../components/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import MyNavBar from '../../../components/MyNavBar';
 import MyCard from '../../../components/MyCard';
@@ -8,34 +7,153 @@ import SkuItem from '../../Sku/SkuItem';
 import ShopNumber from '../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { Button } from 'antd-mobile';
 import style from './index.less';
-import { ERPEnums } from '../../Stock/ERPEnums';
 import LinkButton from '../../../components/LinkButton';
-import BottomButton from '../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
+import User from '../../Instock/InstockAsk/Submit/components/InstockSkus/components/User';
+import MyCheck from '../../../components/MyCheck';
+import MyEmpty from '../../../components/MyEmpty';
+import { PositionShow } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
+import { ToolUtil } from '../../../components/ToolUtil';
 
-export const selectStoreHouse = { url: '/maintenance/findSkuInStoreHouse', method: 'POST' };
+export const detailApi = { url: '/allocation/detail', method: 'POST' };
 
 const SelectStoreHouse = () => {
 
   const history = useHistory();
 
+  const query = history.location.query;
+
+  const [user, setUser] = useState({});
+
+  const [params, setParams] = useState({});
+
   const [data, setData] = useState([]);
+  console.log(data);
 
+  const [storeHouses, setStoreHouses] = useState([]);
 
-  const { loading: shopLoading } = useRequest(selectStoreHouse, {
+  const { loading: detailLoading, run: getDetail } = useRequest(detailApi, {
     onSuccess: (res) => {
-      setData(ToolUtil.isArray(res).map((item) => {
-        return {
-          cartId: item.cartId,
-          skuId: item.skuId,
-          skuResult: item.skuResult,
-          brandName: ToolUtil.isObject(item.brandResult).brandName,
-          brandId: item.brandId,
-          number: item.number,
-        };
-      }));
+      const detail = res || {};
+      let params = {};
+      const detailSkus = detail.detailResults || [];
+
+      const newData = [];
+      const stores = [];
+
+      switch (detail.type) {
+        case 'allocation':
+          if (detail.allocationType === 1) {
+            params = {
+              title: '选择调出仓库',
+              distribution: '分配调出物料',
+              storeHouseTitle: '调出仓库',
+            };
+            detailSkus.forEach(item => {
+              if (!item.positionsResult) {
+                newData.push(item);
+              } else {
+                const storeHouse = item.storehouseResult || {};
+                const storeIds = stores.map(item => item.id);
+                const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
+                if (storeIndex === -1) {
+                  stores.push({
+                    id: storeHouse.storehouseId,
+                    name: storeHouse.name,
+                    skus: [item],
+                  });
+                } else {
+                  const store = stores[storeIndex];
+                  stores[storeIndex] = {
+                    ...store,
+                    skus: [...store.skus, item],
+                  };
+                }
+              }
+            });
+          } else {
+            params = {
+              title: '选择调入仓库',
+              distribution: '分配调入物料',
+              batch: true,
+              storeHouseTitle: '调入仓库',
+            };
+            detailSkus.forEach(item => {
+              if (!item.toPositionsResult) {
+                newData.push(item);
+              } else {
+                const storeHouse = item.toStorehouseResult || {};
+                const storeIds = stores.map(item => item.id);
+                const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
+                if (storeIndex === -1) {
+                  stores.push({
+                    id: storeHouse.storehouseId,
+                    name: storeHouse.name,
+                    skus: [item],
+                  });
+                } else {
+                  const store = stores[storeIndex];
+                  stores[storeIndex] = {
+                    ...store,
+                    skus: [...store.skus, item],
+                  };
+                }
+              }
+            });
+          }
+          break;
+        case 'transfer':
+          params = {
+            title: '选择调入仓库',
+            distribution: '分配调入物料',
+            batch: true,
+            storeHouseTitle: '调入仓库',
+          };
+          detailSkus.forEach(item => {
+            if (!item.toPositionsResult) {
+              newData.push(item);
+            } else {
+              const storeHouse = item.toStorehouseResult || {};
+              const storeIds = stores.map(item => item.id);
+              const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
+              if (storeIndex === -1) {
+                stores.push({
+                  id: storeHouse.storehouseId,
+                  name: storeHouse.name,
+                  skus: [item],
+                });
+              } else {
+                const store = stores[storeIndex];
+                stores[storeIndex] = {
+                  ...store,
+                  skus: [...store.skus, item],
+                };
+              }
+            }
+          });
+          break;
+        default:
+          break;
+      }
+      setParams(params);
+      setData(newData);
+      setStoreHouses(stores);
     },
   });
+
+  useEffect(() => {
+    if (query.id) {
+      getDetail({ data: { allocationId: query.id } });
+    }
+  }, []);
+
+  if (!query.id) {
+    return <MyEmpty />;
+  }
+
+  if (detailLoading) {
+    return <MyLoading skeleton />;
+  }
 
   const dataChange = (cartId, params) => {
     const newData = data.map(item => {
@@ -48,67 +166,99 @@ const SelectStoreHouse = () => {
     setData(newData);
   };
 
-  if (shopLoading) {
-    return <MyLoading skeleton />;
-  }
+  return <div style={{ paddingBottom: 60, backgroundColor: '#fff', height: '100%' }}>
+    <MyNavBar title={params.title} />
+    <div className={style.content}>
+      <User id={user.id} title='负责人' name={user.name} onChange={(id, name) => {
+        setUser({ id, name });
+      }} />
+      <MyCard title={params.distribution}>
+        {
+          data.map((item, index) => {
+            console.log(item);
+            const outName = ToolUtil.isObject(item.positionsResult).name;
+            const inName = ToolUtil.isObject(item.toPositionsResult).name;
+            return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
+              <div className={style.sku}>
+                <SkuItem
+                  skuResult={item.skuResult}
+                  otherData={[
+                    item.brandName || '任意品牌',
+                    PositionShow({ outName, inName }),
+                  ]}
+                  extraWidth='140px'
+                />
+              </div>
+              <div className={style.action}>
+                <ShopNumber
+                  value={item.number}
+                  onChange={number => {
+                    dataChange(item.cartId, { number });
+                  }}
+                />
+                <Button color='primary' fill='outline' onClick={() => {
+                  // getStoreHouse({ data: { skuId: item.skuId } });
+                }}>选择仓库</Button>
+              </div>
+            </div>;
+          })
+        }
+      </MyCard>
 
-  return <div style={{ paddingBottom: 60 }}>
-    <MyNavBar title='选择调出仓库' />
-    <MyCard title='多仓库物料选择'>
       {
-        data.map((item, index) => {
-          return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
-            <div className={style.sku}>
-              <SkuItem skuResult={item.skuResult} otherData={[item.brandName || '任意品牌']} extraWidth='140px' />
-            </div>
-            <div className={style.action}>
-              <ShopNumber value={item.number} onChange={number => {
-                dataChange(item.cartId, { number });
-              }} />
-              <Button color='primary' fill='outline' onClick={() => {
-                // getStoreHouse({ data: { skuId: item.skuId } });
-              }}>选择仓库</Button>
-            </div>
-          </div>;
+        storeHouses.map((item, index) => {
+          const skus = item.skus || [];
+          return <MyCard key={index} title={params.storeHouseTitle} extra={item.name}>
+            {
+              skus.map((item, index) => {
+                const outName = ToolUtil.isObject(item.positionsResult).name;
+                const inName = ToolUtil.isObject(item.toPositionsResult).name;
+                return <div
+                  key={index}
+                  className={style.SkuItem}
+                  style={{ border: index === data.length - 1 && 'none' }}
+                >
+                  <div className={style.sku}>
+                    <SkuItem
+                      skuResult={item.skuResult}
+                      otherData={[
+                        item.brandName || '任意品牌',
+                        PositionShow({ outName, inName }),
+                      ]}
+                      extraWidth='140px'
+                    />
+                  </div>
+                  <div className={style.newAction}>
+                    <LinkButton color='danger'>重新选择</LinkButton>
+                    <ShopNumber value={item.number} onChange={number => {
+                      dataChange(item.cartId, { number });
+                    }} />
+                  </div>
+                </div>;
+              })
+            }
+          </MyCard>;
         })
       }
-    </MyCard>
+    </div>
 
-    <MyCard title='南坡大库'>
-      {
-        data.map((item, index) => {
-          return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
-            <div className={style.sku}>
-              <SkuItem extraWidth='140px' skuResult={item.skuResult} otherData={[item.brandName || '任意品牌']} />
-            </div>
-            <div className={style.newAction}>
-              <LinkButton color='danger'>重新选择</LinkButton>
-              <ShopNumber value={item.number} onChange={number => {
-                dataChange(item.cartId, { number });
-              }} />
-            </div>
-          </div>;
-        })
-      }
-    </MyCard>
+    <div className={style.bottom}>
+      <div className={style.all}>
+        <MyCheck checked onChange={() => {
 
-    <BottomButton
-      rightText='下一步'
-      leftOnClick={() => {
-        history.goBack();
-      }}
-      rightOnClick={() => {
-        history.push({
-          pathname: '/Work/Instock/InstockAsk/Submit',
-          query: {
-            createType: ERPEnums.allocation,
-          },
-          state: {
-            skus: data,
-          },
-        });
-      }}
-    />
+        }}>{true ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
+      </div>
+      <div className={style.buttons}>
+        <Button
+          disabled={data.length === 0}
+          color='primary'
+          onClick={() => {
+
+          }}
+        >确定仓库</Button>
+      </div>
+    </div>
+
   </div>;
 };
 

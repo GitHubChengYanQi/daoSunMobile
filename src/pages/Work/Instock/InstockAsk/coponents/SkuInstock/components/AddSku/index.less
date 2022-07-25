@@ -17,7 +17,11 @@
 
   .checkLabel {
     display: inline-block;
-    width: 60px;
+    width: 70px;
+
+    span {
+      color: var(--adm-color-danger);
+    }
   }
 
   .check {
@@ -116,6 +120,10 @@
     border-radius: 0 50px 50px 0;
     border: none;
   }
+}
+
+.positionPopup {
+  z-index: var(--adm-popup-z-index, 1002);
 }
 
 

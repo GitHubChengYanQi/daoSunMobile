@@ -81,6 +81,10 @@ export const menus = [
     icon: 'icon-pandian1',
     url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.stocktaking}`,
   },
-  { code: 'allocationAsk', icon: 'icon-kujiantiaobo' },
+  {
+    code: 'allocationAsk',
+    icon: 'icon-kujiantiaobo',
+    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.allocation}`,
+  },
   { code: 'OutStockConfirm',icon:'icon-chukuqueren', url: '/Work/OutStockConfirm' },
 ];
