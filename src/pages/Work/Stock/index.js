@@ -28,9 +28,6 @@ const Stock = (props) => {
   const tasks = [
     { text: '出库任务', key: ERPEnums.outStock },
     { text: '入库任务', key: ERPEnums.inStock },
-    // { text: '盘点任务', key: ERPEnums.stocktaking },
-    // { text: '调拨任务', key: ERPEnums.allocation },
-    // { text: '养护任务', key: ERPEnums.curing },
   ];
 
   const { loading: getDefaultShop, refresh } = useRequest({

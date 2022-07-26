@@ -113,10 +113,7 @@ const SkuShop = (
 
   const [tasks, setTasks] = useState([
     { title: '出库申请', key: ERPEnums.outStock },
-    { title: '盘点申请', key: ERPEnums.stocktaking },
-    { title: '调拨申请', key: ERPEnums.allocation },
     { title: '入库申请', key: ERPEnums.inStock },
-    // { title: '养护任务', key: ERPEnums.curing },
   ]);
 
 
@@ -158,7 +155,7 @@ const SkuShop = (
         const inPositionName = ToolUtil.isObject(position.toPositionsResult).name;
         return {
           title: '调拨任务明细',
-          type: '调拨申请',
+          type:  query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')),
           otherData: [
             item.brandName || '任意品牌',
             <PositionShow outPositionName={outPositionName} inPositionName={inPositionName} />,

@@ -9,16 +9,16 @@ import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import style from '../../../PurchaseOrderInstock/index.less';
 import MyRadio from '../../../../../../../../components/MyRadio';
-import { RightOutline } from 'antd-mobile-icons';
+import { ExclamationCircleOutline, RightOutline } from 'antd-mobile-icons';
 import { storeHouseSelect } from '../../../../../../../Quality/Url';
 import { Picker } from 'antd-mobile';
 import Skus from '../Skus';
-import Icon from '../../../../../../../../components/Icon';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import OtherData from '../OtherData';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
 import { PositionShow } from '../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
+import AllocationSteps from './components/AllocationSteps';
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
@@ -45,7 +45,7 @@ const AllocationAsk = ({ skus, createType }) => {
     manual: true,
     onSuccess: (res) => {
       Message.successDialog({
-        content: '创建养护申请成功!',
+        content: '创建调拨申请成功!',
         confirmText: '查看详情',
         cancelText: '返回列表',
         onCancel: () => history.goBack(),
@@ -112,6 +112,7 @@ const AllocationAsk = ({ skus, createType }) => {
   return <>
     <div style={{ marginBottom: 60 }}>
       <MyNavBar title='调拨申请' />
+      <AllocationSteps current={query.storeHouseId ? 2 : 0} />
       {query.storeHouseId && <Skus
         skus={skus}
         createTypeData={createTypeData}
@@ -185,7 +186,9 @@ const AllocationAsk = ({ skus, createType }) => {
         setParams={setParams}
       />}
 
-      <div hidden={query.storeHouseId} className={style.explain}>说明：选择移库后，移库的物料将与所在库位解除绑定关系</div>
+      <div hidden={query.storeHouseId} className={style.explain}>
+        <ExclamationCircleOutline />&nbsp;&nbsp;说明：选择移库后，移库的物料将与所在库位解除绑定关系
+      </div>
 
       <Picker
         popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
@@ -241,6 +244,7 @@ const AllocationAsk = ({ skus, createType }) => {
               askType: params.askType,
               allocationType: params.allocationType,
               storeHouseId: params.storeHouse.value,
+              storeHouse: params.storeHouse.label,
             },
           });
         }}

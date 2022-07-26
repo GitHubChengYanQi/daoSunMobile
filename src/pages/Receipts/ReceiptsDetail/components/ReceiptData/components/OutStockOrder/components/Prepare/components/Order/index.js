@@ -15,6 +15,7 @@ const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', metho
 
 const Order = (
   {
+    out,
     codeData,
     id,
     pickListsDetailId,
@@ -24,6 +25,9 @@ const Order = (
     outStockNumber,
     onChange = () => {
     },
+    className,
+    brandShow,
+    storehouseId,
   },
 ) => {
 
@@ -47,7 +51,7 @@ const Order = (
           show,
           positionsResults: positions.map(item => {
             const checked = show && positions.length === 1;
-            const number = (checked && show) ? (item.number > outStockNumber ? outStockNumber : item.number) : 0;
+            const number = (checked && show) ? ((typeof outStockNumber === 'number' && item.number > outStockNumber) ? outStockNumber : item.number) : 0;
             return { ...item, checked, outStockNumber: number };
           }),
         };
@@ -59,9 +63,9 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId, brandId } });
+      run({ data: { skuId, brandId, storehouseId } });
     }
-  }, []);
+  }, [skuId]);
 
   useEffect(() => {
     if (codeData) {
@@ -139,14 +143,14 @@ const Order = (
     outSkuChange(newBrands);
   };
 
-  return <div className={style.action}>
+  return <div className={ToolUtil.classNames(className, style.action)}>
     {brands.length === 0 && <MyEmpty description='暂无库存' />}
     {brands.map((item, index) => {
 
       const positions = item.positionsResults || [];
 
       return <div key={index}>
-        <div hidden={brands.length === 1}>
+        <div hidden={!brandShow && brands.length === 1}>
           <Button
             className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
             color={item.show ? 'primary' : 'default'}
@@ -169,13 +173,15 @@ const Order = (
           {
             positions.map((positionItem, positionIndex) => {
 
-              return <div className={ToolUtil.classNames(style.brands,positionItem.checked && style.checked)} key={positionIndex}>
+              return <div
+                className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
+                key={positionIndex}>
                 <MyCheck checked={positionItem.checked} />
                 <span onClick={() => {
                   if (!positionItem.checked) {
-                    const num = (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber);
+                    const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber) : positionItem.number;
                     positionChange(index, positionIndex, { checked: true, outStockNumber: num });
-                  }else {
+                  } else {
                     positionChange(index, positionIndex, { checked: false, outStockNumber: 0 });
                   }
                 }}>{positionItem.name} ({positionItem.number})</span>
@@ -192,7 +198,7 @@ const Order = (
                         });
                         return newPositions.map(item => number += (item.outStockNumber || 0));
                       });
-                      if ((number + num) > outStockNumber) {
+                      if (typeof outStockNumber === 'number' && (number + num) > outStockNumber) {
                         return Message.toast('不能超过出库数量！');
                       }
                       if (num > positionItem.num) {

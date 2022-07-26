@@ -20,11 +20,13 @@ const Positions = (
     },
     onSuccess = () => {
     },
+    checkShow,
     showAll,
     autoFocus,
     maxNumber,
     verification,
     storehouseId,
+    skuId,
     ...props
   },
 ) => {
@@ -39,7 +41,7 @@ const Positions = (
   const disabled = verification && value.length >= maxNumber;
 
   const { loading, data, run } = useRequest(positions, {
-    manual:true,
+    manual: true,
     onSuccess: () => {
       if (focus) {
         const positionSearch = document.querySelector('#positionSearch input');
@@ -54,7 +56,7 @@ const Positions = (
   const [name, setName] = useState();
 
   const submit = (data = {}) => {
-    run({ data: { storehouseId, ...data } });
+    run({ data: { storehouseId, skuId, ...data } });
   };
 
   useEffect(() => {
@@ -104,6 +106,7 @@ const Positions = (
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
+        skuId={skuId}
         disabled={disabled}
         single={single}
         value={value}
@@ -113,6 +116,9 @@ const Positions = (
         data={data}
         refresh={data}
         checkShow={(item) => {
+          if (typeof checkShow === 'function'){
+            return checkShow(item);
+          }
           return showAll || ToolUtil.isArray(item.loops).length === 0;
         }}
       />

@@ -17,6 +17,8 @@ export const AddButton = (
     disabled,
     onClick = () => {
     },
+    width,
+    height,
   }) => {
 
   return <Button
@@ -24,6 +26,7 @@ export const AddButton = (
     fill='outline'
     disabled={disabled}
     onClick={onClick}
+    style={{ width, height }}
     className={style.add}
   >
     <AddOutline />

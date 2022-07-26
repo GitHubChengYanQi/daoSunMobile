@@ -28,9 +28,19 @@
   max-height: 60vh;
   overflow: auto;
 
+  .storeItem {
+    display: flex;
+    align-items: center;
+
+    button {
+      margin-right: 12px;
+      width: 50vw;
+    }
+  }
+
   .position {
     border-radius: 2px;
-    margin: 8px 0;
+    margin: 12px 0;
   }
 
   .defaultPosition {
@@ -66,6 +76,11 @@
   padding: 12px;
   text-align: right;
 }
+
+.positionPopup {
+  z-index: var(--adm-popup-z-index, 1002);
+}
+
 
 
 

@@ -5,6 +5,7 @@ import MyCheck from '../../../../../../../../../components/MyCheck';
 
 const CheckPosition = (
   {
+    skuId,
     single,
     data = [],
     value = [],
@@ -20,6 +21,19 @@ const CheckPosition = (
 
   const [openKey, setOpenKey] = useState([]);
 
+  const getChildNumber = (item, number = 0) => {
+    if (!item) {
+      return number;
+    }
+    number += (item.num || 0);
+    const childrens = item.children || item.loops || [];
+    childrens.map((item) => {
+      return number = getChildNumber(item, number);
+    });
+    return number;
+  };
+
+
   const getChildrenKeys = (data, keys = []) => {
     if (!Array.isArray(data)) {
       return keys;
@@ -29,9 +43,7 @@ const CheckPosition = (
       keys.push(item.key);
       return getChildrenKeys(childrens, keys);
     });
-
     return keys;
-
   };
 
   const openPositions = (open, children) => {
@@ -68,7 +80,7 @@ const CheckPosition = (
             {open ? <CaretDownFilled /> : <CaretRightFilled />}
           </div>
           <div className={style.name} onClick={() => openPositions(open, childrens)}>
-            {item.title}
+            {item.title} {skuId && `(${getChildNumber(item)})`}
           </div>
           <div hidden={!checkShow(item)} className={style.checked}>
             <MyCheck
@@ -79,12 +91,18 @@ const CheckPosition = (
                   onChange(value.filter(position => position.id !== item.key));
                 } else {
                   onChange(single ?
-                    [{ id: item.key, name: item.title,storehouseId:item.storeHouseId }]
+                    [{
+                      id: item.key,
+                      name: item.title,
+                      storehouseId: item.storeHouseId,
+                      number: item.num || 0,
+                    }]
                     :
                     [...value, {
                       id: item.key,
                       name: item.title,
-                      storehouseId:item.storeHouseId
+                      storehouseId: item.storeHouseId,
+                      number: item.num || 0,
                     }]);
                 }
               }}
