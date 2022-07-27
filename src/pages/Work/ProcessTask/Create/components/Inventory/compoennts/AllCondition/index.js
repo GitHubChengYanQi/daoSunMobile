@@ -7,6 +7,7 @@ import Positions
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { Message } from '../../../../../../../components/Message';
+import MyPositions from '../../../../../../../components/MyPositions';
 
 export const materialListSelect = {
   url: '/material/listSelect',
@@ -49,7 +50,7 @@ const AllCondition = (
     manual: true,
     onSuccess: (res) => {
       if (ToolUtil.isArray(res).length === 0) {
-        Message.errorToast('请添加品牌！',()=>{
+        Message.errorToast('请添加品牌！', () => {
           onSuccess();
         });
       } else {
@@ -110,18 +111,18 @@ const AllCondition = (
       }}
     />
 
-    <Popup visible={visible === 'position'} destroyOnClose>
-      <Positions
-        showAll
-        single
-        ids={[{ name: value.title, id: value.key }]}
-        onClose={() => setVisible(false)}
-        onSuccess={(value = []) => {
-          const positions = value[0] || {};
-          onChange({ title: positions.name, key: positions.id });
-          setVisible(false);
-        }} />
-    </Popup>
+
+    <MyPositions
+      visible={visible === 'position'}
+      showAll
+      single
+      value={[{ name: value.title, id: value.key }]}
+      onClose={() => setVisible(false)}
+      onSuccess={(value = []) => {
+        const positions = value[0] || {};
+        onChange({ title: positions.name, key: positions.id });
+        setVisible(false);
+      }} />
   </>;
 };
 

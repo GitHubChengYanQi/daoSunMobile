@@ -9,6 +9,7 @@ import { useRequest } from '../../../../../../util/Request';
 import Positions
   from '../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
 import { MyLoading } from '../../../../../components/MyLoading';
+import MyPositions from '../../../../../components/MyPositions';
 
 export const allocationCartAdd = { url: '/allocationCart/add', method: 'POST' };
 
@@ -49,8 +50,8 @@ const Distribution = (
     },
   });
 
-  if (loading){
-    return <MyLoading skeleton />
+  if (loading) {
+    return <MyLoading skeleton />;
   }
 
   return <div className={style.content}>
@@ -112,27 +113,26 @@ const Distribution = (
       }}
     />
 
-    <Popup visible={['outPosition', 'inPosition'].includes(dataVisible)} destroyOnClose className={style.positionPopup}>
-      <Positions
-        single
-        ids={dataVisible === 'outPosition' ? (data.outPosition && [data.outPosition]) : (data.inPosition && [data.inPosition])}
-        onClose={() => setDataVisible(null)}
-        onSuccess={(value = []) => {
-          const position = value[0] || {};
-          if (dataVisible === 'outPosition') {
-            setData({
-              ...data,
-              outPosition: position,
-            });
-          } else {
-            setData({
-              ...data,
-              inPosition: position,
-            });
-          }
-          setDataVisible(null);
-        }} />
-    </Popup>
+    <MyPositions
+      visible={['outPosition', 'inPosition'].includes(dataVisible)}
+      single
+      value={dataVisible === 'outPosition' ? (data.outPosition && [data.outPosition]) : (data.inPosition && [data.inPosition])}
+      onClose={() => setDataVisible(null)}
+      onSuccess={(value = []) => {
+        const position = value[0] || {};
+        if (dataVisible === 'outPosition') {
+          setData({
+            ...data,
+            outPosition: position,
+          });
+        } else {
+          setData({
+            ...data,
+            inPosition: position,
+          });
+        }
+        setDataVisible(null);
+      }} />
 
     <BottomButton
       rightDisabled={out ? !data.outPosition.id : !data.inPosition.id}

@@ -8,20 +8,18 @@ import { useHistory } from 'react-router-dom';
 import Icon from '../../../../../../../components/Icon';
 import ShopNumber from '../ShopNumber';
 import { useRequest } from '../../../../../../../../util/Request';
-import { shopCartAddList, shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../Url';
-import MyCheck from '../../../../../../../components/MyCheck';
+import { shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ERPEnums } from '../../../../../../Stock/ERPEnums';
 import { judgeLoginUser } from '../../../../Submit/components/InstockSkus';
 import MyRemoveButton from '../../../../../../../components/MyRemoveButton';
 import AddSku from '../AddSku';
-import { PositionShow } from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
+import LinkButton from '../../../../../../../components/LinkButton';
+import MyAntPopup from '../../../../../../../components/MyAntPopup';
+import AllocationAdd from '../AddSku/components/AllocationAdd';
 
 const SkuShop = (
   {
-    checked,
-    checkSkus = [],
-    batch,
     skus = [],
     onClear = () => {
     },
@@ -32,19 +30,15 @@ const SkuShop = (
     },
     type,
     switchType,
-    noClose,
     className,
-    selectAll = () => {
-    },
-    onCancel = () => {
-    },
     onDelete = () => {
     },
-    judge,
   },
 ) => {
 
   const [visible, setVisible] = useState();
+
+  const [allocationView, setAllocationView] = useState();
 
   const history = useHistory();
 
@@ -88,6 +82,7 @@ const SkuShop = (
               number: item.number,
             };
           }),
+          allocationJson: JSON.parse(item.allocationJson),
         };
       }));
     },
@@ -101,15 +96,12 @@ const SkuShop = (
     },
   });
 
-  const { loading: addListLoading, run: addList } = useRequest(shopCartAddList, {
+  const { run: shopEdit } = useRequest(shopCartEdit, {
     manual: true,
     onSuccess: () => {
-      onCancel();
-      shopRefresh();
+      setAllocationView(false);
     },
   });
-
-  const { run: shopEdit } = useRequest(shopCartEdit, { manual: true });
 
   const [tasks, setTasks] = useState([
     { title: '出库申请', key: ERPEnums.outStock },
@@ -150,18 +142,23 @@ const SkuShop = (
   const taskData = (item = {}) => {
     switch (type) {
       case ERPEnums.allocation:
-        const position = ToolUtil.isArray(item.positionNums)[0] || {};
-        const outPositionName = ToolUtil.isObject(position.positionsResult).name;
-        const inPositionName = ToolUtil.isObject(position.toPositionsResult).name;
+        const allocationJson = item.allocationJson || {};
+        const brands = ToolUtil.isObject(allocationJson.start).brands || [];
         return {
           title: '调拨任务明细',
-          type:  query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')),
+          type: query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')),
           otherData: [
-            item.brandName || '任意品牌',
-            <PositionShow outPositionName={outPositionName} inPositionName={inPositionName} />,
+            brands.length > 0 ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+            <LinkButton onClick={() => setAllocationView({
+              cartId: item.cartId,
+              ...item.skuResult,
+              number: item.number,
+              allocationJson: item.allocationJson,
+            })}>查看详情</LinkButton>,
           ],
           numberHidden: query.askType === 'moveLibrary',
           min: 1,
+          show: true,
         };
       case ERPEnums.outStock:
         return {
@@ -185,6 +182,7 @@ const SkuShop = (
           title: '入库任务明细',
           type: '入库申请',
           judge: true,
+          show: true,
           otherData: [item.customerName, item.brandName],
           more: positions.join('、'),
           number,
@@ -259,7 +257,7 @@ const SkuShop = (
 
                 <div hidden={taskData().numberHidden}>
                   <ShopNumber
-                    show={taskData().judge}
+                    show={taskData().show}
                     id={`stepper${index}`}
                     min={taskData().min}
                     value={taskData().judge ? taskData(item).number : item.number}
@@ -281,31 +279,6 @@ const SkuShop = (
         }
       </div>
     </Popup>
-    <div hidden={!batch} className={style.batch}>
-      <div className={style.all}>
-        <MyCheck checked={checked} className={style.checkButton} fontSize={14} onChange={() => {
-          selectAll();
-        }}>全选</MyCheck>
-        <div className={style.checkNumber}>已选中 <span>{checkSkus.length}</span> 类</div>
-      </div>
-      <Button
-        disabled={checkSkus.length === 0}
-        color='primary'
-        fill='outline'
-        onClick={() => {
-          addList({
-            data: {
-              shopCartParams: checkSkus.map(item => {
-                return {
-                  type,
-                  skuId: item.skuId,
-                };
-              }),
-            },
-          });
-        }}
-      >添加</Button>
-    </div>
     <div className={style.bottom} id='shop'>
 
       <div className={style.bottomMenu}>
@@ -373,7 +346,28 @@ const SkuShop = (
       shopRefresh();
     }} />
 
-    {(shopLoading || addListLoading || loading) && <MyLoading />}
+    <MyAntPopup
+      title={taskData().type}
+      onClose={() => {
+        setAllocationView(false);
+      }}
+      destroyOnClose
+      className={style.addSkuPopup}
+      visible={allocationView}
+    >
+      <AllocationAdd
+        query={query}
+        sku={allocationView}
+        onClose={() => {
+          setAllocationView(false);
+        }}
+        shopEdit={(data) => {
+          shopEdit({ data });
+        }}
+      />
+    </MyAntPopup>
+
+    {(shopLoading || loading) && <MyLoading />}
   </>;
 };
 

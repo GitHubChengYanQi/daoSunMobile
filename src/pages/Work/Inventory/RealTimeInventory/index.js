@@ -16,6 +16,7 @@ import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyCard from '../../../components/MyCard';
 import MyList from '../../../components/MyList';
 import { MyDate } from '../../../components/MyDate';
+import MyPositions from '../../../components/MyPositions';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
@@ -108,25 +109,21 @@ const RealTimeInventory = (props) => {
     </div>
 
 
-    <Popup
-      visible={positionVisible}
-      destroyOnClose
-      afterClose={() => {
-        if (position.id) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
-        }
-      }}
-    >
-      <Positions
+      <MyPositions
+        afterClose={() => {
+          if (position.id) {
+            history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
+          }
+        }}
+        visible={positionVisible}
         single
         autoFocus
-        ids={[position]}
+        value={[position]}
         onClose={() => setPositionVisible(false)}
         onSuccess={(value = []) => {
           setPositionVisible(false);
           setPosition(value[0] || {});
         }} />
-    </Popup>
 
     {qrCode.loading && <MyLoading />}
   </>;

@@ -10,7 +10,6 @@ import AddPosition
   from '../../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/OneInStock/AddPosition';
 import { useRequest } from '../../../../../../../../../../util/Request';
 import { supplierBySku } from '../../../../../../../../Customer/CustomerUrl';
-import { shopCartAdd, shopCartEdit } from '../../../../../../../Url';
 
 const Add = (
   {
@@ -20,17 +19,20 @@ const Add = (
     state,
     defaultAction,
     other,
-    onChange = () => {
-    },
     onClose = () => {
     },
     skus = [],
+    data = {},
+    setData = () => {
+    },
+    shopEdit = () => {
+    },
+    addShop = () => {
+    },
   },
 ) => {
 
   const [dataVisible, setDataVisible] = useState();
-
-  const [data, setData] = useState({});
 
   useEffect(() => {
     const imgUrl = Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo;
@@ -48,6 +50,7 @@ const Add = (
         break;
     }
     const newData = {
+      ...data,
       imgUrl,
       imgId: sku.imgId,
       skuId: sku.skuId,
@@ -71,52 +74,6 @@ const Add = (
     }
   }, []);
 
-  const createBall = (top, left, cartId, newData = {}, type) => {
-
-    const shop = document.getElementById('shop');
-
-    if (!shop) {
-      onChange({ ...newData, cartId }, type);
-      return;
-    }
-    let i = 0;
-
-    const bar = document.createElement('div');
-
-    bar.style.backgroundImage = `url(${newData.imgUrl})`;
-    bar.style.backgroundColor = '#e1e1e1';
-    bar.style.backgroundSize = 'cover';
-    bar.style.border = 'solid #F1F1F1 1px';
-    bar.style.borderRadius = '4px';
-    bar.style.zIndex = '1001';
-    bar.style.position = 'fixed';
-    bar.style.display = 'block';
-    bar.style.left = left + 'px';
-    bar.style.top = top + 'px';
-    bar.style.width = '50px';
-    bar.style.height = '50px';
-    bar.style.transition = 'left .6s linear, top .6s cubic-bezier(0.5, -0.5, 1, 1)';
-
-    document.body.appendChild(bar);
-    // 添加动画属性
-    setTimeout(() => {
-      bar.style.left = (shop.offsetLeft + 36) + 'px';
-      bar.style.top = (shop.offsetTop) + 'px';
-    }, 0);
-
-    /**
-     * 动画结束后，删除
-     */
-    bar.ontransitionend = () => {
-      bar.remove();
-      i++;
-      if (i === 2 && cartId) {
-        onChange({ ...newData, cartId }, type);
-      }
-
-    };
-  };
-
   const [snameAction, setSnameAction] = useState();
 
   const [disabled, setDisabled] = useState();
@@ -137,35 +94,6 @@ const Add = (
     setSnameAction(defaultAction);
     setDisabled(snameSku[0]);
   };
-
-  const addShopBall = (cartId) => {
-    const skuImg = document.getElementById(data.imgId || 'skuImg');
-    if (skuImg) {
-      const top = skuImg.getBoundingClientRect().top;
-      const left = skuImg.getBoundingClientRect().left;
-      onClose();
-      createBall(top, left, cartId, data, type);
-    } else {
-      onChange({ ...data, cartId }, type);
-    }
-
-  };
-
-  const { loading: addLoading, run: addShop } = useRequest(shopCartAdd, {
-    manual: true,
-    onSuccess: (res) => {
-      addShopBall(res);
-    },
-  });
-
-  const { run: shopEdit } = useRequest(shopCartEdit, {
-    manual: true,
-    onSuccess: () => {
-      addShopBall();
-      onClose();
-    },
-  });
-
 
   const {
     loading: getCustomerLoading,
@@ -417,8 +345,6 @@ const Add = (
         disabledChange({ customerId: customer.value });
       }}
     />
-
-    {addLoading && <MyLoading />}
   </>;
 };
 

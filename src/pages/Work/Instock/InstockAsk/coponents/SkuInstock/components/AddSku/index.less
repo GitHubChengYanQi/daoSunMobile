@@ -4,10 +4,13 @@
 }
 
 .addSku {
-  padding: 12px;
   font-size: 14px;
   display: flex;
   flex-direction: column;
+
+  .sku {
+    padding: 12px 12px 0;
+  }
 
   .flex {
     display: flex;
@@ -59,6 +62,13 @@
     }
   }
 
+  .content {
+    padding: 12px;
+    max-height: 60vh;
+    overflow: auto;
+    overflow-x: hidden;
+  }
+
   .brandAction {
     padding-top: 12px;
     display: flex;
@@ -91,10 +101,6 @@
     }
   }
 
-  .brandAndPositions {
-    max-height: 60vh;
-    overflow: auto;
-  }
   .fixedBrand {
     padding: 0;
   }

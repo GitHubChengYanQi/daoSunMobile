@@ -16,7 +16,6 @@ const MyCheck = (
     className,
   }) => {
 
-
   return <LinkButton
     disabled={disabled}
     color='default'

@@ -14,6 +14,8 @@ const MyAntPopup = (
     },
     afterShow = () => {
     },
+    afterClose = () => {
+    },
   },
 ) => {
 
@@ -21,6 +23,7 @@ const MyAntPopup = (
   return <>
     <Popup
       afterShow={afterShow}
+      afterClose={afterClose}
       visible={visible}
       onMaskClick={onClose}
       destroyOnClose={destroyOnClose}

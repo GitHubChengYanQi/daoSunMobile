@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style
   from '../../../../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/Prepare/index.less';
-import { Button, Popup } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
-import { AddButton } from '../../../../../../../../../../../components/MyButton';
 import ShopNumber from '../../../../../ShopNumber';
-import MyRemoveButton from '../../../../../../../../../../../components/MyRemoveButton';
-import Positions
-  from '../../../../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
+import MyCheck from '../../../../../../../../../../../components/MyCheck';
+import { AddButton } from '../../../../../../../../../../../components/MyButton';
+import MyPositions from '../../../../../../../../../../../components/MyPositions';
 
 const FixedBrand = (
   {
-    sku = {},
+    out,
+    sku,
+    outPositionData = [],
+    storehouseName,
     storehouseId,
-    value,
+    value = [],
     onChange = () => {
     },
   },
@@ -22,7 +24,7 @@ const FixedBrand = (
 
   const brands = sku.brandResults || [];
 
-  const [data, setData] = useState(brands);
+  const [data, setData] = useState([]);
 
   const [visible, setVisible] = useState({});
 
@@ -45,36 +47,80 @@ const FixedBrand = (
   const positionChange = (params = {}, brandId, positionIndex) => {
     const newData = data.map(item => {
       if (item.brandId === brandId) {
+        let number = 0;
         const newPositions = item.positions.map((item, index) => {
           if (index === positionIndex) {
             return { ...item, ...params };
           }
           return item;
         });
-        return { ...item, positions: newPositions };
+        newPositions.forEach(item => {
+          if (item.checked) {
+            number += item.outStockNumber;
+          }
+        });
+        return { ...item, number: number || (out ? item.num : 1), positions: newPositions };
       }
       return item;
     });
     change(newData);
   };
 
+  useEffect(() => {
+    if (value.length > 0) {
+      setData(value);
+      return;
+    }
+    if (out) {
+      const newBrands = outPositionData.map((item) => {
+        const positions = item.positionsResults || [];
+        return {
+          ...item,
+          number: item.number,
+          positions: positions.map(item => {
+            return { ...item, id: item.storehousePositionsId, outStockNumber: item.number };
+          }),
+        };
+      });
+      setData(newBrands);
+    } else {
+      setData(brands);
+    }
+  }, []);
+
   return <div className={style.action} style={{ padding: 0 }}>
     {data.map((item, index) => {
 
       const positions = item.positions || [];
 
+      const positionCheckeds = positions.filter(item => item.checked);
+
       return <div key={index}>
-        <div>
+        <div className={style.storeItem}>
           <Button
             className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
             color={item.show ? 'primary' : 'default'}
             fill='outline'
             onClick={() => {
-              dataChange({ show: !item.show }, item.brandId);
+              let params;
+              if (out) {
+                params = { show: !item.show, number: item.num };
+              } else {
+                params = { show: !item.show, number: 1, positions: [] };
+              }
+              dataChange(params, item.brandId);
             }}
           >
-            <LinkOutline /> {item.brandName}
+            <LinkOutline /> {item.brandName} <span hidden={!out}>({item.num})</span>
           </Button>
+          {item.show &&
+          <ShopNumber
+            show={positionCheckeds.length > 0}
+            max={out ? item.num : undefined}
+            value={item.number}
+            onChange={(number) => {
+              dataChange({ number }, item.brandId);
+            }} />}
 
         </div>
 
@@ -85,53 +131,65 @@ const FixedBrand = (
               return <div
                 className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
                 key={positionIndex}>
-                <span onClick={() => {
+                <div className={style.positionName} onClick={() => {
+                  if (!positionItem.checked) {
+                    const num = positionItem.number;
+                    positionChange({ checked: true, outStockNumber: out ? num : 1 }, item.brandId, positionIndex);
+                  } else {
+                    positionChange({ checked: false, outStockNumber: 0 }, item.brandId, positionIndex);
+                  }
+                }}>
+                  <MyCheck checked={positionItem.checked} />
+                  <span>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
+                </div>
 
-                }}>{positionItem.name}</span>
-                <div>
+                <div hidden={!positionItem.checked}>
                   <ShopNumber
-                    min={1}
-                    value={positionItem.number || 0}
-                    onChange={(number) => {
-                      positionChange({ number }, item.brandId, positionIndex);
+                    min={0}
+                    max={out ? positionItem.number : undefined}
+                    value={positionItem.outStockNumber || 0}
+                    onChange={(num) => {
+                      positionChange({ outStockNumber: num }, item.brandId, positionIndex);
                     }} />
                 </div>
-                <MyRemoveButton onRemove={() => {
-                  dataChange({ positions: positions.filter((item, posiIndex) => posiIndex !== positionIndex) }, item.brandId);
-                }} />
 
               </div>;
             })
           }
-          <AddButton width={40} height={24} onClick={() => setVisible(item)} />
+          {!out && <AddButton width={40} height={24} onClick={() => setVisible(item)} />}
         </div>
       </div>;
     })}
 
-    <Popup
+    <MyPositions
+      title={storehouseName}
       visible={visible.brandId}
-      destroyOnClose
-      className={style.positionPopup}
-      onMaskClick={() => setVisible({})}
-    >
-      <Positions
-        storehouseId={storehouseId}
-        onClose={() => setVisible({})}
-        ids={visible.positions || []}
-        onSuccess={(value = []) => {
-          const newData = data.map(item => {
-            if (item.brandId === visible.brandId) {
-              return {
-                ...item,
-                positions: value.map(item => ({ ...item, number: item.number || 1 })),
-              };
-            }
-            return item;
-          });
-          change(newData);
-          setVisible({});
-        }} />
-    </Popup>
+      storehouseId={storehouseId}
+      onClose={() => setVisible({})}
+      value={visible.positions || []}
+      onSuccess={(value = []) => {
+        let number = 0;
+        const positions = value.map(item => {
+          number += (item.outStockNumber || 1);
+          return {
+            ...item,
+            outStockNumber: item.outStockNumber || 1,
+            checked: true,
+          };
+        });
+        const newData = data.map(item => {
+          if (item.brandId === visible.brandId) {
+            return {
+              ...item,
+              number,
+              positions,
+            };
+          }
+          return item;
+        });
+        change(newData);
+        setVisible({});
+      }} />
   </div>;
 };
 

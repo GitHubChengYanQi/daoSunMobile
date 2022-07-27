@@ -6,7 +6,7 @@ import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 
 const AllocationSteps = ({ current }) => {
 
-  const steps = ['第一步', '第二步', '第三步'];
+  const steps = ['选择仓库', '添加物料', '提交申请'];
 
   return <div className={style.allocationSteps}>
     <Steps current={current} className={style.steps}>

@@ -187,7 +187,10 @@ const AllocationAsk = ({ skus, createType }) => {
       />}
 
       <div hidden={query.storeHouseId} className={style.explain}>
-        <ExclamationCircleOutline />&nbsp;&nbsp;说明：选择移库后，移库的物料将与所在库位解除绑定关系
+        <div>
+          <ExclamationCircleOutline />&nbsp;&nbsp;说明：
+        </div>
+        选择移库后，移库的物料将与所在库位解除绑定关系
       </div>
 
       <Picker

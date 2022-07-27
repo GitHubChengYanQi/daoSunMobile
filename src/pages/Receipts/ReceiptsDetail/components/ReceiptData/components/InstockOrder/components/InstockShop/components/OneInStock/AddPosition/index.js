@@ -11,6 +11,7 @@ import { AddButton } from '../../../../../../../../../../../components/MyButton'
 import ShopNumber
   from '../../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
+import MyPositions from '../../../../../../../../../../../components/MyPositions';
 
 const AddPosition = (
   {
@@ -48,7 +49,7 @@ const AddPosition = (
         const positions = [];
         if (results.length === 1) {
           positions.push({ ...results[0], number: total || min });
-        }else {
+        } else {
           results.map((item, index) => {
             if (!total || index <= total) {
               positions.push({ ...item, number: 1 });
@@ -62,14 +63,14 @@ const AddPosition = (
 
   return <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
     <div className={style.position}>
-      <div className={ToolUtil.classNames(style.positionItem,style.border)}>
+      <div className={ToolUtil.classNames(style.positionItem, style.border)}>
 
         <div className={style.positionName}>
           库位
         </div>
 
         <div className={style.positionAction}>
-         数量
+          数量
         </div>
       </div>
       <div className={style.space} />
@@ -121,38 +122,37 @@ const AddPosition = (
     <div className={style.addPosition}>
       <AddButton
         disabled={positions.length === maxNumber}
-        onClick={()=>{
+        onClick={() => {
           setVisible(true);
         }}
       />
     </div>
 
 
-    <Popup visible={visible} destroyOnClose className={style.positionPopup}>
-      <Positions
-        verification={verification}
-        maxNumber={maxNumber}
-        ids={positions}
-        onClose={() => setVisible(false)}
-        onSuccess={(value = []) => {
-          setVisible(false);
-          const ids = positions.map(item => item.id);
-          const newPosition = value.filter(item => {
-            return !ids.includes(item.id);
-          });
-          if (newPosition.length === 1) {
-            return setPositions(value.map(item => {
-              if (item.id === newPosition[0].id) {
-                return { number: skuNumber, ...item };
-              }
-              return item;
-            }));
-          }
-          setPositions(value.map(item => {
-            return { ...item, number: min };
+    <MyPositions
+      visible={visible}
+      value={positions}
+      verification={verification}
+      maxNumber={maxNumber}
+      onClose={() => setVisible(false)}
+      onSuccess={(value = []) => {
+        setVisible(false);
+        const ids = positions.map(item => item.id);
+        const newPosition = value.filter(item => {
+          return !ids.includes(item.id);
+        });
+        if (newPosition.length === 1) {
+          return setPositions(value.map(item => {
+            if (item.id === newPosition[0].id) {
+              return { number: skuNumber, ...item };
+            }
+            return item;
           }));
-        }} />
-    </Popup>
+        }
+        setPositions(value.map(item => {
+          return { ...item, number: min };
+        }));
+      }} />
   </div>;
 };
 

@@ -86,7 +86,12 @@ const ProcessScreen = (
           multiple
           title={item.title}
           value={statusList}
-          onChange={(statusList) => {
+          onChange={(statusList = []) => {
+            if (statusList.includes('99')) {
+              statusList.push('50');
+            } else {
+              statusList = statusList.filter(item => item !== '50');
+            }
             paramsOnChange({ ...params, statusList });
           }}
         />;

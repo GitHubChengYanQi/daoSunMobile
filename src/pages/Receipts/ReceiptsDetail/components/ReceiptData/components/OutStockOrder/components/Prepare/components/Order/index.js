@@ -11,11 +11,10 @@ import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 
-const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
+export const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
 const Order = (
   {
-    out,
     codeData,
     id,
     pickListsDetailId,
@@ -176,15 +175,18 @@ const Order = (
               return <div
                 className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
                 key={positionIndex}>
-                <MyCheck checked={positionItem.checked} />
-                <span onClick={() => {
+                <div className={style.positionName} onClick={() => {
                   if (!positionItem.checked) {
                     const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber) : positionItem.number;
                     positionChange(index, positionIndex, { checked: true, outStockNumber: num });
                   } else {
                     positionChange(index, positionIndex, { checked: false, outStockNumber: 0 });
                   }
-                }}>{positionItem.name} ({positionItem.number})</span>
+                }}>
+                  <MyCheck checked={positionItem.checked} />
+                  <span>{positionItem.name} ({positionItem.number})</span>
+                </div>
+
                 <div hidden={!positionItem.checked}>
                   <ShopNumber
                     min={0}

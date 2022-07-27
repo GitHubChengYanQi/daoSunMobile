@@ -6,7 +6,8 @@ import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Button, Popup } from 'antd-mobile';
-import ShopNumber from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber
+  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url';
 import { Message } from '../../../../../../../../../../components/Message';
@@ -15,6 +16,7 @@ import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/compon
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import Positions from '../Positions';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
+import MyPositions from '../../../../../../../../../../components/MyPositions';
 
 export const sendBack = { url: '/shopCart/sendBack', method: 'POST' };
 
@@ -62,7 +64,7 @@ const WaitInstock = (
   }, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('入库成功！',()=>{
+      Message.successToast('入库成功！', () => {
         shopRefresh();
         refresh();
       });
@@ -73,7 +75,7 @@ const WaitInstock = (
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('退回成功！',()=>{
+      Message.successToast('退回成功！', () => {
         shopRefresh();
         refresh();
       });
@@ -87,7 +89,7 @@ const WaitInstock = (
 
   const instockSkus = inStockChecked.filter(item => item.skuResult && item.skuResult.positionsResult && item.skuResult.positionsResult.length > 0);
 
-  const backSkus = inStockChecked.filter(item=>item.type !== 'instockByAnomaly');
+  const backSkus = inStockChecked.filter(item => item.type !== 'instockByAnomaly');
 
   const allChecked = inStockChecked.length === 0 ? false : instockList.length === inStockChecked.length;
 
@@ -135,14 +137,14 @@ const WaitInstock = (
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
               const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandName).brandName  || '无品牌';
+              const brandName = ToolUtil.isObject(item.brandName).brandName || '无品牌';
 
               return <div key={index} className={style.skuItem}>
                 <MyCheck checked={checked} className={style.check} onChange={() => {
                   check(checked, index);
                 }} />
                 <div className={style.sku} onClick={() => {
-                  if (positionsResult){
+                  if (positionsResult) {
                     return;
                   }
                   setVisible(item);
@@ -215,31 +217,30 @@ const WaitInstock = (
       </div>
     </div>
 
-    <Popup visible={visible} destroyOnClose className={style.positionPopup}>
-      <Positions
-        ids={[]}
-        single
-        onClose={() => setVisible(false)}
-        onSuccess={(value = []) => {
-          const skuItem = ToolUtil.isObject(visible);
-          const newInstockList = instockList.map(item => {
-            if (item.cartId === skuItem.cartId) {
-              const positions = value[0] || {};
-              return {
-                ...skuItem,
-                skuResult: {
-                  ...skuItem.skuResult,
-                  positionsResult: [{ storehousePositionsId: positions.id, name: positions.name }],
-                },
-              };
-            }
-            return item;
-          });
+    <MyPositions
+      visible={visible}
+      value={[]}
+      single
+      onClose={() => setVisible(false)}
+      onSuccess={(value = []) => {
+        const skuItem = ToolUtil.isObject(visible);
+        const newInstockList = instockList.map(item => {
+          if (item.cartId === skuItem.cartId) {
+            const positions = value[0] || {};
+            return {
+              ...skuItem,
+              skuResult: {
+                ...skuItem.skuResult,
+                positionsResult: [{ storehousePositionsId: positions.id, name: positions.name }],
+              },
+            };
+          }
+          return item;
+        });
 
-          setInstockList(newInstockList);
-          setVisible(false);
-        }} />
-    </Popup>
+        setInstockList(newInstockList);
+        setVisible(false);
+      }} />
 
     {(instockLoading || backLoading) && <MyLoading />}
   </>;
