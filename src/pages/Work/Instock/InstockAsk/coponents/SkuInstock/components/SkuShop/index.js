@@ -96,10 +96,13 @@ const SkuShop = (
     },
   });
 
-  const { run: shopEdit } = useRequest(shopCartEdit, {
+  const { loading: editLoading, run: shopEdit } = useRequest(shopCartEdit, {
     manual: true,
     onSuccess: () => {
-      setAllocationView(false);
+      if (type === ERPEnums.allocation) {
+        setAllocationView(false);
+        shopRefresh();
+      }
     },
   });
 
@@ -367,7 +370,7 @@ const SkuShop = (
       />
     </MyAntPopup>
 
-    {(shopLoading || loading) && <MyLoading />}
+    {(shopLoading || loading || editLoading) && <MyLoading />}
   </>;
 };
 

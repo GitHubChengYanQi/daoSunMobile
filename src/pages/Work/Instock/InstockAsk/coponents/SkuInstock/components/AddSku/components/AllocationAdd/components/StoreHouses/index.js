@@ -53,7 +53,7 @@ const StoreHouses = (
       return;
     }
     setData(newData);
-    onChange(newData.filter(item => item.show));
+    onChange(newData);
   };
 
   const init = (array = []) => {
