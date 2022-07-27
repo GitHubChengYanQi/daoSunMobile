@@ -104,8 +104,9 @@ const AllocationAdd = (
             });
             setBrandAndPositions(value.length > 0 ? [{
               brandId: 0,
+              brandName: '任意品牌',
               number: total,
-              positions:value,
+              positions: value,
             }] : []);
             setTotal(total);
           }} />;
