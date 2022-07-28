@@ -21,15 +21,13 @@ const StartEndDate = (
   }) => {
 
 
-
-
   const ref = useRef();
 
   const [startDate, setStartDate] = useState();
 
   return <>
     <div
-      style={{ display: 'inline-block' }}
+      style={{ display: 'inline-block',width:100,textAlign:'right' }}
       className={className}
       onClick={() => {
         ref.current.open();
@@ -41,7 +39,7 @@ const StartEndDate = (
             {MyDate.Show(value[0])} - {MyDate.Show(value[1])}
           </>
           :
-          <CalendarOutline />
+          <CalendarOutline style={{fontSize:16}} />
       }
     </div>
     <MyDatePicker

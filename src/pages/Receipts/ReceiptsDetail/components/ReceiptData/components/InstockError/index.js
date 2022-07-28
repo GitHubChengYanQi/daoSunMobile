@@ -45,6 +45,7 @@ const InstockError = (
           totalTitle: '申请总数',
         };
       case 'Stocktaking':
+      case 'timelyInventory':
         return {
           receipts: masterUser.name && `${masterUser.name || '-'}的盘点申请 / ${instockOrder.coding || '-'}`,
           totalTitle: '实际总数',
@@ -59,11 +60,16 @@ const InstockError = (
       <div className={style.skuList}>
         {
           anomalyResults.map((item, index) => {
-            return <ErrorItem totalTitle={errorTypeData().totalTitle} item={item} key={index} index={index} onClick={() => {
-              if ((getAction('verify').id && permissions) || data.complete === 99) {
-                setVisible(item.anomalyId);
-              }
-            }} />;
+            return <ErrorItem
+              totalTitle={errorTypeData().totalTitle}
+              item={item}
+              key={index}
+              index={index}
+              onClick={() => {
+                if ((getAction('verify').id && permissions) || data.complete === 99) {
+                  setVisible(item.anomalyId);
+                }
+              }} />;
           })
         }
       </div>

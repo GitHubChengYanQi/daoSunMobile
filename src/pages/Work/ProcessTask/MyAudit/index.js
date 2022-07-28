@@ -12,6 +12,7 @@ const MyAudit = (
     type,
     paramsChange = () => {
     },
+    createUser,
     top = ToolUtil.isQiyeWeixin() ? 0 : 45,
   }) => {
 
@@ -19,7 +20,7 @@ const MyAudit = (
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], types: type && [type] };
+  const defaultParams = { auditType, statusList: ['0'], types: type && [type],createUser, };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});
@@ -59,9 +60,11 @@ const MyAudit = (
         historyType='process'
         onSearch={(value) => {
           submit({ skuName: value });
-        }} onClear={() => {
-        submit({ skuName: '' });
-      }} />
+        }}
+        onClear={() => {
+          submit({ skuName: '' });
+        }}
+      />
     </div>
 
 
@@ -84,7 +87,7 @@ const MyAudit = (
 
     <ProcessScreen
       top={top}
-      open={{ type: !type }}
+      open={{ type: !type,createUser:!createUser }}
       skuNumber={number}
       onClose={() => {
         setScreen(false);

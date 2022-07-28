@@ -1,10 +1,9 @@
 import React from 'react';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import style from '../../index.less';
-import { Button } from 'antd-mobile';
 import { useRequest } from '../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import { Message } from '../../../../../../components/Message';
+import BottomButton from '../../../../../../components/BottomButton';
 
 export const submit = { url: '/anomalyOrder/submit', method: 'POST' };
 
@@ -36,14 +35,14 @@ const InStockErrorBottom = (
 
   const anomalyResults = ToolUtil.isObject(detail.receipts).anomalyResults || [];
   const complete = anomalyResults.filter(item => item.status === 99);
-  return <div hidden={!getAction('verify').id} className={style.bottom}>
-    <Button
+  return <div hidden={!getAction('verify').id}>
+    <BottomButton
+      only
+      text='提交处理'
       disabled={complete.length !== anomalyResults.length}
-      className={style.button}
-      color='primary'
       onClick={() => {
         run({ data: { orderId: detail.formId, actionId: getAction('verify').id } });
-      }}>提交处理</Button>
+      }} />
 
     {loading && <MyLoading />}
   </div>;

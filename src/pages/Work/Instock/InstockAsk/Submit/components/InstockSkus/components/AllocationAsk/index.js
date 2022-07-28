@@ -19,6 +19,11 @@ import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
 import { PositionShow } from '../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
 import AllocationSteps from './components/AllocationSteps';
+import LinkButton from '../../../../../../../../components/LinkButton';
+import AllocationAdd from '../../../../../coponents/SkuInstock/components/AddSku/components/AllocationAdd';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
+import { shopCartEdit } from '../../../../../../Url';
+import { ERPEnums } from '../../../../../../../Stock/ERPEnums';
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
@@ -56,6 +61,13 @@ const AllocationAsk = ({ skus, createType }) => {
     },
   });
 
+  const { loading: editLoading, run: shopEdit } = useRequest(shopCartEdit, {
+    manual: true,
+    onSuccess: () => {
+      setAllocationView(false);
+    },
+  });
+
   const [data, setData] = useState([]);
 
   let countNumber = 0;
@@ -78,6 +90,7 @@ const AllocationAsk = ({ skus, createType }) => {
     setData(array);
   };
 
+  const [allocationView, setAllocationView] = useState();
 
   useEffect(() => {
     setParams({ askType: query.askType || 'allocation', allocationType: query.allocationType || 'out' });
@@ -85,15 +98,19 @@ const AllocationAsk = ({ skus, createType }) => {
   }, []);
 
   const createTypeData = (item = {}) => {
-    const position = ToolUtil.isArray(item.positionNums)[0] || {};
-    const outPositionName = ToolUtil.isObject(position.positionsResult).name;
-    const inPositionName = ToolUtil.isObject(position.toPositionsResult).name;
+    const allocationJson = item.allocationJson || {};
+    const brands = ToolUtil.isObject(allocationJson.start).brands || [];
     return {
       title: '调拨申请',
       type: '调拨',
       otherData: [
-        item.brandName || '任意品牌',
-        <PositionShow outPositionName={outPositionName} inPositionName={inPositionName} />,
+        brands.length > 0 ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+        <LinkButton onClick={() => setAllocationView({
+          cartId: item.cartId,
+          ...item.skuResult,
+          number: item.number,
+          allocationJson: item.allocationJson,
+        })}>查看详情</LinkButton>,
       ],
       careful: '注意事项',
       disabled: query.storeHouseId ? ToolUtil.isArray(params.noticeIds).length === 0 : !params.storeHouse,
@@ -252,6 +269,27 @@ const AllocationAsk = ({ skus, createType }) => {
           });
         }}
       />
+
+      <MyAntPopup
+        // title={taskData().type}
+        onClose={() => {
+          setAllocationView(false);
+        }}
+        destroyOnClose
+        className={style.addSkuPopup}
+        visible={allocationView}
+      >
+        <AllocationAdd
+          query={query}
+          sku={allocationView}
+          onClose={() => {
+            setAllocationView(false);
+          }}
+          shopEdit={(data) => {
+            shopEdit({ data });
+          }}
+        />
+      </MyAntPopup>
 
       {
         (allocationLoading || storeHouseLoaing) && <MyLoading />

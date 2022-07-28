@@ -117,7 +117,7 @@ const AllocationAdd = (
 
   return <>
     <AllocationSteps current={1} />
-    <div className={style.addSku}>
+    <div className={style.addSku} style={{padding:0}}>
       <SkuItem
         className={style.sku}
         number={sku.stockNumber}

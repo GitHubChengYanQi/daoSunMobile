@@ -5,8 +5,8 @@ import Icon from '../../components/Icon';
 import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
 import Create from './Create';
-import MyStart from './MyStart';
 import { useLocation } from 'react-router-dom';
+import { useModel } from 'umi';
 
 
 export const Tasks = () => {
@@ -14,6 +14,10 @@ export const Tasks = () => {
   const [key, setKey] = useState('audit');
 
   const [scrollTop, setScrollTop] = useState();
+
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
 
   const location = useLocation();
 
@@ -24,7 +28,7 @@ export const Tasks = () => {
       case 'audit':
         return <MyAudit auditType='audit' />;
       case 'start':
-        return <MyStart />;
+        return <MyAudit createUser={userInfo.id} />;
       case 'send':
         return <MyAudit auditType='send' />;
       default:
