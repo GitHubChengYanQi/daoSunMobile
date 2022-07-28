@@ -151,7 +151,7 @@ const SkuShop = (
           title: '调拨任务明细',
           type: query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')),
           otherData: [
-            brands.length > 0 ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+            brands.length > 0 ?  brands.filter(item=>item.show).map(item => item.brandName).join(' / ') : '任意品牌',
             <LinkButton onClick={() => setAllocationView({
               cartId: item.cartId,
               ...item.skuResult,
@@ -317,9 +317,6 @@ const SkuShop = (
                   query: {
                     createType: type,
                     ...history.location.query,
-                  },
-                  state: {
-                    skus,
                   },
                 });
                 break;

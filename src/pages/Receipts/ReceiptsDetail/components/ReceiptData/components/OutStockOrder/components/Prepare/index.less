@@ -28,6 +28,16 @@
   max-height: 60vh;
   overflow: auto;
 
+  .storeHouseTitle {
+    padding: 12px 0;
+    border-bottom: solid 1px #F5F5F5;
+
+    svg {
+      color: var(--adm-color-primary);
+      font-size: 15px;
+    }
+  }
+
   .storeItem {
     display: flex;
     align-items: center;
@@ -55,6 +65,12 @@
   .storeBrandItem {
     padding: 0 8px 8px;
     border-bottom: solid 1px #ccc;
+    display: flex;
+    align-items: center;
+
+    div {
+      flex-grow: 1;
+    }
   }
 
   .storeBrandPositions {
@@ -64,12 +80,13 @@
   .brands {
     background-color: var(--body--background--color);
     display: flex;
-    padding: 8px;
+    padding: 0 8px;
     margin-bottom: 6px;
     align-items: center;
     font-size: 14px;
     border-radius: 2px;
     gap: 8px;
+    height: 32px;
 
     .positionName {
       flex-grow: 1;

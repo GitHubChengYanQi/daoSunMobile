@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyCard from '../../../../../../components/MyCard';
-import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import Icon from '../../../../../../components/Icon';
-import ShopNumber from '../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { useBoolean } from 'ahooks';
 import { Divider } from 'antd-mobile';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
@@ -17,6 +13,8 @@ import MyAntPopup from '../../../../../../components/MyAntPopup';
 import MyEmpty from '../../../../../../components/MyEmpty';
 import Viewpager from '../InstockOrder/components/Viewpager';
 import AllocationSkuItem from './components/AllocationSkuItem';
+import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { getEndData, getStartData } from './getData';
 
 const Allocation = (
   {
@@ -30,19 +28,27 @@ const Allocation = (
 
   const history = useHistory();
 
-  let countNumber = 0;
+  const [total, setTotal] = useState(0);
 
   const [allSku, { toggle }] = useBoolean();
 
   const assign = getAction('assign').id && permissions;
   const carryAllocation = getAction('carryAllocation').id && permissions;
 
-  const detailList = (carryAllocation ? data.allocationCartResults : data.detailResults) || [];
-  const showList = (carryAllocation ? data.detailResults : data.allocationCartResults) || [];
-
   const [detailShow, setDetailShow] = useState();
 
   const [visible, setVisible] = useState();
+
+  const [skus, setSkus] = useState([]);
+
+
+  useEffect(() => {
+    const skus = getEndData(getStartData(data.detailResults), data.allocationCartResults);
+    setSkus(skus);
+    let number = 0;
+    skus.forEach(item => number += item.number);
+    setTotal(number);
+  }, []);
 
   return <>
     <MyCard
@@ -57,21 +63,20 @@ const Allocation = (
       bodyClassName={style.bodyStyle}
       extra={<div className={style.extra}>
         合计：
-        <div>{detailList.length}</div>类
-        <div hidden={!countNumber}><span>{countNumber}</span>件</div>
+        <div>{skus.length}</div>类
+        <div hidden={!total}><span>{total}</span>件</div>
       </div>}>
       {
-        detailList.map((item, index) => {
-
-          const view = item.allocationCartId && item.storehouseId === item.toStorehouseId;
+        skus.map((item, index) => {
 
           if (!allSku && index >= 3) {
             return null;
           }
 
-          if (!view) {
-            return <AllocationSkuItem item={item} key={index} />;
-          }
+          return <AllocationSkuItem
+            item={item}
+            key={index}
+          />;
 
           return <div key={index}>
             <Viewpager
@@ -88,7 +93,7 @@ const Allocation = (
           </div>;
         })
       }
-      {detailList.length > 3 && <Divider className={style.allSku}>
+      {skus.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
         }}>
@@ -138,14 +143,14 @@ const Allocation = (
       visible={detailShow}
       destroyOnClose
     >
-      <div className={style.details}>
-        {showList.length === 0 && <MyEmpty />}
-        {
-          showList.map((item, index) => {
-            return <AllocationSkuItem item={item} key={index} />;
-          })
-        }
-      </div>
+      {/*<div className={style.details}>*/}
+      {/*  {showList.length === 0 && <MyEmpty />}*/}
+      {/*  {*/}
+      {/*    showList.map((item, index) => {*/}
+      {/*      return <AllocationSkuItem item={item} key={index} />;*/}
+      {/*    })*/}
+      {/*  }*/}
+      {/*</div>*/}
     </MyAntPopup>
 
     {assign && <BottomButton

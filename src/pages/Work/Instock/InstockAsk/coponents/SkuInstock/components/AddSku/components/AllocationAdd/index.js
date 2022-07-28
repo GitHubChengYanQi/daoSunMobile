@@ -24,6 +24,7 @@ const AllocationAdd = (
     },
     shopEdit = () => {
     },
+    noSteps,
   },
 ) => {
 
@@ -35,10 +36,8 @@ const AllocationAdd = (
   const end = allocationJson.end || {};
 
   const [brandAndPositions, setBrandAndPositions] = useState(start.brands || []);
-  // console.log(brandAndPositions);
 
-  const [storeHouse, setStoreHouse] = useState([]);
-  // console.log(storeHouse);
+  const [storeHouse, setStoreHouse] = useState(end.storeHouse || []);
 
   const [total, setTotal] = useState(sku.number || 0);
 
@@ -84,6 +83,7 @@ const AllocationAdd = (
             });
             setBrandAndPositions(value);
             setTotal(total);
+            setStoreHouse([]);
           }} />;
       case 'allBrand':
         return <AllBrands
@@ -103,12 +103,14 @@ const AllocationAdd = (
               total += item.outStockNumber || 0;
             });
             setBrandAndPositions(value.length > 0 ? [{
-              brandId: 0,
+              brandId: null,
               brandName: '任意品牌',
               number: total,
               positions: value,
+              show:true,
             }] : []);
             setTotal(total);
+            setStoreHouse([]);
           }} />;
       default:
         return <></>;
@@ -116,8 +118,8 @@ const AllocationAdd = (
   };
 
   return <>
-    <AllocationSteps current={1} />
-    <div className={style.addSku} style={{padding:0}}>
+    {!noSteps && <AllocationSteps current={1} />}
+    <div className={style.addSku} style={{ padding: 0 }}>
       <SkuItem
         className={style.sku}
         number={sku.stockNumber}
@@ -131,12 +133,12 @@ const AllocationAdd = (
         <div className={style.brandAction}>
           <div className={style.brandData}>
             品牌：
-            <Button className={brandAction === 'fixedBrand' ? style.checkBrand : ''} onClick={() => {
+            <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
               setTotal(0);
               setBrandAndPositions([]);
               setBrandAction('fixedBrand');
             }}>指定品牌</Button>
-            <Button className={brandAction === 'allBrand' ? style.checkBrand : ''} onClick={() => {
+            <Button color={brandAction === 'allBrand' ? 'primary' : 'default'} onClick={() => {
               setTotal(0);
               setBrandAndPositions([]);
               setBrandAction('allBrand');
@@ -145,7 +147,7 @@ const AllocationAdd = (
           <div className={style.total}>
             调拨总数：<ShopNumber
             max={out ? sku.stockNumber : undefined}
-            show={brandAndPositions.length > 0}
+            show={total > 0}
             value={total}
             onChange={(number) => {
               setTotal(number);
@@ -156,18 +158,14 @@ const AllocationAdd = (
           {selectBrandAndPositions()}
         </div>
         <div hidden={total === 0}>
-          <div className={style.storeHouseTitle}>
-            指定调{out ? '入' : '出'}库（位）
-          </div>
-
           <StoreHouses
             total={total}
             skuId={sku.skuId}
             brandAndPositions={brandAndPositions}
             out={out}
-            value={end.storeHouse}
+            data={storeHouse}
             onChange={setStoreHouse}
-            stotrhouseId={storehouseId}
+            storehouseId={storehouseId}
           />
         </div>
       </div>
@@ -183,6 +181,7 @@ const AllocationAdd = (
         <Button
           className={ToolUtil.classNames(style.ok, style.button)}
           color='primary'
+          disabled={total === 0}
           onClick={() => {
             const data = {
               skuId: sku.skuId,
@@ -215,27 +214,39 @@ const AllocationAdd = (
                 'end': {
                   'storeHouse': storeHouse.map(item => {
                     const brands = item.brands || [];
+                    const positions = item.positions || [];
                     return {
                       'number': item.number,
                       'maxNumber': item.maxNumber,
                       'id': item.id,
                       'name': item.name,
                       'show': item.show,
-                      'brands': brands.map(item => {
-                        const positions = item.positions || [];
+                      'positions': positions.map(item => {
+                        const brands = item.brands || [];
                         return {
+                          'id': item.id,
+                          'name': item.name,
+                          'storehouseId': item.storehouseId,
+                          'number': item.number,
+                          'maxNumber': item.maxNumber,
+                          'brands': brands.map(item => {
+                            return {
+                              'checked': item.checked,
+                              'brandId': item.brandId,
+                              'maxNumber': item.maxNumber,
+                              'number': item.number,
+                              'brandName': item.brandName,
+                            };
+                          }),
+                        };
+                      }),
+                      'brands': brands.map(item => {
+                        return {
+                          'checked': item.checked,
                           'brandId': item.brandId,
                           'number': item.number,
                           'brandName': item.brandName,
-                          'positions': positions.map(item => {
-                            return {
-                              'id': item.id,
-                              'name': item.name,
-                              'storehouseId': item.storehouseId,
-                              'number': item.number,
-                              'maxNumber': item.maxNumber,
-                            };
-                          }),
+                          'maxNumber': item.maxNumber,
                         };
                       }),
                     };

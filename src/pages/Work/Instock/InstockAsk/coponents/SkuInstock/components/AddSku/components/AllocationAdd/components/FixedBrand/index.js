@@ -43,7 +43,6 @@ const FixedBrand = (
     change(newData);
   };
 
-
   const positionChange = (params = {}, brandId, positionIndex) => {
     const newData = data.map(item => {
       if (item.brandId === brandId) {

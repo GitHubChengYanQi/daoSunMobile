@@ -27,7 +27,7 @@ const StartEndDate = (
 
   return <>
     <div
-      style={{ display: 'inline-block',width:100,textAlign:'right' }}
+      style={{ display: 'inline-block',minWidth:100,textAlign:'right' }}
       className={className}
       onClick={() => {
         ref.current.open();

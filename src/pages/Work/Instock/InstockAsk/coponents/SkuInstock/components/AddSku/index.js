@@ -124,6 +124,14 @@ const AddSku = (
     setType(type);
     setSku(sku);
     setOther(other);
+    const imgUrl = Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo;
+    const newData = {
+      imgUrl,
+      imgId: sku.imgId,
+      skuId: sku.skuId,
+      skuResult: sku,
+    };
+    setData(newData);
     switch (type) {
       case ERPEnums.allocation:
         setTitle(query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')));

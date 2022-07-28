@@ -42,7 +42,6 @@ const AllBrands = (
 
   useEffect(() => {
     if (value.length > 0){
-      console.log(value[0]);
       setPositions(value[0].positions);
       return;
     }

@@ -20,6 +20,9 @@ const Skus = (
     judge,
     dataChange = () => {
     },
+    onRemove = () => {
+    },
+    show,
   },
 ) => {
 
@@ -56,11 +59,16 @@ const Skus = (
             </div>
             <div className={style.action}>
               <MyRemoveButton onRemove={() => {
+                if (typeof onRemove === 'function'){
+                  onRemove(item.cartId);
+                  return;
+                }
                 dataChange(skuList.filter(item => item.key !== index));
               }} />
               <div hidden={createTypeData(item).buttonHidden}>
                 <ShopNumber
                   value={item.number}
+                  show={show}
                   onChange={async (number) => {
                     const newData = skuList.map((dataItem) => {
                       if (dataItem.key === index) {

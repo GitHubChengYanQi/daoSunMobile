@@ -17,17 +17,15 @@ import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import OtherData from '../OtherData';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
-import { PositionShow } from '../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/PositionShow';
 import AllocationSteps from './components/AllocationSteps';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import AllocationAdd from '../../../../../coponents/SkuInstock/components/AddSku/components/AllocationAdd';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
-import { shopCartEdit } from '../../../../../../Url';
-import { ERPEnums } from '../../../../../../../Stock/ERPEnums';
+import { shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../../Url';
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
-const AllocationAsk = ({ skus, createType }) => {
+const AllocationAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
 
@@ -64,7 +62,48 @@ const AllocationAsk = ({ skus, createType }) => {
   const { loading: editLoading, run: shopEdit } = useRequest(shopCartEdit, {
     manual: true,
     onSuccess: () => {
+      refresh();
       setAllocationView(false);
+    },
+  });
+
+  const { loading: shopLoading, refresh } = useRequest({
+    ...shopCartApplyList,
+    data: { type: createType },
+  }, {
+    manual: !query.storeHouseId,
+    onSuccess: (res) => {
+      const newData = ToolUtil.isArray(res);
+      if (newData.length === 0) {
+        if (history.length <= 2) {
+          history.push('/');
+        } else {
+          history.goBack();
+        }
+      }
+      setData(newData.map((item) => {
+        return {
+          cartId: item.cartId,
+          skuId: item.skuId,
+          skuResult: item.skuResult,
+          number: item.number,
+          positions: ToolUtil.isArray(item.storehousePositions).map(item => {
+            return {
+              id: item.storehousePositionsId,
+              name: item.name,
+              number: item.number,
+            };
+          }),
+          allocationJson: JSON.parse(item.allocationJson),
+        };
+      }));
+    },
+  });
+
+  const { loading: delelLoading, run: shopDelete } = useRequest(shopCartDelete, {
+    manual: true,
+    onSuccess: (res) => {
+      refresh();
     },
   });
 
@@ -79,22 +118,10 @@ const AllocationAsk = ({ skus, createType }) => {
     return { ...item, key: index };
   });
 
-  const dataChange = (array = []) => {
-    if (array.length === 0 && query.storeHouseId) {
-      if (history.length <= 2) {
-        history.push('/');
-      } else {
-        history.goBack();
-      }
-    }
-    setData(array);
-  };
-
   const [allocationView, setAllocationView] = useState();
 
   useEffect(() => {
     setParams({ askType: query.askType || 'allocation', allocationType: query.allocationType || 'out' });
-    dataChange(skus);
   }, []);
 
   const createTypeData = (item = {}) => {
@@ -104,7 +131,7 @@ const AllocationAsk = ({ skus, createType }) => {
       title: '调拨申请',
       type: '调拨',
       otherData: [
-        brands.length > 0 ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+        brands.length > 0 ? brands.filter(item => item.show).map(item => item.brandName).join(' / ') : '任意品牌',
         <LinkButton onClick={() => setAllocationView({
           cartId: item.cartId,
           ...item.skuResult,
@@ -126,16 +153,124 @@ const AllocationAsk = ({ skus, createType }) => {
     return <MyEmpty description='暂无仓库' />;
   }
 
+  const submit = () => {
+    const skuAndNumbers = [];
+    const storehouseAndPositions = [];
+
+    data.forEach(item => {
+      const allocationJson = item.allocationJson || {};
+      const start = allocationJson.start || {};
+      const end = allocationJson.end || {};
+
+      // 需求
+      const brands = start.brands || [];
+      const showBrands = brands.filter(brandItem => {
+        if (brandItem.show) {
+          const positions = brandItem.positions || [];
+          if (positions.length > 0) {
+            positions.forEach(positionItem => {
+              skuAndNumbers.push({
+                skuId: item.skuId,
+                brandId: brandItem.brandId,
+                storehousePositionsId: positionItem.id,
+                storehouseId: query.storeHouseId,
+                number: positionItem.outStockNumber,
+                haveBrand: brandItem.brandId !== null,
+              });
+            });
+          } else {
+            skuAndNumbers.push({
+              skuId: item.skuId,
+              brandId: brandItem.brandId,
+              storehouseId: query.storeHouseId,
+              number: brandItem.number,
+              haveBrand: brandItem.brandId !== null,
+            });
+          }
+        }
+        return brandItem.show;
+      });
+
+      if (showBrands.length === 0) {
+        skuAndNumbers.push({
+          skuId: item.skuId,
+          storehouseId: query.storeHouseId,
+          number: item.number,
+          haveBrand: false,
+        });
+      }
+
+      // 期望
+      const storeHouse = end.storeHouse || [];
+      storeHouse.forEach(storeItem => {
+        if (storeItem.show) {
+          if (storeItem.id === query.storeHouseId) {
+            const positions = storeItem.positions || [];
+            positions.forEach(positionItem => {
+              const brands = positionItem.brands || [];
+              brands.forEach(brandItem => {
+                if (brandItem.checked) {
+                  storehouseAndPositions.push({
+                    skuId: item.skuId,
+                    brandId: brandItem.brandId,
+                    storehousePositionsId: positionItem.id,
+                    storehouseId: storeItem.id,
+                    number: brandItem.number,
+                  });
+                }
+              });
+            });
+          } else {
+            const brands = storeItem.brands || [];
+            brands.forEach(brandItem => {
+              if (brandItem.checked) {
+                storehouseAndPositions.push({
+                  skuId: item.skuId,
+                  brandId: brandItem.brandId,
+                  // storehousePositionsId: positionItem.id,
+                  storehouseId: storeItem.id,
+                  number: brandItem.number,
+                });
+              }
+            });
+          }
+
+        }
+      });
+
+    });
+    console.log(skuAndNumbers);
+    return;
+    addAllocation({
+      data: {
+        jsonParam: {
+          skuAndNumbers,
+          storehouseAndPositions,
+        },
+        reason: ToolUtil.isArray(params.noticeIds).toString(),
+        enclosure: ToolUtil.isArray(params.mediaIds).toString(),
+        userIds: ToolUtil.isArray(params.userIds).toString(),
+        remark: params.remark,
+        type: params.askType === 'allocation' ? 'allocation' : 'transfer',
+        allocationType: params.allocationType === 'in' ? 1 : 2,
+        storehouseId: ToolUtil.isObject(params.storeHouse).value,
+      },
+    });
+  };
+
   return <>
     <div style={{ marginBottom: 60 }}>
       <MyNavBar title='调拨申请' />
       <AllocationSteps current={query.storeHouseId ? 2 : 0} />
       {query.storeHouseId && <Skus
-        skus={skus}
+        skus={data}
+        show
+        onRemove={(cartId) => {
+          shopDelete({ data: { ids: [cartId] } });
+        }}
         createTypeData={createTypeData}
         skuList={skuList}
         countNumber={countNumber}
-        dataChange={dataChange}
       />}
       <MyCard
         titleBom={<Title className={style.title}>申请类型 <span>*</span></Title>}
@@ -229,33 +364,7 @@ const AllocationAsk = ({ skus, createType }) => {
         rightDisabled={createTypeData().disabled}
         rightOnClick={() => {
           if (query.storeHouseId) {
-            const detailParams = [];
-            skuList.forEach(item => {
-              const position = ToolUtil.isArray(item.positionNums)[0] || {};
-              const storehousePositions = ToolUtil.isObject(position.positionsResult);
-              const toStorehousePositions = ToolUtil.isObject(position.toPositionsResult);
-              detailParams.push({
-                skuId: item.skuId,
-                number: item.number,
-                storehousePositionsId: storehousePositions.storehousePositionsId,
-                storehouseId: params.allocationType === 'out' ? query.storeHouseId : storehousePositions.storehouseId,
-                brandId: item.brandId,
-                toStorehousePositionsId: toStorehousePositions.storehousePositionsId,
-                toStorehouseId: params.allocationType === 'in' ? query.storeHouseId : toStorehousePositions.storehouseId,
-              });
-            });
-            addAllocation({
-              data: {
-                detailParams,
-                reason: ToolUtil.isArray(params.noticeIds).toString(),
-                enclosure: ToolUtil.isArray(params.mediaIds).toString(),
-                userIds: ToolUtil.isArray(params.userIds).toString(),
-                remark: params.remark,
-                type: params.askType === 'allocation' ? 'allocation' : 'transfer',
-                allocationType: params.allocationType === 'in' ? 1 : 2,
-                storehouseId: ToolUtil.isObject(params.storeHouse).value,
-              },
-            });
+            submit();
             return;
           }
           history.push({
@@ -271,7 +380,7 @@ const AllocationAsk = ({ skus, createType }) => {
       />
 
       <MyAntPopup
-        // title={taskData().type}
+        title={query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入'))}
         onClose={() => {
           setAllocationView(false);
         }}
@@ -280,6 +389,7 @@ const AllocationAsk = ({ skus, createType }) => {
         visible={allocationView}
       >
         <AllocationAdd
+          noSteps
           query={query}
           sku={allocationView}
           onClose={() => {
@@ -292,7 +402,7 @@ const AllocationAsk = ({ skus, createType }) => {
       </MyAntPopup>
 
       {
-        (allocationLoading || storeHouseLoaing) && <MyLoading />
+        (allocationLoading || storeHouseLoaing || editLoading || shopLoading || delelLoading) && <MyLoading />
       }
 
     </div>

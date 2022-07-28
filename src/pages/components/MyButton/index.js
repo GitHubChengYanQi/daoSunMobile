@@ -2,6 +2,7 @@ import React from 'react';
 import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { Button } from 'antd-mobile';
 import style from './index.less';
+import { ToolUtil } from '../ToolUtil';
 
 export const RemoveButton = (
   {
@@ -19,6 +20,7 @@ export const AddButton = (
     },
     width,
     height,
+    className,
   }) => {
 
   return <Button
@@ -27,7 +29,7 @@ export const AddButton = (
     disabled={disabled}
     onClick={onClick}
     style={{ width, height }}
-    className={style.add}
+    className={ToolUtil.classNames(className,style.add)}
   >
     <AddOutline />
   </Button>;

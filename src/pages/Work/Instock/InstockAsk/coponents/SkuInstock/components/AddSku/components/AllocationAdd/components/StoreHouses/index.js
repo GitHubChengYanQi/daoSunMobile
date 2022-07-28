@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../../components/MyLoading';
-import { Button } from 'antd-mobile';
+import { Button, Picker } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../ShopNumber';
@@ -11,6 +11,9 @@ import { AddButton } from '../../../../../../../../../../../components/MyButton'
 import MyRemoveButton from '../../../../../../../../../../../components/MyRemoveButton';
 import { Message } from '../../../../../../../../../../../components/Message';
 import MyPositions from '../../../../../../../../../../../components/MyPositions';
+import MyCheck from '../../../../../../../../../../../components/MyCheck';
+import { PlusCircleFilled } from '@ant-design/icons';
+import { storeHouseSelect } from '../../../../../../../../../../Quality/Url';
 
 export const storehouse = { url: '/stockDetails/getStockNumberBySkuId', method: 'GET' };
 
@@ -18,78 +21,172 @@ const StoreHouses = (
   {
     total,
     skuId,
-    value = [],
+    data = [],
     onChange = () => {
     },
     out,
-    stotrhouseId,
+    storehouseId,
     brandAndPositions = [],
   },
 ) => {
 
-  const [data, setData] = useState([]);
-
   const [visible, setVisible] = useState({});
+
+  const [selectStore, setSelectStore] = useState();
+
+  const { loading: storeHouseLoaing, data: storeHouses } = useRequest(storeHouseSelect);
+
+  const storeIds = data.map(item => item.id);
+  const columns = ToolUtil.isArray(storeHouses).filter(item => !storeIds.includes(item.value));
 
   const change = (newData = []) => {
     let number = 0;
     newData.forEach(item => {
       if (item.show) {
-        if (item.id === stotrhouseId) {
-          const brands = item.brands || [];
-          brands.forEach(item => {
-            const positions = item.positions || [];
-            positions.forEach(item => {
-              number += item.number;
+        if (item.id === storehouseId) {
+          const positions = item.positions || [];
+          positions.forEach(item => {
+            const brands = item.brands || [];
+            brands.forEach(item => {
+              if (item.checked) {
+                number += item.number;
+              }
             });
           });
         } else {
-          number += item.number;
+          const brands = item.brands || [];
+          brands.forEach(item => {
+            if (item.checked) {
+              number += item.number;
+            }
+          });
         }
       }
     });
     if (number > total) {
       Message.toast('不能超出指定数量！');
-      return;
+      return false;
     }
-    setData(newData);
     onChange(newData);
+    return true;
   };
 
-  const init = (array = []) => {
-    change(array.map(item => {
-      const storehouse = item.storehouseResult || {};
-      let brands = [];
-      if (storehouse.storehouseId === stotrhouseId) {
-        brands = brandAndPositions.length > 0 ? brandAndPositions.map(item => {
-          return {
-            brandId: item.brandId,
-            number: item.number,
-            brandName: item.brandName || '任意品牌',
-          };
-        }) : [{
-          brandId: 0,
-          number: total,
-          brandName: '任意品牌',
-        }];
-      }
-
-      return {
-        number: 1,
+  const initBrands = [];
+  brandAndPositions.length > 0 ? brandAndPositions.forEach(item => {
+    if (item.show) {
+      initBrands.push({
+        brandId: item.brandId,
         maxNumber: item.number,
-        id: storehouse.storehouseId,
-        name: storehouse.name,
-        brands,
-      };
-    }));
-  };
+        number: 1,
+        brandName: item.brandName || '无品牌',
+        checked: brandAndPositions.length === 1,
+      });
+    }
+  }) : initBrands.push({
+    brandId: null,
+    maxNumber: total,
+    number: 1,
+    brandName: '任意品牌',
+    checked: true,
+  });
 
-  const { loading, data: storeData } = useRequest({ ...storehouse, params: { skuId } }, {
+  const { loading, run } = useRequest({ ...storehouse, params: { skuId } }, {
+    manual: true,
     onSuccess: (res) => {
-      if (value.length > 0){
-        return change(value);
+      const skus = res || [];
+      if (skus.length === 0) {
+        return Message.toast('无库存！');
       }
-      init(res);
+      const storeHouse = skus[0].storehouseResult;
+
+      let number = 0;
+
+      const positions = [];
+      const brands = [];
+
+      const initBrandIds = initBrands.map(item => item.brandId);
+
+      const allBrand = initBrandIds.length === 1 && initBrandIds[0] === null;
+
+      if (storeHouse.storehouseId === storehouseId) {
+        skus.forEach(item => {
+          const positionIds = positions.map(item => item.id);
+          const positionIndex = positionIds.indexOf(item.storehousePositionsId);
+          if (positionIndex === -1) {
+            if (allBrand || initBrandIds.includes(item.brandId)) {
+              number += item.number;
+              positions.push({
+                id: item.storehousePositionsId,
+                name: ToolUtil.isObject(item.storehousePositionsResult).name,
+                number: item.number,
+                maxNumber: item.number,
+                brands: [{
+                  brandId: item.brandId,
+                  brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
+                  maxNumber: item.number,
+                  number: 1,
+                }],
+              });
+            }
+          } else {
+            number += item.number;
+            const position = positions[positionIndex];
+            positions[positionIndex] = {
+              ...position,
+              number: position.number + item.number,
+              maxNumber: position.number + item.number,
+              brands: [...position.brands, {
+                brandId: item.brandId,
+                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
+                maxNumber: item.number,
+                number: 1,
+              }],
+            };
+          }
+        });
+        if (positions.length === 0) {
+          return Message.toast('无库存！');
+        }
+      } else {
+        skus.forEach(item => {
+          const brandIds = brands.map(item => item.brandId);
+          const brandIndex = brandIds.indexOf(item.brandId);
+          if (brandIndex === -1) {
+            if (allBrand || initBrandIds.includes(item.brandId)) {
+              number += item.number;
+              brands.push({
+                brandId: item.brandId,
+                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
+                number: item.number,
+                maxNumber: item.number,
+              });
+            }
+          } else {
+            number += item.number;
+            const brand = brands[brandIndex];
+            brands[brandIndex] = {
+              ...brand,
+              number: brand.number + item.number,
+              maxNumber: brand.number + item.number,
+            };
+          }
+        });
+        if (brands.length === 0) {
+          return Message.toast('无库存！');
+        }
+      }
+
+      if (storeHouse) {
+        const storeData = {
+          id: storeHouse.storehouseId,
+          name: storeHouse.name,
+          show: true,
+          number,
+          brands,
+          positions,
+        };
+        change([...data, storeData]);
+      }
     },
   });
 
@@ -104,103 +201,87 @@ const StoreHouses = (
   };
 
 
-  const brandChange = (params = {}, brandId, storehouseId) => {
+  const brandChange = (params = {}, storehouseId, brandId, positionId) => {
     const newData = data.map(item => {
       if (item.id === storehouseId) {
-        const brands = item.brands || [];
-        const newBrands = brands.map(item => {
-          if (item.brandId === brandId) {
-            return { ...item, ...params };
-          }
-          return item;
-        });
-        return { ...item, brands: newBrands };
+        if (positionId) {
+          const positions = item.positions || [];
+          const newPositions = positions.map(item => {
+            if (item.id === positionId) {
+              const brands = item.brands || [];
+              const newBrands = brands.map(item => {
+                if (item.brandId === brandId) {
+                  return { ...item, ...params };
+                }
+                return item;
+              });
+              return { ...item, brands: newBrands };
+            }
+            return item;
+          });
+          return { ...item, positions: newPositions };
+        } else {
+          const brands = item.brands || [];
+          const newBrands = brands.map(item => {
+            if (item.brandId === brandId) {
+              return { ...item, ...params };
+            }
+            return item;
+          });
+          return { ...item, brands: newBrands };
+        }
       }
       return item;
     });
     change(newData);
   };
 
-
-  const positionChange = (number, storehouseId, brandId, positionIndex, maxNumber) => {
-    let num = 0;
-    const newData = data.map(item => {
-      if (item.id === storehouseId) {
-        const brands = item.brands || [];
-
-        const newBrands = brands.map(item => {
-          if (item.brandId === brandId) {
-            const newPositions = item.positions.map((item, index) => {
-              if (index === positionIndex) {
-                num += number;
-                return { ...item, number, num: number };
-              }
-              num += item.number;
-              return item;
-            });
-            return { ...item, positions: newPositions };
-          }
-          return item;
-        });
-        return { ...item, brands: newBrands };
-      }
-      return item;
-    });
-
-    if (num > maxNumber) {
-      return Message.toast('不能超出指定数量！');
-    }
-
-    change(newData);
-  };
-
-  useEffect(() => {
-    init(storeData);
-  }, [total]);
-
-  if (loading) {
+  if (storeHouseLoaing) {
     return <MyLoading skeleton />;
   }
 
-  const positionsDom = (storehouseId, brandId, positions = [], maxNumber) => {
+  const brandDom = ({ storehouseId, positionId, brands = [], maxNumber }) => {
 
-    return positions.map((positionItem, positionIndex) => {
+    return brands.map((brandItem, brandIndex) => {
 
       return <div
-        className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
-        key={positionIndex}>
-        <div className={style.positionName}>
-           <span>
-          {positionItem.name} <span hidden={out}>({positionItem.maxNumber || 0})</span>
-        </span>
+        className={ToolUtil.classNames(style.brands, brandItem.checked && style.checked)}
+        key={brandIndex}>
+        <div className={style.positionName} onClick={() => {
+          brandChange({ checked: !brandItem.checked, number: 1 }, storehouseId, brandItem.brandId, positionId);
+        }}>
+          <MyCheck checked={brandItem.checked} />
+          <span>{brandItem.brandName}<span hidden={out}>({brandItem.maxNumber})</span></span>
         </div>
 
-        <div>
+        <div hidden={!brandItem.checked}>
           <ShopNumber
-            max={!out ? positionItem.maxNumber : undefined}
+            max={brandItem.maxNumber}
             min={1}
-            value={positionItem.number || 0}
+            value={brandItem.number || 0}
             onChange={(number) => {
-              positionChange(number, storehouseId, brandId, positionIndex, maxNumber);
+              brandChange({ number }, storehouseId, brandItem.brandId, positionId);
             }} />
         </div>
-        <MyRemoveButton onRemove={() => {
-          brandChange({ positions: positions.filter((item, posiIndex) => posiIndex !== positionIndex) }, brandId, storehouseId);
-        }} />
-
       </div>;
     });
   };
 
-  return <div className={style.action} style={{ padding: 0 }}>
+  return <div className={style.action} style={{ padding: 0, overflow: 'visible' }}>
+    <div className={style.storeHouseTitle}>
+      指定调{out ? '入' : '出'}库（位）{columns.length > 0 && <PlusCircleFilled onClick={() => {
+      setSelectStore(true);
+    }} />}
+    </div>
     {data.map((item, index) => {
 
       const brands = item.brands || [];
 
+      const positions = item.positions || [];
+
       return <div key={index}>
         <div className={style.storeItem}>
           <Button
-            disabled={out ? false : item.maxNumber === 0}
             className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
             color={item.show ? 'primary' : 'default'}
             fill='outline'
@@ -208,39 +289,69 @@ const StoreHouses = (
               dataChange({ show: !item.show }, item.id);
             }}
           >
-            <LinkOutline /> {item.name} <span hidden={out}>({item.maxNumber})</span>
+            <LinkOutline /> {item.name} <span hidden={out}>({item.number})</span>
           </Button>
-          <div hidden={!item.show || stotrhouseId === item.id}>
-            <ShopNumber min={1} max={out ? undefined : item.maxNumber} value={item.number} onChange={(number) => {
-              dataChange({ number }, item.id);
-            }} />
-          </div>
         </div>
 
-        <div hidden={!(item.show && stotrhouseId === item.id)} className={style.allBrands}>
-          {brands.map((brandItem, brandIndex) => {
-            const positions = brandItem.positions || [];
-            return <div key={brandIndex} className={style.storeBrands}>
-              <div className={style.storeBrandItem}>
-                {brandItem.brandName} ({brandItem.number})
-              </div>
-              <div className={style.storeBrandPositions}>
-                {positionsDom(item.id, brandItem.brandId, positions, brandItem.number)}
-                <AddButton
-                  width={40}
-                  height={24}
-                  onClick={() => setVisible({
-                    ...item,
-                    positions,
-                    brandId: brandItem.brandId,
-                    brandNum: brandItem.number,
-                  })} />
-              </div>
-            </div>;
-          })}
+        <div hidden={!item.show} className={style.allBrands}>
+          {storehouseId === item.id ? <>
+            {
+              positions.map((positionItem, positionIndex) => {
+                const brands = positionItem.brands || [];
+                return <div key={positionIndex} className={style.storeBrands}>
+                  <div className={style.storeBrandItem}>
+                    <div>
+                      {positionItem.name} <span hidden={out}>({positionItem.number})</span>
+                    </div>
+                    {out && <MyRemoveButton onRemove={() => {
+                      dataChange({ positions: positions.filter((item, posiIndex) => posiIndex !== positionIndex) }, item.id);
+                    }} />}
+                  </div>
+                  <div className={style.storeBrandPositions}>
+                    {brandDom({ storehouseId: item.id, brands, positionId: positionItem.id })}
+                  </div>
+                </div>;
+              })
+            }
+            {out && <AddButton
+              width={40}
+              height={24}
+              onClick={() => setVisible({
+                ...item,
+                positions,
+              })} />}
+          </> : brandDom({ storehouseId: item.id, brands })}
         </div>
       </div>;
     })}
+
+    <Picker
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
+      columns={[columns || []]}
+      visible={selectStore}
+      onClose={() => setSelectStore(false)}
+      onConfirm={(value, options) => {
+        const storeHouse = options.items[0] || {};
+        if (out) {
+          const storeData = {
+            id: storeHouse.value,
+            name: storeHouse.label,
+            show: true,
+            brands: initBrands,
+          };
+          change([...data, storeData]);
+
+          if (storeHouse.value === storehouseId) {
+            setVisible({
+              ...storeData,
+              positions: [],
+            });
+          }
+        } else {
+          run({ params: { skuId, storehouseId: storeHouse.value } });
+        }
+      }}
+    />
 
     <MyPositions
       visible={visible.id}
@@ -253,33 +364,24 @@ const StoreHouses = (
       storehouseId={visible.id}
       onClose={() => setVisible({})}
       onSuccess={(value = []) => {
-        let num = 0;
         const positions = value.map(item => {
-          num += (item.num || 1);
-          return { ...item, number: item.num || 1, maxNumber: item.number };
+          return { ...item, number: item.num || 1, maxNumber: item.number, brands: item.brands || initBrands };
         });
-        if (num > visible.brandNum) {
-          return Message.toast('不能超出指定数量!');
-        }
         const newData = data.map(item => {
           if (item.id === visible.id) {
-            const brands = item.brands || [];
-            const newBrands = brands.map(item => {
-              if (item.brandId === visible.brandId) {
-                return { ...item, positions };
-              }
-              return item;
-            });
             return {
               ...item,
-              brands: newBrands,
+              positions,
             };
           }
           return item;
         });
-        change(newData);
-        setVisible({});
+        if (change(newData)) {
+          setVisible({});
+        }
       }} />
+
+    {loading && <MyLoading />}
   </div>;
 };
 

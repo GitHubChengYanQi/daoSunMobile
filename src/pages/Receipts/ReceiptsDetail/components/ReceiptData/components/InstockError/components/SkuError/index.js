@@ -248,17 +248,17 @@ const SkuError = (
       case 'timelyInventory':
         return {
           showAction: <>
-            {item.status === -1 && <span className={style.allow}>· 忽略异常</span>}
-            {item.status === 1 && <span className={style.prohibit}>· 维修</span>}
+            {item.status === 3 && <span className={style.allow}>· 忽略异常</span>}
+            {item.status === 4 && <span className={style.prohibit}>· 维修</span>}
             {item.status === 2 && <span className={style.allow}>· 报损</span>}
           </>,
           actions: <>
             <Button className={style.ok} color='primary' fill='outline' onClick={() => {
-              action(item, 1);
+              action(item, 4);
             }}>维修</Button>
             <Button color='danger' fill='outline' onClick={() => {
               itemChange(index, { status: -1 });
-              action(item, -1);
+              action(item, 3);
             }}>忽略异常</Button>
             <Button className={style.ok} color='primary' fill='outline' onClick={() => {
               action(item, 2);

@@ -17,6 +17,11 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import Distribution from './components/Distribution';
 import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
+import {
+  getEndData,
+  getStartData,
+} from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/getData';
+import MyAntPopup from '../../../components/MyAntPopup';
 
 export const detailApi = { url: '/allocation/detail', method: 'POST' };
 export const checkCart = { url: '/allocation/checkCart', method: 'POST' };
@@ -41,46 +46,15 @@ const SelectStoreHouse = () => {
   const [fixedSkus, setFixedSkus] = useState([]);
 
   const info = (skus = [], out) => {
-    let newParams;
-    const newData = [];
-    const stores = [];
-    const fixedSku = [];
-    newParams = {
+    const newParams = {
       out,
       title: `选择调${out ? '出' : '入'}仓库`,
       distribution: `分配调${out ? '出' : '入'}物料`,
       batch: !out,
       storeHouseTitle: `调${out ? '出' : '入'}仓库`,
     };
-    skus.forEach(item => {
-      if (out ? item.positionsResult : item.toPositionsResult) {
-        if (!item.allocationCartId) {
-          fixedSku.push(item);
-        }
-        const storeHouse = (out ? item.storehouseResult : item.toStorehouseResult) || {};
-        const storeIds = stores.map(item => item.id);
-        const storeIndex = storeIds.indexOf(storeHouse.storehouseId);
-        if (storeIndex === -1) {
-          stores.push({
-            id: storeHouse.storehouseId,
-            name: storeHouse.name,
-            skus: [item],
-          });
-        } else {
-          const store = stores[storeIndex];
-          stores[storeIndex] = {
-            ...store,
-            skus: [...store.skus, item],
-          };
-        }
-      } else {
-        newData.push(item);
-      }
-    });
-    setFixedSkus(fixedSku);
     setParams(newParams);
-    setData(newData);
-    setStoreHouses(stores);
+    setData(skus);
   };
 
   const { loading: deleteLoading, run: deleteRun } = useRequest(allocationCartDelete, {
@@ -104,22 +78,7 @@ const SelectStoreHouse = () => {
     manual: true,
     onSuccess: (res) => {
       const detail = res || {};
-      const detailResults = res.detailResults || [];
-      const allocationCartResults = res.allocationCartResults || [];
-
-      const skus = allocationCartResults;
-
-      detailResults.forEach(item => {
-        let cartNumber = 0;
-        allocationCartResults.forEach(cartItem => {
-          if (cartItem.allocationDetailId === item.allocationDetailId) {
-            cartNumber += cartItem.number;
-          }
-        });
-        if ((item.number - cartNumber) > 0) {
-          skus.push({ ...item, number: item.number - cartNumber });
-        }
-      });
+      const skus = getEndData(getStartData(detail.detailResults), detail.allocationCartResults);
 
       switch (detail.type) {
         case 'allocation':
@@ -135,6 +94,7 @@ const SelectStoreHouse = () => {
         default:
           break;
       }
+
     },
   });
 
@@ -154,18 +114,18 @@ const SelectStoreHouse = () => {
       <User id={user.id} title='负责人' name={user.name} onChange={(id, name) => {
         setUser({ id, name });
       }} />
-      <MyCard hidden={data.length === 0} title={params.distribution}>
+      <MyCard hidden={data.length === 0} title='待分配物料'>
         {
           data.map((item, index) => {
-            const outName = ToolUtil.isObject(item.positionsResult).name;
-            const inName = ToolUtil.isObject(item.toPositionsResult).name;
+
+            const brands = item.brands || [];
+
             return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
               <div className={style.sku}>
                 <SkuItem
                   skuResult={item.skuResult}
                   otherData={[
-                    item.brandName || '任意品牌',
-                    <PositionShow outPositionName={outName} inPositionName={inName} />,
+                    item.haveBrand ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
                   ]}
                   extraWidth='140px'
                 />
@@ -177,7 +137,7 @@ const SelectStoreHouse = () => {
                 />
                 <Button color='primary' fill='outline' onClick={() => {
                   setVisible(item);
-                }}>选择仓库</Button>
+                }}>分配</Button>
               </div>
             </div>;
           })
@@ -190,8 +150,6 @@ const SelectStoreHouse = () => {
           return <MyCard key={index} title={params.storeHouseTitle} extra={item.name}>
             {
               skus.map((item, index) => {
-                const outName = ToolUtil.isObject(item.positionsResult).name;
-                const inName = ToolUtil.isObject(item.toPositionsResult).name;
                 return <div
                   key={index}
                   className={style.SkuItem}
@@ -202,15 +160,13 @@ const SelectStoreHouse = () => {
                       skuResult={item.skuResult}
                       otherData={[
                         item.brandName || '任意品牌',
-                        <PositionShow outPositionName={outName} inPositionName={inName} />,
                       ]}
                       extraWidth='140px'
                     />
                   </div>
                   <div className={style.newAction}>
                     <LinkButton
-                      color={item.allocationCartId ? 'danger' : 'default'}
-                      disabled={!item.allocationCartId}
+                      color='danger'
                       onClick={() => {
                         deleteRun({ data: { allocationCartId: item.allocationCartId } });
                       }}
@@ -225,7 +181,7 @@ const SelectStoreHouse = () => {
       }
     </div>
 
-    <Popup visible={visible} onMaskClick={() => setVisible(false)} destroyOnClose>
+    <MyAntPopup title={params.distribution} visible={visible} onClose={() => setVisible(false)} destroyOnClose>
       <Distribution
         skuItem={visible}
         out={params.out}
@@ -235,7 +191,7 @@ const SelectStoreHouse = () => {
           refresh();
         }}
       />
-    </Popup>
+    </MyAntPopup>
 
     <div className={style.bottom}>
       <div className={style.all}>
