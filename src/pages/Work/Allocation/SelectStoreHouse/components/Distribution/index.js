@@ -114,7 +114,7 @@ const Distribution = (
           edit({ data: { allocationId, skuId: skuItem.skuId, allocationCartParams, type: 'carry' } });
           return;
         }
-        // run({ data: { allocationId, allocationCartParams } });
+        run({ data: { allocationId, allocationCartParams } });
       }}
     />
 
