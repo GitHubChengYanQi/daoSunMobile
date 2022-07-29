@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../../components/MyLoading';
-import { Button, Picker } from 'antd-mobile';
+import { Picker } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
-import { LinkOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../ShopNumber';
 import style
   from '../../../../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/Prepare/index.less';
@@ -35,9 +34,6 @@ const StoreHouses = (
   const [selectStore, setSelectStore] = useState();
 
   const { loading: storeHouseLoaing, data: storeHouses } = useRequest(storeHouseSelect);
-
-  const storeIds = data.map(item => item.id);
-  const columns = ToolUtil.isArray(storeHouses).filter(item => !storeIds.includes(item.value));
 
   const change = (newData = []) => {
     let number = 0;
@@ -71,9 +67,13 @@ const StoreHouses = (
     return true;
   };
 
+  let checkedPosi = 0;
   const initBrands = [];
   brandAndPositions.length > 0 ? brandAndPositions.forEach(item => {
     if (item.show) {
+      const positions = item.positions || [];
+      const checkPositions = positions.filter(item => item.checked);
+      checkedPosi += checkPositions.length;
       initBrands.push({
         brandId: item.brandId,
         maxNumber: item.number,
@@ -89,6 +89,9 @@ const StoreHouses = (
     brandName: '任意品牌',
     checked: true,
   });
+
+  const storeIds = data.map(item => item.id);
+  const columns = ToolUtil.isArray(storeHouses).filter(item => (checkedPosi === 0 && item.value !== storehouseId) && !storeIds.includes(item.value));
 
   const { loading, run } = useRequest({ ...storehouse, params: { skuId } }, {
     manual: true,
@@ -200,7 +203,6 @@ const StoreHouses = (
     change(newData);
   };
 
-
   const brandChange = (params = {}, storehouseId, brandId, positionId) => {
     const newData = data.map(item => {
       if (item.id === storehouseId) {
@@ -240,23 +242,24 @@ const StoreHouses = (
     return <MyLoading skeleton />;
   }
 
-  const brandDom = ({ storehouseId, positionId, brands = [], maxNumber }) => {
+  const brandDom = ({ storehouseId, positionId, brands = [] }) => {
 
     return brands.map((brandItem, brandIndex) => {
 
       return <div
-        className={ToolUtil.classNames(style.brands, brandItem.checked && style.checked)}
+        style={{ backgroundColor: positionId && '#fff' }}
+        className={ToolUtil.classNames(style.brands, (!positionId && brandItem.checked) && style.checked)}
         key={brandIndex}>
         <div className={style.positionName} onClick={() => {
           brandChange({ checked: !brandItem.checked, number: 1 }, storehouseId, brandItem.brandId, positionId);
         }}>
-          <MyCheck checked={brandItem.checked} />
+          <MyCheck fontSize={16} checked={brandItem.checked} />
           <span>{brandItem.brandName}<span hidden={out}>({brandItem.maxNumber})</span></span>
         </div>
 
         <div hidden={!brandItem.checked}>
           <ShopNumber
-            max={brandItem.maxNumber}
+            max={out ? undefined : brandItem.maxNumber}
             min={1}
             value={brandItem.number || 0}
             onChange={(number) => {
@@ -269,9 +272,12 @@ const StoreHouses = (
 
   return <div className={style.action} style={{ padding: 0, overflow: 'visible' }}>
     <div className={style.storeHouseTitle}>
-      指定调{out ? '入' : '出'}库（位）{columns.length > 0 && <PlusCircleFilled onClick={() => {
-      setSelectStore(true);
-    }} />}
+      指定调{out ? '入' : '出'}库
+      <div className={style.select} hidden={columns.length === 0}>
+        选择<PlusCircleFilled onClick={() => {
+        setSelectStore(true);
+      }} />
+      </div>
     </div>
     {data.map((item, index) => {
 
@@ -279,21 +285,17 @@ const StoreHouses = (
 
       const positions = item.positions || [];
 
-      return <div key={index}>
-        <div className={style.storeItem}>
-          <Button
-            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
-            color={item.show ? 'primary' : 'default'}
-            fill='outline'
-            onClick={() => {
-              dataChange({ show: !item.show }, item.id);
-            }}
-          >
-            <LinkOutline /> {item.name} <span hidden={out}>({item.number})</span>
-          </Button>
+      return <div key={index} className={style.storehouse}>
+        <div className={style.storehouseItem}>
+          {item.name} <span hidden={out}>({item.number})</span>
+          <div className={style.remove}>
+            <MyRemoveButton onRemove={() => {
+              change(data.filter(store => store.id !== item.id));
+            }} />
+          </div>
         </div>
 
-        <div hidden={!item.show} className={style.allBrands}>
+        <div hidden={!item.show} className={ToolUtil.classNames(style.allBrands, style.content)}>
           {storehouseId === item.id ? <>
             {
               positions.map((positionItem, positionIndex) => {

@@ -29,22 +29,50 @@
   overflow: auto;
 
   .storeHouseTitle {
-    padding: 12px 0;
-    border-bottom: solid 1px #F5F5F5;
+    padding-bottom: 12px;
+    font-weight: bold;
 
-    svg {
-      color: var(--adm-color-primary);
-      font-size: 15px;
+    .select {
+      float: right;
+      font-weight: normal;
+
+      svg {
+        color: var(--adm-color-primary);
+        font-size: 15px;
+        margin-left: 4px;
+      }
     }
+  }
+
+  .storehouse {
+    border: 1px solid var(--body--background--color);
+    margin-bottom: 12px;
   }
 
   .storeItem {
     display: flex;
     align-items: center;
+    margin-bottom: 12px;
 
     button {
-      margin-right: 12px;
+      margin: 0 16px 0 0;
+      padding: 0;
+      height: 30px;
       width: 50vw;
+    }
+
+    .number {
+      height: 30px;
+      line-height: 30px;
+    }
+  }
+
+  .storehouseItem {
+    padding: 12px;
+    border-bottom: 1px solid var(--body--background--color);
+
+    .remove {
+      float: right;
     }
   }
 
@@ -62,9 +90,13 @@
 .allBrands {
   padding: 6px 0;
 
+  .storeBrands {
+    border: 1px solid var(--body--background--color);
+    margin-bottom: 8px;
+  }
   .storeBrandItem {
-    padding: 0 8px 8px;
-    border-bottom: solid 1px #ccc;
+    padding: 8px;
+    background-color: var(--body--background--color);
     display: flex;
     align-items: center;
 
@@ -74,19 +106,20 @@
   }
 
   .storeBrandPositions {
-    padding: 8px 0;
+    //padding: 8px 0;
   }
 
   .brands {
     background-color: var(--body--background--color);
     display: flex;
     padding: 0 8px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     align-items: center;
     font-size: 14px;
     border-radius: 2px;
     gap: 8px;
-    height: 32px;
+    height: 36px;
+    //line-height: 36px;
 
     .positionName {
       flex-grow: 1;
@@ -102,6 +135,10 @@
   .checked {
     border: solid 1px var(--adm-color-primary);
   }
+}
+
+.content {
+  padding: 12px;
 }
 
 .count {

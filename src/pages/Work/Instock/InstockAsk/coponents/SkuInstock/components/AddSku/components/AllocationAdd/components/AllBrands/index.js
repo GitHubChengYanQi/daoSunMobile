@@ -74,7 +74,7 @@ const AllBrands = (
 
   return <>
 
-    <div className={style.allBrands}>
+    <div className={style.allBrands} style={{padding:0}}>
       {
         positions.map((positionItem, positionIndex) => {
 

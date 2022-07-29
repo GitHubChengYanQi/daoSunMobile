@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import style from './index.less';
 import MyKeybord from '../../../../../../../components/MyKeybord';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ShopNumber = (
   {
@@ -11,6 +12,7 @@ const ShopNumber = (
     show,
     min = 1,
     max = 999999999,
+    className,
   },
 ) => {
 
@@ -19,7 +21,7 @@ const ShopNumber = (
   return <>
     <div className={style.shopNumber}>
       <div
-        className={style.number}
+        className={ToolUtil.classNames(style.number,className)}
         style={{ border: show && 'none', padding: show && 0, textAlign }}
         onClick={() => {
           if (!show) {

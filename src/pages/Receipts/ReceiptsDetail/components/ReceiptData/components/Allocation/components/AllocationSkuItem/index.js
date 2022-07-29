@@ -11,6 +11,7 @@ import View from './components/View';
 const AllocationSkuItem = (
   {
     item,
+    out,
   },
 ) => {
 
@@ -48,7 +49,7 @@ const AllocationSkuItem = (
     </div>
 
     <MyAntPopup title='申请详情' visible={view} onClose={() => setView(false)}>
-      <View sku={item} />
+      <View out={out} sku={item} />
     </MyAntPopup>
   </div>;
 };

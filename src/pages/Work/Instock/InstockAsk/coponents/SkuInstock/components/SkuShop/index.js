@@ -65,6 +65,14 @@ const SkuShop = (
     manual: true,
     onSuccess: (res) => {
       setSkus(ToolUtil.isArray(res).map((item) => {
+
+        let allocationJson = {};
+        try {
+          allocationJson = JSON.parse(item.allocationJson || '');
+        } catch (e) {
+
+        }
+
         return {
           cartId: item.cartId,
           skuId: item.skuId,
@@ -82,7 +90,7 @@ const SkuShop = (
               number: item.number,
             };
           }),
-          allocationJson: JSON.parse(item.allocationJson),
+          allocationJson,
         };
       }));
     },
@@ -151,7 +159,7 @@ const SkuShop = (
           title: '调拨任务明细',
           type: query.storeHouse + (query.askType === 'moveLibrary' ? '移库' : (query.allocationType === 'out' ? '调出' : '调入')),
           otherData: [
-            brands.length > 0 ?  brands.filter(item=>item.show).map(item => item.brandName).join(' / ') : '任意品牌',
+            brands.length > 0 ? brands.filter(item => item.show).map(item => item.brandName).join(' / ') : '任意品牌',
             <LinkButton onClick={() => setAllocationView({
               cartId: item.cartId,
               ...item.skuResult,
@@ -159,7 +167,6 @@ const SkuShop = (
               allocationJson: item.allocationJson,
             })}>查看详情</LinkButton>,
           ],
-          numberHidden: query.askType === 'moveLibrary',
           min: 1,
           show: true,
         };

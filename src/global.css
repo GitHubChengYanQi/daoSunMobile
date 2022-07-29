@@ -27,6 +27,11 @@ body {
   --adm-font-size-main: 14px;
 }
 
+.numberBlue {
+  padding: 0 4px;
+  color: var(--adm-color-primary);
+}
+
 .blue {
   color: var(--adm-color-primary);
 }

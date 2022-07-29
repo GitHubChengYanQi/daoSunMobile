@@ -305,6 +305,8 @@ const SkuError = (
 
           const handle = !confirm || item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
 
+          console.log(handle , !permissions);
+
           if (forward && item.userId !== userInfo.id) {
             return null;
           }

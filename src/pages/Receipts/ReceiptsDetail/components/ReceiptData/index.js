@@ -80,6 +80,7 @@ const ReceiptData = (
           permissions={permissions}
           getAction={getAction}
           data={data.receipts}
+          refresh={refresh}
         />;
       default:
         return <MyEmpty />;

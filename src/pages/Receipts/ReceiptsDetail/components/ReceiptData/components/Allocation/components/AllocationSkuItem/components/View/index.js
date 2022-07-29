@@ -5,9 +5,10 @@ import ShopNumber
 import style from './index.less';
 import { Divider } from 'antd-mobile';
 
-const View = ({ sku = {} }) => {
+const View = ({ out, sku = {} }) => {
 
   const brands = sku.brands || [];
+  const storeHouse = sku.storeHouse || [];
 
   return <div className={style.view}>
     <div className={style.skuItem}>
@@ -20,15 +21,64 @@ const View = ({ sku = {} }) => {
         ]} />
       <ShopNumber show value={sku.number} />
     </div>
-    <div>
+    <div className={style.content}>
       <Divider contentPosition='left'>{sku.haveBrand ? '指定品牌' : '任意品牌'}</Divider>
       {
-        [].map((item, index) => {
+        brands.map((item, index) => {
+          const positions = item.positions || [];
           return <div key={index} className={style.brandItem}>
-            <div>
-              <div>{item.brandName}</div>
-              <div><ShopNumber show value={item.number} /></div>
+            <div className={style.brandName}>
+              {sku.haveBrand ? (item.brandName || '无品牌') : '任意品牌'}
+              <div className={style.number}>× {item.number}</div>
             </div>
+            {
+              positions.map((item, index) => {
+                return <div key={index} className={style.positionName}>
+                  {item.name}
+                  <div className={style.number}>× {item.number}</div>
+                </div>;
+              })
+            }
+          </div>;
+        })
+      }
+      <Divider contentPosition='left'>{out ? '指定调入' : '指定调出'}</Divider>
+      {
+        storeHouse.map((item, index) => {
+          const positions = item.positions || [];
+          const brands = item.brands || [];
+          return <div key={index} className={style.brandItem}>
+            <div className={style.brandName}>
+              {item.name}
+              <div className={style.number}>× {item.number}</div>
+            </div>
+            {
+              positions.length > 0 ?
+                positions.map((item, index) => {
+                  const brands = item.brands || [];
+                  return <div key={index} className={style.brandItem} style={{ margin: 12 }}>
+                    <div className={style.brandName}>
+                      {item.name}
+                      <div className={style.number}>× {item.number}</div>
+                    </div>
+                    {
+                      brands.map((item, index) => {
+                        return <div key={index} className={style.positionName}>
+                          {item.brandName || '无品牌'}
+                          <div className={style.number}>× {item.number}</div>
+                        </div>;
+                      })
+                    }
+                  </div>;
+                })
+                :
+                brands.map((item, index) => {
+                  return <div key={index} className={style.positionName}>
+                    {item.brandName || '无品牌'}
+                    <div className={style.number}>× {item.number}</div>
+                  </div>;
+                })
+            }
           </div>;
         })
       }

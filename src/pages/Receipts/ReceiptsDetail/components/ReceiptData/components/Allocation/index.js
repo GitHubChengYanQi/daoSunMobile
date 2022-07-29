@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import MyCard from '../../../../../../components/MyCard';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { useBoolean } from 'ahooks';
-import { Divider } from 'antd-mobile';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
-import Title from '../../../../../../components/Title';
-import LinkButton from '../../../../../../components/LinkButton';
-import MyAntPopup from '../../../../../../components/MyAntPopup';
-import MyEmpty from '../../../../../../components/MyEmpty';
-import Viewpager from '../InstockOrder/components/Viewpager';
-import AllocationSkuItem from './components/AllocationSkuItem';
+import { getEndData, getStartData, getStoreHouse } from './getData';
+import { UserName } from '../../../../../../components/User';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
-import { getEndData, getStartData } from './getData';
+import Detail from './components/Detail';
 
 const Allocation = (
   {
@@ -23,6 +16,8 @@ const Allocation = (
 
     },
     permissions,
+    refresh = () => {
+    },
   },
 ) => {
 
@@ -30,83 +25,105 @@ const Allocation = (
 
   const [total, setTotal] = useState(0);
 
-  const [allSku, { toggle }] = useBoolean();
-
   const assign = getAction('assign').id && permissions;
   const carryAllocation = getAction('carryAllocation').id && permissions;
 
-  const [detailShow, setDetailShow] = useState();
-
-  const [visible, setVisible] = useState();
-
   const [skus, setSkus] = useState([]);
 
+  const [hopeList, setHopeList] = useState([]);
+  const [askList, setAskList] = useState([]);
+  const [inLibraryList, setInLibraryList] = useState([]);
+  const [noDistributionList, setNoDistributionList] = useState([]);
+
+  const out = data.allocationType !== 1;
 
   useEffect(() => {
-    const skus = getEndData(getStartData(data.detailResults), data.allocationCartResults);
-    setSkus(skus);
+    const detail = data || {};
+    const askSkus = getStartData(detail.detailResults);
+
+    const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
+    const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
+
+    const distributionSkuIds = carry.map(item => item.skuId);
+
+    const hopeSkus = getEndData(askSkus, hope);
+    const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
+
+    const noDistribution = hopeSkus.filter(item => !distributionSkuIds.includes(item.skuId));
+
+    const inLibrary = [];
+    distributionSkus.forEach(item => {
+      const brands = item.brands || [];
+      const storeHouse = item.storeHouse || [];
+
+      const positionBrands = [];
+      storeHouse.forEach(storeItem => {
+        const positions = storeItem.positions || [];
+        positions.forEach(positionItem => {
+          const brands = positionItem.brands || [];
+          brands.forEach(brandItem => {
+            positionBrands.push({
+              ...positionItem,
+              brandId: brandItem.brandId || 0,
+              brandName: brandItem.brandName,
+              number: brandItem.number,
+              storehouseId: storeItem.id,
+              posiId: positionItem.id,
+            });
+          });
+        });
+      });
+
+      brands.forEach(brandItem => {
+        const positions = brandItem.positions || [];
+        positions.forEach(positionItem => {
+          const inLibraryList = positionBrands.filter(item => {
+            return item.haveBrand ? item.brandId === brandItem.brandId : true;
+          });
+          inLibraryList.forEach(inItem => {
+            inLibrary.push({
+              ...inItem,
+              skuId: item.skuId,
+              skuResult: item.skuResult,
+              positionId: !out ? positionItem.id : inItem.id,
+              positionName: !out ? positionItem.name : inItem.name,
+              toPositionId: out ? positionItem.id : inItem.id,
+              toPositionName: out ? positionItem.name : inItem.name,
+            });
+          });
+        });
+      });
+    });
+
+    const stores = getStoreHouse(distributionSkus);
+
+    setAskList(hopeSkus);
+    setHopeList(stores);
+    setInLibraryList(inLibrary);
+    setNoDistributionList(noDistribution);
+
+    setSkus(carryAllocation ? distributionSkus : hopeSkus);
     let number = 0;
-    skus.forEach(item => number += item.number);
+    askSkus.forEach(item => number += item.number);
     setTotal(number);
   }, []);
 
   return <>
-    <MyCard
-      titleBom={<div className={style.header}>
-        <Title>任务明细</Title>
-        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
-          setDetailShow(true);
-        }}>详情</LinkButton>
-      </div>}
-      className={style.cardStyle}
-      headerClassName={style.headerStyle}
-      bodyClassName={style.bodyStyle}
-      extra={<div className={style.extra}>
-        合计：
-        <div>{skus.length}</div>类
-        <div hidden={!total}><span>{total}</span>件</div>
-      </div>}>
-      {
-        skus.map((item, index) => {
 
-          if (!allSku && index >= 3) {
-            return null;
-          }
+    <Detail
+      carts={data.allocationCartResults || []}
+      skus={skus}
+      carryAllocation={carryAllocation}
+      total={total}
+      hopeList={hopeList}
+      askList={askList}
+      inLibraryList={inLibraryList}
+      noDistributionList={noDistributionList}
+      out={out}
+      refresh={refresh}
+    />
 
-          return <AllocationSkuItem
-            item={item}
-            key={index}
-          />;
-
-          return <div key={index}>
-            <Viewpager
-              currentIndex={index}
-              onLeft={() => {
-                setVisible(true);
-              }}
-              onRight={() => {
-                setVisible(true);
-              }}
-            >
-              <AllocationSkuItem item={item} key={index} />
-            </Viewpager>
-          </div>;
-        })
-      }
-      {skus.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
-    </MyCard>
-
+    <MyCard hidden={!data.userId} title='负责人' extra={<UserName />} />
     <MyCard title='申请类型' extra={data.type === 'allocation' ? '调拨' : '移库'} />
     <MyCard title='调拨类型' extra={data.allocationType === 2 ? '调出' : '调入'} />
     <MyCard title='仓库' extra='无' />
@@ -134,24 +151,6 @@ const Allocation = (
         })} />
       </div>
     </MyCard>
-
-    <MyAntPopup
-      title={carryAllocation ? '调拨申请' : '调拨详情'}
-      onClose={() => {
-        setDetailShow(false);
-      }}
-      visible={detailShow}
-      destroyOnClose
-    >
-      {/*<div className={style.details}>*/}
-      {/*  {showList.length === 0 && <MyEmpty />}*/}
-      {/*  {*/}
-      {/*    showList.map((item, index) => {*/}
-      {/*      return <AllocationSkuItem item={item} key={index} />;*/}
-      {/*    })*/}
-      {/*  }*/}
-      {/*</div>*/}
-    </MyAntPopup>
 
     {assign && <BottomButton
       only

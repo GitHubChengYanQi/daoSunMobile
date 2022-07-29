@@ -5,15 +5,17 @@ export const getStartData = (startData = []) => {
   startData.forEach(item => {
     const skuIds = skus.map(item => item.skuId);
     const skuIndex = skuIds.indexOf(item.skuId);
+    const haveBrand = item.haveBrand === 1;
     if (skuIndex === -1) {
       skus.push({
-        haveBrand: item.haveBrand,
+        haveBrand: haveBrand,
         skuId: item.skuId,
         number: item.number,
         storehouseId: item.storehouseId,
         skuResult: item.skuResult,
         brands: [{
-          brandId: item.brandId,
+          show: true,
+          brandId: !haveBrand ? null : item.brandId,
           brandName: ToolUtil.isObject(item.brandResult).brandName,
           number: item.number,
           positions: item.storehousePositionsId ? [{
@@ -30,9 +32,12 @@ export const getStartData = (startData = []) => {
       const brands = sku.brands;
       if (brandIndex === -1) {
         brands.push({
-          skuId: item.skuId,
+          show: true,
+          brandId: !haveBrand ? null : item.brandId,
+          brandName: ToolUtil.isObject(item.brandResult).brandName,
           number: item.number,
           positions: item.storehousePositionsId ? [{
+            checked: true,
             id: item.storehousePositionsId,
             name: ToolUtil.isObject(item.positionsResult).name,
             number: item.number,
@@ -44,6 +49,7 @@ export const getStartData = (startData = []) => {
           ...brand,
           number: item.number + brand.number,
           positions: [...brand.positions, {
+            checked: true,
             id: item.storehousePositionsId,
             name: ToolUtil.isObject(item.positionsResult).name,
             number: item.number,
@@ -60,7 +66,8 @@ export const getStartData = (startData = []) => {
   return skus;
 };
 
-export const getEndData = (skus = [], endData = []) => {
+export const getEndData = (array = [], endData = []) => {
+  const skus = array.filter(item => true);
   endData.forEach(item => {
     const skuIds = skus.map(item => item.skuId);
     const skuIndex = skuIds.indexOf(item.skuId);
@@ -84,9 +91,10 @@ export const getEndData = (skus = [], endData = []) => {
               number: item.number,
               brands: [{
                 brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName,
+                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
                 number: item.number,
                 checked: true,
+                maxNumber: item.number,
               }],
             });
           } else {
@@ -96,17 +104,20 @@ export const getEndData = (skus = [], endData = []) => {
               number: item.number + position.number,
               brands: [...position.brands, {
                 brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName,
+                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
                 number: item.number,
+                checked: true,
+                maxNumber: item.number,
               }],
             };
           }
         } else {
           brands.push({
             brandId: item.brandId,
-            brandName: ToolUtil.isObject(item.brandResult).brandName,
+            brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
             number: item.number,
             checked: true,
+            maxNumber: item.number,
           });
         }
         storeHouse[storeIndex] = {
@@ -123,9 +134,10 @@ export const getEndData = (skus = [], endData = []) => {
           show: true,
           brands: !snameStore ? [{
             brandId: item.brandId,
-            brandName: ToolUtil.isObject(item.brandResult).brandName,
+            brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
             number: item.number,
             checked: true,
+            maxNumber: item.number,
           }] : [],
           positions: snameStore ? [{
             id: item.storehousePositionsId,
@@ -133,9 +145,10 @@ export const getEndData = (skus = [], endData = []) => {
             number: item.number,
             brands: [{
               brandId: item.brandId,
-              brandName: ToolUtil.isObject(item.brandResult).brandName,
+              brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
               number: item.number,
               checked: true,
+              maxNumber: item.number,
             }],
           }] : [],
         });
@@ -147,4 +160,39 @@ export const getEndData = (skus = [], endData = []) => {
     }
   });
   return skus;
+};
+
+export const getStoreHouse = (distributionSkus=[]) => {
+  const stores = [];
+  distributionSkus.forEach(item => {
+    const storeHouse = item.storeHouse || [];
+    storeHouse.forEach(storeItem => {
+      const storeIds = stores.map(item => item.id);
+      const storeIndex = storeIds.indexOf(storeItem.id);
+      if (storeIndex === -1) {
+        stores.push({
+          id: storeItem.id,
+          name: storeItem.name,
+          skus: [{
+            ...item,
+            number: storeItem.number,
+            storeBrands: storeItem.brands,
+            storePositions: storeItem.positions,
+          }],
+        });
+      } else {
+        const store = stores[storeIndex];
+        stores[storeIndex] = {
+          ...store,
+          skus: [...store.skus, {
+            ...item,
+            number: storeItem.number,
+            storeBrands: storeItem.brands,
+            storePositions: storeItem.positions,
+          }],
+        };
+      }
+    });
+  });
+  return stores;
 };

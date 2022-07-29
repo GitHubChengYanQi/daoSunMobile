@@ -114,6 +114,7 @@ const FixedBrand = (
           </Button>
           {item.show &&
           <ShopNumber
+            className={style.number}
             show={positionCheckeds.length > 0}
             max={out ? item.num : undefined}
             value={item.number}
@@ -123,7 +124,7 @@ const FixedBrand = (
 
         </div>
 
-        <div hidden={!item.show} className={style.allBrands}>
+        <div hidden={!item.show} className={style.allBrands} style={{padding:0,paddingBottom:24}}>
           {
             positions.map((positionItem, positionIndex) => {
 
@@ -138,7 +139,7 @@ const FixedBrand = (
                     positionChange({ checked: false, outStockNumber: 0 }, item.brandId, positionIndex);
                   }
                 }}>
-                  <MyCheck checked={positionItem.checked} />
+                  <MyCheck fontSize={16} checked={positionItem.checked} />
                   <span>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
                 </div>
 
