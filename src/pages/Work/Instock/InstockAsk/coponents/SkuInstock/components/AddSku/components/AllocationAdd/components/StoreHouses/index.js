@@ -91,7 +91,12 @@ const StoreHouses = (
   });
 
   const storeIds = data.map(item => item.id);
-  const columns = ToolUtil.isArray(storeHouses).filter(item => (checkedPosi === 0 && item.value !== storehouseId) && !storeIds.includes(item.value));
+  const columns = ToolUtil.isArray(storeHouses).filter(item => {
+    if (checkedPosi === 0) {
+      return item.value !== storehouseId;
+    }
+    return !storeIds.includes(item.value);
+  });
 
   const { loading, run } = useRequest({ ...storehouse, params: { skuId } }, {
     manual: true,
