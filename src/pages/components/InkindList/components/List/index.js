@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MySearch from '../../../MySearch';
 import { ScanIcon } from '../../../Icon';
 import MyList from '../../../MyList';
@@ -78,9 +78,13 @@ const List = (
     });
   }, []);
 
+  const [searchValue, setSearchValue] = useState();
+
   return <>
     <MySearch
       className={style.search}
+      value={searchValue}
+      onChange={setSearchValue}
       searchIcon={<ScanIcon onClick={() => {
         props.dispatch({
           type: 'qrCode/wxCpScan',
