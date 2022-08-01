@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import MyList from '../../components/MyList';
-import { startList } from '../ProcessTask/ProcessList';
 import OutStockItem from '../Stock/Task/components/OutStockTask/components/OutStockItem';
 import { ReceiptsEnums } from '../../Receipts';
 import { useModel } from 'umi';
+
+const list = { url: '/productionPickLists/selfPickTasks', method: 'POST' };
 
 const MyPicking = () => {
 
@@ -19,10 +20,10 @@ const MyPicking = () => {
   return <div className={style.myPicking}>
     <MyNavBar title='领料中心' />
     <MyList
-      api={startList}
+      api={list}
       data={data}
       getData={setData}
-      params={{ auditType:'audit', statusList: ['0'], type:ReceiptsEnums.outstockOrder,userId:userInfo.id}}
+      params={{ auditType: 'audit', statusList: ['0'], type: ReceiptsEnums.outstockOrder, userId: userInfo.id }}
     >
       {
         data.map((item, index) => {
