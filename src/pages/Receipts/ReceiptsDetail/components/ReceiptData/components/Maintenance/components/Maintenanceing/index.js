@@ -27,24 +27,21 @@ const Maintenanceing = (
   const inkindRef = useRef();
 
   const [brands, setBrands] = useState([]);
-  console.log(brands);
 
   const completeBrands = brands.filter(item => item.checked && item.curingNumber > 0);
+
+  const [complete, setComplete] = useState([]);
 
   const { loading: maintenanceLogLoading, run: maintenanceLogRun } = useRequest(maintenanceLogAdd,
     {
       manual: true,
       onSuccess: () => {
         Message.successToast('养护成功！', () => {
+          inkindRef.current.close();
           onSuccess({
             positionId: skuItem.positionId,
             skuId: skuItem.skuId,
-            brands: completeBrands.map(item => {
-              return {
-                brandId: item.brandId,
-                number: item.curingNumber,
-              };
-            }),
+            brands: complete,
           });
         });
       },
@@ -79,19 +76,18 @@ const Maintenanceing = (
     setBrands(newBrands);
   };
 
-  const submit = (completeBrands) => {
+  const submit = (maintenanceLogParams) => {
+    setComplete(maintenanceLogParams.map(item => {
+      return {
+        brandId: item.brandId,
+        number: item.number,
+      };
+    }));
     maintenanceLogRun({
       data: {
         maintenanceId,
         enclosure: files,
-        maintenanceLogParams: completeBrands.map(item => {
-          return {
-            brandId: item.brandId,
-            storehousePositionsId: skuItem.positionId,
-            skuId: skuItem.skuId,
-            number: item.curingNumber,
-          };
-        }),
+        maintenanceLogParams,
       },
     });
   };
@@ -174,7 +170,14 @@ const Maintenanceing = (
     />
 
     <BottomButton disabled={completeBrands.length === 0} only onClick={() => {
-      submit(completeBrands);
+      submit(completeBrands.map(item => {
+        return {
+          brandId: item.brandId,
+          storehousePositionsId: skuItem.positionId,
+          skuId: skuItem.skuId,
+          number: item.curingNumber,
+        };
+      }));
     }} />
 
     {maintenanceLogLoading && <MyLoading />}

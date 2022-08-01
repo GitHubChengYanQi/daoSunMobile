@@ -68,7 +68,7 @@ const InkindItem = (
                 入库时间：{MyDate.Show(inkindItem.createTime)}
               </div>
               <div>
-                <UserName />
+                <UserName user={inkindItem.user} />
               </div>
             </div>
           </div>

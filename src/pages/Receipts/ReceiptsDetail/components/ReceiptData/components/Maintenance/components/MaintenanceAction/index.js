@@ -48,6 +48,8 @@ const MaintenanceAction = (
                 complete += item.doneNumber;
               });
 
+              const percent = parseInt((complete / total) * 100);
+
               return <div key={skuIndex} className={style.skuAction}>
                 <div
                   className={style.sku}
@@ -62,7 +64,7 @@ const MaintenanceAction = (
                       }).join(' 、 ')]}
                     />
                   </div>
-                  <div hidden={show} className={style.info}>
+                  <div hidden={show || percent === 100} className={style.info}>
                     <Button
                       color='primary'
                       fill='outline'
@@ -93,7 +95,7 @@ const MaintenanceAction = (
                     format={(number) => {
                       return <span className={style.blue}>{number + '%'}</span>;
                     }}
-                    percent={parseInt((complete / total) * 100)}
+                    percent={percent}
                   />
                 </div>
               </div>;

@@ -14,14 +14,10 @@ import UploadFile from '../../../../../../../../../../components/Upload/UploadFi
 import { AddButton } from '../../../../../../../../../../components/MyButton';
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import ShowCode from '../../../../../../../../../../components/ShowCode';
-import MyAntPopup from '../../../../../../../../../../components/MyAntPopup';
-import CodeNumber from '../../../../../../../../../../Work/OutStockConfirm/CodeNumber';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import React, { useState } from 'react';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
-import { getInkInd } from '../../index';
 import InkindList from '../../../../../../../../../../components/InkindList';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
@@ -49,26 +45,6 @@ const ErrorDom = (
     batch,
     inkindRef,
   }) => {
-
-  const [selectInkind, setSelectInkind] = useState([]);
-
-  const { loading: stockInkindsLoading, run: getStockInkinbs } = useRequest(stockInkinds, {
-    manual: true,
-    onSuccess: (res) => {
-      const array = res || [];
-      if (array.length === 0) {
-        Message.toast('暂无库存！');
-        return;
-      }
-      setSelectInkind(array.map(item => {
-        return {
-          label: item.orCodeId,
-          value: item.formId,
-          number: item.num || 1,
-        };
-      }));
-    },
-  });
 
   const { loading: addInkindLoading, run: addInkindRun } = useRequest(autoAddInkind, {
     manual: true,

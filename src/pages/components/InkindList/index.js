@@ -18,7 +18,6 @@ const InkindList = (
   const [visible, setVisible] = useState();
 
   const [skuInfo, setSkuInfo] = useState({});
-  console.log(skuInfo);
 
   const [data, setData] = useState([]);
 
