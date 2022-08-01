@@ -100,7 +100,7 @@ const StartMaintenance = () => {
       setData={setData}
       actionPermissions
       maintenanceId={query.id}
-    />;
+    />
   </div>;
 };
 

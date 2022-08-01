@@ -22,6 +22,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
 import { getInkInd } from '../../index';
+import InkindList from '../../../../../../../../../../components/InkindList';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
 export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: 'POST' };
@@ -42,13 +43,11 @@ const ErrorDom = (
     onClose,
     show,
     inkinds,
-    showCodeRef,
     setInkinds,
     inkinsChange,
     type,
-    setGetInkind,
     batch,
-    getInkind,
+    inkindRef,
   }) => {
 
   const [selectInkind, setSelectInkind] = useState([]);
@@ -74,18 +73,12 @@ const ErrorDom = (
   const { loading: addInkindLoading, run: addInkindRun } = useRequest(autoAddInkind, {
     manual: true,
     onSuccess: (res) => {
-      addInkind(res.formId, res.orCodeId, 1);
-    },
-  });
-
-  const { loading: getInkindLoading, run: getInkindRun } = useRequest(getInkInd, {
-    manual: true,
-    onSuccess: (res) => {
-      if (!res) {
-        Message.errorToast('实物码不正确！');
-        return;
-      }
-      addInkind(res.inkindId, res.qrCodeId, res.number);
+      const newInkinds = [{
+        inkindId: res.formId,
+        codeId: res.orCodeId,
+        number: 1,
+      }];
+      addInkind(newInkinds);
     },
   });
 
@@ -95,27 +88,26 @@ const ErrorDom = (
       manual: true,
       onSuccess: (res) => {
         const inkind = res[0] || {};
-        addInkind(inkind.inkindId, inkind.codeId, 1);
+        const newInkinds = [{
+          inkindId: inkind.inkindId,
+          codeId: inkind.codeId,
+          number: 1,
+        }];
+        addInkind(newInkinds);
       },
     },
   );
 
-  const addInkind = (inkindId, codeId, number) => {
-    if (!inkindId) {
-      Message.errorToast('实物码不正确！');
-      return;
-    }
+  const addInkind = (newInkinds = []) => {
     const ids = inkinds.map(item => item.inkindId);
-    if (ids.includes(inkindId)) {
+    const newIds = newInkinds.map(item => item.inkindId);
+    const exist = ids.filter(id => newIds.includes(id));
+    if (exist.length > 0) {
       Message.errorToast('请勿重复添加实物！');
       return;
     }
-    setInkinds([...inkinds, {
-      codeId,
-      inkindId,
-      number,
-    }]);
-    setGetInkind(false);
+    setInkinds([...inkinds, ...newInkinds]);
+    inkindRef.current.close();
   };
 
   return <>
@@ -191,7 +183,7 @@ const ErrorDom = (
               <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
             </div>}
             extra={<Space>
-              <LinkButton onClick={() => showCodeRef.current.openCode(item.codeId)}><SystemQRcodeOutline /></LinkButton>
+              <ShowCode code={item.codeId} />
               {!show && <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;
@@ -284,7 +276,12 @@ const ErrorDom = (
               });
               break;
             case ReceiptsEnums.stocktaking:
-              setGetInkind(true);
+              inkindRef.current.open({
+                skuId: sku.skuId,
+                brandId: sku.brandId,
+                positionId: sku.positionId,
+                skuResult,
+              });
               break;
             default:
               break;
@@ -293,84 +290,33 @@ const ErrorDom = (
       </div>
     </div>
 
-    <ShowCode ref={showCodeRef} />
-
-    <MyAntPopup
-      title='获取实物'
-      visible={getInkind}
-      onClose={() => setGetInkind(false)} className={style.getInkind}
-    >
-      <CodeNumber
-        inputSize={40}
-        spaceSize={5}
-        fontSize={14}
-        title='请输入实物码后6位'
-        codeNumber={6}
-        other={<div className={style.otehrActions}>
-          <LinkButton onClick={() => {
-            getStockInkinbs({
-              data: {
-                skuId: sku.skuId,
-                brandId: sku.brandId,
-                customerId: sku.customerId,
-                positionId: sku.positionId,
-                // number:'1',
-              },
-            });
-          }}>查询已有实物码</LinkButton>
-          <LinkButton onClick={() => {
-            addInkindRun({
-              data: {
-                skuId: sku.skuId,
-                brandId: sku.brandId,
-                customerId: sku.customerId,
-                positionId: sku.positionId,
-                number: 1,
-              },
-            });
-          }}>生成新的实物码</LinkButton>
-          {(stockInkindsLoading || addInkindLoading || getInkindLoading) && <MyLoading />}
-        </div>}
-        onSuccess={(code) => {
-          getInkindRun({
-            data: {
-              storehousePositionsId: sku.positionId,
-              skuId: sku.skuId,
-              brandId: sku.brandId,
-              inkind: code + '',
-            },
-          });
-        }}
-        onScanResult={(codeId, backObject = {}) => {
-          if (backObject.type === 'item') {
-            const inkind = backObject.inkindResult || {};
-            const details = ToolUtil.isObject(inkind.inkindDetail).stockDetails || {};
-            if (details.brandId === sku.brandId && details.skuId === sku.skuId && details.storehousePositionsId === sku.positionId) {
-              addInkind(inkind.inkindId, codeId, details.number);
-            } else {
-              Message.errorToast('请扫描正确的实物码！');
-            }
-          } else {
-            Message.errorToast('请扫描实物码！');
-          }
-        }}
-      />
-    </MyAntPopup>
-
-    <Picker
-      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
-      columns={[selectInkind]}
-      visible={selectInkind.length > 0}
-      onClose={() => {
-        setSelectInkind([]);
+    <InkindList
+      add
+      ref={inkindRef}
+      addInkind={() => {
+        addInkindRun({
+          data: {
+            skuId: sku.skuId,
+            brandId: sku.brandId,
+            customerId: sku.customerId,
+            positionId: sku.positionId,
+            number: 1,
+          },
+        });
       }}
-      onConfirm={(value, options) => {
-        const inkind = options.items[0] || {};
-        addInkind(inkind.value, inkind.label, inkind.number || 1);
+      onSuccess={(inkinds = []) => {
+        const newInkinds = inkinds.map(item => {
+          return {
+            inkindId: item.inkindId,
+            codeId: item.codeId,
+            number: item.number,
+          };
+        });
+        addInkind(newInkinds);
       }}
     />
 
-    {(CodeLoading) && <MyLoading />}
+    {(CodeLoading || addInkindLoading) && <MyLoading />}
   </>;
 };
 

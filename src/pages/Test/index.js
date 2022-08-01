@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import MyTextArea from '../components/MyTextArea';
+import React, { useRef } from 'react';
+import { ScanIcon } from '../components/Icon';
+import InkindList from '../components/InkindList';
 
 const Test = () => {
 
-  const [value, setValue] = useState();
+  const ref = useRef();
 
   return <div style={{ textAlign: 'center' }}>
-    <MyTextArea value={value} onChange={setValue} />
+    <ScanIcon onClick={() => {
+      ref.current.open({skuId:'1524235225068818433'});
+    }} />
+
+    <InkindList ref={ref} />
   </div>;
 };
 

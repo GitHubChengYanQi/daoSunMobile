@@ -22,7 +22,7 @@ export default {
       const userMenus = yield call(() => request({ url: '/mobelTableView/detail', method: 'GET' }));
       const newUserMenus = ToolUtil.isArray(userMenus.details).filter(item => {
         if (item.code === 'LogOut') {
-          return true;
+          return false;
         }
         let exist = false;
         sysMenus.forEach(menuItem => {

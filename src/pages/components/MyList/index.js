@@ -58,7 +58,7 @@ const MyList = (
       } else {
         setHasMore(false);
         if (pages === 1) {
-          getData([]);
+          getData([], []);
         }
       }
     },
@@ -73,7 +73,7 @@ const MyList = (
     setContents([]);
     setParams(value);
     setSorter(sorter);
-    getData([]);
+    getData([], []);
     await run({
       params: { limit, page: 1, sorter },
       data: value,

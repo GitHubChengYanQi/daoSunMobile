@@ -4,6 +4,7 @@ import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import { Progress } from 'antd';
 import Icon from '../../../../../components/Icon';
+import { ToolUtil } from '../../../../../components/ToolUtil';
 
 const TaskItem = (
   {
@@ -24,6 +25,8 @@ const TaskItem = (
     noSku,
     noPosition,
     noProgress,
+    statusName,
+    statusNameClassName,
   },
 ) => {
 
@@ -53,6 +56,9 @@ const TaskItem = (
     <div className={style.content}>
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
+          <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, statusNameClassName)}>
+            {statusName}
+          </div>
           <div className={style.show} style={{ border: noBorder && 'none' }}>
             <Icon type='icon-pandianwuliao' />
             <div className={style.showNumber}>

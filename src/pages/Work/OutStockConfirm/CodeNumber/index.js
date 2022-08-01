@@ -81,8 +81,11 @@ const CodeNumber = (
               >
                 {item.number}
               </div>
-              <div hidden={code.length === index + 1} className={style.space}
-                   style={{ margin: spaceSize, width: spaceSize }} />
+              <div
+                hidden={code.length === index + 1}
+                className={style.space}
+                style={{ margin: spaceSize, width: spaceSize }}
+              />
             </div>;
           })
         }

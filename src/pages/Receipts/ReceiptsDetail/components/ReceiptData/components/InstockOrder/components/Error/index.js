@@ -4,7 +4,7 @@ import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { Button, TextArea } from 'antd-mobile';
 import { AddOutline, CameraOutline } from 'antd-mobile-icons';
-import Icon from '../../../../../../../../components/Icon';
+import Icon, { ScanIcon } from '../../../../../../../../components/Icon';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { useModel } from 'umi';
@@ -65,7 +65,7 @@ const Error = (
 
   const [inkinds, setInkinds] = useState([]);
 
-  const [getInkind, setGetInkind] = useState();
+  const inkindRef = useRef();
 
   const error = sku.realNumber !== sku.number || inkinds.length > 0;
 
@@ -203,8 +203,6 @@ const Error = (
   const spuResult = skuResult.spuResult || {};
 
   const batch = skuResult.batch === 1;
-
-  const showCodeRef = useRef();
 
   const inkinsChange = (currentIndex, data) => {
     const newInkinds = inkinds.map((item, index) => {
@@ -385,7 +383,7 @@ const Error = (
                   setSku({ ...sku, realNumber });
                 }}
               />
-              <Icon type='icon-dibudaohang-saoma' onClick={() => {
+              <ScanIcon onClick={() => {
                 props.dispatch({
                   type: 'qrCode/wxCpScan',
                   payload: {
@@ -453,7 +451,7 @@ const Error = (
                   }}
                 />
                 <div style={{ flexGrow: 1, textAlign: 'right' }}>
-                  <Icon type='icon-dibudaohang-saoma' onClick={() => {
+                  <ScanIcon onClick={() => {
                     props.dispatch({
                       type: 'qrCode/wxCpScan',
                       payload: {
@@ -502,7 +500,12 @@ const Error = (
                 <Button
                   className={style.addError}
                   color='danger'
-                  onClick={() => setGetInkind(true)}
+                  onClick={() => inkindRef.current.open({
+                    skuId: sku.skuId,
+                    brandId: sku.brandId,
+                    positionId: sku.positionId,
+                    skuResult,
+                  })}
                 >
                   <AddOutline />
                 </Button>
@@ -547,13 +550,11 @@ const Error = (
       onClose={onClose}
       show={show}
       inkinds={inkinds}
-      showCodeRef={showCodeRef}
       setInkinds={setInkinds}
       inkinsChange={inkinsChange}
       type={type}
-      setGetInkind={setGetInkind}
       batch={batch}
-      getInkind={getInkind}
+      inkindRef={inkindRef}
     />
 
     {(

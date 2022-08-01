@@ -2,7 +2,7 @@ export default {
   define:{
     'process.env':{
       ENV:'ren',
-      api:'http://192.168.1.231',
+      api:'http://192.168.0.100',
       wxCp:'https://wx.daoxin.gf2025.com/cp/#/',
     }
   }

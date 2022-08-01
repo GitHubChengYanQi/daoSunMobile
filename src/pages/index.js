@@ -1,6 +1,6 @@
 import Home from './Home';
 import { TabBar } from 'antd-mobile';
-import Icon from './components/Icon';
+import Icon, { ScanIcon } from './components/Icon';
 import React, { useState } from 'react';
 import { connect } from 'dva';
 import style from './index.less';
@@ -73,9 +73,8 @@ const Index = (props) => {
           key='/Home'
           icon={(module === '/Home' && ToolUtil.isQiyeWeixin())
             ?
-            <Icon
+            <ScanIcon
               style={{ fontSize: iconSize }}
-              type='icon-dibudaohang-saoma'
               onClick={() => {
                 props.dispatch({
                   type: 'qrCode/wxCpScan',

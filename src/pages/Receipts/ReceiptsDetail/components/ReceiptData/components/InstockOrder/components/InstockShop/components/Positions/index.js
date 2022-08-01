@@ -6,7 +6,7 @@ import BottomButton from '../../../../../../../../../../components/BottomButton'
 import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import Icon from '../../../../../../../../../../components/Icon';
+import Icon, { ScanIcon } from '../../../../../../../../../../components/Icon';
 import { connect } from 'dva';
 import { Message } from '../../../../../../../../../../components/Message';
 
@@ -86,7 +86,7 @@ const Positions = (
 
     <MySearch
       id='positionSearch'
-      searchIcon={<Icon type='icon-dibudaohang-saoma' />}
+      searchIcon={<ScanIcon />}
       placeholder='搜索库位'
       onChange={setName}
       searchIconClick={() => {

@@ -1,8 +1,8 @@
 import React from 'react';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
+import { UserName } from '../../../../../../../components/User';
 
 const OutStockItem = (
   {
@@ -17,6 +17,10 @@ const OutStockItem = (
   };
 
   return <TaskItem
+    statusName={<>
+      可 <br />备 <br />料
+    </>}
+    statusNameClassName={item.canOperate ? style.backBlue : style.backEee}
     percent={parseInt((receipts.receivedCount / receipts.numberCount) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
@@ -29,7 +33,7 @@ const OutStockItem = (
     onClick={onClick}
     otherData={
       <div className={style.orderData}>
-        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '无'}</div>
+        <div className={style.user}>负责人：<UserName user={receipts.userResult} /></div>
       </div>}
   />;
 };

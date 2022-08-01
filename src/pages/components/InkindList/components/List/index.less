@@ -1,0 +1,68 @@
+.search {
+  padding: 0 12px;
+}
+
+.list {
+  padding: 12px;
+
+  .positionItem {
+    border-radius: 2px;
+    border: solid 1px var(--body--background--color);
+    margin-bottom: 12px;
+
+    .positionName {
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: solid 1px var(--body--background--color);
+    }
+
+    .inkindItem {
+      margin: 12px;
+      border-radius: 2px;
+      border: solid 1px var(--body--background--color);
+
+      .inkindData {
+        background-color: var(--body--background--color);
+        padding: 12px;
+        display: flex;
+        align-items: center;
+
+        .inkindId {
+          display: flex;
+          flex-grow: 1;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .brand {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+      }
+
+      .otherData {
+        padding: 8px 12px;
+        color: #666666;
+      }
+    }
+  }
+
+  .inkindList {
+    max-height: 50vh;
+    overflow: auto;
+    padding: 12px 0;
+  }
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+
+  .flexGrow {
+    flex-grow: 1;
+  }
+}
+

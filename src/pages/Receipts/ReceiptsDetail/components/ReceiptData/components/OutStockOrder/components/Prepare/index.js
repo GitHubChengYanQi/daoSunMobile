@@ -3,7 +3,7 @@ import style from './index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import Icon from '../../../../../../../../components/Icon';
+import Icon, { ScanIcon } from '../../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import { connect } from 'dva';
 import { Message } from '../../../../../../../../components/Message';
@@ -174,7 +174,7 @@ const Prepare = (
               action: 'outStock',
             },
           });
-        }}><Icon type='icon-dibudaohang-saoma' style={{ fontSize: 24 }} /></LinkButton>
+        }}><ScanIcon style={{ fontSize: 24 }} /></LinkButton>
       </div>
     </div>
     <div style={{ paddingBottom: 60 }}>

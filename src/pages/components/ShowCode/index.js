@@ -1,22 +1,19 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog } from 'antd-mobile';
 import jrQrcode from 'jr-qrcode';
 import PrintCode from '../PrintCode';
 import { ToolUtil } from '../ToolUtil';
+import { QrCodeIcon } from '../Icon';
 
-const ShowCode = ({ props }, ref) => {
+const ShowCode = ({ code }) => {
 
-  const [code, setCode] = useState();
+  const [open, setOpen] = useState();
 
-  const openCode = (code) => {
-    setCode(code);
-  };
-
-  useImperativeHandle(ref, () => ({ openCode }));
 
   return <>
+    <QrCodeIcon style={{color:'var(--adm-color-primary)'}} onClick={() => setOpen(code)} />
     <Dialog
-      visible={code}
+      visible={open}
       content={<div style={{ textAlign: 'center' }}>
         <img src={jrQrcode.getQrBase64(code)} alt='' />
       </div>}
@@ -27,7 +24,7 @@ const ShowCode = ({ props }, ref) => {
       onAction={(action) => {
         switch (action.key) {
           case 'close':
-            setCode('');
+            setOpen('');
             return;
           case 'print':
             PrintCode.print([`<img src={${jrQrcode.getQrBase64(code)}} alt='' />`], 0);
@@ -40,4 +37,4 @@ const ShowCode = ({ props }, ref) => {
   </>;
 };
 
-export default React.forwardRef(ShowCode);
+export default ShowCode;
