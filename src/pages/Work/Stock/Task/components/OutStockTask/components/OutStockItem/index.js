@@ -2,7 +2,7 @@ import React from 'react';
 import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
-import { UserName } from '../../../../../../../components/User';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const OutStockItem = (
   {
@@ -33,7 +33,7 @@ const OutStockItem = (
     onClick={onClick}
     otherData={
       <div className={style.orderData}>
-        <div className={style.user}>负责人：<UserName user={receipts.userResult} /></div>
+        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '无'}</div>
       </div>}
   />;
 };
