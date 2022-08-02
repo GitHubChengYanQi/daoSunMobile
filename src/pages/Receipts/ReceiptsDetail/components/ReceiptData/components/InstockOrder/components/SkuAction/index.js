@@ -139,8 +139,9 @@ const SkuAction = (
       },
     }).then(() => {
       addShopCart(imgUrl, `skuImg${index}`, () => {
-        waitShopRef.current.jump();
-        // refresh();
+        waitShopRef.current.jump(() => {
+          refresh();
+        });
         // itemChange({ status: 1 }, item.instockListId);
       });
     });

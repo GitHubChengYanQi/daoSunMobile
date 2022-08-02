@@ -19,7 +19,6 @@ const MyCheck = (
   return <LinkButton
     disabled={disabled}
     color='default'
-    style={{height:fontSize}}
     className={ToolUtil.classNames(className, style.check)}
     onClick={() => {
       onChange(!checked);

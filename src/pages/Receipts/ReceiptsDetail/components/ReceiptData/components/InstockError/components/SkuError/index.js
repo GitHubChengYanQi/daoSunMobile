@@ -155,7 +155,7 @@ const SkuError = (
   const { loading: editLoading, run: editRun } = useRequest(edit, {
     manual: true,
     onSuccess: () => {
-        refresh();
+      refresh();
     },
   });
 
@@ -233,6 +233,7 @@ const SkuError = (
                 data: {
                   anomalyId,
                   instockNumber: sku.instockNumber,
+                  status: 90,
                 },
               };
               saveRun(param).then(() => {
@@ -262,7 +263,7 @@ const SkuError = (
             }}>报损</Button>
           </>,
           bottom: permissions && !forward && <BottomButton disabled={!handle} only onClick={() => {
-            const param = { data: { anomalyId } };
+            const param = { data: { anomalyId, status: 90 } };
             saveRun(param).then(() => {
               onSuccess();
             });

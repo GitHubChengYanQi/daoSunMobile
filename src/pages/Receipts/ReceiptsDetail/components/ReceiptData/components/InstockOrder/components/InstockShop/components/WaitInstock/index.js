@@ -175,11 +175,13 @@ const WaitInstock = (
 
       <div className={style.bottom}>
         <div className={style.all}>
-          <MyCheck checked={allChecked} onChange={() => {
+          <MyCheck fontSize={14} checked={allChecked} onChange={() => {
             setInstockList(instockList.map(item => {
               return { ...item, checked: !allChecked };
             }));
-          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {inStockChecked.length} 类</span>
+          }} />
+          <span>{allChecked ? '取消全选' : '全选'}</span>
+          <span>已选中 {inStockChecked.length} 类</span>
         </div>
         <div className={style.buttons}>
           <Button color='danger' disabled={backSkus.length === 0} fill='outline' onClick={() => {

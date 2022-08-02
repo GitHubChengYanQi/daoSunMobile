@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useRef } from 'react';
 import style from './index.less';
-import { Button } from 'antd-mobile';
+import waitInstockShop from '../../../assets/waitInstockShop.png';
 
 const Bouncing = (
   {
@@ -12,11 +12,15 @@ const Bouncing = (
 
   const ballRef = useRef();
 
-  const jump = () => {
+  const jump = (
+    alter = () => {
+    },
+  ) => {
     const ball = ballRef.current;
     ball.classList.add(style.jump);
     ball.onanimationend = () => {
       ball.classList.remove(style.jump);
+      alter();
     };
   };
 
@@ -25,11 +29,9 @@ const Bouncing = (
   }));
 
   return <>
-
-    {/*<Button onClick={jump}>add</Button>*/}
-    <div className={style.box} style={{ height: size * 1.5, width: size * 1.5 }}>
+    <div className={style.box} style={{ height: size, width: size }}>
       <div ref={ballRef} style={{ width: size, height: size }} className={style.ball}>
-        <img src={img} alt='' width='100%' height='100%' />
+        <img src={img || waitInstockShop} alt='' width='100%' height='100%' />
       </div>
     </div>
   </>;
