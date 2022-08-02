@@ -75,7 +75,7 @@ const WaitOutSku = (
   const { loading: backLoading, run: backRun } = useRequest(backSkus, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('退回成功!',()=>{
+      Message.successToast('移出成功!',()=>{
         listRefresh();
         refresh();
       });
@@ -217,7 +217,7 @@ const WaitOutSku = (
             };
           });
           backRun({ data: { productionPickListsCartParams } });
-        }}>退回</Button>}
+        }}>移出</Button>}
         {!sys && <Button
           disabled={userIds.length === 0}
           color='primary'

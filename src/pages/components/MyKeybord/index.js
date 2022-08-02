@@ -30,6 +30,15 @@ const MyKeybord = (
 
   const [number, setNumber] = useState(value || '');
 
+  const [defaultNumber, setDefaultNumber] = useState('');
+
+  const showNumber = number || defaultNumber;
+
+  const numberChange = (num) => {
+    setNumber(num);
+    setDefaultNumber('');
+  };
+
   const [ok, setOk] = useState();
 
   let decimalLength;
@@ -54,7 +63,7 @@ const MyKeybord = (
   }
 
   const save = () => {
-    const num = Number(number);
+    const num = Number(showNumber);
     let newValue = num;
     if (num < min) {
       newValue = min;
@@ -67,7 +76,8 @@ const MyKeybord = (
 
   useEffect(() => {
     if (visible) {
-      setNumber(value || '');
+      setNumber('');
+      setDefaultNumber(value || '');
     }
   }, [visible]);
 
@@ -88,18 +98,18 @@ const MyKeybord = (
       }}>
       <div className={style.content}>
         <div hidden={noStepper} className={style.calculation}>
-          <Button disabled={number === min} onClick={() => {
-            const newValue = Number((Number(number) - Number(step)).toFixed(decimalLength));
-            setNumber(newValue);
+          <Button disabled={Number(showNumber || 0) === min} onClick={() => {
+            const newValue = Number((Number(showNumber) - Number(step)).toFixed(decimalLength));
+            numberChange(newValue);
           }}>
             <MinusOutline />
           </Button>
           <div className={style.value}>
-            {number || ''}<span className={style.line}>|</span>
+            {showNumber}<span className={style.line}>|</span>
           </div>
-          <Button disabled={number === max} onClick={() => {
-            const newValue = Number((Number(number) + Number(step)).toFixed(decimalLength));
-            setNumber(newValue);
+          <Button disabled={Number(showNumber || 0) === max} onClick={() => {
+            const newValue = Number((Number(showNumber) + Number(step)).toFixed(decimalLength));
+            numberChange(newValue);
           }}>
             <AddOutline />
           </Button>
@@ -115,7 +125,7 @@ const MyKeybord = (
                   return <div key={index} className={style.numberButton}>
                     <Button disabled={!decimal} onClick={() => {
                       if (`${number}`.indexOf('.') === -1) {
-                        setNumber((number || 0) + '.');
+                        numberChange((number || 0) + '.');
                       }
                     }}>.</Button>
                   </div>;
@@ -133,7 +143,7 @@ const MyKeybord = (
                       }
                       numberClick(item);
                       if (!decimal || decimalLength < decimal) {
-                        setNumber(`${number || ''}` + item);
+                        numberChange(`${number || ''}` + item);
                       }
                     }}>{item}</Button>
                   </div>;
@@ -148,7 +158,7 @@ const MyKeybord = (
                 const newValue = numbers.filter((item, index) => {
                   return index !== numbers.length - 1;
                 }).join('');
-                setNumber(newValue);
+                numberChange(newValue);
               }}>
                 <ArrowLeftOutlined />
               </Button>

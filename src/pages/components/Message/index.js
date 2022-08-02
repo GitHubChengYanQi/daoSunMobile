@@ -16,8 +16,10 @@ const successToast = (
   afterClose = () => {
   }) => {
   Toast.show({
+    maskClassName: style.toastMask,
     content: title || '成功！',
     // position: 'bottom',
+    // duration:0,
     icon: 'success',
     afterClose,
   });
@@ -30,6 +32,7 @@ const errorToast = (
 ) => {
   Toast.show({
     content: title || '失败！',
+    maskClassName: style.toastMask,
     // position: 'bottom',
     icon: 'fail',
     afterClose,

@@ -26,14 +26,17 @@ const StocktakingAsk = ({ createType }) => {
   const { loading: inventoryLoading, run: inventory } = useRequest(InventoryApply, {
     manual: true,
     onSuccess: (res) => {
-      Message.successDialog({
-        content: '创建盘点申请成功!',
-        confirmText: '查看详情',
-        cancelText: '返回列表',
-        onCancel: () => history.goBack(),
-        onConfirm: () => {
-          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.stocktaking}&formId=${res.inventoryTaskId}`);
+      history.push({
+        pathname: '/Receipts/ReceiptsResult',
+        state: {
+          type: ReceiptsEnums.stocktaking,
+          formId: res.inventoryTaskId,
         },
+      });
+    },
+    onError: () => {
+      Message.errorDialog({
+        content: '创建盘点任务失败!',
       });
     },
   });

@@ -90,5 +90,5 @@ export const menus = [
     icon: 'icon-kujiantiaobo',
     url:  `/Work/Stock/Task?type=${ReceiptsEnums.allocation}`,
   },
-  { code: 'OutStockConfirm',icon:'icon-chukuqueren', url: '/Work/OutStockConfirm' },
+  { code: 'OutStockConfirm',icon:'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
 ];

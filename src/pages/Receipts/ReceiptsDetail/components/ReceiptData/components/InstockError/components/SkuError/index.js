@@ -155,10 +155,7 @@ const SkuError = (
   const { loading: editLoading, run: editRun } = useRequest(edit, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('操作成功!', () => {
         refresh();
-      });
-
     },
   });
 
@@ -202,7 +199,7 @@ const SkuError = (
       case 'InstockError':
         return {
           showAction: <>
-            {item.status === -1 && <span className={style.prohibit}>· 禁止入库</span>}
+            {item.status === -1 && <span className={style.prohibit}>· 终止入库</span>}
             {item.status === 1 && <span className={style.allow}>· 允许入库</span>}
           </>,
           actions: <>
@@ -210,13 +207,13 @@ const SkuError = (
               itemChange(index, { status: -1 });
               action(item, -1);
             }}>终止入库</Button>
-            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+            <Button color='primary' fill='outline' onClick={() => {
               action(item, 1);
             }}>允许入库</Button>
           </>,
           bottom: <div className={style.bottomAction} hidden={forward}>
             <div className={style.action}>
-              <div>终止入库数量：{sku.errorNumber} </div>
+              <div hidden={!sku.errorNumber}>终止入库 × {sku.errorNumber} </div>
               <div
                 className={style.instockNumber}>
                 入库数量：
@@ -276,6 +273,16 @@ const SkuError = (
     }
   };
 
+  const errorItemsChange = (data = {}, currentIndex) => {
+    const newErrorItems = errorItems.map((item, index) => {
+      if (currentIndex === index) {
+        return { ...item, ...data };
+      }
+      return item;
+    });
+    setErrorItems(newErrorItems);
+  };
+
 
   return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
@@ -324,8 +331,9 @@ const SkuError = (
             </div>}
             extra={<>
               <Space>
+                {item.userId && (item.userId !== userInfo.id) && item.status === 0 && `已转交：${item.userName}`}
                 {permissions && item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
-                  action(item, 0);
+                  errorItemsChange({ status: 0 }, index);
                 }}>
                   <FormOutlined />
                 </LinkButton>}
@@ -333,14 +341,16 @@ const SkuError = (
             </>}
           >
             <div className={style.careful} style={{ padding: '12px 0' }}>
-              异常原因：{ToolUtil.isArray(item.notices).map((item, index) => {
-              return <div key={index} className={style.notices}>
-                {item}
-              </div>;
-            })}
+              <span className={style.inkindTitle}>原因：</span>
+              {ToolUtil.isArray(item.notices).map((item, index) => {
+                return <div key={index} className={style.notices} style={{ margin: index === 0 && 0 }}>
+                  {item}
+                </div>;
+              })}
             </div>
             <div style={{ padding: '8px 0' }}>
-              异常描述：{item.description || '无'}
+              <span className={style.inkindTitle}>描述：</span>
+              {item.description || '无'}
             </div>
             <div>
               <UploadFile
@@ -350,7 +360,7 @@ const SkuError = (
               />
             </div>
             <div className={style.opinion}>
-              <span>处理意见：</span>
+              <span className={style.inkindTitle}>意见：</span>
               {!handle ? <TextArea
                 className={style.textArea}
                 rows={1}

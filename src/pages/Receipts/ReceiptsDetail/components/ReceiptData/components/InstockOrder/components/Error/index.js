@@ -4,7 +4,7 @@ import style from './index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import { Button, TextArea } from 'antd-mobile';
 import { AddOutline, CameraOutline } from 'antd-mobile-icons';
-import Icon, { ScanIcon } from '../../../../../../../../components/Icon';
+import { ScanIcon } from '../../../../../../../../components/Icon';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { useModel } from 'umi';
@@ -374,7 +374,7 @@ const Error = (
             <div className={style.number}>
               <span>入库数量</span> {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
             </div>
-            <div className={style.actual}>
+            <div className={style.actual} style={{gap:8}}>
               <span>实到数量</span>
               <ShopNumber
                 min={allNumber}

@@ -47,14 +47,17 @@ const AllocationAsk = ({ createType }) => {
   const { loading: allocationLoading, run: addAllocation } = useRequest(addApi, {
     manual: true,
     onSuccess: (res) => {
-      Message.successDialog({
-        content: '创建调拨申请成功!',
-        confirmText: '查看详情',
-        cancelText: '返回列表',
-        onCancel: () => history.goBack(),
-        onConfirm: () => {
-          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.allocation}&formId=${res.allocationId}`);
+      history.push({
+        pathname: '/Receipts/ReceiptsResult',
+        state: {
+          type: ReceiptsEnums.allocation,
+          formId: res.allocationId,
         },
+      });
+    },
+    onError: () => {
+      Message.errorDialog({
+        content: '创建调拨任务失败!',
       });
     },
   });

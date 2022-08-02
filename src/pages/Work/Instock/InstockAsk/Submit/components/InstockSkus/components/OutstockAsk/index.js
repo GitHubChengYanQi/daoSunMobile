@@ -41,16 +41,19 @@ const OutstockAsk = ({ skus, judge, createType }) => {
   const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
     onSuccess: (res) => {
-      Message.successDialog({
-        content: '创建出库申请成功!',
-        confirmText: '查看详情',
-        cancelText: '返回列表',
-        onCancel: () => history.goBack(),
-        onConfirm: () => {
-          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.outstockOrder}&formId=${res.pickListsId}`);
+      history.push({
+        pathname: '/Receipts/ReceiptsResult',
+        state: {
+          type: ReceiptsEnums.outstockOrder,
+          formId: res.pickListsId,
         },
       });
     },
+    onError:()=>{
+      Message.errorDialog({
+        content:'创建出库任务失败!'
+      })
+    }
   });
 
   const dataChange = (array = []) => {

@@ -10,8 +10,8 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import { useRequest } from '../../../../../../../../../util/Request';
-import MyStepper from '../../../../../../../../components/MyStepper';
 import InkindList from '../../../../../../../../components/InkindList';
+import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
@@ -127,7 +127,7 @@ const Maintenanceing = (
               <span>({item.number})</span>
             </div>
             <div hidden={!checked}>
-              <MyStepper
+              <ShopNumber
                 max={item.number}
                 min={1}
                 value={item.curingNumber}
@@ -157,15 +157,20 @@ const Maintenanceing = (
     <InkindList
       ref={inkindRef}
       onSuccess={(inkinds = []) => {
-        const completeBrands = inkinds.map(item => {
-          return {
-            brandId: item.brandId,
-            storehousePositionsId: item.storehousePositionsId,
-            skuId: item.skuId,
-            number: item.number,
-          };
+        const newBrands = brands.map(item => {
+          const brands = inkinds.filter(inkindItem => inkindItem.brandId === item.brandId);
+          if (brands.length > 0) {
+            let number = 0;
+            brands.forEach(item => number += item.number);
+            return {
+              ...item,
+              checked: true,
+              curingNumber: number,
+            };
+          }
+          return item;
         });
-        submit(completeBrands);
+        setBrands(newBrands);
       }}
     />
 

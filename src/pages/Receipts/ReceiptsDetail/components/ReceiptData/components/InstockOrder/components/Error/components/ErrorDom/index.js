@@ -3,9 +3,9 @@ import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/compon
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
-import { AddOutline, CameraOutline, CloseOutline, SystemQRcodeOutline } from 'antd-mobile-icons';
+import { AddOutline, CameraOutline, CloseOutline } from 'antd-mobile-icons';
 import MyCard from '../../../../../../../../../../components/MyCard';
-import { Picker, Space, TextArea } from 'antd-mobile';
+import { Space, TextArea } from 'antd-mobile';
 import MyRemoveButton from '../../../../../../../../../../components/MyRemoveButton';
 import { Message } from '../../../../../../../../../../components/Message';
 import Careful
@@ -14,7 +14,7 @@ import UploadFile from '../../../../../../../../../../components/Upload/UploadFi
 import { AddButton } from '../../../../../../../../../../components/MyButton';
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import ShowCode from '../../../../../../../../../../components/ShowCode';
-import React, { useState } from 'react';
+import React  from 'react';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';

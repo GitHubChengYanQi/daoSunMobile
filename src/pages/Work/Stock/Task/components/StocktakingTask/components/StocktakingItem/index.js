@@ -3,7 +3,6 @@ import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-import { MyDate } from '../../../../../../../components/MyDate';
 
 const StocktakingItem = ({ item, index }) => {
 
@@ -15,7 +14,7 @@ const StocktakingItem = ({ item, index }) => {
 
   return <>
     <TaskItem
-      percent={parseInt((receipts.handle / receipts.total) * 100)}
+      percent={index === 1 ? 40 :parseInt((receipts.handle / receipts.total) * 100)}
       coding={receipts.coding}
       endTime={receipts.endTime}
       createTime={item.createTime}
@@ -25,18 +24,9 @@ const StocktakingItem = ({ item, index }) => {
       positionSize={receipts.positionSize}
       beginTime={receipts.beginTime}
       onClick={onClick}
-      orderData={<div className={style.status}>
-        <div>
-          明盘：{receipts.method === 'OpenDisc' ? '是' : '否'}
-        </div>
-        <div>
-          静态：{receipts.mode === 'staticState' ? '是' : '否'}
-        </div>
-      </div>}
       otherData={
         <div className={style.orderData}>
           <div className={style.user}>负责人：{ToolUtil.isObject(receipts.user).name}</div>
-          <div>{MyDate.Show(receipts.beginTime)} - {MyDate.Show(receipts.endTime)}</div>
         </div>}
     />
   </>;

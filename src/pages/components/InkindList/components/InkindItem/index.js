@@ -40,7 +40,7 @@ const InkindItem = (
       inkindList.map((inkindItem, inkindIndex) => {
         const maintenanceLogResult = inkindItem.maintenanceLogResult || {};
         const checked = inkindIds.includes(inkindItem.inkindId);
-        const inkindId = inkindItem.inkindId || '';
+        const qrCodeId = inkindItem.qrCodeId || '';
         return <div className={style.inkindItem} key={inkindIndex}>
           <div className={style.inkindData}>
             <div className={style.inkindId} onClick={() => {
@@ -52,13 +52,13 @@ const InkindItem = (
               }
             }}>
               <MyCheck checked={checked} />
-              编号：{inkindId.substring(inkindId.length - 6, inkindId.length)}
+              实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
               <ShowCode code={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>
             </div>
 
             <div className={style.brand}>
-              {ToolUtil.isObject(inkindItem.brandResult).name || '无品牌'}
+              {ToolUtil.isObject(inkindItem.brandResult).brandName || '无品牌'}
               <LinkButton>更多</LinkButton>
             </div>
           </div>
@@ -75,9 +75,9 @@ const InkindItem = (
           <div className={style.otherData}>
             <div className={style.flex}>
               <div className={style.flexGrow}>
-                上次养护：{MyDate.Show(maintenanceLogResult.createTime)}
+                上次养护：{maintenanceLogResult.createTime ? MyDate.Show(maintenanceLogResult.createTime) : '暂无'}
               </div>
-              <div>
+              <div hidden={!maintenanceLogResult.createTime}>
                 <UserName user={maintenanceLogResult.userResult} />
               </div>
             </div>

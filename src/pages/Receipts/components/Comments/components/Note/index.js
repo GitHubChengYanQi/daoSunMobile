@@ -16,7 +16,8 @@ const Note = (
     uploadId,
     noAdd,
     className,
-    loading=()=>{},
+    loading = () => {
+    },
     autoFocus,
     textAreaId,
   },
@@ -49,6 +50,7 @@ const Note = (
       </div>
       <div className={style.comments}>
         <MyTextArea
+          maxLength={50}
           className={style.textarea}
           value={note}
           id={textAreaId}

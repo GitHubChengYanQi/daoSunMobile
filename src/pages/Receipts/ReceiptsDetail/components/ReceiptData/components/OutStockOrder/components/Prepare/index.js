@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from './index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import Icon, { ScanIcon } from '../../../../../../../../components/Icon';
+import { ScanIcon } from '../../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../../components/LinkButton';
-import { connect } from 'dva';
 import { Message } from '../../../../../../../../components/Message';
 import Order from './components/Order';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { useModel } from 'umi';
+import InkindList from '../../../../../../../../components/InkindList';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
 
@@ -34,14 +34,11 @@ const Prepare = (
 
   const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
-  const codeId = ToolUtil.isObject(props.qrCode).codeId;
-  const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
-
-  const [codeData, setCodeData] = useState();
-
   const [outStockSkus, setOutStockSkus] = useState([]);
 
   const skuResult = skuItem.skuResult || {};
+
+  const inkindRef = useRef();
 
   const addShopCart = (
     imgUrl,
@@ -107,30 +104,12 @@ const Prepare = (
     },
   });
 
-  useEffect(() => {
-    if (codeId) {
-      props.dispatch({ type: 'qrCode/clearCode' });
-      const inkind = ToolUtil.isObject(backObject.inkindResult);
-      if (backObject.type === 'item' && inkind.skuId === skuItem.skuId && (skuItem.brandId ? skuItem.brandId === inkind.brandId : true)) {
-        const inkindDetail = ToolUtil.isObject(inkind.inkindDetail);
-        setCodeData({
-          positionId: ToolUtil.isObject(inkindDetail.storehousePositions).storehousePositionsId,
-          brandId: ToolUtil.isObject(inkindDetail.brand).brandId,
-          number: inkind.number,
-          inkindId: inkind.inkindId,
-        });
-      } else {
-        Message.toast('请扫描正确的实物码！');
-      }
-    }
-  }, [codeId]);
-
 
   const dimensionAction = () => {
     switch (dimension) {
       case 'order':
         return <Order
-          codeData={codeData}
+          inkindRef={inkindRef}
           customerId={skuItem.customerId}
           brandId={skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
           id={id}
@@ -168,11 +147,10 @@ const Prepare = (
       <div className={style.scan}>
         <ShopNumber value={outStockNumber} show />
         <LinkButton onClick={() => {
-          props.dispatch({
-            type: 'qrCode/wxCpScan',
-            payload: {
-              action: 'outStock',
-            },
+          inkindRef.current.open({
+            skuId:skuItem.skuId,
+            brandId:skuItem.brandId,
+            skuResult,
           });
         }}><ScanIcon style={{ fontSize: 24 }} /></LinkButton>
       </div>
@@ -194,4 +172,4 @@ const Prepare = (
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(Prepare);
+export default Prepare;

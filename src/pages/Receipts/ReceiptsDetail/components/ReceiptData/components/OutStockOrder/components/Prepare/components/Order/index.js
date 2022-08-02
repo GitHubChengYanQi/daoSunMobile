@@ -10,12 +10,12 @@ import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
+import InkindList from '../../../../../../../../../../components/InkindList';
 
 export const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
 const Order = (
   {
-    codeData,
     id,
     pickListsDetailId,
     skuId,
@@ -27,6 +27,7 @@ const Order = (
     className,
     brandShow,
     storehouseId,
+    inkindRef,
   },
 ) => {
 
@@ -65,28 +66,6 @@ const Order = (
       run({ data: { skuId, brandId, storehouseId } });
     }
   }, [skuId]);
-
-  useEffect(() => {
-    if (codeData) {
-      const newBrands = brands.map((item) => {
-        if (item.brandId === codeData.brandId) {
-          const positions = item.positionsResults || [];
-          return {
-            ...item, show: true, positionsResults: positions.map((item) => {
-              if (item.storehousePositionsId === codeData.positionId) {
-                const num = (outStockNumber - (outNumber + codeData.number)) > 0 ? codeData.number : (outStockNumber - outNumber);
-                return { ...item, checked: true, outStockNumber: num, inkindId: codeData.inkindId };
-              }
-              return item;
-            }),
-          };
-        }
-        return item;
-      });
-      setBrands(newBrands);
-      outSkuChange(newBrands);
-    }
-  }, [codeData]);
 
   const outSkuChange = (newPosition) => {
     const array = [];
@@ -216,6 +195,40 @@ const Order = (
         </div>
       </div>;
     })}
+
+    <InkindList
+      ref={inkindRef}
+      onSuccess={(inkinds = []) => {
+        const newBrands = brands.map(item => {
+          const brands = inkinds.filter(inkindItem => inkindItem.brandId === item.brandId);
+          if (brands.length > 0) {
+            const positions = item.positionsResults || [];
+            const newPositions = positions.map(item => {
+              const posis = brands.filter(posiItem => posiItem.storehousePositionsId === item.storehousePositionsId);
+              if (posis.length > 0) {
+                let number = 0;
+                posis.forEach(item => number += item.number);
+                const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + number)) > 0 ? number : (outStockNumber - outNumber) : item.number;
+                return {
+                  ...item,
+                  checked: true,
+                  outStockNumber: num,
+                };
+              }
+              return item;
+            });
+            return {
+              ...item,
+              show: true,
+              positionsResults: newPositions,
+            };
+          }
+          return item;
+        });
+        setBrands(newBrands);
+        outSkuChange(newBrands);
+      }}
+    />
 
     {loading && <MyLoading />}
   </div>;

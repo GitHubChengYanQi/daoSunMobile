@@ -7,6 +7,7 @@ import { Button } from 'antd-mobile';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { Message } from '../../../../../components/Message';
+import BottomButton from '../../../../../components/BottomButton';
 
 const TaskBottom = ({ taskKey, task, ...props }) => {
   const history = useHistory();
@@ -46,6 +47,12 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
       }}>
         <ScanIcon />
       </div> : <></>;
+    case ReceiptsEnums.outstockOrder:
+      return task && <div style={{ height: 60 }}>
+        <BottomButton only text='出库确认' onClick={() => {
+          history.push('/Work/OutStockConfirm');
+        }} />
+      </div>;
     default:
       return <></>;
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
@@ -19,16 +19,17 @@ const TaskItem = (
     },
     index,
     otherData,
-    orderData,
     percent = 0,
-    noBorder,
     noSku,
     noPosition,
     noProgress,
     statusName,
     statusNameClassName,
+    noBorder,
   },
 ) => {
+
+  const scaleItems = Array(10).fill('');
 
   const getHour = (begin, end) => {
     const dateDiff = MyDate.formatDate(begin).getTime() - MyDate.formatDate(end).getTime();
@@ -39,7 +40,8 @@ const TaskItem = (
   const total = totalHour + (totalHour * 0.1);
   const pastTimes = getHour(new Date(), beginTime);
   const overtime = getHour(new Date(), endTime);
-  const pastTimesPercent = overtime > 0 ? 95 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
+  const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
+  const overScale = scaleItems.length * (pastTimesPercent / 100);
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.data} hidden={!taskName}>
@@ -49,54 +51,62 @@ const TaskItem = (
           <RightOutline style={{ color: '#B9B9B9' }} />
         </div>
       </div>
-      <div className={style.status} style={{ color: '#555555', width: 130, textAlign: 'right' }}>
+      <div className={style.status} style={{ color: '#808080', width: 130, textAlign: 'right' }}>
         {MyDate.Show(createTime)}
       </div>
     </div>
     <div className={style.content}>
       <div className={style.orderData}>
-        <div hidden={noSku} className={style.dateShow}>
+        <div hidden={noSku} className={style.dateShow} style={{ border: noBorder && 'none' }}>
           <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, statusNameClassName)}>
             {statusName}
           </div>
-          <div className={style.show} style={{ border: noBorder && 'none' }}>
+          <div className={style.show}>
             <Icon type='icon-pandianwuliao' />
             <div className={style.showNumber}>
-              <span className={style.number}>{skuSize}</span>
-              <span>涉及物料</span>
+              <span>涉及  <span className={style.number}>{skuSize}</span> 类物料</span>
             </div>
           </div>
-          <div hidden={noPosition} className={style.show} style={{ borderLeft: 'none', border: noBorder && 'none' }}>
+          <div hidden={noPosition} className={style.show} style={{ borderLeft: !noBorder && 'solid 1px #F5F5F5' }}>
             <Icon type='icon-pandiankuwei' />
             <div className={style.showNumber}>
-              <span className={style.number}>{positionSize}</span>
-              <span>涉及库位</span>
+              <span>涉及 <span className={style.number}>{positionSize}</span> 个库位</span>
             </div>
           </div>
 
-        </div>
-        {orderData}
-        <div className={style.progress} hidden={noProgress}>
-          <Progress
-            strokeColor='var(--adm-color-primary)'
-            format={(number) => {
-              return <span className={style.blue}>{number + '%'}</span>;
-            }}
-            percent={percent}
-          />
         </div>
         {otherData}
       </div>
 
       <div
+        id='scale'
         hidden={!beginTime}
         className={style.timeBar}
-        style={{
-          background: `linear-gradient(to bottom,#35E11F 0%,#FFFC62 80%,#F72323 95%)`,
-        }}
       >
-        <div className={style.maks} style={{ height: `${pastTimesPercent > 95 ? 95 : pastTimesPercent}%` }} />
+        {
+          scaleItems.map((item, index) => {
+            return <div key={index} className={ToolUtil.classNames(style.scale, index < overScale && style.over)} />;
+          })
+        }
       </div>
+    </div>
+
+    <div className={style.progress} hidden={noProgress}>
+      <Progress
+        strokeColor='var(--adm-color-primary)'
+        format={(number) => {
+          return <div
+            className={style.text}
+            style={{
+              width: `${[100, 0].includes(number) ? 100 : number - 1}%`,
+              textAlign: [100, 0].includes(number) ? 'center' : 'right',
+              color: number > 0 ? '#fff' : 'var(--adm-color-primary)',
+            }}>
+            {number + '%'}
+          </div>;
+        }}
+        percent={percent}
+      />
     </div>
   </div>;
 };

@@ -26,18 +26,19 @@ const CuringAsk = ({ createType, state }) => {
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
     manual: true,
     onSuccess: (res) => {
-
-      Message.successDialog({
-        content: '创建养护申请成功!',
-        confirmText: '查看详情',
-        cancelText: '返回列表',
-        onCancel: () => history.goBack(),
-        onConfirm: () => {
-          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.maintenance}&formId=${res.maintenanceId}`);
+      history.push({
+        pathname: '/Receipts/ReceiptsResult',
+        state: {
+          type: ReceiptsEnums.maintenance,
+          formId: res.maintenanceId,
         },
       });
-
     },
+    onError:()=>{
+      Message.errorDialog({
+        content:'创建养护任务失败!'
+      })
+    }
   });
 
   const [skuView, setSkuView] = useState([]);

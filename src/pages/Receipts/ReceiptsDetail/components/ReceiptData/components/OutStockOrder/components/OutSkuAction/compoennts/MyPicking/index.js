@@ -38,6 +38,7 @@ const MyPicking = (
   const [visible, setVisible] = useState();
 
   const [data, setData] = useState([]);
+  console.log(data);
 
   let total = 0;
   const checkSku = [];
@@ -187,12 +188,19 @@ const MyPicking = (
         onClick={() => {
           const cartsParams = [];
           checkSku.map(skuItem => {
+            const cartResults = skuItem.cartResults || [];
+            const brandIds = [];
+            cartResults.forEach(item => {
+              if (!brandIds.includes(item.brandId)) {
+                brandIds.push(item.brandId);
+              }
+            });
             return cartsParams.push({
-              'storehouseId': storehouse.storehouseId,
-              'skuId': skuItem.skuId,
-              'pickListsId': skuItem.pickListsId,
-              'number': skuItem.outNumber,
-              'brandId': skuItem.brandId,
+              storehouseId: storehouse.storehouseId,
+              skuId: skuItem.skuId,
+              pickListsId: skuItem.pickListsId,
+              number: skuItem.outNumber,
+              brandIds,
             });
           });
           skuRun({

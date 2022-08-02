@@ -31,7 +31,7 @@ const OtherData = (
     <MyCard title='添加备注'>
       <MyTextArea
         value={params.remark}
-        className={style.textArea}
+        textClassName={style.textArea}
         onChange={(remark, userIds) => {
           setParams({ ...params, remark, userIds: userIds.map(item => item.userId) });
         }}

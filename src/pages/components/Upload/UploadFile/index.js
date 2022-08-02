@@ -11,6 +11,7 @@ import { CloseOutline } from 'antd-mobile-icons';
 import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
 import IsDev from '../../../../components/IsDev';
 import { Message } from '../../Message';
+import MyActionSheet from '../../MyActionSheet';
 
 const UploadFile = (
   {
@@ -197,9 +198,7 @@ const UploadFile = (
     />
 
 
-    <ActionSheet
-      className={style.action}
-      cancelText='取消'
+    <MyActionSheet
       visible={visible}
       actions={options}
       onClose={setFalse}

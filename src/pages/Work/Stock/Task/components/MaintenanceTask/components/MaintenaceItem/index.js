@@ -29,15 +29,9 @@ const MaintenaceItem = (
     positionSize={receipts.positionCount}
     beginTime={receipts.startTime}
     onClick={onClick}
-    orderData={<div className={style.status}>
-      <div>
-        类型：复检复调
-      </div>
-    </div>}
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>负责人：{ToolUtil.isObject(receipts.user).name}</div>
-        <div>{MyDate.Show(receipts.startTime)} - {MyDate.Show(receipts.endTime)}</div>
       </div>}
   />;
 };

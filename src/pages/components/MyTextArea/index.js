@@ -7,8 +7,9 @@ import style from './index.less';
 const MyTextArea = (
   {
     className,
+    textClassName,
     placeholder,
-    onChange = (value,users) => {
+    onChange = (value, users) => {
 
     },
     value = '',
@@ -17,6 +18,7 @@ const MyTextArea = (
     onFocus = () => {
 
     },
+    maxLength,
   },
 ) => {
 
@@ -108,8 +110,10 @@ const MyTextArea = (
     }
   }, []);
 
-  return <>
+  return <div style={{ padding: maxLength && '12px 0' }} className={ToolUtil.classNames(style.textArea, className)}>
+    <div className={style.count} hidden={!maxLength}>{value.length} / {maxLength}</div>
     <Input.TextArea
+      maxLength={maxLength}
       id={id}
       autoSize
       value={value}
@@ -122,7 +126,7 @@ const MyTextArea = (
           setCursor(getCursortPosition());
         }
       }}
-      className={ToolUtil.classNames(style.text, className)}
+      className={ToolUtil.classNames(style.text, textClassName)}
       placeholder={placeholder || '可@相关人员'}
       onChange={(textArea) => {
         const currentValue = textArea.nativeEvent.data;
@@ -155,7 +159,7 @@ const MyTextArea = (
     />
 
     <CheckUser
-      afterShow={()=>{
+      afterShow={() => {
         const textArea = document.getElementById(id);
         textArea.blur();
       }}
@@ -180,7 +184,7 @@ const MyTextArea = (
         valueChange(newValue, newUserPos, newPos);
         setCaretPosition(cursor + 1);
       }} />
-  </>;
+  </div>;
 };
 
 export default MyTextArea;

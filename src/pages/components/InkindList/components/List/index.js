@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import MySearch from '../../../MySearch';
-import { ScanIcon } from '../../../Icon';
 import MyList from '../../../MyList';
 import { Button } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
-import { Message } from '../../../Message';
-import { connect } from 'dva';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };
 
@@ -22,61 +19,13 @@ const List = (
     },
     addInkind = () => {
     },
-    onSuccess = () => {
-    },
     add,
-    ...props
   },
 ) => {
 
   const inkindIds = inkinds.map(item => item.inkindId);
 
   const ref = useRef();
-
-  const qrCode = ToolUtil.isObject(props.qrCode);
-  const codeId = qrCode.codeId;
-  const action = qrCode.action;
-  const backObject = qrCode.backObject || {};
-
-  useEffect(() => {
-    if (codeId && action === 'getBackObject') {
-      props.dispatch({
-        type: 'qrCode/clearCode',
-      });
-      if (backObject.type === 'item') {
-        const inkind = backObject.inkindResult || {};
-        const details = ToolUtil.isObject(inkind.inkindDetail).stockDetails || {};
-        let exist = true;
-        if (skuInfo.brandId && details.brandId !== skuInfo.brandId) {
-          exist = false;
-        } else if (skuInfo.skuId && details.skuId !== skuInfo.skuId) {
-          exist = false;
-        } else if (skuInfo.storehousePositionsId && details.storehousePositionsId !== skuInfo.storehousePositionsId) {
-          exist = false;
-        }
-        if (!exist) {
-          Message.errorToast('请扫描正确的实物码！');
-        } else {
-          onSuccess([{
-            inkind: inkind.inkindId,
-            codeId,
-            ...details,
-          }]);
-        }
-      } else {
-        Message.errorToast('请扫描实物码！');
-      }
-    }
-  }, [codeId]);
-
-  useEffect(() => {
-    props.dispatch({
-      type: 'qrCode/scanCodeState',
-      payload: {
-        action: 'getBackObject',
-      },
-    });
-  }, []);
 
   const [searchValue, setSearchValue] = useState();
 
@@ -85,27 +34,19 @@ const List = (
       className={style.search}
       value={searchValue}
       onChange={setSearchValue}
-      searchIcon={<ScanIcon onClick={() => {
-        props.dispatch({
-          type: 'qrCode/wxCpScan',
-          payload: {
-            action: 'getBackObject',
-          },
-        });
-      }} />}
       placeholder='请输入实物码'
       onSearch={(value) => {
-        ref.current.submit({ ...skuInfo, inkindId: value });
+        ref.current.submit({ ...skuInfo, qrCodeid: value });
       }}
       onClear={() => {
-        ref.current.submit({ ...skuInfo, inkindId: null });
+        ref.current.submit({ ...skuInfo, qrCodeid: null });
       }}
     />
 
     <div className={style.list}>
       <div className={style.flex} style={{ padding: '8px 0' }}>
         <div className={style.flexGrow}>
-          库存实物编号只显示后六位！
+          实物码只显示后6位！
         </div>
         {add && <Button color='primary' fill='outline' onClick={addInkind}>新增二维码</Button>}
       </div>
@@ -156,4 +97,4 @@ const List = (
   </>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(List);
+export default List;

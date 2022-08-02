@@ -20,7 +20,7 @@ const OutStockItem = (
     statusName={<>
       可 <br />备 <br />料
     </>}
-    statusNameClassName={item.canOperate ? style.backBlue : style.backEee}
+    statusNameClassName={receipts.canOperate ? style.backBlue : style.backEee}
     percent={parseInt((receipts.receivedCount / receipts.numberCount) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}

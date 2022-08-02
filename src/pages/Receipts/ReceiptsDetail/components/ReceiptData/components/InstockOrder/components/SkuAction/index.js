@@ -70,7 +70,7 @@ const SkuAction = (
   });
 
   let countNumber = 0;
-  items.map(item => countNumber += item.number);
+  items.forEach(item => countNumber += item.number);
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -121,9 +121,7 @@ const SkuAction = (
       },
     }).then(() => {
       addShopCart(imgUrl, `skuImg${index}`, () => {
-        Message.successToast('添加成功！', () => {
-          refresh();
-        });
+        refresh();
       });
     });
 

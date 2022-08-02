@@ -71,11 +71,11 @@ const WaitInstock = (
     },
   });
 
-  // 退回
+  // 移出
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('退回成功！', () => {
+      Message.successToast('移出成功！', () => {
         shopRefresh();
         refresh();
       });
@@ -137,7 +137,7 @@ const WaitInstock = (
               const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
               const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
-              const brandName = ToolUtil.isObject(item.brandName).brandName || '无品牌';
+              const brandName = ToolUtil.isObject(item.brandResult).brandName || '无品牌';
 
               return <div key={index} className={style.skuItem}>
                 <MyCheck checked={checked} className={style.check} onChange={() => {
@@ -186,7 +186,7 @@ const WaitInstock = (
             backRun({
               data: { ids: backSkus.map(item => item.cartId) },
             });
-          }}>退回</Button>
+          }}>移出</Button>
           <Button color='primary' disabled={instockSkus.length === 0} onClick={() => {
             const listParams = instockSkus.map((item) => {
               const skuResult = ToolUtil.isObject(item.skuResult);

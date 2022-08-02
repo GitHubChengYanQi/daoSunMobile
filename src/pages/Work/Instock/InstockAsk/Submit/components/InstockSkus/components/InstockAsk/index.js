@@ -38,16 +38,19 @@ const InstockAsk = ({ skus, judge, createType }) => {
   const { loading: instockLoading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: (res) => {
-      Message.successDialog({
-        content: '创建入库申请成功!',
-        confirmText: '查看详情',
-        cancelText: '返回列表',
-        onCancel: () => history.goBack(),
-        onConfirm: () => {
-          history.push(`/Receipts/ReceiptsDetail?type=${ReceiptsEnums.instockOrder}&formId=${res.instockOrderId}`);
+      history.push({
+        pathname: '/Receipts/ReceiptsResult',
+        state: {
+          type: ReceiptsEnums.instockOrder,
+          formId: res.instockOrderId,
         },
       });
     },
+    onError:()=>{
+      Message.errorDialog({
+        content:'创建入库任务失败!'
+      })
+    }
   });
 
 

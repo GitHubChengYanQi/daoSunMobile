@@ -28,7 +28,6 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     default:
       return <MyEmpty />;
   }
-
 };
 
 export default InstockSkus;

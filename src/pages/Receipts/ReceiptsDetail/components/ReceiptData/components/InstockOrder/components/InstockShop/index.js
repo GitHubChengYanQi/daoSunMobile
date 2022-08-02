@@ -119,7 +119,8 @@ const InstockShop = (
             <Badge
               content={order.waitInStockNum || null}
               style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-dairukuang' /></Badge>
+              <Icon type='icon-dairukuang' className='blue' />
+            </Badge>
           </div>
         </div>
         <div id='instockError' className={style.action} onClick={() => {
@@ -130,7 +131,7 @@ const InstockShop = (
             <Badge
               content={order.instockErrorNum || null}
               style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-yichangkuang' />
+              <Icon type='icon-dairukuang' className='red' />
             </Badge>
           </div>
         </div>

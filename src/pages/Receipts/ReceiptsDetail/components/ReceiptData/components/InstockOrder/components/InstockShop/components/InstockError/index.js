@@ -72,7 +72,7 @@ const InstockError = (
     },
   });
 
-  // 退回
+  // 移出
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: (res) => {
@@ -83,7 +83,7 @@ const InstockError = (
           positionId: positions.storehousePositionsId,
         };
       });
-      Message.successToast('退回成功！', () => {
+      Message.successToast('移出成功！', () => {
         shopRefresh();
         refresh(skus, 0);
         setData([]);
@@ -246,7 +246,7 @@ const InstockError = (
             backRun({
               data: { ids: data.map(item => item.cartId) },
             });
-          }}>退回</Button>}
+          }}>移出</Button>}
           <Button
             disabled={data.length === 0}
             color='primary'

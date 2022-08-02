@@ -8,6 +8,7 @@
     padding: 3px 12px;
     font-size: 14px;
     align-items: center;
+    border-bottom: solid 1px #F5F5F5;
 
 
     .taskData {
@@ -86,11 +87,11 @@
 
       .dateShow {
         display: flex;
+        border-bottom: solid 1px #F5F5F5;
 
         .show {
           flex-grow: 1;
           padding: 16px;
-          border: solid 1px #F5F5F5;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -101,38 +102,77 @@
             padding-left: 16px;
 
             .number {
+              font-size: 18px;
+              margin: 0 4px;
               color: var(--adm-color-primary);
             }
           }
 
           svg {
-            font-size: 32px;
+            font-size: 26px;
             color: var(--body--background--color);
           }
-        }
-      }
-
-      .progress {
-        padding: 0 12px;
-
-        .blue {
-          color: var(--adm-color-primary)
         }
       }
     }
 
     .timeBar {
-      width: 14px;
       line-height: 100%;
       position: relative;
+      border: solid 1px #FA8F2B;
+      display: flex;
+      flex-direction: column;
+      margin: 8px 4px;
+      padding: 2px 0;
 
-      .maks {
-        position: absolute;
-        background: #E7E6E6;
-        width: 100%;
+      .scale {
+        width: 8px;
+        background-color: #FA8F2B;
+        flex-grow: 1;
+        margin: 2px 1px;
+      }
+
+      .over {
+        opacity: 0.3;
       }
     }
 
+  }
+
+  .progress {
+    line-height: 14px;
+    height: 14px;
+
+    :global .ant-progress-line {
+      line-height: 14px;
+      height: 100%;
+    }
+
+    :global .ant-progress-outer {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    :global .ant-progress-inner, :global .ant-progress-bg {
+      border-radius: 0;
+      height: 100% !important;
+      vertical-align: baseline;
+    }
+
+    :global .ant-progress-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      text-align: right;
+      margin: 0;
+      line-height: 14px;
+
+      .text {
+        display: inline-block;
+      }
+    }
   }
 
 }

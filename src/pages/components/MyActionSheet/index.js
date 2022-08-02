@@ -10,12 +10,15 @@ const MyActionSheet = (
     actions = [],
     onAction = () => {
     },
+    afterClose = () => {
+    },
   },
 ) => {
 
 
   return <>
     <ActionSheet
+      afterClose={afterClose}
       className={style.action}
       cancelText='取消'
       visible={visible}
