@@ -25,6 +25,7 @@ export const getInkInd = { url: '/stockDetails/getInkind', method: 'POST' };
 
 const Error = (
   {
+    errorShopRef,
     anomalyType,
     id,
     noDelete,
@@ -92,6 +93,7 @@ const Error = (
         return;
       }
       addShop(() => {
+        errorShopRef && errorShopRef.current.jump();
         Message.successToast('添加成功！', () => {
           onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
         });
@@ -374,7 +376,7 @@ const Error = (
             <div className={style.number}>
               <span>入库数量</span> {sku.number} {ToolUtil.isObject(spuResult.unitResult).unitName}
             </div>
-            <div className={style.actual} style={{gap:8}}>
+            <div className={style.actual} style={{ gap: 8 }}>
               <span>实到数量</span>
               <ShopNumber
                 min={allNumber}

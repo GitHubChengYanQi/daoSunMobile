@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Divider, Popup } from 'antd-mobile';
 import Viewpager from '../Viewpager';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -14,7 +14,6 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import { Message } from '../../../../../../../../components/Message';
 import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import LinkButton from '../../../../../../../../components/LinkButton';
@@ -52,6 +51,9 @@ const SkuAction = (
   const actions = [];
   const noAction = [];
 
+  const waitShopRef = useRef();
+  const errorShopRef = useRef();
+
   data.map((item) => {
     if (item.status === 0) {
       noAction.push(item);
@@ -69,16 +71,31 @@ const SkuAction = (
     };
   });
 
+  const [allSku, { toggle }] = useBoolean();
+
+  // const [items, setItems] = useState(defaultItems || []);
+
   let countNumber = 0;
   items.forEach(item => countNumber += item.number);
 
-  const [allSku, { toggle }] = useBoolean();
+  const itemChange = (data = {}, id) => {
+    const newItems = items.map(item => {
+      if (item.instockListId === id) {
+        return { ...item, ...data };
+      }
+      return item;
+    });
+    // setItems(newItems);
+  };
 
   const addShopCart = (
     imgUrl,
     imgId,
     transitionEnd = () => {
-    }) => {
+    },
+    transitionStart = () => {
+    },
+  ) => {
 
     const skuImg = document.getElementById(imgId);
     if (!skuImg) {
@@ -91,6 +108,7 @@ const SkuAction = (
       left,
       imgUrl,
       transitionEnd,
+      transitionStart,
       getNodePosition: () => {
         const waitInstock = document.getElementById('waitInstock');
         const parent = waitInstock.offsetParent;
@@ -121,11 +139,11 @@ const SkuAction = (
       },
     }).then(() => {
       addShopCart(imgUrl, `skuImg${index}`, () => {
-        refresh();
+        waitShopRef.current.jump();
+        // refresh();
+        // itemChange({ status: 1 }, item.instockListId);
       });
     });
-
-
   };
 
   const [refreshOrder, setRefreshOrder] = useState();
@@ -196,6 +214,7 @@ const SkuAction = (
       destroyOnClose
     >
       <Error
+        errorShopRef={errorShopRef}
         type={ReceiptsEnums.instockOrder}
         skuItem={visible}
         onClose={() => {
@@ -227,7 +246,14 @@ const SkuAction = (
     </MyAntPopup>
 
 
-    {action && <InstockShop order={order} actionId={actionId} id={instockOrderId} refresh={refresh} />}
+    {action && <InstockShop
+      errorShopRef={errorShopRef}
+      order={order}
+      actionId={actionId}
+      id={instockOrderId}
+      refresh={refresh}
+      waitShopRef={waitShopRef}
+    />}
 
     {(loading) && <MyLoading />}
 

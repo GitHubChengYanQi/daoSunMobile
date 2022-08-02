@@ -77,6 +77,8 @@ const createBall = (
     imgUrl,
     transitionEnd = () => {
     },
+    transitionStart = () => {
+    },
     getNodePosition = () => {
     },
   },
@@ -103,6 +105,7 @@ const createBall = (
   document.body.appendChild(bar);
   // 添加动画属性
   setTimeout(() => {
+    transitionStart();
     const { top, left } = getNodePosition();
     bar.style.top = (top) + 'px';
     bar.style.left = (left) + 'px';
@@ -117,7 +120,6 @@ const createBall = (
     if (i === 2) {
       transitionEnd();
     }
-
   };
 };
 

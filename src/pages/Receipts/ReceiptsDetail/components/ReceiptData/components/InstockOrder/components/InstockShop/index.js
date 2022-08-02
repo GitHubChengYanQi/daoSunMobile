@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { Badge, FloatingBubble, Popup } from 'antd-mobile';
 import style from './index.less';
-import Icon from '../../../../../../../../components/Icon';
 import WaitInstock from './components/WaitInstock';
 import OneInStock from './components/OneInStock';
 import InstockError from './components/InstockError';
 import Error from '../Error';
 import { ReceiptsEnums } from '../../../../../../../index';
+import Bouncing from '../../../../../../../../components/Bouncing';
+
+import waitInstockShop from '../../../../../../../../../assets/waitInstockShop.png';
+import instockErrorShop from '../../../../../../../../../assets/instockErrorShop.png';
 
 const InstockShop = (
   {
@@ -14,6 +17,8 @@ const InstockShop = (
     id,
     refresh = () => {
     },
+    waitShopRef,
+    errorShopRef,
     order = {},
   }) => {
 
@@ -119,7 +124,7 @@ const InstockShop = (
             <Badge
               content={order.waitInStockNum || null}
               style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-dairukuang' className='blue' />
+              <Bouncing ref={waitShopRef} size={24} img={waitInstockShop} />
             </Badge>
           </div>
         </div>
@@ -131,7 +136,7 @@ const InstockShop = (
             <Badge
               content={order.instockErrorNum || null}
               style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-dairukuang' className='red' />
+              <Bouncing ref={errorShopRef} size={24} img={instockErrorShop} />
             </Badge>
           </div>
         </div>
