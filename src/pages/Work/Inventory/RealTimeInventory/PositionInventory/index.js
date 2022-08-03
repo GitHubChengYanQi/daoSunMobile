@@ -4,7 +4,6 @@ import { useHistory, useLocation } from 'react-router-dom';
 import MyNavBar from '../../../../components/MyNavBar';
 import { MyLoading } from '../../../../components/MyLoading';
 import { Message } from '../../../../components/Message';
-import MyEmpty from '../../../../components/MyEmpty';
 import StocktaskingHandle
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskingHandle';
 import MyCard from '../../../../components/MyCard';
@@ -18,6 +17,7 @@ import { MyDate } from '../../../../components/MyDate';
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
 export const complete = { url: '/inventory/timelyAdd', method: 'POST' };
 
+
 const PositionInventory = () => {
 
   const history = useHistory();
@@ -26,11 +26,22 @@ const PositionInventory = () => {
 
   const [logs, setLogs] = useState([]);
 
+  const [empty, setEmpty] = useState();
+
   const { loading, run } = useRequest(positionInventory, {
     manual: true,
     onSuccess: (res) => {
+      const skus = res || [];
       const newData = [];
-      res.forEach(item => {
+      if (skus.length === 0) {
+        setEmpty(true);
+        setData([{
+          positionId: query.positionId,
+          name: query.name,
+        }]);
+        return;
+      }
+      skus.forEach(item => {
         const newPositionIds = newData.map(item => item.positionId);
         const newPositionIndex = newPositionIds.indexOf(item.positionId);
         if (newPositionIndex !== -1) {
@@ -74,14 +85,11 @@ const PositionInventory = () => {
     return <MyLoading skeleton />;
   }
 
-  if (data.length === 0) {
-    return <MyEmpty description='此库位木有物料' />;
-  }
-
   return <div style={{ height: '100%', backgroundColor: '#fff', paddingBottom: 60 }}>
     <MyNavBar title='即时盘点' />
     <StocktaskingHandle
       anomalyType='timelyInventory'
+      noSubmit={empty}
       showStock
       data={data}
       setData={setData}

@@ -27,6 +27,8 @@ const Header = (
     anomalyId,
     userInfo,
     loading,
+    otherData,
+    checkNumberTitle,
   },
 ) => {
 
@@ -75,10 +77,7 @@ const Header = (
           skuResult={sku.skuResult}
           className={style.sku}
           extraWidth='64px'
-          otherData={[
-            ToolUtil.isObject(sku.customerResult).customerName,
-            ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
-          ]}
+          otherData={otherData}
         />
         <div className={style.showNumber}>
           <span
@@ -90,7 +89,7 @@ const Header = (
 
       <div className={style.verify} hidden={forward}>
         <div className={style.checkNumber}>
-          <Label className={style.title}>到货数：</Label>
+          <Label className={style.title}>{checkNumberTitle}：</Label>
           <ShopNumber show value={sku.realNumber} /> {unitName}
           <div style={{ padding: '0 8px' }}>({ToolUtil.isObject(sku.user).name || '-'})</div>
         </div>

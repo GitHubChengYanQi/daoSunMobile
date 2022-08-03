@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import MySearch from '../../../components/MySearch';
-import Positions
-  from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
-import { Popup } from 'antd-mobile';
 import scanImg from '../../../../assets/scan.png';
 import style from './index.less';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'dva';
-import LinkButton from '../../../components/LinkButton';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
@@ -44,7 +40,7 @@ const RealTimeInventory = (props) => {
       if (backObject.type === 'storehousePositions') {
         const result = ToolUtil.isObject(backObject.result);
         if (result.storehousePositionsId) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}`);
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}&name=${result.name}`);
         } else {
           Message.errorToast('获取库位码失败!');
         }
@@ -57,11 +53,14 @@ const RealTimeInventory = (props) => {
   return <>
     <MyNavBar title='即时盘点' />
 
-    <MySearch id='search' placeholder='请搜索库位进行盘点' onFocus={() => {
-      const search = document.querySelector('#search input');
-      search.blur();
+    <div onClick={() => {
       setPositionVisible(true);
-    }} />
+    }}>
+      <div style={{ pointerEvents: 'none' }}>
+        <MySearch placeholder='请搜索库位进行盘点' />
+      </div>
+    </div>
+
 
     <div className={style.scan}>
       <div className={style.scanImg}>
@@ -81,7 +80,7 @@ const RealTimeInventory = (props) => {
                 return <div key={index} onClick={() => {
                   history.push(`/Work/Inventory/RealTimeInventory/Detail?inventoryTaskId=${item.inventoryTaskId}`);
                 }}>
-                  <div style={{paddingTop:8}}>
+                  <div style={{ paddingTop: 8 }}>
                     库位：{ToolUtil.isObject(item.positionsResult).name}
                   </div>
                   <div className={style.logData}>
@@ -111,21 +110,21 @@ const RealTimeInventory = (props) => {
       <ScanIcon />
     </div>
 
-      <MyPositions
-        afterClose={() => {
-          if (position.id) {
-            history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
-          }
-        }}
-        visible={positionVisible}
-        single
-        autoFocus
-        value={[position]}
-        onClose={() => setPositionVisible(false)}
-        onSuccess={(value = []) => {
-          setPositionVisible(false);
-          setPosition(value[0] || {});
-        }} />
+    <MyPositions
+      afterClose={() => {
+        if (position.id) {
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}&name=${position.name}`);
+        }
+      }}
+      visible={positionVisible}
+      single
+      autoFocus
+      value={[position]}
+      onClose={() => setPositionVisible(false)}
+      onSuccess={(value = []) => {
+        setPositionVisible(false);
+        setPosition(value[0] || {});
+      }} />
 
     {qrCode.loading && <MyLoading />}
   </>;

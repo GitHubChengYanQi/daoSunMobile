@@ -11,6 +11,7 @@ import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponent
 import MyList from '../../../../../../../../components/MyList';
 import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';
+import MyEmpty from '../../../../../../../../components/MyEmpty';
 
 const StocktaskigAction = (
   {
@@ -38,14 +39,17 @@ const StocktaskigAction = (
     return data.map((positionItem, positionIndex) => {
       const skuResultList = positionItem.skuResultList || [];
 
+      const storeName = ToolUtil.isObject(positionItem.storehouseResult).name;
+
       return <div
         key={positionIndex}
         className={style.positionItem}
       >
         <div className={style.positionName}>
-          {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
+          {positionItem.name} {storeName && '/'} {storeName}
         </div>
         <div className={style.skus}>
+          {skuResultList.length === 0 && <MyEmpty description='暂无物料' />}
           {
             skuResultList.map((skuItem, skuIndex) => {
 
@@ -109,7 +113,7 @@ const StocktaskigAction = (
                     positionId: positionItem.positionId,
                     anomalyId: skuItem.anomalyId || false,
                     sourceId: skuItem.inventoryStockId,
-                    customerId:skuItem.customerId
+                    customerId: skuItem.customerId,
                   });
                 }}>
                   <SkuItem

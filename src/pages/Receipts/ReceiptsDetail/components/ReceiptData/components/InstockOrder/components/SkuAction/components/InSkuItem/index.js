@@ -72,39 +72,41 @@ const InSkuItem = (
     }
   }
 
-  return <div
-    className={style.sku}
-  >
+  return <>
     <div
-      className={ToolUtil.classNames(
-        style.skuItem,
-        complete && style.inStockSkuItem,
-        data.length <= 3 && style.skuBorderBottom,
-      )}
+      className={ToolUtil.classNames(style.sku, style.inStockSkuItem)}
     >
-      <div hidden={!complete} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
-        <span>{moment(detail ? item.createTime : item.updateTime).format('YYYY-MM-DD')}</span>
-      </div>
-      <div className={style.item}>
-        <SkuItem
-          imgId={`skuImg${index}`}
-          skuResult={skuResult}
-          extraWidth='150px'
-          otherData={[
-            ToolUtil.isObject(item.customerResult).customerName,
-            ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-          ]}
-        />
-      </div>
-      <div className={style.skuNumber}>
-        <div className={error ? style.error : style.success}>
-          {text}
+      <div
+        className={ToolUtil.classNames(
+          style.skuItem,
+          data.length <= 3 && style.skuBorderBottom,
+        )}
+      >
+        <div hidden={!complete} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
+          <span>{moment(detail ? item.createTime : item.updateTime).format('YYYY-MM-DD')}</span>
         </div>
-        <ShopNumber value={number} show />
+        <div className={style.item}>
+          <SkuItem
+            imgId={`skuImg${index}`}
+            skuResult={skuResult}
+            extraWidth='150px'
+            otherData={[
+              ToolUtil.isObject(item.customerResult).customerName,
+              ToolUtil.isObject(item.brandResult).brandName || '无品牌',
+            ]}
+          />
+        </div>
+        <div className={style.skuNumber}>
+          <div className={error ? style.error : style.success}>
+            {text}
+          </div>
+          <ShopNumber value={number} show />
+        </div>
       </div>
+      {!detail && <MyProgress percent={parseInt((item.instockNumber / item.askNumber) * 100)} />}
     </div>
-    {!detail && <MyProgress percent={parseInt((item.instockNumber / item.askNumber) * 100)} />}
-  </div>;
+    <div className={style.space} />
+  </>;
 };
 
 export default InSkuItem;

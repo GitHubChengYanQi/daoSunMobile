@@ -137,7 +137,7 @@ const WaitInstock = (
               const brandName = ToolUtil.isObject(item.brandResult).brandName || '无品牌';
 
               return <div key={index} className={style.skuItem}>
-                <MyCheck checked={checked} className={style.check} onChange={() => {
+                <MyCheck fontSize={18} checked={checked} className={style.check} onChange={() => {
                   check(checked, index);
                 }} />
                 <div className={style.sku} onClick={() => {

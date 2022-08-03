@@ -1,7 +1,6 @@
 import React from 'react';
 import style from '../../index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const ErrorItem = (
@@ -11,6 +10,7 @@ const ErrorItem = (
     item,
     totalTitle,
     index,
+    otherData,
   },
 ) => {
 
@@ -21,10 +21,7 @@ const ErrorItem = (
         <SkuItem
           extraWidth='100px'
           skuResult={item.skuResult}
-          otherData={[
-            ToolUtil.isObject(item.customer).customerName,
-            ToolUtil.isObject(item.brand).brandName || '无品牌',
-          ]}
+          otherData={otherData}
         />
       </div>
       <div className={style.realNumber}>

@@ -110,7 +110,7 @@ const MyTextArea = (
     }
   }, []);
 
-  return <div style={{ padding: maxLength && '12px 0' }} className={ToolUtil.classNames(style.textArea, className)}>
+  return <div style={{ paddingBottom: maxLength && '12px 0' }} className={ToolUtil.classNames(style.textArea, className)}>
     <div className={style.count} hidden={!maxLength}>{value.length} / {maxLength}</div>
     <Input.TextArea
       maxLength={maxLength}

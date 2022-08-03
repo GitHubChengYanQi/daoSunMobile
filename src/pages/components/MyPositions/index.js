@@ -22,7 +22,6 @@ const MyPositions = (
     verification,
     single,
     showAll,
-    autoFocus,
     maxNumber,
   },
 ) => {
@@ -47,7 +46,6 @@ const MyPositions = (
         onSuccess={onSuccess}
         single={single}
         showAll={showAll}
-        autoFocus={autoFocus}
         maxNumber={maxNumber}
       />
     </MyAntPopup>

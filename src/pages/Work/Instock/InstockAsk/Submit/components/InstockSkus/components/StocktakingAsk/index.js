@@ -61,7 +61,7 @@ const StocktakingAsk = ({ createType }) => {
       return false;
     };
     return {
-      title: '盘点申请明细',
+      title: '盘点申请',
       type: '盘点',
       buttonHidden: true,
       disabled: stocktakingDisabled(),

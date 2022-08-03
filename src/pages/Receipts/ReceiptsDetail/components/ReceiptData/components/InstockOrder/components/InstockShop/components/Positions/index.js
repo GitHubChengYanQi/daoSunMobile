@@ -6,7 +6,7 @@ import BottomButton from '../../../../../../../../../../components/BottomButton'
 import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import Icon, { ScanIcon } from '../../../../../../../../../../components/Icon';
+import { ScanIcon } from '../../../../../../../../../../components/Icon';
 import { connect } from 'dva';
 import { Message } from '../../../../../../../../../../components/Message';
 
@@ -34,23 +34,12 @@ const Positions = (
   const codeId = ToolUtil.isObject(props.qrCode).codeId;
   const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
 
-  const [focus, setFocus] = useState(autoFocus);
-
   const [value, onChange] = useState(ids);
 
   const disabled = verification && value.length >= maxNumber;
 
   const { loading, data, run } = useRequest(positions, {
     manual: true,
-    onSuccess: () => {
-      if (focus) {
-        const positionSearch = document.querySelector('#positionSearch input');
-        if (positionSearch) {
-          positionSearch.focus();
-          setFocus(false);
-        }
-      }
-    },
   });
 
   const [name, setName] = useState();

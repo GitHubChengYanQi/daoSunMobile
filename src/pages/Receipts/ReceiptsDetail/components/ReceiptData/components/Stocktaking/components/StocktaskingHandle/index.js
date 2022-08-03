@@ -20,6 +20,7 @@ const StocktaskingHandle = (
     shopCartNum,
     refresh = () => {
     },
+    noSubmit,
   },
 ) => {
 
@@ -80,7 +81,7 @@ const StocktaskingHandle = (
     return complete.length !== skuResultList.length;
   });
 
-  const errNum = typeof shopCartNum === 'number' ? shopCartNum : errorNumber
+  const errNum = typeof shopCartNum === 'number' ? shopCartNum : errorNumber;
 
   return <>
     <StocktaskigAction
@@ -112,7 +113,7 @@ const StocktaskingHandle = (
       setData={setData}
       showStock={showStock}
     />
-    <div hidden={show}>
+    <div hidden={show || noSubmit}>
       <BottomButton
         disabled={stocktakings.length > 0 || errNum > 0}
         only

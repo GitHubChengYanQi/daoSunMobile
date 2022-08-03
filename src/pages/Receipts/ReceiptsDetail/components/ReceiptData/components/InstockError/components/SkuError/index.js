@@ -100,6 +100,7 @@ const SkuError = (
       const allowNumber = checkNum - termination;
 
       setSku({
+        ...res,
         confirm,
         hidden,
         allowNumber: allowNumber < 0 ? 0 : allowNumber,
@@ -198,6 +199,11 @@ const SkuError = (
     switch (sku.type) {
       case 'InstockError':
         return {
+          checkNumberTitle:'到货数',
+          otherData: [
+            ToolUtil.isObject(sku.customerResult).customerName,
+            ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
+          ],
           showAction: <>
             {item.status === -1 && <span className={style.prohibit}>· 终止入库</span>}
             {item.status === 1 && <span className={style.allow}>· 允许入库</span>}
@@ -247,20 +253,25 @@ const SkuError = (
       case 'StocktakingError':
       case 'timelyInventory':
         return {
+          checkNumberTitle:'盘点数',
+          otherData: [
+            ToolUtil.isObject(sku.brand).brandName || '无品牌',
+            ToolUtil.isObject(sku.positionsResult).name,
+          ],
           showAction: <>
-            {item.status === 3 && <span className={style.allow}>· 忽略异常</span>}
-            {item.status === 4 && <span className={style.prohibit}>· 维修</span>}
-            {item.status === 2 && <span className={style.allow}>· 报损</span>}
+            {item.status === 3 && <span className={style.allow}>· 继续使用</span>}
+            {item.status === 4 && <span className={style.allow}>· 维修</span>}
+            {item.status === 2 && <span className={style.prohibit}>· 报损</span>}
           </>,
           actions: <>
-            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+            <Button color='primary' fill='outline' onClick={() => {
               action(item, 4);
             }}>维修</Button>
-            <Button color='danger' fill='outline' onClick={() => {
+            <Button color='primary' fill='outline' onClick={() => {
               itemChange(index, { status: -1 });
               action(item, 3);
-            }}>忽略异常</Button>
-            <Button className={style.ok} color='primary' fill='outline' onClick={() => {
+            }}>继续使用</Button>
+            <Button color='danger' fill='outline' onClick={() => {
               action(item, 2);
             }}>报损</Button>
           </>,
@@ -292,6 +303,8 @@ const SkuError = (
   return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
     <Header
+      checkNumberTitle={errorTypeData().checkNumberTitle}
+      otherData={errorTypeData().otherData}
       setSku={setSku}
       sku={sku}
       anomalyId={anomalyId}
