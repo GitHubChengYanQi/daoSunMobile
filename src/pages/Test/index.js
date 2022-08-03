@@ -1,10 +1,9 @@
 import React from 'react';
-import MyTextArea from '../components/MyTextArea';
-
+import User from '../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/User';
 const Test = () => {
 
   return <div style={{ textAlign: 'center' }}>
-    <MyTextArea />
+    <User title='参与人' />
   </div>;
 };
 

@@ -8,6 +8,7 @@ const InkindList = (
     },
     addInkind = () => {
     },
+    searchDisabled,
     add,
   }, ref) => {
 
@@ -41,6 +42,7 @@ const InkindList = (
 
   return <>
     <Actions
+      searchDisabled={searchDisabled}
       skuInfo={skuInfo}
       visible={actionVisible}
       setVisible={setActionVisible}

@@ -4,7 +4,8 @@ import style from '../../../InstockOrder/components/InstockShop/index.less';
 import InstockError from '../../../InstockOrder/components/InstockShop/components/InstockError';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
-import Icon from '../../../../../../../../components/Icon';
+import instockErrorShop from '../../../../../../../../../assets/instockErrorShop.png';
+import Bouncing from '../../../../../../../../components/Bouncing';
 
 const ErrorShop = (
   {
@@ -18,6 +19,7 @@ const ErrorShop = (
     },
     errorReturn = () => {
     },
+    errorShopRef,
   },
 ) => {
 
@@ -101,7 +103,7 @@ const ErrorShop = (
             <Badge
               content={errorNumber || null}
               style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-yichangkuang' />
+              <Bouncing ref={errorShopRef} size={24} img={instockErrorShop} />
             </Badge></div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from '../../index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
@@ -32,6 +32,8 @@ const StocktaskigAction = (
     listRef,
   },
 ) => {
+
+  const errorShopRef = useRef();
 
   const [visible, setVisible] = useState();
 
@@ -185,6 +187,7 @@ const StocktaskigAction = (
       destroyOnClose
     >
       <Error
+        errorShopRef={errorShopRef}
         noDelete
         anomalyType={anomalyType}
         showStock={showStock}
@@ -204,6 +207,7 @@ const StocktaskigAction = (
     </Popup>
 
     {!show && <ErrorShop
+      errorShopRef={errorShopRef}
       showStock={showStock}
       noBack
       anomalyType={anomalyType}

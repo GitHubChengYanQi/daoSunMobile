@@ -14,6 +14,7 @@ const Actions = (
     skuInfo,
     onSuccess = () => {
     },
+    searchDisabled,
     ...props
   }) => {
 
@@ -61,11 +62,10 @@ const Actions = (
       },
     });
   }, []);
-
   return <MyActionSheet
     onClose={() => setVisible(false)}
     visible={visible}
-    actions={[{ text: '扫码', key: 'scan' }, { text: '搜索实物', key: 'search' }]}
+    actions={[{ text: '扫码', key: 'scan' }, { text: '搜索实物', key: 'search', disabled: searchDisabled }]}
     onAction={(action) => {
       if (action.key === 'scan') {
         props.dispatch({

@@ -387,6 +387,7 @@ const Error = (
                 min={allNumber}
                 value={sku.realNumber}
                 onChange={(realNumber) => {
+                  setInkinds([]);
                   setSku({ ...sku, realNumber });
                 }}
               />
@@ -454,6 +455,7 @@ const Error = (
                   min={allNumber}
                   value={sku.realNumber}
                   onChange={(realNumber) => {
+                    setInkinds([]);
                     setSku({ ...sku, realNumber });
                   }}
                 />
@@ -576,6 +578,7 @@ const Error = (
     <MyLoading />}
 
     <InkindList
+      searchDisabled={showStock}
       ref={inventoryRef}
       onSuccess={(inkinds = []) => {
         let realNumber = 0;

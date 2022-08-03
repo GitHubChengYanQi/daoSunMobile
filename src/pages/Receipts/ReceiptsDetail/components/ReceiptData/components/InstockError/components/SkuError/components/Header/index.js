@@ -121,6 +121,7 @@ const Header = (
             <Label className={style.title}>复核数：</Label>
             <Space align='center'>
               <ShopNumber
+                min={1}
                 value={sku.checkNumber}
                 onChange={(checkNumber) => {
                   setSku({ ...sku, checkNumber });

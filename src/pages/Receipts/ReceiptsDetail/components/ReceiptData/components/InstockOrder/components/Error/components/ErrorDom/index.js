@@ -14,7 +14,7 @@ import UploadFile from '../../../../../../../../../../components/Upload/UploadFi
 import { AddButton } from '../../../../../../../../../../components/MyButton';
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import ShowCode from '../../../../../../../../../../components/ShowCode';
-import React  from 'react';
+import React from 'react';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
@@ -283,13 +283,19 @@ const ErrorDom = (
         });
       }}
       onSuccess={(inkinds = []) => {
+        let number = 0;
         const newInkinds = inkinds.map(item => {
+          number += item.number;
           return {
             inkindId: item.inkindId,
             codeId: item.codeId,
             number: item.number,
           };
         });
+        if (number > sku.realNumber) {
+          Message.toast('不能超过盘点数量！');
+          return;
+        }
         addInkind(newInkinds);
       }}
     />

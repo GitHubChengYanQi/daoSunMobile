@@ -39,8 +39,6 @@ const MyKeybord = (
     setDefaultNumber('');
   };
 
-  const [ok, setOk] = useState();
-
   let decimalLength;
 
   try {
@@ -84,21 +82,13 @@ const MyKeybord = (
   return <>
     <Popup
       visible={visible}
-      afterShow={() => {
-        setOk(false);
-      }}
-      afterClose={() => {
-        if (!ok) {
-          save();
-        }
-      }}
       className={ToolUtil.classNames(style.popup, popupClassName)}
       onMaskClick={() => {
         setVisible(false);
       }}>
       <div className={style.content}>
         <div hidden={noStepper} className={style.calculation}>
-          <Button disabled={Number(showNumber || 0) === min} onClick={() => {
+          <Button disabled={Number(showNumber || 0) <= min} onClick={() => {
             const newValue = Number((Number(showNumber) - Number(step)).toFixed(decimalLength));
             numberChange(newValue);
           }}>
@@ -107,7 +97,7 @@ const MyKeybord = (
           <div className={style.value}>
             {showNumber}<span className={style.line}>|</span>
           </div>
-          <Button disabled={Number(showNumber || 0) === max} onClick={() => {
+          <Button disabled={Number(showNumber || 0) >= max} onClick={() => {
             const newValue = Number((Number(showNumber) + Number(step)).toFixed(decimalLength));
             numberChange(newValue);
           }}>
@@ -168,7 +158,6 @@ const MyKeybord = (
                 onConfirm();
                 setVisible(false);
                 save();
-                setOk(true);
               }}>
                 确定
               </Button>

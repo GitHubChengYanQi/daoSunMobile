@@ -199,7 +199,7 @@ const SkuError = (
     switch (sku.type) {
       case 'InstockError':
         return {
-          checkNumberTitle:'到货数',
+          checkNumberTitle: '到货数',
           otherData: [
             ToolUtil.isObject(sku.customerResult).customerName,
             ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
@@ -253,7 +253,7 @@ const SkuError = (
       case 'StocktakingError':
       case 'timelyInventory':
         return {
-          checkNumberTitle:'盘点数',
+          checkNumberTitle: '盘点数',
           otherData: [
             ToolUtil.isObject(sku.brand).brandName || '无品牌',
             ToolUtil.isObject(sku.positionsResult).name,
@@ -349,12 +349,20 @@ const SkuError = (
             </div>}
             extra={<>
               <Space>
-                {item.userId && (item.userId !== userInfo.id) && item.status === 0 && `已转交：${item.userName}`}
-                {permissions && item.status !== 0 && <LinkButton style={{ marginLeft: 8 }} onClick={() => {
-                  errorItemsChange({ status: 0 }, index);
-                }}>
-                  <FormOutlined />
-                </LinkButton>}
+                {
+                  (item.userId && (item.userId !== userInfo.id)) ?
+                    `已转交：${item.userName}`
+                    :
+                    (permissions
+                      &&
+                      item.status !== 0
+                      &&
+                      <LinkButton style={{ marginLeft: 8 }} onClick={() => {
+                        errorItemsChange({ status: 0 }, index);
+                      }}>
+                        <FormOutlined />
+                      </LinkButton>)
+                }
               </Space>
             </>}
           >
@@ -412,6 +420,7 @@ const SkuError = (
           anomalyOrderId,
           detailId: param.detailId,
           userId: id,
+          stauts: 0,
         },
       });
     }} />
