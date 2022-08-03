@@ -9,7 +9,6 @@ import ShopNumber
 import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../../../../../../../../components/Upload/UploadFile';
 import { Button, Space, TextArea } from 'antd-mobile';
-import MyCard from '../../../../../../../../../../components/MyCard';
 import Label from '../../../../../../../../../../components/Label';
 
 const Header = (
@@ -48,30 +47,30 @@ const Header = (
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
   return <>
-    <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
-      <div className={style.header} hidden={forward} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
+    <div className={style.header} hidden={forward} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
 
-        {
-          over ?
-            <div className={style.skuShow}>
-              <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
-              <div>
-                <div className={style.smallSku} style={{ maxWidth: 210 }}>
-                  {SkuResultSkuJsons({ skuResult, spu: true })}
-                </div>
-                <div className={style.smallSku} style={{ maxWidth: 210 }}>
-                  {SkuResultSkuJsons({ skuResult, sku: true })}
-                </div>
+      {
+        over ?
+          <div className={style.skuShow}>
+            <img src={imgUrl || state.imgLogo} width={30} height={30} alt='' />
+            <div>
+              <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                {SkuResultSkuJsons({ skuResult, spu: true })}
+              </div>
+              <div className={style.smallSku} style={{ maxWidth: 210 }}>
+                {SkuResultSkuJsons({ skuResult, sku: true })}
               </div>
             </div>
-            :
-            <div className={style.title}>异常处理</div>
-        }
-        <span onClick={() => {
-          onClose();
-        }}><CloseOutline /></span>
-      </div>
+          </div>
+          :
+          <div className={style.title}>异常处理</div>
+      }
+      <span onClick={() => {
+        onClose();
+      }}><CloseOutline /></span>
+    </div>
 
+    <div className={style.errorActionHeader}>
       <div className={style.skuItem} style={{ border: 'none' }}>
         <SkuItem
           skuResult={sku.skuResult}
@@ -82,11 +81,11 @@ const Header = (
         <div className={style.showNumber}>
           <span
             className={style.through}
-            hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}</span>
+            hidden={(sku.confirm ? sku.checkNumber : sku.realNumber) === sku.needNumber}>× {sku.needNumber}
+          </span>
           <span>× {sku.confirm ? sku.checkNumber : sku.realNumber}</span>
         </div>
       </div>
-
       <div className={style.verify} hidden={forward}>
         <div className={style.checkNumber}>
           <Label className={style.title}>{checkNumberTitle}：</Label>
@@ -181,9 +180,8 @@ const Header = (
           </div>
         </div>
 
-
       </div>
-    </MyCard>
+    </div>
   </>;
 };
 

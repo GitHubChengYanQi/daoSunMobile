@@ -36,10 +36,13 @@ const Relation = ({ type, receipts = {} }) => {
   useEffect(() => {
     switch (type) {
       case ReceiptsEnums.instockOrder:
-        inStockRun({ params: { id: receipts.instockOrderId } });
+        inStockRun({ params: { id: receipts.instockOrderId, type } });
         break;
-        case ReceiptsEnums.stocktaking:
-        inStockRun({ params: { id: receipts.inventoryTaskId } });
+      case ReceiptsEnums.stocktaking:
+        inStockRun({ params: { id: receipts.inventoryTaskId, type } });
+        break;
+      case ReceiptsEnums.error:
+        inStockRun({ params: { id: receipts.orderId, type } });
         break;
       default:
         break;

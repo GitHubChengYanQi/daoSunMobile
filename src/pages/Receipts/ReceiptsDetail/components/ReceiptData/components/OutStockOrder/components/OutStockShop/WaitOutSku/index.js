@@ -21,6 +21,8 @@ const WaitOutSku = (
     id,
     refresh = () => {
     },
+    outType,
+    taskId,
   },
 ) => {
 
@@ -33,6 +35,25 @@ const WaitOutSku = (
   const [data, setData] = useState([]);
 
   const [allSkus, setAllSkus] = useState([]);
+
+  const outTypeData = () => {
+    switch (outType) {
+      case 'StocktakingErrorOutStock':
+        return {
+          noSys: true,
+          skuAction: <>
+            <LinkButton>查看异常件</LinkButton>
+          </>,
+        };
+      default:
+        return {
+          noSys: true,
+          skuAction: <>
+            <LinkButton>查看异常件</LinkButton>
+          </>,
+        };
+    }
+  };
 
   const { loading, run, refresh: listRefresh } = useRequest(listByUser,
     {
@@ -94,7 +115,7 @@ const WaitOutSku = (
     <div className={style.header}>待出物料</div>
     <div className={style.sys}>
       <span>数量：{allSkus.length} 类</span>
-      <LinkButton onClick={() => {
+      <LinkButton disabled={outTypeData().noSys} onClick={() => {
         setSys(!sys);
       }}>{sys ? '取消管理' : '管理'}</LinkButton>
     </div>
@@ -135,7 +156,6 @@ const WaitOutSku = (
                 />
                 领料人：{userItem.userName}
               </span>
-              {/*<LinkButton><SystemQRcodeOutline /></LinkButton>*/}
             </div>
 
             {
@@ -182,6 +202,7 @@ const WaitOutSku = (
                             />
                           </div>
                           <div>
+                            {outTypeData().skuAction}
                             <ShopNumber value={cartItem.number} show />
                           </div>
                         </div>
@@ -229,9 +250,9 @@ const WaitOutSku = (
               }
               return null;
             });
-            pickRun({ data: { userIds: userIds.toString(),pickListsIds } });
+            pickRun({ data: { userIds: userIds.toString(), pickListsIds, taskId } });
           }}
-        >通知备料</Button>}
+        >通知领料</Button>}
       </div>
     </div>
 

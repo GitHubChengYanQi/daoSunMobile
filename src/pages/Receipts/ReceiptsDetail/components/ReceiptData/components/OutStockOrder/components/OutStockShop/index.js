@@ -6,7 +6,9 @@ import WaitOutSku from './WaitOutSku';
 
 const OutStockShop = (
   {
+    outType,
     id,
+    taskId,
     refresh = () => {
     },
     allPerpareNumber = 0,
@@ -54,7 +56,7 @@ const OutStockShop = (
       destroyOnClose
       visible={visible}
     >
-      <WaitOutSku id={id} refresh={() => setRefreshOrder(true)} />
+      <WaitOutSku taskId={taskId} outType={outType} id={id} refresh={() => setRefreshOrder(true)} />
     </Popup>
   </div>;
 };

@@ -58,7 +58,7 @@ const Maintenance = (
         {
           data.map((item, index) => {
 
-            const skuResults = item.skuResults || [];
+            const skuResult = item.skuResult || [];
 
             const brands = item.brandResults || [];
             const materials = item.materialResults || [];
@@ -90,7 +90,7 @@ const Maintenance = (
                 <div className={skuStyle.skuAction}>
                   <div className={skuStyle.sku}>
                     <SkuItem
-                      skuResult={skuResults[0]}
+                      skuResult={skuResult}
                       otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
                     />
                   </div>

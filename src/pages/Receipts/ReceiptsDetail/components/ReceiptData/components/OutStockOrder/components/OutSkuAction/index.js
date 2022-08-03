@@ -17,7 +17,6 @@ import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import MyPicking, { collectableColor, notPreparedColor, receivedColor } from './compoennts/MyPicking';
 import { Clock } from '../../../../../../../../components/MyDate';
 import PrintCode from '../../../../../../../../components/PrintCode';
-import { Message } from '../../../../../../../../components/Message';
 import jrQrcode from 'jr-qrcode';
 
 
@@ -161,7 +160,13 @@ const OutSkuAction = (
       />
     </Popup>
 
-    {action && <OutStockShop allPerpareNumber={allPerpareNumber} id={pickListsId} refresh={refresh} />}
+    {action && <OutStockShop
+      taskId={taskId}
+      outType={order.source}
+      allPerpareNumber={allPerpareNumber}
+      id={pickListsId}
+      refresh={refresh}
+    />}
 
     {action && userInfo.id === order.userId
     &&

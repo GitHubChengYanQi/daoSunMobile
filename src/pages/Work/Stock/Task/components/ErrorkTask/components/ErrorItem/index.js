@@ -21,6 +21,7 @@ const ErrorItem = (
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
+    positionSize={receipts.positionNum}
     skuSize={receipts.skuNumber}
     beginTime={receipts.beginTime}
     onClick={onClick}

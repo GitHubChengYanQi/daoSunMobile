@@ -14,6 +14,8 @@ const ForwardItem = (
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
   };
 
+  console.log(receipts);
+
   return  <TaskItem
     coding={receipts.coding}
     endTime={receipts.endTime}
