@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import style from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
-import { Progress } from 'antd';
 import Icon from '../../../../../components/Icon';
 import { ToolUtil } from '../../../../../components/ToolUtil';
+import MyProgress from '../../../../../components/MyProgress';
 
 const TaskItem = (
   {
@@ -91,23 +91,7 @@ const TaskItem = (
       </div>
     </div>
 
-    <div className={style.progress} hidden={noProgress}>
-      <Progress
-        strokeColor='var(--adm-color-primary)'
-        format={(number) => {
-          return <div
-            className={style.text}
-            style={{
-              width: `${[100, 0].includes(number) ? 100 : number - 1}%`,
-              textAlign: [100, 0].includes(number) ? 'center' : 'right',
-              color: number > 0 ? '#fff' : 'var(--adm-color-primary)',
-            }}>
-            {number + '%'}
-          </div>;
-        }}
-        percent={percent}
-      />
-    </div>
+   <MyProgress hidden={noProgress} percent={percent} />
   </div>;
 };
 

@@ -6,6 +6,7 @@ import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import moment from 'moment';
+import MyProgress from '../../../../../../../../../../components/MyProgress';
 
 const InSkuItem = (
   {
@@ -71,7 +72,6 @@ const InSkuItem = (
     }
   }
 
-
   return <div
     className={style.sku}
   >
@@ -103,6 +103,7 @@ const InSkuItem = (
         <ShopNumber value={number} show />
       </div>
     </div>
+    {!detail && <MyProgress percent={parseInt((item.instockNumber / item.askNumber) * 100)} />}
   </div>;
 };
 

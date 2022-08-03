@@ -6,7 +6,7 @@ import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import Maintenanceing from '../Maintenanceing';
 import MyList from '../../../../../../../../components/MyList';
 import style from '../../../Stocktaking/index.less';
-import { Progress } from 'antd';
+import MyProgress from '../../../../../../../../components/MyProgress';
 
 const MaintenanceAction = (
   {
@@ -89,15 +89,7 @@ const MaintenanceAction = (
                     </Button>
                   </div>
                 </div>
-                <div className={style.progress}>
-                  <Progress
-                    strokeColor='var(--adm-color-primary)'
-                    format={(number) => {
-                      return <span className={style.blue}>{number + '%'}</span>;
-                    }}
-                    percent={percent}
-                  />
-                </div>
+                <MyProgress percent={percent} />
               </div>;
             })
           }
