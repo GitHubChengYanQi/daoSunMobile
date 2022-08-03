@@ -75,10 +75,9 @@ const WaitOutSku = (
   const { loading: backLoading, run: backRun } = useRequest(backSkus, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('移出成功!',()=>{
-        listRefresh();
-        refresh();
-      });
+      Message.successToast('移出成功!');
+      listRefresh();
+      refresh();
     },
   });
 

@@ -211,35 +211,37 @@ const SkuError = (
               action(item, 1);
             }}>允许入库</Button>
           </>,
-          bottom: <div className={style.bottomAction} hidden={forward}>
-            <div className={style.action}>
-              <div hidden={!sku.errorNumber}>终止入库 × {sku.errorNumber} </div>
-              <div
-                className={style.instockNumber}>
-                入库数量：
-                <ShopNumber
-                  min={0}
-                  show={!permissions}
-                  max={sku.allowNumber}
-                  value={sku.instockNumber}
-                  onChange={(number) => {
-                    setSku({ ...sku, instockNumber: number });
-                  }} />
+          bottom: <div style={{ minHeight: 40 }} hidden={forward}>
+            <div className={style.bottomAction}>
+              <div className={style.action}>
+                <div hidden={!sku.errorNumber}>终止入库 × {sku.errorNumber} </div>
+                <div
+                  className={style.instockNumber}>
+                  入库数量：
+                  <ShopNumber
+                    min={0}
+                    show={!permissions}
+                    max={sku.allowNumber}
+                    value={sku.instockNumber}
+                    onChange={(number) => {
+                      setSku({ ...sku, instockNumber: number });
+                    }} />
+                </div>
               </div>
-            </div>
 
-            {permissions && <Button disabled={!handle} color='primary' onClick={() => {
-              const param = {
-                data: {
-                  anomalyId,
-                  instockNumber: sku.instockNumber,
-                  status: 90,
-                },
-              };
-              saveRun(param).then(() => {
-                onSuccess();
-              });
-            }}>确定</Button>}
+              {permissions && <Button disabled={!handle} color='primary' onClick={() => {
+                const param = {
+                  data: {
+                    anomalyId,
+                    instockNumber: sku.instockNumber,
+                    status: 90,
+                  },
+                };
+                saveRun(param).then(() => {
+                  onSuccess();
+                });
+              }}>确定</Button>}
+            </div>
           </div>,
         };
       case 'StocktakingError':
@@ -262,12 +264,14 @@ const SkuError = (
               action(item, 2);
             }}>报损</Button>
           </>,
-          bottom: permissions && !forward && <BottomButton disabled={!handle} only onClick={() => {
-            const param = { data: { anomalyId, status: 90 } };
-            saveRun(param).then(() => {
-              onSuccess();
-            });
-          }} />,
+          bottom: permissions && !forward && <div style={{ minHeight: 60 }}>
+            <BottomButton disabled={!handle} only onClick={() => {
+              const param = { data: { anomalyId, status: 90 } };
+              saveRun(param).then(() => {
+                onSuccess();
+              });
+            }} />
+          </div>,
         };
       default:
         return {};
@@ -341,7 +345,7 @@ const SkuError = (
               </Space>
             </>}
           >
-            <div className={style.careful} style={{ padding: '12px 0' }}>
+            <div className={ToolUtil.classNames(style.careful, style.inkindFiled)}>
               <span className={style.inkindTitle}>原因：</span>
               {ToolUtil.isArray(item.notices).map((item, index) => {
                 return <div key={index} className={style.notices} style={{ margin: index === 0 && 0 }}>
@@ -349,18 +353,18 @@ const SkuError = (
                 </div>;
               })}
             </div>
-            <div style={{ padding: '8px 0' }}>
+            <div className={ToolUtil.classNames(style.inkindFiled)}>
               <span className={style.inkindTitle}>描述：</span>
               {item.description || '无'}
             </div>
-            <div>
+            <div hidden={ToolUtil.isArray(item.media).length === 0} className={ToolUtil.classNames(style.inkindFiled)}>
               <UploadFile
                 show
                 value={item.media}
                 imgSize={36}
               />
             </div>
-            <div className={style.opinion}>
+            <div className={ToolUtil.classNames(style.opinion, style.inkindFiled)}>
               <span className={style.inkindTitle}>意见：</span>
               {!handle ? <TextArea
                 className={style.textArea}

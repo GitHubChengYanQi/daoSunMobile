@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IndexBar, List } from 'antd-mobile';
 import { useRequest } from '../../../../../util/Request';
-import { UserIdSelect } from '../../../../Work/Customer/CustomerUrl';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../ToolUtil';
 import MyEmpty from '../../../MyEmpty';
@@ -9,6 +8,9 @@ import { MyLoading } from '../../../MyLoading';
 import { pinyin } from 'pinyin-pro';
 import MySearch from '../../../MySearch';
 import { CheckOutline } from 'antd-mobile-icons';
+import { UserName } from '../../../User';
+
+export const userList = { url: '/formUser/userList', method: 'GET' };
 
 const UserList = (
   {
@@ -25,19 +27,19 @@ const UserList = (
 
   const [data, setData] = useState([]);
 
-  const { loading, run } = useRequest(UserIdSelect, {
+  const { loading, run } = useRequest(userList, {
     manual: true,
     onSuccess: (res) => {
       const users = [];
       let checkUser;
       ToolUtil.isArray(res).forEach(item => {
-        if (hiddenCurrentUser && item.value === userInfo.id) {
+        if (hiddenCurrentUser && item.userId === userInfo.id) {
           return;
         }
-        if (value && value === item.value) {
-          checkUser = { name: item.label, id: item.value };
+        if (value && value === item.userId) {
+          checkUser = { name: item.name, id: item.userId };
         }
-        users.push({ name: item.label, id: item.value });
+        users.push({ name: item.name, id: item.userId, avatar: item.avatar });
       });
       const charCodeOfA = 'A'.charCodeAt(0);
       const groups = [];
@@ -95,9 +97,13 @@ const UserList = (
             >
               <List>
                 {items.map((item, index) => (
-                  <List.Item arrow={value === item.id ? <CheckOutline style={{color:'var(--adm-color-primary)'}} /> : false} key={index} onClick={() => {
+                  <List.Item
+                    arrow={value === item.id ? <CheckOutline style={{ color: 'var(--adm-color-primary)' }} /> : false}
+                    key={index} onClick={() => {
                     onChange(item);
-                  }}>{item.name}</List.Item>
+                  }}>
+                    <UserName user={item} size={40} />
+                  </List.Item>
                 ))}
               </List>
             </IndexBar.Panel>

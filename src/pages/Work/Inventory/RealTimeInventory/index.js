@@ -17,6 +17,7 @@ import MyCard from '../../../components/MyCard';
 import MyList from '../../../components/MyList';
 import { MyDate } from '../../../components/MyDate';
 import MyPositions from '../../../components/MyPositions';
+import { ScanIcon } from '../../../components/Icon';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
@@ -67,16 +68,7 @@ const RealTimeInventory = (props) => {
         <img src={scanImg} alt='' width={60} height={60} />
       </div>
       <div className={style.scanTitle}>
-        请
-        <LinkButton onClick={() => {
-          props.dispatch({
-            type: 'qrCode/wxCpScan',
-            payload: {
-              action: 'position',
-            },
-          });
-        }}>打开手机摄像头</LinkButton>
-        或使用手持终端扫描按键扫描库位码进行盘点
+        请打开手机摄像头或使用手持终端扫描按键扫描库位码进行盘点
       </div>
     </div>
 
@@ -108,6 +100,16 @@ const RealTimeInventory = (props) => {
       </MyCard>
     </div>
 
+    <div className={style.stocktakingButtom} onClick={() => {
+      props.dispatch({
+        type: 'qrCode/wxCpScan',
+        payload: {
+          action: 'position',
+        },
+      });
+    }}>
+      <ScanIcon />
+    </div>
 
       <MyPositions
         afterClose={() => {

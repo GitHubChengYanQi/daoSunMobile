@@ -4,7 +4,7 @@ import MySearch from '../../../components/MySearch';
 import Icon from '../../../components/Icon';
 import SkuList from '../../Sku/SkuList';
 import MyAntList from '../../../components/MyAntList';
-import { ActionSheet, List } from 'antd-mobile';
+import { List } from 'antd-mobile';
 import SkuItem from '../../Sku/SkuItem';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';

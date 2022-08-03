@@ -22,7 +22,6 @@ const ErrorItem = (
     taskName={item.taskName}
     index={index}
     skuSize={receipts.skuNumber}
-    noPosition
     beginTime={receipts.beginTime}
     onClick={onClick}
   />;

@@ -80,6 +80,8 @@ const StocktaskingHandle = (
     return complete.length !== skuResultList.length;
   });
 
+  const errNum = typeof shopCartNum === 'number' ? shopCartNum : errorNumber
+
   return <>
     <StocktaskigAction
       show={show}
@@ -88,7 +90,7 @@ const StocktaskingHandle = (
       api={api}
       anomalyType={anomalyType}
       inventoryTaskId={inventoryTaskId}
-      errorNumber={typeof shopCartNum === 'number' ? shopCartNum : errorNumber}
+      errorNumber={errNum}
       errorReturn={skuReturnChange}
       refresh={(skuItem, error, anomalyId) => {
         if (skuItem) {
@@ -98,7 +100,7 @@ const StocktaskingHandle = (
               status: error,
               anomalyId: [2, -1].includes(error) && anomalyId,
               realNumber: skuItem.realNumber,
-              errorNum:skuItem.errorNumber,
+              errorNum: skuItem.errorNumber,
             },
             skuId: skuItem.skuId,
             positionId: skuItem.positionId,
@@ -111,9 +113,8 @@ const StocktaskingHandle = (
       showStock={showStock}
     />
     <div hidden={show}>
-      <div style={{ height: 60 }} />
       <BottomButton
-        disabled={stocktakings.length > 0 || shopCartNum > 0}
+        disabled={stocktakings.length > 0 || errNum > 0}
         only
         text='提交'
         onClick={() => {

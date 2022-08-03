@@ -19,6 +19,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
 import InkindList from '../../../../../../../../../../components/InkindList';
+import Label from '../../../../../../../../../../components/Label';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
 export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: 'POST' };
@@ -169,7 +170,7 @@ const ErrorDom = (
             </Space>}
           >
             <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>数量：</div>
+              <Label className={style.inKindFiledTitle}>数量：</Label>
               <ShopNumber
                 show={errorTypeData().errorNumberShow}
                 min={1}
@@ -191,10 +192,11 @@ const ErrorDom = (
               />
             </div>
             <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>
+              <Label className={style.inKindFiledTitle}>
                 原因 <span>*</span>：
-              </div>
+              </Label>
               <Careful
+                className={style.inkindCareful}
                 show={show}
                 type='inStockError'
                 value={item.noticeIds}
@@ -204,9 +206,9 @@ const ErrorDom = (
               />
             </div>
             <div className={style.inKindRow}>
-              <div className={style.inKindTitle}>
+              <Label className={style.inKindFiledTitle}>
                 描述：
-              </div>
+              </Label>
               {show ? `${item.description || '无'}` : <TextArea
                 className={style.textArea}
                 rows={1}

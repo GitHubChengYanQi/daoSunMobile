@@ -64,11 +64,10 @@ const InstockError = (
   const { loading: orderAddLoading, run: orderAdd } = useRequest(anomalyOrderAdd, {
     manual: true,
     onSuccess: (res) => {
-      Message.successToast('提报成功！', () => {
-        refresh(res, 99);
-        shopRefresh();
-        setData([]);
-      });
+      Message.successToast('提报成功！');
+      refresh(res, 99);
+      shopRefresh();
+      setData([]);
     },
   });
 
@@ -83,11 +82,10 @@ const InstockError = (
           positionId: positions.storehousePositionsId,
         };
       });
-      Message.successToast('移出成功！', () => {
-        shopRefresh();
-        refresh(skus, 0);
-        setData([]);
-      });
+      Message.successToast('移出成功！');
+      shopRefresh();
+      refresh(skus, 0);
+      setData([]);
     },
   });
 
@@ -206,9 +204,9 @@ const InstockError = (
                 </div>
                 <div className={style.errorAction}>
                   <div className={style.number}>
-                    <span>{errorType().totalTitle}：<span
+                    <span hidden={!showStock}>{errorType().totalTitle}：<span
                       className={style.black}>{anomalyResult.needNumber}</span></span>
-                    <span hidden={!anomalyResult.errorNumber}>数量差异：<span
+                    <span hidden={!anomalyResult.errorNumber || !showStock}>数量差异：<span
                       className={style.red}>{anomalyResult.errorNumber > 0 ? `+${anomalyResult.errorNumber}` : anomalyResult.errorNumber}</span></span>
                     <span hidden={!anomalyResult.otherNumber}>其他异常：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>
@@ -233,7 +231,7 @@ const InstockError = (
 
       <div className={style.bottom}>
         <div className={style.all}>
-          <MyCheck checked={allChecked} onChange={() => {
+          <MyCheck fontSize={16} checked={allChecked} onChange={() => {
             if (allChecked) {
               setData([]);
             } else {

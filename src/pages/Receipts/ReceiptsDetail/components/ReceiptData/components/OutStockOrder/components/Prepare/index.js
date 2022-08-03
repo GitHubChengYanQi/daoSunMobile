@@ -76,11 +76,8 @@ const Prepare = (
     onClose();
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'pickSkuImg', () => {
-      Message.successToast('备料成功！', () => {
-        onSuccess();
-      });
+      onSuccess();
     });
-
   };
 
 

@@ -175,7 +175,7 @@ const Stocktaking = (
 
     <MyCard title='静态' extra={receipts.mode === 'dynamic' ? '否' : '是'} />
 
-    <MyCard title='盘点原由'>
+    <MyCard title='盘点原因'>
       {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
       {ToolUtil.isArray(receipts.announcements).map((item, index) => {
         return <div key={index} className={style.carefulShow}>

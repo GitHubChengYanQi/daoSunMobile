@@ -140,7 +140,7 @@ const StocktakingAsk = ({ createType }) => {
 
     <OtherData
       createType={createType}
-      careful={<Title>盘点原由</Title>}
+      careful={<Title>盘点原因</Title>}
       params={params}
       setParams={setParams}
     />

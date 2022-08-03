@@ -15,6 +15,8 @@ import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import ErrorDom from './components/ErrorDom';
+import Label from '../../../../../../../../components/Label';
+import InkindList from '../../../../../../../../components/InkindList';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -67,6 +69,7 @@ const Error = (
   const [inkinds, setInkinds] = useState([]);
 
   const inkindRef = useRef();
+  const inventoryRef = useRef();
 
   const error = sku.realNumber !== sku.number || inkinds.length > 0;
 
@@ -87,16 +90,18 @@ const Error = (
           break;
       }
       if (!error) {
-        Message.successToast('添加成功！', () => {
-          onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
-        });
+        onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
+        return;
+      }
+      if (!showStock && inkinds.length === 0) {
+        onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
         return;
       }
       addShop(() => {
-        errorShopRef && errorShopRef.current.jump();
-        Message.successToast('添加成功！', () => {
+        errorShopRef ? errorShopRef.current.jump(() => {
+            onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
+          }) :
           onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
-        });
       });
     },
     onError: () => {
@@ -395,7 +400,7 @@ const Error = (
               }} />
             </div>
           </div>,
-          button: <div>
+          button: <div style={{ minHeight: 60 }}>
             <BottomButton
               square
               rightDisabled={required}
@@ -440,9 +445,9 @@ const Error = (
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
               <div className={style.inKindRow}>
-                <div className={style.inKindTitle}>
+                <Label className={style.inKindTitle}>
                   盘点数量
-                </div>
+                </Label>
                 <ShopNumber
                   hiddenNumber={!showStock}
                   show={show}
@@ -453,21 +458,19 @@ const Error = (
                   }}
                 />
                 <div style={{ flexGrow: 1, textAlign: 'right' }}>
-                  <ScanIcon onClick={() => {
-                    props.dispatch({
-                      type: 'qrCode/wxCpScan',
-                      payload: {
-                        action: 'addError',
-                      },
-                    });
-                  }} />
+                  <ScanIcon onClick={() => inventoryRef.current.open({
+                    skuId: sku.skuId,
+                    brandId: sku.brandId,
+                    positionId: sku.positionId,
+                    skuResult,
+                  })} />
                 </div>
 
               </div>
               <div className={style.inKindRow}>
-                <div className={style.inKindTitle}>
+                <Label className={style.inKindTitle}>
                   上传照片
-                </div>
+                </Label>
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
                   show={show}
@@ -481,10 +484,10 @@ const Error = (
                   }}
                 />
               </div>
-              <div className={style.inKindRow} style={{ padding: 0 }}>
-                <div className={style.inKindTitle}>
-                  备注
-                </div>
+              <div className={style.inKindRow}>
+                <Label className={style.inKindTitle}>
+                  添加备注
+                </Label>
                 {show ? `${sku.remark || '无'}` : <TextArea
                   className={style.textArea}
                   rows={1}
@@ -496,9 +499,9 @@ const Error = (
                 />}
               </div>
               <div hidden={inkinds.length > 0} className={style.inKindRow}>
-                <div className={style.inKindTitle}>
+                <Label className={style.inKindTitle}>
                   添加异常
-                </div>
+                </Label>
                 <Button
                   className={style.addError}
                   color='danger'
@@ -514,21 +517,23 @@ const Error = (
               </div>
             </div>
           </div>,
-          button: <BottomButton
-            rightDisabled={required}
-            leftDisabled={id}
-            leftText='暂存'
-            rightText='确定'
-            leftOnClick={() => {
-              anomalyTemporaryRun({ data: getStocktakingParams() });
-            }}
-            rightOnClick={() => {
-              if (id) {
-                editRun({ data: getStocktakingParams() });
-              } else {
-                anomalyRun({ data: getStocktakingParams() });
-              }
-            }} />,
+          button: <div style={{ minHeight: 60 }}>
+            <BottomButton
+              rightDisabled={required}
+              leftDisabled={id}
+              leftText='暂存'
+              rightText='确定'
+              leftOnClick={() => {
+                anomalyTemporaryRun({ data: getStocktakingParams() });
+              }}
+              rightOnClick={() => {
+                if (id) {
+                  editRun({ data: getStocktakingParams() });
+                } else {
+                  anomalyRun({ data: getStocktakingParams() });
+                }
+              }} />
+          </div>,
         };
       default:
         return {};
@@ -569,6 +574,15 @@ const Error = (
       anomalyTemporaryLoading
     ) &&
     <MyLoading />}
+
+    <InkindList
+      ref={inventoryRef}
+      onSuccess={(inkinds = []) => {
+        let realNumber = 0;
+        inkinds.forEach(item => realNumber += item.number);
+        setSku({ ...sku, realNumber });
+      }}
+    />
 
 
     {!show && errorTypeData().button}

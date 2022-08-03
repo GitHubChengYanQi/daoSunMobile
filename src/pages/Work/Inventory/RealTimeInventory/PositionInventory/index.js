@@ -78,7 +78,7 @@ const PositionInventory = () => {
     return <MyEmpty description='此库位木有物料' />;
   }
 
-  return <div style={{ height: '100%', backgroundColor: '#fff' }}>
+  return <div style={{ height: '100%', backgroundColor: '#fff', paddingBottom: 60 }}>
     <MyNavBar title='即时盘点' />
     <StocktaskingHandle
       anomalyType='timelyInventory'

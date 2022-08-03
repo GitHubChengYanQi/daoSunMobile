@@ -335,7 +335,7 @@ const AllocationAsk = ({ createType }) => {
 
       {query.storeHouseId && <OtherData
         createType={createType}
-        careful={<Title className={style.title}>调拨原由 <span>*</span></Title>}
+        careful={<Title className={style.title}>调拨原因 <span>*</span></Title>}
         params={params}
         setParams={setParams}
       />}

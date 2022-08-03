@@ -5,7 +5,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
-import { Button, Popup } from 'antd-mobile';
+import { Button } from 'antd-mobile';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
@@ -14,7 +14,6 @@ import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { ReceiptsEnums } from '../../../../../../../../../index';
-import Positions from '../Positions';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
 import MyPositions from '../../../../../../../../../../components/MyPositions';
 
@@ -64,10 +63,9 @@ const WaitInstock = (
   }, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('入库成功！', () => {
-        shopRefresh();
-        refresh();
-      });
+      Message.successToast('入库成功！');
+      shopRefresh();
+      refresh();
     },
   });
 
@@ -75,10 +73,9 @@ const WaitInstock = (
   const { loading: backLoading, run: backRun } = useRequest(sendBack, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('移出成功！', () => {
-        shopRefresh();
-        refresh();
-      });
+      Message.successToast('移出成功！');
+      shopRefresh();
+      refresh();
     },
   });
 
@@ -174,12 +171,12 @@ const WaitInstock = (
       </div>
 
       <div className={style.bottom}>
-        <div className={style.all}>
-          <MyCheck fontSize={14} checked={allChecked} onChange={() => {
-            setInstockList(instockList.map(item => {
-              return { ...item, checked: !allChecked };
-            }));
-          }} />
+        <div className={style.all} onClick={() => {
+          setInstockList(instockList.map(item => {
+            return { ...item, checked: !allChecked };
+          }));
+        }}>
+          <MyCheck fontSize={16} checked={allChecked} />
           <span>{allChecked ? '取消全选' : '全选'}</span>
           <span>已选中 {inStockChecked.length} 类</span>
         </div>

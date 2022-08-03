@@ -84,7 +84,7 @@ const StartStockTaking = () => {
     return <MyEmpty />;
   }
 
-  return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto' }}>
+  return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto',paddingBottom:60 }}>
     <MyNavBar title='盘点任务' />
     <MySearch
       value={searchValue}
@@ -105,7 +105,7 @@ const StartStockTaking = () => {
         <div className={style.screenItem} onClick={() => {
           submit({ positionSort: params.positionSort === 'asc' ? 'desc' : 'asc' });
         }}>
-          库位 {sortShow(params.positionSort)}
+          <span>库位</span> {sortShow(params.positionSort)}
         </div>
         <Dropdown className={style.dropdown}>
           <Dropdown.Item key='sorter' title='状态'>

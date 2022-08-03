@@ -10,6 +10,7 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../../../../../../../../components/Upload/UploadFile';
 import { Button, Space, TextArea } from 'antd-mobile';
 import MyCard from '../../../../../../../../../../components/MyCard';
+import Label from '../../../../../../../../../../components/Label';
 
 const Header = (
   {
@@ -46,7 +47,7 @@ const Header = (
 
   return <>
     <MyCard noHeader className={style.cardStyle} bodyClassName={style.bodyStyle}>
-      <div className={style.header} hidden={forward}>
+      <div className={style.header} hidden={forward} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
 
         {
           over ?
@@ -89,7 +90,7 @@ const Header = (
 
       <div className={style.verify} hidden={forward}>
         <div className={style.checkNumber}>
-          <div className={style.title}>到货数：</div>
+          <Label className={style.title}>到货数：</Label>
           <ShopNumber show value={sku.realNumber} /> {unitName}
           <div style={{ padding: '0 8px' }}>({ToolUtil.isObject(sku.user).name || '-'})</div>
         </div>
@@ -98,27 +99,27 @@ const Header = (
           const urls = ToolUtil.isArray(item && item.mediaUrls);
           return <div key={index} className={style.checkUser}>
             <div className={style.checkNumber}>
-              <div className={style.title}>复核数：</div>
+              <Label className={style.title}>复核数：</Label>
               <ShopNumber show value={item.number} /> {unitName}
               <div style={{ padding: '0 8px' }}>({item.name || ''})</div>
             </div>
-            <div>
-              附件： {urls.length === 0 && '无'}
-              <div hidden={urls.length === 0} style={{ paddingTop: 8 }}>
+            <div className={style.checkNumber} style={{ display: 'block' }}>
+              <Label className={style.title}>附件： </Label>{urls.length === 0 && '无'}
+              <div hidden={urls.length === 0} style={{ paddingTop: 4 }}>
                 <UploadFile refresh={loading} show value={urls.map(item => {
                   return { url: item };
                 })} />
               </div>
             </div>
-            <div>
-              备注说明： {item.note || '无'}
+            <div className={style.checkNumber}>
+              <Label className={style.title}>备注说明：</Label> {item.note || '无'}
             </div>
           </div>;
         })}
 
         <div hidden={sku.hidden} className={style.verifyAction}>
           <div className={style.checkNumber}>
-            <div className={style.title}>复核数：</div>
+            <Label className={style.title}>复核数：</Label>
             <Space align='center'>
               <ShopNumber
                 value={sku.checkNumber}
@@ -129,7 +130,7 @@ const Header = (
             </Space>
           </div>
           <div className={style.checkNumber}>
-            <div className={style.title}>上传附件：</div>
+            <Label className={style.title}>上传附件：</Label>
             <div>
               <PaperClipOutlined onClick={() => {
                 addFileRef.current.addFile();
@@ -147,7 +148,7 @@ const Header = (
             />}
           </div>
           <div className={style.checkNumber}>
-            <div className={style.title}>添加备注：</div>
+            <Label className={style.title}>添加备注：</Label>
             <TextArea
               rows={1}
               value={note}

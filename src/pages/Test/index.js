@@ -1,10 +1,10 @@
 import React from 'react';
-import Bouncing from '../components/Bouncing';
+import MyTextArea from '../components/MyTextArea';
 
 const Test = () => {
 
   return <div style={{ textAlign: 'center' }}>
-    <Bouncing />
+    <MyTextArea />
   </div>;
 };
 

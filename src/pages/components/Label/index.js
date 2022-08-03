@@ -1,8 +1,10 @@
 import React from 'react';
+import { ToolUtil } from '../ToolUtil';
+import style from './index.less'
 
-const Label = ({children,style}) => {
+const Label = ({children,className}) => {
 
-  return <span style={{color:'rgb(181 179 179)',...style}}>{children}</span>;
+  return <span className={ToolUtil.classNames(className,style.label)}>{children}</span>;
 };
 
 export default Label;

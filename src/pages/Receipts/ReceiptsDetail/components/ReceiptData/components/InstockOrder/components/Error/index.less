@@ -4,7 +4,6 @@
   display: flex;
   flex-direction: column;
   overflow: auto;
-  margin-bottom: 60px;
 
   .cardStyle {
     margin-bottom: 8px;
@@ -112,7 +111,7 @@
 
     .checkUser {
       display: flex;
-      gap: 12px;
+      gap: 4px;
       flex-direction: column;
       align-items: flex-start;
       border-top: solid 1px #f5f5f5;
@@ -207,13 +206,24 @@
   }
 
   .inKindRow {
-    padding: 12px 0;
+    padding: 4px 0;
     align-items: center;
     display: flex;
+
+    .inkindCareful {
+      padding: 0;
+    }
 
     .inKindTitle {
       color: #666666;
       min-width: 70px;
+      margin-right: 8px;
+    }
+
+    .inKindFiledTitle {
+      color: #666666;
+      min-width: 60px;
+      margin-right: 8px;
 
       span {
         color: var(--adm-color-danger);
@@ -227,6 +237,9 @@
     }
   }
 
+  .inkindFiled {
+    padding: 2px 0;
+  }
 
   .careful {
     //padding: 12px 0;
@@ -259,7 +272,6 @@
   .opinion {
     display: flex;
     align-items: center;
-    padding: 8px 0;
 
     .textArea {
       padding: 4px;
@@ -269,8 +281,9 @@
   .actions {
     display: flex;
     align-items: center;
-    padding: 12px 0;
+    padding-top: 8px;
     border-top: #F5F5F5 solid 1px;
+    margin-top: 6px;
 
     .actionButton {
       flex-grow: 1;

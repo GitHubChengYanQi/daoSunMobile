@@ -16,6 +16,7 @@ const Careful = (
     value = [],
     onChange = () => {
     },
+    className,
   }) => {
 
   const { loading: listLoading, data: announcemens, refresh } = useRequest({
@@ -43,7 +44,7 @@ const Careful = (
   const [content, setContent] = useState('');
 
   return <>
-    <div className={style.carefulData} id='careful'>
+    <div className={ToolUtil.classNames(style.carefulData,className)} id='careful'>
       <Selector
         disabled={show}
         value={value}

@@ -6,6 +6,7 @@ import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
 import pickStyle from '../MyPicking/index.less';
+import MyProgress from '../../../../../../../../../../components/MyProgress';
 
 const OutSkuItem = ({ item, data }) => {
   const skuResult = item.skuResult || {};
@@ -63,7 +64,7 @@ const OutSkuItem = ({ item, data }) => {
         <div hidden={percent <= 0} style={{ width: `${percent}%` }}>{collectable}</div>
         <div hidden={trail <= 0} style={{ width: `${trail}%` }}>{notPrepared}</div>
       </div>
-      <Progress
+      <MyProgress
         className={pickStyle.progress}
         format={() => {
           return <span style={{ color: '#000' }}>{item.number + '  (申请数)'}</span>;

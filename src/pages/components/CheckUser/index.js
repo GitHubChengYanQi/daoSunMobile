@@ -1,13 +1,10 @@
 import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
-import { Picker } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import { Message } from '../Message';
 import { ToolUtil } from '../ToolUtil';
-import { UserIdSelect } from '../../Work/Customer/CustomerUrl';
 import { MyLoading } from '../MyLoading';
 import IsDev from '../../../components/IsDev';
-import { useModel } from 'umi';
 import MyAntPopup from '../MyAntPopup';
 import UserList from './components/UserList';
 import style from './index.less';

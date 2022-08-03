@@ -47,20 +47,23 @@ const ReceiptsResult = () => {
     }
   }, []);
 
-  return <MyResult
-    className={style.result}
-    title={typeData().title}
-    description={
-      <div className={style.actions}>
-        <Button onClick={() => {
-          history.goBack();
-        }}>返回列表</Button>
-        <Button color='primary' className={style.view} onClick={() => {
-          history.push(`/Receipts/ReceiptsDetail?type=${state.type}&formId=${state.formId}`);
-        }}>查看详情</Button>
-      </div>
-    }
-  />;
+  return <div className={style.box}>
+    <div className={style.result}>
+      <MyResult
+        title={typeData().title}
+        description={
+          <div className={style.actions}>
+            <Button onClick={() => {
+              history.goBack();
+            }}>返回列表</Button>
+            <Button color='primary' className={style.view} onClick={() => {
+              history.push(`/Receipts/ReceiptsDetail?type=${state.type}&formId=${state.formId}`);
+            }}>查看详情</Button>
+          </div>
+        }
+      />
+    </div>
+  </div>;
 };
 
 export default ReceiptsResult;

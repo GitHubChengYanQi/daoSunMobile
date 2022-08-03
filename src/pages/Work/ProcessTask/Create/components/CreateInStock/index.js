@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { ActionSheet } from 'antd-mobile';
 import { history } from 'umi';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import { useRequest } from '../../../../../../util/Request';
 import { judgeLoginUser } from '../../../../Instock/InstockAsk/Submit/components/InstockSkus';
 import { MyLoading } from '../../../../../components/MyLoading';
+import MyActionSheet from '../../../../../components/MyActionSheet';
 
 const CreateInStock = (
   {
@@ -20,7 +20,6 @@ const CreateInStock = (
 ) => {
 
   const [visible, setVisible] = useState();
-
 
   const { loading, run: judgeRun } = useRequest(judgeLoginUser, {
     manual: true,
@@ -42,8 +41,7 @@ const CreateInStock = (
   }, [open]);
 
   return <>
-    <ActionSheet
-      cancelText='取消'
+    <MyActionSheet
       visible={visible}
       actions={[
         { text: '提交申请', key: 'submit' },

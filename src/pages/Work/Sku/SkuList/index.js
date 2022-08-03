@@ -1,13 +1,12 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { CopyFilled } from '@ant-design/icons';
 import { Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
-import ListScreent from './components/ListScreent';
+import Screen from './components/Screen';
 
 const SkuList = (
   {
@@ -31,6 +30,8 @@ const SkuList = (
 
   const listRef = useRef();
 
+  const skuDefaultParams = {...defaultParams,sortMap: {stockNumber: "desc", createTime: "desc"}}
+
   const [skuClass, setSkuClass] = useState([]);
   const [supplys, setSupplys] = useState([]);
   const [brands, setBrands] = useState([]);
@@ -44,7 +45,9 @@ const SkuList = (
 
   const [skuData, setSkuData] = useState([]);
 
-  const [params, setParams] = useState(defaultParams);
+  const [params, setParams] = useState(skuDefaultParams);
+
+  const sortMap = params.sortMap || {};
 
   const spuClassId = Array.isArray(params.spuClassIds) && params.spuClassIds[0];
 
@@ -64,9 +67,9 @@ const SkuList = (
     setStates([]);
     setScreeing(false);
     setRefresh(false);
-    setParams({ ...defaultParams, skuName: params.skuName });
+    setParams({ ...skuDefaultParams, skuName: params.skuName });
     setSort({});
-    listRef.current.submit({ ...defaultParams, skuName: params.skuName });
+    listRef.current.submit({ ...skuDefaultParams, skuName: params.skuName });
   };
 
   const submit = (newParams = {}, newSort = {}) => {
@@ -97,22 +100,25 @@ const SkuList = (
 
   return <>
 
-    <ListScreent
-      setSort={setSort}
-      sort={sort}
+    <Screen
       screening={screening}
-      submit={submit}
-      onlySorts={['createTime']}
-      sorts={[{ field: 'stockNumber', title: '数量' }, { field: 'createTime', title: '时间' }]}
+      submit={(orderField) => {
+        const order = orderField.order;
+        submit({
+          sortMap: {
+            stockNumber: orderField.field === 'stockNumber' ? order : sortMap.stockNumber,
+            createTime: orderField.field === 'createTime' ? order : sortMap.createTime,
+          },
+        });
+      }}
+      sorts={[
+        { field: 'stockNumber', title: '数量', order: sortMap.stockNumber },
+        { field: 'createTime', title: '时间', order: sortMap.createTime },
+      ]}
       listRef={skuListRef}
       screen={screen}
       screenChange={setScreen}
       screenRef={screenRef}
-      actions={<div className={style.checking} hidden={!openBatch} onClick={() => {
-        onBatch(!batch);
-      }}>
-        {batch ? '单件' : '批量'}添加 <CopyFilled />
-      </div>}
       numberTitle={<>{numberTitle}：<span>{stock ? stockNumber : skuNumber}</span></>}
     />
 
@@ -141,7 +147,7 @@ const SkuList = (
         response={(res) => {
           setSkuNumber(res.count || 0);
           if (!res.count || res.count === 0) {
-            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000,icon:'fail' });
+            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000, icon: 'fail' });
           }
           const resSearch = res.search || [];
           let overs = {};
