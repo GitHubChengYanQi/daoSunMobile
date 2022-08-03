@@ -74,12 +74,13 @@ const InSkuItem = (
 
   return <>
     <div
-      className={ToolUtil.classNames(style.sku, style.inStockSkuItem)}
+      className={ToolUtil.classNames(style.sku)}
     >
       <div
         className={ToolUtil.classNames(
           style.skuItem,
           data.length <= 3 && style.skuBorderBottom,
+          style.inStockSkuItem
         )}
       >
         <div hidden={!complete} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
@@ -100,7 +101,7 @@ const InSkuItem = (
           <div className={error ? style.error : style.success}>
             {text}
           </div>
-          <ShopNumber value={number} show />
+          <ShopNumber shopClassName={style.shopNumber} value={number} show />
         </div>
       </div>
       {!detail && <MyProgress percent={parseInt((item.instockNumber / item.askNumber) * 100)} />}

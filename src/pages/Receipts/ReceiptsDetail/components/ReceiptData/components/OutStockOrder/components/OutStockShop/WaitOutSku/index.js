@@ -13,6 +13,7 @@ import { ToolUtil } from '../../../../../../../../../components/ToolUtil';
 import MyEmpty from '../../../../../../../../../components/MyEmpty';
 import { MyLoading } from '../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../components/Message';
+import SearchInkind from '../../../../../../../../../components/InkindList/components/SearchInkind';
 
 const backSkus = { url: '/productionPickListsCart/deleteBatch', method: 'POST' };
 
@@ -46,12 +47,7 @@ const WaitOutSku = (
           </>,
         };
       default:
-        return {
-          noSys: true,
-          skuAction: <>
-            <LinkButton>查看异常件</LinkButton>
-          </>,
-        };
+        return {};
     }
   };
 
@@ -216,6 +212,18 @@ const WaitOutSku = (
         })
       }
     </div>
+
+    <SearchInkind
+      // skuInfo={skuInfo}
+      // setVisible={setSearchVisible}
+      // visible={true}
+      onSuccess={(inkinds) => {
+        // setSearchVisible(false);
+        // onSuccess(inkinds);
+      }}
+      // add={add}
+      // addInkind={addInkind}
+    />
 
     <div className={style.bottom}>
       <div className={style.all}>

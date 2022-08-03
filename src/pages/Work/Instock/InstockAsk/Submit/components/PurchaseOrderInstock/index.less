@@ -85,6 +85,10 @@
     width: 120px;
     padding-right: 20px;
 
+    .shopNumber {
+      background-color: var(--body--background--color);
+    }
+
     .error {
       color: var(--adm-color-danger);
     }
@@ -270,11 +274,18 @@
   }
 }
 
+.inStockSkuItem {
+  margin: 0 !important;
+  border: solid 4px var(--body--background--color);
+  border-bottom: none;
+  padding: 4px;
+}
 
 .sku {
   position: relative;
   margin: 2px 0;
   overflow: hidden;
+  border-bottom: none;
 
   .mask {
     width: 100%;
@@ -298,7 +309,7 @@
   .logo {
     position: absolute;
     z-index: 1;
-    right: -6px;
+    right: -12px;
     bottom: 0;
     height: 70px;
     width: 70px;
@@ -348,6 +359,10 @@
 
   .bodyStyle {
     padding: 8px 0 !important;
+  }
+
+  .instockBody {
+    padding: 8px 12px !important;
   }
 }
 
@@ -469,6 +484,6 @@
 
 .space {
   height: 3px;
-  background-color: var(--body--background--color);
+  background-color: #fff;
 }
 
