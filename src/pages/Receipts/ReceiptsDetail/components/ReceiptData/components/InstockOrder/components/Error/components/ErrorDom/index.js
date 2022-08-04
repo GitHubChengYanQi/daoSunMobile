@@ -150,7 +150,7 @@ const ErrorDom = (
       {
         inkinds.map((item, index) => {
 
-          const inkindId = item.inkindId || '';
+          const codeId = item.codeId || '';
 
           return <MyCard
             key={index}
@@ -159,10 +159,10 @@ const ErrorDom = (
             titleBom={<div className={style.inkind}>
               异常编码
               <div className={style.index}>{index + 1}</div>
-              <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
+              <span>{codeId.substring(codeId.length - 6, codeId.length)}</span>
             </div>}
             extra={<Space>
-              <ShowCode code={item.codeId} />
+              <ShowCode code={codeId} />
               {!show && <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;
@@ -290,7 +290,7 @@ const ErrorDom = (
           number++;
           return {
             inkindId: item.inkindId,
-            codeId: item.codeId,
+            codeId: item.qrCodeId,
             number: 1,
           };
         });

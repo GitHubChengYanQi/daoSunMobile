@@ -39,7 +39,10 @@ const SearchInkind = (
   return <MyAntPopup
     visible={visible && skuInfo.skuId}
     title='库存实物'
-    onClose={onClose}
+    onClose={() => {
+      setData([]);
+      onClose();
+    }}
   >
     <SkuInfo sku={skuInfo.skuResult} />
     <List

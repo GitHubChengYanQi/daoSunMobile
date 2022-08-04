@@ -18,9 +18,9 @@ const InkindList = (
 
   const [skuInfo, setSkuInfo] = useState({});
 
-  const open = (skuInfo) => {
+  const open = (skuInfo = {}) => {
     setActionVisible(true);
-    setSkuInfo(skuInfo);
+    setSkuInfo({ ...skuInfo, storehousePositionsId: skuInfo.positionId });
   };
 
   const close = () => {
