@@ -126,7 +126,7 @@ const OutSkuAction = (
           </div>;
         })
       }
-
+      <div className={style.space} style={{ height: 14 }} />
       {data.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();

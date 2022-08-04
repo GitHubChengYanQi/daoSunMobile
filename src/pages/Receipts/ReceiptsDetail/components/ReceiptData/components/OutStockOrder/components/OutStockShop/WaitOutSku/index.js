@@ -16,6 +16,7 @@ import { Message } from '../../../../../../../../../components/Message';
 import SearchInkind from '../../../../../../../../../components/InkindList/components/SearchInkind';
 
 const backSkus = { url: '/productionPickListsCart/deleteBatch', method: 'POST' };
+const getCartList = { url: '/productionPickListsCart/getCartInkindByLists', method: 'POST' };
 
 const WaitOutSku = (
   {
@@ -37,13 +38,22 @@ const WaitOutSku = (
 
   const [allSkus, setAllSkus] = useState([]);
 
-  const outTypeData = () => {
+  const [errorSku, setErrorSku] = useState();
+
+  const outTypeData = (item = {}) => {
     switch (outType) {
       case 'StocktakingErrorOutStock':
         return {
           noSys: true,
           skuAction: <>
-            <LinkButton>查看异常件</LinkButton>
+            <LinkButton onClick={() => {
+              setErrorSku({
+                skuId: item.skuId,
+                brandId: item.brandId,
+                skuResult: item.skuResult,
+                pickListsId:id,
+              });
+            }}>查看异常件</LinkButton>
           </>,
         };
       default:
@@ -198,7 +208,7 @@ const WaitOutSku = (
                             />
                           </div>
                           <div>
-                            {outTypeData().skuAction}
+                            {outTypeData(cartItem).skuAction}
                             <ShopNumber value={cartItem.number} show />
                           </div>
                         </div>
@@ -214,15 +224,11 @@ const WaitOutSku = (
     </div>
 
     <SearchInkind
-      // skuInfo={skuInfo}
-      // setVisible={setSearchVisible}
-      // visible={true}
-      onSuccess={(inkinds) => {
-        // setSearchVisible(false);
-        // onSuccess(inkinds);
-      }}
-      // add={add}
-      // addInkind={addInkind}
+      noActions
+      api={getCartList}
+      skuInfo={errorSku}
+      onClose={() => setErrorSku(false)}
+      visible={errorSku}
     />
 
     <div className={style.bottom}>

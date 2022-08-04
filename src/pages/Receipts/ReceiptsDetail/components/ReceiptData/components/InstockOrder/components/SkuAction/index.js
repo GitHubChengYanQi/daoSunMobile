@@ -190,6 +190,7 @@ const SkuAction = (
           </div>;
         })
       }
+      <div className={style.space} style={{ height: 14 }} />
       {items.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();

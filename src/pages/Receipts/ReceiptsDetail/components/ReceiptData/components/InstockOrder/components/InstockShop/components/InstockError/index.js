@@ -50,7 +50,7 @@ const InstockError = (
           } else {
             const newList = list.filter(item => {
               const anomalyResult = item.anomalyResult || {};
-              return anomalyResult.otherNumber !== 0
+              return anomalyResult.otherNumber !== 0;
             });
             setErrorList(newList);
           }
@@ -108,6 +108,7 @@ const InstockError = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return {
+          showStock: true,
           totalTitle: '申请数量',
           type: 'instock',
           skuItem: <SkuItem
@@ -121,6 +122,7 @@ const InstockError = (
         };
       case ReceiptsEnums.stocktaking:
         return {
+          showStock,
           totalTitle: '账面库存',
           type: 'Stocktaking',
           skuItem: <SkuItem
@@ -204,9 +206,9 @@ const InstockError = (
                 </div>
                 <div className={style.errorAction}>
                   <div className={style.number}>
-                    <span hidden={!showStock}>{errorType().totalTitle}：<span
+                    <span hidden={!errorType().showStock}>{errorType().totalTitle}：<span
                       className={style.black}>{anomalyResult.needNumber}</span></span>
-                    <span hidden={!anomalyResult.errorNumber || !showStock}>数量差异：<span
+                    <span hidden={!anomalyResult.errorNumber || !errorType().showStock}>数量差异：<span
                       className={style.red}>{anomalyResult.errorNumber > 0 ? `+${anomalyResult.errorNumber}` : anomalyResult.errorNumber}</span></span>
                     <span hidden={!anomalyResult.otherNumber}>其他异常：<span
                       className={style.yellow}>{anomalyResult.otherNumber}</span></span>

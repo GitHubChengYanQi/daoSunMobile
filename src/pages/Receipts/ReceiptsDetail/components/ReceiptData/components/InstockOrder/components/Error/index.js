@@ -85,15 +85,15 @@ const Error = (
           break;
         case ReceiptsEnums.stocktaking:
           onClose();
+          if (!showStock && inkinds.length === 0) {
+            onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
+            return;
+          }
           break;
         default:
           break;
       }
       if (!error) {
-        onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
-        return;
-      }
-      if (!showStock && inkinds.length === 0) {
         onSuccess({ ...sku, errorNumber: inkinds.length }, error ? -1 : 1, res.anomalyId);
         return;
       }

@@ -20,6 +20,8 @@ const List = (
     addInkind = () => {
     },
     add,
+    api,
+    noActions,
   },
 ) => {
 
@@ -54,7 +56,7 @@ const List = (
         <MyList
           ref={ref}
           params={skuInfo}
-          api={inkindList}
+          api={api || inkindList}
           data={data}
           getData={(list, newList) => {
             const positionIds = list.map(item => item.storehousePositionsId);
@@ -85,6 +87,7 @@ const List = (
                 inkindIds={inkindIds}
                 setInkinds={setInkinds}
                 inkinds={inkinds}
+                noActions={noActions}
               />;
             })
           }

@@ -114,6 +114,7 @@ const SkuInstock = ({ type, title, judge }) => {
       onChange={(sku) => {
         setSkus([...skus, sku]);
       }}
+      setSkus={setSkus}
     />
 
     <SkuShop

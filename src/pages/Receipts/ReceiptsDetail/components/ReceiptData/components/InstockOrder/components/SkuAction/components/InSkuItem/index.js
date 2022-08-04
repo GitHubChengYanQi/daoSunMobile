@@ -75,12 +75,13 @@ const InSkuItem = (
   return <>
     <div
       className={ToolUtil.classNames(style.sku)}
+      style={{ margin: 0 }}
     >
       <div
         className={ToolUtil.classNames(
           style.skuItem,
           data.length <= 3 && style.skuBorderBottom,
-          style.inStockSkuItem
+          style.inStockSkuItem,
         )}
       >
         <div hidden={!complete} className={ToolUtil.classNames(style.logo, error ? style.errLogo : style.infoLogo)}>
@@ -98,7 +99,7 @@ const InSkuItem = (
             moreDom={!detail && <MyProgress
               className='progress'
               percent={parseInt((item.instockNumber / item.askNumber) * 100)}
-              format={(num)=>num + '%'}
+              format={(num) => num + '%'}
             />}
           />
         </div>

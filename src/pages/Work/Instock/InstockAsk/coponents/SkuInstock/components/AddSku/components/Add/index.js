@@ -29,6 +29,7 @@ const Add = (
     },
     addShop = () => {
     },
+    params = {},
   },
 ) => {
 
@@ -165,32 +166,7 @@ const Add = (
   };
 
   const add = () => {
-    const positionNums = [];
-    if (type === ERPEnums.allocation) {
-      positionNums.push({
-        positionId: ToolUtil.isObject(data.outPosition).id,
-        toPositionId: ToolUtil.isObject(data.inPosition).id,
-        storehouseId: query.storeHouseId,
-      });
-    } else {
-      ToolUtil.isArray(data.positions).map(item => {
-        if (item.number) {
-          return positionNums.push({ positionId: item.id, num: item.number });
-        }
-        return null;
-      });
-    }
 
-    const params = {
-      type,
-      skuId: data.skuId,
-      brandId: data.brandId,
-      customerId: data.customerId,
-      number: data.number,
-      storehousePositionsId: data.positionId,
-      positionNums,
-      storehouseId: data.storehouseId,
-    };
 
     if (snameAction === 'edit') {
       shopEdit({ data: { cartId: data.cartId || disabled.cartId, ...params } });

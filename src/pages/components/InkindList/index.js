@@ -18,16 +18,9 @@ const InkindList = (
 
   const [skuInfo, setSkuInfo] = useState({});
 
-  const open = (
-    {
-      skuId,
-      brandId,
-      positionId,
-      skuResult,
-      maintenanceId,
-    }) => {
+  const open = (skuInfo) => {
     setActionVisible(true);
-    setSkuInfo({ skuId, brandId, storehousePositionsId: positionId, skuResult, maintenanceId });
+    setSkuInfo(skuInfo);
   };
 
   const close = () => {
@@ -53,8 +46,8 @@ const InkindList = (
       }}
     />
     <SearchInkind
+      onClose={() => setSearchVisible(false)}
       skuInfo={skuInfo}
-      setVisible={setSearchVisible}
       visible={searchVisible}
       onSuccess={(inkinds) => {
         setSearchVisible(false);

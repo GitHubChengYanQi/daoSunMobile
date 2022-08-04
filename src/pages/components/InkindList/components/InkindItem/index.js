@@ -14,6 +14,7 @@ const InkindItem = (
     },
     inkinds = [],
     inkindIds = [],
+    noActions,
   },
 ) => {
 
@@ -33,7 +34,7 @@ const InkindItem = (
         setInkinds([...newInkinds, ...inkindList]);
       }
     }}>
-      <MyCheck checked={checked} />{positionItem.name} / {positionItem.storehouseName}
+      {!noActions && <MyCheck checked={checked} />}{positionItem.name} / {positionItem.storehouseName}
     </div>
 
     {
@@ -51,7 +52,7 @@ const InkindItem = (
                 setInkinds([...inkinds, inkindItem]);
               }
             }}>
-              <MyCheck checked={checked} />
+              {!noActions && <MyCheck checked={checked} />}
               实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
               <ShowCode code={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>

@@ -15,8 +15,10 @@ const SearchInkind = (
     },
     add,
     visible,
-    setVisible = () => {
+    onClose = () => {
     },
+    api,
+    noActions,
   },
 ) => {
 
@@ -37,10 +39,12 @@ const SearchInkind = (
   return <MyAntPopup
     visible={visible && skuInfo.skuId}
     title='库存实物'
-    onClose={() => setVisible(false)}
+    onClose={onClose}
   >
     <SkuInfo sku={skuInfo.skuResult} />
     <List
+      noActions={noActions}
+      api={api}
       add={add}
       addInkind={addInkind}
       data={data}
@@ -50,7 +54,7 @@ const SearchInkind = (
       skuInfo={skuInfo}
       onSuccess={onSuccess}
     />
-    <div className={style.bottom}>
+    <div className={style.bottom} hidden={noActions}>
       <div className={style.all} onClick={() => {
         setInkinds(checked ? [] : allInkinds);
       }}>

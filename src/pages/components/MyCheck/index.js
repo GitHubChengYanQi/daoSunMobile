@@ -19,6 +19,7 @@ const MyCheck = (
   return <LinkButton
     disabled={disabled}
     color='default'
+    style={{ height: fontSize }}
     className={ToolUtil.classNames(className, style.check)}
     onClick={() => {
       onChange(!checked);
@@ -28,7 +29,7 @@ const MyCheck = (
       checked={checked}
       icon={(checked) => {
         return checked ? <Icon type='icon-duoxuanxuanzhong1' /> :
-          <Icon type='icon-a-44-110' style={{color:'#D8D8D8'}} />;
+          <Icon type='icon-a-44-110' style={{ color: '#D8D8D8' }} />;
       }}
     >
       {children}

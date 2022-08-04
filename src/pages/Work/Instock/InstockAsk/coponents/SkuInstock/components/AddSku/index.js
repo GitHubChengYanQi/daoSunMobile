@@ -9,6 +9,7 @@ import AllocationAdd from './components/AllocationAdd';
 import { useRequest } from '../../../../../../../../util/Request';
 import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const AddSku = (
   {
@@ -19,6 +20,8 @@ const AddSku = (
     onClose = () => {
     },
     defaultAction,
+    setSkus = () => {
+    },
   }, ref) => {
 
   const [type, setType] = useState(defaultType);
@@ -101,7 +104,35 @@ const AddSku = (
     } else {
       onChange({ ...data, cartId }, type);
     }
+  };
 
+  const getParams = () => {
+    const positionNums = [];
+    if (type === ERPEnums.allocation) {
+      positionNums.push({
+        positionId: ToolUtil.isObject(data.outPosition).id,
+        toPositionId: ToolUtil.isObject(data.inPosition).id,
+        storehouseId: query.storeHouseId,
+      });
+    } else {
+      ToolUtil.isArray(data.positions).map(item => {
+        if (item.number) {
+          return positionNums.push({ positionId: item.id, num: item.number });
+        }
+        return null;
+      });
+    }
+
+    return {
+      type,
+      skuId: data.skuId,
+      brandId: data.brandId,
+      customerId: data.customerId,
+      number: data.number,
+      storehousePositionsId: data.positionId,
+      positionNums,
+      storehouseId: data.storehouseId,
+    };
   };
 
   const { loading: addLoading, run: addShop } = useRequest(shopCartAdd, {
@@ -111,9 +142,16 @@ const AddSku = (
     },
   });
 
-  const { run: shopEdit } = useRequest(shopCartEdit, {
+  const { loading: editloading, run: shopEdit } = useRequest(shopCartEdit, {
     manual: true,
-    onSuccess: () => {
+    onSuccess: (res) => {
+      const newSkus = skus.map(item => {
+        if (item.cartId === res) {
+          return {...item, ...getParams() };
+        }
+        return item;
+      });
+      setSkus(newSkus);
       addShopBall();
       close();
     },
@@ -156,7 +194,6 @@ const AddSku = (
     openSkuAdd,
   }));
 
-
   return <>
 
     <MyAntPopup
@@ -169,6 +206,7 @@ const AddSku = (
       visible={visible}
     >
       {oneAdd ? <Add
+        params={getParams()}
         addShop={addShop}
         shopEdit={shopEdit}
         setData={setData}
@@ -196,7 +234,7 @@ const AddSku = (
       />}
     </MyAntPopup>
 
-    {addLoading && <MyLoading />}
+    {(addLoading || editloading) && <MyLoading />}
   </>;
 };
 

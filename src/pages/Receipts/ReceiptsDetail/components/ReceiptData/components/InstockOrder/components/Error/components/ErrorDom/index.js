@@ -76,12 +76,14 @@ const ErrorDom = (
   );
 
   const addInkind = (newInkinds = []) => {
-    const ids = inkinds.map(item => item.inkindId);
-    const newIds = newInkinds.map(item => item.inkindId);
-    const exist = ids.filter(id => newIds.includes(id));
-    if (exist.length > 0) {
-      Message.errorToast('请勿重复添加实物！');
-      return;
+    if (!batch){
+      const ids = inkinds.map(item => item.inkindId);
+      const newIds = newInkinds.map(item => item.inkindId);
+      const exist = ids.filter(id => newIds.includes(id));
+      if (exist.length > 0) {
+        Message.errorToast('请勿重复添加实物！');
+        return;
+      }
     }
     setInkinds([...inkinds, ...newInkinds]);
     inkindRef.current.close();
@@ -285,11 +287,11 @@ const ErrorDom = (
       onSuccess={(inkinds = []) => {
         let number = 0;
         const newInkinds = inkinds.map(item => {
-          number += item.number;
+          number++;
           return {
             inkindId: item.inkindId,
             codeId: item.codeId,
-            number: item.number,
+            number: 1,
           };
         });
         if (number > sku.realNumber) {
