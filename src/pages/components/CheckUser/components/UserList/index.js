@@ -73,7 +73,7 @@ const UserList = (
     run();
   }, []);
 
-  if (loading) {
+  if (loading && data.length === 0) {
     return <MyLoading skeleton />;
   }
 

@@ -49,6 +49,9 @@ const OutStockConfirm = () => {
     if (query.code) {
       setCode(query.code);
       run({ params: { code: query.code } });
+    } else {
+      setOutSkus([]);
+      setCode('');
     }
   }, [query.code]);
 
@@ -100,7 +103,7 @@ const OutStockConfirm = () => {
       text='确认'
       onClick={() => {
         outStockRun({
-          data: {code},
+          data: { code },
         });
       }}
     />

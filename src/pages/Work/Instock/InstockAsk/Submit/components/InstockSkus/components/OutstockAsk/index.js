@@ -49,11 +49,11 @@ const OutstockAsk = ({ skus, judge, createType }) => {
         },
       });
     },
-    onError:()=>{
+    onError: () => {
       Message.errorDialog({
-        content:'创建出库任务失败!'
-      })
-    }
+        content: '创建出库任务失败!',
+      });
+    },
   });
 
   const dataChange = (array = []) => {
@@ -93,9 +93,14 @@ const OutstockAsk = ({ skus, judge, createType }) => {
         countNumber={countNumber}
         dataChange={dataChange}
       />
-      <User title='领料负责人' id={params.userId} name={params.userName} onChange={(id, name) => {
-        setParams({ ...params, userId: id, userName: name });
-      }} />
+      <User
+        title='领料负责人'
+        id={params.userId}
+        name={params.userName}
+        avatar={params.userAvatar}
+        onChange={({ id, name, avatar }) => {
+          setParams({ ...params, userId: id, userName: name, userAvatar: avatar });
+        }} />
 
     </>;
   };

@@ -27,13 +27,19 @@ const Stocktaking = (
       />}
     />
 
-    <User id={value.userId} name={value.userName} onChange={(id, name) => {
-      onChange({ ...value, userId: id, userName: name });
+    <User id={value.userId} name={value.userName} avatar={value.avatar} onChange={({ id, name, avatar }) => {
+      onChange({ ...value, userId: id, userName: name, avatar });
     }} title='负责人' />
 
-    <User noRequired title='参与人' id={value.participantsId} name={value.participantsName} onChange={(id, name) => {
-      onChange({ ...value, participantsId: id, participantsName: name });
-    }} />
+    <User
+      noRequired
+      title='参与人'
+      id={value.participantsId}
+      avatar={value.participantsAvatar}
+      name={value.participantsName}
+      onChange={({ id, name, avatar }) => {
+        onChange({ ...value, participantsId: id, participantsName: name, participantsAvatar: avatar });
+      }} />
 
     <MyCard
       title='明盘'

@@ -58,8 +58,8 @@ const Curing = (
       <div hidden={skuView.length === 0} onClick={() => setVisible(true)}>查看 <RightOutline /></div>
     </div>} />
 
-    <User id={value.userId} name={value.userName} onChange={(id, name) => {
-      onChange({ ...value, userId: id, userName: name });
+    <User id={value.userId} name={value.userName} avatar={value.avatar} onChange={({ id, name, avatar }) => {
+      onChange({ ...value, userId: id, userName: name, avatar });
     }} title='负责人' />
 
     <MyCard

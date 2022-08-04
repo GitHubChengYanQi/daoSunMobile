@@ -10,6 +10,7 @@ const User = (
   {
     id,
     name,
+    avatar,
     title,
     onChange = () => {
     },
@@ -25,13 +26,11 @@ const User = (
       extra={<div className={style.alignCenter} onClick={() => {
         userRef.current.open();
       }}>
-        {id ? <div className={style.alignCenter}><UserName user={{name}} /></div> : '请选择'}<RightOutline />
+        {id ? <div className={style.alignCenter}><UserName user={{ avatar, name }} /></div> : '请选择'}<RightOutline />
       </div>}
     />
 
-    <CheckUser ref={userRef} value={id} onChange={(id, name) => {
-      onChange(id, name);
-    }} />
+    <CheckUser ref={userRef} value={id} onChange={onChange} />
   </>;
 };
 

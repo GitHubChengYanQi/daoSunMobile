@@ -14,7 +14,7 @@ const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
 const CheckUser = (
   {
     value,
-    onChange = (id, name, params) => {
+    onChange = ({ id, name, avatar, params }) => {
     },
     onClose = () => {
     },
@@ -33,7 +33,7 @@ const CheckUser = (
     manual: true,
     onSuccess: (res) => {
       if (res && res.userId) {
-        onChange(res.userId, res.name, params);
+        onChange({ id: res.userId, name: res.name, params });
       } else {
         Message.errorToast('系统无此用户，请先注册！');
       }
@@ -100,7 +100,7 @@ const CheckUser = (
         setVisible(false);
       }}>
       <UserList value={value} hiddenCurrentUser={hiddenCurrentUser} onChange={(items) => {
-        onChange(items.id, items.name, params);
+        onChange({ id: items.id, name: items.name, avatar: items.avatar, params });
         setVisible(false);
       }} />
     </MyAntPopup>

@@ -110,7 +110,8 @@ const MyTextArea = (
     }
   }, []);
 
-  return <div style={{ paddingBottom: maxLength && '12px 0' }} className={ToolUtil.classNames(style.textArea, className)}>
+  return <div style={{ paddingBottom: maxLength && '12px 0' }}
+              className={ToolUtil.classNames(style.textArea, className)}>
     <div className={style.count} hidden={!maxLength}>{value.length} / {maxLength}</div>
     <Input.TextArea
       maxLength={maxLength}
@@ -167,18 +168,18 @@ const MyTextArea = (
         setCaretPosition(cursor + 1);
       }}
       ref={userRef}
-      onChange={(userId, userName) => {
+      onChange={({ id, name }) => {
         const caretPos = getCursortPosition();
-        const newPos = caretPos + userName.length + 1;
+        const newPos = caretPos + name.length + 1;
         const values = value.split('');
-        values.splice(caretPos, 0, userName + ' ');
+        values.splice(caretPos, 0, name + ' ');
         const newValue = values.join('');
         const newUserPos = [...userPos, {
           start: caretPos,
           end: newPos,
-          content: '@' + userName + ' ',
-          userId,
-          userName,
+          content: '@' + name + ' ',
+          userId: id,
+          userName: name,
         }];
         userPosChange(newPos - caretPos, newUserPos, caretPos);
         valueChange(newValue, newUserPos, newPos);
