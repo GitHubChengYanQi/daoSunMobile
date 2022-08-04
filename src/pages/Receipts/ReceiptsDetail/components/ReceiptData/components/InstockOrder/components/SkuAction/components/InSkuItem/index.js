@@ -90,11 +90,16 @@ const InSkuItem = (
           <SkuItem
             imgId={`skuImg${index}`}
             skuResult={skuResult}
-            extraWidth='150px'
+            extraWidth='110px'
             otherData={[
               ToolUtil.isObject(item.customerResult).customerName,
               ToolUtil.isObject(item.brandResult).brandName || '无品牌',
             ]}
+            moreDom={!detail && <MyProgress
+              className='progress'
+              percent={parseInt((item.instockNumber / item.askNumber) * 100)}
+              format={(num)=>num + '%'}
+            />}
           />
         </div>
         <div className={style.skuNumber}>
@@ -104,7 +109,6 @@ const InSkuItem = (
           <ShopNumber shopClassName={style.shopNumber} value={number} show />
         </div>
       </div>
-      {!detail && <MyProgress percent={parseInt((item.instockNumber / item.askNumber) * 100)} />}
     </div>
     <div className={style.space} />
   </>;

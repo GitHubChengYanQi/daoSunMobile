@@ -7,6 +7,8 @@ import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
 import pickStyle from '../MyPicking/index.less';
 import MyProgress from '../../../../../../../../../../components/MyProgress';
+import ShopNumber
+  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const OutSkuItem = ({ item, data }) => {
   const skuResult = item.skuResult || {};
@@ -40,31 +42,32 @@ const OutSkuItem = ({ item, data }) => {
 
   return <div
     className={ToolUtil.classNames(style.sku, data.length <= 3 && style.skuBorderBottom)}
-    style={{paddingBottom:8}}
+    style={{ paddingBottom: 8 }}
   >
     <div
       className={style.skuItem}
+      style={{ paddingBottom: 0 }}
     >
       <div className={style.item}>
         <SkuItem
           number={item.stockNumber || 0}
-          imgSize={60}
+          imgSize={74}
           skuResult={skuResult}
           extraWidth='124px'
           otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
         />
       </div>
-      <div className={style.outStockNumber} style={{ color: stockNumberColor }}>
-        {stockNumberText}
+      <div className={style.outStockNumber}>
+        <div style={{ color: stockNumberColor }}>{stockNumberText}</div>
       </div>
     </div>
     <div className={pickStyle.dataNumber}>
       <div className={pickStyle.number}>
-        <div hidden={successPercent <= 0} style={{ width: `${successPercent}%` }}>{received}</div>
+        <div hidden={successPercent <= 0} style={{ width: `${successPercent}%`, color: '#fff' }}>{received}</div>
         <div hidden={percent <= 0} style={{ width: `${percent}%` }}>{collectable}</div>
         <div hidden={trail <= 0} style={{ width: `${trail}%` }}>{notPrepared}</div>
       </div>
-      <MyProgress
+      <Progress
         className={pickStyle.progress}
         format={() => {
           return <span style={{ color: '#000' }}>{item.number + '  (申请数)'}</span>;

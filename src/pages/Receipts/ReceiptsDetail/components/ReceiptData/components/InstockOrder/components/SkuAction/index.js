@@ -159,7 +159,7 @@ const SkuAction = (
       </div>}
       className={style.cardStyle}
       headerClassName={style.headerStyle}
-      bodyClassName={ToolUtil.classNames(style.bodyStyle,style.instockBody)}
+      bodyClassName={ToolUtil.classNames(style.bodyStyle)}
       extra={<div className={style.extra}>
         合计：<span>{items.length}</span>类<span>{countNumber}</span>件
       </div>}>

@@ -21,7 +21,9 @@ const MyProgress = (
       strokeColor={strokeColor || 'var(--adm-color-primary)'}
       format={(number) => {
         if (typeof format === 'function') {
-          return format(number);
+          return <div style={{color:'var(--adm-color-primary)'}}>
+            {format(number)}
+          </div>;
         }
 
         return <div
