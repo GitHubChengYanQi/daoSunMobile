@@ -50,7 +50,7 @@ const OutStockConfirm = () => {
       setCode(query.code);
       run({ params: { code: query.code } });
     }
-  }, []);
+  }, [query.code]);
 
   if ((loading && query.code) || outStockLoading) {
     return <MyLoading />;

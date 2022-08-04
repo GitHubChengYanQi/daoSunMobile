@@ -83,7 +83,7 @@ const Index = (props) => {
             /> : <Icon type='icon-shouye3' style={{ fontSize: iconSize }} />}
         />
         <TabBar.Item
-          title='报表'
+          title='数据'
           key='/Report'
           icon={<Icon style={{ fontSize: iconSize }} type='icon-baobiao1' />}
         />
