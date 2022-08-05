@@ -10,7 +10,7 @@ import MySearch from '../../../MySearch';
 import { CheckOutline } from 'antd-mobile-icons';
 import { UserName } from '../../../User';
 
-export const userList = { url: '/formUser/userList', method: 'GET' };
+export const userList = { url: '/formUser/userList', method: 'POST' };
 
 const UserList = (
   {
@@ -26,6 +26,8 @@ const UserList = (
   const indexBarRef = useRef(null);
 
   const [data, setData] = useState([]);
+
+  const [name, setName] = useState();
 
   const { loading, run } = useRequest(userList, {
     manual: true,
@@ -70,7 +72,7 @@ const UserList = (
   });
 
   useEffect(() => {
-    run();
+    run({ data: {} });
   }, []);
 
   if (loading && data.length === 0) {
@@ -83,7 +85,7 @@ const UserList = (
 
   return (
     <div style={{ height: '80vh' }}>
-      <MySearch onSearch={(name) => {
+      <MySearch value={name} onChange={setName} onSearch={(name) => {
         run({ data: { name } });
       }} />
       <IndexBar ref={indexBarRef}>
