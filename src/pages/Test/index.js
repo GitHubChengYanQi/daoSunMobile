@@ -1,9 +1,14 @@
-import React from 'react';
-import User from '../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/User';
+import React, { useRef } from 'react';
+import Bouncing from '../components/Bouncing';
+import { Button } from 'antd-mobile';
+
 const Test = () => {
 
+  const ref = useRef();
+
   return <div style={{ textAlign: 'center' }}>
-    <User title='参与人' />
+    <Button onClick={()=>ref.current.jump()}>123</Button>
+    <Bouncing ref={ref} />
   </div>;
 };
 

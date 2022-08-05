@@ -48,7 +48,7 @@ const List = (
     <div className={style.list}>
       <div className={style.flex} style={{ padding: '8px 0' }}>
         <div className={style.flexGrow}>
-          实物码只显示后6位！
+          实物码只显示后6位数字！
         </div>
         {add && <Button color='primary' fill='outline' onClick={addInkind}>新增二维码</Button>}
       </div>

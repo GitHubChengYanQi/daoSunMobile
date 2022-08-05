@@ -130,7 +130,7 @@ const ReceiptsDetail = () => {
           addComments={setHidden}
         />;
       case 'dynamic':
-        return <Dynamic data={detail} refresh={refresh} />;
+        return <Dynamic taskId={detail.processTaskId} refresh={refresh} />;
       case 'inStockLog':
         return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
       case 'outStockLog':

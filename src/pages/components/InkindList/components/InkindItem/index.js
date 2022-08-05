@@ -2,7 +2,6 @@ import React from 'react';
 import style from '../List/index.less';
 import MyCheck from '../../../MyCheck';
 import { ToolUtil } from '../../../ToolUtil';
-import LinkButton from '../../../LinkButton';
 import { MyDate } from '../../../MyDate';
 import { UserName } from '../../../User';
 import ShowCode from '../../../ShowCode';
@@ -60,7 +59,7 @@ const InkindItem = (
 
             <div className={style.brand}>
               {ToolUtil.isObject(inkindItem.brandResult).brandName || '无品牌'}
-              <LinkButton>更多</LinkButton>
+              {/*<LinkButton>更多</LinkButton>*/}
             </div>
           </div>
           <div className={style.otherData}>

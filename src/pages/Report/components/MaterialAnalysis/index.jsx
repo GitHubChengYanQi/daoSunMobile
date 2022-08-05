@@ -13,20 +13,20 @@ const MaterialAnalysis = () => {
     { name: '标件', values: [10, 10, 10, 10, 10, 10, 10, 10, 10] },
   ];
 
-  const skus = ['T510-A8']
+  const skus = ['T510-A8','物料名称']
 
   const data ={};
 
   skus.forEach((item,index)=>{
     data[item] = skuClass.map(item => {
       return {
-        'income': item.values[index],
-        'country': item.name,
-        'emoji': item.values[index],
-        year:1,
+        'number': item.values[index],
+        'name': item.name,
       };
     })
   })
+
+  // console.log(data);
 
 
   function sort(data) {
@@ -36,7 +36,7 @@ const MaterialAnalysis = () => {
   }
 
   function Year(props) {
-    const { coord, year } = props;
+    const { coord } = props;
     const { bottom, right } = coord;
     return (
       <group>
@@ -44,7 +44,6 @@ const MaterialAnalysis = () => {
           attrs={{
             x: right,
             y: bottom,
-            text: year,
             textAlign: 'end',
             textBaseline: 'bottom',
             fontSize: '40px',
@@ -69,9 +68,9 @@ const MaterialAnalysis = () => {
             }}
           >
             <Year year={year} />
-            <Axis field='country' />
+            <Axis field='name' />
             <Axis
-              field='income'
+              field='number'
               style={{
                 label: {
                   align: 'between',
@@ -79,9 +78,9 @@ const MaterialAnalysis = () => {
               }}
             />
             <Interval
-              x='country'
-              y='income'
-              color='country'
+              x='name'
+              y='number'
+              color='name'
               animation={{
                 appear: {
                   easing: 'linear',
@@ -105,9 +104,9 @@ const MaterialAnalysis = () => {
             {data[year].map((record) => {
               return (
                 <TextGuide
-                  key={record.country}
+                  key={record.name}
                   records={[record]}
-                  content={record.emoji}
+                  content={record.number}
                   offsetX={4}
                   style={{
                     fill: '#666',

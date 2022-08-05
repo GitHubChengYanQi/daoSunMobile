@@ -1,8 +1,7 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Popup, Toast } from 'antd-mobile';
+import { Button, Popup } from 'antd-mobile';
 import { FormOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../../util/Request';
-import style from './index.less';
 import { MyLoading } from '../../../components/MyLoading';
 import Note from './components/Note';
 import { Message } from '../../../components/Message';
@@ -30,11 +29,10 @@ const Comments = (
     {
       manual: true,
       onSuccess: () => {
-        Message.successToast('评论完成', () => {
-          refresh();
-          onInput(false);
-          setVisible(false);
-        });
+        Message.toast('评论完成');
+        refresh();
+        onInput(false);
+        setVisible(false);
       },
     },
   );
@@ -51,7 +49,7 @@ const Comments = (
   return <>
     <div style={{ padding: 12, backgroundColor: '#fff' }}>
       <Button
-        style={{ width: '100%',height:40 }}
+        style={{ width: '100%', height: 40 }}
         onClick={() => {
           setVisible(true);
         }}

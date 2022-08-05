@@ -11,7 +11,6 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { useModel } from 'umi';
-import InkindList from '../../../../../../../../components/InkindList';
 
 const cartAdd = { url: '/productionPickListsCart/add', method: 'POST' };
 
@@ -25,7 +24,6 @@ const Prepare = (
     onSuccess = () => {
     },
     taskId,
-    ...props
   },
 ) => {
 
@@ -35,6 +33,7 @@ const Prepare = (
   const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
+  console.log(outStockSkus);
 
   const skuResult = skuItem.skuResult || {};
 
@@ -76,7 +75,9 @@ const Prepare = (
     onClose();
     const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'pickSkuImg', () => {
-      onSuccess();
+      let number = 0;
+      outStockSkus.forEach(item => number += item.number);
+      onSuccess(number);
     });
   };
 
@@ -145,8 +146,8 @@ const Prepare = (
         <ShopNumber value={outStockNumber} show />
         <LinkButton onClick={() => {
           inkindRef.current.open({
-            skuId:skuItem.skuId,
-            brandId:skuItem.brandId,
+            skuId: skuItem.skuId,
+            brandId: skuItem.brandId,
             skuResult,
           });
         }}><ScanIcon style={{ fontSize: 24 }} /></LinkButton>

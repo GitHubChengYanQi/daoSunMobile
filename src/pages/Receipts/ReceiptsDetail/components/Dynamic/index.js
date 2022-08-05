@@ -1,26 +1,16 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import StepList from './components/StepList';
+import MyList from '../../../../components/MyList';
+import { remakeList } from '../../../../Work/Stock/Dynamic';
 
-const Dynamic = (
-  {
-    data = {},
-  },
-) => {
+const Dynamic = ({ taskId }) => {
 
-
-  const [remarks, setRemarks] = useState([]);
-
-  useEffect(() => {
-    const remarks = data.remarks || [];
-    setRemarks(remarks.filter(item => ['audit', 'dynamic'].includes(item.type)));
-  }, [data.remarks]);
-
-  const ref = useRef();
+  const [data, setData] = useState([]);
 
   return <div style={{ backgroundColor: '#fff' }}>
-    <StepList remarks={remarks} onChange={setRemarks} addComments={(remarksId) => {
-      ref.current.addComments(remarksId);
-    }} />
+    <MyList api={remakeList} params={{ types: ['audit', 'dynamic'], taskId }} data={data} getData={setData}>
+      <StepList remarks={data} />
+    </MyList>
   </div>;
 };
 

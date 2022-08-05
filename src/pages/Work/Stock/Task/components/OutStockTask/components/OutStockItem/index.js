@@ -12,15 +12,22 @@ const OutStockItem = (
 
   const receipts = item.receipts || {};
 
+  const canPick = receipts.canPick;
+  const canOperate = receipts.canOperate;
+
+  const can = canOperate === undefined ? canPick : canOperate;
+
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
   };
 
   return <TaskItem
-    statusName={<>
-      可 <br />备 <br />料
+    statusName={canOperate === undefined ? <>
+      可 <br />领 <br />料
+    </> : <>
+      可 <br />备<br />料
     </>}
-    statusNameClassName={receipts.canOperate ? style.backBlue : style.backEee}
+    statusNameClassName={can ? style.backBlue : style.backEee}
     percent={parseInt((receipts.receivedCount / receipts.numberCount) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ReceiptsEnums } from '../../../index';
 import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
@@ -9,8 +9,8 @@ import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
 import StepList from '../Dynamic/components/StepList';
-import { MyLoading } from '../../../../components/MyLoading';
 import Allocation from './components/Allocation';
+import CommentsList from './CommentsList';
 
 const ReceiptData = (
   {
@@ -89,9 +89,7 @@ const ReceiptData = (
 
   const remarks = data.remarks || [];
 
-  if (loading) {
-    return <MyLoading skeleton skeletonStyle={{ backgroundColor: '#fff', height: 'calc(100% - 166px)' }} />;
-  }
+  const commentsListRef = useRef();
 
   return <div>
     {receiptType()}
@@ -100,10 +98,14 @@ const ReceiptData = (
       auditData={data.stepsResult}
       createUser={data.user}
     />
-    <Comments title='添加评论' detail={data} id={data.processTaskId} refresh={refresh} onInput={addComments} />
-    <div className={style.comments}>
-      <StepList remarks={remarks.filter(item => 'comments' === item.type)} />
-    </div>
+    <Comments
+      title='添加评论'
+      detail={data}
+      id={data.processTaskId}
+      refresh={() => commentsListRef.current.submit()}
+      onInput={addComments}
+    />
+    <CommentsList taskId={data.processTaskId} ref={commentsListRef} />
     <div style={{ backgroundColor: '#fff', height: 60, marginTop: 3 }} />
   </div>;
 };

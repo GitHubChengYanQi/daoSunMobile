@@ -78,22 +78,36 @@
 
   .position {
     border-radius: 2px;
-    margin: 12px 0;
+    margin: 4px 0;
+    border: 1px solid #D9D9D9;
+    color: #808080;
+    padding: 0 8px;
+
+    .brandName {
+      padding: 8px 0;
+    }
   }
 
   .defaultPosition {
     border: 1px solid #D9D9D9;
     color: #808080;
   }
+
+  .show {
+    border: 1px solid var(--adm-color-primary);
+    color: var(--adm-color-primary);
+  }
 }
 
 .allBrands {
-  padding: 6px 0;
+  //padding: 6px 0;
+  padding-bottom: 8px;
 
   .storeBrands {
     border: 1px solid var(--body--background--color);
     margin-bottom: 8px;
   }
+
   .storeBrandItem {
     padding: 8px;
     background-color: var(--body--background--color);
@@ -113,7 +127,7 @@
     background-color: var(--body--background--color);
     display: flex;
     padding: 0 8px;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
     align-items: center;
     font-size: 14px;
     border-radius: 2px;

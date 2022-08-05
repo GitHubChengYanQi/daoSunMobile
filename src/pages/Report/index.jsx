@@ -2,7 +2,6 @@ import React from 'react';
 import MaterialAnalysis from './components/MaterialAnalysis';
 import style from './index.less';
 import Title from '../components/Title';
-import MyNavBar from '../components/MyNavBar';
 import InventoryRotation from './components/InventoryRotation';
 import WorkEfficiency from './components/WorkEfficiency';
 import ErrorSku from './components/ErrorSku';

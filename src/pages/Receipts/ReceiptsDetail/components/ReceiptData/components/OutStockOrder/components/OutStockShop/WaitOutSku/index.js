@@ -123,7 +123,7 @@ const WaitOutSku = (
       <span>数量：{allSkus.length} 类</span>
       <LinkButton disabled={outTypeData().noSys} onClick={() => {
         setSys(!sys);
-      }}>{sys ? '取消管理' : '管理'}</LinkButton>
+      }}>{sys ? '退出管理' : '管理'}</LinkButton>
     </div>
     <div className={style.content}>
       {data.length === 0 && <MyEmpty />}
@@ -233,13 +233,13 @@ const WaitOutSku = (
 
     <div className={style.bottom}>
       <div className={style.all}>
-        <MyCheck checked={allChecked} onChange={() => {
+        <MyCheck fontSize={16} checked={allChecked} onChange={() => {
           if (sys) {
             setReturnSkus(allChecked ? [] : allSkus);
           } else {
             setUserIds(allChecked ? [] : data.map(item => item.userId));
           }
-        }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {sys ? returnSkus.length : userIds.length} 类</span>
+        }} />{allChecked ? '取消全选' : '全选'}<span>已选中 {sys ? returnSkus.length : userIds.length} 类</span>
       </div>
       <div className={style.buttons}>
         {sys && <Button color='danger' disabled={returnSkus.length === 0} onClick={() => {

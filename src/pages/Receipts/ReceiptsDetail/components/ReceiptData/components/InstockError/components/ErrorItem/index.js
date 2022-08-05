@@ -35,10 +35,10 @@ const ErrorItem = (
     <div className={style.error}>
       <div><span>{totalTitle}：<span>{item.needNumber}</span></span>
       </div>
-      <div hidden={!item.errorNumber}>数量差异 <span
+      <div hidden={!item.errorNumber}>数量差异：<span
         className={style.red}>{item.errorNumber > 0 ? `+${item.errorNumber}` : item.errorNumber}</span>
       </div>
-      <div hidden={!item.otherNumber}>其他异常 <span className={style.yellow}>{item.otherNumber}</span></div>
+      <div hidden={!item.otherNumber}>其他异常：<span className={style.yellow}>{item.otherNumber}</span></div>
     </div>
   </div>;
 };

@@ -11,6 +11,7 @@ import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import InkindList from '../../../../../../../../../../components/InkindList';
+import { TrademarkCircleOutlined } from '@ant-design/icons';
 
 export const getPositionsAndBrands = { url: '/storehousePositions/selectByBrand', method: 'POST' };
 
@@ -129,11 +130,11 @@ const Order = (
 
       return <div key={index}>
         <div hidden={!brandShow && brands.length === 1}>
-          <Button
-            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
+          <div
+            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : style.show)}
             color={item.show ? 'primary' : 'default'}
-            fill='outline'
-            onClick={() => {
+          >
+            <div onClick={() => {
               let positionsResults = item.positionsResults || [];
               if (item.show) {
                 positionsResults = positionsResults.map(item => {
@@ -141,57 +142,57 @@ const Order = (
                 });
               }
               brandChange(index, { show: !item.show, positionsResults });
-            }}
-          >
-            <LinkOutline /> {item.brandName} ({item.num})
-          </Button>
-        </div>
+            }} className={style.brandName}>
+              <TrademarkCircleOutlined /> {item.brandName} ({item.num})
+            </div>
 
-        <div hidden={!item.show} className={style.allBrands}>
-          {
-            positions.map((positionItem, positionIndex) => {
+            <div hidden={!item.show} className={style.allBrands}>
+              {
+                positions.map((positionItem, positionIndex) => {
 
-              return <div
-                className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
-                key={positionIndex}>
-                <div className={style.positionName} onClick={() => {
-                  if (!positionItem.checked) {
-                    const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber) : positionItem.number;
-                    positionChange(index, positionIndex, { checked: true, outStockNumber: num });
-                  } else {
-                    positionChange(index, positionIndex, { checked: false, outStockNumber: 0 });
-                  }
-                }}>
-                  <MyCheck checked={positionItem.checked} />
-                  <span>{positionItem.name} ({positionItem.number})</span>
-                </div>
-
-                <div hidden={!positionItem.checked}>
-                  <ShopNumber
-                    min={0}
-                    value={positionItem.outStockNumber || 0}
-                    onChange={(num) => {
-                      let number = 0;
-                      brands.map((pItem, pIndex) => {
-                        const positions = pItem.positionsResults || [];
-                        const newPositions = positions.filter((bIten, bIndex) => {
-                          return !(pIndex === index && bIndex === positionIndex);
-                        });
-                        return newPositions.map(item => number += (item.outStockNumber || 0));
-                      });
-                      if (typeof outStockNumber === 'number' && (number + num) > outStockNumber) {
-                        return Message.toast('不能超过出库数量！');
+                  return <div
+                    className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
+                    key={positionIndex}>
+                    <div className={style.positionName} onClick={() => {
+                      if (!positionItem.checked) {
+                        const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + positionItem.number)) > 0 ? positionItem.number : (outStockNumber - outNumber) : positionItem.number;
+                        positionChange(index, positionIndex, { checked: true, outStockNumber: num });
+                      } else {
+                        positionChange(index, positionIndex, { checked: false, outStockNumber: 0 });
                       }
-                      if (num > positionItem.num) {
-                        return Message.toast('不能超过库存数量！');
-                      }
-                      positionChange(index, positionIndex, { outStockNumber: num });
-                    }} />
-                </div>
+                    }}>
+                      <MyCheck checked={positionItem.checked} />
+                      <span>{positionItem.name} ({positionItem.number})</span>
+                    </div>
 
-              </div>;
-            })
-          }
+                    <div hidden={!positionItem.checked}>
+                      <ShopNumber
+                        min={0}
+                        value={positionItem.outStockNumber || 0}
+                        onChange={(num) => {
+                          let number = 0;
+                          brands.map((pItem, pIndex) => {
+                            const positions = pItem.positionsResults || [];
+                            const newPositions = positions.filter((bIten, bIndex) => {
+                              return !(pIndex === index && bIndex === positionIndex);
+                            });
+                            return newPositions.map(item => number += (item.outStockNumber || 0));
+                          });
+                          if (typeof outStockNumber === 'number' && (number + num) > outStockNumber) {
+                            return Message.toast('不能超过出库数量！');
+                          }
+                          if (num > positionItem.num) {
+                            return Message.toast('不能超过库存数量！');
+                          }
+                          positionChange(index, positionIndex, { outStockNumber: num });
+                        }} />
+                    </div>
+
+                  </div>;
+                })
+              }
+            </div>
+          </div>
         </div>
       </div>;
     })}

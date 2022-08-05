@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Dialog, Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -18,10 +18,12 @@ import MyPicking, { collectableColor, notPreparedColor, receivedColor } from './
 import { Clock } from '../../../../../../../../components/MyDate';
 import PrintCode from '../../../../../../../../components/PrintCode';
 import jrQrcode from 'jr-qrcode';
+import { MyLoading } from '../../../../../../../../components/MyLoading';
 
 
 const OutSkuAction = (
   {
+    loading,
     order = {},
     pickListsId,
     data = [],
@@ -36,6 +38,8 @@ const OutSkuAction = (
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
   const userInfo = state.userInfo || {};
+
+  const shopRef = useRef();
 
   const [visible, setVisible] = useState();
 
@@ -78,27 +82,13 @@ const OutSkuAction = (
       bodyClassName={style.bodyStyle}
       titleBom={<div className={style.skuTitle}>
         <Title>申请明细</Title>
-        <div className={style.status}>
-          <div className={style.statusItem}>
-            <div className={style.radius} style={{ backgroundColor: receivedColor }} />
-            已领
-          </div>
-          <div className={style.statusItem}>
-            <div className={style.radius} style={{ backgroundColor: collectableColor }} />
-            可领
-          </div>
-          <div className={style.statusItem}>
-            <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
-            未备
-          </div>
-        </div>
       </div>}
       extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>}>
       {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
       {
-        outSkus.map((item, index) => {
+        loading ? <MyLoading skeleton title='正在刷新物料信息' /> : outSkus.map((item, index) => {
 
           const complete = item.complete;
           const prepare = item.prepare;
@@ -126,7 +116,6 @@ const OutSkuAction = (
           </div>;
         })
       }
-      <div className={style.space} style={{ height: 14 }} />
       {data.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
@@ -151,8 +140,10 @@ const OutSkuAction = (
         id={pickListsId}
         skuItem={visible}
         dimension={dimension}
-        onSuccess={() => {
-          refresh();
+        onSuccess={(number) => {
+          shopRef.current.jump(() => {
+            refresh();
+          }, number);
         }}
         onClose={() => {
           setVisible(false);
@@ -161,6 +152,7 @@ const OutSkuAction = (
     </Popup>
 
     {action && <OutStockShop
+      shopRef={shopRef}
       taskId={taskId}
       outType={order.source}
       allPerpareNumber={allPerpareNumber}

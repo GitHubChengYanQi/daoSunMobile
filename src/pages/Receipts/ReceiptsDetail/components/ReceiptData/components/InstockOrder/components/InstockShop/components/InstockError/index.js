@@ -239,7 +239,7 @@ const InstockError = (
             } else {
               setData(errorList);
             }
-          }}>{allChecked ? '取消全选' : '全选'}</MyCheck> <span>已选中 {data.length} 类</span>
+          }} /> {allChecked ? '取消全选' : '全选'} <span>已选中 {data.length} 类</span>
         </div>
         <div className={style.buttons}>
           {!noBack && <Button color='danger' disabled={data.length === 0} fill='outline' onClick={() => {
@@ -269,6 +269,7 @@ const InstockError = (
 
     {(orderAddLoading || backLoading) && <MyLoading />}
   </>;
+  ;
 };
 
 export default InstockError;

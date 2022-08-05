@@ -9,6 +9,7 @@ import LinkButton from '../../../../../../../../../../components/LinkButton';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import OutItem from './components/OutItem';
 import MyActionSheet from '../../../../../../../../../../components/MyActionSheet';
+import { EnvironmentOutline } from 'antd-mobile-icons';
 
 
 export const getCarts = { url: '/productionPickListsCart/getSelfCartsByLists', method: 'POST' };
@@ -38,7 +39,6 @@ const MyPicking = (
   const [visible, setVisible] = useState();
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   let total = 0;
   const checkSku = [];
@@ -152,7 +152,7 @@ const MyPicking = (
           <LinkButton onClick={() => {
             setVisible(true);
           }}>
-            {storehouse.name || '全部'} >
+            <EnvironmentOutline />{storehouse.name || '全部'} >
           </LinkButton>
         </div>
       </div>

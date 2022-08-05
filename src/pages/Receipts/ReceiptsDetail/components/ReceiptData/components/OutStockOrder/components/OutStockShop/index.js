@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Badge, FloatingBubble, Popup } from 'antd-mobile';
+import { FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
-import Icon from '../../../../../../../../components/Icon';
 import WaitOutSku from './WaitOutSku';
+import waitInstockShop from '../../../../../../../../../assets/waitInstockShop.png';
+import Bouncing from '../../../../../../../../components/Bouncing';
 
 const OutStockShop = (
   {
@@ -12,6 +13,7 @@ const OutStockShop = (
     refresh = () => {
     },
     allPerpareNumber = 0,
+    shopRef,
   }) => {
 
   const [visible, setVisible] = useState();
@@ -34,11 +36,7 @@ const OutStockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}>
-            <Badge
-              content={allPerpareNumber || null}
-              style={{ '--right': '5%', '--top': '5%' }}>
-              <Icon type='icon-chukuguanli2' />
-            </Badge>
+            <Bouncing ref={shopRef} size={24} img={waitInstockShop} number={allPerpareNumber} />
           </div>
         </div>
       </div>

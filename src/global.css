@@ -3,11 +3,16 @@ html, body, #root {
   overflow: hidden;
 }
 
+#root {
+  max-width: 640px;
+  margin: auto;
+  background-color: #E1EBF6;
+}
+
 body {
   margin: 0;
-  background-color: #E1EBF6;
-  --body--background--color: #E1EBF6;
   line-height: initial;
+  --body--background--color: #E1EBF6;
 }
 
 :global .am-badge-text {

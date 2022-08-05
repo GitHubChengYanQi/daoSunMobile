@@ -95,7 +95,7 @@ const MyKeybord = (
             <MinusOutline />
           </Button>
           <div className={style.value}>
-            {showNumber}<span className={style.line}>|</span>
+            {showNumber}<span hidden={defaultNumber} className={style.line}>|</span>
           </div>
           <Button disabled={Number(showNumber || 0) >= max} onClick={() => {
             const newValue = Number((Number(showNumber) + Number(step)).toFixed(decimalLength));
@@ -128,12 +128,13 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      if (number > 999999999) {
+                      const num = Number(number);
+                      if (num > 999999999) {
                         return;
                       }
                       numberClick(item);
                       if (!decimal || decimalLength < decimal) {
-                        numberChange(`${number || ''}` + item);
+                        numberChange(`${num || ''}` + item);
                       }
                     }}>{item}</Button>
                   </div>;

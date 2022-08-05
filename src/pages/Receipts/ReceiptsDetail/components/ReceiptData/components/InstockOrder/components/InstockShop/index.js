@@ -40,6 +40,7 @@ const InstockShop = (
           instockOrderId={id}
           onClose={() => {
             if (refreshOrder) {
+              setRefreshOrder(false);
               refresh();
             }
             setVisible(false);
@@ -71,6 +72,7 @@ const InstockShop = (
           refresh={() => setRefreshOrder(true)}
           onClose={() => {
             if (refreshOrder) {
+              setRefreshOrder(false);
               refresh();
             }
             setVisible(false);
@@ -121,11 +123,7 @@ const InstockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}>
-            <Badge
-              content={order.waitInStockNum || null}
-              style={{ '--right': '5%', '--top': '5%' }}>
-              <Bouncing ref={waitShopRef} size={24} img={waitInstockShop} />
-            </Badge>
+            <Bouncing ref={waitShopRef} size={24} img={waitInstockShop} number={order.waitInStockNum} />
           </div>
         </div>
         <div id='instockError' className={style.action} onClick={() => {
@@ -133,11 +131,7 @@ const InstockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}>
-            <Badge
-              content={order.instockErrorNum || null}
-              style={{ '--right': '5%', '--top': '5%' }}>
-              <Bouncing ref={errorShopRef} size={24} img={instockErrorShop} />
-            </Badge>
+            <Bouncing ref={errorShopRef} size={24} img={instockErrorShop} number={order.instockErrorNum} />
           </div>
         </div>
       </div>
@@ -145,8 +139,10 @@ const InstockShop = (
 
 
     <Popup
+      destroyOnClose
       onMaskClick={() => {
         if (refreshOrder) {
+          setRefreshOrder(false);
           refresh();
         }
         setVisible(false);

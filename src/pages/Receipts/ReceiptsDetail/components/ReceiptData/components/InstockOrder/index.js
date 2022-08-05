@@ -10,6 +10,7 @@ import { UserName } from '../../../../../../components/User';
 
 const InstockOrder = (
   {
+    loading,
     data = {},
     refresh = () => {
     },
@@ -47,6 +48,7 @@ const InstockOrder = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return <SkuAction
+          loading={loading}
           order={data}
           data={details}
           actionId={getAction('performInstock').id}
@@ -56,6 +58,7 @@ const InstockOrder = (
         />;
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
+          loading={loading}
           order={data}
           taskId={taskId}
           data={details}

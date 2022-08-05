@@ -24,6 +24,7 @@ export const instockHandle = { url: '/instockHandle/listByInstockOrderId', metho
 
 const SkuAction = (
   {
+    loading,
     actionId,
     data = [],
     action,
@@ -34,10 +35,12 @@ const SkuAction = (
   },
 ) => {
 
+  let orderInfo = order || {};
+
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
-  const { loading, run: addShop } = useRequest(shopCartAdd, {
+  const { loading: addShopLoading, run: addShop } = useRequest(shopCartAdd, {
     manual: true,
     onError: () => {
       refresh();
@@ -73,20 +76,8 @@ const SkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-  // const [items, setItems] = useState(defaultItems || []);
-
   let countNumber = 0;
   items.forEach(item => countNumber += item.number);
-
-  const itemChange = (data = {}, id) => {
-    const newItems = items.map(item => {
-      if (item.instockListId === id) {
-        return { ...item, ...data };
-      }
-      return item;
-    });
-    // setItems(newItems);
-  };
 
   const addShopCart = (
     imgUrl,
@@ -140,6 +131,7 @@ const SkuAction = (
     }).then(() => {
       addShopCart(imgUrl, `skuImg${index}`, () => {
         waitShopRef.current.jump(() => {
+          orderInfo = { ...orderInfo, waitInStockNum: orderInfo.waitInStockNum + 1 };
           refresh();
         });
         // itemChange({ status: 1 }, item.instockListId);
@@ -165,7 +157,7 @@ const SkuAction = (
       </div>}>
       {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
       {
-        items.map((item, index) => {
+        loading ? <MyLoading skeleton title='正在刷新物料信息' /> : items.map((item, index) => {
 
           if (!allSku && index >= 3) {
             return null;
@@ -190,7 +182,6 @@ const SkuAction = (
           </div>;
         })
       }
-      <div className={style.space} style={{ height: 14 }} />
       {items.length > 3 && <Divider className={style.allSku}>
         <div onClick={() => {
           toggle();
@@ -208,6 +199,7 @@ const SkuAction = (
     <Popup
       onMaskClick={() => {
         if (refreshOrder) {
+          setRefreshOrder(false);
           refresh();
         }
         setVisible(false);
@@ -221,6 +213,7 @@ const SkuAction = (
         skuItem={visible}
         onClose={() => {
           if (refreshOrder) {
+            setRefreshOrder(false);
             refresh();
           }
           setVisible(false);
@@ -257,7 +250,7 @@ const SkuAction = (
       waitShopRef={waitShopRef}
     />}
 
-    {(loading) && <MyLoading />}
+    {(addShopLoading) && <MyLoading />}
 
   </div>;
 };
