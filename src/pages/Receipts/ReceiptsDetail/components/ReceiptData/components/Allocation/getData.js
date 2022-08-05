@@ -175,7 +175,8 @@ export const getStoreHouse = (distributionSkus=[]) => {
           name: storeItem.name,
           skus: [{
             ...item,
-            number: storeItem.number,
+            number: item.number,
+            storeNumber:storeItem.number,
             storeBrands: storeItem.brands,
             storePositions: storeItem.positions,
           }],
@@ -186,7 +187,8 @@ export const getStoreHouse = (distributionSkus=[]) => {
           ...store,
           skus: [...store.skus, {
             ...item,
-            number: storeItem.number,
+            number: item.number,
+            storeNumber:storeItem.number,
             storeBrands: storeItem.brands,
             storePositions: storeItem.positions,
           }],

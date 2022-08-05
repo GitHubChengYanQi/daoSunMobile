@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import style
-  from '../../../../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/Prepare/index.less';
+import style from '../../index.less';
 import { Button } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
@@ -87,7 +86,7 @@ const FixedBrand = (
     }
   }, []);
 
-  return <div className={style.action} style={{ padding: 0 }}>
+  return <div className={style.action}>
     {data.map((item, index) => {
 
       const positions = item.positions || [];
@@ -96,67 +95,67 @@ const FixedBrand = (
 
       return <div key={index}>
         <div className={style.storeItem}>
-          <Button
-            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : '')}
-            color={item.show ? 'primary' : 'default'}
-            fill='outline'
-            onClick={() => {
-              let params;
-              if (out) {
-                params = { show: !item.show, number: item.num };
-              } else {
-                params = { show: !item.show, number: 1, positions: [] };
-              }
-              dataChange(params, item.brandId);
-            }}
+          <div
+            className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : style.show)}
           >
-            <LinkOutline /> {item.brandName} <span hidden={!out}>({item.num})</span>
-          </Button>
-          {item.show &&
-          <ShopNumber
-            className={style.number}
-            show={positionCheckeds.length > 0}
-            max={out ? item.num : undefined}
-            value={item.number}
-            onChange={(number) => {
-              dataChange({ number }, item.brandId);
-            }} />}
+            <div className={style.brandName}>
+              <div className={style.name} onClick={() => {
+                let params;
+                if (out) {
+                  params = { show: !item.show, number: item.num };
+                } else {
+                  params = { show: !item.show, number: 1, positions: [] };
+                }
+                dataChange(params, item.brandId);
+              }}>
+                <LinkOutline /> {item.brandName} <span hidden={!out}>({item.num})</span>
+              </div>
 
-        </div>
+              {item.show &&
+              <ShopNumber
+                className={style.number}
+                show={positionCheckeds.length > 0}
+                max={out ? item.num : undefined}
+                value={item.number}
+                onChange={(number) => {
+                  dataChange({ number }, item.brandId);
+                }} />}
+            </div>
+            <div hidden={!item.show} className={style.allBrands} style={{ padding: 0, paddingBottom: 24 }}>
+              {
+                positions.map((positionItem, positionIndex) => {
 
-        <div hidden={!item.show} className={style.allBrands} style={{padding:0,paddingBottom:24}}>
-          {
-            positions.map((positionItem, positionIndex) => {
+                  return <div
+                    className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
+                    key={positionIndex}>
+                    <div className={style.positionName} onClick={() => {
+                      if (!positionItem.checked) {
+                        const num = positionItem.number;
+                        positionChange({ checked: true, outStockNumber: out ? num : 1 }, item.brandId, positionIndex);
+                      } else {
+                        positionChange({ checked: false, outStockNumber: 0 }, item.brandId, positionIndex);
+                      }
+                    }}>
+                      <MyCheck fontSize={16} checked={positionItem.checked} />
+                      <span>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
+                    </div>
 
-              return <div
-                className={ToolUtil.classNames(style.brands, positionItem.checked && style.checked)}
-                key={positionIndex}>
-                <div className={style.positionName} onClick={() => {
-                  if (!positionItem.checked) {
-                    const num = positionItem.number;
-                    positionChange({ checked: true, outStockNumber: out ? num : 1 }, item.brandId, positionIndex);
-                  } else {
-                    positionChange({ checked: false, outStockNumber: 0 }, item.brandId, positionIndex);
-                  }
-                }}>
-                  <MyCheck fontSize={16} checked={positionItem.checked} />
-                  <span>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
-                </div>
+                    <div hidden={!positionItem.checked}>
+                      <ShopNumber
+                        min={0}
+                        max={out ? positionItem.number : undefined}
+                        value={positionItem.outStockNumber || 0}
+                        onChange={(num) => {
+                          positionChange({ outStockNumber: num }, item.brandId, positionIndex);
+                        }} />
+                    </div>
 
-                <div hidden={!positionItem.checked}>
-                  <ShopNumber
-                    min={0}
-                    max={out ? positionItem.number : undefined}
-                    value={positionItem.outStockNumber || 0}
-                    onChange={(num) => {
-                      positionChange({ outStockNumber: num }, item.brandId, positionIndex);
-                    }} />
-                </div>
-
-              </div>;
-            })
-          }
-          {!out && <AddButton width={40} height={24} onClick={() => setVisible(item)} />}
+                  </div>;
+                })
+              }
+              {!out && <AddButton width={40} height={24} onClick={() => setVisible(item)} />}
+            </div>
+          </div>
         </div>
       </div>;
     })}

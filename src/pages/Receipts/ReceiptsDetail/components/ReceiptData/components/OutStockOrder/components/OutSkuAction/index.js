@@ -88,7 +88,7 @@ const OutSkuAction = (
       </div>}>
       {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
       {
-        loading ? <MyLoading skeleton title='正在刷新物料信息' /> : outSkus.map((item, index) => {
+        outSkus.map((item, index) => {
 
           const complete = item.complete;
           const prepare = item.prepare;

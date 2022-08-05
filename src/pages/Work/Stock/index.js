@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Icon, { ScanIcon } from '../../components/Icon';
 import MyEmpty from '../../components/MyEmpty';
 import style from './index.less';
@@ -18,6 +18,8 @@ import TaskBottom from './Task/components/TaskBottom';
 const Stock = (props) => {
 
   const [key, setKey] = useState('stock');
+
+  const shopRef = useRef();
 
   const ids = props.location.query;
 
@@ -56,7 +58,9 @@ const Stock = (props) => {
             setStockDetail({ ...stockDetail, task, judge });
           }}
           setSkus={(skus, type) => {
-            setStockDetail({ ...stockDetail, skus, task: type });
+            shopRef.current.jump(()=>{
+              setStockDetail({ ...stockDetail, skus, task: type });
+            },null);
           }}
           stockDetail={stockDetail}
         />;
@@ -74,6 +78,7 @@ const Stock = (props) => {
       case 'stock':
         const skus = stockDetail.skus || [];
         return stockDetail.task && <SkuShop
+          shopRef={shopRef}
           switchType
           className={style.popup}
           noClose

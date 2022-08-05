@@ -24,9 +24,6 @@
 }
 
 .action {
-  padding: 12px;
-  max-height: 60vh;
-  overflow: auto;
 
   .storeHouseTitle {
     padding-bottom: 12px;
@@ -50,21 +47,8 @@
   }
 
   .storeItem {
-    display: flex;
-    align-items: center;
-    margin-bottom: 12px;
 
-    button {
-      margin: 0 16px 0 0;
-      padding: 0;
-      height: 30px;
-      width: 50vw;
-    }
 
-    .number {
-      height: 30px;
-      line-height: 30px;
-    }
   }
 
   .storehouseItem {
@@ -84,6 +68,18 @@
 
     .brandName {
       padding: 8px 0;
+      display: flex;
+      align-items: center;
+
+      .name {
+        flex-grow: 1;
+      }
+
+      .number {
+        height: 30px;
+        line-height: 30px;
+        margin-left: 12px;
+      }
     }
   }
 

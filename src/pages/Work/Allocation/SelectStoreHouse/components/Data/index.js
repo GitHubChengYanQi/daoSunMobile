@@ -81,7 +81,7 @@ const Data = (
                   setVisible({ ...item, edit: true });
                 }}
               >重新分配</LinkButton>}
-              <ShopNumber show value={item.number} />
+              <ShopNumber show value={item.storeNumber} />
             </div>
           </div>;
         })

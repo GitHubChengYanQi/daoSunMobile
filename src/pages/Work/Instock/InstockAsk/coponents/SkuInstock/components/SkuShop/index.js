@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
-import { Badge, Button, Popup, Tabs } from 'antd-mobile';
+import { Button, Popup, Tabs } from 'antd-mobile';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import MyEmpty from '../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
-import Icon from '../../../../../../../components/Icon';
 import ShopNumber from '../ShopNumber';
 import { useRequest } from '../../../../../../../../util/Request';
 import { shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../Url';
@@ -17,6 +16,8 @@ import AddSku from '../AddSku';
 import LinkButton from '../../../../../../../components/LinkButton';
 import MyAntPopup from '../../../../../../../components/MyAntPopup';
 import AllocationAdd from '../AddSku/components/AllocationAdd';
+import Bouncing from '../../../../../../../components/Bouncing';
+import shop from '../../../../../../../../assets/shop.png';
 
 const SkuShop = (
   {
@@ -33,6 +34,7 @@ const SkuShop = (
     className,
     onDelete = () => {
     },
+    shopRef,
   },
 ) => {
 
@@ -300,13 +302,7 @@ const SkuShop = (
           });
           setVisible(!visible);
         }}>
-          <Badge content={skus.length || null} color='#FA8F2B' style={{ '--top': '5px', '--right': '5px' }}>
-            <Icon
-              id='shopIcon'
-              type='icon-cangchuche'
-              style={{ color: skus.length > 0 ? 'var(--adm-color-primary)' : '#B5B6B8' }}
-            />
-          </Badge>
+          <Bouncing color='#FA8F2B' ref={shopRef} size={24} img={shop} number={skus.length} />
           <div>
             <div className={style.type}>{taskData().type}</div>
             <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>

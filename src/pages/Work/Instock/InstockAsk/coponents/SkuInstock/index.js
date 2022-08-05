@@ -7,7 +7,6 @@ import AddSku from './components/AddSku';
 import SkuShop from './components/SkuShop';
 import Icon from '../../../../../components/Icon';
 import SkuList from '../../../../Sku/SkuList';
-import { ScanningOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../components/MySearch';
 import MyNavBar from '../../../../../components/MyNavBar';
 import { ERPEnums } from '../../../../Stock/ERPEnums';
@@ -71,6 +70,8 @@ const SkuInstock = ({ type, title, judge }) => {
 
   const checked = checkSkus.length === newCheckSkus.length;
 
+  const shopRef = useRef();
+
   return <div className={style.skuInStock}>
     <MyNavBar title={title} />
     <div className={style.content}>
@@ -107,17 +108,21 @@ const SkuInstock = ({ type, title, judge }) => {
 
 
     <AddSku
+      shopRef={shopRef}
       judge={judge}
       skus={skus}
       ref={addSku}
       type={type}
       onChange={(sku) => {
-        setSkus([...skus, sku]);
+        shopRef.current.jump(()=>{
+          setSkus([...skus, sku]);
+        },null);
       }}
       setSkus={setSkus}
     />
 
     <SkuShop
+      shopRef={shopRef}
       checked={checked}
       checkSkus={checkSkus}
       batch={batch}

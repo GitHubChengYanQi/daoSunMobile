@@ -157,7 +157,7 @@ const SkuAction = (
       </div>}>
       {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
       {
-        loading ? <MyLoading skeleton title='正在刷新物料信息' /> : items.map((item, index) => {
+        items.map((item, index) => {
 
           if (!allSku && index >= 3) {
             return null;

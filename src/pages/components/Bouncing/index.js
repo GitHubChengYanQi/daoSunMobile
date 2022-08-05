@@ -8,6 +8,7 @@ const Bouncing = (
     img,
     size = 100,
     number,
+    color,
   },
   ref,
 ) => {
@@ -29,7 +30,9 @@ const Bouncing = (
     ball.classList.add(style.jump);
     ball.onanimationend = () => {
       ball.classList.remove(style.jump);
-      setNum(num + number);
+      if (number !== null){
+        setNum(num + number);
+      }
       alter();
     };
   };
@@ -40,6 +43,7 @@ const Bouncing = (
 
   return <>
     <Badge
+      color={color}
       content={num || null}
       style={{ '--right': '5%', '--top': '5%' }}>
       <div className={style.box} style={{ height: size, width: size }}>

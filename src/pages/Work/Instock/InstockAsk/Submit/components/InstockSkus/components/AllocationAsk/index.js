@@ -164,7 +164,6 @@ const AllocationAsk = ({ createType }) => {
       const allocationJson = item.allocationJson || {};
       const start = allocationJson.start || {};
       const end = allocationJson.end || {};
-
       // 需求
       const brands = start.brands || [];
       const showBrands = brands.filter(brandItem => {
@@ -193,7 +192,7 @@ const AllocationAsk = ({ createType }) => {
         }
         return brandItem.show;
       });
-
+      console.log(showBrands);
       if (showBrands.length === 0) {
         skuAndNumbers.push({
           skuId: item.skuId,
@@ -242,7 +241,7 @@ const AllocationAsk = ({ createType }) => {
       });
     });
 
-
+// return;
     addAllocation({
       data: {
         jsonParam: {
