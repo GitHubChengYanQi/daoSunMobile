@@ -17,11 +17,25 @@ export const SkuContent = (
     query,
     data,
     addSku,
+    type,
+    shopSkuIds = [],
   }) => {
+
 
   return <div className={style.skuList}>
     {
       data.map((item, index) => {
+
+        let hidden = false;
+
+        switch (type) {
+          case ERPEnums.allocation:
+            hidden = shopSkuIds.includes(item.skuId);
+            break;
+          default:
+            break;
+        }
+
         return <div key={index} className={style.skuItem}>
           <div className={style.sku}>
             <SkuItem
@@ -33,11 +47,14 @@ export const SkuContent = (
               otherData={[ToolUtil.isArray(item.brandResults).map(item => item.brandName).join(' / ')]}
             />
           </div>
-          <LinkButton onClick={() => {
-            addSku.current.openSkuAdd({ ...item, imgId: `stocktakingImg${index}`, storehouseId: query.storehouseId });
-          }}>
-            <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
-          </LinkButton>
+          <div hidden={hidden}>
+            <LinkButton onClick={() => {
+              addSku.current.openSkuAdd({ ...item, imgId: `stocktakingImg${index}`, storehouseId: query.storehouseId });
+            }}>
+              <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
+            </LinkButton>
+          </div>
+
         </div>;
       })
     }
@@ -99,6 +116,8 @@ const SkuInstock = ({ type, title, judge }) => {
         skuContentProps={{
           query,
           addSku,
+          shopSkuIds,
+          type,
         }}
         defaultParams={{ stockView: true }}
         open={{ time: true, user: true }}
@@ -114,9 +133,9 @@ const SkuInstock = ({ type, title, judge }) => {
       ref={addSku}
       type={type}
       onChange={(sku) => {
-        shopRef.current.jump(()=>{
+        shopRef.current.jump(() => {
           setSkus([...skus, sku]);
-        },null);
+        }, null);
       }}
       setSkus={setSkus}
     />

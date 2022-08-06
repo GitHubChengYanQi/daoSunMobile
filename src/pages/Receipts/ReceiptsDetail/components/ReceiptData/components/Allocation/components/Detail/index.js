@@ -11,7 +11,6 @@ import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { PositionShow } from '../PositionShow';
 import LinkButton from '../../../../../../../../components/LinkButton';
-import BottomButton from '../../../../../../../../components/BottomButton';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
@@ -27,7 +26,6 @@ const Detail = (
     carryAllocation,
     skus = [],
     inLibraryList = [],
-    noDistributionList = [],
     total,
     refresh = () => {
     },
@@ -36,7 +34,7 @@ const Detail = (
 
   const [key, setKey] = useState(0);
 
-  const [allSku, { toggle }] = useBoolean();
+  const [allSku, { toggle, setFalse }] = useBoolean();
 
   const swiperRef = useRef();
 
@@ -54,17 +52,35 @@ const Detail = (
       {array.length === 0 && <MyEmpty />}
       {
         array.map((item, index) => {
+          if (!allSku && index > 2) {
+            return null;
+          }
           return <AllocationSkuItem item={item} key={index} />;
         })
       }
+      {array.length > 3 && <Divider className={style.allSku}>
+        <div onClick={() => {
+          toggle();
+        }}>
+          {
+            allSku ?
+              <UpOutline />
+              :
+              <DownOutline />
+          }
+        </div>
+      </Divider>}
     </div>;
   };
 
   const inLibraryListData = () => {
-    return <div className={style.details}>
+    return <div>
       {inLibraryList.length === 0 && <MyEmpty />}
       {
         inLibraryList.map((item, index) => {
+          if (!allSku && index > 2) {
+            return null;
+          }
           return <div key={index} className={style.skuItem}>
             <SkuItem
               className={style.item}
@@ -72,31 +88,20 @@ const Detail = (
               extraWidth='124px'
               otherData={[
                 item.brandName,
-                <PositionShow inPositionName={item.positionName} outPositionName={item.toPositionName} />,
+                <PositionShow inPositionName={item.toPositionName} outPositionName={item.positionName} />,
               ]}
             />
             <div className={style.inLibrary}>
               <LinkButton onClick={() => {
-                const oneCart = carts.filter(cartItem => {
-                  return cartItem.skuId === item.skuId &&
-                    cartItem.brandId === item.brandId &&
-                    cartItem.storehousePositionsId === item.posiId &&
-                    cartItem.storehouseId === item.storehouseId &&
-                    cartItem.type === 'carry';
+                run({
+                  data: {
+                    skuId: item.skuId,
+                    brandId: item.brandId,
+                    storehousePositionsId: item.positionId,
+                    toStorehousePositionsId: item.toPositionId,
+                    number: item.number,
+                  },
                 });
-                if (oneCart.length === 1) {
-                  run({
-                    data: {
-                      skuId: item.skuId,
-                      brandId: item.brandId,
-                      storehousePositionsId: item.positionId,
-                      toStorehousePositionsId: item.toPositionId,
-                    },
-                  });
-                } else {
-                  Message.errorToast('调拨失败！');
-                }
-
               }}>调拨</LinkButton>
               <ShopNumber show value={item.number} />
             </div>
@@ -104,6 +109,18 @@ const Detail = (
           </div>;
         })
       }
+      {inLibraryList.length > 3 && <Divider className={style.allSku}>
+        <div onClick={() => {
+          toggle();
+        }}>
+          {
+            allSku ?
+              <UpOutline />
+              :
+              <DownOutline />
+          }
+        </div>
+      </Divider>}
     </div>;
   };
 
@@ -111,7 +128,6 @@ const Detail = (
     { key: 'inLibrary', title: '库内调拨' },
     { key: 'outData', title: '调出明细' },
     { key: 'inData', title: '调入明细' },
-    { key: 'noDistribution', title: '未分配' },
   ];
 
   const swiperItem = () => {
@@ -122,8 +138,6 @@ const Detail = (
         return out ? askData(askList) : <Data show noLink storeHouses={hopeList} />;
       case 2:
         return out ? <Data show noLink storeHouses={hopeList} /> : askData(askList);
-      case 3:
-        return askData(noDistributionList);
       default:
         return <MyEmpty />;
     }
@@ -138,6 +152,7 @@ const Detail = (
         ref={swiperRef}
         defaultIndex={key}
         onIndexChange={index => {
+          setFalse();
           setKey(index);
         }}
       >
@@ -200,15 +215,6 @@ const Detail = (
       </div>}>
       {content()}
     </MyCard>
-
-    {key === 3 && noDistributionList.length > 0 && <BottomButton
-      leftDisabled
-      leftText='转成需求'
-      rightText='继续分配'
-      rightOnClick={() => {
-
-      }}
-    />}
 
     {loading && <MyLoading />}
   </>;

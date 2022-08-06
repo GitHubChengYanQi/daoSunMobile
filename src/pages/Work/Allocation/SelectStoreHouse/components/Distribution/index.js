@@ -53,7 +53,7 @@ const Distribution = (
         className={style.sku}
         skuResult={skuItem.skuResult}
         otherData={[
-          skuItem.haveBrand ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+          skuItem.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
         ]}
       />
       <ShopNumber show value={skuItem.number} />

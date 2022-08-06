@@ -36,7 +36,7 @@ const AllocationSkuItem = (
           extraWidth='124px'
           skuResult={item.skuResult}
           otherData={[
-            item.haveBrand ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+            item.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
             <LinkButton onClick={() => setView(true)}>查看详情</LinkButton>,
           ]} />
       </div>

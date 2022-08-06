@@ -1,7 +1,5 @@
 import style from '../../index.less';
-import { Button } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
-import { LinkOutline } from 'antd-mobile-icons';
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
@@ -26,7 +24,6 @@ const Order = (
     onChange = () => {
     },
     className,
-    brandShow,
     storehouseId,
     inkindRef,
   },
@@ -129,7 +126,7 @@ const Order = (
       const positions = item.positionsResults || [];
 
       return <div key={index}>
-        <div hidden={!brandShow && brands.length === 1}>
+        <div>
           <div
             className={ToolUtil.classNames(style.position, !item.show ? style.defaultPosition : style.show)}
             color={item.show ? 'primary' : 'default'}

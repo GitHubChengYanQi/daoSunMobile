@@ -177,7 +177,7 @@ const AllocationAsk = ({ createType }) => {
                 storehousePositionsId: positionItem.id,
                 storehouseId: query.storeHouseId,
                 number: positionItem.outStockNumber,
-                haveBrand: typeof brandItem.brandId === 'number' ? 1 : 0,
+                haveBrand: brandItem.brandId !== undefined ? 1 : 0,
               });
             });
           } else {
@@ -186,13 +186,12 @@ const AllocationAsk = ({ createType }) => {
               brandId: brandItem.brandId,
               storehouseId: query.storeHouseId,
               number: brandItem.number,
-              haveBrand: typeof brandItem.brandId === 'number' ? 1 : 0,
+              haveBrand: brandItem.brandId !== undefined ? 1 : 0,
             });
           }
         }
         return brandItem.show;
       });
-      console.log(showBrands);
       if (showBrands.length === 0) {
         skuAndNumbers.push({
           skuId: item.skuId,
@@ -240,8 +239,8 @@ const AllocationAsk = ({ createType }) => {
         }
       });
     });
-
-// return;
+    console.log(skuAndNumbers);
+    return;
     addAllocation({
       data: {
         jsonParam: {

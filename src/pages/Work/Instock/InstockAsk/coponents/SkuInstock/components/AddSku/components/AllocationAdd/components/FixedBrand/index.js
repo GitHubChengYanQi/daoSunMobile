@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
-import { Button } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../ShopNumber';
 import MyCheck from '../../../../../../../../../../../components/MyCheck';
 import { AddButton } from '../../../../../../../../../../../components/MyButton';
 import MyPositions from '../../../../../../../../../../../components/MyPositions';
+import { TrademarkCircleOutlined } from '@ant-design/icons';
 
 const FixedBrand = (
   {
@@ -108,7 +108,7 @@ const FixedBrand = (
                 }
                 dataChange(params, item.brandId);
               }}>
-                <LinkOutline /> {item.brandName} <span hidden={!out}>({item.num})</span>
+                <TrademarkCircleOutlined />  {item.brandName} <span hidden={!out}>({item.num})</span>
               </div>
 
               {item.show &&

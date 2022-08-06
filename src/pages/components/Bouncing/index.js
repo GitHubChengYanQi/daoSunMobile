@@ -9,6 +9,8 @@ const Bouncing = (
     size = 100,
     number,
     color,
+    height,
+    width,
   },
   ref,
 ) => {
@@ -30,7 +32,7 @@ const Bouncing = (
     ball.classList.add(style.jump);
     ball.onanimationend = () => {
       ball.classList.remove(style.jump);
-      if (number !== null){
+      if (number !== null) {
         setNum(num + number);
       }
       alter();
@@ -46,8 +48,8 @@ const Bouncing = (
       color={color}
       content={num || null}
       style={{ '--right': '5%', '--top': '5%' }}>
-      <div className={style.box} style={{ height: size, width: size }}>
-        <div ref={ballRef} style={{ width: size, height: size }} className={style.ball}>
+      <div className={style.box} style={{ height: height || size, width: width || size }}>
+        <div ref={ballRef} style={{ height: height || size, width: width || size }} className={style.ball}>
           <img src={img || waitInstockShop} alt='' width='100%' height='100%' />
         </div>
       </div>

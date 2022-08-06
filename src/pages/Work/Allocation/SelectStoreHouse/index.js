@@ -15,7 +15,8 @@ import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import {
   getEndData,
-  getStartData, getStoreHouse,
+  getStartData,
+  getStoreHouse,
 } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/getData';
 import MyAntPopup from '../../../components/MyAntPopup';
 import { ToolUtil } from '../../../components/ToolUtil';
@@ -54,6 +55,7 @@ const SelectStoreHouse = () => {
   const { loading: detailLoading, run: getDetail, refresh } = useRequest(detailApi, {
     manual: true,
     onSuccess: (res) => {
+      setUser({ id: res.userId });
       const detail = res || {};
       const askSkus = getStartData(detail.detailResults);
 
@@ -62,8 +64,34 @@ const SelectStoreHouse = () => {
 
       const distributionSkuIds = carry.map(item => item.skuId);
 
-      const hopeSkus = getEndData(askSkus, hope).filter(item => !distributionSkuIds.includes(item.skuId));
-      const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
+      const hopeSkus = getEndData(askSkus, hope);
+      const distributionSkus = getEndData(askSkus, carry.filter(item => item.status === 0)).filter(item => distributionSkuIds.includes(item.skuId));
+
+      const newHopeSkus = [];
+      hopeSkus.forEach(item => {
+        let carryNumber = 0;
+        carry.forEach(carryItem => {
+          if (carryItem.skuId === item.skuId) {
+            carryNumber += carryItem.number;
+          }
+        });
+        const number = item.number - carryNumber;
+        if (number > 0) {
+          const storeHouse = item.storeHouse || [];
+          const newStoreHouse = storeHouse.map(item => {
+            const brands = item.brands || [];
+            const positions = item.positions || [];
+            const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 }));
+            const newPositions = positions.map(item => {
+              const brands = item.brands || [];
+              const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 }));
+              return { ...item, brands: newBrands };
+            });
+            return { ...item, brands: newBrands, positions: newPositions };
+          });
+          newHopeSkus.push({ ...item, number, storeHouse: newStoreHouse });
+        }
+      });
 
       const stores = getStoreHouse(distributionSkus);
 
@@ -77,10 +105,8 @@ const SelectStoreHouse = () => {
         storeHouseTitle: `调${!out ? '出' : '入'}明细`,
       };
       setParams(newParams);
-      setData(hopeSkus);
+      setData(newHopeSkus);
       setStoreHouses(stores);
-
-
     },
   });
 
@@ -111,7 +137,7 @@ const SelectStoreHouse = () => {
                 <SkuItem
                   skuResult={item.skuResult}
                   otherData={[
-                    item.haveBrand ? brands.map(item => item.brandName).join(' / ') : '任意品牌',
+                    item.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
                   ]}
                   extraWidth='140px'
                 />
@@ -159,9 +185,8 @@ const SelectStoreHouse = () => {
       leftOnClick={() => {
         history.goBack();
       }}
-      rightDisabled={data.length !== 0 || !user.id}
+      rightDisabled={storeHouses.length === 0 || !user.id}
       rightOnClick={() => {
-
         checkCartRun({
           data: {
             allocationId: query.id,

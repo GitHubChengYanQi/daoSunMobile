@@ -99,26 +99,51 @@ export const getEndData = (array = [], endData = []) => {
             });
           } else {
             const position = positions[positionIndex];
-            positions[positionIndex] = {
-              ...position,
-              number: item.number + position.number,
-              brands: [...position.brands, {
+            const posiBrands = position.brands;
+            const brandIds = posiBrands.map(item => item.brandId);
+            const brandIndex = brandIds.indexOf(item.brandId);
+            if (brandIndex === -1) {
+              posiBrands.push({
                 brandId: item.brandId,
                 brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
                 number: item.number,
                 checked: true,
                 maxNumber: item.number,
-              }],
+              });
+            } else {
+              const brand = posiBrands[brandIndex];
+              posiBrands[brandIndex] = {
+                ...brand,
+                number: item.number + brand.number,
+                maxNumber: item.number + brand.number,
+              };
+            }
+            positions[positionIndex] = {
+              ...position,
+              number: item.number + position.number,
+              brands: posiBrands,
             };
           }
         } else {
-          brands.push({
-            brandId: item.brandId,
-            brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-            number: item.number,
-            checked: true,
-            maxNumber: item.number,
-          });
+          const brandIds = brands.map(item => item.brandId);
+          const brandIndex = brandIds.indexOf(item.brandId);
+          if (brandIndex === -1) {
+            brands.push({
+              brandId: item.brandId,
+              brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
+              number: item.number,
+              checked: true,
+              maxNumber: item.number,
+            });
+          } else {
+            const brand = brands[brandIndex];
+            brands[brandIndex] = {
+              ...brand,
+              number: item.number + brand.number,
+              maxNumber: item.number + brand.number,
+            };
+          }
+
         }
         storeHouse[storeIndex] = {
           ...store,
@@ -162,7 +187,7 @@ export const getEndData = (array = [], endData = []) => {
   return skus;
 };
 
-export const getStoreHouse = (distributionSkus=[]) => {
+export const getStoreHouse = (distributionSkus = []) => {
   const stores = [];
   distributionSkus.forEach(item => {
     const storeHouse = item.storeHouse || [];
@@ -176,7 +201,7 @@ export const getStoreHouse = (distributionSkus=[]) => {
           skus: [{
             ...item,
             number: item.number,
-            storeNumber:storeItem.number,
+            storeNumber: storeItem.number,
             storeBrands: storeItem.brands,
             storePositions: storeItem.positions,
           }],
@@ -188,7 +213,7 @@ export const getStoreHouse = (distributionSkus=[]) => {
           skus: [...store.skus, {
             ...item,
             number: item.number,
-            storeNumber:storeItem.number,
+            storeNumber: storeItem.number,
             storeBrands: storeItem.brands,
             storePositions: storeItem.positions,
           }],

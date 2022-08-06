@@ -29,7 +29,7 @@ const Data = (
     const skus = item.skus || [];
 
     let number = 0;
-    skus.map(item => number += item.number);
+    skus.map(item => number += item.storeNumber);
 
     return <MyCard
       className={style.card}

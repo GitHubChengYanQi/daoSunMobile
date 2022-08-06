@@ -33,7 +33,6 @@ const Allocation = (
   const [hopeList, setHopeList] = useState([]);
   const [askList, setAskList] = useState([]);
   const [inLibraryList, setInLibraryList] = useState([]);
-  const [noDistributionList, setNoDistributionList] = useState([]);
 
   const out = data.allocationType !== 1;
 
@@ -49,48 +48,66 @@ const Allocation = (
     const hopeSkus = getEndData(askSkus, hope);
     const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
 
-    const noDistribution = hopeSkus.filter(item => !distributionSkuIds.includes(item.skuId));
-
     const inLibrary = [];
+    const outPositions = [];
+    const inPositions = [];
     distributionSkus.forEach(item => {
+
       const brands = item.brands || [];
       const storeHouse = item.storeHouse || [];
 
-      const positionBrands = [];
+      brands.forEach(brandItem => {
+        const positions = brandItem.positions || [];
+        positions.forEach(positionItem => {
+          const object = {
+            skuId: item.skuId,
+            skuResult: item.skuResult,
+            brandId: brandItem.brandId || 0,
+            brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
+            number: positionItem.number,
+            positionId: positionItem.id,
+            positionName: positionItem.name,
+            haveBrand: item.haveBrand,
+          };
+          out ? outPositions.push(object) : inPositions.push(object);
+        });
+      });
+
       storeHouse.forEach(storeItem => {
         const positions = storeItem.positions || [];
         positions.forEach(positionItem => {
           const brands = positionItem.brands || [];
           brands.forEach(brandItem => {
-            positionBrands.push({
-              ...positionItem,
+            const object = {
+              skuId: item.skuId,
+              skuResult: item.skuResult,
               brandId: brandItem.brandId || 0,
-              brandName: brandItem.brandName,
+              brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
               number: brandItem.number,
               storehouseId: storeItem.id,
-              posiId: positionItem.id,
-            });
+              positionId: positionItem.id,
+              positionName: positionItem.name,
+              haveBrand: item.haveBrand,
+            };
+            out ? inPositions.push(object) : outPositions.push(object);
           });
         });
       });
-
-      brands.forEach(brandItem => {
-        const positions = brandItem.positions || [];
-        positions.forEach(positionItem => {
-          const inLibraryList = positionBrands.filter(item => {
-            return item.haveBrand ? item.brandId === brandItem.brandId : true;
-          });
-          inLibraryList.forEach(inItem => {
-            inLibrary.push({
-              ...inItem,
-              skuId: item.skuId,
-              skuResult: item.skuResult,
-              positionId: !out ? positionItem.id : inItem.id,
-              positionName: !out ? positionItem.name : inItem.name,
-              toPositionId: out ? positionItem.id : inItem.id,
-              toPositionName: out ? positionItem.name : inItem.name,
-            });
-          });
+    });
+    outPositions.forEach(outItem => {
+      const library = inPositions.filter(inItem =>
+        inItem.skuId === outItem.skuId &&
+        (!inItem.haveBrand || inItem.brandId === outItem.brandId) &&
+        inItem.positionId !== outItem.positionId,
+      );
+      library.forEach(inItem => {
+        inLibrary.push({
+          ...inItem,
+          number: outItem.number > inItem.number ? inItem.number : outItem.number,
+          positionId: outItem.positionId,
+          positionName: outItem.positionName,
+          toPositionId: inItem.positionId,
+          toPositionName: inItem.positionName,
         });
       });
     });
@@ -100,7 +117,6 @@ const Allocation = (
     setAskList(hopeSkus);
     setHopeList(stores);
     setInLibraryList(inLibrary);
-    setNoDistributionList(noDistribution);
 
     setSkus(carryAllocation ? distributionSkus : hopeSkus);
     let number = 0;
@@ -118,7 +134,6 @@ const Allocation = (
       hopeList={hopeList}
       askList={askList}
       inLibraryList={inLibraryList}
-      noDistributionList={noDistributionList}
       out={out}
       refresh={refresh}
     />

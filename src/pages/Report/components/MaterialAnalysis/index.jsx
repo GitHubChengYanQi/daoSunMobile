@@ -1,42 +1,41 @@
 import React from 'react';
 import Canvas from '@antv/f2-react';
 import { Chart, Timeline, Axis, Interval, TextGuide } from '@antv/f2';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
+
+const spectaculars = { url: '/asynTask/spectaculars', method: 'POST' };
 
 const MaterialAnalysis = () => {
 
-
-  const skuClass = [
-    { name: '零件', values: [10, 8, 6, 6, 8, 6, 4, 8, 6] },
-    { name: '外购件', values: [12, 11, 12, 10, 11, 12, 10, 11, 12] },
-    { name: '部件', values: [4, 2, 4, 4, 2, 4, 4, 2, 4] },
-    { name: '虚拟件', values: [5, 2, 8, 5, 2, 8, 5, 2, 8] },
-    { name: '标件', values: [10, 10, 10, 10, 10, 10, 10, 10, 10] },
-  ];
-
-  const skus = ['T510-A8','物料名称']
-
-  const data ={};
-
-  skus.forEach((item,index)=>{
-    data[item] = skuClass.map(item => {
-      return {
-        'number': item.values[index],
-        'name': item.name,
-      };
-    })
-  })
-
-  // console.log(data);
-
+  const { loading, data } = useRequest(spectaculars);
 
   function sort(data) {
     return data.sort((a, b) => {
-      return a.income - b.income;
+      return a.number - b.number;
     });
   }
 
+  const dataSort = (data) => {
+    const keys = Object.keys(data).map(item => {
+      return { key: item, values: data[item] };
+    });
+    console.log(keys);
+    keys.sort((a, b) => {
+      return a.values.length - b.values.length;
+    });
+    console.log(keys);
+    const newData = {};
+    keys.forEach(item => {
+      newData[item.key] = item.values;
+    });
+    console.log(newData);
+    return newData;
+  };
+
   function Year(props) {
-    const { coord } = props;
+    const { coord, year } = props;
     const { bottom, right } = coord;
     return (
       <group>
@@ -44,6 +43,7 @@ const MaterialAnalysis = () => {
           attrs={{
             x: right,
             y: bottom,
+            text: year,
             textAlign: 'end',
             textBaseline: 'bottom',
             fontSize: '40px',
@@ -55,10 +55,19 @@ const MaterialAnalysis = () => {
     );
   }
 
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  if (!data) {
+    return <MyEmpty />;
+  }
+
+  dataSort(data);
 
   return <Canvas pixelRatio={window.devicePixelRatio} height={200}>
     <Timeline delay={10}>
-      {Object.keys(data).map((year, index) => {
+      {Object.keys({}).map((year, index) => {
         return (
           <Chart
             key={index}
@@ -68,7 +77,7 @@ const MaterialAnalysis = () => {
             }}
           >
             <Year year={year} />
-            <Axis field='name' />
+            <Axis field='className' />
             <Axis
               field='number'
               style={{
@@ -78,9 +87,9 @@ const MaterialAnalysis = () => {
               }}
             />
             <Interval
-              x='name'
+              x='className'
               y='number'
-              color='name'
+              color='className'
               animation={{
                 appear: {
                   easing: 'linear',
@@ -104,7 +113,7 @@ const MaterialAnalysis = () => {
             {data[year].map((record) => {
               return (
                 <TextGuide
-                  key={record.name}
+                  key={record.className}
                   records={[record]}
                   content={record.number}
                   offsetX={4}

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
 import WaitOutSku from './WaitOutSku';
-import waitInstockShop from '../../../../../../../../../assets/waitInstockShop.png';
+import outShop from '../../../../../../../../../assets/outShop.png';
 import Bouncing from '../../../../../../../../components/Bouncing';
 
 const OutStockShop = (
@@ -36,7 +36,7 @@ const OutStockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}>
-            <Bouncing ref={shopRef} size={24} img={waitInstockShop} number={allPerpareNumber} />
+            <Bouncing ref={shopRef} size={24} height={18} img={outShop} number={allPerpareNumber} />
           </div>
         </div>
       </div>
