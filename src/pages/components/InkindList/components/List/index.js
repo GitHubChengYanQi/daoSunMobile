@@ -35,6 +35,12 @@ const List = (
 
   const [status, setStatus] = useState('all');
 
+  const screen = [
+    { text: '全部', value: 'all', id: null },
+    { text: '正常', value: 'init', id: 99 },
+    { text: '异常', value: 'error', id: -1 },
+  ];
+
   return <div className={className}>
     <MySearch
       className={style.search}
@@ -50,9 +56,12 @@ const List = (
     />
     <div className={style.statusList}>
       <Space className={style.status}>
-        <MyRadio checked={status === 'all'} onChange={() => setStatus('all')}>全部</MyRadio>
-        <MyRadio checked={status === 'init'} onChange={() => setStatus('init')}>正常</MyRadio>
-        <MyRadio checked={status === 'error'} onChange={() => setStatus('error')}>异常</MyRadio>
+        {screen.map((item, index) => {
+          return <MyRadio key={index} checked={status === item.value} onChange={() => {
+            ref.current.submit({ ...skuInfo, qrCodeid: searchValue, status: item.id });
+            setStatus(item.value);
+          }}>{item.text}</MyRadio>;
+        })}
       </Space>
     </div>
 
