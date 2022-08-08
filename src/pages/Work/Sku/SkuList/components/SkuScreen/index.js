@@ -31,7 +31,7 @@ const SkuScreen = (
     { key: 'skuClass', title: '分类', open: true },
     { key: 'brand', title: '品牌', open: true },
     { key: 'material', title: '材质', open: true },
-    // { key: 'state', title: '状态', open: false },
+    { key: 'state', title: '状态', open: true },
     { key: 'position', title: '库位', open: true },
     { key: 'supply', title: '供应商', open: true },
     // { key: 'user', title: '创建人', open: false },
@@ -63,7 +63,7 @@ const SkuScreen = (
       case 'brand':
         return search.brands || [];
       case 'state':
-        return search.states || [];
+        return [{ label: '异常件', value: -1 }];
       case 'position':
         return search.position || [];
       case 'bom':
@@ -120,9 +120,9 @@ const SkuScreen = (
       case 'skuClass':
       case 'supply':
       case 'brand':
-      case 'state':
       case 'position':
         return getOptions(key).length <= 1 && !screened && !overLength;
+      case 'state':
       case 'bom':
       case 'time':
       case 'user':
@@ -186,13 +186,11 @@ const SkuScreen = (
         />;
       case 'state':
         return <State
-          options={getOptions(item.key).map(item => {
-            return { label: item.title, value: item.key };
-          })}
+          options={getOptions(item.key)}
           title={item.title}
-          value={params.statusIds}
-          onChange={(statusIds) => {
-            paramsOnChange({ ...params, statusIds });
+          value={[params.status]}
+          onChange={(status) => {
+            paramsOnChange({ ...params, status: status[0] });
           }}
         />;
       case 'position':

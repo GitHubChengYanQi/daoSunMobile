@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
 import MySearch from '../../../MySearch';
 import MyList from '../../../MyList';
-import { Button } from 'antd-mobile';
+import { Button, Space } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
+import MyRadio from '../../../MyRadio';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };
 
@@ -21,6 +22,7 @@ const List = (
     },
     add,
     api,
+    className,
     noActions,
   },
 ) => {
@@ -31,7 +33,9 @@ const List = (
 
   const [searchValue, setSearchValue] = useState();
 
-  return <>
+  const [status, setStatus] = useState('all');
+
+  return <div className={className}>
     <MySearch
       className={style.search}
       value={searchValue}
@@ -44,6 +48,14 @@ const List = (
         ref.current.submit({ ...skuInfo, qrCodeid: null });
       }}
     />
+    <div className={style.statusList}>
+      <Space className={style.status}>
+        <MyRadio checked={status === 'all'} onChange={() => setStatus('all')}>全部</MyRadio>
+        <MyRadio checked={status === 'init'} onChange={() => setStatus('init')}>正常</MyRadio>
+        <MyRadio checked={status === 'error'} onChange={() => setStatus('error')}>异常</MyRadio>
+      </Space>
+    </div>
+
 
     <div className={style.list}>
       <div className={style.flex} style={{ padding: '8px 0' }}>
@@ -97,7 +109,7 @@ const List = (
     </div>
 
 
-  </>;
+  </div>;
 };
 
 export default List;

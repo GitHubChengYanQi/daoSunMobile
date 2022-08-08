@@ -19,6 +19,7 @@ const SearchInkind = (
     },
     api,
     noActions,
+    className,
   },
 ) => {
 
@@ -46,6 +47,7 @@ const SearchInkind = (
   >
     <SkuInfo sku={skuInfo.skuResult} />
     <List
+      className={className}
       noActions={noActions}
       api={api}
       add={add}

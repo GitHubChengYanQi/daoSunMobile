@@ -19,7 +19,7 @@ export const transferInStorehouse = { url: '/allocation/transferInStorehouse', m
 
 const Detail = (
   {
-    carts = [],
+    allocationId,
     out,
     hopeList = [],
     askList = [],
@@ -55,7 +55,7 @@ const Detail = (
           if (!allSku && index > 2) {
             return null;
           }
-          return <AllocationSkuItem item={item} key={index} />;
+          return <AllocationSkuItem out={out} item={item} key={index} />;
         })
       }
       {array.length > 3 && <Divider className={style.allSku}>
@@ -95,6 +95,7 @@ const Detail = (
               <LinkButton onClick={() => {
                 run({
                   data: {
+                    allocationId,
                     skuId: item.skuId,
                     brandId: item.brandId,
                     storehousePositionsId: item.positionId,
@@ -199,17 +200,17 @@ const Detail = (
   return <>
 
     <MyCard
-      title={<>{carryAllocation ? tabItems[key].title : '任务明细'}
-        {carryAllocation && <PageIndicator
-          style={{ marginLeft: 16 }}
-          total={4}
-          current={key}
-        />}
-      </>}
+      title='任务明细'
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={style.bodyStyle}
-      extra={<div className={style.extra}>
+      extra={carryAllocation ? <div className={style.extra}>
+        <PageIndicator
+          total={3}
+          current={key}
+        />
+        {tabItems[key].title}
+      </div> : <div className={style.extra}>
         合计：<span className='numberBlue'>{skus.length}</span>类
         <span className='numberBlue' hidden={!total}>{total}</span>件
       </div>}>

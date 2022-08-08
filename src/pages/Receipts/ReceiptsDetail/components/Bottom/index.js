@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { MoreOutline } from 'antd-mobile-icons';
 import Audit from '../../../components/Audit';
-import { ActionSheet } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../index';
 import InStockErrorBottom from './components/InStockErrorBottom';
 import Note from '../../../components/Comments/components/Note';

@@ -20,7 +20,7 @@ const MyRadio = (
       checked={checked}
       key='children'
       style={{
-        '--icon-size': '18px',
+        '--icon-size': '14px',
         '--font-size': '14px',
         '--gap': '6px',
       }}

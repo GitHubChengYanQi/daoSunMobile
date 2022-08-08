@@ -11,7 +11,7 @@ import Detail from './components/Detail';
 
 const Allocation = (
   {
-    data,
+    data = {},
     getAction = () => {
 
     },
@@ -78,12 +78,16 @@ const Allocation = (
         positions.forEach(positionItem => {
           const brands = positionItem.brands || [];
           brands.forEach(brandItem => {
+            const number = brandItem.number - (brandItem.doneNumber || 0);
+            if (number <= 0) {
+              return;
+            }
             const object = {
               skuId: item.skuId,
               skuResult: item.skuResult,
               brandId: brandItem.brandId || 0,
               brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
-              number: brandItem.number,
+              number: number,
               storehouseId: storeItem.id,
               positionId: positionItem.id,
               positionName: positionItem.name,
@@ -127,7 +131,7 @@ const Allocation = (
   return <>
 
     <Detail
-      carts={data.allocationCartResults || []}
+      allocationId={data.allocationId}
       skus={skus}
       carryAllocation={carryAllocation}
       total={total}

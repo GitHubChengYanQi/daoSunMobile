@@ -12,6 +12,7 @@ import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { ERPEnums } from '../ERPEnums';
 import MyActionSheet from '../../../components/MyActionSheet';
+import SearchInkind from '../../../components/InkindList/components/SearchInkind';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
@@ -39,51 +40,70 @@ export const SkuContent = (
 
   const shopSkuIds = skus.map(item => item.skuId);
 
-  return <MyAntList>
-    {
-      data.map((item, index) => {
+  const [errorSku, setErrorSku] = useState();
 
-        const isShop = shopSkuIds.includes(item.skuId);
+  return <>
+    <MyAntList>
+      {
+        data.map((item, index) => {
 
-        const positions = item.positionsResult || [];
+          const isShop = shopSkuIds.includes(item.skuId);
 
-        const spuResult = item.spuResult || {};
-        const unit = spuResult.unitResult || {};
+          const positions = item.positionsResult || [];
 
-        let buttonHidden = false;
-        switch (type) {
-          case ERPEnums.stocktaking:
-            buttonHidden = isShop;
-            break;
-          default:
-            break;
-        }
+          const spuResult = item.spuResult || {};
+          const unit = spuResult.unitResult || {};
 
-        return <List.Item key={index} className={style.listItem}>
-          <div className={style.skuItem}>
-            <div className={style.sku}>
-              <SkuItem
-                imgId={`skuImg${index}`}
-                extraWidth='84px'
-                unitName={unit.unitName}
-                skuResult={item}
-                otherData={[positions.map((item) => {
-                  return positionResult(item);
-                }).join(' / ')]}
-              />
+          let buttonHidden = false;
+          switch (type) {
+            case ERPEnums.stocktaking:
+              buttonHidden = isShop;
+              break;
+            default:
+              break;
+          }
+
+          return <List.Item key={index} className={style.listItem}>
+            <div className={style.skuItem}>
+              <div className={style.sku}>
+                <SkuItem
+                  imgId={`skuImg${index}`}
+                  extraWidth='84px'
+                  unitName={unit.unitName}
+                  skuResult={item}
+                  otherData={[
+                    positions.map((item) => {
+                      return positionResult(item);
+                    }).join(' / '),
+                    item.stockNumber > 0 && <LinkButton onClick={() => {
+                      setErrorSku({
+                        skuId: item.skuId,
+                        skuResult: item,
+                      });
+                    }}>查看实物</LinkButton>,
+                  ]}
+                />
+              </div>
+              <div>
+                {buttonHidden ? <span style={{ fontSize: 14 }}>已添加</span> : <LinkButton onClick={() => {
+                  openTask({ ...item, imgId: `skuImg${index}` });
+                }}>
+                  <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
+                </LinkButton>}
+              </div>
             </div>
-            <div>
-              {buttonHidden ? <span style={{ fontSize: 14 }}>已添加</span> : <LinkButton onClick={() => {
-                openTask({ ...item,imgId: `skuImg${index}` });
-              }}>
-                <Icon type='icon-jiahao' style={{ fontSize: 20 }} />
-              </LinkButton>}
-            </div>
-          </div>
-        </List.Item>;
-      })
-    }
-  </MyAntList>;
+          </List.Item>;
+        })
+      }
+    </MyAntList>
+    <SearchInkind
+      className={skus.length > 0 ? style.inkindShop : style.inkindList}
+      noActions
+      skuInfo={errorSku}
+      onClose={() => setErrorSku(false)}
+      visible={errorSku}
+    />
+  </>;
 };
 
 const StockDetail = (
@@ -95,9 +115,9 @@ const StockDetail = (
     setSkus = () => {
     },
     tasks,
-    refreshTask=()=>{
+    refreshTask = () => {
 
-    }
+    },
   }) => {
 
 
@@ -141,7 +161,7 @@ const StockDetail = (
         skus: stockDetail.skus,
         openTask: (item) => {
           if (stockDetail.task) {
-            addSku.current.openSkuAdd(item,stockDetail.task);
+            addSku.current.openSkuAdd(item, stockDetail.task);
           } else {
             setVisible(true);
             setSkuItem(item);

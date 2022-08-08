@@ -239,8 +239,6 @@ const AllocationAsk = ({ createType }) => {
         }
       });
     });
-    console.log(skuAndNumbers);
-    return;
     addAllocation({
       data: {
         jsonParam: {

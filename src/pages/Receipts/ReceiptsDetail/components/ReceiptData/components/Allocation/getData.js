@@ -22,13 +22,14 @@ export const getStartData = (startData = []) => {
             id: item.storehousePositionsId,
             name: ToolUtil.isObject(item.positionsResult).name,
             number: item.number,
+            checked: true,
           }] : [],
         }],
       });
     } else {
       const sku = skus[skuIndex];
       const brandIds = sku.brands.map(item => item.brandId);
-      const brandIndex = brandIds.indexOf(item.brandId);
+      const brandIndex = haveBrand ? 0 : brandIds.indexOf(item.brandId);
       const brands = sku.brands;
       if (brandIndex === -1) {
         brands.push({
@@ -44,7 +45,9 @@ export const getStartData = (startData = []) => {
           }] : [],
         });
       } else {
+
         const brand = brands[brandIndex];
+
         brands[brandIndex] = {
           ...brand,
           number: item.number + brand.number,
@@ -95,6 +98,7 @@ export const getEndData = (array = [], endData = []) => {
                 number: item.number,
                 checked: true,
                 maxNumber: item.number,
+                doneNumber: item.doneNumber,
               }],
             });
           } else {
@@ -109,6 +113,7 @@ export const getEndData = (array = [], endData = []) => {
                 number: item.number,
                 checked: true,
                 maxNumber: item.number,
+                doneNumber: item.doneNumber,
               });
             } else {
               const brand = posiBrands[brandIndex];
@@ -116,6 +121,7 @@ export const getEndData = (array = [], endData = []) => {
                 ...brand,
                 number: item.number + brand.number,
                 maxNumber: item.number + brand.number,
+                doneNumber: brand.doneNumber + item.doneNumber,
               };
             }
             positions[positionIndex] = {
@@ -174,6 +180,7 @@ export const getEndData = (array = [], endData = []) => {
               number: item.number,
               checked: true,
               maxNumber: item.number,
+              doneNumber: item.doneNumber,
             }],
           }] : [],
         });

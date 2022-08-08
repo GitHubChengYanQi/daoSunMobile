@@ -14,7 +14,6 @@ const ErrorSku = () => {
       data.push({ date: item, name: typeItem.type, value: typeItem.values[index] });
     });
   });
-
   return <Canvas pixelRatio={window.devicePixelRatio}>
     <Chart data={data}>
       <Axis field='date' />

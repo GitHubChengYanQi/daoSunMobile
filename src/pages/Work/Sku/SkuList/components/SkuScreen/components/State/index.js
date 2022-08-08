@@ -12,10 +12,6 @@ const State = (
     },
   }) => {
 
-  if (options.length <= 1 && value.length === 0) {
-    return <></>;
-  }
-
   return <div className={style.content}>
     <Card
       title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
@@ -34,7 +30,7 @@ const State = (
         multiple={multiple}
         value={value}
         onChange={(v) => {
-          onChange(v);
+          onChange(v || []);
         }}
       />
     </Card>

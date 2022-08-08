@@ -18,7 +18,6 @@ const WorkEfficiency = () => {
       data.push({ name: user.type, year:item , income: user.values[index] ,emoji:user.type});
     });
   });
-
   return   <Canvas  pixelRatio={window.devicePixelRatio}>
     <Chart
       data={data}

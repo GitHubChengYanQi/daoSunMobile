@@ -11,26 +11,15 @@ const MaterialAnalysis = () => {
 
   const { loading, data } = useRequest(spectaculars);
 
-  function sort(data) {
+  const sort = (data) => {
     return data.sort((a, b) => {
       return a.number - b.number;
     });
-  }
+  };
 
   const dataSort = (data) => {
-    const keys = Object.keys(data).map(item => {
-      return { key: item, values: data[item] };
-    });
-    console.log(keys);
-    keys.sort((a, b) => {
-      return a.values.length - b.values.length;
-    });
-    console.log(keys);
-    const newData = {};
-    keys.forEach(item => {
-      newData[item.key] = item.values;
-    });
-    console.log(newData);
+    const newData = [];
+    newData.push(Object.keys(data)[0]);
     return newData;
   };
 
@@ -63,15 +52,13 @@ const MaterialAnalysis = () => {
     return <MyEmpty />;
   }
 
-  dataSort(data);
-
   return <Canvas pixelRatio={window.devicePixelRatio} height={200}>
     <Timeline delay={10}>
-      {Object.keys({}).map((year, index) => {
+      {dataSort(data).map((year, index) => {
         return (
           <Chart
             key={index}
-            data={sort(data[year])}
+            data={sort(data[year]) || []}
             coord={{
               transposed: true,
             }}
