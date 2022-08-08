@@ -19,6 +19,7 @@ import Dynamic from './components/Dynamic';
 import MyError from '../../components/MyError';
 import LinkButton from '../../components/LinkButton';
 import Relation from './components/Relation';
+import { useBoolean } from 'ahooks';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -33,6 +34,8 @@ const ReceiptsDetail = () => {
   const [detail, setDetail] = useState();
 
   const [hidden, setHidden] = useState(false);
+
+  const [success, { setTrue, setFalse }] = useBoolean();
 
   const [currentNode, setCurrentNode] = useState([]);
 
@@ -74,12 +77,13 @@ const ReceiptsDetail = () => {
           const node = getCurrentNode(res.stepsResult);
           const currentNode = Array.isArray(node) ? node : [node];
           setCurrentNode(currentNode);
+          setTrue();
         } else {
 
         }
       },
       onError: () => {
-
+        setFalse();
       },
     },
   );
@@ -99,6 +103,7 @@ const ReceiptsDetail = () => {
       taskId = await getTaskIdRun({ params: { formId: query.formId, type: query.type } });
     }
     if (taskId) {
+      setFalse();
       run({
         params: {
           taskId: taskId,
@@ -122,15 +127,19 @@ const ReceiptsDetail = () => {
     switch (key) {
       case 'data':
         return <ReceiptData
+          success={success}
           permissions={detail.permissions}
           data={detail}
           currentNode={currentNode}
-          refresh={refresh}
+          refresh={() => {
+            refresh();
+            setFalse();
+          }}
           loading={loading}
           addComments={setHidden}
         />;
       case 'dynamic':
-        return <Dynamic taskId={detail.processTaskId} refresh={refresh} />;
+        return <Dynamic taskId={detail.processTaskId} />;
       case 'inStockLog':
         return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
       case 'outStockLog':
@@ -200,7 +209,10 @@ const ReceiptsDetail = () => {
           &&
           !loading
           &&
-          <Bottom loading={loading} currentNode={currentNode} detail={detail} refresh={refresh} />
+          <Bottom loading={loading} currentNode={currentNode} detail={detail} refresh={() => {
+            setFalse();
+            refresh();
+          }} />
         }
 
       </div>;

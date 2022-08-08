@@ -9,6 +9,7 @@ import { UserName } from '../../../../../../../../components/User';
 const User = (
   {
     id,
+    multiple,
     name,
     avatar,
     title,
@@ -30,7 +31,7 @@ const User = (
       </div>}
     />
 
-    <CheckUser ref={userRef} value={id} onChange={onChange} />
+    <CheckUser multiple={multiple} ref={userRef} value={id} onChange={onChange} />
   </>;
 };
 

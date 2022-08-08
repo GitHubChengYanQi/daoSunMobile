@@ -4,16 +4,15 @@ import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
 import Process from '../../../../Work/PurchaseAsk/components/Process';
 import Comments from '../../../components/Comments';
-import style from './index.less';
 import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
-import StepList from '../Dynamic/components/StepList';
 import Allocation from './components/Allocation';
 import CommentsList from './CommentsList';
 
 const ReceiptData = (
   {
+    success,
     data = {},
     currentNode,
     refresh = () => {
@@ -56,6 +55,7 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.error:
         return <InstockError
+          loading={loading}
           permissions={permissions}
           data={data.receipts}
           getAction={getAction}
@@ -63,6 +63,7 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.stocktaking:
         return <Stocktaking
+          loading={loading}
           permissions={permissions}
           receipts={data.receipts}
           getAction={getAction}
@@ -70,6 +71,7 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.maintenance:
         return <Maintenance
+          loading={loading}
           getAction={getAction}
           refresh={refresh}
           permissions={permissions}
@@ -77,6 +79,8 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.allocation:
         return <Allocation
+          success={success}
+          loading={loading}
           permissions={permissions}
           getAction={getAction}
           data={data.receipts}

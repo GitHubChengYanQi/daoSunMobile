@@ -29,7 +29,7 @@ export const getStartData = (startData = []) => {
     } else {
       const sku = skus[skuIndex];
       const brandIds = sku.brands.map(item => item.brandId);
-      const brandIndex = haveBrand ? 0 : brandIds.indexOf(item.brandId);
+      const brandIndex = haveBrand ? brandIds.indexOf(item.brandId) : 0;
       const brands = sku.brands;
       if (brandIndex === -1) {
         brands.push({

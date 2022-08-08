@@ -9,11 +9,12 @@ import MyAntPopup from '../MyAntPopup';
 import UserList from './components/UserList';
 import style from './index.less';
 
-const getUserByCpUserId = { url: '/ucMember/getUserByCp', method: 'GET' };
+const getUserByCpUserId = { url: '/ucMember/getUserByCps', method: 'GET' };
 
 const CheckUser = (
   {
     value,
+    multiple,
     onChange = ({ id, name, avatar, params }) => {
     },
     onClose = () => {
@@ -32,8 +33,9 @@ const CheckUser = (
   const { loading: getUserLoading, run: getUser } = useRequest(getUserByCpUserId, {
     manual: true,
     onSuccess: (res) => {
-      if (res && res.userId) {
-        onChange({ id: res.userId, name: res.name, params });
+      const users = res || [];
+      if (users.length > 0) {
+        onChange(users.map(item => ({ id: item.userId, name: item.name, avatar: item.avatar })), params);
       } else {
         Message.errorToast('系统无此用户，请先注册！');
       }
@@ -44,7 +46,7 @@ const CheckUser = (
     wx.ready(() => {
       wx.invoke('selectEnterpriseContact', {
           'fromDepartmentId': 0,// 必填，表示打开的通讯录从指定的部门开始展示，-1表示自己所在部门开始, 0表示从最上层开始
-          'mode': 'single',// 必填，选择模式，single表示单选，multi表示多选
+          'mode': multiple ? 'multi' : 'single',// 必填，选择模式，single表示单选，multi表示多选
           'type': ['user'],// 必填，选择限制类型，指定department、user中的一个或者多个
         }, (res) => {
           if (res.err_msg === 'selectEnterpriseContact:ok') {
@@ -66,7 +68,7 @@ const CheckUser = (
             });
 
             if (userIds.length > 0) {
-              getUser({ params: { CpUserId: userIds[0] } });
+              getUser({ params: { cpUserIds: userIds } });
             }
           }
         },

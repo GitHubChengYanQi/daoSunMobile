@@ -8,9 +8,11 @@ import { getEndData, getStartData, getStoreHouse } from './getData';
 import { UserName } from '../../../../../../components/User';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import Detail from './components/Detail';
+import { MyLoading } from '../../../../../../components/MyLoading';
 
 const Allocation = (
   {
+    success,
     data = {},
     getAction = () => {
 
@@ -18,6 +20,7 @@ const Allocation = (
     permissions,
     refresh = () => {
     },
+    loading,
   },
 ) => {
 
@@ -39,15 +42,23 @@ const Allocation = (
   useEffect(() => {
     const detail = data || {};
     const askSkus = getStartData(detail.detailResults);
+    const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
+    const hopeSkus = getEndData(askSkus, hope);
+
+    if (!carryAllocation) {
+      let number = 0;
+      askSkus.forEach(item => number += item.number);
+      setTotal(number);
+      setSkus(hopeSkus);
+      return;
+    }
 
     const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
-    const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
 
     const distributionSkuIds = carry.map(item => item.skuId);
 
-    const hopeSkus = getEndData(askSkus, hope);
-    const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
 
+    const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
     const inLibrary = [];
     const outPositions = [];
     const inPositions = [];
@@ -55,7 +66,6 @@ const Allocation = (
 
       const brands = item.brands || [];
       const storeHouse = item.storeHouse || [];
-
       brands.forEach(brandItem => {
         const positions = brandItem.positions || [];
         positions.forEach(positionItem => {
@@ -78,20 +88,17 @@ const Allocation = (
         positions.forEach(positionItem => {
           const brands = positionItem.brands || [];
           brands.forEach(brandItem => {
-            const number = brandItem.number - (brandItem.doneNumber || 0);
-            if (number <= 0) {
-              return;
-            }
             const object = {
               skuId: item.skuId,
               skuResult: item.skuResult,
               brandId: brandItem.brandId || 0,
               brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
-              number: number,
+              number: brandItem.number,
               storehouseId: storeItem.id,
               positionId: positionItem.id,
               positionName: positionItem.name,
               haveBrand: item.haveBrand,
+              doneNumber: brandItem.doneNumber || 0,
             };
             out ? inPositions.push(object) : outPositions.push(object);
           });
@@ -105,9 +112,15 @@ const Allocation = (
         inItem.positionId !== outItem.positionId,
       );
       library.forEach(inItem => {
+        const doneNumber = out ? inItem.doneNumber : out.doneNumber;
+        const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
+        const number = allNumber - (doneNumber > 0 ? doneNumber : 0);
+        if (number <= 0) {
+          return;
+        }
         inLibrary.push({
           ...inItem,
-          number: outItem.number > inItem.number ? inItem.number : outItem.number,
+          number,
           positionId: outItem.positionId,
           positionName: outItem.positionName,
           toPositionId: inItem.positionId,
@@ -121,12 +134,8 @@ const Allocation = (
     setAskList(hopeSkus);
     setHopeList(stores);
     setInLibraryList(inLibrary);
-
-    setSkus(carryAllocation ? distributionSkus : hopeSkus);
-    let number = 0;
-    askSkus.forEach(item => number += item.number);
-    setTotal(number);
-  }, []);
+    setSkus(distributionSkus);
+  }, [success]);
 
   return <>
 
@@ -170,6 +179,8 @@ const Allocation = (
         })} />
       </div>
     </MyCard>
+
+    {loading && <MyLoading />}
 
     {assign && <BottomButton
       only

@@ -41,7 +41,6 @@ const StocktakingAsk = ({ createType }) => {
     },
   });
 
-
   useEffect(() => {
     setParams({ method: 'OpenDisc' });
   }, []);

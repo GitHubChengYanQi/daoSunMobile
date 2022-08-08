@@ -17,6 +17,7 @@ import { UserName } from '../../../../../../components/User';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import Icon from '../../../../../../components/Icon';
 import { useModel } from 'umi';
+import { MyLoading } from '../../../../../../components/MyLoading';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -41,6 +42,7 @@ export const nowInDateBetwen = (d1, d2) => {
 
 const Stocktaking = (
   {
+    loading,
     permissions,
     receipts = {},
     getAction = () => {
@@ -200,6 +202,7 @@ const Stocktaking = (
       </div>
     </MyCard>
 
+    {loading && <MyLoading />}
 
     {actionPermissions && <BottomButton
       only

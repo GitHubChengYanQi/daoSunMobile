@@ -36,7 +36,6 @@ const MaterialAnalysis = () => {
             textAlign: 'end',
             textBaseline: 'bottom',
             fontSize: '40px',
-            // fontWeight: 'bold',
             fill: '#ddd',
           }}
         />

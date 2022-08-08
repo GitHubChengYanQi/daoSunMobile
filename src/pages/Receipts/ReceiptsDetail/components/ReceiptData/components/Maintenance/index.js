@@ -18,6 +18,7 @@ import { useHistory } from 'react-router-dom';
 import { SkuResultSkuJsons } from '../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
 import { nowInDateBetwen } from '../Stocktaking';
+import { MyLoading } from '../../../../../../components/MyLoading';
 
 const Maintenance = (
   {
@@ -26,6 +27,7 @@ const Maintenance = (
     getAction = () => {
       return {};
     },
+    loading,
   },
 ) => {
 
@@ -33,7 +35,7 @@ const Maintenance = (
   const state = initialState || {};
   const userInfo = state.userInfo || {};
 
-  const actionPermissions = getAction('maintenanceing').id &&  (permissions || userInfo.id === receipts.userId);
+  const actionPermissions = getAction('maintenanceing').id && (permissions || userInfo.id === receipts.userId);
 
   const outTime = !nowInDateBetwen(receipts.startTime, receipts.endTime);
 
@@ -172,20 +174,22 @@ const Maintenance = (
       </div>
     </MyCard>
 
+    {loading && <MyLoading />}
+
     {actionPermissions && <BottomButton
       only
       disabled={outTime}
       text={outTime ? '任务未开始' : '开始养护'}
       onClick={() => {
-      history.push({
-        pathname: '/Work/Maintenance/StartMaintenance',
-        query: {
-          id: receipts.maintenanceId,
-          skuCount: receipts.skuCount,
-          positionCount: receipts.positionCount,
-        },
-      });
-    }} />}
+        history.push({
+          pathname: '/Work/Maintenance/StartMaintenance',
+          query: {
+            id: receipts.maintenanceId,
+            skuCount: receipts.skuCount,
+            positionCount: receipts.positionCount,
+          },
+        });
+      }} />}
 
   </>;
 };

@@ -8,6 +8,7 @@ import LinkButton from '../../../../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';
 import { ReceiptsEnums } from '../../../../../index';
 import ErrorItem from './components/ErrorItem';
+import { MyLoading } from '../../../../../../components/MyLoading';
 
 const InstockError = (
   {
@@ -18,6 +19,7 @@ const InstockError = (
     permissions,
     refresh = () => {
     },
+    loading,
   },
 ) => {
 
@@ -100,6 +102,8 @@ const InstockError = (
           refresh();
         }} />
     </Popup>
+
+    {loading && <MyLoading />}
   </>;
 };
 
