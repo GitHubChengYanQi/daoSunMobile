@@ -33,7 +33,6 @@ const Prepare = (
   const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
-  console.log(outStockSkus);
 
   const skuResult = skuItem.skuResult || {};
 

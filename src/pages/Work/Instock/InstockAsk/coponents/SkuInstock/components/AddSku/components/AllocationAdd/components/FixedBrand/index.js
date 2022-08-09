@@ -121,7 +121,7 @@ const FixedBrand = (
                   dataChange({ number }, item.brandId);
                 }} />}
             </div>
-            <div hidden={!item.show} className={style.allBrands} style={{ padding: 0, paddingBottom: 24 }}>
+            <div hidden={!item.show} className={style.allBrands} style={{ padding: 0, paddingBottom: 8 }}>
               {
                 positions.map((positionItem, positionIndex) => {
 

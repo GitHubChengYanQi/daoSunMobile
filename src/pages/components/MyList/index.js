@@ -86,8 +86,7 @@ const MyList = (
 
   if (loading && pages === 1) {
     return <>
-      <MyLoading />
-      <MyEmpty height='100%' description='正在加载数据...' />
+      <MyLoading skeleton title='正在加载数据...' />
     </>;
   }
 
@@ -111,13 +110,16 @@ const MyList = (
       hasMore={hasMore}
     >
       <>
-        {loading ? (
-          <>
-            <MyLoading imgWidth={20} loaderWidth={40} skeleton downLoading title='努力加载中...' noLoadingTitle />
-          </>
-        ) : (
-          <span>--- 我是有底线的 ---</span>
-        )}
+        {
+          loading ? <MyLoading
+            imgWidth={20}
+            loaderWidth={40}
+            skeleton
+            downLoading
+            title='努力加载中...'
+            noLoadingTitle
+          /> : <span>--- 我是有底线的 ---</span>
+        }
       </>
     </InfiniteScroll>}
   </div>;

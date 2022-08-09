@@ -1,5 +1,5 @@
 import Home from './Home';
-import { TabBar } from 'antd-mobile';
+import { Badge, TabBar } from 'antd-mobile';
 import Icon, { ScanIcon } from './components/Icon';
 import React, { useState } from 'react';
 import { connect } from 'dva';
@@ -10,8 +10,10 @@ import Report from './Report';
 import Message from './Message';
 import Notice from './Notice';
 import User from './User';
+import { useRequest } from '../util/Request';
 
 const iconSize = 20;
+export const messageCount = { url: '/message/getViewCount', method: 'GET' };
 
 const Index = (props) => {
 
@@ -19,6 +21,9 @@ const Index = (props) => {
 
   const [module, setModule] = useState(routes || '/Home');
 
+  const { data: messageTotal } = useRequest(messageCount, {
+    pollingInterval: 30000,
+  });
   const route = (name) => {
     props.dispatch({
       type: 'qrCode/scanCodeState',
@@ -66,7 +71,9 @@ const Index = (props) => {
         <TabBar.Item
           title='消息'
           key='/Message'
-          icon={<Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />}
+          icon={<Badge content={typeof messageTotal === 'number' && (messageTotal || null)}>
+            <Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />
+          </Badge>}
         />
         <TabBar.Item
           title={(module === '/Home' && ToolUtil.isQiyeWeixin()) ? '扫码' : '首页'}

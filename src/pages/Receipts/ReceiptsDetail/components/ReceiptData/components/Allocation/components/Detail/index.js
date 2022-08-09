@@ -92,7 +92,7 @@ const Detail = (
               ]}
             />
             <div className={style.inLibrary}>
-              <LinkButton onClick={() => {
+              {item.complete ? '已完成' : <LinkButton onClick={() => {
                 run({
                   data: {
                     allocationId,
@@ -103,8 +103,8 @@ const Detail = (
                     number: item.number,
                   },
                 });
-              }}>调拨</LinkButton>
-              <ShopNumber show value={item.number} />
+              }}>调拨</LinkButton>}
+              <ShopNumber show value={item.complete ? item.num : item.number} />
             </div>
 
           </div>;

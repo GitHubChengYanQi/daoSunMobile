@@ -115,12 +115,11 @@ const Allocation = (
         const doneNumber = out ? inItem.doneNumber : out.doneNumber;
         const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
         const number = allNumber - (doneNumber > 0 ? doneNumber : 0);
-        if (number <= 0) {
-          return;
-        }
         inLibrary.push({
           ...inItem,
           number,
+          complete: number <= 0,
+          num: allNumber,
           positionId: outItem.positionId,
           positionName: outItem.positionName,
           toPositionId: inItem.positionId,

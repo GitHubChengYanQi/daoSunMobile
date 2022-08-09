@@ -76,6 +76,18 @@ export const getEndData = (array = [], endData = []) => {
     const skuIndex = skuIds.indexOf(item.skuId);
     if (skuIndex !== -1) {
       const sku = skus[skuIndex];
+      // const brands = sku.brands || [];
+      // const newBrands = brands.map(brandItem => {
+      //   return {
+      //     brandId: brandItem.brandId,
+      //     brandName: brandItem.brandName,
+      //     number: item.number,
+      //     checked: brandItem.brandId === item.brandId,
+      //     maxNumber: item.number,
+      //     doneNumber: item.doneNumber,
+      //   };
+      // });
+      // console.log(newBrands);
       const snameStore = item.storehouseId === sku.storehouseId;
       const storeHouse = sku.storeHouse || [];
       const storeIds = storeHouse.map(item => item.id);

@@ -26,6 +26,7 @@ const UserList = (
   const indexBarRef = useRef(null);
 
   const [data, setData] = useState([]);
+  const [init, setInit] = useState([]);
 
   const [name, setName] = useState();
 
@@ -61,6 +62,7 @@ const UserList = (
         });
       });
       setData(groups);
+      setInit(groups);
 
       if (checkUser) {
         const pys = pinyin(checkUser.name, { pattern: 'first', toneType: 'none', type: 'array' });
@@ -79,16 +81,20 @@ const UserList = (
     return <MyLoading skeleton />;
   }
 
-  if (data.length === 0) {
-    return <MyEmpty description='暂无人员' />;
-  }
-
   return (
     <div style={{ height: '80vh' }}>
-      <MySearch value={name} onChange={setName} onSearch={(name) => {
-        run({ data: { name } });
+      <MySearch value={name} onChange={setName} onClear={() => setData(init)} onSearch={(name) => {
+        const newData = [];
+        init.forEach(item => {
+          const users = item.items || [];
+          const newUsers = users.filter(item => ToolUtil.queryString(name, item.name));
+          if (newUsers.length > 0) {
+            newData.push({ ...item, items: newUsers });
+          }
+        });
+        setData(newData);
       }} />
-      <IndexBar ref={indexBarRef}>
+      {data.length === 0 ? <MyEmpty description='暂无人员' /> : <IndexBar ref={indexBarRef}>
         {data.map(group => {
           const { title, items } = group;
           return (
@@ -111,7 +117,7 @@ const UserList = (
             </IndexBar.Panel>
           );
         })}
-      </IndexBar>
+      </IndexBar>}
     </div>
   );
 };

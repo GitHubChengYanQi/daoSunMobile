@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Dialog, Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
+import { CheckCircleFill, CheckCircleOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Viewpager from '../../../InstockOrder/components/Viewpager';
@@ -14,12 +14,13 @@ import Title from '../../../../../../../../components/Title';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import { useModel } from 'umi';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
-import MyPicking, { collectableColor, notPreparedColor, receivedColor } from './compoennts/MyPicking';
+import MyPicking from './compoennts/MyPicking';
 import { Clock } from '../../../../../../../../components/MyDate';
 import PrintCode from '../../../../../../../../components/PrintCode';
 import jrQrcode from 'jr-qrcode';
-import { MyLoading } from '../../../../../../../../components/MyLoading';
+import { useRequest } from '../../../../../../../../../util/Request';
 
+export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 
 const OutSkuAction = (
   {
@@ -69,6 +70,18 @@ const OutSkuAction = (
     }
     allPerpareNumber += perpareNumber;
     return countNumber += (item.number || 0);
+  });
+
+  const [success, { setTrue, setFalse }] = useBoolean();
+
+  const { run, cancel } = useRequest(checkCode, {
+    manual: true,
+    pollingInterval: 2000,
+    onSuccess: (res) => {
+      if (res === false) {
+        setTrue();
+      }
+    },
   });
 
   const outSkus = [...actions, ...noAction];
@@ -186,13 +199,24 @@ const OutSkuAction = (
     </MyAntPopup>
 
     <Dialog
+      afterClose={cancel}
+      afterShow={() => {
+        run({ params: { code } });
+        setFalse();
+      }}
       visible={code}
       className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
         <div className={style.codeTitle}>领料码</div>
-        <div className={style.code}>{code}</div>
-        {code && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
-        <img src={imgSrc} alt='' width={187} />
+        <div style={{ position: 'relative', marginTop: 19 }}>
+          <div className={style.code}>{code}</div>
+          {code && !success && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
+          <img src={imgSrc} alt='' width={187} />
+          <div hidden={!success} className={style.getCodeSuccess}>
+            <CheckCircleFill />
+            领取成功！
+          </div>
+        </div>
       </div>}
       actions={[[
         { text: '关闭', key: 'close' },
@@ -200,6 +224,9 @@ const OutSkuAction = (
       onAction={(action) => {
         switch (action.key) {
           case 'close':
+            if (success) {
+              refresh();
+            }
             setCode('');
             return;
           case 'print':

@@ -63,9 +63,10 @@ const Bom = (
   });
 
   const Select = (skuName) => {
+    const defaultParams = { status: 99 };
     listRun({
       params: { limit: 10, page: 1 },
-      data: { skuName },
+      data: { ...defaultParams, skuName },
     });
   };
 

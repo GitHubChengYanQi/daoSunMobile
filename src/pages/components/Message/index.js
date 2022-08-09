@@ -14,14 +14,17 @@ const toast = (title) => {
 const successToast = (
   title,
   afterClose = () => {
-  }) => {
+  },
+  wait,
+) => {
+  if (!wait) {
+    afterClose();
+  }
   Toast.show({
     maskClassName: style.toastMask,
     content: title || '成功！',
-    // position: 'bottom',
-    // duration:0,
     icon: 'success',
-    afterClose,
+    afterClose: wait && afterClose,
   });
 };
 
@@ -29,13 +32,16 @@ const errorToast = (
   title,
   afterClose = () => {
   },
+  wait,
 ) => {
+  if (!wait) {
+    afterClose();
+  }
   Toast.show({
     content: title || '失败！',
     maskClassName: style.toastMask,
-    // position: 'bottom',
     icon: 'fail',
-    afterClose,
+    afterClose: wait && afterClose,
   });
 };
 
