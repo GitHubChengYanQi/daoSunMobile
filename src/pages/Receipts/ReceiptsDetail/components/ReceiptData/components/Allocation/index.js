@@ -26,7 +26,7 @@ const Allocation = (
 
   const history = useHistory();
 
-  const [total, setTotal] = useState(0);
+  // const [total, setTotal] = useState(0);
 
   const assign = getAction('assign').id && permissions;
   const carryAllocation = getAction('carryAllocation').id && permissions;
@@ -45,13 +45,13 @@ const Allocation = (
     const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
     const hopeSkus = getEndData(askSkus, hope);
 
-    if (!carryAllocation) {
-      let number = 0;
-      askSkus.forEach(item => number += item.number);
-      setTotal(number);
-      setSkus(hopeSkus);
-      return;
-    }
+    // if (!carryAllocation) {
+    //   let number = 0;
+    //   askSkus.forEach(item => number += item.number);
+    //   setTotal(number);
+    //   setSkus(hopeSkus);
+    //   return;
+    // }
 
     const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
 
@@ -114,6 +114,9 @@ const Allocation = (
       library.forEach(inItem => {
         const doneNumber = out ? inItem.doneNumber : out.doneNumber;
         const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
+        if (allNumber <= 0) {
+          return;
+        }
         const number = allNumber - (doneNumber > 0 ? doneNumber : 0);
         inLibrary.push({
           ...inItem,
@@ -142,7 +145,6 @@ const Allocation = (
       allocationId={data.allocationId}
       skus={skus}
       carryAllocation={carryAllocation}
-      total={total}
       hopeList={hopeList}
       askList={askList}
       inLibraryList={inLibraryList}

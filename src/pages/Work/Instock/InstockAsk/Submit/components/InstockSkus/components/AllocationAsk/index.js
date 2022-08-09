@@ -171,14 +171,16 @@ const AllocationAsk = ({ createType }) => {
           const positions = brandItem.positions || [];
           if (positions.length > 0) {
             positions.forEach(positionItem => {
-              skuAndNumbers.push({
-                skuId: item.skuId,
-                brandId: brandItem.brandId,
-                storehousePositionsId: positionItem.id,
-                storehouseId: query.storeHouseId,
-                number: positionItem.outStockNumber,
-                haveBrand: brandItem.brandId !== undefined ? 1 : 0,
-              });
+              if (positionItem.checked){
+                skuAndNumbers.push({
+                  skuId: item.skuId,
+                  brandId: brandItem.brandId,
+                  storehousePositionsId: positionItem.id,
+                  storehouseId: query.storeHouseId,
+                  number: positionItem.outStockNumber,
+                  haveBrand: brandItem.brandId !== undefined ? 1 : 0,
+                });
+              }
             });
           } else {
             skuAndNumbers.push({

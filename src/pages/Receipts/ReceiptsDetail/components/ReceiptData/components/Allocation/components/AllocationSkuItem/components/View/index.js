@@ -63,7 +63,7 @@ const View = ({ out, sku = {} }) => {
                     </div>
                     {
                       brands.map((item, index) => {
-                        return <div key={index} className={style.positionName}>
+                        return <div hidden={!item.checked} key={index} className={style.positionName}>
                           {item.brandName || '无品牌'}
                           <div className={style.number}>× {item.number}</div>
                         </div>;
@@ -73,7 +73,7 @@ const View = ({ out, sku = {} }) => {
                 })
                 :
                 brands.map((item, index) => {
-                  return <div key={index} className={style.positionName}>
+                  return <div hidden={!item.checked} key={index} className={style.positionName}>
                     {item.brandName || '无品牌'}
                     <div className={style.number}>× {item.number}</div>
                   </div>;

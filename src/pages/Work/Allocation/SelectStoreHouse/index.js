@@ -80,10 +80,10 @@ const SelectStoreHouse = () => {
           const newStoreHouse = storeHouse.map(item => {
             const brands = item.brands || [];
             const positions = item.positions || [];
-            const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 }));
+            const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
             const newPositions = positions.map(item => {
               const brands = item.brands || [];
-              const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 }));
+              const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
               return { ...item, brands: newBrands };
             });
             return { ...item, brands: newBrands, positions: newPositions };

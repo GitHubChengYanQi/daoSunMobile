@@ -303,17 +303,22 @@ const SkuShop = (
           });
           setVisible(!visible);
         }}>
-          <Bouncing
-            color='#FA8F2B'
-            ref={shopRef}
-            size={24}
-            img={skus.length > 0 ? shop : shopEmpty}
-            number={skus.length}
-          />
-          <div>
-            <div className={style.type}>{taskData().type}</div>
-            <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>
+          <div className={style.info}>
+            <Bouncing
+              color='#FA8F2B'
+              ref={shopRef}
+              size={24}
+              img={skus.length > 0 ? shop : shopEmpty}
+              number={skus.length}
+            />
+            <div className={style.data}>
+              <div className={style.type}>{taskData().type}</div>
+              <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>
+            </div>
           </div>
+          {ERPEnums.outStock === type && <LinkButton onClick={() => {
+            history.push('/Work/OutStock/BomAdd');
+          }}>按BOM添加</LinkButton>}
         </div>
         <Button
           disabled={skus.length === 0}

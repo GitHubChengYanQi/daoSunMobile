@@ -5,6 +5,7 @@ import { Image, Space } from 'antd-mobile';
 import Label from '../../../components/Label';
 import MyEmpty from '../../../components/MyEmpty';
 import { MyLoading } from '../../../components/MyLoading';
+
 const Detail = ({ value }) => {
 
   const { loading, data, run } = useRequest(skuDetail, { manual: true });

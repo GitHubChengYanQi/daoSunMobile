@@ -70,24 +70,25 @@ export const getStartData = (startData = []) => {
 };
 
 export const getEndData = (array = [], endData = []) => {
-  const skus = array.filter(item => true);
+  const skus = array.filter(() => true);
   endData.forEach(item => {
     const skuIds = skus.map(item => item.skuId);
     const skuIndex = skuIds.indexOf(item.skuId);
     if (skuIndex !== -1) {
       const sku = skus[skuIndex];
-      // const brands = sku.brands || [];
-      // const newBrands = brands.map(brandItem => {
-      //   return {
-      //     brandId: brandItem.brandId,
-      //     brandName: brandItem.brandName,
-      //     number: item.number,
-      //     checked: brandItem.brandId === item.brandId,
-      //     maxNumber: item.number,
-      //     doneNumber: item.doneNumber,
-      //   };
-      // });
-      // console.log(newBrands);
+      const haveBrand = sku.haveBrand;
+      const skuBrands = sku.brands || [];
+      const newBrands = skuBrands.map(brandItem => {
+        const current = brandItem.brandId === item.brandId;
+        return {
+          brandId: brandItem.brandId,
+          brandName: haveBrand ? (brandItem.brandName || '无品牌') : '任意品牌',
+          number: (current || !haveBrand) ? item.number : 0,
+          checked: (current || !haveBrand),
+          maxNumber: item.number,
+          doneNumber: (current || !haveBrand) ? item.doneNumber : 0,
+        };
+      });
       const snameStore = item.storehouseId === sku.storehouseId;
       const storeHouse = sku.storeHouse || [];
       const storeIds = storeHouse.map(item => item.id);
@@ -104,70 +105,44 @@ export const getEndData = (array = [], endData = []) => {
               id: item.storehousePositionsId,
               name: ToolUtil.isObject(item.positionsResult).name,
               number: item.number,
-              brands: [{
-                brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-                number: item.number,
-                checked: true,
-                maxNumber: item.number,
-                doneNumber: item.doneNumber,
-              }],
+              brands: newBrands,
             });
           } else {
             const position = positions[positionIndex];
-            const posiBrands = position.brands;
-            const brandIds = posiBrands.map(item => item.brandId);
-            const brandIndex = brandIds.indexOf(item.brandId);
-            if (brandIndex === -1) {
-              posiBrands.push({
-                brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-                number: item.number,
-                checked: true,
-                maxNumber: item.number,
-                doneNumber: item.doneNumber,
-              });
-            } else {
-              const brand = posiBrands[brandIndex];
-              posiBrands[brandIndex] = {
-                ...brand,
-                number: item.number + brand.number,
-                maxNumber: item.number + brand.number,
-                doneNumber: brand.doneNumber + item.doneNumber,
-              };
-            }
+            const brands = position.brands || [];
             positions[positionIndex] = {
               ...position,
               number: item.number + position.number,
-              brands: posiBrands,
+              brands:  brands.map(brandItem => {
+                const current = brandItem.brandId === item.brandId;
+                return {
+                  brandId: brandItem.brandId,
+                  brandName: haveBrand ? (brandItem.brandName || '无品牌') : '任意品牌',
+                  number: (current || !haveBrand) ? item.number : brandItem.number,
+                  checked: current || !haveBrand || brandItem.checked,
+                  maxNumber: item.number,
+                  doneNumber: (current || !haveBrand) ? item.doneNumber : brandItem.doneNumber,
+                };
+              }),
             };
           }
-        } else {
-          const brandIds = brands.map(item => item.brandId);
-          const brandIndex = brandIds.indexOf(item.brandId);
-          if (brandIndex === -1) {
-            brands.push({
-              brandId: item.brandId,
-              brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-              number: item.number,
-              checked: true,
-              maxNumber: item.number,
-            });
-          } else {
-            const brand = brands[brandIndex];
-            brands[brandIndex] = {
-              ...brand,
-              number: item.number + brand.number,
-              maxNumber: item.number + brand.number,
-            };
-          }
-
         }
+
         storeHouse[storeIndex] = {
           ...store,
           number: item.number + store.number,
           positions,
-          brands,
+          brands: brands.map(brandItem => {
+            const current = brandItem.brandId === item.brandId;
+            return {
+              brandId: brandItem.brandId,
+              brandName: haveBrand ? (brandItem.brandName || '无品牌') : '任意品牌',
+              number: (current || !haveBrand) ? item.number : brandItem.number,
+              checked: current || !haveBrand || brandItem.checked,
+              maxNumber: item.number,
+              doneNumber: (current || !haveBrand) ? item.doneNumber : brandItem.doneNumber,
+            };
+          }),
         };
       } else {
         storeHouse.push({
@@ -175,25 +150,12 @@ export const getEndData = (array = [], endData = []) => {
           name: ToolUtil.isObject(item.storehouseResult).name,
           number: item.number,
           show: true,
-          brands: !snameStore ? [{
-            brandId: item.brandId,
-            brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-            number: item.number,
-            checked: true,
-            maxNumber: item.number,
-          }] : [],
+          brands: !snameStore ? newBrands : [],
           positions: snameStore ? [{
             id: item.storehousePositionsId,
             name: ToolUtil.isObject(item.positionsResult).name,
             number: item.number,
-            brands: [{
-              brandId: item.brandId,
-              brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-              number: item.number,
-              checked: true,
-              maxNumber: item.number,
-              doneNumber: item.doneNumber,
-            }],
+            brands: newBrands,
           }] : [],
         });
       }

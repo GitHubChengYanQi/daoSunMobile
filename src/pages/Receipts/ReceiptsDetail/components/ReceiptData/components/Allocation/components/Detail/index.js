@@ -125,76 +125,49 @@ const Detail = (
     </div>;
   };
 
-  const tabItems = [
-    { key: 'inLibrary', title: '库内调拨' },
+  const tabItems = out ? [
     { key: 'outData', title: '调出明细' },
     { key: 'inData', title: '调入明细' },
+    { key: 'inLibrary', title: '库内调拨' },
+  ] : [
+    { key: 'inData', title: '调入明细' },
+    { key: 'outData', title: '调出明细' },
+    { key: 'inLibrary', title: '库内调拨' },
   ];
 
   const swiperItem = () => {
     switch (key) {
       case 0:
-        return inLibraryListData();
+        return askData(askList);
       case 1:
-        return out ? askData(askList) : <Data show noLink storeHouses={hopeList} />;
+        return <Data show noLink storeHouses={hopeList} />;
       case 2:
-        return out ? <Data show noLink storeHouses={hopeList} /> : askData(askList);
+        return inLibraryListData();
       default:
         return <MyEmpty />;
     }
   };
 
   const content = () => {
-    if (carryAllocation) {
-      return <Swiper
-        direction='horizontal'
-        loop
-        indicator={() => null}
-        ref={swiperRef}
-        defaultIndex={key}
-        onIndexChange={index => {
-          setFalse();
-          setKey(index);
-        }}
-      >
-        {
-          tabItems.map((item, index) => {
-            return <Swiper.Item key={index}>
-              {swiperItem()}
-            </Swiper.Item>;
-          })
-        }
-      </Swiper>;
-    } else {
-      return <>
-        {
-          skus.map((item, index) => {
-
-            if (!allSku && index >= 3) {
-              return null;
-            }
-
-            return <AllocationSkuItem
-              item={item}
-              key={index}
-              out={out}
-            />;
-          })
-        }
-        {skus.length > 3 && <Divider className={style.allSku}>
-          <div onClick={() => {
-            toggle();
-          }}>
-            {
-              allSku ?
-                <UpOutline />
-                :
-                <DownOutline />
-            }
-          </div>
-        </Divider>}
-      </>;
-    }
+    return <Swiper
+      direction='horizontal'
+      loop
+      indicator={() => null}
+      ref={swiperRef}
+      defaultIndex={key}
+      onIndexChange={index => {
+        setFalse();
+        setKey(index);
+      }}
+    >
+      {
+        tabItems.map((item, index) => {
+          return <Swiper.Item key={index}>
+            {swiperItem()}
+          </Swiper.Item>;
+        })
+      }
+    </Swiper>;
   };
 
   return <>
@@ -204,15 +177,12 @@ const Detail = (
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={style.bodyStyle}
-      extra={carryAllocation ? <div className={style.extra}>
+      extra={<div className={style.extra}>
         <PageIndicator
           total={3}
           current={key}
         />
         {tabItems[key].title}
-      </div> : <div className={style.extra}>
-        合计：<span className='numberBlue'>{skus.length}</span>类
-        <span className='numberBlue' hidden={!total}>{total}</span>件
       </div>}>
       {content()}
     </MyCard>
