@@ -2,7 +2,7 @@ import React, { useEffect, useImperativeHandle, useState } from 'react';
 import style from './index.less';
 import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
-import { ActionSheet, ImageViewer } from 'antd-mobile';
+import { ImageViewer } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
@@ -27,6 +27,7 @@ const UploadFile = (
     loading: getLoading = () => {
     },
     refresh,
+    max,
   }, ref,
 ) => {
 
@@ -174,7 +175,7 @@ const UploadFile = (
       </div>
 
       <div
-        hidden={show || noAddButton}
+        hidden={show || noAddButton || files.length === max}
         className={style.img}
         style={{ width: imgSize, height: imgSize }}
         onClick={() => addFile()}>

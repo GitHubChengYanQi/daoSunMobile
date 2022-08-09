@@ -12,6 +12,7 @@ import MyList from '../../../../../../../../components/MyList';
 import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
+import { useHistory } from 'react-router-dom';
 
 const StocktaskigAction = (
   {
@@ -36,6 +37,33 @@ const StocktaskigAction = (
   const errorShopRef = useRef();
 
   const [visible, setVisible] = useState();
+
+  const history = useHistory();
+
+  const action = (positionItem,skuItem) => {
+    if (show) {
+      return;
+    }
+
+    if (skuItem.lockStatus === 99) {
+      Message.toast('此物料存在异常，正在处理中');
+    }
+    setVisible({
+      show: skuItem.lockStatus === 99,
+      skuId: skuItem.skuId,
+      skuResult: skuItem.skuResult,
+      // inkindId: brandItem.inkind,
+      brandId: skuItem.brandId,
+      brandResult: skuItem.brandResult,
+      stockNumber: skuItem.number,
+      number: skuItem.number,
+      inventoryTaskId: inventoryTaskId,
+      positionId: positionItem.positionId,
+      anomalyId: skuItem.anomalyId || false,
+      sourceId: skuItem.inventoryStockId,
+      customerId: skuItem.customerId,
+    });
+  }
 
   const dataList = () => {
     return data.map((positionItem, positionIndex) => {
@@ -94,36 +122,25 @@ const StocktaskigAction = (
                 className={style.sku}
                 key={skuIndex}
                 style={{ border: border ? 'none' : '' }}>
-                <div className={style.skuItem} onClick={() => {
-                  if (show) {
-                    return;
-                  }
-
-                  if (skuItem.lockStatus === 99) {
-                    Message.toast('此物料存在异常，正在处理中');
-                  }
-                  setVisible({
-                    show: skuItem.lockStatus === 99,
-                    skuId: skuItem.skuId,
-                    skuResult: skuItem.skuResult,
-                    // inkindId: brandItem.inkind,
-                    brandId: skuItem.brandId,
-                    brandResult: skuItem.brandResult,
-                    stockNumber: skuItem.number,
-                    number: skuItem.number,
-                    inventoryTaskId: inventoryTaskId,
-                    positionId: positionItem.positionId,
-                    anomalyId: skuItem.anomalyId || false,
-                    sourceId: skuItem.inventoryStockId,
-                    customerId: skuItem.customerId,
-                  });
-                }}>
+                <div className={style.skuItem}>
                   <SkuItem
+                    imgOnClick={() => {
+                      if (anomalyType === 'timelyInventory'){
+                        history.push(`/Work/Sku/SkuDetail?skuId=${skuItem.skuId}`);
+                      }else {
+                        action(positionItem,skuItem);
+                      }
+                    }}
+                    onClick={() => {
+                      action(positionItem,skuItem);
+                    }}
                     skuResult={skuItem.skuResult}
                     extraWidth='100px'
                     hiddenNumber={!showStock}
                     number={skuItem.number}
-                    otherData={[ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌']}
+                    otherData={[
+                      ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
+                    ]}
                   />
                 </div>
                 <div className={style.info}>

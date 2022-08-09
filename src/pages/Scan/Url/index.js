@@ -54,6 +54,11 @@ export const skuDetail = {
   method: 'POST',
 };
 
+export const skuEdit = {
+  url: '/sku/edit',
+  method: 'POST',
+};
+
 export const skuResults = {
   url: '/sku/resultSkuByIds',
   method: 'POST',

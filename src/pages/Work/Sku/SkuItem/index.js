@@ -22,6 +22,10 @@ const SkuItem = (
     moreDom,
     moreClick = () => {
     },
+    imgOnClick = () => {
+    },
+    onClick = () => {
+    },
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -33,7 +37,7 @@ const SkuItem = (
 
   return <>
     <div className={ToolUtil.classNames(style.skuList, className)}>
-      <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }}>
+      <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }} onClick={imgOnClick}>
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
         <div
           hidden={hiddenNumber}
@@ -44,6 +48,7 @@ const SkuItem = (
       </div>
       <div
         className={style.sku}
+        onClick={onClick}
         style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
         <MyEllipsis width='100%'>

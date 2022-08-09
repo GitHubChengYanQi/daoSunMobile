@@ -8,10 +8,13 @@ const MyEllipsis = (
     width,
     style,
     maxWidth,
+    onClick = () => {
+    },
   }) => {
 
   return <div
     className={styles.ellipsis}
+    onClick={onClick}
     style={{
       maxWidth,
       width: width || '90%',

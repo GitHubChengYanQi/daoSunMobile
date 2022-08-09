@@ -13,6 +13,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { ERPEnums } from '../ERPEnums';
 import MyActionSheet from '../../../components/MyActionSheet';
 import SearchInkind from '../../../components/InkindList/components/SearchInkind';
+import { useHistory } from 'react-router-dom';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
@@ -24,6 +25,8 @@ export const SkuContent = (
     skus = [],
     type,
   }) => {
+
+  const history = useHistory();
 
   const positionResult = (data) => {
 
@@ -67,6 +70,9 @@ export const SkuContent = (
             <div className={style.skuItem}>
               <div className={style.sku}>
                 <SkuItem
+                  onClick={() => {
+                    history.push(`/Work/Sku/SkuDetail?skuId=${item.skuId}`);
+                  }}
                   imgId={`skuImg${index}`}
                   extraWidth='84px'
                   unitName={unit.unitName}
