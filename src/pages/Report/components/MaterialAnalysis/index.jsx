@@ -19,7 +19,10 @@ const MaterialAnalysis = () => {
 
   const dataSort = (data) => {
     const newData = [];
-    newData.push(Object.keys(data)[0]);
+    const keys = Object.keys(data)[0];
+    if (keys) {
+      newData.push(Object.keys(data)[0]);
+    }
     return newData;
   };
 
@@ -50,10 +53,14 @@ const MaterialAnalysis = () => {
   if (!data) {
     return <MyEmpty />;
   }
+  const keys = dataSort(data);
 
+  if (keys.length === 0) {
+    return <MyEmpty />;
+  }
   return <Canvas pixelRatio={window.devicePixelRatio} height={200}>
     <Timeline delay={10}>
-      {dataSort(data).map((year, index) => {
+      {keys.map((year, index) => {
         return (
           <Chart
             key={index}

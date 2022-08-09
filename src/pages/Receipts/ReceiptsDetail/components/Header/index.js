@@ -18,6 +18,7 @@ const Header = ({ data = {} }) => {
       case ReceiptsEnums.outstockOrder:
       case ReceiptsEnums.maintenance:
       case ReceiptsEnums.stocktaking:
+      case ReceiptsEnums.allocation:
         return {
           coding: receipts.coding,
           statusName: receipts.statusName,

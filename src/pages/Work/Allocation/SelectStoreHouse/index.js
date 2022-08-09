@@ -58,7 +58,6 @@ const SelectStoreHouse = () => {
       setUser({ id: res.userId });
       const detail = res || {};
       const askSkus = getStartData(detail.detailResults);
-      console.log(askSkus);
       const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
       const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
 

@@ -10,6 +10,7 @@ import { backDetails, partsList } from '../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import MySearch from '../../../../../../../components/MySearch';
 import { SkuResultSkuJsons } from '../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const Bom = (
   {
@@ -22,6 +23,8 @@ const Bom = (
   const [type, setType] = useState('Present');
 
   const [boms, setBoms] = useState([[]]);
+
+  const [page, setPage] = useState(1);
 
   const { loading, run } = useRequest(backDetails, {
     manual: true,
@@ -45,20 +48,27 @@ const Bom = (
 
   const { loading: listLoading, run: listRun } = useRequest(partsList, {
     manual: true,
+    response: true,
     onSuccess: (res) => {
-      const options = res.map((item) => {
+      const object = res || {};
+      const options = ToolUtil.isArray(object.data).map((item) => {
         return {
           title: SkuResultSkuJsons({ skuResult: item.skuResult }),
           key: item.skuId,
         };
       });
-      setBoms([options]);
+      if (object.current === 1) {
+        setBoms([options]);
+      } else {
+        setBoms([[...boms[0], ...options]]);
+      }
     },
   });
 
-  const Select = (skuName) => {
+  const Select = (skuName, page = 1) => {
+    setPage(page);
     listRun({
-      params: { limit: 10, page: 1 },
+      params: { limit: 10, page },
       data: { skuName },
     });
   };
@@ -131,7 +141,7 @@ const Bom = (
         }}><LeftOutline /> 返回{boms.length - 1}级</LinkButton>}
       </div>
 
-      {(loading || listLoading) ? <MyLoading skeleton /> : <List>
+      {loading ? <MyLoading skeleton /> : <List>
         {
           boms[boms.length - 1].map((item, index) => {
             return <List.Item
@@ -167,7 +177,10 @@ const Bom = (
         }
       </List>}
 
-      {/*<Dri*/}
+      {listLoading && <MyLoading imgWidth={20} loaderWidth={40} skeleton downLoading title='努力加载中...' noLoadingTitle />}
+      {boms.length === 1 && !listLoading && boms[0].length % 10 === 0 && <Divider><LinkButton onClick={() => {
+        Select(searchValue, page + 1);
+      }}>加载更多</LinkButton></Divider>}
 
     </Card>
 
