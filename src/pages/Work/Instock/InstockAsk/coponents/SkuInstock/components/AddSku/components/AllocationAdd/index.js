@@ -16,7 +16,10 @@ import MyEmpty from '../../../../../../../../../components/MyEmpty';
 
 const AllocationAdd = (
   {
+    open,
     onClose = () => {
+    },
+    setOver = () => {
     },
     sku = {},
     query = {},
@@ -118,158 +121,174 @@ const AllocationAdd = (
     }
   };
 
-  return <>
-    {!noSteps && <AllocationSteps current={1} />}
-    <div className={style.addSku} style={{ padding: 0 }}>
-      <SkuItem
-        className={style.sku}
-        number={sku.stockNumber}
-        imgId='skuImg'
-        skuResult={sku}
-        imgSize={80}
-        otherData={[ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')]}
-        extraWidth={'calc(25vw + 24px)'}
-      />
-      <div className={style.content}>
-        <div className={style.brandAction}>
-          {
-            moveLibrary ?' 调出库位' : <>
-              <div className={style.brandData}>
-                品牌：
-                <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
-                  setTotal(0);
-                  setBrandAndPositions([]);
-                  setBrandAction('fixedBrand');
-                  setStoreHouse([]);
-                }}>指定品牌</Button>
-                <Button color={brandAction === 'allBrand' ? 'primary' : 'default'} onClick={() => {
-                  setTotal(0);
-                  setBrandAndPositions([]);
-                  setBrandAction('allBrand');
-                  setStoreHouse([]);
-                }}>任意品牌</Button>
-              </div>
-              <div className={style.total}>
-                调拨总数：<ShopNumber
-                max={out ? sku.stockNumber : undefined}
-                show={total > 0}
-                value={total}
-                onChange={(number) => {
-                  setTotal(number);
-                }} />
-              </div>
-            </>
-          }
-        </div>
-        <div className={style.brandAndPositions}>
-          {selectBrandAndPositions()}
-        </div>
-        <div hidden={total === 0} style={{ marginTop: 24 }}>
-          <StoreHouses
-            total={total}
-            skuId={sku.skuId}
-            brandAndPositions={brandAndPositions}
-            out={out}
-            data={storeHouse}
-            onChange={setStoreHouse}
-            storehouseId={storehouseId}
-          />
-        </div>
-      </div>
+  useEffect(() => {
+    const allocation = document.getElementById('allocation');
+    if (allocation) {
+      allocation.addEventListener('scroll', (event) => {
+        const scrollTop = event.target.scrollTop;
+        if (scrollTop > 150) {
+          setOver(true);
+        } else {
+          setOver(false);
+        }
+      });
+    }
+  }, []);
 
-      <div className={style.buttons} style={{ margin: 0 }}>
-        <Button
-          className={ToolUtil.classNames(style.close, style.button)}
-          onClick={() => {
-            onClose();
-          }}>
-          取消
-        </Button>
-        <Button
-          className={ToolUtil.classNames(style.ok, style.button)}
-          color='primary'
-          disabled={total === 0}
-          onClick={() => {
-            const data = {
-              skuId: sku.skuId,
-              number: total,
-              storehouseId,
-              allocationJson: {
-                'start': {
-                  'brandType': brandAction,
-                  'brands': brandAndPositions.map(item => {
-                    const positions = item.positions || [];
-                    return {
-                      'brandId': item.brandId,
-                      'brandName': item.brandName,
-                      'num': item.num,
-                      'number': item.number,
-                      'show': item.show,
-                      'positions': positions.map(item => {
-                        return {
-                          'id': item.id,
-                          'name': item.name,
-                          'storehouseId': item.storehouseId,
-                          'number': item.number,
-                          'outStockNumber': item.outStockNumber,
-                          'checked': item.checked,
-                        };
-                      }),
-                    };
-                  }),
-                },
-                'end': {
-                  'storeHouse': storeHouse.map(item => {
-                    const brands = item.brands || [];
-                    const positions = item.positions || [];
-                    return {
-                      'number': item.number,
-                      'maxNumber': item.maxNumber,
-                      'id': item.id,
-                      'name': item.name,
-                      'show': item.show,
-                      'positions': positions.map(item => {
-                        const brands = item.brands || [];
-                        return {
-                          'id': item.id,
-                          'name': item.name,
-                          'storehouseId': item.storehouseId,
-                          'number': item.number,
-                          'maxNumber': item.maxNumber,
-                          'brands': brands.map(item => {
-                            return {
-                              'checked': item.checked,
-                              'brandId': item.brandId,
-                              'maxNumber': item.maxNumber,
-                              'number': item.number,
-                              'brandName': item.brandName,
-                            };
-                          }),
-                        };
-                      }),
-                      'brands': brands.map(item => {
-                        return {
-                          'checked': item.checked,
-                          'brandId': item.brandId,
-                          'number': item.number,
-                          'brandName': item.brandName,
-                          'maxNumber': item.maxNumber,
-                        };
-                      }),
-                    };
-                  }),
-                },
-              },
-            };
-            if (sku.cartId) {
-              shopEdit({ ...data, cartId: sku.cartId });
-              return;
+  return <>
+    <div id='allocation' className={style.allocation}>
+      {!noSteps && <AllocationSteps current={1} />}
+      <div className={style.addSku} style={{ padding: 0 }}>
+        <SkuItem
+          className={style.sku}
+          number={sku.stockNumber}
+          imgId='skuImg'
+          skuResult={sku}
+          imgSize={80}
+          otherData={[ToolUtil.isArray(sku.brandResults).map(item => item.brandName).join(' / ')]}
+          extraWidth={'calc(25vw + 24px)'}
+        />
+        <div className={style.content}>
+          <div className={style.brandAction}>
+            {
+              moveLibrary ? ' 调出库位' : <>
+                <div className={style.brandData}>
+                  品牌：
+                  <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
+                    setTotal(0);
+                    setBrandAndPositions([]);
+                    setBrandAction('fixedBrand');
+                    setStoreHouse([]);
+                  }}>指定品牌</Button>
+                  <Button color={brandAction === 'allBrand' ? 'primary' : 'default'} onClick={() => {
+                    setTotal(0);
+                    setBrandAndPositions([]);
+                    setBrandAction('allBrand');
+                    setStoreHouse([]);
+                  }}>任意品牌</Button>
+                </div>
+                <div className={style.total}>
+                  调拨总数：<ShopNumber
+                  max={out ? sku.stockNumber : undefined}
+                  show={total > 0}
+                  value={total}
+                  onChange={(number) => {
+                    setTotal(number);
+                  }} />
+                </div>
+              </>
             }
-            addShop(data);
-          }}>
-          {sku.cartId ? '修改' : '添加'}
-        </Button>
+          </div>
+          <div className={style.brandAndPositions}>
+            {selectBrandAndPositions()}
+          </div>
+          <div hidden={total === 0} style={{ marginTop: 24 }}>
+            <StoreHouses
+              open={open}
+              total={total}
+              skuId={sku.skuId}
+              brandAndPositions={brandAndPositions}
+              out={out}
+              data={storeHouse}
+              onChange={setStoreHouse}
+              storehouseId={storehouseId}
+            />
+          </div>
+        </div>
       </div>
+    </div>
+    <div className={style.buttons} style={{ margin: 0 }}>
+      <Button
+        className={ToolUtil.classNames(style.close, style.button)}
+        onClick={() => {
+          onClose();
+        }}>
+        取消
+      </Button>
+      <Button
+        className={ToolUtil.classNames(style.ok, style.button)}
+        color='primary'
+        disabled={total === 0}
+        onClick={() => {
+          const data = {
+            skuId: sku.skuId,
+            number: total,
+            storehouseId,
+            allocationJson: {
+              'start': {
+                'brandType': brandAction,
+                'brands': brandAndPositions.map(item => {
+                  const positions = item.positions || [];
+                  return {
+                    'brandId': item.brandId,
+                    'brandName': item.brandName,
+                    'num': item.num,
+                    'number': item.number,
+                    'show': item.show,
+                    'positions': positions.map(item => {
+                      return {
+                        'id': item.id,
+                        'name': item.name,
+                        'storehouseId': item.storehouseId,
+                        'number': item.number,
+                        'outStockNumber': item.outStockNumber,
+                        'checked': item.checked,
+                      };
+                    }),
+                  };
+                }),
+              },
+              'end': {
+                'storeHouse': storeHouse.map(item => {
+                  const brands = item.brands || [];
+                  const positions = item.positions || [];
+                  return {
+                    'number': item.number,
+                    'maxNumber': item.maxNumber,
+                    'id': item.id,
+                    'name': item.name,
+                    'show': item.show,
+                    'positions': positions.map(item => {
+                      const brands = item.brands || [];
+                      return {
+                        'id': item.id,
+                        'name': item.name,
+                        'storehouseId': item.storehouseId,
+                        'number': item.number,
+                        'maxNumber': item.maxNumber,
+                        'brands': brands.map(item => {
+                          return {
+                            'checked': item.checked,
+                            'brandId': item.brandId,
+                            'maxNumber': item.maxNumber,
+                            'number': item.number,
+                            'brandName': item.brandName,
+                          };
+                        }),
+                      };
+                    }),
+                    'brands': brands.map(item => {
+                      return {
+                        'checked': item.checked,
+                        'brandId': item.brandId,
+                        'number': item.number,
+                        'brandName': item.brandName,
+                        'maxNumber': item.maxNumber,
+                      };
+                    }),
+                  };
+                }),
+              },
+            },
+          };
+          if (sku.cartId) {
+            shopEdit({ ...data, cartId: sku.cartId });
+            return;
+          }
+          addShop(data);
+        }}>
+        {sku.cartId ? '修改' : '添加'}
+      </Button>
     </div>
   </>;
 };

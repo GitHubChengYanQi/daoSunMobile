@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../../components/MyLoading';
 import { Picker } from 'antd-mobile';
@@ -14,10 +14,11 @@ import MyCheck from '../../../../../../../../../../../components/MyCheck';
 import { PlusCircleFilled } from '@ant-design/icons';
 import { storeHouseSelect } from '../../../../../../../../../../Quality/Url';
 
-export const storehouse = { url: '/stockDetails/getStockNumberBySkuId', method: 'GET' };
+export const storehouse = { url: '/stockDetails/getStockNumberBySkuId', method: 'POST' };
 
 const StoreHouses = (
   {
+    open,
     total,
     skuId,
     data = [],
@@ -33,7 +34,17 @@ const StoreHouses = (
 
   const [selectStore, setSelectStore] = useState();
 
-  const { loading: storeHouseLoaing, data: storeHouses } = useRequest(storeHouseSelect);
+  const [storeHouses, setStoreHouses] = useState([]);
+
+  const { loading: storeHouseLoaing, run: getStoreHouse } = useRequest(storeHouseSelect, {
+    manual: true,
+    onSuccess: (res) => {
+      setStoreHouses(res || []);
+      if (!open) {
+        setSelectStore(true);
+      }
+    },
+  });
 
   const change = (newData = []) => {
     let number = 0;
@@ -93,110 +104,161 @@ const StoreHouses = (
   const storeIds = data.map(item => item.id);
   const columns = ToolUtil.isArray(storeHouses).filter(item => {
     if (checkedPosi === 0) {
-      return item.value !== storehouseId;
+      return item.value !== storehouseId && !storeIds.includes(item.value);
     }
     return !storeIds.includes(item.value);
   });
 
-  const { loading, run } = useRequest({ ...storehouse, params: { skuId } }, {
-    manual: true,
-    onSuccess: (res) => {
-      const skus = res || [];
-      if (skus.length === 0) {
-        return Message.toast('无库存！');
+  const outFormat = (stockDetails = [], open) => {
+    const storeHouse = [];
+    stockDetails.forEach(stockItem => {
+      if (stockItem.number === 0) {
+        return;
       }
-      const storeHouse = skus[0].storehouseResult;
 
-      let number = 0;
+      let checkBrand = {};
+      let checkPositionBrand = {};
+      let checkStore = {};
+      if (open) {
+        checkStore = data.filter(item => item.id === stockItem.storehouseId)[0] || {};
+        const checkBrands = ToolUtil.isArray(checkStore.brands).filter(item => item.checked);
+        const checkPositions = ToolUtil.isArray(checkStore.positions);
+        const checkPosition = checkPositions.filter(item => item.id === stockItem.storehousePositionsId)[0] || {};
+        const checkPositionBrands = ToolUtil.isArray(checkPosition.brands).filter(item => item.checked) || [];
 
-      const positions = [];
-      const brands = [];
+        checkBrand = checkBrands.filter(item => item.brandId === stockItem.brandId)[0] || {};
+        checkPositionBrand = checkPositionBrands.filter(item => item.brandId === stockItem.brandId)[0] || {};
+      }
 
-      const initBrandIds = initBrands.map(item => item.brandId);
+      const sname = stockItem.storehouseId === storehouseId;
+      const storeHouseIds = storeHouse.map(item => item.value);
+      const storeHouseIndex = storeHouseIds.indexOf(stockItem.storehouseId);
+      const addBrand = {
+        brandId: stockItem.brandId,
+        brandName: ToolUtil.isObject(stockItem.brandResult).brandName || '无品牌',
+        maxNumber: stockItem.number,
+        checked: Boolean(checkBrand.brandId),
+        number: checkBrand.number || 1,
+      };
+      const addPosition = {
+        id: stockItem.storehousePositionsId,
+        name: ToolUtil.isObject(stockItem.storehousePositionsResult).name,
+        number: stockItem.number,
+        brands: [{
+          brandId: stockItem.brandId,
+          brandName: ToolUtil.isObject(stockItem.brandResult).brandName || '无品牌',
+          maxNumber: stockItem.number,
+          checked: Boolean(checkPositionBrand.brandId),
+          number: checkPositionBrand.number || 1,
+        }],
+      };
+      if (storeHouseIndex === -1) {
+        storeHouse.push({
+          value: stockItem.storehouseId,
+          label: ToolUtil.isObject(stockItem.storehouseResult).name,
+          number: stockItem.number,
+          show: Boolean(checkStore.id),
+          brands: sname ? [] : [addBrand],
+          positions: sname ? [addPosition] : [],
+        });
+      } else {
+        const store = storeHouse[storeHouseIndex] || {};
+        const brands = store.brands || [];
+        const positions = store.positions || [];
 
-      const allBrand = initBrandIds.length === 1 && initBrandIds[0] === null;
-
-      if (storeHouse.storehouseId === storehouseId) {
-        skus.forEach(item => {
+        if (sname) {
           const positionIds = positions.map(item => item.id);
-          const positionIndex = positionIds.indexOf(item.storehousePositionsId);
-          if (positionIndex === -1) {
-            if (allBrand || initBrandIds.includes(item.brandId)) {
-              number += item.number;
-              positions.push({
-                id: item.storehousePositionsId,
-                name: ToolUtil.isObject(item.storehousePositionsResult).name,
-                number: item.number,
-                maxNumber: item.number,
-                brands: [{
-                  brandId: item.brandId,
-                  brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-                  maxNumber: item.number,
-                  number: 1,
-                }],
-              });
-            }
+          const positionsIndex = positionIds.indexOf(stockItem.storehousePositionsId);
+          if (positionsIndex === -1) {
+            positions.push(addPosition);
           } else {
-            number += item.number;
-            const position = positions[positionIndex];
-            positions[positionIndex] = {
+            const position = positions[positionsIndex] || {};
+            const brands = position.brands || [];
+            const brandIds = brands.map(item => item.brandId);
+            const brandIndex = brandIds.indexOf(stockItem.brandId);
+            if (brandIndex === -1) {
+              brands.push(addBrand);
+            } else {
+              const brand = brands[brandIndex] || {};
+              brands[brandIndex] = {
+                ...brand,
+                maxNumber: brand.maxNumber + stockItem.number,
+              };
+            }
+            positions[positionsIndex] = {
               ...position,
-              number: position.number + item.number,
-              maxNumber: position.number + item.number,
-              brands: [...position.brands, {
-                brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-                maxNumber: item.number,
-                number: 1,
-              }],
+              number: stockItem.number + position.number,
+              brands,
             };
           }
-        });
-        if (positions.length === 0) {
-          return Message.toast('无库存！');
-        }
-      } else {
-        skus.forEach(item => {
+        } else {
           const brandIds = brands.map(item => item.brandId);
-          const brandIndex = brandIds.indexOf(item.brandId);
+          const brandIndex = brandIds.indexOf(stockItem.brandId);
           if (brandIndex === -1) {
-            if (allBrand || initBrandIds.includes(item.brandId)) {
-              number += item.number;
-              brands.push({
-                brandId: item.brandId,
-                brandName: ToolUtil.isObject(item.brandResult).brandName || '无品牌',
-                number: item.number,
-                maxNumber: item.number,
-              });
-            }
+            brands.push(addBrand);
           } else {
-            number += item.number;
-            const brand = brands[brandIndex];
+            const brand = brands[brandIndex] || {};
             brands[brandIndex] = {
               ...brand,
-              number: brand.number + item.number,
-              maxNumber: brand.number + item.number,
+              maxNumber: brand.maxNumber + stockItem.number,
             };
           }
-        });
-        if (brands.length === 0) {
-          return Message.toast('无库存！');
         }
-      }
 
-      if (storeHouse) {
-        const storeData = {
-          id: storeHouse.storehouseId,
-          name: storeHouse.name,
-          show: true,
-          number,
+        storeHouse[storeHouseIndex] = {
+          ...store,
+          number: stockItem.number + store.number,
           brands,
           positions,
         };
-        change([...data, storeData]);
       }
-    },
+    });
+
+    if (storeHouse.length === 0) {
+      Message.toast('暂无库存!');
+    }
+    setStoreHouses(storeHouse);
+    if (!open) {
+      setSelectStore(true);
+    } else {
+      const storeData = [];
+      storeHouse.forEach(item => {
+        if (!item.show) {
+          return;
+        }
+        storeData.push({
+          id: item.value,
+          name: item.label,
+          number: item.number,
+          show: true,
+          brands: item.brands,
+          positions: item.positions,
+        });
+      });
+      change(storeData);
+    }
+  };
+
+  const { loading, run } = useRequest(storehouse, {
+    manual: true,
   });
+
+  useEffect(() => {
+    if (open) {
+      if (out) {
+        getStoreHouse();
+      } else {
+        run({
+          data: {
+            skuId,
+            brandIds: (initBrands.length === 1 && initBrands[0].brandId === null) ? null : initBrands.map(item => item.brandId),
+          },
+        }).then((res) => {
+          outFormat(res, true);
+        });
+      }
+    }
+  }, []);
 
   const dataChange = (params = {}, id) => {
     const newData = data.map(item => {
@@ -278,9 +340,24 @@ const StoreHouses = (
   return <div className={style.action} style={{ padding: 0, overflow: 'visible' }}>
     <div className={style.storeHouseTitle}>
       指定调{out ? '入' : '出'}库
-      <div className={style.select} hidden={columns.length === 0}>
+      <div className={style.select}>
         选择<PlusCircleFilled onClick={() => {
-        setSelectStore(true);
+        if (data.length > 0) {
+          setSelectStore(true);
+          return;
+        }
+        if (out) {
+          getStoreHouse();
+        } else {
+          run({
+            data: {
+              skuId,
+              brandIds: (initBrands.length === 1 && initBrands[0].brandId === null) ? null : initBrands.map(item => item.brandId),
+            },
+          }).then((res) => {
+            outFormat(res);
+          });
+        }
       }} />
       </div>
     </div>
@@ -339,23 +416,28 @@ const StoreHouses = (
       onClose={() => setSelectStore(false)}
       onConfirm={(value, options) => {
         const storeHouse = options.items[0] || {};
-        if (out) {
-          const storeData = {
-            id: storeHouse.value,
-            name: storeHouse.label,
-            show: true,
-            brands: initBrands,
-          };
-          change([...data, storeData]);
+        if (!storeHouse.value) {
+          return;
+        }
+        const brands = storeHouse.brands || initBrands || [];
+        const storeData = {
+          id: storeHouse.value,
+          name: storeHouse.label,
+          number: storeHouse.number,
+          show: true,
+          brands: brands.map(item => ({ ...item, checked: false })),
+          positions: ToolUtil.isArray(storeHouse.positions).map(item => {
+            const brands = item.brands || [];
+            return { ...item, brands: brands.map(item => ({ ...item, checked: false })) };
+          }),
+        };
+        change([...data, storeData]);
 
-          if (storeHouse.value === storehouseId) {
-            setVisible({
-              ...storeData,
-              positions: [],
-            });
-          }
-        } else {
-          run({ params: { skuId, storehouseId: storeHouse.value } });
+        if (storeHouse.value === storehouseId && out) {
+          setVisible({
+            ...storeData,
+            positions: [],
+          });
         }
       }}
     />

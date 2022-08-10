@@ -178,7 +178,7 @@ export default {
               id: codeId,
             },
           }));
-          yield put({ type: 'router', payload: { codeId, type: res.type } });
+          yield put({ type: 'router', payload: { codeId, object: res } });
           break;
       }
 
@@ -187,9 +187,10 @@ export default {
     // 扫码跳路由
     * router({ payload }, { put }) {
       const codeId = payload.codeId;
-      const type = payload.type;
+      const object = payload.object || {};
+      console.log(object);
       yield put({ type: 'clearCode' });
-      switch (type) {
+      switch (object.type) {
         case 'spu':
           // history.push(`/Scan/Spu?id=${codeId}`);
           break;
@@ -197,7 +198,8 @@ export default {
           // history.push(`/Scan/Storehouse?id=${codeId}`);
           break;
         case 'storehousePositions':
-          // history.push(`/Scan/StorehousePositions?id=${codeId}`);
+          const result = object.result || {};
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}&name=${result.name}`);
           break;
         case 'stock':
           // history.push(`/Scan/Stock?id=${codeId}`);

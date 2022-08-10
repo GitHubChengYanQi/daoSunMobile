@@ -11,7 +11,7 @@
 
   .sku {
     padding: 12px;
-    box-shadow: 0 10px 9px 0 rgba(0,0,0,0.1);
+    //box-shadow: 0 10px 9px 0 rgba(0, 0, 0, 0.1);
     z-index: 1;
   }
 
@@ -67,9 +67,6 @@
 
   .content {
     padding: 12px;
-    max-height: 60vh;
-    overflow: auto;
-    overflow-x: hidden;
   }
 
   .brandAction {
@@ -172,4 +169,21 @@
   z-index: var(--adm-popup-z-index, 1002);
 }
 
+
+.allocation {
+  max-height: 70vh;
+  overflow: auto;
+}
+
+.skuShow {
+  padding: 0 12px;
+  display: flex;
+  gap: 8px;
+  font-size: 12px;
+  align-items: center;
+
+  div {
+    display: flex;
+  }
+}
 

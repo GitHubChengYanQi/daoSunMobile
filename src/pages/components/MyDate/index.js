@@ -2,6 +2,9 @@ import moment from 'moment';
 import { useEffect, useState } from 'react';
 
 const Show = (date) => {
+  if (!date) {
+    return <></>;
+  }
   return moment(date).format('YYYY/MM/DD HH:mm');
 };
 

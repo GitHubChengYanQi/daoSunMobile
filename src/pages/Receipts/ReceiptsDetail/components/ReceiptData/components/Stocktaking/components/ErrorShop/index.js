@@ -59,6 +59,7 @@ const ErrorShop = (
         />;
       case 'error':
         return <Error
+          onEdit={refresh}
           showStock={showStock}
           noDelete
           type={ReceiptsEnums.stocktaking}

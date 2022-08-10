@@ -389,6 +389,7 @@ const AllocationAsk = ({ createType }) => {
         visible={allocationView}
       >
         <AllocationAdd
+          open
           noSteps
           query={query}
           sku={allocationView}

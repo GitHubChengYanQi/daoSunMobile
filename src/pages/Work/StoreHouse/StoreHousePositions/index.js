@@ -9,6 +9,7 @@ import { history } from 'umi';
 import { AppstoreOutline } from 'antd-mobile-icons';
 import PrintCode from '../../../components/PrintCode';
 import MyNavBar from '../../../components/MyNavBar';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 const StoreHousePositions = (props) => {
 
@@ -29,9 +30,10 @@ const StoreHousePositions = (props) => {
     });
 
   useEffect(() => {
-    if (id)
+    if (id){
       run({ params: { ids: id } });
-  }, []);
+    }
+  }, [id]);
 
   const action = (items) => {
     return items.children.length === 0 && <LinkButton title={<AppstoreOutline />} onClick={()=>{
@@ -53,6 +55,7 @@ const StoreHousePositions = (props) => {
           {
             key: 'print',
             text: '打印二维码',
+            display:ToolUtil.isQiyeWeixin(),
           },
           {
             key: 'see',

@@ -371,6 +371,7 @@ const SkuShop = (
       visible={allocationView}
     >
       <AllocationAdd
+        open
         query={query}
         sku={allocationView}
         onClose={() => {

@@ -95,7 +95,6 @@ const StocktaskingHandle = (
       errorReturn={skuReturnChange}
       refresh={(skuItem, error, anomalyId) => {
         if (skuItem) {
-          console.log(skuItem.errorNumber);
           skuStatusChange({
             params: {
               status: error,

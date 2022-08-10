@@ -9,6 +9,7 @@ import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
 import LinkButton from '../pages/components/LinkButton';
+import { Button } from 'antd-mobile';
 
 
 const BasicLayout = (props) => {

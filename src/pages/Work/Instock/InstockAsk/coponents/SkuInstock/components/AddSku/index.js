@@ -10,6 +10,7 @@ import { useRequest } from '../../../../../../../../util/Request';
 import { shopCartAdd, shopCartEdit } from '../../../../../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { SkuResultSkuJsons } from '../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const AddSku = (
   {
@@ -43,8 +44,12 @@ const AddSku = (
   };
 
   const [data, setData] = useState({});
+  const skuResult = data.skuResult || {};
+  const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
 
   const [title, setTitle] = useState();
+
+  const [over, setOver] = useState(false);
 
   const [oneAdd, setOneAdd] = useState();
 
@@ -147,7 +152,7 @@ const AddSku = (
     onSuccess: (res) => {
       const newSkus = skus.map(item => {
         if (item.cartId === res) {
-          return {...item, ...getParams() };
+          return { ...item, ...getParams() };
         }
         return item;
       });
@@ -195,9 +200,11 @@ const AddSku = (
   }));
 
   return <>
-
     <MyAntPopup
-      title={title}
+      title={over ? <div className={style.skuShow}  style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}>
+        <img src={imgUrl || state.imgLogo} width='30' height='30' alt='' />
+        {SkuResultSkuJsons({ skuResult, spu: true })} / {SkuResultSkuJsons({ skuResult, sku: true })}
+      </div> : title}
       onClose={() => {
         close(false);
       }}
@@ -223,6 +230,7 @@ const AddSku = (
           close(false);
         }}
       /> : <AllocationAdd
+        setOver={setOver}
         query={query}
         sku={sku}
         onClose={() => {

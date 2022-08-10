@@ -106,7 +106,8 @@ const AllBrands = (
         })
       }
     </div>
-    {!out && <AddButton width={40} height={24} onClick={() => setVisible(true)} />}
+
+    {!out && <AddButton className={style.addButton} width={40} height={24} onClick={() => setVisible(true)} />}
 
     <MyPositions
       title={storehouseName}

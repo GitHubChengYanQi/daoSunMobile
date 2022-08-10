@@ -65,6 +65,7 @@ const Distribution = (
         skuId={skuItem.skuId}
         brandAndPositions={skuItem.brands}
         out={out}
+        open
         data={storeHouse}
         onChange={setStoreHouse}
         storehouseId={skuItem.storehouseId}

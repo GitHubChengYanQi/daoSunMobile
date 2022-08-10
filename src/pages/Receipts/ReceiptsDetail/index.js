@@ -20,6 +20,7 @@ import MyError from '../../components/MyError';
 import LinkButton from '../../components/LinkButton';
 import Relation from './components/Relation';
 import { useBoolean } from 'ahooks';
+import Log from './components/Log';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
@@ -140,10 +141,8 @@ const ReceiptsDetail = () => {
         />;
       case 'dynamic':
         return <Dynamic taskId={detail.processTaskId} />;
-      case 'inStockLog':
-        return <InStockLog instockOrderId={ToolUtil.isObject(detail.receipts).instockOrderId} />;
-      case 'outStockLog':
-        return <OutStockLog outstockOrderId={ToolUtil.isObject(detail.receipts).pickListsId} />;
+      case 'log':
+        return <Log type={type} detail={detail} />;
       case 'relation':
         return <Relation type={type} receipts={detail.receipts} />;
       default:
@@ -151,17 +150,27 @@ const ReceiptsDetail = () => {
     }
   };
 
-  const receiptsTabs = () => {
+  const receiptsType = () => {
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return {
-          title: '入库记录',
-          key: 'inStockLog',
+          logTitle: '入库记录',
         };
       case ReceiptsEnums.outstockOrder:
         return {
-          title: '出库记录',
-          key: 'outStockLog',
+          logTitle: '出库记录',
+        };
+      case ReceiptsEnums.stocktaking:
+        return {
+          logTitle: '盘点记录',
+        };
+      case ReceiptsEnums.maintenance:
+        return {
+          logTitle: '养护记录',
+        };
+      case ReceiptsEnums.allocation:
+        return {
+          logTitle: '调拨记录',
         };
       default:
         return {};
@@ -196,7 +205,7 @@ const ReceiptsDetail = () => {
               setHidden(key !== 'data');
             }} className={topStyle.tab}>
               <Tabs.Tab title='基本信息' key='data' />
-              {receiptsTabs().key && <Tabs.Tab title={receiptsTabs().title} key={receiptsTabs().key} />}
+              <Tabs.Tab title={receiptsType().logTitle} key='log' />
               <Tabs.Tab title='动态日志' key='dynamic' />
               <Tabs.Tab title='关联单据' key='relation' />
             </Tabs>

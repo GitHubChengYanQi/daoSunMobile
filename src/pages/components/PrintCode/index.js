@@ -1,5 +1,4 @@
 import { Dialog, Toast } from 'antd-mobile';
-import IsDev from '../../../components/IsDev';
 
 let pringCount = 0;
 let canvas = [];
@@ -40,11 +39,9 @@ const print = (array, index) => {
   win.document.write(canvas[index]);
   setTimeout(() => {
     win.print();
+    Toast.clear();
   }, 0);
   window.Android && window.Android.nPrint(canvas[index]);
-  if (IsDev()) {
-    Toast.clear();
-  }
 };
 
 const nextPrint = () => {
