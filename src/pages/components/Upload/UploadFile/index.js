@@ -28,6 +28,7 @@ const UploadFile = (
     },
     refresh,
     max,
+    noDefault,
   }, ref,
 ) => {
 
@@ -42,7 +43,7 @@ const UploadFile = (
   const [files, setFiles] = useState(value);
 
   useEffect(() => {
-    if (files.length === 0 && value.length > 0) {
+    if (!noDefault && files.length === 0 && value.length > 0) {
       setFiles(value);
     }
   }, [value]);

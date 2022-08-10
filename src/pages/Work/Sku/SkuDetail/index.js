@@ -120,6 +120,7 @@ const SkuDetail = ({ id }) => {
           图片:
         </Label>
         <UploadFile
+          noDefault
           uploadId='imgUpload'
           value={imgs}
           max={3}
@@ -136,6 +137,7 @@ const SkuDetail = ({ id }) => {
           附件:
         </Label>
         <UploadFile
+          noDefault
           max={3}
           uploadId='fileUpload'
           value={files}
@@ -152,6 +154,7 @@ const SkuDetail = ({ id }) => {
           关联图纸:
         </Label>
         <UploadFile
+          noDefault
           max={3}
           uploadId='drawingUpload'
           value={drawings}
