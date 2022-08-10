@@ -36,7 +36,11 @@ const print = (array, index) => {
         </html>
 `;
   });
-  console.log(canvas[index]);
+  const win = window.open();
+  win.document.write(canvas[index]);
+  setTimeout(() => {
+    win.print();
+  }, 0);
   window.Android && window.Android.nPrint(canvas[index]);
   if (IsDev()) {
     Toast.clear();
