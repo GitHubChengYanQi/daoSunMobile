@@ -82,30 +82,30 @@ const CheckPosition = (
           <div className={style.name} onClick={() => openPositions(open, childrens)}>
             {item.title} {skuId && `(${getChildNumber(item)})`}
           </div>
-          <div hidden={!checkShow(item)} className={style.checked}>
+          <div hidden={!checkShow(item)} className={style.checked} onClick={()=>{
+            if (checked) {
+              onChange(value.filter(position => position.id !== item.key));
+            } else {
+              onChange(single ?
+                [{
+                  id: item.key,
+                  name: item.title,
+                  storehouseId: item.storeHouseId,
+                  number: item.num || 0,
+                }]
+                :
+                [...value, {
+                  id: item.key,
+                  name: item.title,
+                  storehouseId: item.storeHouseId,
+                  number: item.num || 0,
+                }]);
+            }
+          }}>
             <MyCheck
+              fontSize={18}
               disabled={!checked && disabled}
               checked={checked}
-              onChange={(checked) => {
-                if (!checked) {
-                  onChange(value.filter(position => position.id !== item.key));
-                } else {
-                  onChange(single ?
-                    [{
-                      id: item.key,
-                      name: item.title,
-                      storehouseId: item.storeHouseId,
-                      number: item.num || 0,
-                    }]
-                    :
-                    [...value, {
-                      id: item.key,
-                      name: item.title,
-                      storehouseId: item.storeHouseId,
-                      number: item.num || 0,
-                    }]);
-                }
-              }}
             />
           </div>
         </div>}

@@ -24,6 +24,7 @@ const List = (
     api,
     className,
     noActions,
+    over,
   },
 ) => {
 
@@ -54,7 +55,7 @@ const List = (
         ref.current.submit({ ...skuInfo, qrCodeid: null });
       }}
     />
-    <div className={style.statusList}>
+    <div className={style.statusList} style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}>
       <Space className={style.status}>
         {screen.map((item, index) => {
           return <MyRadio key={index} checked={status === item.value} onChange={() => {

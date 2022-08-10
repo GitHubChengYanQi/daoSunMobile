@@ -51,12 +51,12 @@ const MaterialAnalysis = () => {
   }
 
   if (!data) {
-    return <MyEmpty />;
+    return <MyEmpty height={200} />;
   }
   const keys = dataSort(data);
 
   if (keys.length === 0) {
-    return <MyEmpty />;
+    return <MyEmpty height={200} />;
   }
   return <Canvas pixelRatio={window.devicePixelRatio} height={200}>
     <Timeline delay={10}>

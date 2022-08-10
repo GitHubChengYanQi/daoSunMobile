@@ -3,7 +3,7 @@ import style from '../../index.less';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
-import { Popup } from 'antd-mobile';
+import { Button, Popup } from 'antd-mobile';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
 import ErrorShop from '../ErrorShop';
@@ -13,6 +13,7 @@ import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
+import LinkButton from '../../../../../../../../components/LinkButton';
 
 const StocktaskigAction = (
   {
@@ -40,10 +41,7 @@ const StocktaskigAction = (
 
   const history = useHistory();
 
-  const action = (positionItem,skuItem) => {
-    if (show) {
-      return;
-    }
+  const action = (positionItem, skuItem) => {
 
     if (skuItem.lockStatus === 99) {
       Message.toast('此物料存在异常，正在处理中');
@@ -63,7 +61,7 @@ const StocktaskigAction = (
       sourceId: skuItem.inventoryStockId,
       customerId: skuItem.customerId,
     });
-  }
+  };
 
   const dataList = () => {
     return data.map((positionItem, positionIndex) => {
@@ -122,18 +120,12 @@ const StocktaskigAction = (
                 className={style.sku}
                 key={skuIndex}
                 style={{ border: border ? 'none' : '' }}>
-                <div className={style.skuItem}>
+                <div className={style.skuItem} onClick={() => {
+                  if (anomalyType === 'timelyInventory'){
+                    history.push(`/Work/Sku/SkuDetail?skuId=${skuItem.skuId}`);
+                  }
+                }}>
                   <SkuItem
-                    imgOnClick={() => {
-                      if (anomalyType === 'timelyInventory'){
-                        history.push(`/Work/Sku/SkuDetail?skuId=${skuItem.skuId}`);
-                      }else {
-                        action(positionItem,skuItem);
-                      }
-                    }}
-                    onClick={() => {
-                      action(positionItem,skuItem);
-                    }}
                     skuResult={skuItem.skuResult}
                     extraWidth='100px'
                     hiddenNumber={!showStock}
@@ -144,12 +136,14 @@ const StocktaskigAction = (
                   />
                 </div>
                 <div className={style.info}>
-                  <div style={{ color }}>
-                    <Icon type='icon-dian' /> {text}
+                  <div style={{ color }} className={style.actionStatus}>
+                    <div className={style.icon}>{icon}</div><Icon type='icon-dian' /> {text}
                   </div>
                   {typeof skuItem.realNumber === 'number' &&
                   <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
-                  <div className={style.icon}>{icon}</div>
+                  {!show && <Button className={style.inventoryButton} onClick={() => {
+                    action(positionItem, skuItem);
+                  }}>盘点</Button>}
                 </div>
               </div>;
             })

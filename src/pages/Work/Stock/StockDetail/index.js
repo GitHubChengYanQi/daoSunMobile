@@ -70,7 +70,7 @@ export const SkuContent = (
             <div className={style.skuItem}>
               <div className={style.sku}>
                 <SkuItem
-                  imgOnClick={()=>{
+                  imgOnClick={() => {
                     history.push(`/Work/Sku/SkuDetail?skuId=${item.skuId}`);
                   }}
                   imgId={`skuImg${index}`}

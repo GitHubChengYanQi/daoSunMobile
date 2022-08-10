@@ -18,7 +18,7 @@
     .sku {
       padding: 8px 12px;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       border-bottom: solid 1px #F5F5F5;
       position: relative;
 
@@ -29,11 +29,28 @@
       .info {
         display: flex;
         flex-direction: column;
-        gap: 8px;
         align-items: flex-end;
+        grid-gap: 4px;
+        gap: 4px;
+        font-size: 12px;
+        height: 74px;
+        justify-content: space-between;
+
+        .actionStatus {
+          display: flex;
+          gap: 4px;
+          align-items: center;
+        }
 
         .icon {
           color: var(--adm-color-danger);
+        }
+
+        .inventoryButton {
+          font-size: 12px;
+          --border-radius:50px;
+          width: 100%;
+          min-width: 70px;
         }
       }
     }

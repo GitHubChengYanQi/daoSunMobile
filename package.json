@@ -4,6 +4,7 @@
     "start": "cross-env UMI_ENV=test umi dev",
     "ren": "cross-env UMI_ENV=ren umi dev",
     "song": "cross-env UMI_ENV=song umi dev",
+    "buildBeta": "cross-env UMI_ENV=beta umi build",
     "build": "cross-env UMI_ENV=daoxin umi build",
     "buildZjzc": "cross-env UMI_ENV=zjzc umi build",
     "buildHunHe": "cross-env UMI_ENV=hunhe umi build",
