@@ -13,7 +13,7 @@ const getUserByCpUserId = { url: '/ucMember/getUserByCps', method: 'POST' };
 
 const CheckUser = (
   {
-    value,
+    value = [],
     multiple,
     onChange = () => {
     },
@@ -80,7 +80,6 @@ const CheckUser = (
 
   const open = (param) => {
     setParams(param);
-    const u = navigator.userAgent;
     if (ToolUtil.isQiyeWeixin() && !IsDev()) {
       invoke();
     } else {
@@ -103,10 +102,15 @@ const CheckUser = (
         onClose();
         setVisible(false);
       }}>
-      <UserList value={value} hiddenCurrentUser={hiddenCurrentUser} onChange={(items) => {
-        onChange([{ id: items.id, name: items.name, avatar: items.avatar }], params);
-        setVisible(false);
-      }} />
+      <UserList
+        multiple={multiple}
+        value={value}
+        onClose={() => setVisible(false)}
+        hiddenCurrentUser={hiddenCurrentUser}
+        onChange={(items) => {
+          onChange(items, params);
+          setVisible(false);
+        }} />
     </MyAntPopup>
   </>;
 };

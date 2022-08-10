@@ -9,16 +9,22 @@ import { pinyin } from 'pinyin-pro';
 import MySearch from '../../../MySearch';
 import { CheckOutline } from 'antd-mobile-icons';
 import { UserName } from '../../../User';
+import BottomButton from '../../../BottomButton';
 
 export const userList = { url: '/formUser/userList', method: 'POST' };
 
 const UserList = (
   {
+    multiple,
     hiddenCurrentUser,
-    value,
+    value = [],
     onChange = () => {
     },
+    onClose = () => {
+    },
   }) => {
+
+  const [users, setUsers] = useState(value);
 
   const { initialState } = useModel('@@initialState');
   const userInfo = ToolUtil.isObject(initialState).userInfo || {};
@@ -30,17 +36,21 @@ const UserList = (
 
   const [name, setName] = useState();
 
+  const checked = (userId) => {
+    return users.filter(item => item.id === userId).length > 0;
+  };
+
   const { loading, run } = useRequest(userList, {
     manual: true,
     onSuccess: (res) => {
       const users = [];
-      let checkUser;
+      const checkUser = [];
       ToolUtil.isArray(res).forEach(item => {
         if (hiddenCurrentUser && item.userId === userInfo.id) {
           return;
         }
-        if (value && value === item.userId) {
-          checkUser = { name: item.name, id: item.userId };
+        if (checked(item.userId)) {
+          checkUser.push({ name: item.name, id: item.userId });
         }
         users.push({ name: item.name, id: item.userId, avatar: item.avatar });
       });
@@ -64,8 +74,8 @@ const UserList = (
       setData(groups);
       setInit(groups);
 
-      if (checkUser) {
-        const pys = pinyin(checkUser.name, { pattern: 'first', toneType: 'none', type: 'array' });
+      if (checkUser[0] && !multiple) {
+        const pys = pinyin(checkUser[0].name, { pattern: 'first', toneType: 'none', type: 'array' });
         const first = pys[0];
         indexBarRef.current.scrollTo(first.toUpperCase());
       }
@@ -94,7 +104,7 @@ const UserList = (
         });
         setData(newData);
       }} />
-      {data.length === 0 ? <MyEmpty description='暂无人员' /> : <IndexBar ref={indexBarRef}>
+      {data.length === 0 ? <MyEmpty description='暂无人员' /> : <IndexBar style={{ paddingBottom: 60 }} ref={indexBarRef}>
         {data.map(group => {
           const { title, items } = group;
           return (
@@ -104,20 +114,31 @@ const UserList = (
               key={title}
             >
               <List>
-                {items.map((item, index) => (
-                  <List.Item
-                    arrow={value === item.id ? <CheckOutline style={{ color: 'var(--adm-color-primary)' }} /> : false}
-                    key={index} onClick={() => {
-                    onChange(item);
-                  }}>
+                {items.map((item, index) => {
+                  return <List.Item
+                    arrow={checked(item.id) ?
+                      <CheckOutline style={{ color: 'var(--adm-color-primary)' }} /> : false}
+                    key={index}
+                    onClick={() => {
+                      if (checked(item.id)) {
+                        setUsers(multiple ? users.filter(user => user.id !== item.id) : []);
+                      } else {
+                        setUsers(multiple ? [...users, item] : [item]);
+                      }
+                    }}
+                  >
                     <UserName user={item} size={40} />
-                  </List.Item>
-                ))}
+                  </List.Item>;
+                })}
               </List>
             </IndexBar.Panel>
           );
         })}
       </IndexBar>}
+
+      <BottomButton leftOnClick={onClose} rightDisabled={users.length === 0} rightOnClick={() => {
+        onChange(users);
+      }} />
     </div>
   );
 };

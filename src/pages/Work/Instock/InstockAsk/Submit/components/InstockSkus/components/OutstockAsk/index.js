@@ -95,10 +95,13 @@ const OutstockAsk = ({ skus, judge, createType }) => {
       />
       <User
         title='领料负责人'
-        id={params.userId}
-        name={params.userName}
-        avatar={params.userAvatar}
-        onChange={({ id, name, avatar }) => {
+        value={params.userId ? [{
+          id: params.userId,
+          name: params.userName,
+          avatar: params.userAvatar,
+        }] : []}
+        onChange={(users) => {
+          const { id, name, avatar } = users[0] || {};
           setParams({ ...params, userId: id, userName: name, userAvatar: avatar });
         }} />
 

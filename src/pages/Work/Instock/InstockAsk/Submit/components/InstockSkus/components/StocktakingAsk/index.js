@@ -70,7 +70,7 @@ const StocktakingAsk = ({ createType }) => {
   const stocktaskingAsk = () => {
     let data = {
       ...params,
-      participants: [params.participantsId],
+      participants: ToolUtil.isArray(params.participants).map(item => item.id),
       notice: params.noticeIds,
       enclosure: params.mediaIds,
       userIds: ToolUtil.isArray(params.userIds).toString(),

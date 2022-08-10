@@ -122,9 +122,18 @@ const SelectStoreHouse = () => {
   return <div style={{ paddingBottom: 60, backgroundColor: '#fff', height: '100%' }}>
     <MyNavBar title={params.title} />
     <div className={style.content}>
-      <User id={user.id} title='负责人' name={user.name} avatar={user.avatar} onChange={({ id, name, avatar }) => {
-        setUser({ id, name, avatar });
-      }} />
+      <User
+        value={user.id ? [{
+          id: user.id,
+          name: user.name,
+          avatar: user.avatar,
+        }] : []}
+        title='负责人'
+        onChange={(users) => {
+          const { id, name, avatar } = users[0] || {};
+          setUser({ id, name, avatar });
+        }}
+      />
       <MyCard hidden={data.length === 0} title='待分配物料'>
         {
           data.map((item, index) => {
