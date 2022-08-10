@@ -13,7 +13,8 @@ import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
-import LinkButton from '../../../../../../../../components/LinkButton';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
+import StocktaskLog from './components/StocktaskLog';
 
 const StocktaskigAction = (
   {
@@ -39,6 +40,8 @@ const StocktaskigAction = (
 
   const [visible, setVisible] = useState();
 
+  const [log, setLog] = useState();
+
   const history = useHistory();
 
   const action = (positionItem, skuItem) => {
@@ -50,7 +53,6 @@ const StocktaskigAction = (
       show: skuItem.lockStatus === 99,
       skuId: skuItem.skuId,
       skuResult: skuItem.skuResult,
-      // inkindId: brandItem.inkind,
       brandId: skuItem.brandId,
       brandResult: skuItem.brandResult,
       stockNumber: skuItem.number,
@@ -121,7 +123,7 @@ const StocktaskigAction = (
                 key={skuIndex}
                 style={{ border: border ? 'none' : '' }}>
                 <div className={style.skuItem} onClick={() => {
-                  if (anomalyType === 'timelyInventory'){
+                  if (anomalyType === 'timelyInventory') {
                     history.push(`/Work/Sku/SkuDetail?skuId=${skuItem.skuId}`);
                   }
                 }}>
@@ -137,13 +139,23 @@ const StocktaskigAction = (
                 </div>
                 <div className={style.info}>
                   <div style={{ color }} className={style.actionStatus}>
-                    <div className={style.icon}>{icon}</div><Icon type='icon-dian' /> {text}
+                    <div className={style.icon}>{icon}</div>
+                    <Icon type='icon-dian' /> {text}
                   </div>
                   {typeof skuItem.realNumber === 'number' &&
                   <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
-                  {!show && <Button className={style.inventoryButton} onClick={() => {
+                  <Button className={style.inventoryButton} onClick={() => {
+                    if (show) {
+                      setLog({
+                        sourceId: inventoryTaskId,
+                        skuId: skuItem.skuId,
+                        brandId: skuItem.brandId,
+                        storehousePositionsId:positionItem.positionId,
+                      });
+                      return;
+                    }
                     action(positionItem, skuItem);
-                  }}>盘点</Button>}
+                  }}>{show ? '查看' : '盘点'}</Button>
                 </div>
               </div>;
             })
@@ -216,6 +228,10 @@ const StocktaskigAction = (
         }}
       />
     </Popup>
+
+    <MyAntPopup title='盘点记录' visible={log} onClose={() => setLog()}>
+      <StocktaskLog data={log} />
+    </MyAntPopup>
 
     {!show && <ErrorShop
       errorShopRef={errorShopRef}

@@ -9,13 +9,13 @@ import MyAntPopup from '../MyAntPopup';
 import UserList from './components/UserList';
 import style from './index.less';
 
-const getUserByCpUserId = { url: '/ucMember/getUserByCps', method: 'GET' };
+const getUserByCpUserId = { url: '/ucMember/getUserByCps', method: 'POST' };
 
 const CheckUser = (
   {
     value,
     multiple,
-    onChange = ({ id, name, avatar, params }) => {
+    onChange = () => {
     },
     onClose = () => {
     },
@@ -33,6 +33,7 @@ const CheckUser = (
   const { loading: getUserLoading, run: getUser } = useRequest(getUserByCpUserId, {
     manual: true,
     onSuccess: (res) => {
+      console.log('users', res);
       const users = res || [];
       if (users.length > 0) {
         onChange(users.map(item => ({ id: item.userId, name: item.name, avatar: item.avatar })), params);
@@ -68,7 +69,8 @@ const CheckUser = (
             });
 
             if (userIds.length > 0) {
-              getUser({ params: { cpUserIds: userIds } });
+              console.log('cpUserIds', userIds);
+              getUser({ data: { cpUserIds: userIds } });
             }
           }
         },
@@ -102,7 +104,7 @@ const CheckUser = (
         setVisible(false);
       }}>
       <UserList value={value} hiddenCurrentUser={hiddenCurrentUser} onChange={(items) => {
-        onChange({ id: items.id, name: items.name, avatar: items.avatar, params });
+        onChange([{ id: items.id, name: items.name, avatar: items.avatar }], params);
         setVisible(false);
       }} />
     </MyAntPopup>

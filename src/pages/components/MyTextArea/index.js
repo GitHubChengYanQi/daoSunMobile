@@ -168,7 +168,10 @@ const MyTextArea = (
         setCaretPosition(cursor + 1);
       }}
       ref={userRef}
-      onChange={({ id, name }) => {
+      onChange={(users) => {
+        const user = users[0] || {};
+        const name = user.name || '';
+        const id = user.id;
         const caretPos = getCursortPosition();
         const newPos = caretPos + name.length + 1;
         const values = value.split('');

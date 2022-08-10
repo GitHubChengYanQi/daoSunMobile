@@ -414,12 +414,13 @@ const SkuError = (
       }
     </div>
 
-    <CheckUser hiddenCurrentUser ref={userRef} onChange={({ id, param }) => {
+    <CheckUser hiddenCurrentUser ref={userRef} onChange={(users, param) => {
+      const user = users[0] || {};
       editRun({
         data: {
           anomalyOrderId,
           detailId: param.detailId,
-          userId: id,
+          userId: user.id,
           stauts: 0,
         },
       });

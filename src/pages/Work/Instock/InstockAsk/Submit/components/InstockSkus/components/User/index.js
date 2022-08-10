@@ -31,7 +31,10 @@ const User = (
       </div>}
     />
 
-    <CheckUser multiple={multiple} ref={userRef} value={id} onChange={onChange} />
+    <CheckUser multiple={multiple} ref={userRef} value={id} onChange={(users) => {
+      const user = users[0] || {};
+      onChange(user);
+    }} />
   </>;
 };
 
