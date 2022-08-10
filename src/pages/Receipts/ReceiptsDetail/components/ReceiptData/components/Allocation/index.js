@@ -155,7 +155,7 @@ const Allocation = (
     <MyCard hidden={!data.userId} title='负责人' extra={<UserName />} />
     <MyCard title='申请类型' extra={data.type === 'allocation' ? '调拨' : '移库'} />
     <MyCard title='调拨类型' extra={data.allocationType === 2 ? '调出' : '调入'} />
-    <MyCard title='仓库' extra='无' />
+    <MyCard title='仓库' extra={ToolUtil.isObject(data.storehouseResult).name} />
     <MyCard title='注意事项'>
       {[].length === 0 && <div>无</div>}
       {[].map((item, index) => {
@@ -166,7 +166,7 @@ const Allocation = (
     </MyCard>
 
     <MyCard title='备注'>
-      <div className={style.remake}>{'无'}</div>
+      <div className={style.remake}>{data.remark || '无'}</div>
     </MyCard>
 
     <MyCard title='附件'>

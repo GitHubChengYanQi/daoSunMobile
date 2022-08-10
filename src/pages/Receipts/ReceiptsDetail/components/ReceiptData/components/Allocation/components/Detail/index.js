@@ -91,7 +91,7 @@ const Detail = (
                 <PositionShow inPositionName={item.toPositionName} outPositionName={item.positionName} />,
               ]}
             />
-            <div className={style.inLibrary}>
+            <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
                 run({
                   data: {
