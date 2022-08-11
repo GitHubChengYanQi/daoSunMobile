@@ -149,36 +149,34 @@ const AllocationAdd = (
           extraWidth={'calc(25vw + 24px)'}
         />
         <div className={style.content}>
-          <div className={style.brandAction}>
-            {
-              moveLibrary ? ' 调出库位' : <>
-                <div className={style.brandData}>
-                  品牌：
-                  <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
-                    setTotal(0);
-                    setBrandAndPositions([]);
-                    setBrandAction('fixedBrand');
-                    setStoreHouse([]);
-                  }}>指定品牌</Button>
-                  <Button color={brandAction === 'allBrand' ? 'primary' : 'default'} onClick={() => {
-                    setTotal(0);
-                    setBrandAndPositions([]);
-                    setBrandAction('allBrand');
-                    setStoreHouse([]);
-                  }}>任意品牌</Button>
-                </div>
-                <div className={style.total}>
-                  调拨总数：<ShopNumber
-                  max={out ? sku.stockNumber : undefined}
-                  show={total > 0}
-                  value={total}
-                  onChange={(number) => {
-                    setTotal(number);
-                  }} />
-                </div>
-              </>
-            }
-          </div>
+          {
+            moveLibrary ? <div style={{ paddingBottom: 8 }}>调出库位</div> : <div className={style.brandAction}>
+              <div className={style.brandData}>
+                品牌：
+                <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
+                  setTotal(0);
+                  setBrandAndPositions([]);
+                  setBrandAction('fixedBrand');
+                  setStoreHouse([]);
+                }}>指定品牌</Button>
+                <Button color={brandAction === 'allBrand' ? 'primary' : 'default'} onClick={() => {
+                  setTotal(0);
+                  setBrandAndPositions([]);
+                  setBrandAction('allBrand');
+                  setStoreHouse([]);
+                }}>任意品牌</Button>
+              </div>
+              <div className={style.total}>
+                调拨总数：<ShopNumber
+                max={out ? sku.stockNumber : undefined}
+                show={total > 0}
+                value={total}
+                onChange={(number) => {
+                  setTotal(number);
+                }} />
+              </div>
+            </div>
+          }
           <div className={style.brandAndPositions}>
             {selectBrandAndPositions()}
           </div>

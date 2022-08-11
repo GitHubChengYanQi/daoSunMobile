@@ -85,7 +85,7 @@ const StocktaskigAction = (
 
               const border = (positionItem.show || skuResultList.length <= 2) ? skuIndex === skuResultList.length - 1 : skuIndex === 1;
 
-              let color = '';
+              let color;
               let icon = '';
               let text = '';
               switch (skuItem.status) {

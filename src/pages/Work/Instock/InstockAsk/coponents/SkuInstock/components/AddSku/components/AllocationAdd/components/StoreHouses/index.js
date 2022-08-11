@@ -305,10 +305,6 @@ const StoreHouses = (
     change(newData);
   };
 
-  if (storeHouseLoaing) {
-    return <MyLoading skeleton />;
-  }
-
   const brandDom = ({ storehouseId, positionId, brands = [] }) => {
 
     return brands.map((brandItem, brandIndex) => {
@@ -470,7 +466,7 @@ const StoreHouses = (
         }
       }} />
 
-    {loading && <MyLoading />}
+    {(loading || storeHouseLoaing) && <MyLoading />}
   </div>;
 };
 
