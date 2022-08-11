@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
-import { taskList } from '../../../../../Work/Inventory/StartStockTaking';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import Icon from '../../../../../components/Icon';
 import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { Button } from 'antd-mobile';
 import { UserName } from '../../../../../components/User';
 import { MyDate } from '../../../../../components/MyDate';
+
+export const historyList = {url:'/inventoryStock/historyList',method:'POST'}
 
 const StocktaskingLog = ({ detail = {} }) => {
 
@@ -111,8 +111,8 @@ const StocktaskingLog = ({ detail = {} }) => {
 
   return <div className={style.stocktaking}>
     <MyList
-      api={taskList}
-      params={{status:99}}
+      api={historyList}
+      params={{ inventoryId:detail.inventoryTaskId }}
       data={data}
       getData={(list = [], newList = []) => {
         const positionIds = list.map(item => item.positionId);
