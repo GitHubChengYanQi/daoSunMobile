@@ -2,30 +2,47 @@ import React from 'react';
 import Canvas from '@antv/f2-react';
 import { Chart, Axis, Interval, TextGuide } from '@antv/f2';
 import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+
+export const billCountView = { url: '/statisticalView/billCountView', method: 'GET' };
 
 const OrderStatisicalChart = () => {
 
   const history = useHistory();
 
+  const { loading, data: orderCount } = useRequest(billCountView);
+
+  const orderDetail = orderCount || {};
+
   const data = [
     {
       title: '入库',
-      number: 385,
+      number: orderDetail.instockCount,
     },
     {
       title: '出库',
-      number: 123,
+      number: orderDetail.outstockCont,
     },
     {
       title: '盘点',
-      number: 5342,
+      number: orderDetail.inventoryCount,
+    },
+    {
+      title: '养护',
+      number: orderDetail.maintenanceCount,
     },
     {
       title: '调拨',
-      number: 1232,
+      number: orderDetail.allocationCount,
     },
   ];
 
+  const total = orderDetail.instockCount + orderDetail.outstockCont + orderDetail.inventoryCount + orderDetail.maintenanceCount + orderDetail.allocationCount;
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
 
   const Total = (props) => {
     const { coord } = props;
@@ -36,7 +53,7 @@ const OrderStatisicalChart = () => {
           attrs={{
             x: right,
             y: bottom,
-            text: `合计 131 个`,
+            text: `合计 ${total || 0} 个`,
             textAlign: 'end',
             textBaseline: 'bottom',
             fontSize: '40px',
@@ -48,7 +65,11 @@ const OrderStatisicalChart = () => {
   };
 
   return <div onClick={() => {
-    history.push('/Report/OrderData');
+    const pathname = history.location.pathname;
+    const url = '/Report/OrderData';
+    if (pathname !== url) {
+      history.push(url);
+    }
   }}>
     <Canvas pixelRatio={window.devicePixelRatio} height={200}>
       <Chart

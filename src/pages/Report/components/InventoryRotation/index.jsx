@@ -1,21 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval, PieLabel } from '@antv/f2';
 import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
 
-const InventoryRotation = () => {
+export const stockSpectaculars = { url: '/asynTask/stockSpectaculars', method: 'POST' };
+
+const InventoryRotation = (
+  {
+    onChange = () => {
+    },
+  },
+) => {
 
   const history = useHistory();
 
-  const data = [
-    { name: '长期呆滞', number: 78, const: 'const',  },
-    { name: '六个月内', number: 353, const: 'const',  },
-    { name: '三个月内', number: 1213, const: 'const',  },
-    { name: '一个月内', number: 234, const: 'const',  },
-  ];
+  const [data, setData] = useState([]);
 
-  return <div  onClick={() => {
-    history.push('/Report/DaysInStock');
+  const { loading } = useRequest(stockSpectaculars, {
+    onSuccess: (res) => {
+      onChange(res || []);
+      const datas = res || [];
+      const times = ['长期呆滞', '6个月内', '3个月内', '1个月内'];
+      const newData = [];
+      times.forEach(month => {
+        const values = datas.filter(item => item.month === month);
+        if (values.length === 0) {
+          return;
+        }
+        let number = 0;
+        values.forEach(item => number += item.value);
+        newData.push({ month, number, const: 'const' });
+      });
+      setData(newData);
+    },
+  });
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  if (data.length === 0) {
+    return <MyEmpty />;
+  }
+
+  return <div onClick={() => {
+    const pathname = history.location.pathname;
+    const url = '/Report/DaysInStock';
+    if (pathname !== url) {
+      history.push(url);
+    }
   }}>
     <Canvas pixelRatio={window.devicePixelRatio} height={200}>
       <Chart
@@ -29,11 +65,11 @@ const InventoryRotation = () => {
         scale={{}}
       >
         <Interval
-          x="const"
-          y="number"
-          adjust="stack"
+          x='const'
+          y='number'
+          adjust='stack'
           color={{
-            field: 'name',
+            field: 'month',
             range: [
               '#1890FF',
               '#13C2C2',
@@ -45,20 +81,17 @@ const InventoryRotation = () => {
         <PieLabel
           label1={(data) => {
             return {
-              text: data.name,
+              text: data.month,
               fill: '#808080',
             };
           }}
           label2={(data) => {
             return {
               fill: '#000000',
-              text: data.number.toFixed(2),
+              text: data.number,
               fontWeight: 500,
               fontSize: 10,
             };
-          }}
-          onClick={(data) => {
-            console.log(data);
           }}
         />
       </Chart>

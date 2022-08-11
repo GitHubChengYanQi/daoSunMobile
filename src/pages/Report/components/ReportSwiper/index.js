@@ -2,8 +2,10 @@ import React from 'react';
 import { Swiper } from 'antd-mobile';
 import MaterialAnalysis from '../MaterialAnalysis';
 import InventoryRotation from '../InventoryRotation';
-import WorkEfficiency from '../WorkEfficiency';
 import ErrorSku from '../ErrorSku';
+import Stock from '../Stock';
+import OrderStatisicalChart from '../OrderStatisicalChart';
+import TaskStatisicalChart from '../TaskStatisicalChart';
 
 const ReportSwiper = () => {
 
@@ -13,19 +15,25 @@ const ReportSwiper = () => {
 
     }}>
       <Swiper.Item key='1'>
-        <MaterialAnalysis />
+        <Stock />
       </Swiper.Item>
       <Swiper.Item key='2'>
-        <InventoryRotation />
-      </Swiper.Item>
-      <Swiper.Item key='3'>
-        <WorkEfficiency />
-      </Swiper.Item>
-      <Swiper.Item key='4'>
         <ErrorSku />
       </Swiper.Item>
+      <Swiper.Item key='3'>
+        <InventoryRotation />
+      </Swiper.Item>
+      <Swiper.Item key='4'>
+        <OrderStatisicalChart />
+      </Swiper.Item>
+      <Swiper.Item key='4'>
+        <TaskStatisicalChart />
+      </Swiper.Item>
+      <Swiper.Item key='4'>
+        <MaterialAnalysis noIndicator />
+      </Swiper.Item>
     </Swiper>
-  </>
+  </>;
 };
 
 export default ReportSwiper;

@@ -10,8 +10,8 @@
 .flexGap {
   flex-grow: 1;
 
-  div {
-    padding: 8px 0;
+  .row {
+    padding-top: 16px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -37,6 +37,10 @@
   .header {
     background-color: var(--body--background--color);
     padding: 8px;
+  }
+
+  .errorBody {
+    padding: 0;
   }
 
   .body {
@@ -68,7 +72,7 @@
   }
 
   .td {
-    flex-grow: 1;
+    width: 100px;
     text-align: center;
     padding: 8px;
   }
@@ -87,4 +91,10 @@
 .time {
   color: #808080;
   font-size: 12px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: bold;
+  color: #000000;
 }

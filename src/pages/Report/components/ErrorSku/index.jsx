@@ -1,26 +1,46 @@
 import Canvas from '@antv/f2-react';
 import { Chart, Tooltip, Axis, Line, TextGuide } from '@antv/f2';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import { ToolUtil } from '../../../components/ToolUtil';
 
-const ErrorSku = () => {
+export const anomalyCensus = { url: '/anomaly/anomalyCensus', method: 'POST' };
+
+const ErrorSku = (
+  {
+    year,
+  },
+) => {
 
   const history = useHistory();
 
-  const data = [
-    { date: '1月', value: 116 },
-    { date: '2月', value: 2141 },
-    { date: '3月', value: 1232 },
-    { date: '4月', value: 234 },
-    { date: '5月', value: 5467 },
-    { date: '6月', value: 342 },
-  ];
+  const { loading, data, run } = useRequest(anomalyCensus, { manual: true });
+
+  const submit = (year) => {
+    run({ data: { beginTime: year } });
+  };
+  useEffect(() => {
+    submit(year);
+  }, [year]);
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  const yearData = ToolUtil.isObject(data);
+  const datas = Object.keys(yearData).map(item => ({ date: item, value: yearData[item] }));
 
   return <div onClick={() => {
-    history.push('/Report/SkuErrorData');
+    const pathname = history.location.pathname;
+    const url = '/Report/SkuErrorData';
+    if (pathname !== url) {
+      history.push(url);
+    }
   }}>
     <Canvas pixelRatio={window.devicePixelRatio} height={200}>
-      <Chart data={data}>
+      <Chart data={datas}>
         <Axis
           field='date'
           tickCount={12}
@@ -31,7 +51,7 @@ const ErrorSku = () => {
         <Axis field='value' tickCount={5} />
         <Line x='date' y='value' />
         <Tooltip />
-        {data.map((record) => {
+        {datas.map((record) => {
           return (
             <TextGuide
               key={record.date}

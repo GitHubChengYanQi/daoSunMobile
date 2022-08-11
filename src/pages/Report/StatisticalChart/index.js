@@ -13,8 +13,8 @@ const StatisticalChart = () => {
 
 
   const extra = () => {
-    return <Space>常用列表 <Switch
-      style={{ '--height': '24px', '--width': '64px' }}
+    return <Space align='center'>常用列表 <Switch
+      style={{ '--height': '24px', '--width': '38px' }}
       onChange={(checked) => {
 
       }} /></Space>;

@@ -8,18 +8,12 @@ import style from '../StatisticalChart/index.less';
 import { ToolUtil } from '../../components/ToolUtil';
 import { RightOutline } from 'antd-mobile-icons';
 import TaskStatisicalChart from '../components/TaskStatisicalChart';
+import { startList } from '../../Work/ProcessTask/ProcessList';
+import { history } from 'umi';
 
 const TaskData = () => {
 
-  const tabs = [
-    { title: '入库' },
-    { title: '出库' },
-    { title: '盘点' },
-    { title: '养护' },
-    { title: '调拨' },
-  ];
-
-  const [data, setData] = useState([1, 2]);
+  const [data, setData] = useState([]);
 
   return <>
     <MyNavBar title='任务统计' />
@@ -27,12 +21,20 @@ const TaskData = () => {
       <TaskStatisicalChart />
     </MyCard>
     <MyCard title='任务明细'>
-      <MyList data={data}>
+      <MyList api={startList} data={data} getData={setData}>
         {
           data.map((item, index) => {
-            return <div key={index} className={ToolUtil.classNames(style.flexCenter, style.orderItem)}>
-              <div className={style.row}>xxx的记录单 / 113213</div>
-              <div className={style.time}><Space>{MyDate.Show(new Date())}<RightOutline /></Space></div>
+            const receipts = item.receipts || {};
+            const coding = receipts.coding;
+            return <div
+              key={index}
+              className={ToolUtil.classNames(style.flexCenter, style.orderItem)}
+              onClick={() => {
+                history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+              }}
+            >
+              <div className={style.row}><span className={style.title}>{item.taskName}</span> <br /> {coding}</div>
+              <div className={style.time}><Space>{MyDate.Show(item.createTime)}<RightOutline /></Space></div>
             </div>;
           })
         }

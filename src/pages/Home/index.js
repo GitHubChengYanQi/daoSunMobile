@@ -14,6 +14,7 @@ import InventoryRotation from '../Report/components/InventoryRotation';
 import WorkEfficiency from '../Report/components/WorkEfficiency';
 import ErrorSku from '../Report/components/ErrorSku';
 import { useHistory } from 'react-router-dom';
+import ReportSwiper from '../Report/components/ReportSwiper';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
@@ -78,64 +79,12 @@ const Home = (props) => {
     </div>
     <Card
       className={style.dataCard}
-      title={<div className={style.cardTitle}>{dataTitle}</div>}
+      title={<div className={style.cardTitle}>数据看板</div>}
       extra={<SetOutline style={{ color: '#257BDE', fontSize: 16 }} />}
       bodyClassName={style.cardBody}
       headerClassName={style.cardHeader}
     >
-      <Swiper loop autoplay onIndexChange={(index) => {
-        let title = '';
-        switch (index) {
-          case 0:
-            title = '资产状况数据看板';
-            break;
-          case 1:
-            title = '物料分析';
-            break;
-          case 2:
-            title = '库存轮转';
-            break;
-          case 3:
-            title = '工作效率';
-            break;
-          case 4:
-            title = '异常物料';
-            break;
-          default:
-            break;
-        }
-        setDataTitle(title);
-      }}>
-        <Swiper.Item key='0'>
-          <div className={style.data}>
-            <div className={style.dataShowLeft}>
-              <span>总资产：<span className={style.red}>￥1023200.00</span></span>
-              <Badge color='#F04864' text={<span className={style.dataValue}><span>账户余额</span><span
-                className={style.fontSize12}>￥7256.36</span></span>} />
-              <Badge color='#1890FF' text={<span className={style.dataValue}><span>库存总额</span><span
-                className={style.fontSize12}>￥3536.66</span></span>} />
-              <Badge color='#13C2C2' text={<span className={style.dataValue}><span>固定资产</span><span
-                className={style.fontSize12}>￥5000.00</span></span>} />
-              <Badge color='#FACC14' text={<span className={style.dataValue}><span>应付欠款</span><span
-                className={style.fontSize12}>￥8565.78</span></span>} />
-              {/*<MoreOutline className={style.allData} />*/}
-            </div>
-            <DataShow />
-          </div>
-        </Swiper.Item>
-        <Swiper.Item key='1'>
-          <MaterialAnalysis />
-        </Swiper.Item>
-        <Swiper.Item key='2'>
-          <InventoryRotation />
-        </Swiper.Item>
-        <Swiper.Item key='3'>
-          <WorkEfficiency />
-        </Swiper.Item>
-        <Swiper.Item key='4'>
-          <ErrorSku />
-        </Swiper.Item>
-      </Swiper>
+      <ReportSwiper />
     </Card>
     <Card
       className={style.dataCard}
@@ -174,4 +123,4 @@ const Home = (props) => {
   </div>;
 };
 
-export default connect(({ qrCode,data }) => ({ qrCode,data }))(Home);
+export default connect(({ qrCode, data }) => ({ qrCode, data }))(Home);

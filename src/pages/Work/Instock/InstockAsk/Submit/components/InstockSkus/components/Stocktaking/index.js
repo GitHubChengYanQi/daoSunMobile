@@ -54,7 +54,7 @@ const Stocktaking = (
       extra={<div className={style.method}>
         <Switch
           checked={value.method === 'OpenDisc'}
-          style={{ '--height': '24px', '--width': '64px' }}
+          style={{ '--height': '24px', '--width': '38px' }}
           onChange={(checked) => {
             onChange({ ...value, method: checked ? 'OpenDisc' : 'DarkDisk' });
           }} />
@@ -66,7 +66,7 @@ const Stocktaking = (
       extra={<div className={style.mode}>
         <Switch
           checked={value.mode === 'staticState'}
-          style={{ '--height': '24px', '--width': '64px' }}
+          style={{ '--height': '24px', '--width': '38px' }}
           onChange={(checked) => {
             onChange({ ...value, mode: checked ? 'staticState' : 'dynamic' });
           }} />

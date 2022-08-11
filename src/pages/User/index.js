@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { history, useModel } from 'umi';
 import { Avatar } from 'antd-mobile';
 import style from './index.less';
@@ -8,23 +8,41 @@ import cookie from 'js-cookie';
 import Icon from '../components/Icon';
 import MyRemoveButton from '../components/MyRemoveButton';
 import MyList from '../components/MyList';
-import StepList from '../Receipts/ReceiptsDetail/components/Dynamic/components/StepList';
 import MyCard from '../components/MyCard';
+import { ToolUtil } from '../components/ToolUtil';
 
-const info = { url: '/rest/system/currentUserInfo', method: 'POST' };
-const dynamic = { url: '/remarks/personalDynamic', method: 'POST' };
 
-const User = () => {
+const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
+const selfDynamic = { url: '/dynamic/lsitBySelf', method: 'POST' };
+const userDynamic = { url: '/dynamic/ListByUser', method: 'POST' };
 
-  const { loading, data } = useRequest(info);
+const User = ({ userId }) => {
 
-  const [dynamicData,setDynamicData] = useState();
+  const [userData, setUserData] = useState({});
+
+  const { loading, run } = useRequest(getUserInfo, {
+    manual: true,
+    onSuccess: (res) => {
+      const user = res || {};
+      setUserData({
+        avatar: res.avatar,
+        name: res.name,
+        deptName: user.deptName,
+        positionNames: user.positionNames,
+      });
+    },
+  });
+  const [dynamicData, setDynamicData] = useState([]);
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
   const customer = state.customer || {};
   const userInfo = state.userInfo || {};
+
+  useEffect(() => {
+    run({ params: { userId: userId || userInfo.id } });
+  }, []);
 
   if (loading) {
     return <MyLoading />;
@@ -34,11 +52,11 @@ const User = () => {
     <div style={{ padding: 12 }}>
       <div className={style.card}>
         <div className={style.flexStart}>
-          <Avatar src={userInfo.avatar} style={{ '--size': '60px' }} />
+          <Avatar src={userData.avatar} style={{ '--size': '60px' }} />
           <div className={style.customerName}>
             {customer.customerName}
           </div>
-          <MyRemoveButton
+          {!userId && <MyRemoveButton
             className={style.outLogin}
             icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24 }} />}
             content='是否退出登录'
@@ -46,19 +64,36 @@ const User = () => {
               cookie.remove('cheng-token');
               history.push('/Login');
             }}
-          />
+          />}
         </div>
         <div className={style.userInfo}>
-          <div className={style.name}>{userInfo.name}</div>
+          <div className={style.name}>{userData.name}</div>
           <div className={style.dept}>
-            {data.deptName} - {data.positionNames}
+            {userData.deptName} - {userData.positionNames}
           </div>
         </div>
       </div>
 
-      <MyCard title='个人动态' bodyClassName={style.dynamicContent} className={style.dynamic} headerClassName={style.dynamicHeader}>
-        <MyList api={dynamic} data={dynamicData} getData={setDynamicData}>
-          <StepList className={style.description} imgHidden nameHidden remarks={dynamicData} />
+      <MyCard
+        title='个人动态'
+        bodyClassName={style.dynamicContent}
+        className={style.dynamic}
+        headerClassName={style.dynamicHeader}
+      >
+        <MyList
+          api={userId ? userDynamic : selfDynamic}
+          params={{ userId }}
+          data={dynamicData}
+          getData={setDynamicData}
+        >
+          {
+            dynamicData.map((item, index) => {
+              return <div key={index} className={style.dynamicItem}>
+                <div>{item.type}{item.sourceName}</div>
+                <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
+              </div>;
+            })
+          }
         </MyList>
       </MyCard>
     </div>

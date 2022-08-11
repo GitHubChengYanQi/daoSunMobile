@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyCard from '../../components/MyCard';
 import Stock from '../components/Stock';
 import MyNavBar from '../../components/MyNavBar';
@@ -8,6 +8,9 @@ import style from '../StatisticalChart/index.less';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyEmpty from '../../components/MyEmpty';
+import MyAntPopup from '../../components/MyAntPopup';
+import InkindList from './components/InkindList';
+import { ToolUtil } from '../../components/ToolUtil';
 
 export const stockDetails = { url: '/stockDetails/detailed', method: 'GET' };
 
@@ -15,12 +18,10 @@ const StockData = () => {
 
   const { loading, data } = useRequest(stockDetails);
 
+  const [inkindIds, setInkindIds] = useState([]);
+
   if (loading) {
     return <MyLoading skeleton />;
-  }
-
-  if (!data) {
-    return <MyEmpty />;
   }
 
   return <>
@@ -30,8 +31,9 @@ const StockData = () => {
     </MyCard>
 
     <MyCard title='分类明细' bodyClassName={style.stockBody}>
+      {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
       {
-        data.map((item, index) => {
+        ToolUtil.isArray(data).map((item, index) => {
           return <MyCard
             className={style.card}
             headerClassName={style.header}
@@ -52,7 +54,7 @@ const StockData = () => {
                 <span className='numberRed'>{item.errorCount}</span>件
               </div>
               <LinkButton disabled={item.errorCount === 0} onClick={() => {
-                console.log(item.errorInkindIds);
+                setInkindIds(item.errorInkindIds);
               }}>查看异常件</LinkButton>
             </div>
 
@@ -60,6 +62,10 @@ const StockData = () => {
         })
       }
     </MyCard>
+
+    <MyAntPopup title='异常件明细' visible={inkindIds.length > 0} onClose={() => setInkindIds([])}>
+      <InkindList inkindIds={inkindIds} />
+    </MyAntPopup>
   </>;
 };
 

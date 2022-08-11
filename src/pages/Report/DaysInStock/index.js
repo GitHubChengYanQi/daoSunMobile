@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyCard from '../../components/MyCard';
 import InventoryRotation from '../components/InventoryRotation';
 import MyNavBar from '../../components/MyNavBar';
@@ -8,12 +8,25 @@ import style from '../StatisticalChart/index.less';
 
 const DaysInStock = () => {
 
-  const date = ['一个月内', '三个月内', '六个月内', '长期呆滞'];
+  const years = ['1个月内', '3个月内', '6个月内', '长期呆滞'];
+
+  const [data, setData] = useState([]);
+
+  const [skuClass, setSkuClass] = useState([]);
 
   return <>
     <MyNavBar title='在库天数' />
     <MyCard title='分析图表'>
-      <InventoryRotation />
+      <InventoryRotation onChange={(data) => {
+        const skuClass = [];
+        data.forEach(item => {
+          if (!skuClass.includes(item.name)) {
+            skuClass.push(item.name);
+          }
+        });
+        setSkuClass(skuClass);
+        setData(data);
+      }} />
     </MyCard>
 
     <MyCard title='物料明细' extra={<Space>
@@ -21,9 +34,9 @@ const DaysInStock = () => {
       <div><MyCheck>查看件数</MyCheck></div>
     </Space>}>
       <div className={style.tr}>
-        <div className={style.tdTitle} style={{height:32}} />
+        <div className={style.tdTitle} style={{ height: 32 }} />
         {
-          date.map((item, index) => {
+          years.map((item, index) => {
             return <div key={index} className={style.td}>
               {item}
             </div>;
@@ -31,15 +44,16 @@ const DaysInStock = () => {
         }
       </div>
       {
-        [1, 2, 3].map((item, index) => {
-          return <div key={index} className={style.tr}>
-            <div key={index} className={style.tdTitle}>
-              {item}
+        skuClass.map((skuClassItem, skuClassIndex) => {
+          return <div key={skuClassIndex} className={style.tr}>
+            <div key={skuClassIndex} className={style.tdTitle}>
+              {skuClassItem}
             </div>
             {
-              date.map((item, index) => {
-                return <div key={index} className={style.td}>
-                  123
+              years.map((yearItem, yearIndex) => {
+                const { value } = data.filter(item => item.month === yearItem && item.name === skuClassItem)[0] || {};
+                return <div key={yearIndex} className={style.td}>
+                  {value || 0}
                 </div>;
               })
             }

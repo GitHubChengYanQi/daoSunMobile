@@ -22,7 +22,7 @@ const Stock = () => {
     return <MyLoading skeleton />;
   }
 
-  if (!data) {
+  if (!stockData) {
     return <MyEmpty />;
   }
 
@@ -34,24 +34,32 @@ const Stock = () => {
   const normalPercent = parseInt((getData('normal').number / getData('stockCount').number) * 100);
 
   return <div className={style.flexCenter} onClick={() => {
-    history.push('/Report/StockData');
+    const pathname = history.location.pathname;
+    const url = '/Report/StockData';
+    if (pathname !== url) {
+      history.push(url);
+    }
   }}>
     <div className={style.flexGap}>
       <div style={{ fontSize: 14 }}>全部库存
         <span className='numberBlue' style={{ fontSize: 16 }}>{getData('skuNumber').number}</span>类
         <span className='numberBlue' style={{ fontSize: 16 }}>{getData('stockCount').number}</span> 件
       </div>
-      <div>
+      <div className={style.row}>
         <span style={{ backgroundColor: '#257BDE' }} className={style.dian} />
-        正常 <span className='numberBlue'>{getData('normal').typeNum}</span>类
-        <span className='numberBlue'>{getData('normal').number}</span> 件
-        ({normalPercent}%)
+        <div>
+          正常 <span className='numberBlue'>{getData('normal').typeNum}</span>类
+          <span className='numberBlue'>{getData('normal').number}</span> 件
+          ({normalPercent}%)
+        </div>
       </div>
-      <div>
+      <div className={style.row}>
         <span style={{ backgroundColor: '#FA5151' }} className={style.dian} />
-        异常 <span className='numberBlue'>{getData('error').typeNum}</span>类
-        <span className='numberBlue'>{getData('error').number}</span> 件
-        ({100 - normalPercent}%)
+        <div>
+          异常 <span className='numberBlue'>{getData('error').typeNum}</span>类
+          <span className='numberBlue'>{getData('error').number}</span> 件
+          ({100 - normalPercent}%)
+        </div>
       </div>
     </div>
     <Canvas pixelRatio={window.devicePixelRatio} width={150} height={150}>

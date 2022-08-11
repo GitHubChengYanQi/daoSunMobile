@@ -3,12 +3,15 @@ import Canvas from '@antv/f2-react';
 import { Chart, Axis, Interval, TextGuide } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { Swiper } from 'antd-mobile';
+import { PageIndicator, Swiper } from 'antd-mobile';
 import { useHistory } from 'react-router-dom';
 
 const spectaculars = { url: '/asynTask/spectaculars', method: 'POST' };
 
-const MaterialAnalysis = () => {
+const MaterialAnalysis = (
+  {
+    noIndicator,
+  }) => {
 
   const history = useHistory();
 
@@ -50,11 +53,19 @@ const MaterialAnalysis = () => {
   }
 
   return <div onClick={() => {
-    history.push('/Report/MaterialAnalysisData');
+    const pathname = history.location.pathname;
+    const url = '/Report/MaterialAnalysisData';
+    if (pathname !== url) {
+      history.push(url);
+    }
   }}>
-    <Swiper loop autoplay onIndexChange={(index) => {
+    <Swiper
+      indicator={(total, current) => noIndicator ? null : <PageIndicator style={{justifyContent: 'center'}} total={total} current={current} />}
+      loop
+      autoplay
+      onIndexChange={(index) => {
 
-    }}>
+      }}>
       {
         Object.keys(data).map((item, index) => {
           const options = data[item] || [];

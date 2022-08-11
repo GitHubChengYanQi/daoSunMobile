@@ -125,7 +125,7 @@ const StocktakingAsk = ({ createType }) => {
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}
       extra={
-        <Switch style={{ '--height': '24px', '--width': '64px' }} checked={params.all} onChange={(checked) => {
+        <Switch style={{ '--height': '24px', '--width': '38px' }} checked={params.all} onChange={(checked) => {
           setParams({ ...params, all: checked, mode: checked ? 'staticState' : 'dynamic' });
         }}
         />
