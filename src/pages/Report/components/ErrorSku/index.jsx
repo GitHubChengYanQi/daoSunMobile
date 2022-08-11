@@ -1,53 +1,55 @@
 import Canvas from '@antv/f2-react';
-import { Chart, Interval, Axis, Legend } from '@antv/f2';
+import { Chart, Tooltip, Axis, Line, TextGuide } from '@antv/f2';
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 const ErrorSku = () => {
 
-  const types = [{ type: '数量', values: [128, 32] }, { type: '其他', values: [32, 12] }];
+  const history = useHistory();
 
-  const months = ['入库', '盘点'];
+  const data = [
+    { date: '1月', value: 116 },
+    { date: '2月', value: 2141 },
+    { date: '3月', value: 1232 },
+    { date: '4月', value: 234 },
+    { date: '5月', value: 5467 },
+    { date: '6月', value: 342 },
+  ];
 
-  const data = [];
-  types.forEach(typeItem => {
-    months.forEach((item, index) => {
-      data.push({ date: item, name: typeItem.type, value: typeItem.values[index] });
-    });
-  });
-  return <Canvas pixelRatio={window.devicePixelRatio}>
-    <Chart data={data}>
-      <Axis field='date' />
-      <Axis field='value' />
-      <Legend
-        position='top'
-        style={{
-          justifyContent: 'space-around',
-        }}
-        triggerMap={{
-          press: (items, records, legend) => {
-            const map = {};
-            items.forEach((item) => (map[item.name] = this.clone(item)));
-            records.forEach((record) => {
-              map[record.type].value = record.value;
-            });
-            legend.setItems(this.values(map));
-          },
-          pressend: (items, records, legend) => {
-            legend.setItems(items);
-          },
-        }}
-      />
-      <Interval
-        x='date'
-        y='value'
-        color='name'
-        adjust={{
-          type: 'dodge',
-          marginRatio: 0.05, // 设置分组间柱子的间距
-        }}
-      />
-    </Chart>
-  </Canvas>;
+  return <div onClick={() => {
+    history.push('/Report/SkuErrorData');
+  }}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+      <Chart data={data}>
+        <Axis
+          field='date'
+          tickCount={12}
+          style={{
+            label: { align: 'between' },
+          }}
+        />
+        <Axis field='value' tickCount={5} />
+        <Line x='date' y='value' />
+        <Tooltip />
+        {data.map((record) => {
+          return (
+            <TextGuide
+              key={record.date}
+              records={[record]}
+              content={record.value}
+              offsetY={-10}
+              style={{
+                fill: '#EA0000',
+                fontSize: '20px',
+                textBaseline: 'middle',
+                textAlign: 'center',
+              }}
+            />
+          );
+        })}
+      </Chart>
+    </Canvas>
+  </div>;
 };
 
 export default ErrorSku;

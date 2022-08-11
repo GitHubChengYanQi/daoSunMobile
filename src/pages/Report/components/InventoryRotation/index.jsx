@@ -1,59 +1,69 @@
 import React from 'react';
 import Canvas from '@antv/f2-react';
-import { Chart, Interval,  Axis, Legend } from '@antv/f2';
+import { Chart, Interval, PieLabel } from '@antv/f2';
+import { useHistory } from 'react-router-dom';
 
 const InventoryRotation = () => {
 
-  const skuClass = [
-    { name: '零件', values: [250, 198, 156, 65] },
-    { name: '外购件', values: [385, 226, 128, 69] },
-    { name: '部件', values: [52, 12, 2, 1] },
-    { name: '虚拟件', values: [38, 24, 6, 4] },
-    { name: '标件', values: [78, 26, 15, 12] }];
+  const history = useHistory();
 
-  const date = ['1个月内', '3个月内', '6个月内', '长期呆滞'];
+  const data = [
+    { name: '长期呆滞', number: 78, const: 'const',  },
+    { name: '六个月内', number: 353, const: 'const',  },
+    { name: '三个月内', number: 1213, const: 'const',  },
+    { name: '一个月内', number: 234, const: 'const',  },
+  ];
 
-  const data = [];
-  skuClass.forEach(typeItem => {
-    date.forEach((item, index) => {
-      data.push({ name:typeItem.name , month: item, value: typeItem.values[index] });
-    });
-  });
-
-  return <Canvas pixelRatio={window.devicePixelRatio}>
-    <Chart data={data}>
-      <Axis field='name' />
-      <Axis field='value' />
-      <Legend
-        position='top'
-        style={{
-          justifyContent: 'space-around',
+  return <div  onClick={() => {
+    history.push('/Report/DaysInStock');
+  }}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+      <Chart
+        data={data}
+        coord={{
+          type: 'polar',
+          transposed: true,
+          innerRadius: 0.5,
+          radius: 0.6,
         }}
-        triggerMap={{
-          press: (items, records, legend) => {
-            const map = {};
-            items.forEach((item) => (map[item.month] = this.clone(item)));
-            records.forEach((record) => {
-              map[record.type].value = record.value;
-            });
-            legend.setItems(this.values(map));
-          },
-          pressend: (items, records, legend) => {
-            legend.setItems(items);
-          },
-        }}
-      />
-      <Interval
-        x='name'
-        y='value'
-        color='month'
-        adjust={{
-          type: 'dodge',
-          marginRatio: 0.05, // 设置分组间柱子的间距
-        }}
-      />
-    </Chart>
-  </Canvas>;
+        scale={{}}
+      >
+        <Interval
+          x="const"
+          y="number"
+          adjust="stack"
+          color={{
+            field: 'name',
+            range: [
+              '#1890FF',
+              '#13C2C2',
+              '#2FC25B',
+              '#FACC14',
+            ],
+          }}
+        />
+        <PieLabel
+          label1={(data) => {
+            return {
+              text: data.name,
+              fill: '#808080',
+            };
+          }}
+          label2={(data) => {
+            return {
+              fill: '#000000',
+              text: data.number.toFixed(2),
+              fontWeight: 500,
+              fontSize: 10,
+            };
+          }}
+          onClick={(data) => {
+            console.log(data);
+          }}
+        />
+      </Chart>
+    </Canvas>
+  </div>;
 };
 
 export default InventoryRotation;

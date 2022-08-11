@@ -76,8 +76,8 @@ const Maintenanceing = (
     setBrands(newBrands);
   };
 
-  const submit = (maintenanceLogParams) => {
-    setComplete(maintenanceLogParams.map(item => {
+  const submit = (maintenanceLogDetailParams) => {
+    setComplete(maintenanceLogDetailParams.map(item => {
       return {
         brandId: item.brandId,
         number: item.number,
@@ -87,7 +87,7 @@ const Maintenanceing = (
       data: {
         maintenanceId,
         enclosure: files,
-        maintenanceLogParams,
+        maintenanceLogDetailParams,
       },
     });
   };
