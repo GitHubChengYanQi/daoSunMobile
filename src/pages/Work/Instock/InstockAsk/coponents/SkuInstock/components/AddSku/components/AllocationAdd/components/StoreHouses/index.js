@@ -36,15 +36,14 @@ const StoreHouses = (
 
   const [storeHouses, setStoreHouses] = useState([]);
 
-  const { loading: storeHouseLoaing, run: getStoreHouse } = useRequest(storeHouseSelect, {
-    manual: true,
-    onSuccess: (res) => {
-      setStoreHouses(res || []);
-      if (!open) {
-        setSelectStore(true);
-      }
-    },
-  });
+  const { loading: storeHouseLoaing, run: getStoreHouse } = useRequest(storeHouseSelect, { manual: true });
+
+  const storeFormat = (res, open) => {
+    setStoreHouses(res || []);
+    if (!open) {
+      setSelectStore(true);
+    }
+  };
 
   const change = (newData = []) => {
     let number = 0;
@@ -246,7 +245,9 @@ const StoreHouses = (
   useEffect(() => {
     if (open) {
       if (out) {
-        getStoreHouse();
+        getStoreHouse().then((res) => {
+          storeFormat(res, true);
+        });
       } else {
         run({
           data: {
@@ -343,7 +344,9 @@ const StoreHouses = (
           return;
         }
         if (out) {
-          getStoreHouse();
+          getStoreHouse().then((res) => {
+            storeFormat(res);
+          });
         } else {
           run({
             data: {
