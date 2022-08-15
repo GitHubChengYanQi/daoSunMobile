@@ -16,7 +16,7 @@ const ReportSwiper = (
 
 
   return <>
-    <Swiper loop onIndexChange={(index) => {
+    <Swiper loop autoplay onIndexChange={(index) => {
       let title = '';
       switch (index) {
         case 0:
