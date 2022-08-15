@@ -64,7 +64,6 @@ export async function getInitialState() {
 
       await wxTicket();
       const userInfo = await getUserInfo();
-      const customer = await userCustomer();
 
       // type不存在
       if (!IsDev() && userInfo.name === '程彦祺') {
@@ -83,7 +82,6 @@ export async function getInitialState() {
         ...publicInfo,
         init: true,
         userInfo,
-        customer,
       };
     }
   }

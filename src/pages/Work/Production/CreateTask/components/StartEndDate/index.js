@@ -5,6 +5,9 @@ import { MyDate } from '../../../../../components/MyDate';
 import LinkButton from '../../../../../components/LinkButton';
 
 export const getMinTime = (minTime) => {
+  if (!minTime) {
+    return minTime;
+  }
   if (minTime.getMinutes() >= 45) {
     minTime = MyDate.formatDate(minTime.setHours(minTime.getHours() + 1));
     minTime = MyDate.formatDate(minTime.setMinutes(0));
@@ -19,6 +22,8 @@ const StartEndDate = (
     },
     min,
     className,
+    textAlign,
+    minWidth,
   }) => {
 
 
@@ -28,7 +33,7 @@ const StartEndDate = (
 
   return <>
     <div
-      style={{ display: 'inline-block', minWidth: 100, textAlign: 'right' }}
+      style={{ display: 'inline-block', minWidth: minWidth || 100, textAlign: textAlign || 'right' }}
       className={className}
       onClick={() => {
         ref.current.open();

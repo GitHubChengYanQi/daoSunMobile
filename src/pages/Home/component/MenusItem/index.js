@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Menus from '../Menus';
 
 const MenusItem = (
@@ -11,8 +11,6 @@ const MenusItem = (
   },
 ) => {
 
-  const [visible, setVisible] = useState();
-
   return <>
 
     <Menus
@@ -21,15 +19,6 @@ const MenusItem = (
       name={name}
       disabled={disabled}
       fontSize={fontSize}
-      onClick={(code) => {
-        switch (code) {
-          case 'curingAsk':
-            setVisible(code);
-            return true;
-          default:
-            break;
-        }
-      }}
     />
 
   </>;

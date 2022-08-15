@@ -54,8 +54,9 @@ const SelectStoreHouse = () => {
 
   const { loading: detailLoading, run: getDetail, refresh } = useRequest(detailApi, {
     manual: true,
-    onSuccess: (res) => {
-      setUser({ id: res.userId });
+    onSuccess: (res = {}) => {
+      const user = res.userResult || {};
+      setUser({ id: user.userId, name: user.name, avatar: user.avatar });
       const detail = res || {};
       const askSkus = getStartData(detail.detailResults);
       const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');

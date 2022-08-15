@@ -35,12 +35,18 @@ const AllocationAsk = ({ createType }) => {
 
   const [selectStore, setSelectStore] = useState();
 
-  const { loading: storeHouseLoaing, data: storeHouses } = useRequest(storeHouseSelect, {
+  const { loading: storeHouseLoaing, data: storeHouses, run: getStoreHouses } = useRequest(storeHouseSelect, {
+    manual: true,
     onSuccess: (res) => {
-      if (query.storeHouseId) {
-        const storeHouse = ToolUtil.isArray(res).filter(item => item.value === query.storeHouseId)[0];
-        setParams({ ...params, storeHouse });
+      let storeHouse = {};
+      if (ToolUtil.isArray(res).length === 1) {
+        storeHouse = res[0];
       }
+      setParams({
+        askType: 'allocation',
+        allocationType: 'out',
+        storeHouse,
+      });
     },
   });
 
@@ -124,7 +130,15 @@ const AllocationAsk = ({ createType }) => {
   const [allocationView, setAllocationView] = useState();
 
   useEffect(() => {
-    setParams({ askType: query.askType || 'allocation', allocationType: query.allocationType || 'out' });
+    if (query.storeHouseId) {
+      setParams({
+        askType: query.askType || 'allocation',
+        allocationType: query.allocationType || 'out',
+        storeHouse: { label: query.storeHouse, value: query.storeHouseId },
+      });
+    } else {
+      getStoreHouses();
+    }
   }, []);
 
   const createTypeData = (item = {}) => {
@@ -152,7 +166,7 @@ const AllocationAsk = ({ createType }) => {
     return <MyLoading skeleton />;
   }
 
-  if (ToolUtil.isArray(storeHouses).length === 0) {
+  if (!query.storeHouseId && ToolUtil.isArray(storeHouses).length === 0) {
     return <MyEmpty description='暂无仓库' />;
   }
 
@@ -171,7 +185,7 @@ const AllocationAsk = ({ createType }) => {
           const positions = brandItem.positions || [];
           if (positions.length > 0) {
             positions.forEach(positionItem => {
-              if (positionItem.checked){
+              if (positionItem.checked) {
                 skuAndNumbers.push({
                   skuId: item.skuId,
                   brandId: brandItem.brandId,
@@ -273,8 +287,8 @@ const AllocationAsk = ({ createType }) => {
         countNumber={countNumber}
       />}
       <MyCard
-        titleBom={<Title className={style.title}>申请类型 <span>*</span></Title>}
-        extra={query.allocationType ?
+        titleBom={<Title className={style.title}>申请类型 <span hidden={query.askType}>*</span></Title>}
+        extra={query.askType ?
           (params.askType === 'allocation' ? '调拨' : '移库')
           :
           <div className={style.radios}>
@@ -298,7 +312,7 @@ const AllocationAsk = ({ createType }) => {
       />
       <MyCard
         hidden={params.askType === 'moveLibrary'}
-        titleBom={<Title className={style.title}>调拨类型 <span>*</span></Title>}
+        titleBom={<Title className={style.title}>调拨类型 <span hidden={query.allocationType}>*</span></Title>}
         extra={query.allocationType ?
           (params.allocationType === 'out' ? '调出' : '调入')
           :
@@ -323,7 +337,7 @@ const AllocationAsk = ({ createType }) => {
       />
 
       <MyCard
-        titleBom={<Title className={style.title}>仓库 <span>*</span></Title>}
+        titleBom={<Title className={style.title}>仓库 <span hidden={query.storeHouseId}>*</span></Title>}
         extra={query.storeHouseId ? ToolUtil.isObject(params.storeHouse).label : <div onClick={() => {
           setSelectStore(true);
         }}>
