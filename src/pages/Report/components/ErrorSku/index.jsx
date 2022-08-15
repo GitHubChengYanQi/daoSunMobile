@@ -11,6 +11,7 @@ export const anomalyCensus = { url: '/anomaly/anomalyCensus', method: 'POST' };
 const ErrorSku = (
   {
     year,
+    height,
   },
 ) => {
 
@@ -39,7 +40,7 @@ const ErrorSku = (
       history.push(url);
     }
   }}>
-    <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
       <Chart data={datas}>
         <Axis
           field='date'

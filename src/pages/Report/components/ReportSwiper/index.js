@@ -47,19 +47,19 @@ const ReportSwiper = (
         <Stock />
       </Swiper.Item>
       <Swiper.Item key='2'>
-        <ErrorSku />
+        <ErrorSku height={150} />
       </Swiper.Item>
       <Swiper.Item key='3'>
-        <InventoryRotation />
+        <InventoryRotation height={150} />
       </Swiper.Item>
       <Swiper.Item key='4'>
-        <OrderStatisicalChart />
+        <OrderStatisicalChart height={150} />
       </Swiper.Item>
       <Swiper.Item key='5'>
-        <TaskStatisicalChart />
+        <TaskStatisicalChart height={150} />
       </Swiper.Item>
       <Swiper.Item key='6'>
-        <MaterialAnalysis noIndicator />
+        <MaterialAnalysis noIndicator height={150} />
       </Swiper.Item>
     </Swiper>
   </>;

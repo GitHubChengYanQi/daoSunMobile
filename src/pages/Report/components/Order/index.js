@@ -7,15 +7,17 @@ import { MyDate } from '../../../components/MyDate';
 import { RightOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import MyEmpty from '../../../components/MyEmpty';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { billPageList } from '../../OrderData';
+import { useHistory } from 'react-router-dom';
 
 export const OrderList = (
   {
     orderItem = {},
   },
 ) => {
+
+  const history = useHistory();
 
   const { loading, data } = useRequest({
     ...billPageList,
@@ -34,7 +36,9 @@ export const OrderList = (
   return <MyCard
     className={style.orderItem}
     titleBom={<Divider className={style.divider} contentPosition='left'>{orderItem.title}</Divider>}
-    extra={<LinkButton>更多</LinkButton>}
+    extra={<LinkButton onClick={() => {
+      history.push(`/Report/OrderData?type=${orderItem.type}`);
+    }}>更多</LinkButton>}
   >
     {
       ToolUtil.isArray(data).map((item, index) => {

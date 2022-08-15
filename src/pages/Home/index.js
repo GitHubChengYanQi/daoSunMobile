@@ -9,6 +9,7 @@ import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
 import MenusItem from './component/MenusItem';
 import ReportSwiper from '../Report/components/ReportSwiper';
+import { useHistory } from 'react-router-dom';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
@@ -30,6 +31,8 @@ const Home = (
   const commonlyMenus = DefaultMenus({ userMenus, sysMenus });
 
   const [dataTitle, setDataTitle] = useState('库存统计');
+
+  const history = useHistory();
 
   useEffect(() => {
     if (!userMenus) {
@@ -71,7 +74,9 @@ const Home = (
     <Card
       className={style.dataCard}
       title={<div className={style.cardTitle}>{dataTitle || '库存统计'}</div>}
-      extra={<SetOutline style={{ color: '#257BDE', fontSize: 16 }} />}
+      extra={<SetOutline style={{ color: '#257BDE', fontSize: 16 }} onClick={() => {
+        history.push('/Report/StatisticalChart');
+      }} />}
       bodyClassName={style.cardBody}
       headerClassName={style.cardHeader}
     >
