@@ -12,8 +12,6 @@ import Bottom from './components/Bottom';
 import style from './index.less';
 import ReceiptData from './components/ReceiptData';
 import { ReceiptsEnums } from '../index';
-import InStockLog from './components/Log/InStockLog';
-import OutStockLog from './components/Log/OutStockLog';
 import SkuError from './components/ReceiptData/components/InstockError/components/SkuError';
 import Dynamic from './components/Dynamic';
 import MyError from '../../components/MyError';
