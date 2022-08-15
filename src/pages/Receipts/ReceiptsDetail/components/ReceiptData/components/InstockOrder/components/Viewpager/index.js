@@ -80,8 +80,9 @@ const Viewpager = (
 
   return (
     <div className={styles.wrapper} onClick={onClick}>
+      <div className={styles.make} />
       {props.map(({ x, display, scale }, i) => {
-        return <animated.div
+        return <animated.div scrollLeft={50}
           className={styles.page}
           {...bind()}
           key={i}

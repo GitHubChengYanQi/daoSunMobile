@@ -37,7 +37,6 @@ const User = ({ userId }) => {
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
-  const customer = state.customer || {};
   const userInfo = state.userInfo || {};
 
   useEffect(() => {
@@ -54,7 +53,7 @@ const User = ({ userId }) => {
         <div className={style.flexStart}>
           <Avatar src={userData.avatar} style={{ '--size': '60px' }} />
           <div className={style.customerName}>
-            {customer.customerName}
+            {state.enterpriseName || '--'}
           </div>
           {!userId && <MyRemoveButton
             className={style.outLogin}

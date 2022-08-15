@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Divider, PageIndicator, Swiper } from 'antd-mobile';
+import { Divider, PageIndicator, Swiper, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -14,6 +14,7 @@ import LinkButton from '../../../../../../../../components/LinkButton';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
+import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
@@ -24,19 +25,15 @@ const Detail = (
     hopeList = [],
     askList = [],
     carryAllocation,
-    skus = [],
     inLibraryList = [],
-    total,
     refresh = () => {
     },
   },
 ) => {
 
-  const [key, setKey] = useState(0);
+  const [key, setKey] = useState('0');
 
-  const [allSku, { toggle, setFalse }] = useBoolean();
-
-  const swiperRef = useRef();
+  const [allSku, { toggle}] = useBoolean();
 
   const { loading, run } = useRequest(transferInStorehouse, {
     manual: true,
@@ -126,48 +123,27 @@ const Detail = (
   };
 
   const tabItems = out ? [
-    { key: 'outData', title: '调出明细' },
-    { key: 'inData', title: '调入明细' },
-    { key: 'inLibrary', title: '库内调拨' },
+    { key: '0', title: '调出明细' },
+    { key: '1', title: '调入明细' },
+    { key: '2', title: '库内调拨' },
   ] : [
-    { key: 'inData', title: '调入明细' },
-    { key: 'outData', title: '调出明细' },
-    { key: 'inLibrary', title: '库内调拨' },
+    { key: '0', title: '调入明细' },
+    { key: '1', title: '调出明细' },
+    { key: '2', title: '库内调拨' },
   ];
 
-  const swiperItem = () => {
+
+  const content = () => {
     switch (key) {
-      case 0:
+      case '0':
         return askData(askList);
-      case 1:
+      case '1':
         return <Data show noLink storeHouses={hopeList} />;
-      case 2:
+      case '2':
         return inLibraryListData();
       default:
         return <MyEmpty />;
     }
-  };
-
-  const content = () => {
-    return <Swiper
-      direction='horizontal'
-      loop
-      indicator={() => null}
-      ref={swiperRef}
-      defaultIndex={key}
-      onIndexChange={index => {
-        setFalse();
-        setKey(index);
-      }}
-    >
-      {
-        tabItems.map((item, index) => {
-          return <Swiper.Item key={index}>
-            {swiperItem()}
-          </Swiper.Item>;
-        })
-      }
-    </Swiper>;
   };
 
   return <>
@@ -175,15 +151,22 @@ const Detail = (
     <MyCard
       title='任务明细'
       className={style.cardStyle}
-      headerClassName={style.headerStyle}
+      headerClassName={ToolUtil.classNames(style.headerStyle, style.borderBottom)}
       bodyClassName={style.bodyStyle}
-      extra={<div className={style.extra}>
-        <PageIndicator
-          total={3}
-          current={key}
-        />
-        {tabItems[key].title}
-      </div>}>
+      extra={<Tabs
+        style={{
+          '--title-font-size': '13px',
+        }}
+        onChange={(key) => {
+          setKey(key);
+        }}
+      >
+        {
+          tabItems.map((item) => {
+            return <Tabs.Tab {...item} />;
+          })
+        }
+      </Tabs>}>
       {content()}
     </MyCard>
 
