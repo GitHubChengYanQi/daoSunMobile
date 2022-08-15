@@ -31,7 +31,7 @@ const print = (array, index) => {
 </style>
           </head>
           <body>
-            <div style='max-width:384px;max-height: 230px;overflow-y: hidden'>${items}</div>
+            <div style='max-width:384px;max-height: 240px;overflow-y: hidden'>${items}</div>
           </body>
         </html>
 `;
