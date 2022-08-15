@@ -36,7 +36,7 @@ const Index = (props) => {
   const content = () => {
     switch (module) {
       case '/Home':
-        return <Home {...props} />;
+        return <Home setModule={setModule} />;
       case '/Report':
         return <Report />;
       case '/Message':

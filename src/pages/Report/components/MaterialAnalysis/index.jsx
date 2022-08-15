@@ -1,13 +1,20 @@
 import React from 'react';
 import Canvas from '@antv/f2-react';
-import { Chart, Timeline, Axis, Interval, TextGuide } from '@antv/f2';
+import { Chart, Axis, Interval, TextGuide } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import MyEmpty from '../../../components/MyEmpty';
+import { PageIndicator, Swiper } from 'antd-mobile';
+import { useHistory } from 'react-router-dom';
 
 const spectaculars = { url: '/asynTask/spectaculars', method: 'POST' };
 
-const MaterialAnalysis = () => {
+const MaterialAnalysis = (
+  {
+    noIndicator,
+    height,
+  }) => {
+
+  const history = useHistory();
 
   const { loading, data } = useRequest(spectaculars);
 
@@ -17,17 +24,9 @@ const MaterialAnalysis = () => {
     });
   };
 
-  const dataSort = (data) => {
-    const newData = [];
-    const keys = Object.keys(data)[0];
-    if (keys) {
-      newData.push(Object.keys(data)[0]);
-    }
-    return newData;
-  };
 
-  function Year(props) {
-    const { coord, year } = props;
+  const SkuName = (props) => {
+    const { coord, name } = props;
     const { bottom, right } = coord;
     return (
       <group>
@@ -35,7 +34,7 @@ const MaterialAnalysis = () => {
           attrs={{
             x: right,
             y: bottom,
-            text: year,
+            text: name,
             textAlign: 'end',
             textBaseline: 'bottom',
             fontSize: '40px',
@@ -44,7 +43,7 @@ const MaterialAnalysis = () => {
         />
       </group>
     );
-  }
+  };
 
   if (loading) {
     return <MyLoading skeleton />;
@@ -53,76 +52,70 @@ const MaterialAnalysis = () => {
   if (!data) {
     return <></>;
   }
-  const keys = dataSort(data);
 
-  if (keys.length === 0) {
-    return <></>;
-  }
-  return <Canvas pixelRatio={window.devicePixelRatio} height={200}>
-    <Timeline delay={10}>
-      {keys.map((year, index) => {
-        return (
-          <Chart
-            key={index}
-            data={sort(data[year]) || []}
-            coord={{
-              transposed: true,
-            }}
-          >
-            <Year year={year} />
-            <Axis field='className' />
-            <Axis
-              field='number'
-              style={{
-                label: {
-                  align: 'between',
-                },
-              }}
-            />
-            <Interval
-              x='className'
-              y='number'
-              color='className'
-              animation={{
-                appear: {
-                  easing: 'linear',
-                  duration: 0,
-                  property: ['width'],
-                  start: {
-                    width: 0,
+  return <div onClick={() => {
+    const pathname = history.location.pathname;
+    const url = '/Report/MaterialAnalysisData';
+    if (pathname !== url) {
+      history.push(url);
+    }
+  }}>
+    <Swiper
+      indicator={(total, current) => noIndicator ? null :
+        <PageIndicator style={{ justifyContent: 'center' }} total={total} current={current} />}
+      loop
+      autoplay
+      onIndexChange={(index) => {
+
+      }}>
+      {
+        Object.keys(data).map((item, index) => {
+          const options = data[item] || [];
+          if (options.length <= 0) {
+            return null;
+          }
+          return <Swiper.Item key={index}>
+            <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
+              <Chart
+                key={index}
+                data={sort(options) || []}
+                coord={{
+                  transposed: true,
+                }}
+              >
+                <SkuName name={item} />
+                <Axis field='className' style={{
+                  line: {
+                    opacity: 0,
                   },
-                },
-                update: {
-                  easing: 'linear',
-                  duration: 0,
-                  delay: 0,
-                  property: ['width'],
-                  start: {
-                    width: 0,
-                  },
-                },
-              }}
-            />
-            {data[year].map((record) => {
-              return (
-                <TextGuide
-                  key={record.className}
-                  records={[record]}
-                  content={record.number}
-                  offsetX={4}
-                  style={{
-                    fill: '#666',
-                    fontSize: '20px',
-                    textBaseline: 'middle',
-                  }}
+                }} />
+                <Interval
+                  x='className'
+                  y='number'
+                  color='className'
                 />
-              );
-            })}
-          </Chart>
-        );
-      })}
-    </Timeline>
-  </Canvas>;
+                {options.map((record) => {
+                  return (
+                    <TextGuide
+                      key={record.className}
+                      records={[record]}
+                      content={record.number}
+                      offsetX={4}
+                      style={{
+                        fill: '#666',
+                        fontSize: '20px',
+                        textBaseline: 'middle',
+                      }}
+                    />
+                  );
+                })}
+              </Chart>
+            </Canvas>
+          </Swiper.Item>;
+        })
+      }
+    </Swiper>
+  </div>;
 };
 
 export default MaterialAnalysis;

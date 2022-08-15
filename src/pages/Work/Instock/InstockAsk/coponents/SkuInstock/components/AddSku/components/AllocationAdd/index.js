@@ -41,6 +41,13 @@ const AllocationAdd = (
 
   const [brandAndPositions, setBrandAndPositions] = useState(start.brands || []);
 
+  const checkBrand = brandAndPositions.filter(item => {
+    if (item.show) {
+      return item.number > 0;
+    }
+    return false;
+  }).length > 0;
+
   const [storeHouse, setStoreHouse] = useState(end.storeHouse || []);
 
   const [total, setTotal] = useState(sku.number || 0);
@@ -91,6 +98,7 @@ const AllocationAdd = (
           }} />;
       case 'allBrand':
         return <AllBrands
+          moveLibrary={moveLibrary}
           positionsResult={sku.positionsResult || []}
           outPositionData={outPositionData}
           out={out}
@@ -150,7 +158,7 @@ const AllocationAdd = (
         />
         <div className={style.content}>
           {
-            moveLibrary ? <div style={{ paddingBottom: 8 }}>调出库位</div> : <div className={style.brandAction}>
+            moveLibrary ? <div style={{ paddingBottom: 8 }}>移出库位</div> : <div className={style.brandAction}>
               <div className={style.brandData}>
                 品牌：
                 <Button color={brandAction === 'fixedBrand' ? 'primary' : 'default'} onClick={() => {
@@ -169,9 +177,10 @@ const AllocationAdd = (
               <div className={style.total}>
                 调拨总数：<ShopNumber
                 max={out ? sku.stockNumber : undefined}
-                show={total > 0}
+                show={checkBrand}
                 value={total}
                 onChange={(number) => {
+                  setBrandAndPositions([]);
                   setTotal(number);
                 }} />
               </div>
@@ -182,6 +191,7 @@ const AllocationAdd = (
           </div>
           <div hidden={total === 0} style={{ marginTop: 24 }}>
             <StoreHouses
+              moveLibrary={moveLibrary}
               open={open}
               total={total}
               skuId={sku.skuId}

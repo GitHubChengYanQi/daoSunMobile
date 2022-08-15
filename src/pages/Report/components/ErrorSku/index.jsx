@@ -1,53 +1,76 @@
 import Canvas from '@antv/f2-react';
-import { Chart, Interval, Axis, Legend } from '@antv/f2';
-import React from 'react';
+import { Chart, Tooltip, Axis, Line, TextGuide } from '@antv/f2';
+import React, { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import { ToolUtil } from '../../../components/ToolUtil';
 
-const ErrorSku = () => {
+export const anomalyCensus = { url: '/anomaly/anomalyCensus', method: 'POST' };
 
-  const types = [{ type: '数量', values: [128, 32] }, { type: '其他', values: [32, 12] }];
+const ErrorSku = (
+  {
+    year,
+    height,
+  },
+) => {
 
-  const months = ['入库', '盘点'];
+  const history = useHistory();
 
-  const data = [];
-  types.forEach(typeItem => {
-    months.forEach((item, index) => {
-      data.push({ date: item, name: typeItem.type, value: typeItem.values[index] });
-    });
-  });
-  return <Canvas pixelRatio={window.devicePixelRatio}>
-    <Chart data={data}>
-      <Axis field='date' />
-      <Axis field='value' />
-      <Legend
-        position='top'
-        style={{
-          justifyContent: 'space-around',
-        }}
-        triggerMap={{
-          press: (items, records, legend) => {
-            const map = {};
-            items.forEach((item) => (map[item.name] = this.clone(item)));
-            records.forEach((record) => {
-              map[record.type].value = record.value;
-            });
-            legend.setItems(this.values(map));
-          },
-          pressend: (items, records, legend) => {
-            legend.setItems(items);
-          },
-        }}
-      />
-      <Interval
-        x='date'
-        y='value'
-        color='name'
-        adjust={{
-          type: 'dodge',
-          marginRatio: 0.05, // 设置分组间柱子的间距
-        }}
-      />
-    </Chart>
-  </Canvas>;
+  const { loading, data, run } = useRequest(anomalyCensus, { manual: true });
+
+  const submit = (year) => {
+    run({ data: { beginTime: year } });
+  };
+  useEffect(() => {
+    submit(year);
+  }, [year]);
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  const yearData = ToolUtil.isObject(data);
+  const datas = Object.keys(yearData).map(item => ({ date: item, value: yearData[item] }));
+
+  return <div onClick={() => {
+    const pathname = history.location.pathname;
+    const url = '/Report/SkuErrorData';
+    if (pathname !== url) {
+      history.push(url);
+    }
+  }}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
+      <Chart data={datas}>
+        <Axis
+          field='date'
+          tickCount={12}
+          style={{
+            label: { align: 'between' },
+          }}
+        />
+        <Axis field='value' tickCount={5} />
+        <Line x='date' y='value' />
+        <Tooltip />
+        {datas.map((record) => {
+          return (
+            <TextGuide
+              key={record.date}
+              records={[record]}
+              content={record.value}
+              offsetY={-10}
+              style={{
+                fill: '#EA0000',
+                fontSize: '20px',
+                textBaseline: 'middle',
+                textAlign: 'center',
+              }}
+            />
+          );
+        })}
+      </Chart>
+    </Canvas>
+  </div>;
 };
 
 export default ErrorSku;

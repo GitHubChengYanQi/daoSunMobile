@@ -62,7 +62,7 @@ export const shopCartDelete = {
 };
 
 export const shopCartEdit = {
-  url: '/shopCart/edit',
+  url: '/shopCart/applyUpdate',
   method: 'POST',
 };
 

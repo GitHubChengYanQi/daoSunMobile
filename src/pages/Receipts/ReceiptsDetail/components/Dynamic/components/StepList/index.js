@@ -14,8 +14,6 @@ const StepList = (
     },
     addComments = () => {
     },
-    imgHidden,
-    nameHidden,
     className,
   },
 ) => {
@@ -65,12 +63,12 @@ const StepList = (
 
         return <div key={index} className={ToolUtil.classNames(style.dynamic,className)} style={{ borderTop: index === 0 && 'none' }}>
 
-          <div className={style.avatar} hidden={imgHidden}>
+          <div className={style.avatar}>
             <Avatar src={user.avatar} style={{'--size':'32px'}} />
           </div>
 
           <div>
-            <div className={style.name} hidden={nameHidden || !user.name}>
+            <div className={style.name} hidden={!user.name}>
               {user.name}
             </div>
             <div className={style.description}>

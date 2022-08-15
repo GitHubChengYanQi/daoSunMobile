@@ -91,4 +91,5 @@ export const menus = [
     url:  `/Work/Stock/Task?type=${ReceiptsEnums.allocation}`,
   },
   { code: 'OutStockConfirm',icon:'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
+  { code: 'mailList', url: '/Work/MailList' },
 ];

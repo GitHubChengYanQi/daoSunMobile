@@ -1,59 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Canvas from '@antv/f2-react';
-import { Chart, Interval,  Axis, Legend } from '@antv/f2';
+import { Chart, Interval, PieLabel } from '@antv/f2';
+import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import MyEmpty from '../../../components/MyEmpty';
 
-const InventoryRotation = () => {
+export const stockSpectaculars = { url: '/asynTask/stockSpectaculars', method: 'POST' };
 
-  const skuClass = [
-    { name: '零件', values: [250, 198, 156, 65] },
-    { name: '外购件', values: [385, 226, 128, 69] },
-    { name: '部件', values: [52, 12, 2, 1] },
-    { name: '虚拟件', values: [38, 24, 6, 4] },
-    { name: '标件', values: [78, 26, 15, 12] }];
+const InventoryRotation = (
+  {
+    onChange = () => {
+    },
+    height,
+  },
+) => {
 
-  const date = ['1个月内', '3个月内', '6个月内', '长期呆滞'];
+  const history = useHistory();
 
-  const data = [];
-  skuClass.forEach(typeItem => {
-    date.forEach((item, index) => {
-      data.push({ name:typeItem.name , month: item, value: typeItem.values[index] });
-    });
+  const [data, setData] = useState([]);
+
+  const { loading } = useRequest(stockSpectaculars, {
+    onSuccess: (res) => {
+      onChange(res || []);
+      const datas = res || [];
+      const times = ['长期呆滞', '6个月内', '3个月内', '1个月内'];
+      const newData = [];
+      times.forEach(month => {
+        const values = datas.filter(item => item.month === month);
+        let number = 0;
+        values.forEach(item => number += item.value);
+        newData.push({ month, number, const: 'const' });
+      });
+      setData(newData);
+    },
   });
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
 
-  return <Canvas pixelRatio={window.devicePixelRatio}>
-    <Chart data={data}>
-      <Axis field='name' />
-      <Axis field='value' />
-      <Legend
-        position='top'
-        style={{
-          justifyContent: 'space-around',
+  if (data.length === 0) {
+    return <MyEmpty />;
+  }
+
+  return <div onClick={() => {
+    const pathname = history.location.pathname;
+    const url = '/Report/DaysInStock';
+    if (pathname !== url) {
+      history.push(url);
+    }
+  }}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
+      <Chart
+        data={data}
+        coord={{
+          type: 'polar',
+          transposed: true,
+          innerRadius: 0.5,
         }}
-        triggerMap={{
-          press: (items, records, legend) => {
-            const map = {};
-            items.forEach((item) => (map[item.month] = this.clone(item)));
-            records.forEach((record) => {
-              map[record.type].value = record.value;
-            });
-            legend.setItems(this.values(map));
-          },
-          pressend: (items, records, legend) => {
-            legend.setItems(items);
-          },
-        }}
-      />
-      <Interval
-        x='name'
-        y='value'
-        color='month'
-        adjust={{
-          type: 'dodge',
-          marginRatio: 0.05, // 设置分组间柱子的间距
-        }}
-      />
-    </Chart>
-  </Canvas>;
+        scale={{}}
+      >
+        <Interval
+          x='const'
+          y='number'
+          adjust='stack'
+          color={{
+            field: 'month',
+            range: [
+              '#1890FF',
+              '#13C2C2',
+              '#2FC25B',
+              '#FACC14',
+            ],
+          }}
+        />
+        <PieLabel
+          label1={(data) => {
+            return {
+              text: data.month,
+              fill: '#808080',
+            };
+          }}
+          label2={(data) => {
+            return {
+              fill: '#000000',
+              text: data.number,
+              fontWeight: 500,
+              fontSize: 10,
+            };
+          }}
+        />
+      </Chart>
+    </Canvas>
+  </div>;
 };
 
 export default InventoryRotation;

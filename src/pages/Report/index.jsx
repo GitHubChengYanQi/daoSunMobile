@@ -1,41 +1,32 @@
 import React from 'react';
-import MaterialAnalysis from './components/MaterialAnalysis';
+import MyCard from '../components/MyCard';
+import LinkButton from '../components/LinkButton';
+import ReportSwiper from './components/ReportSwiper';
+import Order from './components/Order';
 import style from './index.less';
-import Title from '../components/Title';
-import InventoryRotation from './components/InventoryRotation';
-import WorkEfficiency from './components/WorkEfficiency';
-import ErrorSku from './components/ErrorSku';
+import TaskList from './components/TaskList';
+import { useHistory } from 'react-router-dom';
 
 const Report = () => {
 
+  const history = useHistory();
+
   return <div className={style.report}>
-    <div className={style.Item}>
-      <div>
-        <Title>物料分析</Title>
-      </div>
-      <MaterialAnalysis />
-    </div>
+    <MyCard title='图表统计' extra={<LinkButton onClick={() => {
+      history.push('/Report/StatisticalChart');
+    }}>更多</LinkButton>}>
+      <ReportSwiper />
+    </MyCard>
 
-    <div className={style.Item}>
-      <div>
-        <Title>库存轮转</Title>
-      </div>
-      <InventoryRotation />
-    </div>
+    <MyCard title='单据统计' bodyClassName={style.bodyClassName}>
+      <Order />
+    </MyCard>
 
-    <div className={style.Item}>
-      <div>
-        <Title>工作效率</Title>
-      </div>
-      <WorkEfficiency />
-    </div>
-
-    <div className={style.Item}>
-      <div>
-        <Title>异常物料</Title>
-      </div>
-      <ErrorSku />
-    </div>
+    <MyCard title='任务统计' extra={<LinkButton onClick={() => {
+      history.push('/Work/ProcessTask');
+    }}>更多</LinkButton>}>
+      <TaskList />
+    </MyCard>
 
   </div>;
 };

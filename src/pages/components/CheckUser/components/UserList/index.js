@@ -15,6 +15,9 @@ export const userList = { url: '/formUser/userList', method: 'POST' };
 
 const UserList = (
   {
+    show,
+    onShow = () => {
+    },
     multiple,
     hiddenCurrentUser,
     value = [],
@@ -92,7 +95,7 @@ const UserList = (
   }
 
   return (
-    <div style={{ height: '80vh' }}>
+    <div style={{ height: `calc(100vh - ${ToolUtil.isQiyeWeixin() ? 75 : 120}px)` }}>
       <MySearch value={name} onChange={setName} onClear={() => setData(init)} onSearch={(name) => {
         const newData = [];
         init.forEach(item => {
@@ -104,41 +107,46 @@ const UserList = (
         });
         setData(newData);
       }} />
-      {data.length === 0 ? <MyEmpty description='暂无人员' /> : <IndexBar style={{ paddingBottom: 60 }} ref={indexBarRef}>
-        {data.map(group => {
-          const { title, items } = group;
-          return (
-            <IndexBar.Panel
-              index={title}
-              title={title}
-              key={title}
-            >
-              <List>
-                {items.map((item, index) => {
-                  return <List.Item
-                    arrow={checked(item.id) ?
-                      <CheckOutline style={{ color: 'var(--adm-color-primary)' }} /> : false}
-                    key={index}
-                    onClick={() => {
-                      if (checked(item.id)) {
-                        setUsers(multiple ? users.filter(user => user.id !== item.id) : []);
-                      } else {
-                        setUsers(multiple ? [...users, item] : [item]);
-                      }
-                    }}
-                  >
-                    <UserName user={item} size={40} />
-                  </List.Item>;
-                })}
-              </List>
-            </IndexBar.Panel>
-          );
-        })}
-      </IndexBar>}
+      {data.length === 0 ? <MyEmpty description='暂无人员' /> :
+        <IndexBar style={{ paddingBottom: show ? 0 : 60 }} ref={indexBarRef}>
+          {data.map(group => {
+            const { title, items } = group;
+            return (
+              <IndexBar.Panel
+                index={title}
+                title={title}
+                key={title}
+              >
+                <List>
+                  {items.map((item, index) => {
+                    return <List.Item
+                      arrow={checked(item.id) ?
+                        <CheckOutline style={{ color: 'var(--adm-color-primary)' }} /> : false}
+                      key={index}
+                      onClick={() => {
+                        if (show) {
+                          onShow(item);
+                          return;
+                        }
+                        if (checked(item.id)) {
+                          setUsers(multiple ? users.filter(user => user.id !== item.id) : []);
+                        } else {
+                          setUsers(multiple ? [...users, item] : [item]);
+                        }
+                      }}
+                    >
+                      <UserName user={item} size={40} />
+                    </List.Item>;
+                  })}
+                </List>
+              </IndexBar.Panel>
+            );
+          })}
+        </IndexBar>}
 
-      <BottomButton leftOnClick={onClose} rightDisabled={users.length === 0} rightOnClick={() => {
+      {!show && <BottomButton leftOnClick={onClose} rightDisabled={users.length === 0} rightOnClick={() => {
         onChange(users);
-      }} />
+      }} />}
     </div>
   );
 };

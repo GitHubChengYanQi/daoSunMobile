@@ -18,6 +18,7 @@ export const storehouse = { url: '/stockDetails/getStockNumberBySkuId', method: 
 
 const StoreHouses = (
   {
+    moveLibrary,
     open,
     total,
     skuId,
@@ -44,39 +45,51 @@ const StoreHouses = (
       setSelectStore(true);
     }
   };
+  const getBrandNumbers = (brands, brandNumbers) => {
+    brands.forEach(item => {
+      if (item.checked) {
+        const brandNumberIds = brandNumbers.map(item => item.id);
+        const brandNumberIndex = brandNumberIds.indexOf(item.brandId);
+        if (brandNumberIndex === -1) {
+          brandNumbers.push({ id: item.brandId, number: item.number });
+        } else {
+          const brandNumber = brandNumbers[brandNumberIndex];
+          brandNumbers[brandNumberIndex] = { ...brandNumber, number: brandNumber.number + item.number };
+        }
+      }
+    });
+  };
 
   const change = (newData = []) => {
-    let number = 0;
+    let brandNumbers = [];
     newData.forEach(item => {
       if (item.show) {
         if (item.id === storehouseId) {
           const positions = item.positions || [];
           positions.forEach(item => {
             const brands = item.brands || [];
-            brands.forEach(item => {
-              if (item.checked) {
-                number += item.number;
-              }
-            });
+            getBrandNumbers(brands, brandNumbers);
           });
         } else {
           const brands = item.brands || [];
-          brands.forEach(item => {
-            if (item.checked) {
-              number += item.number;
-            }
-          });
+          getBrandNumbers(brands, brandNumbers);
         }
       }
     });
-    if (number > total) {
+    let overflow = false;
+    brandNumbers.forEach(item => {
+      const brand = initBrands.filter(initItem => initItem.brandId === item.id)[0] || {};
+      if (item.number > brand.maxNumber) {
+        overflow = true;
+      }
+    });
+    if (overflow) {
       Message.toast('不能超出指定数量！');
       return false;
     }
     onChange(newData);
     return true;
   };
-
   let checkedPosi = 0;
   const initBrands = [];
   brandAndPositions.length > 0 ? brandAndPositions.forEach(item => {
@@ -317,7 +330,7 @@ const StoreHouses = (
         <div className={style.positionName} onClick={() => {
           brandChange({ checked: !brandItem.checked, number: 1 }, storehouseId, brandItem.brandId, positionId);
         }}>
-          <MyCheck fontSize={16} checked={brandItem.checked} />
+          <MyCheck fontSize={14} checked={brandItem.checked} />
           <span>{brandItem.brandName}<span hidden={out}>({brandItem.maxNumber})</span></span>
         </div>
 
@@ -333,10 +346,9 @@ const StoreHouses = (
       </div>;
     });
   };
-
   return <div className={style.action} style={{ padding: 0, overflow: 'visible' }}>
     <div className={style.storeHouseTitle}>
-      指定调{out ? '入' : '出'}库
+      指定{moveLibrary ? '移' : '调'}{out ? '入' : '出'}库(位)
       <div className={style.select}>
         选择<PlusCircleFilled onClick={() => {
         if (data.length > 0) {
@@ -424,7 +436,7 @@ const StoreHouses = (
           name: storeHouse.label,
           number: storeHouse.number,
           show: true,
-          brands: brands.map(item => ({ ...item, checked: false })),
+          brands: brands.map(item => ({ ...item, checked: moveLibrary })),
           positions: ToolUtil.isArray(storeHouse.positions).map(item => {
             const brands = item.brands || [];
             return { ...item, brands: brands.map(item => ({ ...item, checked: false })) };
@@ -447,7 +459,21 @@ const StoreHouses = (
       value={visible.positions || []}
       skuId={out ? undefined : skuId}
       checkShow={(item) => {
-        return (out || item.num > 0) && ToolUtil.isArray(item.loops).length === 0;
+        const checkedPositionIds = [];
+        brandAndPositions.forEach(brandItem => {
+          if (!brandItem.show) {
+            return;
+          }
+          const positions = brandItem.positions || [];
+          positions.forEach(positionItem => {
+            if (!positionItem.checked) {
+              return;
+            }
+            checkedPositionIds.push(positionItem.id);
+          });
+        });
+
+        return !checkedPositionIds.includes(item.key) && (out || item.num > 0) && ToolUtil.isArray(item.loops).length === 0;
       }}
       storehouseId={visible.id}
       onClose={() => setVisible({})}
