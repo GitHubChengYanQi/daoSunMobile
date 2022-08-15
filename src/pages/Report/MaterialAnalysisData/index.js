@@ -113,7 +113,7 @@ const MaterialAnalysisData = () => {
                           className={ToolUtil.classNames(style.flexCenter, style.skuItem)}
                         >
                           <SkuItem
-                            skuResult={{ skuName: item.skuName, spuResult: { name: item.spuName } }}
+                            skuResult={{ skuId: item.skuId, skuName: item.skuName, spuResult: { name: item.spuName } }}
                             imgSize={45}
                             className={style.row}
                           />

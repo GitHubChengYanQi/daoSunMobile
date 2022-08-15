@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { Divider, PageIndicator, Swiper, Tabs } from 'antd-mobile';
+import React, { useState } from 'react';
+import { Divider, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -26,6 +26,7 @@ const Detail = (
     askList = [],
     carryAllocation,
     inLibraryList = [],
+    distributionList = [],
     refresh = () => {
     },
   },
@@ -33,7 +34,7 @@ const Detail = (
 
   const [key, setKey] = useState('0');
 
-  const [allSku, { toggle}] = useBoolean();
+  const [allSku, { toggle }] = useBoolean();
 
   const { loading, run } = useRequest(transferInStorehouse, {
     manual: true,
@@ -44,7 +45,7 @@ const Detail = (
     },
   });
 
-  const askData = (array = []) => {
+  const askData = (array = [], view = true) => {
     return <div className={style.details}>
       {array.length === 0 && <MyEmpty />}
       {
@@ -52,7 +53,7 @@ const Detail = (
           if (!allSku && index > 2) {
             return null;
           }
-          return <AllocationSkuItem out={out} item={item} key={index} />;
+          return <AllocationSkuItem out={out} item={item} key={index} view={view} />;
         })
       }
       {array.length > 3 && <Divider className={style.allSku}>
@@ -126,10 +127,12 @@ const Detail = (
     { key: '0', title: '调出明细' },
     { key: '1', title: '调入明细' },
     { key: '2', title: '库内调拨' },
+    { key: '3', title: '未分配' },
   ] : [
     { key: '0', title: '调入明细' },
     { key: '1', title: '调出明细' },
     { key: '2', title: '库内调拨' },
+    { key: '3', title: '未分配' },
   ];
 
 
@@ -141,6 +144,8 @@ const Detail = (
         return <Data show noLink storeHouses={hopeList} />;
       case '2':
         return inLibraryListData();
+      case '3':
+        return askData(distributionList, false);
       default:
         return <MyEmpty />;
     }

@@ -113,7 +113,7 @@ export const getEndData = (array = [], endData = []) => {
             positions[positionIndex] = {
               ...position,
               number: item.number + position.number,
-              brands:  brands.map(brandItem => {
+              brands: brands.map(brandItem => {
                 const current = brandItem.brandId === item.brandId;
                 return {
                   brandId: brandItem.brandId,
@@ -203,4 +203,34 @@ export const getStoreHouse = (distributionSkus = []) => {
     });
   });
   return stores;
+};
+
+
+export const noDistribution = (hopeSkus, carry) => {
+  const newHopeSkus = [];
+  hopeSkus.forEach(item => {
+    let carryNumber = 0;
+    carry.forEach(carryItem => {
+      if (carryItem.skuId === item.skuId) {
+        carryNumber += carryItem.number;
+      }
+    });
+    const number = item.number - carryNumber;
+    if (number > 0) {
+      const storeHouse = item.storeHouse || [];
+      const newStoreHouse = storeHouse.map(item => {
+        const brands = item.brands || [];
+        const positions = item.positions || [];
+        const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
+        const newPositions = positions.map(item => {
+          const brands = item.brands || [];
+          const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
+          return { ...item, brands: newBrands };
+        });
+        return { ...item, brands: newBrands, positions: newPositions };
+      });
+      newHopeSkus.push({ ...item, number, storeHouse: newStoreHouse });
+    }
+  });
+  return newHopeSkus;
 };

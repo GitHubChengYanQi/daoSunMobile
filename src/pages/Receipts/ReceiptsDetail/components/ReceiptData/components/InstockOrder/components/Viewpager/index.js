@@ -78,23 +78,24 @@ const Viewpager = (
   }) || '';
 
 
-  return (
-    <div className={styles.wrapper} onClick={onClick}>
-      <div className={styles.make} />
-      {props.map(({ x, display, scale }, i) => {
-        return <animated.div scrollLeft={50}
-          className={styles.page}
-          {...bind()}
-          key={i}
-          style={{ display, x }}
-        >
-          <animated.div style={{ scale }}>
-            {pages[i] === 'content' && children}
-          </animated.div>
-        </animated.div>;
-      })}
-    </div>
-  );
+  return <div
+    className={styles.wrapper}
+    onClick={onClick}
+  >
+    <div className={styles.make} />
+    {props.map(({ x, display, scale }, i) => {
+      return <animated.div
+        className={styles.page}
+        {...bind()}
+        key={i}
+        style={{ display, x }}
+      >
+        <animated.div style={{ scale }}>
+          {pages[i] === 'content' && children}
+        </animated.div>
+      </animated.div>;
+    })}
+  </div>;
 };
 
 export default Viewpager;

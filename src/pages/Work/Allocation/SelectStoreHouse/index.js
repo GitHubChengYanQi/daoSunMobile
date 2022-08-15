@@ -16,7 +16,7 @@ import { Message } from '../../../components/Message';
 import {
   getEndData,
   getStartData,
-  getStoreHouse,
+  getStoreHouse, noDistribution,
 } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/getData';
 import MyAntPopup from '../../../components/MyAntPopup';
 import { ToolUtil } from '../../../components/ToolUtil';
@@ -58,40 +58,28 @@ const SelectStoreHouse = () => {
       const user = res.userResult || {};
       setUser({ id: user.userId, name: user.name, avatar: user.avatar });
       const detail = res || {};
-      const askSkus = getStartData(detail.detailResults);
+      const detailResults = detail.detailResults || [];
+      const askSkus = getStartData(detailResults);
       const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
       const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
+
+      const carryDetail = detailResults.map(item => {
+        const carrys = carry.filter(carryItem => {
+          return carryItem.status !== 0 && carryItem.skuId === item.skuId && carryItem.brandId === item.brandId;
+        });
+        let number = 0;
+        carrys.forEach(item => number += item.number);
+        return { ...item, number: item.number - number };
+      });
+
+      const waitCarry = getStartData(carryDetail);
 
       const distributionSkuIds = carry.map(item => item.skuId);
 
       const hopeSkus = getEndData(askSkus, hope);
-      const distributionSkus = getEndData(askSkus, carry.filter(item => item.status === 0)).filter(item => distributionSkuIds.includes(item.skuId));
+      const distributionSkus = getEndData(waitCarry, carry.filter(item => item.status === 0)).filter(item => distributionSkuIds.includes(item.skuId));
 
-      const newHopeSkus = [];
-      hopeSkus.forEach(item => {
-        let carryNumber = 0;
-        carry.forEach(carryItem => {
-          if (carryItem.skuId === item.skuId) {
-            carryNumber += carryItem.number;
-          }
-        });
-        const number = item.number - carryNumber;
-        if (number > 0) {
-          const storeHouse = item.storeHouse || [];
-          const newStoreHouse = storeHouse.map(item => {
-            const brands = item.brands || [];
-            const positions = item.positions || [];
-            const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
-            const newPositions = positions.map(item => {
-              const brands = item.brands || [];
-              const newBrands = brands.map(item => ({ ...item, checked: carryNumber === 0 ? item.checked : false }));
-              return { ...item, brands: newBrands };
-            });
-            return { ...item, brands: newBrands, positions: newPositions };
-          });
-          newHopeSkus.push({ ...item, number, storeHouse: newStoreHouse });
-        }
-      });
+      const newHopeSkus = noDistribution(hopeSkus, carry);
 
       const stores = getStoreHouse(distributionSkus);
 
