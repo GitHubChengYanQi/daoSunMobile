@@ -1,4 +1,5 @@
 import { Dialog, Toast } from 'antd-mobile';
+import { ToolUtil } from '../ToolUtil';
 
 let pringCount = 0;
 let canvas = [];
@@ -35,13 +36,17 @@ const print = (array, index) => {
         </html>
 `;
   });
-  const win = window.open();
-  win.document.write(canvas[index]);
-  setTimeout(() => {
-    win.print();
-    Toast.clear();
-  }, 0);
-  window.Android && window.Android.nPrint(canvas[index]);
+  if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+    window.Android && window.Android.nPrint(canvas[index]);
+  } else { //pc
+    const win = window.open();
+    win.document.write(canvas[index]);
+    setTimeout(() => {
+      win.print();
+      Toast.clear();
+    }, 0);
+  }
+
 };
 
 const nextPrint = () => {
