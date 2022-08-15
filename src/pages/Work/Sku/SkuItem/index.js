@@ -4,6 +4,7 @@ import MyEllipsis from '../../../components/MyEllipsis';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../components/ToolUtil';
+import { useHistory } from 'react-router-dom';
 
 const SkuItem = (
   {
@@ -22,10 +23,6 @@ const SkuItem = (
     moreDom,
     moreClick = () => {
     },
-    imgOnClick = () => {
-    },
-    onClick = () => {
-    },
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -35,9 +32,15 @@ const SkuItem = (
   const spuResult = skuResult.spuResult || {};
   const unitResult = spuResult.unitResult || {};
 
+  const history = useHistory();
+
+  const view = () => {
+    history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
+  };
+
   return <>
     <div className={ToolUtil.classNames(style.skuList, className)}>
-      <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }} onClick={imgOnClick}>
+      <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }} onClick={view}>
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
         <div
           hidden={hiddenNumber}
@@ -48,13 +51,12 @@ const SkuItem = (
       </div>
       <div
         className={style.sku}
-        onClick={onClick}
         style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
-        <MyEllipsis width='100%'>
+        <MyEllipsis width='100%' onClick={view}>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
         </MyEllipsis>
-        <div className={style.describe}>
+        <div className={style.describe} onClick={view}>
           <MyEllipsis width='100%'>
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>
