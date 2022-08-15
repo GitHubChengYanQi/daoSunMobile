@@ -9,6 +9,7 @@ import MyPositions from '../../../../../../../../../../../components/MyPositions
 
 const AllBrands = (
   {
+    moveLibrary,
     storehouseName,
     outPositionData = [],
     positionsResult = [],
@@ -41,7 +42,7 @@ const AllBrands = (
   };
 
   useEffect(() => {
-    if (value.length > 0){
+    if (value.length > 0) {
       setPositions(value[0].positions);
       return;
     }
@@ -74,7 +75,7 @@ const AllBrands = (
 
   return <>
 
-    <div className={style.allBrands} style={{padding:0}}>
+    <div className={style.allBrands} style={{ padding: 0 }}>
       {
         positions.map((positionItem, positionIndex) => {
 
@@ -90,11 +91,12 @@ const AllBrands = (
               }
             }}>
               <MyCheck checked={positionItem.checked} />
-              <span>{positionItem.name} ({positionItem.number})</span>
+              <span>{positionItem.name} <span hidden={!out}>({positionItem.number})</span></span>
             </div>
 
             <div hidden={!positionItem.checked}>
               <ShopNumber
+                show={moveLibrary}
                 max={out ? positionItem.number : undefined}
                 value={positionItem.outStockNumber || 0}
                 onChange={(num) => {

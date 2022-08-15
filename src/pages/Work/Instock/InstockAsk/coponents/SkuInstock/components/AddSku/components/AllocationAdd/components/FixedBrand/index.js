@@ -142,7 +142,6 @@ const FixedBrand = (
 
                     <div hidden={!positionItem.checked}>
                       <ShopNumber
-                        min={0}
                         max={out ? positionItem.number : undefined}
                         value={positionItem.outStockNumber || 0}
                         onChange={(num) => {

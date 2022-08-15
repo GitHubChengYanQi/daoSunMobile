@@ -41,6 +41,7 @@ const AddSku = (
   const close = () => {
     setVisible(false);
     onClose();
+    setOver(false);
   };
 
   const [data, setData] = useState({});

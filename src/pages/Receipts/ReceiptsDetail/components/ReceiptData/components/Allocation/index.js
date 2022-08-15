@@ -152,7 +152,7 @@ const Allocation = (
       refresh={refresh}
     />
 
-    <MyCard hidden={!data.userId} title='负责人' extra={<UserName />} />
+    <MyCard hidden={!data.userId} title='负责人' extra={<UserName user={data.userResult} />} />
     <MyCard title='申请类型' extra={data.type === 'allocation' ? '调拨' : '移库'} />
     <MyCard title='调拨类型' extra={data.allocationType === 2 ? '调出' : '调入'} />
     <MyCard title='仓库' extra={ToolUtil.isObject(data.storehouseResult).name} />
