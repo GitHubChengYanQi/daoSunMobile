@@ -1,26 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import style from './index.less';
-import { Card, Grid, Swiper } from 'antd-mobile';
+import { Card, Grid } from 'antd-mobile';
 import { SetOutline } from 'antd-mobile-icons';
-import DataShow from './component/DatsShow';
-import { Avatar, Badge } from 'antd';
+import { Avatar } from 'antd';
 import Menus, { borderStyle } from './component/Menus';
 import { useModel } from 'umi';
 import { connect } from 'dva';
 import DefaultMenus from './component/DefaultMenus';
 import MenusItem from './component/MenusItem';
-import MaterialAnalysis from '../Report/components/MaterialAnalysis';
-import InventoryRotation from '../Report/components/InventoryRotation';
-import WorkEfficiency from '../Report/components/WorkEfficiency';
-import ErrorSku from '../Report/components/ErrorSku';
-import { useHistory } from 'react-router-dom';
 import ReportSwiper from '../Report/components/ReportSwiper';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
-const Home = (props) => {
-
-  const history = useHistory();
+const Home = (
+  {
+    setModule = () => {
+    },
+    ...props
+  }) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -32,7 +29,7 @@ const Home = (props) => {
 
   const commonlyMenus = DefaultMenus({ userMenus, sysMenus });
 
-  const [dataTitle, setDataTitle] = useState('资产状况数据看板');
+  const [dataTitle, setDataTitle] = useState('库存统计');
 
   useEffect(() => {
     if (!userMenus) {
@@ -63,13 +60,7 @@ const Home = (props) => {
         </div>
       </div>
       <div onClick={() => {
-        // props.dispatch({
-        //   type: 'qrCode/scanCodeState',
-        //   payload: {
-        //     route: '/User',
-        //   },
-        // });
-        // history.push('/');
+        setModule('/User');
       }}>
         <Avatar
           style={{ backgroundColor: '#98BFEB' }}
@@ -79,12 +70,12 @@ const Home = (props) => {
     </div>
     <Card
       className={style.dataCard}
-      title={<div className={style.cardTitle}>数据看板</div>}
+      title={<div className={style.cardTitle}>{dataTitle || '库存统计'}</div>}
       extra={<SetOutline style={{ color: '#257BDE', fontSize: 16 }} />}
       bodyClassName={style.cardBody}
       headerClassName={style.cardHeader}
     >
-      <ReportSwiper />
+      <ReportSwiper titleChange={setDataTitle} />
     </Card>
     <Card
       className={style.dataCard}
