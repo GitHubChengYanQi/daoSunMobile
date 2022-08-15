@@ -12,6 +12,7 @@ const AllocationSkuItem = (
   {
     item,
     out,
+    view: viewAction = true,
   },
 ) => {
 
@@ -37,7 +38,7 @@ const AllocationSkuItem = (
           skuResult={item.skuResult}
           otherData={[
             item.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
-            <LinkButton onClick={() => setView(true)}>查看详情</LinkButton>,
+            viewAction && <LinkButton onClick={() => setView(true)}>查看详情</LinkButton>,
           ]} />
       </div>
       <div className={style.skuNumber} style={{ padding: 0 }}>

@@ -4,7 +4,7 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import BottomButton from '../../../../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
-import { getEndData, getStartData, getStoreHouse } from './getData';
+import { getEndData, getStartData, getStoreHouse, noDistribution } from './getData';
 import { UserName } from '../../../../../../components/User';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import Detail from './components/Detail';
@@ -36,6 +36,7 @@ const Allocation = (
   const [hopeList, setHopeList] = useState([]);
   const [askList, setAskList] = useState([]);
   const [inLibraryList, setInLibraryList] = useState([]);
+  const [distributionList, setDistributionList] = useState([]);
 
   const out = data.allocationType !== 1;
 
@@ -131,12 +132,15 @@ const Allocation = (
       });
     });
 
+    const distributionList = noDistribution(hopeSkus, carry);
+
     const stores = getStoreHouse(distributionSkus);
 
     setAskList(hopeSkus);
     setHopeList(stores);
     setInLibraryList(inLibrary);
     setSkus(distributionSkus);
+    setDistributionList(distributionList);
   }, [success]);
 
   return <>
@@ -148,6 +152,7 @@ const Allocation = (
       hopeList={hopeList}
       askList={askList}
       inLibraryList={inLibraryList}
+      distributionList={distributionList}
       out={out}
       refresh={refresh}
     />

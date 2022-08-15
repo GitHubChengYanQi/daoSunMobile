@@ -57,6 +57,7 @@ const InventoryRotation = (
           type: 'polar',
           transposed: true,
           innerRadius: 0.5,
+          radius: 0.6,
         }}
         scale={{}}
       >

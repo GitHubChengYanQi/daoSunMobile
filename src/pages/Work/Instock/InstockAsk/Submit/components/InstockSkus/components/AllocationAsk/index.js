@@ -38,7 +38,7 @@ const AllocationAsk = ({ createType }) => {
   const { loading: storeHouseLoaing, data: storeHouses, run: getStoreHouses } = useRequest(storeHouseSelect, {
     manual: true,
     onSuccess: (res) => {
-      let storeHouse = {};
+      let storeHouse;
       if (ToolUtil.isArray(res).length === 1) {
         storeHouse = res[0];
       }
