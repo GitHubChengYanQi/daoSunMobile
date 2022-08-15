@@ -11,6 +11,7 @@ const spectaculars = { url: '/asynTask/spectaculars', method: 'POST' };
 const MaterialAnalysis = (
   {
     noIndicator,
+    height,
   }) => {
 
   const history = useHistory();
@@ -60,7 +61,8 @@ const MaterialAnalysis = (
     }
   }}>
     <Swiper
-      indicator={(total, current) => noIndicator ? null : <PageIndicator style={{justifyContent: 'center'}} total={total} current={current} />}
+      indicator={(total, current) => noIndicator ? null :
+        <PageIndicator style={{ justifyContent: 'center' }} total={total} current={current} />}
       loop
       autoplay
       onIndexChange={(index) => {
@@ -73,7 +75,7 @@ const MaterialAnalysis = (
             return null;
           }
           return <Swiper.Item key={index}>
-            <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+            <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
               <Chart
                 key={index}
                 data={sort(options) || []}

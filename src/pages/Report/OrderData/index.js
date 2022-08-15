@@ -16,7 +16,9 @@ const OrderData = () => {
 
   const history = useHistory();
 
-  const [tab, setTab] = useState({ title: '入库', type: 'instockLog' });
+  const { type: orderType } = history.location.query;
+
+  const [type, setType] = useState(orderType || 'instockLog');
 
   const listRef = useRef();
 
@@ -28,9 +30,9 @@ const OrderData = () => {
     { title: '调拨', type: 'allocationLog' },
   ];
 
-  const getTab = (type) => {
-    const tab = tabs.filter(item => item.type === type)[0];
-    return tab || {};
+  const getTitle = (type) => {
+    const tab = tabs.filter(item => item.type === type)[0] || {};
+    return tab.title;
   };
 
   const [data, setData] = useState([1, 2]);
@@ -43,9 +45,9 @@ const OrderData = () => {
       <OrderStatisicalChart />
     </MyCard>
     <MyCard title='单据明细'>
-      <Tabs onChange={(key) => {
-        listRef.current.submit({type:key});
-        setTab(getTab(key));
+      <Tabs activeKey={type} onChange={(key) => {
+        listRef.current.submit({ type: key });
+        setType(key);
       }}>
         {
           tabs.map((item) => {
@@ -60,7 +62,7 @@ const OrderData = () => {
         ref={listRef}
         api={billPageList}
         data={data}
-        params={{ type: tab.type }}
+        params={{ type }}
         getData={setData}
         response={(res) => {
           setTotal(res.count);
@@ -76,7 +78,7 @@ const OrderData = () => {
               }}
             >
               <div className={ToolUtil.classNames(style.row, style.title)}>
-                {tab.title}记录单 /{item.coding}
+                {getTitle(type)}记录单 /{item.coding}
               </div>
               <div className={style.time}><Space>{MyDate.Show(item.createTime)}<RightOutline /></Space></div>
             </div>;

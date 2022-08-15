@@ -51,7 +51,7 @@ const TaskStatisicalChart = () => {
     }
   }}>
     <div className={style.flexGap}>
-      <div style={{ fontSize: 14 }}>全部任务
+      <div className={style.row} style={{ fontSize: 14 }}>全部任务
         <span className='numberBlue' style={{ fontSize: 16 }}>{total || 0}</span>个
       </div>
       <div className={style.row}>
@@ -69,7 +69,7 @@ const TaskStatisicalChart = () => {
         <div>
           超期 <span className='numberRed'>{taskDetail.overdueCount}</span>个
         </div>
-        ({(100 - startingPercent - donePercent)|| 0}%)
+        ({(100 - startingPercent - donePercent) || 0}%)
       </div>
     </div>
     <Canvas pixelRatio={window.devicePixelRatio} width={150} height={150}>

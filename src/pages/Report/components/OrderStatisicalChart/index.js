@@ -7,7 +7,7 @@ import { MyLoading } from '../../../components/MyLoading';
 
 export const billCountView = { url: '/statisticalView/billCountView', method: 'GET' };
 
-const OrderStatisicalChart = () => {
+const OrderStatisicalChart = ({height}) => {
 
   const history = useHistory();
 
@@ -71,7 +71,7 @@ const OrderStatisicalChart = () => {
       history.push(url);
     }
   }}>
-    <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
       <Chart
         data={data}
         coord={{

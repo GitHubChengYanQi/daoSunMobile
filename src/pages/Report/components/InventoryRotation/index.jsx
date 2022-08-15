@@ -12,6 +12,7 @@ const InventoryRotation = (
   {
     onChange = () => {
     },
+    height,
   },
 ) => {
 
@@ -27,9 +28,6 @@ const InventoryRotation = (
       const newData = [];
       times.forEach(month => {
         const values = datas.filter(item => item.month === month);
-        if (values.length === 0) {
-          return;
-        }
         let number = 0;
         values.forEach(item => number += item.value);
         newData.push({ month, number, const: 'const' });
@@ -37,7 +35,6 @@ const InventoryRotation = (
       setData(newData);
     },
   });
-
   if (loading) {
     return <MyLoading skeleton />;
   }
@@ -53,14 +50,13 @@ const InventoryRotation = (
       history.push(url);
     }
   }}>
-    <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+    <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
       <Chart
         data={data}
         coord={{
           type: 'polar',
           transposed: true,
           innerRadius: 0.5,
-          radius: 0.6,
         }}
         scale={{}}
       >
