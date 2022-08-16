@@ -513,7 +513,7 @@ const Error = (
                   }}
                 />}
               </div>
-              <div hidden={inkinds.length > 0} className={style.inKindRow}>
+              <div hidden={inkinds.length > 0 || show} className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
                   添加异常
                 </Label>

@@ -40,7 +40,7 @@ const UploadFile = (
 
   const [visible, { setTrue, setFalse }] = useBoolean();
 
-  const [files, setFiles] = useState(value);
+  const [files, setFiles] = useState(ToolUtil.isArray(value));
 
   useEffect(() => {
     if (!noDefault && files.length === 0 && value.length > 0) {
