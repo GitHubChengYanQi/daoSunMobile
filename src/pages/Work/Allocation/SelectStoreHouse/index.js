@@ -112,6 +112,8 @@ const SelectStoreHouse = () => {
     <MyNavBar title={params.title} />
     <div className={style.content}>
       <User
+        show={user.id}
+        noRequired={user.id}
         value={user.id ? [{
           id: user.id,
           name: user.name,

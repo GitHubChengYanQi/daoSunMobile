@@ -155,45 +155,48 @@ const SkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{items.length}</span>类<span>{countNumber}</span>件
       </div>}>
-      {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
-      {
-        items.map((item, index) => {
+      <MyLoading loading={loading}>
+        {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+        {
+          items.map((item, index) => {
 
-          if (!allSku && index >= 3) {
-            return null;
-          }
+            if (!allSku && index >= 3) {
+              return null;
+            }
 
-          if (!action || item.status !== 0) {
-            return <InSkuItem item={item} data={items} key={index} />;
-          }
+            if (!action || item.status !== 0) {
+              return <InSkuItem item={item} data={items} key={index} />;
+            }
 
-          return <div key={index}>
-            <Viewpager
-              currentIndex={index}
-              onLeft={() => {
-                addInstockShop(1, item, index, 'waitInStock');
-              }}
-              onRight={() => {
-                setVisible(item);
-              }}
-            >
-              <InSkuItem index={index} item={item} data={items} key={index} />
-            </Viewpager>
-          </div>;
-        })
-      }
-      {items.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
+            return <div key={index}>
+              <Viewpager
+                currentIndex={index}
+                onLeft={() => {
+                  addInstockShop(1, item, index, 'waitInStock');
+                }}
+                onRight={() => {
+                  setVisible(item);
+                }}
+              >
+                <InSkuItem index={index} item={item} data={items} key={index} />
+              </Viewpager>
+            </div>;
+          })
+        }
+        {items.length > 3 && <Divider className={style.allSku}>
+          <div onClick={() => {
+            toggle();
+          }}>
+            {
+              allSku ?
+                <UpOutline />
+                :
+                <DownOutline />
+            }
+          </div>
+        </Divider>}
+      </MyLoading>
+
     </MyCard>
 
     <Popup

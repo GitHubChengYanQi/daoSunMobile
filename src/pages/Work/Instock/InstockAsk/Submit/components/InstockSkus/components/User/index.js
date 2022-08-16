@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
 import CheckUser from '../../../../../../../../components/CheckUser';
-import { RightOutline, UserAddOutline } from 'antd-mobile-icons';
+import { UserAddOutline } from 'antd-mobile-icons';
 import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
 import { UserName } from '../../../../../../../../components/User';
@@ -15,6 +15,7 @@ const User = (
     onChange = () => {
     },
     noRequired,
+    show,
   },
 ) => {
 
@@ -24,15 +25,17 @@ const User = (
     <MyCard
       titleBom={<Title className={style.title}>{title}<span hidden={noRequired}>*</span></Title>}
       extra={!multiple && <div className={style.alignCenter} onClick={() => {
-        userRef.current.open();
+        !show && userRef.current.open();
       }}>
         {value.length > 0 ?
           <div className={style.alignCenter}>
             <UserName user={value[0]} />
           </div>
           :
-          <LinkButton onClick={() => userRef.current.open()}><UserAddOutline
-            className={style.addUserIcon} /></LinkButton>
+          <LinkButton>
+            <UserAddOutline
+              className={style.addUserIcon} />
+          </LinkButton>
         }
       </div>}
     >
@@ -44,7 +47,12 @@ const User = (
             </div>;
           })
         }
-        <LinkButton onClick={() => userRef.current.open()}><UserAddOutline className={style.addUserIcon} /></LinkButton>
+        <LinkButton
+          onClick={() => !show && userRef.current.open()}>
+          <UserAddOutline
+            className={style.addUserIcon}
+          />
+        </LinkButton>
       </div>}
     </MyCard>
 

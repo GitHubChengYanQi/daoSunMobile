@@ -313,7 +313,7 @@ const SkuShop = (
             />
             <div className={style.data}>
               <div className={style.type}>{taskData().type}</div>
-              <div className={style.shopNumber}>已选<span>{skus.length}</span>类</div>
+              <div className={style.shopNumber}>已选<span className={style.number}>{skus.length}</span>类</div>
             </div>
           </div>
           {ERPEnums.outStock === type && <LinkButton onClick={() => {

@@ -16,6 +16,8 @@ export const MyLoading = (
     imgWidth = 46,
     downLoading,
     refresh,
+    loading,
+    children,
   },
 ) => {
 
@@ -86,6 +88,13 @@ export const MyLoading = (
       </div>
     </div>;
   };
+
+  if (children) {
+    return <div className={style.spinLoading}>
+      <div hidden={!loading} className={style.spin}>{Loading()}</div>
+      {children}
+    </div>;
+  }
 
   if (skeleton) {
     return <div className={style.skeleton} style={skeletonStyle}>

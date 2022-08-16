@@ -2,6 +2,7 @@ import React from 'react';
 import style from '../../index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import { Button } from 'antd-mobile';
 
 const ErrorItem = (
   {
@@ -11,12 +12,14 @@ const ErrorItem = (
     totalTitle,
     index,
     otherData,
+    show,
+    buttonHidden,
   },
 ) => {
 
 
   return <div key={index}>
-    <div className={style.skuItem} onClick={onClick}>
+    <div className={style.skuItem}>
       <div className={style.sku}>
         <SkuItem
           extraWidth='100px'
@@ -29,6 +32,7 @@ const ErrorItem = (
         <div className={style.status}>
           · {item.status === 99 ? '已处理' : '处理中'}
         </div>
+        {!buttonHidden && <Button className={style.action} onClick={onClick}>{show ? '查看' : '处理'}</Button>}
       </div>
     </div>
 

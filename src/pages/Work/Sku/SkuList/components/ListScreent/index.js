@@ -21,6 +21,7 @@ const ListScreent = (
     },
     screening,
     top,
+    className,
   },
 ) => {
 
@@ -72,7 +73,7 @@ const ListScreent = (
 
   return <div
     style={{ top }}
-    className={style.screen}
+    className={ToolUtil.classNames(style.screen,className)}
     ref={screenRef}
   >
     <div className={style.stockNumber}>{numberTitle}</div>

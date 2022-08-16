@@ -32,7 +32,7 @@ const InstockError = (
 
   const masterUser = ToolUtil.isObject(data.masterUser);
 
-  const errorTypeData = (item={}) => {
+  const errorTypeData = (item = {}) => {
     switch (data.type) {
       case 'instock':
         return {
@@ -45,20 +45,20 @@ const InstockError = (
             {masterUser.name && `${masterUser.name || '-'}的入库申请 / ${instockOrder.coding || '-'}`}
           </LinkButton>,
           totalTitle: '申请总数',
-          otherData:[
+          otherData: [
             ToolUtil.isObject(item.customer).customerName,
             ToolUtil.isObject(item.brand).brandName || '无品牌',
-          ]
+          ],
         };
       case 'Stocktaking':
       case 'timelyInventory':
         return {
           receipts: masterUser.name && `${masterUser.name || '-'}的盘点申请 / ${instockOrder.coding || '-'}`,
           totalTitle: '账面库存',
-          otherData:[
+          otherData: [
             ToolUtil.isObject(item.brand).brandName || '无品牌',
             ToolUtil.isObject(item.positionsResult).name,
-          ]
+          ],
         };
       default:
         return {};
@@ -76,10 +76,10 @@ const InstockError = (
               item={item}
               key={index}
               index={index}
+              show={data.complete === 99}
+              buttonHidden={!((getAction('verify').id && permissions) || data.complete === 99)}
               onClick={() => {
-                if ((getAction('verify').id && permissions) || data.complete === 99) {
-                  setVisible(item.anomalyId);
-                }
+                setVisible(item.anomalyId);
               }} />;
           })
         }
