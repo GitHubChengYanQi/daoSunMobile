@@ -19,6 +19,7 @@ import { Clock } from '../../../../../../../../components/MyDate';
 import PrintCode from '../../../../../../../../components/PrintCode';
 import jrQrcode from 'jr-qrcode';
 import { useRequest } from '../../../../../../../../../util/Request';
+import { MyLoading } from '../../../../../../../../components/MyLoading';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 
@@ -99,48 +100,50 @@ const OutSkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>}>
-      {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
-      {
-        outSkus.map((item, index) => {
+      <MyLoading loading={loading}>
+        {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+        {
+          outSkus.map((item, index) => {
 
-          const complete = item.complete;
-          const prepare = item.prepare;
+            const complete = item.complete;
+            const prepare = item.prepare;
 
-          if (!allSku && index >= 3) {
-            return null;
-          }
+            if (!allSku && index >= 3) {
+              return null;
+            }
 
-          if (!action || complete || prepare || !item.stockNumber) {
-            return <OutSkuItem data={data} item={item} key={index} />;
-          }
+            if (!action || complete || prepare || !item.stockNumber) {
+              return <OutSkuItem data={data} item={item} key={index} />;
+            }
 
-          return <div key={index}>
-            <Viewpager
-              currentIndex={index}
-              onLeft={() => {
-                setVisible(item);
-              }}
-              onRight={() => {
-                setVisible(item);
-              }}
-            >
-              <OutSkuItem data={data} item={item} key={index} />
-            </Viewpager>
-          </div>;
-        })
-      }
-      {data.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
+            return <div key={index}>
+              <Viewpager
+                currentIndex={index}
+                onLeft={() => {
+                  setVisible(item);
+                }}
+                onRight={() => {
+                  setVisible(item);
+                }}
+              >
+                <OutSkuItem data={data} item={item} key={index} />
+              </Viewpager>
+            </div>;
+          })
+        }
+        {data.length > 3 && <Divider className={style.allSku}>
+          <div onClick={() => {
+            toggle();
+          }}>
+            {
+              allSku ?
+                <UpOutline />
+                :
+                <DownOutline />
+            }
+          </div>
+        </Divider>}
+      </MyLoading>
     </MyCard>
 
     <Popup

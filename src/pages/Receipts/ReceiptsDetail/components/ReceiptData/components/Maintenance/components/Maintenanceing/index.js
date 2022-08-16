@@ -59,7 +59,7 @@ const Maintenanceing = (
       setBrands(brands.map(item => {
         return {
           ...item,
-          curingNumber: item.number,
+          curingNumber: 0,
         };
       }));
     }
@@ -120,7 +120,7 @@ const Maintenanceing = (
           const checked = item.checked;
           return <div key={index} className={style.brandItem}>
             <div className={style.brand} onClick={() => {
-              brandsChange({ checked: !checked }, index);
+              brandsChange({ checked: !checked, curingNumber: checked ? 0 : item.number }, index);
             }}>
               <MyCheck fontSize={22} checked={checked} />
               <span>{item.brandName}</span>
@@ -136,7 +136,6 @@ const Maintenanceing = (
                 }}
               />
             </div>
-
           </div>;
         })
       }
@@ -162,10 +161,11 @@ const Maintenanceing = (
           if (brands.length > 0) {
             let number = 0;
             brands.forEach(item => number += item.number);
+            const curingNumber = item.curingNumber + number;
             return {
               ...item,
               checked: true,
-              curingNumber: number,
+              curingNumber: item.number >= curingNumber ? curingNumber : item.number,
             };
           }
           return item;
