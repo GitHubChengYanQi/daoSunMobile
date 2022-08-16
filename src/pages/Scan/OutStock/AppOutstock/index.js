@@ -149,7 +149,6 @@ const AppOutstock = (props) => {
 
   if (loading || outstockLoading){
     return  <MyLoading
-      loading={loading || outstockLoading}
       title={loading ? '处理中...' : '出库中...'} />
   }
 

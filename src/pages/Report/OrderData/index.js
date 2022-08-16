@@ -80,6 +80,7 @@ const OrderData = () => {
         }
       </Tabs>
       <ListScreent
+        className={style.screent}
         top={ToolUtil.isQiyeWeixin() ? 0 : 45}
         screenRef={screenRef}
         screening={screening}

@@ -16,7 +16,6 @@ import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import ErrorDom from './components/ErrorDom';
 import Label from '../../../../../../../../components/Label';
-import InkindList from '../../../../../../../../components/InkindList';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -56,10 +55,10 @@ const Error = (
   useEffect(() => {
     switch (type) {
       case ReceiptsEnums.instockOrder:
-        setSku({ ...skuItem, realNumber: skuItem.number });
+        setSku({ ...skuItem, realNumber: skuItem.number,scanNumber: false, });
         break;
       case ReceiptsEnums.stocktaking:
-        setSku({ ...skuItem, realNumber: showStock ? skuItem.number : 0 });
+        setSku({ ...skuItem, realNumber: showStock ? skuItem.number : 0,scanNumber: false,});
         break;
       default:
         break;
@@ -67,9 +66,9 @@ const Error = (
   }, [skuItem.skuId]);
 
   const [inkinds, setInkinds] = useState([]);
+  const [errorInkind, setErrorInkind] = useState(false);
 
   const inkindRef = useRef();
-  const inventoryRef = useRef();
 
   const error = sku.realNumber !== sku.number || inkinds.length > 0;
 
@@ -144,6 +143,7 @@ const Error = (
       const filedUrls = ToolUtil.isArray(res.filedUrls);
       let sku = {
         ...skuItem,
+        scanNumber: false,
         number: res.needNumber,
         skuId: res.skuId,
         skuResult: res.skuResult,
@@ -257,7 +257,7 @@ const Error = (
         if (type === ReceiptsEnums.instockOrder && ToolUtil.isObject(inkind.inkindDetail).stockDetails) {
           return Message.toast('物料已入库！');
         } else {
-          setSku({ ...sku, realNumber: inkind.number || 1 });
+          setSku({ ...sku, realNumber: sku.scanNumber ? sku.realNumber + inkind.number : inkind.number, scanNumber: true });
         }
       } else {
         return Message.toast('扫描物料不符！');
@@ -388,7 +388,7 @@ const Error = (
                 value={sku.realNumber}
                 onChange={(realNumber) => {
                   setInkinds([]);
-                  setSku({ ...sku, realNumber });
+                  setSku({ ...sku, realNumber,scanNumber: false, });
                 }}
               />
               <ScanIcon onClick={() => {
@@ -456,16 +456,19 @@ const Error = (
                   value={sku.realNumber}
                   onChange={(realNumber) => {
                     setInkinds([]);
-                    setSku({ ...sku, realNumber });
+                    setSku({ ...sku, realNumber ,scanNumber: false,});
                   }}
                 />
                 <div style={{ flexGrow: 1, textAlign: 'right' }}>
-                  <ScanIcon onClick={() => inventoryRef.current.open({
-                    skuId: sku.skuId,
-                    brandId: sku.brandId,
-                    positionId: sku.positionId,
-                    skuResult,
-                  })} />
+                  <ScanIcon onClick={() => {
+                    setErrorInkind(false);
+                    inkindRef.current.open({
+                      skuId: sku.skuId,
+                      brandId: sku.brandId,
+                      positionId: sku.positionId,
+                      skuResult,
+                    });
+                  }} />
                 </div>
 
               </div>
@@ -507,12 +510,15 @@ const Error = (
                 <Button
                   className={style.addError}
                   color='danger'
-                  onClick={() => inkindRef.current.open({
-                    skuId: sku.skuId,
-                    brandId: sku.brandId,
-                    positionId: sku.positionId,
-                    skuResult,
-                  })}
+                  onClick={() => {
+                    setErrorInkind(true);
+                    inkindRef.current.open({
+                      skuId: sku.skuId,
+                      brandId: sku.brandId,
+                      positionId: sku.positionId,
+                      skuResult,
+                    });
+                  }}
                 >
                   <AddOutline />
                 </Button>
@@ -563,7 +569,10 @@ const Error = (
       inkinsChange={inkinsChange}
       type={type}
       batch={batch}
+      errorInkind={errorInkind}
+      setErrorInkind={setErrorInkind}
       inkindRef={inkindRef}
+      showStock={showStock}
     />
 
     {(
@@ -576,17 +585,6 @@ const Error = (
       anomalyTemporaryLoading
     ) &&
     <MyLoading />}
-
-    <InkindList
-      searchDisabled={showStock}
-      ref={inventoryRef}
-      onSuccess={(inkinds = []) => {
-        let realNumber = 0;
-        inkinds.forEach(item => realNumber += item.number);
-        setSku({ ...sku, realNumber });
-      }}
-    />
-
 
     {!show && errorTypeData().button}
 

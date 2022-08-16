@@ -111,6 +111,7 @@ const CheckBom = () => {
             </div>;
           })
         }
+        <div style={{height:60}} />
       </div>
     </MyCard>
 

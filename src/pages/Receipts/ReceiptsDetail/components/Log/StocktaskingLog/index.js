@@ -29,6 +29,7 @@ const StocktaskingLog = ({ detail = {} }) => {
         className={style.positionItem}
       >
         <div className={style.positionName}>
+          <Icon type='icon-pandiankuwei' />
           {positionItem.name} {storeName && '/'} {storeName}
         </div>
         <div className={style.skus}>

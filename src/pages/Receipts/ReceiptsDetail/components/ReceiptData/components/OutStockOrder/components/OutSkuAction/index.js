@@ -100,7 +100,7 @@ const OutSkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
       </div>}>
-      <MyLoading loading={loading}>
+      <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
         {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
         {
           outSkus.map((item, index) => {
@@ -211,7 +211,7 @@ const OutSkuAction = (
       className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
         <div className={style.codeTitle}>领料码</div>
-        <div style={{ position: 'relative', marginTop: 19 }}>
+        <div style={{ position: 'relative',paddingTop: 19 }}>
           <div className={style.code}>{code}</div>
           {code && !success && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
           <img src={imgSrc} alt='' width={187} />

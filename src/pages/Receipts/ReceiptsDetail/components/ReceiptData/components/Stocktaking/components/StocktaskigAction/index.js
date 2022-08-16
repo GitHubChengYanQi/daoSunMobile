@@ -76,7 +76,7 @@ const StocktaskigAction = (
         className={style.positionItem}
       >
         <div className={style.positionName}>
-          {positionItem.name} {storeName && '/'} {storeName}
+          <Icon type='icon-pandiankuwei' />{positionItem.name} {storeName && '/'} {storeName}
         </div>
         <div className={style.skus}>
           {skuResultList.length === 0 && <MyEmpty description='暂无物料' />}
@@ -150,7 +150,7 @@ const StocktaskigAction = (
                         sourceId: inventoryTaskId,
                         skuId: skuItem.skuId,
                         brandId: skuItem.brandId,
-                        storehousePositionsId:positionItem.positionId,
+                        storehousePositionsId: positionItem.positionId,
                       });
                       return;
                     }

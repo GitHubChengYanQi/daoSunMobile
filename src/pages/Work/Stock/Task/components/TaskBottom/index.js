@@ -3,7 +3,6 @@ import { ReceiptsEnums } from '../../../../../Receipts';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import style from '../../index.less';
 import { ScanIcon } from '../../../../../components/Icon';
-import { Button } from 'antd-mobile';
 import { connect } from 'dva';
 import React, { useEffect } from 'react';
 import { Message } from '../../../../../components/Message';
@@ -48,11 +47,11 @@ const TaskBottom = ({ taskKey, task, ...props }) => {
         <ScanIcon />
       </div> : <></>;
     case ReceiptsEnums.outstockOrder:
-      return task && <div style={{ height: 60 }}>
+      return task ? <div style={{ height: 60 }}>
         <BottomButton only text='出库确认' onClick={() => {
           history.push('/Work/OutStockConfirm');
         }} />
-      </div>;
+      </div> : <></>;
     default:
       return <></>;
   }

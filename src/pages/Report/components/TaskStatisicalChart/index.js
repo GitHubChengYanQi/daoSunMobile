@@ -52,22 +52,22 @@ const TaskStatisicalChart = () => {
   }}>
     <div className={style.flexGap}>
       <div className={style.row} style={{ fontSize: 14 }}>全部任务
-        <span className='numberBlue' style={{ fontSize: 16 }}>{total || 0}</span>个
+        <span className='numberBlue' style={{ fontSize: 16 }}>{total || 0}</span>条
       </div>
       <div className={style.row}>
         <span style={{ backgroundColor: '#257BDE' }} className={style.dian} />
-        <div>完成 <span className='numberBlue'>{taskDetail.doneCount}</span>个</div>
+        <div>完成 <span className='numberBlue'>{taskDetail.doneCount}</span>条</div>
         ({donePercent || 0}%)
       </div>
       <div className={style.row}>
         <span style={{ backgroundColor: '#FA8F2B' }} className={style.dian} />
-        <div> 执行中 <span className='numberBlue'>{taskDetail.startingCount}</span>个</div>
+        <div> 执行中 <span className='numberBlue'>{taskDetail.startingCount}</span>条</div>
         ({startingPercent || 0}%)
       </div>
       <div className={style.row}>
         <span style={{ backgroundColor: '#EA0000' }} className={style.dian} />
         <div>
-          超期 <span className='numberRed'>{taskDetail.overdueCount}</span>个
+          超期 <span className='numberRed'>{taskDetail.overdueCount}</span>条
         </div>
         ({(100 - startingPercent - donePercent) || 0}%)
       </div>

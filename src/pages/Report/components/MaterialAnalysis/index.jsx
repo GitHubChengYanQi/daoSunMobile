@@ -37,7 +37,7 @@ const MaterialAnalysis = (
             text: name,
             textAlign: 'end',
             textBaseline: 'bottom',
-            fontSize: '40px',
+            fontSize: '24px',
             fill: '#ddd',
           }}
         />

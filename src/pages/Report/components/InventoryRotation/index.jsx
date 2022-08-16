@@ -43,6 +43,9 @@ const InventoryRotation = (
     return <MyEmpty />;
   }
 
+  let total = 0;
+  data.forEach(item => total += item.number);
+
   return <div onClick={() => {
     const pathname = history.location.pathname;
     const url = '/Report/DaysInStock';
@@ -57,7 +60,7 @@ const InventoryRotation = (
           type: 'polar',
           transposed: true,
           innerRadius: 0.5,
-          radius: 0.6,
+          radius: 0.7,
         }}
         scale={{}}
       >
@@ -85,7 +88,7 @@ const InventoryRotation = (
           label2={(data) => {
             return {
               fill: '#000000',
-              text: data.number,
+              text: `${data.number || 0}件 (${parseInt((data.number / total) * 100)}%)`,
               fontWeight: 500,
               fontSize: 10,
             };

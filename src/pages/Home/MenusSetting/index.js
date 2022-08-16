@@ -137,10 +137,10 @@ const MenusSetting = (props) => {
     </div>;
   };
 
-  const addButton = (code, name) => {
+  const addButton = (code, name, sys) => {
     const commonly = commonlyMenus.map(item => item.code);
     return (menuSys && !commonly.includes(code)) ?
-      <div className={style.addContent}>
+      <div className={style.addContent} style={{ backgroundColor: sys && '#FA8F2B' }}>
         <AddOutline onClick={() => {
           if (commonlyMenus.length >= 8) {
             return Toast.show({ content: '最多添加8个常用功能！' });
@@ -261,7 +261,7 @@ const MenusSetting = (props) => {
             className={style.card}
             title={<div className={style.cardTitle}>
               {item.name}
-              {addButton(item.id, item.name)}
+              {addButton(item.id, item.name,true)}
             </div>}
             bodyClassName={style.menuCardBody}
             headerClassName={style.cardHeader}

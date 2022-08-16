@@ -51,13 +51,25 @@ const AllBrands = (
       outPositionData.forEach(item => {
         const positions = item.positionsResults || [];
         positions.forEach(item => {
-          newPositions.push({
-            id: item.storehousePositionsId,
-            name: item.name,
-            number: item.number,
-            outStockNumber: item.number,
-            storehouseId: item.storehouseId,
-          });
+          const positionIds = newPositions.map(item => item.id);
+          const positionIndex = positionIds.indexOf(item.storehousePositionsId);
+          if (positionIndex === -1) {
+            newPositions.push({
+              id: item.storehousePositionsId,
+              name: item.name,
+              number: item.number,
+              outStockNumber: item.number,
+              storehouseId: item.storehouseId,
+            });
+          } else {
+            const newPosition = newPositions[positionIndex];
+            newPositions[positionIndex] = {
+              ...newPosition,
+              number: item.number + newPosition.number,
+              outStockNumber: item.outStockNumber + newPosition.number,
+            };
+          }
+
         });
       });
       setPositions(newPositions);
