@@ -11,7 +11,7 @@ import MyProgress from '../../../../../../../../../../components/MyProgress';
 const InSkuItem = (
   {
     item = {},
-    data = [],
+    dataLength,
     index,
     detail,
   }) => {
@@ -80,7 +80,6 @@ const InSkuItem = (
       <div
         className={ToolUtil.classNames(
           style.skuItem,
-          data.length <= 3 && style.skuBorderBottom,
           style.inStockSkuItem,
         )}
       >
@@ -111,7 +110,7 @@ const InSkuItem = (
         </div>
       </div>
     </div>
-    <div className={style.space} />
+    <div hidden={index === dataLength} className={style.space} />
   </>;
 };
 

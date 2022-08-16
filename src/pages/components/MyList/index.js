@@ -3,6 +3,7 @@ import { useRequest } from '../../../util/Request';
 import { InfiniteScroll } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
 import MyEmpty from '../MyEmpty';
+import style from './index.less';
 
 let limit = 10;
 
@@ -17,6 +18,7 @@ const MyList = (
     response = () => {
     },
     sorter: defaultSorter,
+    noEmpty,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -90,15 +92,16 @@ const MyList = (
     </>;
   }
 
-  if (!loading && (!data || data.length === 0)) {
+  if (!loading && (!data || data.length === 0) && !noEmpty) {
     return <MyEmpty height='100%' />;
   }
 
-  return <div id='list'>
+  return <div id='list' className={style.list}>
 
     {children}
 
     {error && <InfiniteScroll
+      style={{ padding: noEmpty && 0 }}
       threshold={0}
       loadMore={async () => {
         return await run({
@@ -118,7 +121,7 @@ const MyList = (
             downLoading
             title='努力加载中...'
             noLoadingTitle
-          /> : <span>--- 我是有底线的 ---</span>
+          /> : <span hidden={noEmpty}>--- 我是有底线的 ---</span>
         }
       </>
     </InfiniteScroll>}

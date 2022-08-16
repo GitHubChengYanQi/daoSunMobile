@@ -165,7 +165,12 @@ const SkuAction = (
             }
 
             if (!action || item.status !== 0) {
-              return <InSkuItem item={item} data={items} key={index} />;
+              return <InSkuItem
+                index={index}
+                item={item}
+                dataLength={(items.length > 3 && !allSku) ? 2 : items.length - 1}
+                key={index}
+              />;
             }
 
             return <div key={index}>
@@ -178,7 +183,12 @@ const SkuAction = (
                   setVisible(item);
                 }}
               >
-                <InSkuItem index={index} item={item} data={items} key={index} />
+                <InSkuItem
+                  index={index}
+                  item={item}
+                  dataLength={(items.length > 3 && !allSku) ? 2 : items.length - 1}
+                  key={index}
+                />
               </Viewpager>
             </div>;
           })

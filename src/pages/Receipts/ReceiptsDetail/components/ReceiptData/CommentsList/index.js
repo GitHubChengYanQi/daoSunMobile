@@ -18,7 +18,7 @@ const CommentsList = ({ taskId }, ref) => {
   useImperativeHandle(ref, () => ({ submit }));
 
   return <div style={{ backgroundColor: '#fff' }}>
-    <MyList ref={commentsListRef} api={remakeList} params={defaultParams} data={data} getData={setData}>
+    <MyList noEmpty ref={commentsListRef} api={remakeList} params={defaultParams} data={data} getData={setData}>
       <StepList remarks={data} />
     </MyList>
   </div>;

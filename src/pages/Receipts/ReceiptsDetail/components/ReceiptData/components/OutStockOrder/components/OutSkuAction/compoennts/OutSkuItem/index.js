@@ -7,7 +7,7 @@ import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
 import pickStyle from '../MyPicking/index.less';
 
-const OutSkuItem = ({ item, data }) => {
+const OutSkuItem = ({ item, dataLength, index }) => {
   const skuResult = item.skuResult || {};
 
   let stockNumberColor = '';
@@ -39,7 +39,7 @@ const OutSkuItem = ({ item, data }) => {
 
   return <>
     <div
-      className={ToolUtil.classNames(style.sku, data.length <= 3 && style.skuBorderBottom)}
+      className={ToolUtil.classNames(style.sku)}
       style={{ paddingBottom: 8 }}
     >
       <div
@@ -61,7 +61,7 @@ const OutSkuItem = ({ item, data }) => {
       </div>
       <div className={pickStyle.dataNumber}>
         <div className={pickStyle.number}>
-          <div hidden={successPercent <= 0} style={{ width: `${successPercent}%`}}>{received}</div>
+          <div hidden={successPercent <= 0} style={{ width: `${successPercent}%` }}>{received}</div>
           <div hidden={percent <= 0} style={{ width: `${percent}%` }}>{collectable}</div>
           <div hidden={trail <= 0} style={{ width: `${trail}%` }}>{notPrepared}</div>
         </div>
@@ -77,7 +77,7 @@ const OutSkuItem = ({ item, data }) => {
         />
       </div>
     </div>
-    <div className={style.space} />
+    <div hidden={index === dataLength} className={style.space} />
   </>;
 };
 
