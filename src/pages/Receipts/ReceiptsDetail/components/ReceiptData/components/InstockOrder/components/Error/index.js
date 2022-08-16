@@ -26,6 +26,7 @@ export const getInkInd = { url: '/stockDetails/getInkind', method: 'POST' };
 
 const Error = (
   {
+    showError,
     errorShopRef,
     anomalyType,
     id,
@@ -50,15 +51,15 @@ const Error = (
 
   const [sku, setSku] = useState({});
 
-  const show = sku.show;
+  const show = sku.show || showError;
 
   useEffect(() => {
     switch (type) {
       case ReceiptsEnums.instockOrder:
-        setSku({ ...skuItem, realNumber: skuItem.number,scanNumber: false, });
+        setSku({ ...skuItem, realNumber: skuItem.number, scanNumber: false });
         break;
       case ReceiptsEnums.stocktaking:
-        setSku({ ...skuItem, realNumber: showStock ? skuItem.number : 0,scanNumber: false,});
+        setSku({ ...skuItem, realNumber: showStock ? skuItem.number : 0, scanNumber: false });
         break;
       default:
         break;
@@ -250,17 +251,23 @@ const Error = (
   const backObject = ToolUtil.isObject(props.qrCode).backObject || {};
 
   useEffect(() => {
-    if (codeId && action === 'addError') {
+    if (codeId) {
       props.dispatch({ type: 'qrCode/clearCode' });
-      const inkind = backObject.inkindResult || backObject.result || {};
-      if (['item', 'sku'].includes(backObject.type) && inkind.skuId === sku.skuId) {
-        if (type === ReceiptsEnums.instockOrder && ToolUtil.isObject(inkind.inkindDetail).stockDetails) {
-          return Message.toast('物料已入库！');
+      if (action === 'addError') {
+        const inkind = backObject.inkindResult || backObject.result || {};
+        if (['item', 'sku'].includes(backObject.type) && inkind.skuId === sku.skuId) {
+          if (type === ReceiptsEnums.instockOrder && ToolUtil.isObject(inkind.inkindDetail).stockDetails) {
+            return Message.toast('物料已入库！');
+          } else {
+            setSku({
+              ...sku,
+              realNumber: sku.scanNumber ? sku.realNumber + inkind.number : inkind.number,
+              scanNumber: true,
+            });
+          }
         } else {
-          setSku({ ...sku, realNumber: sku.scanNumber ? sku.realNumber + inkind.number : inkind.number, scanNumber: true });
+          return Message.toast('扫描物料不符！');
         }
-      } else {
-        return Message.toast('扫描物料不符！');
       }
     }
   }, [codeId]);
@@ -384,21 +391,24 @@ const Error = (
             <div className={style.actual} style={{ gap: 8 }}>
               <span>实到数量</span>
               <ShopNumber
+                show={show}
                 min={allNumber}
                 value={sku.realNumber}
                 onChange={(realNumber) => {
                   setInkinds([]);
-                  setSku({ ...sku, realNumber,scanNumber: false, });
+                  setSku({ ...sku, realNumber, scanNumber: false });
                 }}
               />
-              <ScanIcon onClick={() => {
-                props.dispatch({
-                  type: 'qrCode/wxCpScan',
-                  payload: {
-                    action: 'position',
-                  },
-                });
-              }} />
+              <div hidden={show}>
+                <ScanIcon onClick={() => {
+                  props.dispatch({
+                    type: 'qrCode/wxCpScan',
+                    payload: {
+                      action: 'addError',
+                    },
+                  });
+                }} />
+              </div>
             </div>
           </div>,
           button: <div style={{ minHeight: 60 }}>
@@ -456,10 +466,10 @@ const Error = (
                   value={sku.realNumber}
                   onChange={(realNumber) => {
                     setInkinds([]);
-                    setSku({ ...sku, realNumber ,scanNumber: false,});
+                    setSku({ ...sku, realNumber, scanNumber: false });
                   }}
                 />
-                <div style={{ flexGrow: 1, textAlign: 'right' }}>
+                <div hidden={show} style={{ flexGrow: 1, textAlign: 'right' }}>
                   <ScanIcon onClick={() => {
                     setErrorInkind(false);
                     inkindRef.current.open({
@@ -503,7 +513,7 @@ const Error = (
                   }}
                 />}
               </div>
-              <div hidden={inkinds.length > 0} className={style.inKindRow}>
+              <div hidden={inkinds.length > 0 || show} className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
                   添加异常
                 </Label>
@@ -551,6 +561,7 @@ const Error = (
   return <div className={style.error} style={{ maxHeight, margin: show && 0 }} id='errors'>
 
     <ErrorDom
+      showError={showError}
       over={over}
       imgUrl={imgUrl}
       state={state}
