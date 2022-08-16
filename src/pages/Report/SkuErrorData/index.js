@@ -10,7 +10,10 @@ import { ToolUtil } from '../../components/ToolUtil';
 import MyDatePicker from '../../components/MyDatePicker';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
-import { Space } from 'antd-mobile';
+import { Popup, Space } from 'antd-mobile';
+import MyAntPopup from '../../components/MyAntPopup';
+import Error from '../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/Error';
+import { ReceiptsEnums } from '../../Receipts';
 
 export const detaile = { url: '/anomaly/detailed', method: 'POST' };
 
@@ -22,6 +25,8 @@ const SkuErrorData = () => {
   const [data, setData] = useState({});
 
   const [open, setOpen] = useState();
+
+  const [visible, setVisible] = useState({});
 
   const { loading, run } = useRequest(detaile, {
     manual: true,
@@ -72,7 +77,7 @@ const SkuErrorData = () => {
             }}><Space
               align='center'>{open !== index ? <>展开<UpOutline /></> : <>收起<DownOutline /></>}</Space></LinkButton>}
           >
-            <div hidden={open !== index} style={{padding:'0 8px'}}>
+            <div hidden={open !== index} style={{ padding: '0 8px' }}>
               {
                 skus.map((item, index) => {
                   return <div
@@ -81,7 +86,21 @@ const SkuErrorData = () => {
                     className={ToolUtil.classNames(style.flexCenter, style.skuItem)}
                   >
                     <SkuItem hiddenNumber skuResult={item.skuResult} imgSize={45} className={style.row} />
-                    <LinkButton>详情</LinkButton>
+                    <LinkButton onClick={() => {
+                      let type = '';
+                      switch (item.type) {
+                        case 'InstockError':
+                          type = ReceiptsEnums.instockOrder;
+                          break;
+                        case 'StocktakingError':
+                        case 'timelyInventory':
+                          type = ReceiptsEnums.stocktaking;
+                          break;
+                        default:
+                          break;
+                      }
+                      setVisible({ ...item,type });
+                    }}>详情</LinkButton>
                   </div>;
                 })
               }
@@ -90,6 +109,17 @@ const SkuErrorData = () => {
         })
       }
     </MyCard>
+
+    <Popup visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
+      <Error
+        noDelete
+        onClose={()=>setVisible({})}
+        id={visible.anomalyId}
+        showError
+        type={visible.type}
+        skuItem={visible}
+      />
+    </Popup>
   </>;
 };
 

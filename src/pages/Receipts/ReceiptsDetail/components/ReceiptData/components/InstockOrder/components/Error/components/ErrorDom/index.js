@@ -26,6 +26,7 @@ export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: '
 
 const ErrorDom = (
   {
+    showError,
     showStock,
     over,
     imgUrl,
@@ -143,7 +144,7 @@ const ErrorDom = (
         }}>
           删除异常
         </LinkButton>}
-        {show && <LinkButton color='danger'>
+        {show && !showError && <LinkButton color='danger'>
           处理中
         </LinkButton>}
       </div>
