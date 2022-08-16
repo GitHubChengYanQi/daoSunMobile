@@ -155,7 +155,7 @@ const SkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{items.length}</span>类<span>{countNumber}</span>件
       </div>}>
-      <MyLoading loading={loading}>
+      <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
         {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
         {
           items.map((item, index) => {

@@ -53,10 +53,10 @@ const OrderStatisicalChart = ({height}) => {
           attrs={{
             x: right,
             y: bottom,
-            text: `合计 ${total || 0} 个`,
+            text: `合计 ${total || 0} 单`,
             textAlign: 'end',
             textBaseline: 'bottom',
-            fontSize: '40px',
+            fontSize: '24px',
             fill: '#ddd',
           }}
         />

@@ -26,6 +26,7 @@ export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: '
 
 const ErrorDom = (
   {
+    showStock,
     over,
     imgUrl,
     state,
@@ -45,6 +46,9 @@ const ErrorDom = (
     type,
     batch,
     inkindRef,
+    errorInkind,
+    setErrorInkind = () => {
+    },
   }) => {
 
   const { loading: addInkindLoading, run: addInkindRun } = useRequest(autoAddInkind, {
@@ -76,7 +80,7 @@ const ErrorDom = (
   );
 
   const addInkind = (newInkinds = []) => {
-    if (!batch){
+    if (!batch) {
       const ids = inkinds.map(item => item.inkindId);
       const newIds = newInkinds.map(item => item.inkindId);
       const exist = ids.filter(id => newIds.includes(id));
@@ -106,7 +110,7 @@ const ErrorDom = (
             </div>
             <div className={style.number}>
               <ShopNumber min={allNumber} value={sku.realNumber} onChange={(realNumber) => {
-                setSku({ ...sku, realNumber });
+                setSku({ ...sku, realNumber, scanNumber: false });
               }} />
             </div>
             {id && !noDelete && <LinkButton color='danger' onClick={() => {
@@ -256,6 +260,7 @@ const ErrorDom = (
               });
               break;
             case ReceiptsEnums.stocktaking:
+              setErrorInkind(true);
               inkindRef.current.open({
                 skuId: sku.skuId,
                 brandId: sku.brandId,
@@ -271,7 +276,8 @@ const ErrorDom = (
     </div>
 
     <InkindList
-      add
+      searchDisabled={!showStock}
+      add={errorInkind}
       ref={inkindRef}
       addInkind={() => {
         addInkindRun({
@@ -285,20 +291,27 @@ const ErrorDom = (
         });
       }}
       onSuccess={(inkinds = []) => {
-        let number = 0;
-        const newInkinds = inkinds.map(item => {
-          number++;
-          return {
-            inkindId: item.inkindId,
-            codeId: item.qrCodeId,
-            number: 1,
-          };
-        });
-        if (number > sku.realNumber) {
-          Message.toast('不能超过盘点数量！');
+        if (errorInkind) {
+          let number = 0;
+          const newInkinds = inkinds.map(item => {
+            number++;
+            return {
+              inkindId: item.inkindId,
+              codeId: item.qrCodeId,
+              number: 1,
+            };
+          });
+          if (number > sku.realNumber) {
+            Message.toast('不能超过盘点数量！');
+            return;
+          }
+          addInkind(newInkinds);
           return;
         }
-        addInkind(newInkinds);
+
+        let realNumber = 0;
+        inkinds.forEach(item => realNumber += item.number);
+        setSku({ ...sku, realNumber: sku.scanNumber ? sku.realNumber + realNumber : realNumber, scanNumber: true });
       }}
     />
 

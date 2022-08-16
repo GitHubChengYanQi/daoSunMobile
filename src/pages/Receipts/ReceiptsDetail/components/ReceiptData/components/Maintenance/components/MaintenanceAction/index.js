@@ -7,6 +7,7 @@ import Maintenanceing from '../Maintenanceing';
 import MyList from '../../../../../../../../components/MyList';
 import style from '../../../Stocktaking/index.less';
 import MyProgress from '../../../../../../../../components/MyProgress';
+import Icon from '../../../../../../../../components/Icon';
 
 const MaintenanceAction = (
   {
@@ -34,6 +35,7 @@ const MaintenanceAction = (
         className={style.positionItem}
       >
         <div className={style.positionName}>
+          <Icon type='icon-pandiankuwei' />
           {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
         </div>
         <div className={style.skus}>

@@ -31,7 +31,6 @@ const InstockError = (
     type,
   },
 ) => {
-
   const [errorList, setErrorList] = useState([]);
 
   const {
@@ -124,7 +123,7 @@ const InstockError = (
         return {
           showStock,
           totalTitle: '账面库存',
-          type: 'Stocktaking',
+          type: anomalyType === 'StocktakingError' ? 'Stocktaking' : 'timelyInventory',
           skuItem: <SkuItem
             hiddenNumber={!showStock}
             skuResult={skuResult}
@@ -269,7 +268,6 @@ const InstockError = (
 
     {(orderAddLoading || backLoading) && <MyLoading />}
   </>;
-  ;
 };
 
 export default InstockError;

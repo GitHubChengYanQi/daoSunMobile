@@ -13,6 +13,7 @@ import { inventoryComplete } from '../../../Receipts/ReceiptsDetail/components/R
 import { Message } from '../../../components/Message';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
+import MyPositions from '../../../components/MyPositions';
 
 export const taskList = { url: '/inventoryStock/list', method: 'POST' };
 export const detail = { url: '/inventory/detail', method: 'POST' };
@@ -29,6 +30,8 @@ const StartStockTaking = () => {
   const listRef = useRef();
 
   const [data, setData] = useState([]);
+
+  const [visible, setVisible] = useState();
 
   const [statistics, setStatistics] = useState({});
 
@@ -84,9 +87,12 @@ const StartStockTaking = () => {
     return <MyEmpty />;
   }
 
-  return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto',paddingBottom:60 }}>
+  return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto', paddingBottom: 60 }}>
     <MyNavBar title='盘点任务' />
     <MySearch
+      extraIcon={<Icon type='icon-pandiankuwei' style={{ fontSize: 20 }} onClick={() => {
+        setVisible(true);
+      }} />}
       value={searchValue}
       placeholder='搜索物料信息'
       onChange={setSearchValue}
@@ -150,6 +156,16 @@ const StartStockTaking = () => {
         run({ data: { inventoryId: query.id } });
       }}
     />
+
+    <MyPositions
+      visible={visible}
+      single
+      autoFocus
+      onClose={() => setVisible(false)}
+      onSuccess={(value = []) => {
+        console.log(value);
+        setVisible(false)
+      }} />
 
     {(loading || statisticsLoading) && <MyLoading />}
   </div>;

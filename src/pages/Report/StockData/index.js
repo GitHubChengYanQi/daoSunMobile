@@ -20,6 +20,8 @@ const StockData = () => {
 
   const [inkindIds, setInkindIds] = useState([]);
 
+  const [viewAll, setViewAll] = useState();
+
   if (loading) {
     return <MyLoading skeleton />;
   }
@@ -27,7 +29,7 @@ const StockData = () => {
   return <>
     <MyNavBar title='库存统计' />
     <MyCard title='分析图表'>
-      <Stock />
+      <Stock action viewError={() => setViewAll(true)} />
     </MyCard>
 
     <MyCard title='分类明细' bodyClassName={style.stockBody}>
@@ -46,8 +48,8 @@ const StockData = () => {
           >
             <div className={style.flexCenter}>
               <div className={style.row}>正常
-                <span className='numberBlue'>{item.normalCount}</span>类
-                <span className='numberBlue'>{item.normalNum}</span>件
+                <span className='numberBlue'>{item.normalNum}</span>类
+                <span className='numberBlue'>{item.normalCount}</span>件
               </div>
               <div className={style.row}>异常
                 <span className='numberRed'>{item.errorNum}</span>类
@@ -63,7 +65,10 @@ const StockData = () => {
       }
     </MyCard>
 
-    <MyAntPopup title='异常件明细' visible={inkindIds.length > 0} onClose={() => setInkindIds([])}>
+    <MyAntPopup title='异常件明细' visible={viewAll || inkindIds.length > 0} onClose={() => {
+      setInkindIds([]);
+      setViewAll(false);
+    }}>
       <InkindList inkindIds={inkindIds} />
     </MyAntPopup>
   </>;

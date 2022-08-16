@@ -180,7 +180,6 @@ const Inventory = (props) => {
 
   if (loading || outstockLoading) {
     return <MyLoading
-      loading={loading || outstockLoading}
       title={'处理中...'} />;
   }
 
