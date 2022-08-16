@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { Divider, ErrorBlock } from 'antd-mobile';
+import { Divider, ErrorBlock, Space } from 'antd-mobile';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
@@ -85,9 +85,10 @@ const Stocktaking = (
       {(data.length === 1 && data[0].type === 'all') ?
         <div style={{ padding: 8 }}>
           <ErrorBlock
+            style={{'--image-height':'50px'}}
             status='empty'
             title='全局盘点'
-            image={<Icon type='icon-pandian1' style={{ fontSize: 100 }} />}
+            image={<Icon type='icon-pandian1' style={{ fontSize: 50 }} />}
             description
           />
         </div>
@@ -166,11 +167,13 @@ const Stocktaking = (
 
     <MyCard title='参与人员'>
       {participantList.length === 0 && '无'}
-      {
-        participantList.map((item, index) => {
-          return <UserName key={index} user={item} />;
-        })
-      }
+      <Space align='center' wrap>
+        {
+          participantList.map((item, index) => {
+            return <UserName key={index} user={item} />;
+          })
+        }
+      </Space>
     </MyCard>
 
     <MyCard title='明盘' extra={receipts.method === 'OpenDisc' ? '是' : '否'} />
