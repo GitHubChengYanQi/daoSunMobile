@@ -113,7 +113,12 @@ const OutSkuAction = (
             }
 
             if (!action || complete || prepare || !item.stockNumber) {
-              return <OutSkuItem data={data} item={item} key={index} />;
+              return <OutSkuItem
+                item={item}
+                index={index}
+                dataLength={(outSkus.length > 3 && !allSku) ? 2 : outSkus.length - 1}
+                key={index}
+              />;
             }
 
             return <div key={index}>
@@ -126,7 +131,12 @@ const OutSkuAction = (
                   setVisible(item);
                 }}
               >
-                <OutSkuItem data={data} item={item} key={index} />
+                <OutSkuItem
+                  item={item}
+                  index={index}
+                  dataLength={(outSkus.length > 3 && !allSku) ? 2 : outSkus.length - 1}
+                  key={index}
+                />
               </Viewpager>
             </div>;
           })
@@ -211,7 +221,7 @@ const OutSkuAction = (
       className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
         <div className={style.codeTitle}>领料码</div>
-        <div style={{ position: 'relative',paddingTop: 19 }}>
+        <div style={{ position: 'relative', paddingTop: 19 }}>
           <div className={style.code}>{code}</div>
           {code && !success && <div className={style.time}>失效剩余时间：<Clock seconds={600} /></div>}
           <img src={imgSrc} alt='' width={187} />

@@ -19,12 +19,12 @@ const OrderDataScreen = (
 ) => {
 
   const searchtype = [
-    { key: 'user', title: '执行人', open: true },
-    { key: 'time', title: '时间', open: true },
+    { key: 'createUser', title: '执行人', open: true },
+    { key: 'dateParams', title: '时间', open: true },
   ];
 
-  const user = params.user;
-  const time = params.time;
+  const createUser = params.createUser;
+  const dateParams = params.dateParams;
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -34,10 +34,10 @@ const OrderDataScreen = (
     let screened = false;
     switch (key) {
       case 'createUser':
-        screened = user;
+        screened = createUser;
         break;
-      case 'time':
-        screened = time;
+      case 'dateParams':
+        screened = dateParams;
         break;
       default:
         break;
@@ -47,20 +47,20 @@ const OrderDataScreen = (
 
   const screenContent = (item) => {
     switch (item.key) {
-      case 'user':
+      case 'createUser':
         return <User
           title={item.title}
-          value={user}
-          onChange={(user) => {
-            paramsOnChange({ ...params, user });
+          value={createUser}
+          onChange={(createUser) => {
+            paramsOnChange({ ...params, createUser });
           }}
         />;
-      case 'time':
+      case 'dateParams':
         return <Time
           title={item.title}
-          value={time}
-          onChange={(time) => {
-            paramsOnChange({ ...params, time });
+          value={dateParams}
+          onChange={(dateParams) => {
+            paramsOnChange({ ...params, dateParams });
           }}
         />;
       default:

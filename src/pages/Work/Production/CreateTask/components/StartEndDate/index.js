@@ -3,6 +3,7 @@ import MyDatePicker from '../../../../../components/MyDatePicker';
 import { CalendarOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import LinkButton from '../../../../../components/LinkButton';
+import { Space } from 'antd-mobile';
 
 export const getMinTime = (minTime) => {
   if (!minTime) {
@@ -39,14 +40,10 @@ const StartEndDate = (
         ref.current.open();
       }}
     >
-      {
-        value[0] && value[1] ?
-          <>
-            {MyDate.Show(value[0])} - {MyDate.Show(value[1])}
-          </>
-          :
-          <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
-      }
+      <Space>
+        <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
+        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
+      </Space>
     </div>
     <MyDatePicker
       filter={{

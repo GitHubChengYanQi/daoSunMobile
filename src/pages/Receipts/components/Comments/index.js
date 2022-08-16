@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Popup } from 'antd-mobile';
+import { Button, Popup, Space } from 'antd-mobile';
 import { FormOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
@@ -49,12 +49,13 @@ const Comments = (
   return <>
     <div style={{ padding: 12, backgroundColor: '#fff' }}>
       <Button
+        fill='none'
         style={{ width: '100%', height: 40 }}
         onClick={() => {
           setVisible(true);
         }}
       >
-        <FormOutlined />{title}
+        <Space align='center'><FormOutlined />{title}</Space>
       </Button>
     </div>
 

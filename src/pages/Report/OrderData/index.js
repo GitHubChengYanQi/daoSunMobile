@@ -49,7 +49,7 @@ const OrderData = () => {
 
   const [screening, setScreeing] = useState();
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState({type});
 
   const submit = (data = {}) => {
     const newParmas = { ...params, ...data };
@@ -59,8 +59,8 @@ const OrderData = () => {
   };
 
   const clear = () => {
-    setParams({});
-    listRef.current.submit({});
+    setParams({type});
+    listRef.current.submit({type});
   };
 
   return <>
