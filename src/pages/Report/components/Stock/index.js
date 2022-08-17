@@ -7,10 +7,16 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import { ToolUtil } from '../../../components/ToolUtil';
+import LinkButton from '../../../components/LinkButton';
 
 export const stockCensus = { url: '/stockDetails/stockCensus', method: 'GET' };
 
-const Stock = () => {
+const Stock = (
+  {
+    action,
+    viewError = () => {
+    },
+  }) => {
 
   const history = useHistory();
 
@@ -60,6 +66,9 @@ const Stock = () => {
           <span className='numberBlue'>{getData('error').number}</span> 件
           ({100 - normalPercent}%)
         </div>
+      </div>
+      <div hidden={!action} className={style.row}>
+        <LinkButton onClick={viewError}>查看异常件</LinkButton>
       </div>
     </div>
     <Canvas pixelRatio={window.devicePixelRatio} width={150} height={150}>

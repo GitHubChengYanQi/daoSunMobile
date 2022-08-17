@@ -14,7 +14,7 @@ import { ToolUtil } from '../components/ToolUtil';
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
 const selfDynamic = { url: '/dynamic/lsitBySelf', method: 'POST' };
-const userDynamic = { url: '/dynamic/ListByUser', method: 'POST' };
+const userDynamic = { url: '/dynamic/listByUser', method: 'POST' };
 
 const User = ({ userId }) => {
 

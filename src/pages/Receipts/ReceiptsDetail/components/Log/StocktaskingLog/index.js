@@ -10,7 +10,7 @@ import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInst
 import { UserName } from '../../../../../components/User';
 import { MyDate } from '../../../../../components/MyDate';
 
-export const historyList = {url:'/inventoryStock/historyList',method:'POST'}
+export const historyList = {url:'/instockLogDetail/list',method:'POST'}
 
 const StocktaskingLog = ({ detail = {} }) => {
 
