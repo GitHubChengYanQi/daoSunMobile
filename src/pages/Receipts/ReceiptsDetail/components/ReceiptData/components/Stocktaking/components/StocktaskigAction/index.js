@@ -13,8 +13,6 @@ import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
-import MyAntPopup from '../../../../../../../../components/MyAntPopup';
-import StocktaskLog from './components/StocktaskLog';
 
 const StocktaskigAction = (
   {
@@ -40,16 +38,15 @@ const StocktaskigAction = (
 
   const [visible, setVisible] = useState();
 
-  const [log, setLog] = useState();
-
   const history = useHistory();
 
-  const action = (positionItem, skuItem) => {
+  const action = (positionItem, skuItem, showError) => {
 
-    if (skuItem.lockStatus === 99) {
+    if (!showError && skuItem.lockStatus === 99) {
       Message.toast('此物料存在异常，正在处理中');
     }
     setVisible({
+      showError,
       show: skuItem.lockStatus === 99,
       skuId: skuItem.skuId,
       skuResult: skuItem.skuResult,
@@ -145,16 +142,7 @@ const StocktaskigAction = (
                   {typeof skuItem.realNumber === 'number' &&
                   <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
                   <Button className={style.inventoryButton} onClick={() => {
-                    if (show) {
-                      setLog({
-                        sourceId: inventoryTaskId,
-                        skuId: skuItem.skuId,
-                        brandId: skuItem.brandId,
-                        storehousePositionsId: positionItem.positionId,
-                      });
-                      return;
-                    }
-                    action(positionItem, skuItem);
+                    action(positionItem, skuItem, show);
                   }}>{show ? '查看' : '盘点'}</Button>
                 </div>
               </div>;
@@ -212,6 +200,7 @@ const StocktaskigAction = (
       <Error
         errorShopRef={errorShopRef}
         noDelete
+        showError={visible && visible.showError}
         anomalyType={anomalyType}
         showStock={showStock}
         id={visible && visible.anomalyId}
@@ -228,10 +217,6 @@ const StocktaskigAction = (
         }}
       />
     </Popup>
-
-    <MyAntPopup title='盘点记录' visible={log} onClose={() => setLog()}>
-      <StocktaskLog data={log} />
-    </MyAntPopup>
 
     {!show && <ErrorShop
       errorShopRef={errorShopRef}

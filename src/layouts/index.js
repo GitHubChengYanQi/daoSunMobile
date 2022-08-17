@@ -8,12 +8,10 @@ import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
-import LinkButton from '../pages/components/LinkButton';
-import { Button } from 'antd-mobile';
+import { AliveScope } from '../components/KeepAlive';
 
 
 const BasicLayout = (props) => {
-
 
   const { initialState, loading } = useModel('@@initialState');
 
@@ -122,9 +120,11 @@ const BasicLayout = (props) => {
   }
 
   if (state.init === true) {
-    return <div className={styles.safeArea}>
-      {props.children}
-    </div>;
+    return <AliveScope>
+      <div className={styles.safeArea}>
+        {props.children}
+      </div>
+    </AliveScope>;
   } else {
     return <div>
       <MyError title='系统初始化失败' />

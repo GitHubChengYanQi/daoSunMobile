@@ -1,36 +1,31 @@
 import React from 'react';
-import { useRequest } from '../../../util/Request';
-import { ListItem, Picker, Stripe } from 'weui-react-v2';
-import { useDebounceEffect } from 'ahooks';
+import { ToolUtil } from '../ToolUtil';
+import { Picker } from 'antd-mobile';
 
 
-const MyPicker = ({ api,value,onChange=()=>{},option,disabled }) => {
+const MyPicker = (
+  {
+    options,
+    visible,
+    onClose = () => {
+    },
+    value,
+    onChange = () => {
+    },
+  }) => {
 
-  useDebounceEffect(()=>{
-    !option && run({});
-  },[api, option],{
-    wait:0
-  })
-
-
-  const { data,run } = useRequest(api,{manual:option});
-
-  if (option || data){
-    return (
-      <div>
-        <Picker title='请选择' placeholder='请选择' disabled={disabled} data={option || data} value={[value]} onConfirm={(value,object)=>{
-          onChange(value && value[0]);
-        }}>
-          <ListItem arrow={true} style={{padding:0}} />
-        </Picker>
-      </div>
-    );
-  }else {
-    return <Stripe />;
-  }
-
-
-
+  return <>
+    <Picker
+      popupStyle={{ '--z-index': 'var(--adm-popup-z-index, 1003)' }}
+      columns={[options]}
+      visible={visible}
+      onClose={onClose}
+      value={[value]}
+      onConfirm={(value, options) => {
+        onChange(ToolUtil.isArray(options.items)[0] || {});
+      }}
+    />
+  </>;
 };
 
 export default MyPicker;

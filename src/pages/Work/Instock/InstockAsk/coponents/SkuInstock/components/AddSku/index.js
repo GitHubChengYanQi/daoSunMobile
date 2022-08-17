@@ -202,7 +202,7 @@ const AddSku = (
 
   return <>
     <MyAntPopup
-      title={over ? <div className={style.skuShow}  style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}>
+      title={over ? <div className={style.skuShow} style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}>
         <img src={imgUrl || state.imgLogo} width='30' height='30' alt='' />
         {SkuResultSkuJsons({ skuResult, spu: true })} / {SkuResultSkuJsons({ skuResult, sku: true })}
       </div> : title}

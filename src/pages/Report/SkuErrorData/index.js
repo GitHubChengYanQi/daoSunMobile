@@ -11,7 +11,6 @@ import MyDatePicker from '../../components/MyDatePicker';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import { Popup, Space } from 'antd-mobile';
-import MyAntPopup from '../../components/MyAntPopup';
 import Error from '../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../Receipts';
 

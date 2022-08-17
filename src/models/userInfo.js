@@ -22,18 +22,9 @@ export default {
           method: 'POST',
         },
       ));
-      const customer = yield call(() => request(
-        {
-          url: '/customer/detail',
-          method: 'POST',
-        },
-      ));
       yield put({
         type: 'setUserInfo', payload: {
           ...userInfo,
-          abbreviation: customer.abbreviation,
-          customerName: customer.customerName,
-          customerId: customer.customerId,
         },
       });
     },

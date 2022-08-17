@@ -51,7 +51,7 @@ const Task = (
   return <div>
     {query.type && <MyNavBar title='任务列表' />}
     <MySearch
-      placeholder='请输入物料相关信息'
+      placeholder='请输入单据相关信息'
       extraIcon={extraIcon()}
     />
     <div hidden={activeKey}>

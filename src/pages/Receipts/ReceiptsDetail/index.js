@@ -170,6 +170,10 @@ const ReceiptsDetail = () => {
         return {
           logTitle: '调拨记录',
         };
+        case ReceiptsEnums.error:
+        return {
+          logTitle: '处理记录',
+        };
       default:
         return {};
     }

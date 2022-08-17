@@ -40,7 +40,7 @@ const StartEndDate = (
         ref.current.open();
       }}
     >
-      <Space>
+      <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
         {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
       </Space>

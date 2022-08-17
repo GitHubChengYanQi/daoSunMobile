@@ -131,8 +131,8 @@ const WaitInstock = (
               const checked = item.checked;
 
               const skuResult = item.skuResult || {};
-              const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0];
-              const storehouseResult = positionsResult && positionsResult.storehouseResult || {};
+              const positionsResult = ToolUtil.isArray(skuResult.positionsResult)[0] || {};
+              const storehouseResult = positionsResult.storehouseResult || {};
               const customerName = ToolUtil.isObject(item.customer).customerName || '-';
               const brandName = ToolUtil.isObject(item.brandResult).brandName || '无品牌';
 
@@ -141,17 +141,20 @@ const WaitInstock = (
                   check(checked, index);
                 }} />
                 <div className={style.sku} onClick={() => {
-                  if (positionsResult) {
-                    return;
-                  }
-                  setVisible(item);
+                  setVisible({
+                    ...item,
+                    position: { id: positionsResult.storehousePositionsId, name: positionsResult.name },
+                  });
                 }}>
                   <SkuItem
+                    textClickDisabled
                     skuResult={skuResult}
-                    title={positionsResult ?
-                      (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') :
-                      <LinkButton>请选择库位</LinkButton>
-                    }
+                    title={<LinkButton>
+                      {
+                        positionsResult.storehousePositionsId ?
+                          (positionsResult.name || '') + `${(positionsResult.name && storehouseResult.name) ? '/' : ''}` + (storehouseResult.name || '') :
+                          '请选择库位'}
+                    </LinkButton>}
                     extraWidth='120px'
                     describe={SkuResultSkuJsons({ skuResult })}
                     otherData={[customerName, brandName]}
@@ -218,7 +221,7 @@ const WaitInstock = (
 
     <MyPositions
       visible={visible}
-      value={[]}
+      value={visible ? [visible.position] : []}
       single
       onClose={() => setVisible(false)}
       onSuccess={(value = []) => {

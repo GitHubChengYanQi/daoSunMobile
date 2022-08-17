@@ -21,13 +21,14 @@ const SkuItem = (
     title,
     more,
     moreDom,
+    textClickDisabled,
     moreClick = () => {
     },
   }) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
 
   const spuResult = skuResult.spuResult || {};
   const unitResult = spuResult.unitResult || {};
@@ -53,10 +54,10 @@ const SkuItem = (
         className={style.sku}
         style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
-        <MyEllipsis width='100%' onClick={view}>
+        <MyEllipsis width='100%' onClick={() => !textClickDisabled && view()}>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
         </MyEllipsis>
-        <div className={style.describe} onClick={view}>
+        <div className={style.describe} onClick={() => !textClickDisabled && view()}>
           <MyEllipsis width='100%'>
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>

@@ -110,7 +110,7 @@ const ReceiptData = (
       onInput={addComments}
     />
     <CommentsList taskId={data.processTaskId} ref={commentsListRef} />
-    <div style={{ backgroundColor: '#fff', height: 60, marginTop: 3 }} />
+    <div style={{ height: 60, marginTop: 3 }} />
   </div>;
 };
 

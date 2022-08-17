@@ -15,6 +15,7 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 import { FormOutlined } from '@ant-design/icons';
 import MyCard from '../../../../../../../../components/MyCard';
 import Header from './components/Header';
+import Label from '../../../../../../../../components/Label';
 
 export const save = { url: '/anomaly/dealWithError', method: 'POST' };
 export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
@@ -39,6 +40,13 @@ const SkuError = (
   const [sku, setSku] = useState({});
 
   const [errorItems, setErrorItems] = useState([]);
+
+  const inStockNumber = sku.checkNumber - sku.needNumber;
+
+  const [inStockCustomers, setInStockCustomers] = useState([]);
+
+  let inStockCustomersNumber = 0;
+  inStockCustomers.forEach(item => inStockCustomersNumber += item.number);
 
   const [over, setOver] = useState();
 
@@ -103,6 +111,7 @@ const SkuError = (
         ...res,
         confirm,
         hidden,
+        customerNums: res.customerNums,
         allowNumber: allowNumber < 0 ? 0 : allowNumber,
         instockNumber: instockNumber < 0 ? 0 : instockNumber,
         errorNumber: termination,
@@ -160,7 +169,6 @@ const SkuError = (
     },
   });
 
-
   useEffect(() => {
     if (anomalyId) {
       detailRun({
@@ -182,7 +190,6 @@ const SkuError = (
       });
     }
   }, []);
-
 
   const action = (item, stauts) => {
     editRun({
@@ -276,12 +283,25 @@ const SkuError = (
             }}>报损</Button>
           </>,
           bottom: permissions && !forward && <div style={{ minHeight: 60 }}>
-            <BottomButton disabled={!handle} only onClick={() => {
-              const param = { data: { anomalyId, status: 90 } };
-              saveRun(param).then(() => {
-                onSuccess();
-              });
-            }} />
+            <BottomButton
+              disabled={!handle || !(inStockNumber > 0 ? inStockNumber === inStockCustomersNumber : false)}
+              only
+              onClick={() => {
+                const param = {
+                  data: {
+                    anomalyId,
+                    status: 90,
+                    customerNums: inStockCustomers.map(item => ({
+                      customerId: item.value,
+                      customerName: item.label,
+                      num: item.number,
+                    })),
+                  },
+                };
+                saveRun(param).then(() => {
+                  onSuccess();
+                });
+              }} />
           </div>,
         };
       default:
@@ -303,6 +323,8 @@ const SkuError = (
   return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
     <Header
+      permissions={permissions}
+      inStockCustomers={setInStockCustomers}
       checkNumberTitle={errorTypeData().checkNumberTitle}
       otherData={errorTypeData().otherData}
       setSku={setSku}
@@ -367,7 +389,7 @@ const SkuError = (
             </>}
           >
             <div className={ToolUtil.classNames(style.careful, style.inkindFiled)}>
-              <span className={style.inkindTitle}>原因：</span>
+              <Label className={style.inkindTitle}>原因</Label>：
               {ToolUtil.isArray(item.notices).map((item, index) => {
                 return <div key={index} className={style.notices} style={{ margin: index === 0 && 0 }}>
                   {item}
@@ -375,7 +397,7 @@ const SkuError = (
               })}
             </div>
             <div className={ToolUtil.classNames(style.inkindFiled)}>
-              <span className={style.inkindTitle}>描述：</span>
+              <Label className={style.inkindTitle}>描述</Label>：
               {item.description || '无'}
             </div>
             <div hidden={ToolUtil.isArray(item.media).length === 0} className={ToolUtil.classNames(style.inkindFiled)}>
@@ -386,7 +408,7 @@ const SkuError = (
               />
             </div>
             <div className={ToolUtil.classNames(style.opinion, style.inkindFiled)}>
-              <span className={style.inkindTitle}>意见：</span>
+              <Label className={style.inkindTitle}>意见</Label>：
               {!handle ? <TextArea
                 className={style.textArea}
                 rows={1}

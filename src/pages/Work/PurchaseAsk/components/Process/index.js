@@ -217,7 +217,7 @@ const Process = (
             users.push({ name: '所有人', auditStatus: status || 99 });
             break;
           case 'MasterDocumentPromoter':
-            users.push({ name: '主单据审批人', auditStatus: status });
+            users.push({ name: '主单据发起人', auditStatus: status });
             break;
           default:
             break;

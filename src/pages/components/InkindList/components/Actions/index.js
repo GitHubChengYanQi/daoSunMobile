@@ -44,8 +44,8 @@ const Actions = (
         } else {
           onSuccess([{
             inkind: inkind.inkindId,
-            codeId,
             ...details,
+            qrCodeId:codeId,
           }]);
         }
       } else {

@@ -51,9 +51,16 @@ const InstockError = (
           ],
         };
       case 'Stocktaking':
-      case 'timelyInventory':
         return {
           receipts: masterUser.name && `${masterUser.name || '-'}的盘点申请 / ${instockOrder.coding || '-'}`,
+          totalTitle: '账面库存',
+          otherData: [
+            ToolUtil.isObject(item.brand).brandName || '无品牌',
+            ToolUtil.isObject(item.positionsResult).name,
+          ],
+        };
+      case 'timelyInventory':
+        return {
           totalTitle: '账面库存',
           otherData: [
             ToolUtil.isObject(item.brand).brandName || '无品牌',
@@ -86,7 +93,7 @@ const InstockError = (
       </div>
     </MyCard>
 
-    <MyCard title='来源'>
+    <MyCard title='来源' hidden={!errorTypeData().receipts}>
       {errorTypeData().receipts}
     </MyCard>
 

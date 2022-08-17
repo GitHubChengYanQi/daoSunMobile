@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { Dialog, Divider, Popup } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { CheckCircleFill, CheckCircleOutline, DownOutline, UpOutline } from 'antd-mobile-icons';
+import { CheckCircleFill, DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Viewpager from '../../../InstockOrder/components/Viewpager';

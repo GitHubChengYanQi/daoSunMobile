@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../../../InstockOrder/components/Error/index.less';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { CloseOutline } from 'antd-mobile-icons';
+import { AddCircleOutline, CloseOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import ShopNumber
@@ -10,6 +10,14 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../../../../../../../../components/Upload/UploadFile';
 import { Button, Space, TextArea } from 'antd-mobile';
 import Label from '../../../../../../../../../../components/Label';
+import { useRequest } from '../../../../../../../../../../../util/Request';
+import { supplierBySku } from '../../../../../../../../../../Work/Customer/CustomerUrl';
+import { MyLoading } from '../../../../../../../../../../components/MyLoading';
+import MyPicker from '../../../../../../../../../../components/MyPicker';
+import MyCard from '../../../../../../../../../../components/MyCard';
+import LinkButton from '../../../../../../../../../../components/LinkButton';
+import { Message } from '../../../../../../../../../../components/Message';
+import MyRemoveButton from '../../../../../../../../../../components/MyRemoveButton';
 
 const Header = (
   {
@@ -28,11 +36,16 @@ const Header = (
     loading,
     otherData,
     checkNumberTitle,
+    inStockCustomers = () => {
+    },
+    permissions,
   },
 ) => {
 
   const [mediaIds, setMediaIds] = useState([]);
   const [note, setNote] = useState();
+
+  const inStockNumber = sku.checkNumber - sku.needNumber;
 
   const skuResult = sku.skuResult || {};
   const spuResult = skuResult.spuResult || {};
@@ -40,11 +53,56 @@ const Header = (
 
   const checkUsers = ToolUtil.isArray(sku.checkUsers);
 
-
   const addFileRef = useRef();
 
   const state = initialState || {};
   const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+
+  const [customers, setCustomers] = useState([]);
+
+  const noCheckCustomers = customers.filter(item => !item.checked);
+  const checkCustomers = customers.filter(item => item.checked);
+
+  const [visible, setVisible] = useState();
+
+  const {
+    loading: getCustomerLoading,
+    run: getCustomer,
+  } = useRequest(supplierBySku, {
+    manual: true,
+    onSuccess: (res) => {
+      const customer = res || [];
+      const newCustomers = customer.map(item => {
+        const customerNums = sku.customerNums || [];
+        const customerNum = customerNums.filter(numItem => numItem.customerId === item.customerId)[0] || {};
+        return {
+          value: customerNum.customerId || item.customerId,
+          label: customerNum.customerName || item.customerName,
+          checked: Boolean(customerNum.customerId),
+          number: customerNum.num || 0,
+        };
+      });
+      setCustomers(newCustomers);
+      inStockCustomers(newCustomers.filter(item => item.checked && item.number > 0));
+    },
+  });
+
+  useEffect(() => {
+    if (sku.skuId && sku.confirm && inStockNumber > 0) {
+      getCustomer({ data: { skuId: sku.skuId } });
+    }
+  }, [sku.skuId]);
+
+  const customersChange = (id, data = {}) => {
+    const newCustomer = customers.map(item => {
+      if (item.value === id) {
+        return { ...item, ...data };
+      }
+      return item;
+    });
+    setCustomers(newCustomer);
+    inStockCustomers(newCustomer.filter(item => item.checked && item.number > 0));
+  };
 
   return <>
     <div className={style.header} hidden={forward} style={over ? { boxShadow: '0 1px 5px 0 rgb(0 0 0 / 30%)' } : {}}>
@@ -74,6 +132,7 @@ const Header = (
       <div className={style.skuItem} style={{ border: 'none' }}>
         <SkuItem
           skuResult={sku.skuResult}
+          number={sku.needNumber}
           className={style.sku}
           extraWidth='64px'
           otherData={otherData}
@@ -97,12 +156,12 @@ const Header = (
           const urls = ToolUtil.isArray(item && item.mediaUrls);
           return <div key={index} className={style.checkUser}>
             <div className={style.checkNumber}>
-              <Label className={style.title}>复核数：</Label>
+              <Label className={style.title}>复核数</Label>：
               <ShopNumber show value={item.number} /> {unitName}
               <div style={{ padding: '0 8px' }}>({item.name || ''})</div>
             </div>
             <div className={style.checkNumber} style={{ display: 'block' }}>
-              <Label className={style.title}>附件： </Label>{urls.length === 0 && '无'}
+              <Label className={style.title}>附件 </Label>：{urls.length === 0 && '无'}
               <div hidden={urls.length === 0} style={{ paddingTop: 4 }}>
                 <UploadFile refresh={loading} show value={urls.map(item => {
                   return { url: item };
@@ -110,14 +169,14 @@ const Header = (
               </div>
             </div>
             <div className={style.checkNumber}>
-              <Label className={style.title}>备注说明：</Label> {item.note || '无'}
+              <Label className={style.title}>备注说明</Label>：{item.note || '无'}
             </div>
           </div>;
         })}
 
         <div hidden={sku.hidden} className={style.verifyAction}>
           <div className={style.checkNumber}>
-            <Label className={style.title}>复核数：</Label>
+            <Label className={style.title}>复核数</Label>：
             <Space align='center'>
               <ShopNumber
                 min={1}
@@ -129,7 +188,7 @@ const Header = (
             </Space>
           </div>
           <div className={style.checkNumber}>
-            <Label className={style.title}>上传附件：</Label>
+            <Label className={style.title}>上传附件</Label>：
             <div>
               <PaperClipOutlined onClick={() => {
                 addFileRef.current.addFile();
@@ -147,7 +206,7 @@ const Header = (
             />}
           </div>
           <div className={style.checkNumber}>
-            <Label className={style.title}>添加备注：</Label>
+            <Label className={style.title}>添加备注</Label>：
             <TextArea
               rows={1}
               value={note}
@@ -179,9 +238,62 @@ const Header = (
             }}>确认</Button>
           </div>
         </div>
-
       </div>
     </div>
+
+    <MyCard
+      title='绑定入库供应商'
+      hidden={!sku.confirm || inStockNumber <= 0} className={style.customerList}
+      extra={permissions && <LinkButton
+        disabled={noCheckCustomers.length === 0}
+        onClick={() => setVisible(true)}
+      >
+        <AddCircleOutline />
+      </LinkButton>}
+    >
+      {
+        checkCustomers.map((item, index) => {
+          return <div key={index} className={style.customer}>
+            <div className={style.name}>{item.label}</div>
+            <ShopNumber show={!permissions} value={item.number} onChange={(number) => {
+              let total = 0;
+              checkCustomers.forEach(customerItem => {
+                if (customerItem.value === item.value) {
+                  total += number;
+                } else {
+                  total += (customerItem.number || 0);
+                }
+              });
+              if (total > inStockNumber) {
+                Message.toast('不能超过入库数量！');
+                return;
+              }
+              customersChange(item.value, { number });
+            }} />
+            {permissions && <MyRemoveButton style={{ marginLeft: 8 }} onRemove={() => {
+              customersChange(item.value, { checked: false });
+            }} />}
+          </div>;
+        })
+      }
+    </MyCard>
+
+
+    <MyPicker
+      visible={visible}
+      options={noCheckCustomers}
+      onClose={() => setVisible(false)}
+      onChange={(customer) => {
+        let number = 0;
+        checkCustomers.forEach(item => number += (item.number || 0));
+        customersChange(customer.value, {
+          checked: true,
+          number: inStockNumber - number,
+        });
+      }}
+    />
+
+    {getCustomerLoading && <MyLoading />}
   </>;
 };
 

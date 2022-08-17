@@ -7,6 +7,7 @@ import MyAudit from './MyAudit';
 import Create from './Create';
 import { useLocation } from 'react-router-dom';
 import { useModel } from 'umi';
+import KeepAlive from '../../../components/KeepAlive';
 
 
 export const Tasks = () => {
@@ -84,10 +85,10 @@ export const Tasks = () => {
 };
 
 const ProcessTask = () => {
-  return <Tasks />;
-  // return <KeepAlive id='Test'>
-  //   <Tasks />
-  // </KeepAlive>;
+  // return <Tasks />;
+  return <KeepAlive id='Test'>
+    <Tasks />
+  </KeepAlive>;
 };
 
 export default ProcessTask;

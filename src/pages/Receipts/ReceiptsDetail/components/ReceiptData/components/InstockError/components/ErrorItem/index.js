@@ -17,13 +17,13 @@ const ErrorItem = (
   },
 ) => {
 
-
   return <div key={index}>
     <div className={style.skuItem}>
       <div className={style.sku}>
         <SkuItem
           extraWidth='100px'
           skuResult={item.skuResult}
+          number={item.needNumber}
           otherData={otherData}
         />
       </div>
