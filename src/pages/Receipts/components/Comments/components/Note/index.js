@@ -20,6 +20,7 @@ const Note = (
     },
     autoFocus,
     textAreaId,
+    placeholder,
   },
 ) => {
 
@@ -54,7 +55,7 @@ const Note = (
           className={style.textarea}
           value={note}
           id={textAreaId}
-          placeholder='添加备注，可@相关人员...'
+          placeholder={placeholder || '添加备注，可@相关人员...'}
           autoFocus={autoFocus}
           onFocus={() => onInput(true)}
           onChange={(note, users = []) => {

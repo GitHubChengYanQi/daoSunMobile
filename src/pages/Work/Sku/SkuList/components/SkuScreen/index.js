@@ -63,7 +63,7 @@ const SkuScreen = (
       case 'brand':
         return search.brands || [];
       case 'state':
-        return [{ label: '异常件', value: -1 }];
+        return [{ label: '存在异常件', value: -1 }];
       case 'position':
         return search.position || [];
       case 'bom':

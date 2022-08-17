@@ -5,6 +5,7 @@ import User from '../User';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
+import MySwitch from '../../../../../../../../components/MySwitch';
 
 const Stocktaking = (
   {
@@ -52,9 +53,8 @@ const Stocktaking = (
     <MyCard
       title='明盘'
       extra={<div className={style.method}>
-        <Switch
+        <MySwitch
           checked={value.method === 'OpenDisc'}
-          style={{ '--height': '24px', '--width': '38px' }}
           onChange={(checked) => {
             onChange({ ...value, method: checked ? 'OpenDisc' : 'DarkDisk' });
           }} />
@@ -64,9 +64,8 @@ const Stocktaking = (
     {value.all && <MyCard
       title='静态'
       extra={<div className={style.mode}>
-        <Switch
+        <MySwitch
           checked={value.mode === 'staticState'}
-          style={{ '--height': '24px', '--width': '38px' }}
           onChange={(checked) => {
             onChange({ ...value, mode: checked ? 'staticState' : 'dynamic' });
           }} />

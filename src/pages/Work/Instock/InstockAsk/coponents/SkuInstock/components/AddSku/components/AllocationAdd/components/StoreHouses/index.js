@@ -349,7 +349,7 @@ const StoreHouses = (
   return <div className={style.action} style={{ padding: 0, overflow: 'visible' }}>
     <div className={style.storeHouseTitle}>
       指定{moveLibrary ? '移' : '调'}{out ? '入' : '出'}库(位)
-      <div className={style.select}>
+      <div hidden={ToolUtil.isArray(storeHouses).length !== 0 && columns.length === 0} className={style.select}>
         选择<PlusCircleFilled onClick={() => {
         if (data.length > 0) {
           setSelectStore(true);

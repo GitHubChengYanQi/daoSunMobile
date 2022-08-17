@@ -101,7 +101,7 @@ const StocktaskingLog = ({ detail = {} }) => {
                     {typeof skuItem.realNumber === 'number' &&
                     <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
                     {skuItem.type === 'error' && <Button className={style.inventoryButton} onClick={() => {
-                      setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking });
+                      setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking, number: skuItem.stockNumber });
                     }}>查看</Button>}
                   </div>
                 </div>

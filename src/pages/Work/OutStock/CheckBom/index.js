@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from '../BomAdd/index.less';
 import SkuItem from '../../Sku/SkuItem';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -42,7 +42,7 @@ const CheckBom = () => {
     manual: true,
     onSuccess: (res) => {
       Message.successToast('添加成功！', () => {
-        history.goBack();
+        history.go(-2);
       }, true);
     },
   });
@@ -87,6 +87,8 @@ const CheckBom = () => {
         {
           data.map((item, index) => {
             const skuResult = item.skuResult || {};
+            const spuResult = skuResult.spuResult || {};
+            const unitResult = spuResult.unitResult || {};
             const brandResults = skuResult.brandResults || [];
             const brand = item.brand || {};
             return <div key={index} className={style.bomItem} style={{
@@ -106,12 +108,12 @@ const CheckBom = () => {
                 }}>{brand.brandName || '任意品牌'}</LinkButton> : '任意品牌']}
               />
               <div>
-                {item.number}个 / 每套
+                {item.number}{unitResult.unitName} / 每套
               </div>
             </div>;
           })
         }
-        <div style={{height:60}} />
+        <div style={{ height: 60 }} />
       </div>
     </MyCard>
 

@@ -15,6 +15,7 @@ const Comments = (
     title = '添加备注',
     onInput = () => {
     },
+    placeholder,
   }, ref) => {
 
   const [pid, setPid] = useState();
@@ -64,6 +65,7 @@ const Comments = (
       setVisible(false);
     }}>
       <Note
+        placeholder={placeholder}
         textAreaId='commetsTextArea'
         autoFocus
         uploadId='commentImgs'

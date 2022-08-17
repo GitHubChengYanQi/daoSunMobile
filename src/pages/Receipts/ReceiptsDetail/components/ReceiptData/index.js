@@ -103,6 +103,7 @@ const ReceiptData = (
       createUser={data.user}
     />
     <Comments
+      placeholder='添加评论,可@相关人员'
       title='添加评论'
       detail={data}
       id={data.processTaskId}

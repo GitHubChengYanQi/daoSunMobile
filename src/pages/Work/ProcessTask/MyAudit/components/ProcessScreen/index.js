@@ -97,6 +97,7 @@ const ProcessScreen = (
         />;
       case 'createUser':
         return <User
+          placeholder='请输入人员信息'
           title={item.title}
           value={createUser}
           onChange={(createUser) => {

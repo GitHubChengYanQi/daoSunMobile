@@ -14,6 +14,7 @@ import { ERPEnums } from './ERPEnums';
 import { MyLoading } from '../../components/MyLoading';
 import { connect } from 'dva';
 import TaskBottom from './Task/components/TaskBottom';
+import Report from '../../Report';
 
 const Stock = (props) => {
 
@@ -58,14 +59,16 @@ const Stock = (props) => {
             setStockDetail({ ...stockDetail, task, judge });
           }}
           setSkus={(skus, type) => {
-            shopRef.current.jump(()=>{
+            shopRef.current.jump(() => {
               setStockDetail({ ...stockDetail, skus, task: type });
-            },null);
+            }, null);
           }}
           stockDetail={stockDetail}
         />;
       case 'Message':
         return <Task keyChange={setTaskKey} />;
+      case 'report':
+        return <Report />;
       case 'dynamic':
         return <Dynamic />;
       default:
@@ -105,7 +108,7 @@ const Stock = (props) => {
 
 
   return <div className={style.pageIndex}>
-    <MyNavBar title='库存管理' />
+    <MyNavBar title='仓储中心' />
     <div
       className={style.content}
     >

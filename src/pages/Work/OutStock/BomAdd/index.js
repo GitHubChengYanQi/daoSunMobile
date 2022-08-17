@@ -24,6 +24,7 @@ const BomAdd = () => {
   return <>
     <MyNavBar title='选择BOM' />
     <MySearch
+      placeholder='请输入BOM相关信息'
       className={style.search}
       style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}
       value={value}
@@ -37,7 +38,7 @@ const BomAdd = () => {
           return <div key={index} className={style.bomItem}>
             <SkuItem extraWidth='90px' className={style.sku} skuResult={item.skuResult} />
             <Button color='primary' fill='outline' onClick={() => {
-              history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}&partsId=${item.partsId}`);
+              history.push(`/Work/OutStock/CheckBom?skuId=${item.skuId}&partsId=${item.partsId}`);
             }}>选择</Button>
           </div>;
         })

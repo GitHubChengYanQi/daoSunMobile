@@ -14,6 +14,7 @@ import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
 import { Switch } from 'antd-mobile';
 import SelectSkus from './components/SelectSkus';
+import MySwitch from '../../../../../../../../components/MySwitch';
 
 export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST' };
 
@@ -125,7 +126,7 @@ const StocktakingAsk = ({ createType }) => {
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}
       extra={
-        <Switch style={{ '--height': '24px', '--width': '38px' }} checked={params.all} onChange={(checked) => {
+        <MySwitch  checked={params.all} onChange={(checked) => {
           setParams({ ...params, all: checked, mode: checked ? 'staticState' : 'dynamic' });
         }}
         />

@@ -182,12 +182,12 @@ const AddSku = (
         setOneAdd(false);
         break;
       case ERPEnums.outStock:
-        setTitle('出库任务');
+        setTitle('添加出库物料');
         setOneAdd(true);
         break;
       case ERPEnums.inStock:
       case ERPEnums.directInStock:
-        setTitle('入库任务');
+        setTitle('添加入库物料');
         setOneAdd(true);
         break;
       default:

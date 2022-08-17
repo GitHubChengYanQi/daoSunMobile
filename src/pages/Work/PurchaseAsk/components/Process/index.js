@@ -60,63 +60,78 @@ const Process = (
   };
 
   // 节点名称 + 状态
-  const nodeStatusName = (auditType, stepStatus, status) => {
+  const nodeStatusName = (auditType, stepStatus, actioning) => {
     // 节点类型
     switch (auditType) {
       case 'start':
         // 发起节点状态
+        if (actioning) {
+          return '发起中';
+        }
         switch (stepStatus) {
           case 'error':
           case 'success':
-            return status ? '发起' : '已发起';
+            return '已发起';
           case 'wait':
-            return status ? '发起' : '未发起';
+            return '未发起';
           default:
             return '';
         }
       case 'route':
         // 路由节点状态
+        if (actioning) {
+          return '审批中';
+        }
         switch (stepStatus) {
           case 'error':
-            return status ? '拒绝' : '已拒绝';
+            return '已驳回';
           case 'success':
-            return status ? '通过' : '已通过';
+            return '已同意';
           case 'wait':
-            return status ? '通过' : '未通过';
+            return '未审批';
           default:
             return '';
         }
       case 'send':
         // 抄送节点状态
+        if (actioning) {
+          return '抄送中';
+        }
         switch (stepStatus) {
           case 'error':
-            return status ? '抄送' : '抄送异常';
+            return '抄送异常';
           case 'success':
-            return status ? '抄送' : '已抄送';
+            return '已抄送';
           case 'wait':
-            return status ? '抄送' : '未抄送';
+            return '未抄送';
           default:
             return '';
         }
       case 'process':
         // 审批节点状态
+        if (actioning) {
+          return '审批中';
+        }
         switch (stepStatus) {
           case 'error':
-            return status ? '拒绝' : '已拒绝';
+            return '已驳回';
           case 'success':
-            return status ? '审批' : '已审批';
+            return '已同意';
           case 'wait':
-            return status ? '审批' : '未审批';
+            return '未审批';
           default:
             return '';
         }
       case 'action':
         // 动作节点状态
+        if (actioning) {
+          return '执行中';
+        }
         switch (stepStatus) {
           case 'success':
-            return status ? '执行' : '已执行';
+            return '已执行';
           case 'wait':
-            return status ? '执行' : '未执行';
+            return '未执行';
           default:
             return '';
         }
@@ -172,11 +187,10 @@ const Process = (
               src={items.avatar}
             >{items.name.substring(0, 1)}</Avatar>
           </Badge>
-
           {items.name}
         </div>
         <div hidden={!stepsStatus}>
-          {nodeStatusName(auditType, stepsStatus, true)} · {MyDate.Show(logResult.updateTime || new Date())}
+          {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime || new Date())}
           {logRemark && <div>
             {logRemark.content}
             <UploadFile imgSize={14} show value={imgs} />
@@ -252,6 +266,8 @@ const Process = (
 
     let iconColor = '';
 
+    let actioning = false;
+
     const hidden = hiddenStep.includes(index);
 
     switch (step.logResult && step.logResult.status) {
@@ -259,6 +275,7 @@ const Process = (
         if (next) {
           stepStatus = 'wait';
           iconColor = style.action;
+          actioning = true;
           break;
         }
         stepStatus = 'wait';
@@ -283,7 +300,7 @@ const Process = (
             style={{ minHeight, fontSize: '5vw' }}
             status={stepStatus}
             title={<div className={style.title}>
-              <span>发起人 · {nodeStatusName(step.auditType, stepStatus)}</span>
+              <span>发起人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>
               {visiable(hidden, index)}
             </div>}
             description={!hidden && (createUser.name ? auditUsers([{
@@ -302,7 +319,7 @@ const Process = (
         return <div>
           <Steps.Step
             title={<div className={style.title}>
-              <span>审批人 · {nodeStatusName(step.auditType, stepStatus)}</span>
+              <span>审批人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>
               {visiable(hidden, index)}
             </div>}
             style={{ minHeight }}
@@ -327,11 +344,15 @@ const Process = (
       case 'process':
         let title;
         if (step.auditType === 'send') {
-          title = <span>抄送人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
+          title = <span>抄送人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>;
         } else if (step.auditRule.type === 'audit') {
-          title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus)}</span>;
+          title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>;
         } else {
-          title = <span>执行人 · {nodeStatusName('action', stepStatus)}</span>;
+
+          const actionStatuses = step.auditRule.actionStatuses || [];
+          title = <span>
+            {actionStatuses.map(item => item.actionName || '执行动作').join('、')} · {nodeStatusName('action', stepStatus, actioning)}
+          </span>;
         }
         return <div>
           <Steps.Step

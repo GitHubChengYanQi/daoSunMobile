@@ -83,6 +83,7 @@ const Bom = (
       title={<Divider contentPosition='left' className={style.divider}>{title}</Divider>}
     >
       <MySearch
+        placeholder='请输入BOM信息'
         className={style.searchBar}
         onSearch={(value) => {
           Select(value);

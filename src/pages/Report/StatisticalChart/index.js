@@ -8,14 +8,14 @@ import InventoryRotation from '../components/InventoryRotation';
 import OrderStatisicalChart from '../components/OrderStatisicalChart';
 import TaskStatisicalChart from '../components/TaskStatisicalChart';
 import MaterialAnalysis from '../components/MaterialAnalysis';
+import MySwitch from '../../components/MySwitch';
 
 const StatisticalChart = () => {
 
 
   const extra = () => {
     return <></>;
-    return <Space align='center'>常用列表 <Switch
-      style={{ '--height': '24px', '--width': '38px' }}
+    return <Space align='center'>常用列表 <MySwitch
       onChange={(checked) => {
 
       }} /></Space>;

@@ -138,7 +138,6 @@ const StockDetail = (
     <div className={style.search}>
       <MySearch
         historyType='stock'
-        extraIcon={<Icon type='icon-lingdang' style={{ fontSize: 20 }} />}
         placeholder='请输入物料相关信息'
         onSearch={(value) => {
           ref.current.submit({ skuName: value });

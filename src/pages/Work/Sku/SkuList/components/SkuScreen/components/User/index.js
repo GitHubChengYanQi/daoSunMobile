@@ -16,6 +16,7 @@ const User = (
     title,
     onChange = () => {
     },
+    placeholder,
   }) => {
 
   const [open, { toggle }] = useBoolean();
@@ -48,6 +49,7 @@ const User = (
       </LinkButton>}
     >
       <MySearch
+        placeholder={placeholder}
         className={style.searchBar}
         onSearch={(value) => {
           like(value);

@@ -147,7 +147,7 @@ const SkuAction = (
         <Title>申请明细</Title>
         <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
-        }}>详情</LinkButton>
+        }}>入库详情</LinkButton>
       </div>}
       className={style.cardStyle}
       headerClassName={style.headerStyle}

@@ -18,11 +18,11 @@ const Report = () => {
       <ReportSwiper />
     </MyCard>
 
-    <MyCard title='单据统计' bodyClassName={style.bodyClassName}>
+    <MyCard title='单据记录' bodyClassName={style.bodyClassName}>
       <Order />
     </MyCard>
 
-    <MyCard title='任务统计' extra={<LinkButton onClick={() => {
+    <MyCard title='任务记录' extra={<LinkButton onClick={() => {
       history.push('/Work/ProcessTask');
     }}>更多</LinkButton>}>
       <TaskList />
