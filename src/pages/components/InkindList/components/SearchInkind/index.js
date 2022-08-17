@@ -34,7 +34,7 @@ const SearchInkind = (
   const skuResult = skuInfo.skuResult || {};
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
 
   let inkindTotal = 0;
   let allInkinds = [];

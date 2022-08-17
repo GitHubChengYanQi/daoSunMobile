@@ -284,7 +284,7 @@ const SkuError = (
           </>,
           bottom: permissions && !forward && <div style={{ minHeight: 60 }}>
             <BottomButton
-              disabled={!handle || !(inStockNumber > 0 ? inStockNumber === inStockCustomersNumber : false)}
+              disabled={!handle || !(inStockNumber > 0 ? inStockNumber === inStockCustomersNumber : true)}
               only
               onClick={() => {
                 const param = {

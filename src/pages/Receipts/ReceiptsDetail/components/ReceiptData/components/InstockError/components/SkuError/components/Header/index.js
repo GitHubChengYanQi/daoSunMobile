@@ -56,7 +56,7 @@ const Header = (
   const addFileRef = useRef();
 
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0];
+  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
 
   const [customers, setCustomers] = useState([]);
 
@@ -91,7 +91,7 @@ const Header = (
     if (sku.skuId && sku.confirm && inStockNumber > 0) {
       getCustomer({ data: { skuId: sku.skuId } });
     }
-  }, [sku.skuId]);
+  }, [sku.skuId,sku.confirm]);
 
   const customersChange = (id, data = {}) => {
     const newCustomer = customers.map(item => {

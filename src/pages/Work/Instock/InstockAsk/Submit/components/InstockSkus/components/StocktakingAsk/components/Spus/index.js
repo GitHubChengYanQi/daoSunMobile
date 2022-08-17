@@ -12,12 +12,15 @@ import Brand from './components/Brand';
 import Material from './components/Material';
 import Bom from './components/Bom';
 import Positions from './components/Positions';
-import { DownFill, DownOutline, UpOutline } from 'antd-mobile-icons';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import { history } from 'umi';
+import LinkButton from '../../../../../../../../../../components/LinkButton';
+import SearchInkind from '../../../../../../../../../../components/InkindList/components/SearchInkind';
 
 const Spus = (
   {
+    inkind,
     noChecked,
     value = {},
     onClose = () => {
@@ -114,6 +117,8 @@ const Spus = (
       ...data,
     });
   };
+
+  const [errorSku, setErrorSku] = useState();
 
   useEffect(() => {
     submit();
@@ -217,7 +222,15 @@ const Spus = (
                       <SkuItem
                         extraWidth='60px'
                         skuResult={item}
-                        otherData={[ToolUtil.isArray(item.brandResults).map(item => item.brandName).join('`、')]}
+                        otherData={[
+                          ToolUtil.isArray(item.brandResults).map(item => item.brandName).join('`、'),
+                          inkind && item.stockNumber > 0 && <LinkButton onClick={() => {
+                            setErrorSku({
+                              skuId: item.skuId,
+                              skuResult: item,
+                            });
+                          }}>选择实物</LinkButton>,
+                        ]}
                       />
                     </div>;
                   })
@@ -227,8 +240,19 @@ const Spus = (
           }
         </MyList>
       </div>
-
     </div>
+
+    <SearchInkind
+      className={style.inkindList}
+      skuInfo={errorSku}
+      onClose={() => setErrorSku(false)}
+      visible={errorSku}
+      onSuccess={(inkindList = []) => {
+        onChange(params, inkindList.map(item=>({...ToolUtil.isObject(item.skuResult),...item})));
+        setErrorSku(false);
+      }}
+    />
+
     <BottomButton
       leftOnClick={() => {
         onClose();

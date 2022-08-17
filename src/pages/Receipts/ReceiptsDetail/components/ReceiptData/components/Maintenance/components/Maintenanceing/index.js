@@ -12,6 +12,10 @@ import { Message } from '../../../../../../../../components/Message';
 import { useRequest } from '../../../../../../../../../util/Request';
 import InkindList from '../../../../../../../../components/InkindList';
 import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import MyTextArea from '../../../../../../../../components/MyTextArea';
+import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
+import { ReceiptsEnums } from '../../../../../../../index';
+import MyCard from '../../../../../../../../components/MyCard';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
@@ -48,7 +52,7 @@ const Maintenanceing = (
       onError: () => Message.errorToast('养护失败！'),
     });
 
-  const [files, setFiles] = useState([]);
+  const [params, setParams] = useState({});
 
   useEffect(() => {
     const brands = skuItem.brandResults || [];
@@ -86,7 +90,7 @@ const Maintenanceing = (
     maintenanceLogRun({
       data: {
         maintenanceId,
-        enclosure: files,
+        enclosure: params.files,
         maintenanceLogDetailParams,
       },
     });
@@ -141,17 +145,31 @@ const Maintenanceing = (
       }
     </div>
 
-    <div className={style.phone}>
-      <div className={style.title}>养护现场</div>
+    <MyCard title='养护内容'>
+      <Careful
+        type={ReceiptsEnums.maintenance}
+        value={params.noticeIds}
+        onChange={(noticeIds) => {
+          setParams({ ...params, noticeIds });
+        }}
+      />
+    </MyCard>
+    <MyCard title='添加备注'>
+      <MyTextArea value={params.remake} onChange={(remake) => {
+        setParams({ ...params, remake });
+      }} />
+    </MyCard>
+
+    <MyCard title='上传附件'>
       <UploadFile
         imgSize={36}
         icon={<CameraOutline />}
         noFile
         onChange={(mediaIds) => {
-          setFiles(mediaIds);
+          setParams({ ...params, files: mediaIds });
         }}
       />
-    </div>
+    </MyCard>
 
     <InkindList
       ref={inkindRef}

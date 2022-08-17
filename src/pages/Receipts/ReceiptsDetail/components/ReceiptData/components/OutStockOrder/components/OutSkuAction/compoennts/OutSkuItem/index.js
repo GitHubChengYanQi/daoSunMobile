@@ -6,28 +6,11 @@ import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
 import pickStyle from '../MyPicking/index.less';
+import ShopNumber
+  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
 const OutSkuItem = ({ item, dataLength, index }) => {
   const skuResult = item.skuResult || {};
-
-  let stockNumberColor = '';
-  let stockNumberText = '';
-
-  switch (item.stockNumber || 0) {
-    case 0:
-      stockNumberColor = '#EA0000';
-      stockNumberText = '零库存';
-      break;
-    default:
-      if (item.isMeet) {
-        stockNumberColor = '#2EAF5D';
-        stockNumberText = '库存充足';
-      } else {
-        stockNumberColor = '#257BDE';
-        stockNumberText = '部分满足';
-      }
-      break;
-  }
 
   const received = item.receivedNumber;
   const collectable = item.perpareNumber;
@@ -35,50 +18,64 @@ const OutSkuItem = ({ item, dataLength, index }) => {
 
   const successPercent = Number(((received / item.number)).toFixed(2)) * 100;
   const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
-  const trail = Number(((notPrepared / item.number)).toFixed(2)) * 100;
 
-  return <>
-    <div
-      className={ToolUtil.classNames(style.sku)}
-      style={{ paddingBottom: 8 }}
-    >
+  return <div className={style.out}>
+    <div className={ToolUtil.classNames(style.statusName, '1')}>
+      {item.stockNumber ? <>可 <br />备 <br />料</> : <>不 <br />可 <br />备 <br />料</>}
+    </div>
+    <div className={style.skuData}>
       <div
-        className={style.skuItem}
-        style={{ paddingBottom: 0 }}
+        className={ToolUtil.classNames(style.sku)}
+        style={{ paddingBottom: 8 }}
       >
-        <div className={style.item}>
-          <SkuItem
-            number={item.stockNumber || 0}
-            imgSize={74}
-            skuResult={skuResult}
-            extraWidth='124px'
-            otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
-          />
-        </div>
-        <div className={style.outStockNumber}>
-          <div style={{ color: stockNumberColor }}>{stockNumberText}</div>
+        <div
+          className={style.skuItem}
+          style={{ paddingBottom: 0 }}
+        >
+          <div className={style.item}>
+            <SkuItem
+              number={item.stockNumber || 0}
+              imgSize={74}
+              skuResult={skuResult}
+              extraWidth='124px'
+              otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
+            />
+          </div>
+          <div className={style.outStockNumber}>
+            <ShopNumber show value={item.number} />
+          </div>
         </div>
       </div>
       <div className={pickStyle.dataNumber}>
-        <div className={pickStyle.number}>
-          <div hidden={successPercent <= 0} style={{ width: `${successPercent}%` }}>{received}</div>
-          <div hidden={percent <= 0} style={{ width: `${percent}%` }}>{collectable}</div>
-          <div hidden={trail <= 0} style={{ width: `${trail}%` }}>{notPrepared}</div>
-        </div>
         <Progress
           className={pickStyle.progress}
           format={() => {
-            return <span style={{ color: '#000' }}>{item.number + '  (申请数)'}</span>;
+            return <></>;
           }}
           percent={percent + successPercent}
           success={{ percent: successPercent, strokeColor: receivedColor }}
           trailColor={notPreparedColor}
           strokeColor={collectableColor}
         />
+        <div className={style.status}>
+          <div className={style.statusItem} style={{ margin: 0 }}>
+            <div className={style.radius} style={{ backgroundColor: receivedColor }} />
+            已领 {received}
+          </div>
+          <div className={style.statusItem}>
+            <div className={style.radius} style={{ backgroundColor: collectableColor }} />
+            可领 {collectable}
+          </div>
+          <div className={style.statusItem}>
+            <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
+            未备 {notPrepared}
+          </div>
+        </div>
       </div>
+      <div hidden={index === dataLength} className={style.space} />
     </div>
-    <div hidden={index === dataLength} className={style.space} />
-  </>;
+
+  </div>;
 };
 
 export default OutSkuItem;

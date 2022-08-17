@@ -65,6 +65,24 @@
 
 }
 
+.out {
+  display: flex;
+  margin-bottom: 3px;
+
+  .skuData {
+    flex-grow: 1;
+  }
+
+  .statusName {
+    padding: 0 4px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 12px;
+    background-color: var(--adm-color-primary);
+  }
+}
+
 .skuItem {
   display: flex;
   align-items: center;
@@ -370,22 +388,23 @@
 .skuTitle {
   display: flex;
   align-items: center;
+}
 
-  .status {
+.status {
+  display: flex;
+  align-items: center;
+
+  .statusItem {
+    margin-left: 16px;
     display: flex;
     align-items: center;
+    font-size: 12px;
 
-    .statusItem {
-      margin-left: 8px;
-      display: flex;
-      align-items: center;
-
-      .radius {
-        width: 8px;
-        height: 8px;
-        border-radius: 100%;
-        margin: 4px;
-      }
+    .radius {
+      width: 8px;
+      height: 8px;
+      border-radius: 100%;
+      margin: 4px;
     }
   }
 }

@@ -143,7 +143,7 @@ const CuringAsk = ({ createType, state }) => {
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
-      <SelectSkus value={params.skuList} onChange={(skuList) => {
+      <SelectSkus inkind value={params.skuList} onChange={(skuList) => {
         viewRun({ data: { selectParams: getSelectParams(skuList), nearMaintenance: params.nearMaintenance } });
         setParams({ ...params, skuList });
       }} />

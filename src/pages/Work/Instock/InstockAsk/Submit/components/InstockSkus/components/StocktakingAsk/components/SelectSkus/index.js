@@ -17,6 +17,7 @@ export const getOne = { url: '/inventory/conditionGetOne', method: 'POST' };
 
 const SelectSkus = (
   {
+    inkind,
     noChecked,
     value = [],
     onChange = () => {
@@ -105,10 +106,12 @@ const SelectSkus = (
       destroyOnClose
     >
       <Spus
+        inkind={inkind}
         noChecked={noChecked}
         value={visible}
         onClose={() => setVisible(null)}
         onChange={async (params, checkSkus = []) => {
+          console.log(checkSkus);
           if (checkSkus.length > 0) {
             const addSkus = checkSkus.map(item => {
               return {

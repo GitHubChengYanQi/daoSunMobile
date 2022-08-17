@@ -72,7 +72,7 @@ const Prepare = (
 
   const addShop = () => {
     onClose();
-    const imgUrl = Array.isArray(skuResult.imgUrls) && skuResult.imgUrls[0] || state.homeLogo;
+    const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0] || state.homeLogo;
     addShopCart(imgUrl, 'pickSkuImg', () => {
       let number = 0;
       outStockSkus.forEach(item => number += item.number);

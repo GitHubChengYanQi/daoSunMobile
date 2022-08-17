@@ -51,24 +51,23 @@ const User = ({ userId }) => {
     <div style={{ padding: 12 }}>
       <div className={style.card}>
         <div className={style.flexStart}>
-          <Avatar src={userData.avatar} style={{ '--size': '60px' }} />
           <div className={style.customerName}>
             {state.enterpriseName || '--'}
           </div>
-          {!userId && <MyRemoveButton
-            className={style.outLogin}
-            icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24 }} />}
-            content='是否退出登录'
-            onRemove={() => {
-              cookie.remove('cheng-token');
-              history.push('/Login');
-            }}
-          />}
+          <Avatar src={userData.avatar} style={{ '--size': '60px' }} />
         </div>
         <div className={style.userInfo}>
           <div className={style.name}>{userData.name}</div>
           <div className={style.dept}>
-            {userData.deptName} - {userData.positionNames}
+            {!userId && <MyRemoveButton
+              className={style.outLogin}
+              icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24,marginRight:12 }} />}
+              content='是否退出登录'
+              onRemove={() => {
+                cookie.remove('cheng-token');
+                history.push('/Login');
+              }}
+            />} {userData.deptName} - {userData.positionNames}
           </div>
         </div>
       </div>
