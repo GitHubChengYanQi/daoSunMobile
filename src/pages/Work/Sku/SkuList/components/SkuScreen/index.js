@@ -186,6 +186,7 @@ const SkuScreen = (
         />;
       case 'state':
         return <State
+          columns={2}
           options={getOptions(item.key)}
           title={item.title}
           value={[params.status]}

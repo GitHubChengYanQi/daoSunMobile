@@ -190,7 +190,7 @@ const Process = (
           {items.name}
         </div>
         <div hidden={!stepsStatus}>
-          {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime || new Date())}
+          {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
           {logRemark && <div>
             {logRemark.content}
             <UploadFile imgSize={14} show value={imgs} />

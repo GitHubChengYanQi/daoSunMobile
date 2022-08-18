@@ -10,6 +10,7 @@ const State = (
     value = [],
     onChange = () => {
     },
+    columns,
   }) => {
 
   return <div className={style.content}>
@@ -18,7 +19,7 @@ const State = (
       headerStyle={{ border: 'none' }}
     >
       <Selector
-        columns={3}
+        columns={columns ||3}
         className={style.skuClass}
         style={{
           '--border': 'solid transparent 1px',

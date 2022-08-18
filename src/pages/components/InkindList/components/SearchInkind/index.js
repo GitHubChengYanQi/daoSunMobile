@@ -7,6 +7,7 @@ import MyCheck from '../../../MyCheck';
 import { Button } from 'antd-mobile';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
+import { ToolUtil } from '../../../ToolUtil';
 
 const SearchInkind = (
   {
@@ -34,7 +35,7 @@ const SearchInkind = (
   const skuResult = skuInfo.skuResult || {};
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
+  const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0];
 
   let inkindTotal = 0;
   let allInkinds = [];

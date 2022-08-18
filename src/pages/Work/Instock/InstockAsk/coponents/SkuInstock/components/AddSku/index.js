@@ -46,7 +46,7 @@ const AddSku = (
 
   const [data, setData] = useState({});
   const skuResult = data.skuResult || {};
-  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
+  const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0];
 
   const [title, setTitle] = useState();
 

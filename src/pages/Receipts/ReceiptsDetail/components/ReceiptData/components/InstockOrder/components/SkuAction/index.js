@@ -116,7 +116,7 @@ const SkuAction = (
 
   const addInstockShop = (formStatus, item, index, type) => {
     const skuResult = item.skuResult || {};
-    const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0] || state.homeLogo;
+    const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0] || state.homeLogo;
     addShop({
       data: {
         formStatus,

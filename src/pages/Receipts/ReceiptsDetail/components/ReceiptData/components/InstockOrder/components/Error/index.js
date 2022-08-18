@@ -274,7 +274,7 @@ const Error = (
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
+  const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0];
 
   const [over, setOver] = useState(0);
 
@@ -357,7 +357,7 @@ const Error = (
     transitionEnd = () => {
     },
   ) => {
-    const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0] || state.homeLogo;
+    const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0] || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', transitionEnd);
   };
 

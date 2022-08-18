@@ -28,7 +28,7 @@ const SkuItem = (
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = Array.isArray(skuResult.imgThumbUrls) && skuResult.imgThumbUrls[0];
+  const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0];
 
   const spuResult = skuResult.spuResult || {};
   const unitResult = spuResult.unitResult || {};
