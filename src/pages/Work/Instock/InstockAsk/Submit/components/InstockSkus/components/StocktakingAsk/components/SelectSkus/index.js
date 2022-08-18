@@ -111,7 +111,6 @@ const SelectSkus = (
         value={visible}
         onClose={() => setVisible(null)}
         onChange={async (params, checkSkus = []) => {
-          console.log(checkSkus);
           if (checkSkus.length > 0) {
             const addSkus = checkSkus.map(item => {
               return {

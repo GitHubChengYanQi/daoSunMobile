@@ -21,7 +21,6 @@ const SkuItem = (
     title,
     more,
     moreDom,
-    textClickDisabled,
     moreClick = () => {
     },
   }) => {
@@ -54,10 +53,10 @@ const SkuItem = (
         className={style.sku}
         style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
       >
-        <MyEllipsis width='100%' onClick={() => !textClickDisabled && view()}>
+        <MyEllipsis width='100%'>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
         </MyEllipsis>
-        <div className={style.describe} onClick={() => !textClickDisabled && view()}>
+        <div className={style.describe}>
           <MyEllipsis width='100%'>
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>

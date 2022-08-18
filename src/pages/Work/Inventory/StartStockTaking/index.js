@@ -163,8 +163,9 @@ const StartStockTaking = () => {
       autoFocus
       onClose={() => setVisible(false)}
       onSuccess={(value = []) => {
-        console.log(value);
-        setVisible(false)
+        const positions = value[0] || {};
+        submit({ positionId: positions.id });
+        setVisible(false);
       }} />
 
     {(loading || statisticsLoading) && <MyLoading />}

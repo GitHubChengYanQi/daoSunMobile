@@ -12,7 +12,6 @@ import { ReceiptsEnums } from '../../../../../../../../Receipts';
 import style from '../../../PurchaseOrderInstock/index.less';
 import Title from '../../../../../../../../components/Title';
 import MyCard from '../../../../../../../../components/MyCard';
-import { Switch } from 'antd-mobile';
 import SelectSkus from './components/SelectSkus';
 import MySwitch from '../../../../../../../../components/MySwitch';
 

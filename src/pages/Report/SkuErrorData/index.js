@@ -84,7 +84,13 @@ const SkuErrorData = () => {
                     style={{ border: index === 1 ? 'none' : '' }}
                     className={ToolUtil.classNames(style.flexCenter, style.skuItem)}
                   >
-                    <SkuItem hiddenNumber skuResult={item.skuResult} imgSize={45} className={style.row} />
+                    <SkuItem
+                      hiddenNumber
+                      skuResult={item.skuResult}
+                      imgSize={45}
+                      className={style.row}
+                      extraWidth='100px'
+                    />
                     <LinkButton onClick={() => {
                       let type = '';
                       switch (item.type) {

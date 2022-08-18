@@ -20,7 +20,7 @@ const OutSkuItem = ({ item, dataLength, index }) => {
   const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
 
   return <div className={style.out}>
-    <div className={ToolUtil.classNames(style.statusName, '1')}>
+    <div className={ToolUtil.classNames(style.statusName, !item.stockNumber && style.noStatusName)}>
       {item.stockNumber ? <>可 <br />备 <br />料</> : <>不 <br />可 <br />备 <br />料</>}
     </div>
     <div className={style.skuData}>

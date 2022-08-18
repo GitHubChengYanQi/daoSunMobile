@@ -39,7 +39,6 @@ const ShopNumber = (
       min={min}
       max={max}
       onChange={onChange}
-      // decimal={decimal}
     />
   </>;
 };
