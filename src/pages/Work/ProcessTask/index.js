@@ -1,26 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import Icon from '../../components/Icon';
 import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
 import Create from './Create';
-import { useLocation } from 'react-router-dom';
 import { useModel } from 'umi';
 import KeepAlive from '../../../components/KeepAlive';
-
 
 export const Tasks = () => {
 
   const [key, setKey] = useState('audit');
 
-  const [scrollTop, setScrollTop] = useState();
-
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
   const userInfo = state.userInfo || {};
 
-  const location = useLocation();
+  const [scrollTop, setScrollTop] = useState(0);
 
   const content = () => {
     switch (key) {
@@ -37,20 +33,7 @@ export const Tasks = () => {
     }
   };
 
-  const initScroll = () => {
-    // const content = document.getElementById('content');
-    // console.log(content,scrollTop);
-    // if (content) {
-    //   content.scrollTop = scrollTop;
-    // }
-  };
-
-  useEffect(() => {
-    initScroll();
-  }, [location]);
-
-
-  return <div className={style.process} id='process'>
+  return <div className={style.process} style={{scrollMarginTop:scrollTop}}>
     <div className={style.content} id='content' onScroll={(event) => {
       setScrollTop(event.target.scrollTop);
     }}>
@@ -85,8 +68,8 @@ export const Tasks = () => {
 };
 
 const ProcessTask = () => {
-  // return <Tasks />;
-  return <KeepAlive id='Test'>
+
+  return <KeepAlive id='task' contentId='content'>
     <Tasks />
   </KeepAlive>;
 };

@@ -22,6 +22,13 @@ const PositionInventory = () => {
 
   const history = useHistory();
 
+  useEffect(() => {
+    ToolUtil.back({
+      title: '未进行提交，是否退出当前页面？',
+      key: 'timelyInventory',
+    });
+  }, []);
+
   const [data, setData] = useState([]);
 
   const [logs, setLogs] = useState([]);

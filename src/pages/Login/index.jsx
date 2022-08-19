@@ -131,7 +131,10 @@ const Login = (props) => {
   useEffect(() => {
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
     const token = GetUserInfo().token;
-    if (token && query.backUrl && ToolUtil.queryString('login', history.location.pathname)) {
+    const userInfo = GetUserInfo().userInfo || {};
+    const type = userInfo.hasOwnProperty('type');
+
+    if (token && !type && query.backUrl && ToolUtil.queryString('login', history.location.pathname)) {
       history.push('/');
     }
   }, []);

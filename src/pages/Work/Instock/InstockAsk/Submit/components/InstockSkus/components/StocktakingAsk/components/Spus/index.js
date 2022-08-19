@@ -14,9 +14,9 @@ import Bom from './components/Bom';
 import Positions from './components/Positions';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
-import { history } from 'umi';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
 import SearchInkind from '../../../../../../../../../../components/InkindList/components/SearchInkind';
+import { useHistory } from 'react-router-dom';
 
 const Spus = (
   {
@@ -30,13 +30,11 @@ const Spus = (
   },
 ) => {
 
-  window.addEventListener('popstate', (e) => {
-    if (history.location.query.popup === 1) {
-      onClose();
-    }
-  }, false);
+  const history = useHistory();
 
   const listRef = useRef();
+
+  const [searchValue, setSearchValue] = useState();
 
   const [data, setData] = useState([]);
 
@@ -122,11 +120,17 @@ const Spus = (
 
   useEffect(() => {
     submit();
+    ToolUtil.back({
+      key: 'spus',
+      onBack: onClose,
+    });
   }, []);
 
   return <>
     <div className={style.content}>
       <MySearch
+        value={searchValue}
+        onChange={setSearchValue}
         placeholder='请输入物料相关信息'
         className={style.search}
         onSearch={(skuName) => {
@@ -248,13 +252,14 @@ const Spus = (
       onClose={() => setErrorSku(false)}
       visible={errorSku}
       onSuccess={(inkindList = []) => {
-        onChange(params, inkindList.map(item=>({...ToolUtil.isObject(item.skuResult),...item})));
+        onChange(params, inkindList.map(item => ({ ...ToolUtil.isObject(item.skuResult), ...item })));
         setErrorSku(false);
       }}
     />
 
     <BottomButton
       leftOnClick={() => {
+        history.goBack();
         onClose();
       }}
       rightText={params.key !== undefined ? '修改' : '确认'}

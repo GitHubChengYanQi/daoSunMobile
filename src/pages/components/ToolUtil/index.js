@@ -1,6 +1,8 @@
 import pako from 'pako';
 import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 import { MyDate } from '../MyDate';
+import { Message } from '../Message';
+import { history } from 'umi';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {
@@ -153,6 +155,44 @@ const timeDifference = (tmpTime) => {
   return ansTimeDifference;
 };
 
+// 监听浏览器后退事件
+const back = (
+  {
+    title,
+    key,
+    onBack,
+  }) => {
+
+  const url = '#' + history.location.pathname + history.location.search;
+  window.history.replaceState({ key }, title, url);
+  window.history.pushState({}, title, url);
+
+  window.onloadstart = (ev) => {
+    console.log(ev);
+  };
+
+  window.onpopstate = (event) => {
+    const state = event.state || {};
+    if (state.key === key) {
+      if (typeof onBack === 'function') {
+        onBack();
+        return;
+      }
+      Message.warningDialog({
+        only: false,
+        content: title || '是否退出当前页面？',
+        onConfirm: () => {
+          history.goBack();
+        },
+        onCancel: () => {
+          window.history.replaceState({ key }, title, url);
+          window.history.pushState({}, title, url);
+        },
+      });
+    }
+  };
+};
+
 
 export const ToolUtil = {
   queryString,
@@ -164,4 +204,5 @@ export const ToolUtil = {
   listenOnKeyUp,
   createBall,
   timeDifference,
+  back,
 };

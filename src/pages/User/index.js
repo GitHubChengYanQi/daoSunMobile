@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import { Avatar } from 'antd-mobile';
 import style from './index.less';
 import { useRequest } from '../../util/Request';
@@ -13,6 +13,7 @@ import { ToolUtil } from '../components/ToolUtil';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
+const logOut = { url: '/login/cpLogOut', method: 'GET' };
 const selfDynamic = { url: '/dynamic/lsitBySelf', method: 'POST' };
 const userDynamic = { url: '/dynamic/ListByUser', method: 'POST' };
 
@@ -32,6 +33,16 @@ const User = ({ userId }) => {
       });
     },
   });
+
+  const { run:logOutRun } = useRequest(logOut, {
+    manual: true,
+    onSuccess: (res) => {
+      cookie.remove('cheng-token');
+      window.location.reload();
+    },
+  });
+
+
   const [dynamicData, setDynamicData] = useState([]);
 
   const { initialState } = useModel('@@initialState');
@@ -40,7 +51,16 @@ const User = ({ userId }) => {
   const userInfo = state.userInfo || {};
 
   useEffect(() => {
-    run({ params: { userId: userId || userInfo.id } });
+    if (userId){
+      run({ params: { userId: userId} });
+    }else {
+      setUserData({
+        avatar: userInfo.avatar,
+        name: userInfo.name,
+        deptName: ToolUtil.isArray(userInfo.dept).toString(),
+        positionNames: ToolUtil.isArray(userInfo.role).toString(),
+      });
+    }
   }, []);
 
   if (loading) {
@@ -58,16 +78,19 @@ const User = ({ userId }) => {
         </div>
         <div className={style.userInfo}>
           <div className={style.name}>{userData.name}</div>
-          <div className={style.dept}>
-            {!userId && <MyRemoveButton
+          <div className={style.describe}>
+            {userData.deptName}
+          </div>
+          <div className={style.describe}>
+            {userData.positionNames}
+          </div>
+          <div className={style.dept} hidden={userId}>
+            <MyRemoveButton
               className={style.outLogin}
-              icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24,marginRight:12 }} />}
+              icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24 }} />}
               content='是否退出登录'
-              onRemove={() => {
-                cookie.remove('cheng-token');
-                history.push('/Login');
-              }}
-            />} {userData.deptName} - {userData.positionNames}
+              onRemove={logOutRun}
+            >退出登录</MyRemoveButton>
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
-import { AliveScope } from '../components/KeepAlive';
+import KeepAlive, { AliveScope } from '../components/KeepAlive';
 
 
 const BasicLayout = (props) => {

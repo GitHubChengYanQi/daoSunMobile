@@ -16,6 +16,7 @@ export default {
   },
 
   effects: {
+
     // 获取常用菜单信息
     * getUserMenus({ payload }, { call, put }) {
       const sysMenus = payload.sysMenus || [];

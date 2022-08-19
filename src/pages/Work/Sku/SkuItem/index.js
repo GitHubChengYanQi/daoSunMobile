@@ -21,6 +21,7 @@ const SkuItem = (
     title,
     more,
     moreDom,
+    noView,
     moreClick = () => {
     },
   }) => {
@@ -35,6 +36,9 @@ const SkuItem = (
   const history = useHistory();
 
   const view = () => {
+    if (noView) {
+      return;
+    }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
   };
 

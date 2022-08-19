@@ -14,13 +14,14 @@ const MyAudit = (
     },
     createUser,
     top = ToolUtil.isQiyeWeixin() ? 0 : 45,
+    listScreentTop,
   }) => {
 
   const [screen, setScreen] = useState();
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], types: type && [type],createUser, };
+  const defaultParams = { auditType, statusList: ['0'], types: type && [type], createUser };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});
@@ -69,7 +70,7 @@ const MyAudit = (
 
 
     <ListScreent
-      top={top}
+      top={typeof listScreentTop === 'number' ? listScreentTop : top}
       setSort={setSort}
       sort={sort}
       screening={screening}
@@ -87,7 +88,7 @@ const MyAudit = (
 
     <ProcessScreen
       top={top}
-      open={{ type: !type,createUser:!createUser }}
+      open={{ type: !type, createUser: !createUser }}
       skuNumber={number}
       onClose={() => {
         setScreen(false);
