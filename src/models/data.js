@@ -20,7 +20,7 @@ export default {
     // 获取常用菜单信息
     * getUserMenus({ payload }, { call, put }) {
       const sysMenus = payload.sysMenus || [];
-      const userMenus = yield call(() => request({ url: '/mobelTableView/detail', method: 'GET' }));
+      const userMenus = yield call(() => request({ url: '/mobelTableView/viewDetail', method: 'GET' }));
       const newUserMenus = ToolUtil.isArray(userMenus.details).filter(item => {
         if (item.code === 'LogOut') {
           return false;
@@ -41,6 +41,14 @@ export default {
       });
       yield put({
         type: 'setData', payload: { userMenus: newUserMenus },
+      });
+    },
+
+    // 获取常用图表信息
+    * getUserChar({ payload }, { call, put }) {
+      const userChart = yield call(() => request({ url: '/mobelTableView/chartDetail', method: 'GET' }));
+      yield put({
+        type: 'setData', payload: { userChart: ToolUtil.isObject(userChart).details || [] },
       });
     },
   },

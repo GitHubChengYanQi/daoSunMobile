@@ -17,7 +17,7 @@ import MenusItem from '../component/MenusItem';
 import { Message } from '../../components/Message';
 
 
-const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
+export const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
 
 const MenusSetting = (props) => {
 
@@ -167,7 +167,7 @@ const MenusSetting = (props) => {
                 };
               });
               addRun({
-                data: { details },
+                data: { details,type:0 },
               });
               return;
             }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Swiper } from 'antd-mobile';
 import MaterialAnalysis from '../MaterialAnalysis';
 import InventoryRotation from '../InventoryRotation';
@@ -6,14 +6,24 @@ import ErrorSku from '../ErrorSku';
 import Stock from '../Stock';
 import OrderStatisicalChart from '../OrderStatisicalChart';
 import TaskStatisicalChart from '../TaskStatisicalChart';
+import { connect } from 'dva';
 
 const ReportSwiper = (
   {
     titleChange = () => {
     },
+    ...props
   },
 ) => {
 
+  const userChart = props.data && props.data.userChart;
+  console.log(userChart);
+
+  useEffect(() => {
+    if (!userChart) {
+      props.dispatch({type: 'data/getUserChar'});
+    }
+  }, []);
 
   return <>
     <Swiper loop autoplay onIndexChange={(index) => {
@@ -65,4 +75,4 @@ const ReportSwiper = (
   </>;
 };
 
-export default ReportSwiper;
+export default connect(({ data }) => ({ data }))(ReportSwiper);
