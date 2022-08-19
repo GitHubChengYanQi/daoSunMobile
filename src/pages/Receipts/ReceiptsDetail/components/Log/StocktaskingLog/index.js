@@ -42,38 +42,8 @@ const StocktaskingLog = ({ detail = {} }) => {
           {
             skuResultList.map((skuItem, skuIndex) => {
 
-              let color = '';
-              let icon = '';
-              let text = '';
-              switch (skuItem.status) {
-                case 0:
-                  text = '进行中';
-                  color = '#666666';
-                  break;
-                case 1:
-                  text = '已完成';
-                  color = '#257BDE';
-                  // icon = <CheckOutlined />;
-                  break;
-                case -1:
-                case 99:
-                  text = '已完成';
-                  color = '#257BDE';
-                  if (!showStock && skuItem.errorNum === 0) {
-                    break;
-                  }
-                  icon = <ExclamationTriangleOutline />;
-                  break;
-                case 2:
-                  text = '暂停中';
-                  color = '#FA8F2B';
-                  // icon = <PauseCircleFilled />;
-                  break;
-                default:
-                  text = skuItem.type === 'error' ? '异常' : '正常';
-                  color = skuItem.type === 'error' ? 'var(--adm-color-danger)' : '#257BDE';
-                  break;
-              }
+              const text = skuItem.type === 'error' ? '异常' : '正常';
+              const color = skuItem.type === 'error' ? 'var(--adm-color-danger)' : '#257BDE';
 
               return <div key={skuIndex}>
                 <div
@@ -95,11 +65,9 @@ const StocktaskingLog = ({ detail = {} }) => {
                   </div>
                   <div className={style.info} style={{ justifyContent: 'center', alignItems: 'center' }}>
                     <div style={{ color }} className={style.actionStatus}>
-                      <div className={style.icon}>{icon}</div>
                       <Icon type='icon-dian' /> {text}
                     </div>
-                    {typeof skuItem.realNumber === 'number' &&
-                    <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
+                    {skuItem.type !== 'error' && <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
                     {skuItem.type === 'error' && <Button className={style.inventoryButton} onClick={() => {
                       setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking, number: skuItem.stockNumber });
                     }}>查看</Button>}

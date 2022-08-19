@@ -113,6 +113,9 @@ const Spus = (
       storehousePositionsIds: positions.map(item => item.id),
       skuName: params.skuName,
       ...data,
+    }, {
+      field: 'spuId',
+      order: 'ascend',
     });
   };
 
@@ -125,6 +128,11 @@ const Spus = (
       onBack: onClose,
     });
   }, []);
+
+  const select = (params, checkSkus) => {
+    onChange(params, checkSkus);
+    history.goBack();
+  };
 
   return <>
     <div className={style.content}>
@@ -201,6 +209,7 @@ const Spus = (
       </Dropdown>
       <div className={style.spus}>
         <MyList
+          manual
           ref={listRef}
           api={skuList}
           getData={setData}
@@ -213,7 +222,7 @@ const Spus = (
                 <div className={style.spu}>
                   <div className={style.name}>{item.name}</div>
                   {!noChecked && <Button color='primary' fill='outline' onClick={() => {
-                    onChange({ ...params, spuId: item.spuId, name: item.name });
+                    select({ ...params, spuId: item.spuId, name: item.name });
                   }}>选择</Button>}
                 </div>
                 {
@@ -252,7 +261,11 @@ const Spus = (
       onClose={() => setErrorSku(false)}
       visible={errorSku}
       onSuccess={(inkindList = []) => {
-        onChange(params, inkindList.map(item => ({ ...ToolUtil.isObject(item.skuResult), ...item })));
+        let sku = {};
+        inkindList.forEach(item => {
+          sku = { ...ToolUtil.isObject(item.skuResult), ...item, number: (sku.number || 0) + item.number };
+        });
+        select(params, [sku]);
         setErrorSku(false);
       }}
     />
@@ -264,7 +277,7 @@ const Spus = (
       }}
       rightText={params.key !== undefined ? '修改' : '确认'}
       rightOnClick={() => {
-        onChange(params, checkSkus);
+        select(params, checkSkus);
       }}
     />
   </>;

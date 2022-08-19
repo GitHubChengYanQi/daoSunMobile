@@ -168,15 +168,13 @@ const back = (
   window.history.replaceState({ key }, title, url);
   window.history.pushState({}, title, url);
 
-  window.onloadstart = (ev) => {
-    console.log(ev);
-  };
-
   window.onpopstate = (event) => {
     const state = event.state || {};
-    if (state.key === key) {
+    console.log(state.key, onBack);
+    if (state.key) {
       if (typeof onBack === 'function') {
         onBack();
+        onBack = null;
         return;
       }
       Message.warningDialog({

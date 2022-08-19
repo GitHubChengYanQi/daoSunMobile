@@ -19,7 +19,7 @@ const OutSkuItem = ({ item, dataLength, index }) => {
   const successPercent = Number(((received / item.number)).toFixed(2)) * 100;
   const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
 
-  let statusDom;
+  let statusDom = <>可 <br />备 <br />料</>;
   let noAction = true;
 
   if (item.stockNumber) {
@@ -28,11 +28,8 @@ const OutSkuItem = ({ item, dataLength, index }) => {
     } else if (item.number === received + collectable) {
       statusDom = <>已 <br />备 <br />完</>;
     } else {
-      statusDom = <>可 <br />备 <br />料</>;
       noAction = false;
     }
-  } else {
-    statusDom = <>不 <br />可 <br />备 <br />料</>;
   }
 
   return <div className={style.out}>

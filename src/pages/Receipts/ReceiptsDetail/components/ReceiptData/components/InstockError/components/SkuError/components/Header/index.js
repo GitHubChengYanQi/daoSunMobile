@@ -81,7 +81,7 @@ const Header = (
           value: customerNum.customerId || item.customerId,
           label: customerNum.customerName || item.customerName,
           checked: customer.length === 1 || Boolean(customerNum.customerId),
-          number: customer.length === 1 ? 11 : (customerNum.num || 0),
+          number: customer.length === 1 ? inStockNumber : (customerNum.num || 0),
         };
       });
       setCustomers(newCustomers);

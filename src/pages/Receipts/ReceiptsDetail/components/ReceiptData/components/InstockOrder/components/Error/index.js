@@ -16,6 +16,8 @@ import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import ErrorDom from './components/ErrorDom';
 import Label from '../../../../../../../../components/Label';
+import { MyDate } from '../../../../../../../../components/MyDate';
+import { UserName } from '../../../../../../../../components/User';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -144,6 +146,8 @@ const Error = (
       const filedUrls = ToolUtil.isArray(res.filedUrls);
       let sku = {
         ...skuItem,
+        createTime: res.createTime,
+        user: res.user,
         scanNumber: false,
         number: res.needNumber,
         skuId: res.skuId,
@@ -455,20 +459,28 @@ const Error = (
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
+              <div hidden={!show} className={style.log}>
+                <div className={style.user}><UserName user={sku.user} /></div>
+                <div className={style.time}>{MyDate.Show(sku.createTime)}</div>
+              </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
                   盘点数量
                 </Label>
-                <ShopNumber
-                  hiddenNumber={!showStock}
-                  show={show}
-                  min={allNumber}
-                  value={sku.realNumber}
-                  onChange={(realNumber) => {
-                    setInkinds([]);
-                    setSku({ ...sku, realNumber, scanNumber: false });
-                  }}
-                />
+                {show ? <div style={{ padding: '0 4px' }}>
+                    {`盘${(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}${Math.abs(sku.realNumber - sku.number)}个`}
+                  </div>
+                  :
+                  <ShopNumber
+                    hiddenNumber={!showStock}
+                    show={show}
+                    min={allNumber}
+                    value={sku.realNumber}
+                    onChange={(realNumber) => {
+                      setInkinds([]);
+                      setSku({ ...sku, realNumber, scanNumber: false });
+                    }}
+                  />}
                 <div hidden={show} style={{ flexGrow: 1, textAlign: 'right' }}>
                   <ScanIcon onClick={() => {
                     setErrorInkind(false);
@@ -484,7 +496,7 @@ const Error = (
               </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
-                  上传照片
+                  {show ? '照片' : '上传照片'}
                 </Label>
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
@@ -501,7 +513,7 @@ const Error = (
               </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
-                  添加备注
+                  {show ? '备注' : '添加备注'}
                 </Label>
                 {show ? `${sku.remark || '无'}` : <TextArea
                   className={style.textArea}
