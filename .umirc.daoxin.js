@@ -2,7 +2,7 @@ export default {
   define:{
     'process.env':{
       ENV:'daoxin',
-      api:'https://api.daoxin.gf2025.com',
+      api:'http/127.0.0.1',
       wxCp:'https://wx.daoxin.gf2025.com/cp/#/',
       title:'道昕云',
       welcome:'欢迎使用道昕云',
