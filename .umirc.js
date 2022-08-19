@@ -10,7 +10,7 @@ export default {
     // '@primary-color': '#CDDC39',
   },
 
-  publicPath: ['test','daoxin'].includes(process.env.ENV)? '/' : '/cp/',
+  publicPath: process.env.ENV === 'test' ? '/' : '/cp/',
   history: { type: 'hash' },
 
   hash: true,
