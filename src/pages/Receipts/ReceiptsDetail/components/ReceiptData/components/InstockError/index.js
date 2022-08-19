@@ -9,6 +9,11 @@ import { useHistory } from 'react-router-dom';
 import { ReceiptsEnums } from '../../../../../index';
 import ErrorItem from './components/ErrorItem';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import BottomButton from '../../../../../../components/BottomButton';
+import { useRequest } from '../../../../../../../util/Request';
+import { Message } from '../../../../../../components/Message';
+
+export const submit = { url: '/anomalyOrder/submit', method: 'POST' };
 
 const InstockError = (
   {
@@ -18,6 +23,8 @@ const InstockError = (
     },
     permissions,
     refresh = () => {
+    },
+    afertShow = () => {
     },
     loading,
   },
@@ -31,6 +38,19 @@ const InstockError = (
   const history = useHistory();
 
   const masterUser = ToolUtil.isObject(data.masterUser);
+
+  const complete = anomalyResults.filter(item => item.status === 99);
+
+  const action = getAction('verify').id && permissions;
+
+  const { loading:submitLoading, run } = useRequest(submit, {
+    manual: true,
+    onSuccess: () => {
+      Message.successToast('提交成功！', () => {
+        refresh();
+      });
+    },
+  });
 
   const errorTypeData = (item = {}) => {
     switch (data.type) {
@@ -84,7 +104,7 @@ const InstockError = (
               key={index}
               index={index}
               show={data.complete === 99}
-              buttonHidden={!((getAction('verify').id && permissions) || data.complete === 99)}
+              buttonHidden={!(action || data.complete === 99)}
               onClick={() => {
                 setVisible(item.anomalyId);
               }} />;
@@ -99,7 +119,6 @@ const InstockError = (
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError
-        permissions={data.complete !== 99}
         height='80vh'
         anomalyOrderId={data.orderId}
         anomalyId={visible}
@@ -110,7 +129,16 @@ const InstockError = (
         }} />
     </Popup>
 
-    {loading && <MyLoading />}
+    {action && <BottomButton
+      afertShow={afertShow}
+      only
+      text='提交处理'
+      disabled={complete.length !== anomalyResults.length}
+      onClick={() => {
+        run({ data: { orderId: data.orderId, actionId: getAction('verify').id } });
+      }} />}
+
+    {(loading || submitLoading) && <MyLoading />}
   </>;
 };
 

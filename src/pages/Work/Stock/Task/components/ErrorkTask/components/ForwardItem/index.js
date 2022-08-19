@@ -1,5 +1,5 @@
 import React from 'react';
-import { history } from 'umi';
+import { history, useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
 
 const ForwardItem = (
@@ -8,23 +8,40 @@ const ForwardItem = (
   },
 ) => {
 
+  const { initialState } = useModel('@@initialState');
+  const state = initialState || {};
+  const userInfo = state.userInfo || {};
+
   const receipts = item.receipts || {};
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
   };
 
-  console.log(receipts);
+  const details = receipts.details || [];
 
-  return  <TaskItem
+  let myDetails = 0;
+  let complete = 0;
+
+  details.forEach(item => {
+    if (item.userId === userInfo.id) {
+      if (item.status !== 0) {
+        complete++;
+      }
+      myDetails++;
+    }
+  });
+
+  return <TaskItem
+    percent={parseInt((complete / myDetails) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}
-    skuSize={receipts.skuSize}
-    positionSize={receipts.positionSize}
+    skuSize={1}
+    positionSize={1}
     onClick={onClick}
-  />
+  />;
 };
 
 export default ForwardItem;

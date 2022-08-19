@@ -126,6 +126,12 @@ const ReceiptsDetail = () => {
     switch (key) {
       case 'data':
         return <ReceiptData
+          actionButton={
+            !hidden &&
+            !loading &&
+            detail.permissions &&
+            currentNode.filter(item => item.stepType === 'audit').length > 0
+          }
           success={success}
           permissions={detail.permissions}
           data={detail}
@@ -170,7 +176,7 @@ const ReceiptsDetail = () => {
         return {
           logTitle: '调拨记录',
         };
-        case ReceiptsEnums.error:
+      case ReceiptsEnums.error:
         return {
           logTitle: '处理记录',
         };
@@ -194,7 +200,7 @@ const ReceiptsDetail = () => {
     case ReceiptsEnums.errorForWard:
       return <>
         <MyNavBar title='异常处理' />
-        <SkuError anomalyId={detail.formId} forward permissions />
+        <SkuError anomalyId={detail.formId} forward />
       </>;
     default:
       return <div className={style.receipts}>

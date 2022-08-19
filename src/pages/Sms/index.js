@@ -6,7 +6,7 @@ import cookie from 'js-cookie';
 import GetUserInfo from '../GetUserInfo';
 import style from '../Login/index.less';
 import { Form } from '@formily/antd';
-import { Field } from '@formily/react';
+import { FormProvider, Field } from '@formily/react';
 import Icon from '../components/Icon';
 import { createForm, onFieldReact } from '@formily/core';
 import { Code, Phone } from './components/Field';
@@ -59,15 +59,13 @@ const Sms = () => {
         {process.env.welcome}
         <span>首次登录请输入手机号进行绑定</span>
       </div>
-      <Form
-        className={style.form}
-        form={form}
-        layout='vertical'
-        feedbackLayout='terse'
-      >
-        <Field name='phone' component={[Phone]} />
-        <Field name='code' component={[Code]} />
-      </Form>
+      <div className={style.form}>
+        <FormProvider form={form}>
+          <Field name='phone' component={[Phone]} />
+          <Field name='code' component={[Code]} />
+        </FormProvider>
+      </div>
+
 
       <div hidden className={style.foterAction}>
         <div className={style.privacy}>

@@ -162,8 +162,9 @@ const back = (
     key,
     onBack,
   }) => {
-
-  const url = '#' + history.location.pathname + history.location.search;
+  const query = history.location.query || {};
+  const search = Object.keys(query).map(item => (`${item}=${query[item]}`)).join('&');
+  const url = '#' + history.location.pathname + '?' + search;
   window.history.replaceState({ key }, title, url);
   window.history.pushState({}, title, url);
 

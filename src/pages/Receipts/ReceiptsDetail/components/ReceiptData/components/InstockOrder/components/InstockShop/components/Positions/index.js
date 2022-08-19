@@ -27,6 +27,7 @@ const Positions = (
     verification,
     storehouseId,
     skuId,
+    empty,
     ...props
   },
 ) => {
@@ -120,7 +121,7 @@ const Positions = (
       leftOnClick={() => {
         onClose();
       }}
-      rightDisabled={value.length === 0}
+      rightDisabled={!empty && value.length === 0}
       rightOnClick={() => {
         onSuccess(value);
       }}

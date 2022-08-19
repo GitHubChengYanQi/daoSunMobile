@@ -48,6 +48,7 @@ const Stocktaking = (
     getAction = () => {
       return {};
     },
+    afertShow=()=>{}
   },
 ) => {
 
@@ -208,6 +209,7 @@ const Stocktaking = (
     {loading && <MyLoading />}
 
     {actionPermissions && <BottomButton
+      afertShow={afertShow}
       only
       disabled={outTime}
       text={outTime ? '任务未开始' : '开始盘点'}

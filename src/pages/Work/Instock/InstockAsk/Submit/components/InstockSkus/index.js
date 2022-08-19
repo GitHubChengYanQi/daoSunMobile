@@ -22,7 +22,6 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     });
   },[])
 
-
   switch (createType) {
     case ERPEnums.outStock:
       return <OutstockAsk skus={skus} judge={judge} createType={createType} />;

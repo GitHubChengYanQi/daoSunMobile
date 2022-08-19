@@ -20,6 +20,8 @@ const Allocation = (
     permissions,
     refresh = () => {
     },
+    afertShow = () => {
+    },
     loading,
   },
 ) => {
@@ -189,6 +191,7 @@ const Allocation = (
     {loading && <MyLoading />}
 
     {assign && <BottomButton
+      afertShow={afertShow}
       only
       text='分配调拨物料'
       onClick={() => {

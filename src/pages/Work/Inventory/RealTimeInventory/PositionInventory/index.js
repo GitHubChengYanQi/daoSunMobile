@@ -22,13 +22,6 @@ const PositionInventory = () => {
 
   const history = useHistory();
 
-  useEffect(() => {
-    ToolUtil.back({
-      title: '未进行提交，是否退出当前页面？',
-      key: 'timelyInventory',
-    });
-  }, []);
-
   const [data, setData] = useState([]);
 
   const [logs, setLogs] = useState([]);
@@ -48,6 +41,11 @@ const PositionInventory = () => {
         }]);
         return;
       }
+
+      ToolUtil.back({
+        title: '未进行提交，是否退出当前页面？',
+        key: 'timelyInventory',
+      });
       skus.forEach(item => {
         const newPositionIds = newData.map(item => item.positionId);
         const newPositionIndex = newPositionIds.indexOf(item.positionId);
@@ -71,7 +69,7 @@ const PositionInventory = () => {
     manual: true,
     onSuccess: () => {
       Message.successToast('盘点完成！', () => {
-        history.goBack();
+        history.go(-2)
       });
     },
     onError: () => {

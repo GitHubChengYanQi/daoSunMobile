@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Tabs } from 'antd-mobile';
 import style from './index.less';
 import MySearch from '../../../components/MySearch';
@@ -26,6 +26,12 @@ export const TaskList = (
   const history = useHistory();
 
   const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
+
+  useEffect(() => {
+    if (query.type){
+      setKey(query.type);
+    }
+  }, [query.type]);
 
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -79,7 +85,7 @@ export const TaskList = (
     </div>
 
     <MyAudit
-      listScreentTop={0}
+      listScreentTop={!query.type && 0}
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {

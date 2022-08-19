@@ -21,6 +21,8 @@ import MyRemoveButton from '../../../../../../../../../../components/MyRemoveBut
 
 const Header = (
   {
+    errors = [],
+    type,
     forward,
     over,
     initialState,
@@ -78,8 +80,8 @@ const Header = (
         return {
           value: customerNum.customerId || item.customerId,
           label: customerNum.customerName || item.customerName,
-          checked: Boolean(customerNum.customerId),
-          number: customerNum.num || 0,
+          checked: customer.length === 1 || Boolean(customerNum.customerId),
+          number: customer.length === 1 ? 11 : (customerNum.num || 0),
         };
       });
       setCustomers(newCustomers);
@@ -91,7 +93,7 @@ const Header = (
     if (sku.skuId && sku.confirm && inStockNumber > 0) {
       getCustomer({ data: { skuId: sku.skuId } });
     }
-  }, [sku.skuId,sku.confirm]);
+  }, [sku.skuId, sku.confirm]);
 
   const customersChange = (id, data = {}) => {
     const newCustomer = customers.map(item => {
@@ -182,6 +184,10 @@ const Header = (
                 min={1}
                 value={sku.checkNumber}
                 onChange={(checkNumber) => {
+                  if (checkNumber < errors.length) {
+                    Message.toast('不能小于异常数量！');
+                    return;
+                  }
                   setSku({ ...sku, checkNumber });
                 }} />
               {unitName}
@@ -242,9 +248,10 @@ const Header = (
     </div>
 
     <MyCard
-      title='绑定入库供应商'
-      hidden={!sku.confirm || inStockNumber <= 0} className={style.customerList}
-      extra={permissions && <LinkButton
+      title='盘盈物所属料供应商'
+      hidden={type === 'InstockError' || forward || !sku.confirm || inStockNumber <= 0}
+      className={style.customerList}
+      extra={permissions && customers.length > 1 && <LinkButton
         disabled={noCheckCustomers.length === 0}
         onClick={() => setVisible(true)}
       >
@@ -270,7 +277,7 @@ const Header = (
               }
               customersChange(item.value, { number });
             }} />
-            {permissions && <MyRemoveButton style={{ marginLeft: 8 }} onRemove={() => {
+            {permissions && customers.length > 1 && <MyRemoveButton style={{ marginLeft: 8 }} onRemove={() => {
               customersChange(item.value, { checked: false });
             }} />}
           </div>;

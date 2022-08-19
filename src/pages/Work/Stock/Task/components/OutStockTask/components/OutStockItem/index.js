@@ -8,6 +8,7 @@ const OutStockItem = (
   {
     item = {},
     index,
+    pick,
   }) => {
 
   const receipts = item.receipts || {};
@@ -15,14 +16,14 @@ const OutStockItem = (
   const canPick = receipts.canPick;
   const canOperate = receipts.canOperate;
 
-  const can = canOperate === undefined ? canPick : canOperate;
+  const can = pick ? canPick : (canOperate === undefined ? canPick : canOperate);
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
   };
 
   return <TaskItem
-    statusName={canOperate === undefined ? <>
+    statusName={(pick || canOperate === undefined) ? <>
       可 <br />领 <br />料
     </> : <>
       可 <br />备<br />料

@@ -180,6 +180,7 @@ const ErrorDom = (
               <Label className={style.inKindFiledTitle}>数量：</Label>
               <ShopNumber
                 show={errorTypeData().errorNumberShow}
+                max={item.maxNumber}
                 min={1}
                 value={item.number}
                 onChange={(number) => {
@@ -300,6 +301,7 @@ const ErrorDom = (
               inkindId: item.inkindId,
               codeId: item.qrCodeId,
               number: 1,
+              maxNumber: item.number,
             };
           });
           if (number > sku.realNumber) {

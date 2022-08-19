@@ -7,10 +7,13 @@ import MyAudit from './MyAudit';
 import Create from './Create';
 import { useModel } from 'umi';
 import KeepAlive from '../../../components/KeepAlive';
+import { useLocation } from 'react-router-dom';
 
 export const Tasks = () => {
 
-  const [key, setKey] = useState('audit');
+  const { query } = useLocation();
+
+  const [key, setKey] = useState(query.key || 'audit');
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -33,7 +36,7 @@ export const Tasks = () => {
     }
   };
 
-  return <div className={style.process} style={{scrollMarginTop:scrollTop}}>
+  return <div className={style.process} style={{ scrollMarginTop: scrollTop }}>
     <div className={style.content} id='content' onScroll={(event) => {
       setScrollTop(event.target.scrollTop);
     }}>

@@ -61,7 +61,7 @@ const OutstockAsk = ({ skus, judge, createType }) => {
       if (history.length <= 2) {
         history.push('/');
       } else {
-        history.goBack();
+        history.go(-2);
       }
     }
     setData(array);

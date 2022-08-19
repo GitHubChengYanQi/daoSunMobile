@@ -27,7 +27,7 @@ const MyStart = () => {
 
 
   return <>
-    <MySearch placeholder='请输入相关单据信息' historyType='process' />
+    <MySearch placeholder='请输入单据相关信息' historyType='process' />
     <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
       <div
         className={topStyle.screen}

@@ -44,7 +44,7 @@ export const MyLoading = (
   });
 
   const Loading = () => {
-    if (error) {
+    if (error && !children) {
       return <div className={style.error}>
         <Icon type='icon-Wifi-Error' />
         <div>网络不给力</div>

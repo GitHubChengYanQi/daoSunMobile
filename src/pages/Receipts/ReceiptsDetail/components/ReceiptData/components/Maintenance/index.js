@@ -27,6 +27,7 @@ const Maintenance = (
     getAction = () => {
       return {};
     },
+    afertShow=()=>{},
     loading,
   },
 ) => {
@@ -177,6 +178,7 @@ const Maintenance = (
     {loading && <MyLoading />}
 
     {actionPermissions && <BottomButton
+      afertShow={afertShow}
       only
       disabled={outTime}
       text={outTime ? '任务未开始' : '开始养护'}

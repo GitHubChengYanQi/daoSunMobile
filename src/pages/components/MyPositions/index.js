@@ -23,6 +23,7 @@ const MyPositions = (
     single,
     showAll,
     maxNumber,
+    empty,
   },
 ) => {
 
@@ -37,6 +38,7 @@ const MyPositions = (
       onClose={onClose}
     >
       <Positions
+        empty
         verification={verification}
         skuId={skuId}
         checkShow={checkShow}
