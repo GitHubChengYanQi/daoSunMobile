@@ -1,6 +1,6 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { Button, Checkbox, Divider, Input, Toast } from 'antd-mobile';
+import { Button, Checkbox, Divider, Input } from 'antd-mobile';
 import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import { connect, useHistory } from 'dva';
@@ -139,6 +139,8 @@ const Login = (props) => {
     }
   }, []);
 
+  // console.log(Username)
+  // return <Username />;
   return <div className={style.login}>
     <div className={style.formDiv}>
       <div style={{ textAlign: 'center' }} className={style.logo}>
