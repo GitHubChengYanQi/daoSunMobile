@@ -62,7 +62,6 @@
     "babel-eslint": "^9.0.0",
     "cross-env": "^7.0.3",
     "echarts-for-react": "^3.0.1",
-    "eslint": "^5.4.0",
     "eslint-config-umi": "^1.4.0",
     "eslint-plugin-flowtype": "^2.50.0",
     "eslint-plugin-import": "^2.14.0",
