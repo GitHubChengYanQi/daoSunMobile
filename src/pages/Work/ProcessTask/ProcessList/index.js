@@ -8,6 +8,7 @@ import MaintenaceItem from '../../Stock/Task/components/MaintenanceTask/componen
 import StocktakingItem from '../../Stock/Task/components/StocktakingTask/components/StocktakingItem';
 import ErrorItem from '../../Stock/Task/components/ErrorkTask/components/ErrorItem';
 import ForwardItem from '../../Stock/Task/components/ErrorkTask/components/ForwardItem';
+import { history } from 'umi';
 
 
 export const startList = {
@@ -27,22 +28,31 @@ const ProcessList = (
 
   const [data, setData] = useState([]);
 
+  const onClick = (item) => {
+    const { query, pathname } = history.location;
+    history.replace({
+      pathname,
+      query: { ...query, actionTaskId: item.processTaskId },
+    });
+    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+  };
+
   const receiptsData = (item, index) => {
     switch (item.type) {
       case ReceiptsEnums.instockOrder:
-        return <InStockItem item={item} index={index} />;
+        return <InStockItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.outstockOrder:
-        return <OutStockItem item={item} index={index} />;
+        return <OutStockItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.maintenance:
-        return <MaintenaceItem item={item} index={index} />;
+        return <MaintenaceItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.stocktaking:
-        return <StocktakingItem item={item} index={index} />;
-        case ReceiptsEnums.allocation:
-        return <InStockItem item={item} index={index} />;
+        return <StocktakingItem onClick={onClick} item={item} index={index} />;
+      case ReceiptsEnums.allocation:
+        return <InStockItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.error:
-        return <ErrorItem item={item} />;
+        return <ErrorItem onClick={onClick} item={item} />;
       case ReceiptsEnums.errorForWard:
-        return <ForwardItem item={item} />;
+        return <ForwardItem onClick={onClick} item={item} />;
       default:
         return <></>;
     }

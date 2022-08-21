@@ -98,6 +98,10 @@ export default {
             id: codeId,
           },
         }), codeId);
+        if (!res) {
+          yield put({ type: 'scanCodeState', payload: { loading: false } });
+          return;
+        }
         switch (action) {
           case 'getBackObject':
             yield put({ type: 'scanCodeState', payload: { codeId, backObject: res, loading: false, action } });

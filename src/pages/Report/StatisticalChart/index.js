@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MyCard from '../../components/MyCard';
-import { Space, Switch } from 'antd-mobile';
+import { Space } from 'antd-mobile';
 import MyNavBar from '../../components/MyNavBar';
 import Stock from '../components/Stock';
 import ErrorSku from '../components/ErrorSku';
@@ -17,8 +17,7 @@ import MySwitch from '../../components/MySwitch';
 
 const StatisticalChart = ({ ...props }) => {
 
-  const userChart = props.data && props.data.userChart;
-  console.log(userChart);
+  const userChart = props.data && props.data.userChart || [];
 
   const { loading: addLoading, run: addRun } = useRequest(menusAddApi, {
     manual: true,
@@ -30,14 +29,29 @@ const StatisticalChart = ({ ...props }) => {
   });
 
   const extra = ({ code, name }) => {
-    return <Space align='center'>常用列表 <Switch
-      style={{ '--height': '24px', '--width': '38px' }}
+    return <Space align='center'>常用列表 <MySwitch
+      checked={userChart.filter(item => item.code === code).length > 0}
       onChange={(checked) => {
-        // addRun({
-        //   data: { details: [], type: 0 },
-        // });
+        let details = userChart;
+        if (checked) {
+          details.push({
+            code,
+            name,
+          })
+        }else {
+          details = details.filter(item=>item.code !== code);
+        }
+        addRun({
+          data: { details:details.map((item,index)=>({...item,sort:index})), type: 1 },
+        });
       }} /></Space>;
   };
+
+  useEffect(() => {
+    if (userChart.length === 0) {
+      props.dispatch({ type: 'data/getUserChar' });
+    }
+  }, []);
 
   return <>
     <MyNavBar title='统计图表设置' />

@@ -41,6 +41,7 @@ const StocktaskigAction = (
   const history = useHistory();
 
   const action = (positionItem, skuItem, showError) => {
+    console.log(skuItem);
 
     if (!showError && skuItem.lockStatus === 99) {
       Message.toast('此物料存在异常，正在处理中');
@@ -52,8 +53,8 @@ const StocktaskigAction = (
       skuResult: skuItem.skuResult,
       brandId: skuItem.brandId,
       brandResult: skuItem.brandResult,
-      stockNumber: skuItem.number,
-      number: skuItem.number,
+      stockNumber: (skuItem.number || 0) - (skuItem.lockNumber || 0),
+      number: (skuItem.number || 0) - (skuItem.lockNumber || 0),
       inventoryTaskId: inventoryTaskId,
       positionId: positionItem.positionId,
       anomalyId: skuItem.anomalyId || false,
@@ -128,7 +129,7 @@ const StocktaskigAction = (
                     skuResult={skuItem.skuResult}
                     extraWidth='100px'
                     hiddenNumber={!showStock}
-                    number={skuItem.number}
+                    number={(skuItem.number || 0) - (skuItem.lockNumber || 0)}
                     otherData={[
                       ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
                     ]}

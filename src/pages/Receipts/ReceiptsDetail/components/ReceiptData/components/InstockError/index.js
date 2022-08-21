@@ -43,7 +43,7 @@ const InstockError = (
 
   const action = getAction('verify').id && permissions;
 
-  const { loading:submitLoading, run } = useRequest(submit, {
+  const { loading: submitLoading, run } = useRequest(submit, {
     manual: true,
     onSuccess: () => {
       Message.successToast('提交成功！', () => {
@@ -103,8 +103,7 @@ const InstockError = (
               item={item}
               key={index}
               index={index}
-              show={data.complete === 99}
-              buttonHidden={!(action || data.complete === 99)}
+              show={data.complete === 99 || !permissions}
               onClick={() => {
                 setVisible(item.anomalyId);
               }} />;
@@ -121,6 +120,7 @@ const InstockError = (
       <SkuError
         height='80vh'
         anomalyOrderId={data.orderId}
+        orderComplete={data.complete === 99 || !permissions}
         anomalyId={visible}
         onClose={() => setVisible(false)}
         onSuccess={() => {

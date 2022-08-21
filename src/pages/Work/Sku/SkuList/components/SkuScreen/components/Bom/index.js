@@ -112,7 +112,7 @@ const Bom = (
               }
             }}
           >
-            下一级
+            子级物料
           </Radio>
           <Radio
             icon={(checked) => {
@@ -132,7 +132,7 @@ const Bom = (
               }
             }}
           >
-            全部
+            基础物料
           </Radio>
         </div>
 

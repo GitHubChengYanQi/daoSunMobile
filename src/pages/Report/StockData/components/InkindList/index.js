@@ -11,14 +11,14 @@ import { Space } from 'antd-mobile';
 
 const list = { url: '/inkind/list', method: 'POST' };
 
-const InkindList = ({ inkindIds }) => {
+const InkindList = ({ anomaly, inkindIds }) => {
 
   const [data, setData] = useState([]);
 
   return <div style={{ maxHeight: '70vh', overflow: 'auto' }}>
     <MyList
       api={list}
-      params={{ inkindIds }}
+      params={{ inkindIds, anomaly: anomaly ? 1 : null }}
       getData={(list, newList) => {
         const skuIds = list.map(item => item.skuId);
         const newData = data.filter(item => skuIds.includes(item.skuId));

@@ -467,9 +467,9 @@ const Error = (
                 <Label className={style.inKindTitle}>
                   盘点数量
                 </Label>
-                {show ? <div style={{ padding: '0 4px' }}>
+                {show ? <>
                     {`盘${(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}${Math.abs(sku.realNumber - sku.number)}个`}
-                  </div>
+                  </>
                   :
                   <ShopNumber
                     hiddenNumber={!showStock}

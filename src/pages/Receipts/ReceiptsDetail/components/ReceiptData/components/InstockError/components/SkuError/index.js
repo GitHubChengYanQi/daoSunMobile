@@ -30,10 +30,11 @@ const SkuError = (
     onSuccess = () => {
     },
     forward,
+    orderComplete = false,
   },
 ) => {
 
-  const [complete, setComplete] = useState(false);
+  const [complete, setComplete] = useState(orderComplete);
 
   const { initialState } = useModel('@@initialState');
   const userInfo = ToolUtil.isObject(initialState).userInfo || {};
@@ -69,7 +70,7 @@ const SkuError = (
     manual: true,
     onSuccess: (res) => {
 
-      if (res.status === 99) {
+      if (res.status === 99 && forward) {
         setComplete(true);
       }
 
@@ -252,7 +253,7 @@ const SkuError = (
                   data: {
                     anomalyId,
                     instockNumber: sku.instockNumber,
-                    status: 90,
+                    complete: true,
                   },
                 };
                 saveRun(param).then(() => {
@@ -295,7 +296,7 @@ const SkuError = (
                 const param = {
                   data: {
                     anomalyId,
-                    status: 90,
+                    complete: true,
                     customerNums: inStockCustomers.map(item => ({
                       customerId: item.value,
                       customerName: item.label,

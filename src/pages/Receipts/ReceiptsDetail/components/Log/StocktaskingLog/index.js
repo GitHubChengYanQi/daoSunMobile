@@ -3,10 +3,8 @@ import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
 import MyEmpty from '../../../../../components/MyEmpty';
-import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import Icon from '../../../../../components/Icon';
-import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { UserName } from '../../../../../components/User';
 import { MyDate } from '../../../../../components/MyDate';
 import { Button, Popup } from 'antd-mobile';
@@ -67,7 +65,6 @@ const StocktaskingLog = ({ detail = {} }) => {
                     <div style={{ color }} className={style.actionStatus}>
                       <Icon type='icon-dian' /> {text}
                     </div>
-                    {skuItem.type !== 'error' && <ShopNumber show value={skuItem.realNumber} textAlign='right' />}
                     {skuItem.type === 'error' && <Button className={style.inventoryButton} onClick={() => {
                       setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking, number: skuItem.stockNumber });
                     }}>查看</Button>}

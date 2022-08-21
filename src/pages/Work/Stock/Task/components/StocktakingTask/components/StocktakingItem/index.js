@@ -4,7 +4,12 @@ import TaskItem from '../../../TaskItem';
 import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
-const StocktakingItem = ({ item, index }) => {
+const StocktakingItem = (
+  {
+    item,
+    index,
+  }
+) => {
 
   const onClick = () => {
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);

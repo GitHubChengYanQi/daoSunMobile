@@ -2,7 +2,6 @@ import React from 'react';
 import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-import { MyDate } from '../../../../../../../components/MyDate';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 
 const MaintenaceItem = (

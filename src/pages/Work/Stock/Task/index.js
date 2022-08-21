@@ -25,11 +25,15 @@ export const TaskList = (
 
   const history = useHistory();
 
-  const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
+  const [key, setKey] = useState(ReceiptsEnums.instockOrder);
 
   useEffect(() => {
-    if (query.type){
-      setKey(query.type);
+    if (query.type) {
+      if (query.type !== key){
+        setKey(query.type);
+      }
+    } else if (activeKey) {
+      setKey(activeKey);
     }
   }, [query.type]);
 
@@ -73,6 +77,9 @@ export const TaskList = (
     />
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
+        if (query.type){
+          history.replace(`/Work/Stock/Task?type=${key}`)
+        }
         setKey(key);
         keyChange(key);
       }} className={style.tab}>

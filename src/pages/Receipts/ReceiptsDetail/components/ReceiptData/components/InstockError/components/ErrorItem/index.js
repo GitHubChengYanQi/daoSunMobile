@@ -13,7 +13,6 @@ const ErrorItem = (
     index,
     otherData,
     show,
-    buttonHidden,
   },
 ) => {
 
@@ -32,7 +31,7 @@ const ErrorItem = (
         <div className={style.status}>
           · {item.status === 99 ? '已处理' : '处理中'}
         </div>
-        {!buttonHidden && <Button className={style.action} onClick={onClick}>{show ? '查看' : '处理'}</Button>}
+        <Button className={style.action} onClick={onClick}>{show ? '查看' : '处理'}</Button>
       </div>
     </div>
 

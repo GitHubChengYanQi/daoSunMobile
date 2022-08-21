@@ -42,15 +42,17 @@ const SkuItem = (
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
   };
 
+  const getStockNumber = () => {
+    const stockNumber = (skuResult.stockNumber || 0) - (skuResult.lockStockDetailNumbe || 0);
+    return typeof number === 'number' ? number : stockNumber;
+  };
+
   return <>
     <div className={ToolUtil.classNames(style.skuList, className)}>
       <div id={imgId} className={style.img} style={{ maxHeight: imgSize, minWidth: imgSize }} onClick={view}>
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
-        <div
-          hidden={hiddenNumber}
-          className={style.number}
-        >
-          {typeof number === 'number' ? number : skuResult.stockNumber}{unitName || unitResult.unitName}
+        <div hidden={hiddenNumber} className={style.number}>
+          {getStockNumber()}{unitName || unitResult.unitName}
         </div>
       </div>
       <div

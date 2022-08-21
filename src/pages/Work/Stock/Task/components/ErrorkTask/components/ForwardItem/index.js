@@ -1,10 +1,12 @@
 import React from 'react';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
 
 const ForwardItem = (
   {
     item,
+    onClick = () => {
+    },
   },
 ) => {
 
@@ -13,10 +15,6 @@ const ForwardItem = (
   const userInfo = state.userInfo || {};
 
   const receipts = item.receipts || {};
-
-  const onClick = () => {
-    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-  };
 
   const details = receipts.details || [];
 
@@ -33,14 +31,14 @@ const ForwardItem = (
   });
 
   return <TaskItem
-    percent={parseInt((complete / myDetails) * 100)}
+    percent={myDetails || parseInt((complete / myDetails) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}
     skuSize={1}
     positionSize={1}
-    onClick={onClick}
+    onClick={() => onClick(item)}
   />;
 };
 
