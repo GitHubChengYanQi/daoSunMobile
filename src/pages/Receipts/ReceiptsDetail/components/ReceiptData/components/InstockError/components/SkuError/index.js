@@ -233,10 +233,12 @@ const SkuError = (
           bottom: <div style={{ minHeight: 40 }} hidden={forward}>
             <div className={style.bottomAction}>
               <div className={style.action}>
-                <div hidden={!sku.errorNumber}>终止入库 × {sku.errorNumber} </div>
-                <div
-                  className={style.instockNumber}>
-                  入库数量：
+                <div hidden={!sku.errorNumber} className={style.instockNumber}>
+                  <div>终止入库</div>
+                  <ShopNumber textAlign='left' show value={sku.errorNumber} />
+                </div>
+                <div className={style.instockNumber}>
+                  入库数量
                   <ShopNumber
                     min={0}
                     show={complete}
