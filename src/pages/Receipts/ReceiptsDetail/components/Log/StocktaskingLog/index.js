@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
-import MyEmpty from '../../../../../components/MyEmpty';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import Icon from '../../../../../components/Icon';
 import { UserName } from '../../../../../components/User';
@@ -22,62 +21,45 @@ const StocktaskingLog = ({ detail = {} }) => {
   const showStock = detail.method === 'OpenDisc';
 
   const dataList = () => {
-    return data.map((positionItem, positionIndex) => {
-      const skuResultList = positionItem.skuResultList || [];
+    return data.map((skuItem, skuIndex) => {
+      const text = skuItem.type === 'error' ? '异常' : '正常';
+      const color = skuItem.type === 'error' ? 'var(--adm-color-danger)' : '#257BDE';
 
-      const storeName = ToolUtil.isObject(positionItem.storehouseResult).name;
-
-      return <div
-        key={positionIndex}
-        className={style.positionItem}
-      >
-        <div className={style.positionName}>
-          <Icon type='icon-pandiankuwei' />
-          {positionItem.name} {storeName && '/'} {storeName}
-        </div>
+      return <div key={skuIndex} className={style.positionItem}>
         <div className={style.skus}>
-          {skuResultList.length === 0 && <MyEmpty description='暂无物料' />}
-          {
-            skuResultList.map((skuItem, skuIndex) => {
+          <div
+            className={style.sku}
+            key={skuIndex}
+            style={{ border: 'none' }}>
+            <div className={style.skuItem} onClick={() => {
 
-              const text = skuItem.type === 'error' ? '异常' : '正常';
-              const color = skuItem.type === 'error' ? 'var(--adm-color-danger)' : '#257BDE';
-
-              return <div key={skuIndex}>
-                <div
-                  className={style.sku}
-                  key={skuIndex}
-                  style={{ border: 'none' }}>
-                  <div className={style.skuItem} onClick={() => {
-
-                  }}>
-                    <SkuItem
-                      skuResult={skuItem.skuResult}
-                      extraWidth='100px'
-                      hiddenNumber={!showStock}
-                      number={skuItem.number}
-                      otherData={[
-                        ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
-                      ]}
-                    />
-                  </div>
-                  <div className={style.info} style={{ justifyContent: 'center', alignItems: 'center' }}>
-                    <div style={{ color }} className={style.actionStatus}>
-                      <Icon type='icon-dian' /> {text}
-                    </div>
-                    {skuItem.type === 'error' && <Button className={style.inventoryButton} onClick={() => {
-                      setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking, number: skuItem.stockNumber });
-                    }}>查看</Button>}
-                  </div>
-                </div>
-                <div className={style.update}>
-                  <div className={style.time}>{MyDate.Show(skuItem.createTime)}</div>
-                  <div><UserName user={skuItem.user} /></div>
-                </div>
-              </div>;
-            })
-          }
+            }}>
+              <SkuItem
+                skuResult={skuItem.skuResult}
+                extraWidth='100px'
+                hiddenNumber={!showStock}
+                number={skuItem.number}
+                otherData={[
+                  ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
+                  ToolUtil.isObject(skuItem.storehousePositionsResult).name,
+                ]}
+              />
+            </div>
+            <div className={style.info} style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <div style={{ color }} className={style.actionStatus}>
+                <Icon type='icon-dian' /> {text}
+              </div>
+              {skuItem.type === 'error' && <Button className={style.inventoryButton} onClick={() => {
+                setVisible({ ...skuItem, type: ReceiptsEnums.stocktaking, number: skuItem.stockNumber });
+              }}>查看</Button>}
+            </div>
+          </div>
+          <div className={style.update}>
+            <div className={style.time}>{MyDate.Show(skuItem.createTime)}</div>
+            <div><UserName user={skuItem.user} /></div>
+          </div>
         </div>
+
         <div className={style.space} />
       </div>;
     });
@@ -88,31 +70,13 @@ const StocktaskingLog = ({ detail = {} }) => {
       api={historyList}
       params={{ sourceId: detail.inventoryTaskId }}
       data={data}
-      getData={(list = [], newList = []) => {
-        const positionIds = list.map(item => item.storehousePositionsId);
-        const newData = data.filter(item => positionIds.includes(item.positionId));
-        newList.forEach(item => {
-          const newPositionIds = newData.map(item => item.positionId);
-          const newPositionIndex = newPositionIds.indexOf(item.positionId);
-          if (newPositionIndex !== -1) {
-            const newPosition = newData[newPositionIndex];
-            newData[newPositionIndex] = { ...newPosition, skuResultList: [...newPosition.skuResultList, item] };
-          } else {
-            newData.push({
-              positionId: item.storehousePositionsId,
-              name: ToolUtil.isObject(item.storehousePositionsResult).name,
-              storehouseResult: ToolUtil.isObject(item.storehousePositionsResult).storehouseResult,
-              skuResultList: [item],
-            });
-          }
-        });
-        setData(newData);
-      }}>
+      getData={setData}>
       {dataList()}
     </MyList>
 
     <Popup visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
       <Error
+        title='盘点记录'
         noDelete
         showStock
         onClose={() => setVisible({})}

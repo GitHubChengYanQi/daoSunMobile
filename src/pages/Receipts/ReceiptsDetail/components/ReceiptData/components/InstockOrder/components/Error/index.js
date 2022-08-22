@@ -47,6 +47,7 @@ const Error = (
     maxHeight = '80vh',
     type,
     showStock,
+    title,
     ...props
   },
 ) => {
@@ -160,6 +161,7 @@ const Error = (
         anomalyId: res.anomalyId,
         realNumber: res.realNumber,
         remark: res.remark,
+        positionsResult:res.positionsResult,
         filedUrls: fileIds.map((item, index) => {
           return {
             mediaIds: item,
@@ -444,7 +446,7 @@ const Error = (
         };
       case ReceiptsEnums.stocktaking:
         return {
-          title: '盘点',
+          title: title || '盘点',
           shopId: 'stocktakingError',
           addErrorHidden: show || inkinds.length === 0,
           errorNumberShow: show || !batch,
@@ -455,7 +457,10 @@ const Error = (
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}
-            otherData={[ToolUtil.isObject(sku.brandResult).brandName || '无品牌']}
+            otherData={[
+              ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
+              ToolUtil.isObject(sku.positionsResult).name
+            ]}
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
@@ -468,7 +473,9 @@ const Error = (
                   盘点数量
                 </Label>
                 {show ? <>
-                    {`盘${(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}${Math.abs(sku.realNumber - sku.number)}个`}
+                    盘{(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}
+                    <span className='numberBlue'>{Math.abs(sku.realNumber - sku.number) || 0}</span>
+                     {ToolUtil.isObject(spuResult.unitResult).unitName}
                   </>
                   :
                   <ShopNumber

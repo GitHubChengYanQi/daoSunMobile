@@ -22,10 +22,10 @@ const Careful = (
   const { loading: listLoading, data: announcemens, refresh } = useRequest({
     ...announcementsListSelect,
     data: { type },
-  },{
-    onSuccess:()=>{
+  }, {
+    onSuccess: () => {
 
-    }
+    },
   });
 
   const { loading: addLoading, run: add } = useRequest(announcementsAdd, {
@@ -43,16 +43,21 @@ const Careful = (
 
   const [content, setContent] = useState('');
 
+  const options = [...ToolUtil.isArray(announcemens).filter((item, index) => show ? value.includes(item.value) : (allCareful || index < 6))];
+
+  if (!show) {
+    options.push({
+      label: '其他',
+      value: 'other',
+    });
+  }
+
   return <>
-    <div className={ToolUtil.classNames(style.carefulData,className)} id='careful'>
+    <div className={ToolUtil.classNames(style.carefulData, className)} id='careful'>
       <Selector
-        disabled={show}
-        value={value}
+        value={show ? [] : value}
         className={style.selector}
-        options={[...ToolUtil.isArray(announcemens).filter((item, index) => allCareful || index < 6), {
-          label: '其他',
-          value: 'other',
-        }]}
+        options={options}
         multiple={true}
         onChange={(noticeIds) => {
           if (noticeIds.includes('other')) {

@@ -20,6 +20,7 @@ import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
 import InkindList from '../../../../../../../../../../components/InkindList';
 import Label from '../../../../../../../../../../components/Label';
+import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
 export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: 'POST' };
@@ -227,7 +228,7 @@ const ErrorDom = (
                 }}
               />}
             </div>
-            <div className={style.imgs}>
+            <div hidden={ToolUtil.isArray(item.media).length === 0} className={style.imgs}>
               <UploadFile
                 show={show}
                 value={item.media}
