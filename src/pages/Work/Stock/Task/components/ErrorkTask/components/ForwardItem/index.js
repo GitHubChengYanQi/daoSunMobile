@@ -20,10 +20,9 @@ const ForwardItem = (
 
   let myDetails = 0;
   let complete = 0;
-
   details.forEach(item => {
     if (item.userId === userInfo.id) {
-      if (item.status !== 0) {
+      if (item.stauts !== 0) {
         complete++;
       }
       myDetails++;
@@ -31,7 +30,7 @@ const ForwardItem = (
   });
 
   return <TaskItem
-    percent={myDetails || parseInt((complete / myDetails) * 100)}
+    percent={parseInt((complete / myDetails) * 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
