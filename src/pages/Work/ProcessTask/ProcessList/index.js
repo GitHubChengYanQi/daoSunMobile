@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from '../MyAudit/index.less';
 import MyList from '../../../components/MyList';
 import { ReceiptsEnums } from '../../../Receipts';
@@ -28,8 +28,13 @@ const ProcessList = (
 
   const [data, setData] = useState([]);
 
+  const { query, pathname } = history.location;
+
+  useEffect(()=>{
+    console.log(query.actionTaskId);
+  },[query.actionTaskId])
+
   const onClick = (item) => {
-    const { query, pathname } = history.location;
     history.replace({
       pathname,
       query: { ...query, actionTaskId: item.processTaskId },

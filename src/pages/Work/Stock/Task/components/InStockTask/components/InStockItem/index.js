@@ -1,5 +1,4 @@
 import React from 'react';
-import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 
 const InStockItem = (

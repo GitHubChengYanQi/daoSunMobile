@@ -1,5 +1,4 @@
 import React from 'react';
-import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
@@ -9,6 +8,8 @@ const OutStockItem = (
     item = {},
     index,
     pick,
+    onClick = () => {
+    },
   }) => {
 
   const receipts = item.receipts || {};
@@ -17,10 +18,6 @@ const OutStockItem = (
   const canOperate = receipts.canOperate;
 
   const can = pick ? canPick : (canOperate === undefined ? canPick : canOperate);
-
-  const onClick = () => {
-    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-  };
 
   return <TaskItem
     statusName={(pick || canOperate === undefined) ? <>
@@ -38,7 +35,7 @@ const OutStockItem = (
     skuSize={receipts.skuCount || 0}
     positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
-    onClick={onClick}
+    onClick={()=>onClick(item)}
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '无'}</div>
