@@ -247,7 +247,7 @@ const SkuError = (
                   data: {
                     anomalyId,
                     instockNumber: sku.instockNumber,
-                    status: 90,
+                    complete: true,
                   },
                 };
                 saveRun(param).then(() => {
@@ -290,7 +290,7 @@ const SkuError = (
                 const param = {
                   data: {
                     anomalyId,
-                    status: 90,
+                    complete: true,
                     customerNums: inStockCustomers.map(item => ({
                       customerId: item.value,
                       customerName: item.label,
