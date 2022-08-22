@@ -27,6 +27,7 @@ const Positions = (
     verification,
     storehouseId,
     skuId,
+    extra,
     ...props
   },
 ) => {
@@ -95,6 +96,7 @@ const Positions = (
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
+        extra={extra}
         skuId={skuId}
         disabled={disabled}
         single={single}

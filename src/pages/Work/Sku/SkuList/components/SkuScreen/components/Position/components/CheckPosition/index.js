@@ -5,6 +5,7 @@ import MyCheck from '../../../../../../../../../components/MyCheck';
 
 const CheckPosition = (
   {
+    extra,
     skuId,
     single,
     data = [],
@@ -82,7 +83,10 @@ const CheckPosition = (
           <div className={style.name} onClick={() => openPositions(open, childrens)}>
             {item.title} {skuId && `(${getChildNumber(item)})`}
           </div>
-          <div hidden={!checkShow(item)} className={style.checked} onClick={()=>{
+          <div hidden={!checkShow(item)} className={style.checked} onClick={() => {
+            if (typeof extra === 'function') {
+              return;
+            }
             if (checked) {
               onChange(value.filter(position => position.id !== item.key));
             } else {
@@ -102,11 +106,11 @@ const CheckPosition = (
                 }]);
             }
           }}>
-            <MyCheck
+            {typeof extra === 'function' ? extra(item) : <MyCheck
               fontSize={18}
               disabled={!checked && disabled}
               checked={checked}
-            />
+            />}
           </div>
         </div>}
         {positions(childrens, left + 12)}
