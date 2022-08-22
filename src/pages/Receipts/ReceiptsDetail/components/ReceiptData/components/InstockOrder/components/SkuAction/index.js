@@ -53,6 +53,7 @@ const SkuAction = (
 
   const actions = [];
   const noAction = [];
+  const wait = [];
   const error = [];
 
   const waitShopRef = useRef();
@@ -63,6 +64,8 @@ const SkuAction = (
       noAction.push(item);
     } else if (item.status === -1 || item.status === 50) {
       error.push(item);
+    } else if (item.status === 1) {
+      wait.push(item);
     } else {
       actions.push(item);
     }
@@ -71,7 +74,7 @@ const SkuAction = (
 
   let instockNumber = 0;
   let countNumber = 0;
-  const items = [...noAction, ...error, ...actions].map(item => {
+  const items = [...noAction, ...error, ...wait, ...actions].map(item => {
     countNumber += item.number;
     instockNumber += (item.instockNumber || 0);
     return {

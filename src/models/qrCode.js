@@ -138,7 +138,7 @@ export default {
           default:
             // 没有动作跳路由
             // 获取数据
-            yield put({ type: 'router', payload: { codeId, type: res.type } });
+            yield put({ type: 'router', payload: { codeId,object:res} });
             break;
         }
 
