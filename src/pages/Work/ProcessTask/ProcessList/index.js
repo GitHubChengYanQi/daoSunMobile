@@ -9,6 +9,9 @@ import StocktakingItem from '../../Stock/Task/components/StocktakingTask/compone
 import ErrorItem from '../../Stock/Task/components/ErrorkTask/components/ErrorItem';
 import ForwardItem from '../../Stock/Task/components/ErrorkTask/components/ForwardItem';
 import { history } from 'umi';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import { ToolUtil } from '../../../components/ToolUtil';
 
 
 export const startList = {
@@ -16,13 +19,20 @@ export const startList = {
   method: 'POST',
 };
 
+export const getTaskStatus = {
+  url: '/activitiProcessTask/getTaskStatus',
+  method: 'GET',
+};
+
 const ProcessList = (
   {
+    params,
     setNumber = () => {
     },
     listRef,
     api,
     processListRef,
+    all,
   },
 ) => {
 
@@ -30,9 +40,21 @@ const ProcessList = (
 
   const { query, pathname } = history.location;
 
-  useEffect(()=>{
-    console.log(query.actionTaskId);
-  },[query.actionTaskId])
+  const { loading, run } = useRequest(getTaskStatus, {
+    manual: true,
+    onSuccess: (res) => {
+      if (ToolUtil.isObject(res).status !== 0 && !all) {
+        const newData = data.filter(item => item.processTaskId !== res.processTaskId);
+        setData(newData);
+      }
+    },
+  });
+
+  useEffect(() => {
+    if (query.actionTaskId) {
+      run({ params: { taskId: query.actionTaskId } });
+    }
+  }, [query.actionTaskId]);
 
   const onClick = (item) => {
     history.replace({
@@ -64,6 +86,7 @@ const ProcessList = (
   };
 
   return <>
+    {loading && <MyLoading />}
     <div className={style.list} ref={processListRef}>
       <MyList
         ref={listRef}

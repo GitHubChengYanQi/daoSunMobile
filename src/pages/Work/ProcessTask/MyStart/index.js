@@ -50,7 +50,7 @@ const MyStart = () => {
       </div>
     </div>
 
-    <ProcessList api={myStart} setNumber={setNumber} listRef={ref} />
+    <ProcessList all api={myStart} setNumber={setNumber} listRef={ref} />
   </>;
 };
 

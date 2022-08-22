@@ -53,7 +53,6 @@ const MyAudit = (
   }, [auditType, type]);
 
   const processListRef = useRef();
-
   return <>
     <div hidden={type}>
       <MySearch
@@ -84,7 +83,7 @@ const MyAudit = (
       numberTitle={<>数量：<span>{number}</span></>}
     />
 
-    <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
+    <ProcessList all={ToolUtil.isArray(params.statusList).includes('99')} setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen
       top={top}
