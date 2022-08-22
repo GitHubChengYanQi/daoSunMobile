@@ -53,6 +53,7 @@ const SkuAction = (
 
   const actions = [];
   const noAction = [];
+  const error = [];
 
   const waitShopRef = useRef();
   const errorShopRef = useRef();
@@ -60,13 +61,19 @@ const SkuAction = (
   data.map((item) => {
     if (item.status === 0) {
       noAction.push(item);
+    } else if (item.status === -1 || item.status === 50) {
+      error.push(item);
     } else {
       actions.push(item);
     }
     return null;
   });
 
-  const items = [...noAction, ...actions].map(item => {
+  let instockNumber = 0;
+  let countNumber = 0;
+  const items = [...noAction, ...error, ...actions].map(item => {
+    countNumber += item.number;
+    instockNumber += (item.instockNumber || 0);
     return {
       ...item,
       number: item.realNumber,
@@ -75,9 +82,6 @@ const SkuAction = (
   });
 
   const [allSku, { toggle }] = useBoolean();
-
-  let countNumber = 0;
-  items.forEach(item => countNumber += item.number);
 
   const addShopCart = (
     imgUrl,
@@ -145,9 +149,9 @@ const SkuAction = (
     <MyCard
       titleBom={<div className={style.header}>
         <Title>申请明细</Title>
-        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+        {instockNumber > 0 && <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
-        }}>入库详情</LinkButton>
+        }}>入库详情</LinkButton>}
       </div>}
       className={style.cardStyle}
       headerClassName={style.headerStyle}
@@ -252,7 +256,6 @@ const SkuAction = (
         instockOrderId={instockOrderId}
       />
     </MyAntPopup>
-
 
     {action && <InstockShop
       errorShopRef={errorShopRef}
