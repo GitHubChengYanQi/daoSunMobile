@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { skuDetail } from '../../../Scan/Url';
 import { MyLoading } from '../../../components/MyLoading';
@@ -21,7 +21,38 @@ const SkuDetail = ({ id }) => {
 
   const skuId = id || query.skuId;
 
-  const { loading, data, run, refresh } = useRequest(skuDetail, { manual: true });
+  const [detail, setDetail] = useState();
+
+  const { loading, run, refresh } = useRequest(skuDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      const detail = res || {};
+      const imgs = detail.images ? ToolUtil.isArray(detail.images.split(',')).map((item, index) => {
+        const url = ToolUtil.isArray(detail.imgUrls)[index];
+        return {
+          url,
+          mediaId: item,
+        };
+      }) : [];
+
+      const files = detail.fileId ? ToolUtil.isArray(detail.fileId.split(',')).map((item, index) => {
+        const url = ToolUtil.isArray(detail.filedUrls)[index];
+        return {
+          url,
+          mediaId: item,
+        };
+      }) : [];
+
+      const drawings = detail.drawing ? ToolUtil.isArray(detail.drawing.split(',')).map((item, index) => {
+        const url = ToolUtil.isArray(detail.drawingUrls)[index];
+        return {
+          url,
+          mediaId: item,
+        };
+      }) : [];
+      setDetail({ ...detail, imgs, files, drawings });
+    },
+  });
 
   const { loading: editLoading, run: edit } = useRequest(editEnclosure, {
     manual: true,
@@ -41,40 +72,16 @@ const SkuDetail = ({ id }) => {
     }
   }, []);
 
-  if (loading && !data) {
+  if (loading && !detail) {
     return <MyLoading skeleton />;
   }
 
-  if (!data) {
+  if (!detail) {
     return <MyEmpty />;
   }
 
-  const imgs = data.images ? ToolUtil.isArray(data.images.split(',')).map((item, index) => {
-    const url = ToolUtil.isArray(data.imgUrls)[index];
-    return {
-      url,
-      mediaId: item,
-    };
-  }) : [];
-
-  const files = data.fileId ? ToolUtil.isArray(data.fileId.split(',')).map((item, index) => {
-    const url = ToolUtil.isArray(data.filedUrls)[index];
-    return {
-      url,
-      mediaId: item,
-    };
-  }) : [];
-
-  const drawings = data.drawing ? ToolUtil.isArray(data.drawing.split(',')).map((item, index) => {
-    const url = ToolUtil.isArray(data.drawingUrls)[index];
-    return {
-      url,
-      mediaId: item,
-    };
-  }) : [];
-
   const editAction = (newData = {}) => {
-    edit({ data: { skuId, images: data.images, fileId: data.fileId, drawing: data.drawing, ...newData } });
+    edit({ data: { skuId, images: detail.images, fileId: detail.fileId, drawing: detail.drawing, ...newData } });
   };
 
   return <div className={style.skuDetail}>
@@ -82,36 +89,36 @@ const SkuDetail = ({ id }) => {
     <MyCard title='基本信息'>
       <div className={style.item}>
         <Label className={style.label}>物料编码：</Label>
-        {data.standard}
+        {detail.standard}
       </div>
       <div className={style.item}>
         <Label className={style.label}>物料分类：</Label>
-        {data.spuResult && data.spuResult.spuClassificationResult && data.spuResult.spuClassificationResult.name}
+        {detail.spuResult && detail.spuResult.spuClassificationResult && detail.spuResult.spuClassificationResult.name}
       </div>
       <div className={style.item}>
         <Label className={style.label}>物料名称：</Label>
-        {data.spuResult && data.spuResult.name}
+        {detail.spuResult && detail.spuResult.name}
       </div>
       <div className={style.item}>
         <Label className={style.label}>物料型号：</Label>
-        {data.skuName}
+        {detail.skuName}
       </div>
       <div className={style.item}>
         <Label className={style.label}>物料规格：</Label>
-        {data.specifications}
+        {detail.specifications}
       </div>
       <div className={style.item}>
         <Label
           className={style.label}>单位：</Label>
-        {data.spuResult && data.spuResult.unitResult && data.spuResult.unitResult.unitName}
+        {detail.spuResult && detail.spuResult.unitResult && detail.spuResult.unitResult.unitName}
       </div>
       <div className={style.item}>
         <Label className={style.label}>品牌：</Label>
-        {data.brandResults && data.brandResults.map((item) => item.brandName).join(',')}
+        {detail.brandResults && detail.brandResults.map((item) => item.brandName).join(',')}
       </div>
       <div className={style.item}>
         <Label className={style.label}>创建人：</Label>
-        {ToolUtil.isObject(data.user).name}
+        {ToolUtil.isObject(detail.user).name}
       </div>
     </MyCard>
     <MyCard title='描述信息'>
@@ -122,12 +129,13 @@ const SkuDetail = ({ id }) => {
         <UploadFile
           noDefault
           uploadId='imgUpload'
-          value={imgs}
+          files={detail.imgs}
           max={3}
           noFile
           icon={<CameraOutline />}
-          onChange={(mediaIds) => {
-            editAction({ images: mediaIds.toString() });
+          onChange={(medias) => {
+            console.log(medias);
+            editAction({ images: medias.map(item => item.mediaId).toString() });
           }}
         />
       </div>
@@ -140,11 +148,11 @@ const SkuDetail = ({ id }) => {
           noDefault
           max={3}
           uploadId='fileUpload'
-          value={files}
+          files={detail.files}
           noFile
           icon={<CameraOutline />}
-          onChange={(mediaIds) => {
-            editAction({ fileId: mediaIds.toString() });
+          onChange={(medias) => {
+            editAction({ fileId: medias.map(item => item.mediaId).toString() });
           }}
         />
       </div>
@@ -157,14 +165,15 @@ const SkuDetail = ({ id }) => {
           noDefault
           max={3}
           uploadId='drawingUpload'
-          value={drawings}
+          files={detail.drawings}
           noFile
           icon={<CameraOutline />}
-          onChange={(mediaIds) => {
-            editAction({ drawing: mediaIds.toString() });
+          onChange={(medias) => {
+            editAction({  drawing: medias.map(item => item.mediaId).toString() });
           }}
         />
       </div>
+
     </MyCard>
 
     {(editLoading || loading) && <MyLoading />}

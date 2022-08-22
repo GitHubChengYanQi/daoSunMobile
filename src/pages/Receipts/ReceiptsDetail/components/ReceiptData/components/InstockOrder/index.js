@@ -101,7 +101,7 @@ const InstockOrder = (
     <MyCard title='附件'>
       <div className={style.files}>
         {fileUrls.length === 0 && '无'}
-        <UploadFile show value={fileUrls.map(item => {
+        <UploadFile show files={fileUrls.map(item => {
           return {
             url: item,
             type: 'image',

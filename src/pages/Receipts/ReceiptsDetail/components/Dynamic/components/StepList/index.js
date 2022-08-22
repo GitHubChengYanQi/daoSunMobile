@@ -76,7 +76,7 @@ const StepList = (
                 {getContent(item)}
               </div>
               <div className={style.photos} hidden={imgs.length === 0}>
-                <UploadFile show value={imgs} />
+                <UploadFile show files={imgs} />
               </div>
               <div className={style.time}>
                 {ToolUtil.timeDifference(item.createTime)}

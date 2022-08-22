@@ -166,7 +166,7 @@ const Maintenance = (
     <MyCard title='附件'>
       <div className={style.files}>
         {ToolUtil.isArray(receipts.enclosureUrl).length === 0 && '无'}
-        <UploadFile show value={ToolUtil.isArray(receipts.enclosureUrl).map(item => {
+        <UploadFile show files={ToolUtil.isArray(receipts.enclosureUrl).map(item => {
           return {
             url: item,
             type: 'image',

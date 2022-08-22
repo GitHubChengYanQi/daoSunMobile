@@ -193,7 +193,7 @@ const Process = (
           {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
           {logRemark && <div>
             {logRemark.content}
-            <UploadFile imgSize={14} show value={imgs} />
+            <UploadFile imgSize={14} show files={imgs} />
           </div>}
         </div>
       </div>;

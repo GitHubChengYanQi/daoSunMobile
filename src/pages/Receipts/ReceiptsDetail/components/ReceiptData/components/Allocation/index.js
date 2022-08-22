@@ -179,7 +179,7 @@ const Allocation = (
     <MyCard title='附件'>
       <div className={style.files}>
         {[].length === 0 && '无'}
-        <UploadFile show value={[].map(item => {
+        <UploadFile show files={[].map(item => {
           return {
             url: item,
             type: 'image',

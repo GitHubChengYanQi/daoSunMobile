@@ -13,9 +13,21 @@ const MyRemoveButton = (
     className,
     content,
     style = {},
+    dom: DOM,
   },
 ) => {
 
+  const onClick = () => {
+    Message.warningDialog({
+      content: content || '是否确认删除？',
+      onConfirm: onRemove,
+      only: false,
+    });
+  };
+
+  if (DOM) {
+    return <DOM onClick={onClick} />;
+  }
 
   return <>
     <Button
@@ -24,14 +36,9 @@ const MyRemoveButton = (
       color='danger'
       fill='none'
       style={{ padding: 0, ...style }}
-      onClick={() => {
-        Message.warningDialog({
-          content: content || '是否确认删除？',
-          onConfirm: onRemove,
-          only: false,
-        });
-      }}>
-      <Space align={'center'} style={{'--gap':'4px'}}>{icon || <DeleteOutline style={{ fontSize: 14 }} />} {children}</Space>
+      onClick={onClick}>
+      <Space align={'center'} style={{ '--gap': '4px' }}>{icon ||
+      <DeleteOutline style={{ fontSize: 14 }} />} {children}</Space>
     </Button>
   </>;
 };

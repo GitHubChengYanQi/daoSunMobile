@@ -161,7 +161,7 @@ const Error = (
         anomalyId: res.anomalyId,
         realNumber: res.realNumber,
         remark: res.remark,
-        positionsResult:res.positionsResult,
+        positionsResult: res.positionsResult,
         filedUrls: fileIds.map((item, index) => {
           return {
             mediaIds: item,
@@ -459,7 +459,7 @@ const Error = (
             extraWidth={id ? '84px' : '24px'}
             otherData={[
               ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
-              ToolUtil.isObject(sku.positionsResult).name
+              ToolUtil.isObject(sku.positionsResult).name,
             ]}
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
@@ -475,7 +475,7 @@ const Error = (
                 {show ? <>
                     盘{(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}
                     <span className='numberBlue'>{Math.abs(sku.realNumber - sku.number) || 0}</span>
-                     {ToolUtil.isObject(spuResult.unitResult).unitName}
+                    {ToolUtil.isObject(spuResult.unitResult).unitName}
                   </>
                   :
                   <ShopNumber
@@ -508,13 +508,13 @@ const Error = (
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
                   show={show}
-                  value={sku.filedUrls}
+                  files={sku.filedUrls}
                   uploadId={`errorUpload`}
                   imgSize={36}
                   icon={<CameraOutline />}
                   noFile
-                  onChange={(mediaIds) => {
-                    setSku({ ...sku, enclosure: mediaIds.toString() });
+                  onChange={(medias) => {
+                    setSku({ ...sku, filedUrls: medias, enclosure: medias.map(item => item.mediaId).toString() });
                   }}
                 />
               </div>

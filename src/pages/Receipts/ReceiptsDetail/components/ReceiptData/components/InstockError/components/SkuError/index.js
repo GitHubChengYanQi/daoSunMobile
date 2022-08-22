@@ -343,7 +343,6 @@ const SkuError = (
       onClose={onClose}
       forward={forward}
       over={over}
-      loading={saveLoading}
       initialState={initialState}
       saveRun={(params) => {
         setSku({ ...sku, checkUsers: [] });
@@ -413,7 +412,7 @@ const SkuError = (
             <div hidden={ToolUtil.isArray(item.media).length === 0} className={ToolUtil.classNames(style.inkindFiled)}>
               <UploadFile
                 show
-                value={item.media}
+                files={item.media}
                 imgSize={36}
               />
             </div>

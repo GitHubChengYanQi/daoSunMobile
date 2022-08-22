@@ -228,16 +228,16 @@ const ErrorDom = (
                 }}
               />}
             </div>
-            <div hidden={ToolUtil.isArray(item.media).length === 0} className={style.imgs}>
+            <div hidden={show && ToolUtil.isArray(item.media).length === 0} className={style.imgs}>
               <UploadFile
                 show={show}
-                value={item.media}
+                files={item.media}
                 uploadId={`errorUpload${index}`}
                 imgSize={36}
                 icon={<CameraOutline />}
                 noFile
-                onChange={(mediaIds) => {
-                  inkinsChange(index, { mediaIds });
+                onChange={(medias) => {
+                  inkinsChange(index, { media: medias, mediaIds: medias.map(item => item.mediaId) });
                 }}
               />
             </div>

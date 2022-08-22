@@ -35,7 +35,6 @@ const Header = (
     },
     anomalyId,
     userInfo,
-    loading,
     otherData,
     checkNumberTitle,
     inStockCustomers = () => {
@@ -44,7 +43,7 @@ const Header = (
   },
 ) => {
 
-  const [mediaIds, setMediaIds] = useState([]);
+  const [medias, setMedias] = useState([]);
   const [note, setNote] = useState();
 
   const inStockNumber = sku.checkNumber - sku.needNumber;
@@ -165,7 +164,7 @@ const Header = (
             <div className={style.checkNumber} style={{ display: 'block' }}>
               <Label className={style.title}>附件 </Label>：{urls.length === 0 && '无'}
               <div hidden={urls.length === 0} style={{ paddingTop: 4 }}>
-                <UploadFile refresh={loading} show value={urls.map(item => {
+                <UploadFile show files={urls.map(item => {
                   return { url: item };
                 })} />
               </div>
@@ -201,15 +200,14 @@ const Header = (
               }} />
             </div>
           </div>
-          <div hidden={mediaIds.length === 0}>
-            {!loading && <UploadFile
+          <div hidden={medias.length === 0}>
+            <UploadFile
+              files={medias}
               uploadId='verifyImg'
               noAddButton
               ref={addFileRef}
-              onChange={(mediaIds) => {
-                setMediaIds(mediaIds);
-              }}
-            />}
+              onChange={setMedias}
+            />
           </div>
           <div className={style.checkNumber}>
             <Label className={style.title}>添加备注</Label>：
@@ -233,12 +231,12 @@ const Header = (
                     number: sku.checkNumber,
                     name: userInfo.name,
                     userId: userInfo.id,
-                    mediaIds,
+                    mediaIds: medias.map(item => item.mediaId),
                     note,
                   }]),
                 },
               };
-              setMediaIds([]);
+              setMedias([]);
               setNote('');
               saveRun(param);
             }}>确认</Button>

@@ -27,6 +27,8 @@ const Note = (
 
   const [mediaIds, setMediaId] = useState([]);
 
+  const [medias, setMedias] = useState([]);
+
   const [userIds, setUserIds] = useState([]);
 
   const [note, setNote] = useState('');
@@ -37,15 +39,17 @@ const Note = (
     <div className={ToolUtil.classNames(style.content, className)}>
       <div hidden={mediaIds.length === 0} className={style.imgs}>
         <UploadFile
+          files={noAdd ? value.files : medias}
           loading={loading}
           uploadId={uploadId}
           noAddButton
           ref={addFileRef}
-          onChange={(mediaIds) => {
+          onChange={(medias) => {
             if (noAdd) {
-              onChange({ ...value, mediaIds });
+              onChange({ ...value, files: medias, mediaIds: medias.map(item => item.mediaId) });
             }
-            setMediaId(mediaIds);
+            setMedias(medias);
+            setMediaId(medias.map(item => item.mediaId));
           }}
         />
       </div>
