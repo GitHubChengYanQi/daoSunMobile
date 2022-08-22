@@ -33,6 +33,10 @@ const ReportSwiper = (
     }
   }, []);
 
+  useEffect(() => {
+    titleChange(userChart.length === 0 ? defaultChart[0].name : userChart[0].name);
+  }, [userChart.length]);
+
   return <>
     <Swiper loop autoplay onIndexChange={(index) => {
       let title = '';

@@ -15,12 +15,34 @@ export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
 
-  useEffect(()=>{
+
+  useEffect(() => {
+    let title = '';
+    switch (createType) {
+      case ERPEnums.outStock:
+        title = '出库';
+        break;
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
+        title = '入库';
+        break;
+      case ERPEnums.curing:
+        title = '养护';
+        break;
+      case ERPEnums.stocktaking:
+        title = '盘点';
+        break;
+      case ERPEnums.allocation:
+        title = '调拨';
+        break;
+      default:
+        break;
+    }
     ToolUtil.back({
-      title: '未进行提交，是否退出当前页面？',
+      title: `${title}申请未提交，是否退出？`,
       key: 'ask',
     });
-  },[])
+  }, []);
 
   switch (createType) {
     case ERPEnums.outStock:

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyCard from '../components/MyCard';
 import LinkButton from '../components/LinkButton';
 import ReportSwiper from './components/ReportSwiper';
@@ -11,11 +11,13 @@ const Report = () => {
 
   const history = useHistory();
 
+  const [title, setTitle] = useState();
+
   return <div className={style.report}>
-    <MyCard title='图表统计' extra={<LinkButton onClick={() => {
+    <MyCard title={title} extra={<LinkButton onClick={() => {
       history.push('/Report/StatisticalChart');
     }}>更多</LinkButton>}>
-      <ReportSwiper />
+      <ReportSwiper titleChange={setTitle} />
     </MyCard>
 
     <MyCard title='单据记录' bodyClassName={style.bodyClassName}>

@@ -49,44 +49,6 @@ const BasicLayout = (props) => {
     };
   };
 
-  const qrCodeAction = () => {
-    let action = '';
-    switch (history.location.pathname) {
-      case '/Scan/InStock/AppInstock':
-        action = 'instock';
-        break;
-      case '/Scan/OutStock/AppOutstock':
-        action = 'outstock';
-        break;
-      case '/Scan/InStock/FreeInstock':
-        action = 'freeInstock';
-        break;
-      case '/Scan/OutStock/FreeOutstock':
-        action = 'freeOutstock';
-        break;
-      case '/Scan/Inventory':
-        action = 'inventory';
-        break;
-      case '/Work/Quality':
-        action = 'quality';
-        break;
-      default:
-        break;
-    }
-    props.dispatch({
-      type: 'qrCode/scanCodeState',
-      payload: {
-        action,
-      },
-    });
-    if (props.qrCode && props.qrCode.codeId) {
-      props.dispatch({
-        type: 'qrCode/clearCode',
-      });
-    }
-  };
-
-
   setInterval(() => {
     if (GetUserInfo().token && ToolUtil.queryString('wxLogin', history.location.pathname)) {
       window.location.href = wxUrl(false);

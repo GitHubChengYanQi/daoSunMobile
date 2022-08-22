@@ -43,7 +43,7 @@ const PositionInventory = () => {
       }
 
       ToolUtil.back({
-        title: '未进行提交，是否退出当前页面？',
+        title: '盘点结果未提交，是否退出？',
         key: 'timelyInventory',
       });
       skus.forEach(item => {

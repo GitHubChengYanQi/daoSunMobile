@@ -30,7 +30,7 @@ const Home = (
 
   const commonlyMenus = DefaultMenus({ userMenus, sysMenus });
 
-  const [dataTitle, setDataTitle] = useState('库存统计');
+  const [dataTitle, setDataTitle] = useState('');
 
   const history = useHistory();
 
