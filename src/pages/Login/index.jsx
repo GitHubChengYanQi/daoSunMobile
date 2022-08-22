@@ -1,6 +1,6 @@
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
-import { Button, Checkbox, Divider, Input, Toast } from 'antd-mobile';
+import { Button, Checkbox, Divider, Input } from 'antd-mobile';
 import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import { connect, useHistory } from 'dva';
@@ -8,9 +8,8 @@ import { useLocation, useModel } from 'umi';
 import Icon from '../components/Icon';
 import { useBoolean } from 'ahooks';
 import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
-import { Field } from '@formily/react';
+import { FormProvider,Field } from '@formily/react';
 import { createForm } from '@formily/core';
-import { Form } from '@formily/antd';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
@@ -143,20 +142,17 @@ const Login = (props) => {
       </div>
       <div className={style.enterpriseName}>欢迎使用{state.systemName}</div>
 
-      <Form
-        className={style.form}
-        form={form}
-        layout='vertical'
-        feedbackLayout='terse'
-      >
-        <Field name='username' component={[Username]} />
-        <Field name='password' component={[Password]} />
-        <Field
-          hidden={kaptchaOpen !== true}
-          name='kaptchaOpen'
-          component={[VerificationCode, { count, codeChange }]}
-        />
-      </Form>
+      <div className={style.form}>
+        <FormProvider form={form}>
+          <Field name='username' component={[Username]} />
+          <Field name='password' component={[Password]} />
+          <Field
+            hidden={kaptchaOpen !== true}
+            name='kaptchaOpen'
+            component={[VerificationCode, { count, codeChange }]}
+          />
+        </FormProvider>
+      </div>
 
       <div hidden className={style.foterAction}>
         <div className={style.privacy}>
