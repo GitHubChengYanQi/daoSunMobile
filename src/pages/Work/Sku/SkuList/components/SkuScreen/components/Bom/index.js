@@ -180,7 +180,7 @@ const Bom = (
       </List>}
 
       {listLoading && <MyLoading imgWidth={20} loaderWidth={40} skeleton downLoading title='努力加载中...' noLoadingTitle />}
-      {boms.length === 1 && !listLoading && boms[0].length % 10 === 0 && <Divider><LinkButton onClick={() => {
+      {boms.length === 1 && !listLoading && boms[0].length % 10 === 0 && !loading && <Divider><LinkButton onClick={() => {
         Select(searchValue, page + 1);
       }}>加载更多</LinkButton></Divider>}
 

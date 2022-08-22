@@ -38,7 +38,10 @@ const OutSkuItem = ({ item, dataLength, index }) => {
               imgSize={74}
               skuResult={skuResult}
               extraWidth='124px'
-              otherData={[ToolUtil.isObject(item.brandResult).brandName || '任意品牌']}
+              otherData={[
+                ToolUtil.isObject(item.brandResult).brandName || '任意品牌',
+                ToolUtil.isArray(item.positionNames).join('、')
+              ]}
             />
           </div>
           <div className={style.outStockNumber}>
