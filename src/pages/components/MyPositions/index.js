@@ -38,7 +38,7 @@ const MyPositions = (
       onClose={onClose}
     >
       <Positions
-        empty
+        empty={empty}
         verification={verification}
         skuId={skuId}
         checkShow={checkShow}

@@ -110,7 +110,7 @@ const SkuError = (
         return null;
       });
 
-      const instockNumber = res.instockNumber || (checkNum - termination);
+      const instockNumber = typeof res.instockNumber === 'number' ? res.instockNumber : (checkNum - termination);
       const allowNumber = checkNum - termination;
 
       setSku({
