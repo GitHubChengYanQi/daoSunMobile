@@ -3,7 +3,7 @@ import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
-const InStockItem = (
+const AllocationItem = (
   {
     item = {},
     index,
@@ -13,15 +13,10 @@ const InStockItem = (
   const receipts = item.receipts || {};
 
   return <TaskItem
-    percent={parseInt((receipts.inStockNum / receipts.applyNum) * 100)}
     coding={receipts.coding}
-    endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
-    skuSize={receipts.skuNum}
-    positionSize={receipts.positionNum}
-    beginTime={receipts.beginTime}
     onClick={()=>onClick(item)}
     otherData={
       <div className={style.orderData}>
@@ -30,4 +25,4 @@ const InStockItem = (
   />;
 };
 
-export default InStockItem;
+export default AllocationItem;

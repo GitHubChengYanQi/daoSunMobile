@@ -21,7 +21,7 @@ import AllocationSteps from './components/AllocationSteps';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import AllocationAdd from '../../../../../coponents/SkuInstock/components/AddSku/components/AllocationAdd';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
-import { shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../../Url';
+import { clearAllocationShopCart, shopCartApplyList, shopCartDelete, shopCartEdit } from '../../../../../../Url';
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
@@ -113,6 +113,21 @@ const AllocationAsk = ({ createType }) => {
     manual: true,
     onSuccess: (res) => {
       refresh();
+    },
+  });
+
+  const { loading: clearLoading, run: shopClear } = useRequest(clearAllocationShopCart, {
+    manual: true,
+    onSuccess: (res) => {
+      history.push({
+        pathname: '/Work/Allocation/AllocationAsk',
+        query: {
+          askType: params.askType,
+          allocationType: params.allocationType,
+          storeHouseId: params.storeHouse.value,
+          storeHouse: params.storeHouse.label,
+        },
+      });
     },
   });
 
@@ -379,17 +394,9 @@ const AllocationAsk = ({ createType }) => {
         rightOnClick={() => {
           if (query.storeHouseId) {
             submit();
-            return;
+          } else {
+            shopClear();
           }
-          history.push({
-            pathname: '/Work/Allocation/AllocationAsk',
-            query: {
-              askType: params.askType,
-              allocationType: params.allocationType,
-              storeHouseId: params.storeHouse.value,
-              storeHouse: params.storeHouse.label,
-            },
-          });
         }}
       />
 
@@ -417,7 +424,8 @@ const AllocationAsk = ({ createType }) => {
       </MyAntPopup>
 
       {
-        (allocationLoading || storeHouseLoaing || editLoading || shopLoading || delelLoading) && <MyLoading />
+        (allocationLoading || storeHouseLoaing || editLoading || shopLoading || delelLoading || clearLoading) &&
+        <MyLoading />
       }
 
     </div>

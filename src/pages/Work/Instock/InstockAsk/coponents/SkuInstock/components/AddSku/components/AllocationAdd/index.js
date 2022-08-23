@@ -104,7 +104,7 @@ const AllocationAdd = (
           out={out}
           value={brandAndPositions}
           storehouseName={query.storeHouse}
-          stotrhouseId={storehouseId}
+          storehouseId={storehouseId}
           skuId={sku.skuId}
           onChange={(value = []) => {
             let total = 0;

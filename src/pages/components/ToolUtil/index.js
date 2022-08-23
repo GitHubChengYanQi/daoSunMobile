@@ -160,21 +160,28 @@ const back = (
   {
     title,
     key,
-    onBack,
+    onBack = () => {
+    },
+    noBack,
+    disabled,
   }) => {
+
+  const winHistory = window.history || {};
   const query = history.location.query || {};
   const search = Object.keys(query).map(item => (`${item}=${query[item]}`)).join('&');
   const url = '#' + history.location.pathname + '?' + search;
-  window.history.replaceState({ key }, title, url);
-  window.history.pushState({}, title, url);
+  if (!disabled) {
+    winHistory.replaceState({ key }, title, url);
+    winHistory.pushState({ title:key }, title, url);
+  }
 
   window.onpopstate = (event) => {
     const state = event.state || {};
-    console.log(state.key, onBack);
+    console.log(state);
     if (state.key) {
-      if (typeof onBack === 'function') {
+      if (noBack) {
         onBack();
-        onBack = null;
+        noBack = false;
         return;
       }
       Message.warningDialog({
@@ -184,8 +191,8 @@ const back = (
           history.goBack();
         },
         onCancel: () => {
-          window.history.replaceState({ key }, title, url);
-          window.history.pushState({}, title, url);
+          winHistory.replaceState({ key }, title, url);
+          winHistory.pushState({ title:key }, title, url);
         },
       });
     }
