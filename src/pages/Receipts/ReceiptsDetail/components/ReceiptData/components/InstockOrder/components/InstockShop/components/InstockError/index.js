@@ -128,7 +128,7 @@ const InstockError = (
             hiddenNumber={!showStock}
             skuResult={skuResult}
             extraWidth='100px'
-            otherData={[brandName]}
+            otherData={[brandName || '无品牌', ToolUtil.isObject(item.storehousePositions).name]}
           />,
         };
       default:

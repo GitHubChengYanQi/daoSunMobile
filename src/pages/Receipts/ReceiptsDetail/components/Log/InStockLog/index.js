@@ -58,7 +58,7 @@ const InStockLog = (
               <div className={style.errorData}>
                 <span hidden={!error} className={style.error}>异常未入库</span>
                 <div hidden={error}><LinkButton><SystemQRcodeOutline /></LinkButton></div>
-                <ShopNumber show value={item.number} />
+                <ShopNumber textAlign='right' show value={item.number} />
               </div>
             </div>
 

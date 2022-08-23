@@ -46,6 +46,7 @@ const OutStockShop = (
     <Popup
       onMaskClick={() => {
         if (refreshOrder) {
+          setRefreshOrder(false);
           refresh();
         }
         setVisible(false);
