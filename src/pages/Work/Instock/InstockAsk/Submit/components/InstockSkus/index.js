@@ -7,16 +7,17 @@ import CuringAsk from './components/CuringAsk';
 import StocktakingAsk from './components/StocktakingAsk';
 import AllocationAsk from './components/AllocationAsk';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { history } from 'umi';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
-export const inventorySelectCondition = { url: '/inventory/selectCondition', method: 'POST' };
 export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
-
-
+  
   useEffect(() => {
+    const winHistory = window.history || {};
+    const historyState = winHistory.state || {};
     let title = '';
     switch (createType) {
       case ERPEnums.outStock:
@@ -41,7 +42,13 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     ToolUtil.back({
       title: `${title}申请未提交，是否退出？`,
       key: 'ask',
+      disabled: ['spus', 'ask'].includes(historyState.key),
+      noBack: historyState.key === 'spus',
     });
+
+    if (historyState.key === 'spus') {
+      history.go(-1);
+    }
   }, []);
 
   switch (createType) {

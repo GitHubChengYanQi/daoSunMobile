@@ -61,6 +61,11 @@ export const shopCartDelete = {
   method: 'POST',
 };
 
+export const clearAllocationShopCart = {
+  url: '/shopCart/clearAllocationShopCart',
+  method: 'GET',
+};
+
 export const shopCartEdit = {
   url: '/shopCart/applyUpdate',
   method: 'POST',

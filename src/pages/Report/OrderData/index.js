@@ -30,6 +30,7 @@ const OrderData = () => {
     { title: '盘点', type: 'inventoryLog' },
     { title: '养护', type: 'maintenanceLog' },
     { title: '调拨', type: 'allocationLog' },
+    { title: '异常', type: 'anomaly' },
   ];
 
   const getTitle = (type) => {

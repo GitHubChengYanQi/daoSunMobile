@@ -125,6 +125,7 @@ const Spus = (
     submit();
     ToolUtil.back({
       key: 'spus',
+      noBack: true,
       onBack: onClose,
     });
   }, []);

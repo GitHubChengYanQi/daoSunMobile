@@ -12,6 +12,8 @@ import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { ToolUtil } from '../../../components/ToolUtil';
+import AllocationTask from '../../Stock/Task/components/AllocationTask';
+import AllocationItem from '../../Stock/Task/components/AllocationTask/components/AllocationItem';
 
 
 export const startList = {
@@ -75,7 +77,7 @@ const ProcessList = (
       case ReceiptsEnums.stocktaking:
         return <StocktakingItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.allocation:
-        return <InStockItem onClick={onClick} item={item} index={index} />;
+        return <AllocationItem onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.error:
         return <ErrorItem onClick={onClick} item={item} />;
       case ReceiptsEnums.errorForWard:

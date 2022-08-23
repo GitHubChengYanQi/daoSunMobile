@@ -436,7 +436,7 @@ const StoreHouses = (
           name: storeHouse.label,
           number: storeHouse.number,
           show: true,
-          brands: brands.map(item => ({ ...item, checked: moveLibrary })),
+          brands: brands.map(item => ({ ...item, checked: moveLibrary || brands.length === 1 })),
           positions: ToolUtil.isArray(storeHouse.positions).map(item => {
             const brands = item.brands || [];
             return { ...item, brands: brands.map(item => ({ ...item, checked: false })) };
