@@ -16,8 +16,9 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { shopCartAddList } from '../../Instock/Url';
 import { ERPEnums } from '../../Stock/ERPEnums';
 import { Message } from '../../../components/Message';
+import { RightOutline } from 'antd-mobile-icons';
 
-export const list = { url: '/erpPartsDetail/bomList', method: 'POST' };
+export const list = { url: '/erpPartsDetail/v1.1.1/bomList', method: 'POST' };
 
 const CheckBom = () => {
 
@@ -40,7 +41,7 @@ const CheckBom = () => {
   });
   const { loading: addLoading, run: addShop } = useRequest(shopCartAddList, {
     manual: true,
-    onSuccess: (res) => {
+    onSuccess: () => {
       Message.successToast('添加成功！', () => {
         history.go(-2);
       }, true);
@@ -48,7 +49,6 @@ const CheckBom = () => {
   });
 
   const skuId = query.skuId;
-  const partsId = query.partsId;
 
   const submit = (data) => {
     run({ data });
@@ -57,13 +57,14 @@ const CheckBom = () => {
   useEffect(() => {
     if (skuId) {
       getSkuDetail({ data: { skuId } });
-      submit({ skuId });
+      submit({ skuId,all:true });
     }
-  }, []);
+  }, [skuId]);
 
   if (skuLoading || loading) {
     return <MyLoading skeleton />;
   }
+
   return <>
     <MyNavBar title='选择BOM' />
     <div className={style.bom}>
@@ -75,11 +76,11 @@ const CheckBom = () => {
       <Space>
         <MyRadio onChange={() => {
           setType('all');
-          submit({ skuId });
+          submit({ skuId,all:true });
         }} checked={type === 'all'}>基础物料</MyRadio>
         <MyRadio onChange={() => {
           setType('next');
-          submit({ partsId });
+          submit({ skuId,all:false });
         }} checked={type === 'next'}>子级物料</MyRadio>
       </Space>
     }>
@@ -107,9 +108,12 @@ const CheckBom = () => {
                   });
                 }}>{brand.brandName || '任意品牌'}</LinkButton> : '任意品牌']}
               />
-              <div>
-                {item.number}{unitResult.unitName} / 每套
-              </div>
+                <Space align='end'>
+                  <div>{item.number}{unitResult.unitName} / 每套</div>
+                  <LinkButton onClick={() => {
+                    history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);
+                  }}> <RightOutline /></LinkButton>
+                </Space>
             </div>;
           })
         }
@@ -117,7 +121,7 @@ const CheckBom = () => {
       </div>
     </MyCard>
 
-    <BottomButton only onClick={() => {
+    <BottomButton disabled={data.length === 0} only onClick={() => {
       const shopCartParams = data.map(item => {
         const brand = item.brand || {};
         return {

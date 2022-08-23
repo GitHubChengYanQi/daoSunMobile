@@ -41,7 +41,6 @@ const StocktaskigAction = (
   const history = useHistory();
 
   const action = (positionItem, skuItem, showError) => {
-    console.log(skuItem);
 
     if (!showError && skuItem.lockStatus === 99) {
       Message.toast('此物料存在异常，正在处理中');

@@ -80,7 +80,7 @@ export const SkuContent = (
                         skuId: item.skuId,
                         skuResult: item,
                       });
-                    }}>查看实物</LinkButton>,
+                    }}>查询实物</LinkButton>,
                   ]}
                 />
               </div>

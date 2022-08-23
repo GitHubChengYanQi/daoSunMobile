@@ -28,7 +28,7 @@ const SkuDetail = ({ id }) => {
     onSuccess: (res) => {
       const detail = res || {};
       const imgs = detail.images ? ToolUtil.isArray(detail.images.split(',')).map((item, index) => {
-        const url = ToolUtil.isArray(detail.imgUrls)[index];
+        const url = ToolUtil.isArray(detail.imgThumbUrls)[index];
         return {
           url,
           mediaId: item,
