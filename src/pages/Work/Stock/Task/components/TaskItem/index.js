@@ -90,8 +90,9 @@ const TaskItem = (
         }
       </div>
     </div>
-
-   <MyProgress hidden={noProgress} percent={percent} />
+    <div className={style.progress}>
+      <MyProgress hidden={noProgress} percent={percent} />
+    </div>
   </div>;
 };
 

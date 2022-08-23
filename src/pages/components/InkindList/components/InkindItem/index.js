@@ -33,7 +33,8 @@ const InkindItem = (
         setInkinds([...newInkinds, ...inkindList]);
       }
     }}>
-      {!noActions && <MyCheck checked={checked} />}{positionItem.name} / {positionItem.storehouseName}
+      {!noActions && <MyCheck checked={checked} />}
+     {positionItem.name} / {positionItem.storehouseName}
     </div>
 
     {

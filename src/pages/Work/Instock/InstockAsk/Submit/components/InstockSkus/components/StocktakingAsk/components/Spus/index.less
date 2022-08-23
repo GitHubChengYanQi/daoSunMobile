@@ -50,10 +50,11 @@
     margin-bottom: 1px;
     padding: 8px 0;
     z-index: 1;
-    box-shadow: 0 10px 10px 0 rgba(0,0,0,0.1);
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.1);
 
     :global .adm-dropdown-nav {
       border: none;
+      justify-content: center;
     }
 
     :global .adm-dropdown-item {
@@ -65,7 +66,6 @@
       padding: 0 8px;
       height: 20px;
       line-height: 20px;
-      min-width: 54px;
       background-color: #F7F7F7;
       border-radius: 50px;
       font-size: 14px;
@@ -149,23 +149,23 @@
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    max-width: 56px;
+    width: 11vw;
   }
 }
 
 
-.downContent {
+.space {
+  height: 3px;
   background-color: #F7F7F7;
 }
 
 .filterSearch {
   margin-bottom: 12px;
   background: transparent;
-  border: solid 1px #e1e1e1;
-  padding: 0 8px 0 0;
+  padding: 0;
 
   :global .adm-search-bar-input-box {
-    border: none !important;
+    //border: none !important;
   }
 }
 

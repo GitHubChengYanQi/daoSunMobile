@@ -29,6 +29,7 @@ const TaskList = () => {
         return <div
           key={index}
           className={style.orderInfo}
+          style={{padding:'8px 0'}}
           onClick={() => {
             history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
           }}

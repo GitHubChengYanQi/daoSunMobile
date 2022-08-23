@@ -20,13 +20,21 @@ const Report = () => {
       <ReportSwiper titleChange={setTitle} />
     </MyCard>
 
-    <MyCard title='单据记录' bodyClassName={style.bodyClassName}>
+    <MyCard
+      title='单据'
+      headerClassName={style.orderHeader}
+      className={style.orderCard}
+      bodyClassName={style.orderBody}
+    >
       <Order />
     </MyCard>
 
-    <MyCard title='任务记录' extra={<LinkButton onClick={() => {
-      history.push('/Work/ProcessTask');
-    }}>更多</LinkButton>}>
+    <MyCard
+      bodyClassName={style.taskBody}
+      title='任务'
+      extra={<LinkButton onClick={() => {
+        history.push('/Work/ProcessTask');
+      }}>更多</LinkButton>}>
       <TaskList />
     </MyCard>
 
