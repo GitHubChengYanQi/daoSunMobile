@@ -27,7 +27,6 @@ const MyPositions = (
   },
 ) => {
 
-
   return <>
     <MyAntPopup
       afterClose={afterClose}
