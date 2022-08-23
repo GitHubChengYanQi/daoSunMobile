@@ -172,7 +172,7 @@ const back = (
   const url = '#' + history.location.pathname + '?' + search;
   if (!disabled) {
     winHistory.replaceState({ key }, title, url);
-    winHistory.pushState({ key }, title, url);
+    winHistory.pushState({ title:key }, title, url);
   }
 
   window.onpopstate = (event) => {
@@ -192,7 +192,7 @@ const back = (
         },
         onCancel: () => {
           winHistory.replaceState({ key }, title, url);
-          winHistory.pushState({ key }, title, url);
+          winHistory.pushState({ title:key }, title, url);
         },
       });
     }

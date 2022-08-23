@@ -15,7 +15,7 @@ const AllBrands = (
     positionsResult = [],
     out,
     skuId,
-    stotrhouseId,
+    storehouseId,
     onChange = () => {
     },
     value = [],
@@ -74,13 +74,18 @@ const AllBrands = (
       });
       setPositions(newPositions);
     } else {
-      const newPositions = positionsResult.map(item => ({
-        id: item.storehousePositionsId,
-        name: item.name,
-        number: 1,
-        outStockNumber: 1,
-        storehouseId: item.storehouseId,
-      }));
+      const newPositions = [];
+      positionsResult.forEach(item => {
+        if (item.storehouseId === storehouseId){
+          newPositions.push({
+            id: item.storehousePositionsId,
+            name: item.name,
+            number: 1,
+            outStockNumber: 1,
+            storehouseId: item.storehouseId,
+          });
+        }
+      });
       setPositions(newPositions);
     }
   }, []);
@@ -130,7 +135,7 @@ const AllBrands = (
         return (!out || item.num > 0) && ToolUtil.isArray(item.loops).length === 0;
       }}
       skuId={out ? skuId : undefined}
-      storehouseId={stotrhouseId}
+      storehouseId={storehouseId}
       value={positions}
       onClose={() => setVisible(false)}
       onSuccess={(value = []) => {

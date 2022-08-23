@@ -46,7 +46,7 @@ const PositionInventory = () => {
       ToolUtil.back({
         title: '盘点结果未提交，是否退出？',
         key: 'timelyInventory',
-        disabled: historyState.key === 'timelyInventory',
+        disabled: historyState.title === 'timelyInventory',
       });
       skus.forEach(item => {
         const newPositionIds = newData.map(item => item.positionId);

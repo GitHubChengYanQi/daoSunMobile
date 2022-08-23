@@ -228,6 +228,7 @@ const StoreHouses = (
 
     if (storeHouse.length === 0) {
       Message.toast('暂无库存!');
+      return;
     }
     setStoreHouses(storeHouse);
     if (!open) {
@@ -366,6 +367,7 @@ const StoreHouses = (
               brandIds: (initBrands.length === 1 && initBrands[0].brandId === null) ? null : initBrands.map(item => item.brandId),
             },
           }).then((res) => {
+            console.log(res);
             outFormat(res);
           });
         }

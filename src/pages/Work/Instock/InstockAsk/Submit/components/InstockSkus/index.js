@@ -14,7 +14,7 @@ export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
 export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
-  
+
   useEffect(() => {
     const winHistory = window.history || {};
     const historyState = winHistory.state || {};
@@ -42,11 +42,11 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     ToolUtil.back({
       title: `${title}申请未提交，是否退出？`,
       key: 'ask',
-      disabled: ['spus', 'ask'].includes(historyState.key),
-      noBack: historyState.key === 'spus',
+      disabled: ['spus', 'ask'].includes(historyState.title),
+      noBack: historyState.title === 'spus',
     });
 
-    if (historyState.key === 'spus') {
+    if (historyState.title === 'spus') {
       history.go(-1);
     }
   }, []);
