@@ -20,6 +20,8 @@ const Allocation = (
     permissions,
     refresh = () => {
     },
+    afertShow = () => {
+    },
     loading,
   },
 ) => {
@@ -177,7 +179,7 @@ const Allocation = (
     <MyCard title='附件'>
       <div className={style.files}>
         {[].length === 0 && '无'}
-        <UploadFile show value={[].map(item => {
+        <UploadFile show files={[].map(item => {
           return {
             url: item,
             type: 'image',
@@ -189,6 +191,7 @@ const Allocation = (
     {loading && <MyLoading />}
 
     {assign && <BottomButton
+      afertShow={afertShow}
       only
       text='分配调拨物料'
       onClick={() => {

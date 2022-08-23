@@ -7,11 +7,12 @@ import { RightOutline } from 'antd-mobile-icons';
 import style from './index.less';
 import { Avatar } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
+import KeepAlive from '../../components/KeepAlive';
 
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
 
-const Message = () => {
+const MessageList = () => {
 
   const history = useHistory();
 
@@ -19,7 +20,18 @@ const Message = () => {
 
   const { run: edit } = useRequest(messageEdit, { manual: true });
 
-  return <>
+  const [scrollTop, setScrollTop] = useState(0);
+
+  return <div
+    id='content'
+    style={{
+      scrollMarginTop: scrollTop,
+      height: '100%',
+      overflow: 'auto',
+    }}
+    onScroll={(event) => {
+      setScrollTop(event.target.scrollTop);
+    }}>
     <MyList data={data} getData={setData} api={messageList}>
       {
         data.map((item, index) => {
@@ -39,7 +51,14 @@ const Message = () => {
                 <RightOutline style={{ marginLeft: 8 }} />
               </div>}
               onClick={() => {
-                edit({data:{messageId:item.messageId,view:1}})
+                edit({ data: { messageId: item.messageId, view: 1 } });
+                const newData = data.map((item, clickIndex) => {
+                  if (clickIndex === index) {
+                    return { ...item, view: 1 };
+                  }
+                  return item;
+                });
+                setData(newData);
                 switch (item.source) {
                   case 'instockOrder':
                   case 'instock':
@@ -73,7 +92,13 @@ const Message = () => {
         })
       }
     </MyList>
-  </>;
+  </div>;
+};
+
+const Message = () => {
+  return <KeepAlive id='message' contentId='content'>
+    <MessageList />
+  </KeepAlive>;
 };
 
 export default Message;

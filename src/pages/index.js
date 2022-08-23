@@ -71,7 +71,8 @@ const Index = (props) => {
         <TabBar.Item
           title='消息'
           key='/Message'
-          icon={<Badge content={typeof messageTotal === 'number' && (messageTotal || null)}>
+          icon={<Badge
+            content={typeof messageTotal === 'number' && ((messageTotal > 99 ? '99+' : messageTotal) || null)}>
             <Icon style={{ fontSize: iconSize }} type='icon-xiaoxi2' />
           </Badge>}
         />

@@ -16,6 +16,7 @@ import MyTextArea from '../../../../../../../../components/MyTextArea';
 import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
 import { ReceiptsEnums } from '../../../../../../../index';
 import MyCard from '../../../../../../../../components/MyCard';
+import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
@@ -90,7 +91,7 @@ const Maintenanceing = (
     maintenanceLogRun({
       data: {
         maintenanceId,
-        enclosure: params.files,
+        enclosure: ToolUtil.isArray(params.files).map(item => item.mediaId),
         maintenanceLogDetailParams,
       },
     });
@@ -163,10 +164,11 @@ const Maintenanceing = (
     <MyCard title='上传附件'>
       <UploadFile
         imgSize={36}
+        files={params.files}
         icon={<CameraOutline />}
         noFile
-        onChange={(mediaIds) => {
-          setParams({ ...params, files: mediaIds });
+        onChange={(medias) => {
+          setParams({ ...params, files: medias });
         }}
       />
     </MyCard>

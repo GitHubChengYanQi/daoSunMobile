@@ -41,6 +41,11 @@ const PositionInventory = () => {
         }]);
         return;
       }
+
+      ToolUtil.back({
+        title: '盘点结果未提交，是否退出？',
+        key: 'timelyInventory',
+      });
       skus.forEach(item => {
         const newPositionIds = newData.map(item => item.positionId);
         const newPositionIndex = newPositionIds.indexOf(item.positionId);
@@ -64,7 +69,7 @@ const PositionInventory = () => {
     manual: true,
     onSuccess: () => {
       Message.successToast('盘点完成！', () => {
-        history.goBack();
+        history.go(-2)
       });
     },
     onError: () => {

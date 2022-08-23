@@ -95,7 +95,7 @@ const SkuInstock = ({ type, title, judge }) => {
       <MySearch
         historyType={type}
         value={searchValue}
-        placeholder={`请输入相关物料信息`}
+        placeholder={`请输入物料相关信息`}
         onChange={setSearchValue}
         onSearch={(value) => {
           ref.current.submit({ skuName: value });

@@ -158,9 +158,12 @@ const StartStockTaking = () => {
     />
 
     <MyPositions
+      showAll
+      empty
       visible={visible}
       single
       autoFocus
+      value={params.positionId ? [{ id: params.positionId }] : []}
       onClose={() => setVisible(false)}
       onSuccess={(value = []) => {
         const positions = value[0] || {};

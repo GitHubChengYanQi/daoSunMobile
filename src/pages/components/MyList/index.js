@@ -19,6 +19,7 @@ const MyList = (
     },
     sorter: defaultSorter,
     noEmpty,
+    manual,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -44,6 +45,7 @@ const MyList = (
       ...params,
     },
   }, {
+    manual,
     response: true,
     onSuccess: (res) => {
       const resData = res.data || [];

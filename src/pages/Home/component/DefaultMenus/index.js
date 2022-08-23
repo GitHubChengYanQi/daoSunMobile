@@ -5,7 +5,11 @@ const DefaultMenus = ({ userMenus = [], sysMenus = [] }) => {
   } else {
     const defaultMenus = [];
     sysMenus.map((item, index) => {
-      if (index >= 8) {
+      const subMenus = item.subMenus || [];
+      if (subMenus.length === 0) {
+        return null;
+      }
+      if (defaultMenus.length >= 8) {
         return null;
       }
       return defaultMenus.push({ code: item.id, name: item.name });

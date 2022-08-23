@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Tabs } from 'antd-mobile';
 import style from './index.less';
 import MySearch from '../../../components/MySearch';
@@ -8,12 +8,12 @@ import { useLocation } from 'umi';
 import MyNavBar from '../../../components/MyNavBar';
 import { useHistory } from 'react-router-dom';
 import TaskBottom from './components/TaskBottom';
-import { ToolUtil } from '../../../components/ToolUtil';
+import KeepAlive from '../../../../components/KeepAlive';
 
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
 
-const Task = (
+export const TaskList = (
   {
     activeKey,
     keyChange = () => {
@@ -25,7 +25,19 @@ const Task = (
 
   const history = useHistory();
 
-  const [key, setKey] = useState(query.type || activeKey || ReceiptsEnums.instockOrder);
+  const [key, setKey] = useState(ReceiptsEnums.instockOrder);
+
+  useEffect(() => {
+    if (query.type) {
+      if (query.type !== key){
+        setKey(query.type);
+      }
+    } else if (activeKey) {
+      setKey(activeKey);
+    }
+  }, [query.type]);
+
+  const [scrollTop, setScrollTop] = useState(0);
 
   const tabs = [
     { title: '调拨任务', key: ReceiptsEnums.allocation },
@@ -48,7 +60,16 @@ const Task = (
     }
   };
 
-  return <div>
+  return <div
+    id='taskList'
+    style={query.type ? {
+      scrollMarginTop: scrollTop,
+      height: '100%',
+      overflow: 'auto',
+    } : {}}
+    onScroll={(event) => {
+      setScrollTop(event.target.scrollTop);
+    }}>
     {query.type && <MyNavBar title='任务列表' />}
     <MySearch
       placeholder='请输入单据相关信息'
@@ -56,6 +77,9 @@ const Task = (
     />
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
+        if (query.type){
+          history.replace(`/Work/Stock/Task?type=${key}`)
+        }
         setKey(key);
         keyChange(key);
       }} className={style.tab}>
@@ -68,10 +92,11 @@ const Task = (
     </div>
 
     <MyAudit
+      listScreentTop={!query.type && 0}
       auditType='audit'
       type={key}
       paramsChange={(param = {}) => {
-        const types = param.types || []
+        const types = param.types || [];
         setKey(types[0]);
       }}
     />
@@ -80,6 +105,18 @@ const Task = (
     {query.type && <TaskBottom taskKey={key} task />}
 
   </div>;
+};
+
+const Task = (
+  {
+    activeKey,
+    keyChange = () => {
+    },
+  },
+) => {
+  return <KeepAlive id='task' contentId='taskList'>
+    <TaskList keyChange={keyChange} activeKey={activeKey} />
+  </KeepAlive>;
 };
 
 export default Task;

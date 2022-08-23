@@ -74,6 +74,11 @@ const ProcessScreen = (
           title={item.title}
           value={types}
           onChange={(types) => {
+            if (types.includes('ERROR')) {
+              types.push('ErrorForWard');
+            } else {
+              types = types.filter(item => item !== 'ErrorForWard');
+            }
             paramsOnChange({ ...params, types });
           }}
         />;

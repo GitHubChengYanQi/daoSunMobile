@@ -76,11 +76,11 @@ const CheckBom = () => {
         <MyRadio onChange={() => {
           setType('all');
           submit({ skuId });
-        }} checked={type === 'all'}>全部</MyRadio>
+        }} checked={type === 'all'}>基础物料</MyRadio>
         <MyRadio onChange={() => {
           setType('next');
           submit({ partsId });
-        }} checked={type === 'next'}>下一级</MyRadio>
+        }} checked={type === 'next'}>子级物料</MyRadio>
       </Space>
     }>
       <div className={style.skuList}>

@@ -1,6 +1,8 @@
 import pako from 'pako';
 import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 import { MyDate } from '../MyDate';
+import { Message } from '../Message';
+import { history } from 'umi';
 
 // 判断是否是企业微信或者微信开发者工具
 const isQiyeWeixin = () => {
@@ -153,6 +155,43 @@ const timeDifference = (tmpTime) => {
   return ansTimeDifference;
 };
 
+// 监听浏览器后退事件
+const back = (
+  {
+    title,
+    key,
+    onBack,
+  }) => {
+  const query = history.location.query || {};
+  const search = Object.keys(query).map(item => (`${item}=${query[item]}`)).join('&');
+  const url = '#' + history.location.pathname + '?' + search;
+  window.history.replaceState({ key }, title, url);
+  window.history.pushState({}, title, url);
+
+  window.onpopstate = (event) => {
+    const state = event.state || {};
+    console.log(state.key, onBack);
+    if (state.key) {
+      if (typeof onBack === 'function') {
+        onBack();
+        onBack = null;
+        return;
+      }
+      Message.warningDialog({
+        only: false,
+        content: title || '是否退出当前页面？',
+        onConfirm: () => {
+          history.goBack();
+        },
+        onCancel: () => {
+          window.history.replaceState({ key }, title, url);
+          window.history.pushState({}, title, url);
+        },
+      });
+    }
+  };
+};
+
 
 export const ToolUtil = {
   queryString,
@@ -164,4 +203,5 @@ export const ToolUtil = {
   listenOnKeyUp,
   createBall,
   timeDifference,
+  back,
 };

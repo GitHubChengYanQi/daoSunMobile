@@ -12,16 +12,29 @@ import ShopNumber
 const OutSkuItem = ({ item, dataLength, index }) => {
   const skuResult = item.skuResult || {};
 
-  const received = item.receivedNumber;
-  const collectable = item.perpareNumber;
-  const notPrepared = item.number - collectable - received;
+  const received = Number(item.receivedNumber) || 0;
+  const collectable = Number(item.perpareNumber) || 0;
+  const notPrepared = Number(item.number - collectable - received) || 0;
 
   const successPercent = Number(((received / item.number)).toFixed(2)) * 100;
   const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
 
+  let statusDom = <>可 <br />备 <br />料</>;
+  let noAction = true;
+
+  if (item.stockNumber) {
+    if (item.number === received) {
+      statusDom = <>已 <br />领 <br />完</>;
+    } else if (item.number === received + collectable) {
+      statusDom = <>已 <br />备 <br />完</>;
+    } else {
+      noAction = false;
+    }
+  }
+
   return <div className={style.out}>
-    <div className={ToolUtil.classNames(style.statusName, !item.stockNumber && style.noStatusName)}>
-      {item.stockNumber ? <>可 <br />备 <br />料</> : <>不 <br />可 <br />备 <br />料</>}
+    <div className={ToolUtil.classNames(style.statusName, noAction && style.noStatusName)}>
+      {statusDom}
     </div>
     <div className={style.skuData}>
       <div

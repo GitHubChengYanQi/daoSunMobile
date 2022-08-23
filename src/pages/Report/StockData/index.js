@@ -69,7 +69,7 @@ const StockData = () => {
       setInkindIds([]);
       setViewAll(false);
     }}>
-      <InkindList inkindIds={inkindIds} />
+      <InkindList anomaly={viewAll} inkindIds={inkindIds} />
     </MyAntPopup>
   </>;
 };

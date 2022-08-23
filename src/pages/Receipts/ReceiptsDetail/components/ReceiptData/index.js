@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { ReceiptsEnums } from '../../../index';
 import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
@@ -21,7 +21,15 @@ const ReceiptData = (
     permissions,
     addComments = () => {
     },
+    actionButton,
   }) => {
+
+  const [bottomButton, setBottomButton] = useState(false);
+
+  const refreshOrder = () => {
+    refresh();
+    setBottomButton(false);
+  };
 
   const actions = [];
   currentNode.map((item) => {
@@ -45,46 +53,51 @@ const ReceiptData = (
       case ReceiptsEnums.instockOrder:
       case ReceiptsEnums.outstockOrder:
         return <InstockOrder
+          afertShow={() => setBottomButton(true)}
           taskId={data.processTaskId}
           permissions={permissions}
           data={data.receipts}
           getAction={getAction}
-          refresh={refresh}
+          refresh={refreshOrder}
           loading={loading}
           type={data.type}
         />;
       case ReceiptsEnums.error:
         return <InstockError
+          afertShow={() => setBottomButton(true)}
           loading={loading}
           permissions={permissions}
           data={data.receipts}
           getAction={getAction}
-          refresh={refresh}
+          refresh={refreshOrder}
         />;
       case ReceiptsEnums.stocktaking:
         return <Stocktaking
+          afertShow={() => setBottomButton(true)}
           loading={loading}
           permissions={permissions}
           receipts={data.receipts}
           getAction={getAction}
-          refresh={refresh}
+          refresh={refreshOrder}
         />;
       case ReceiptsEnums.maintenance:
         return <Maintenance
+          afertShow={() => setBottomButton(true)}
           loading={loading}
           getAction={getAction}
-          refresh={refresh}
+          refresh={refreshOrder}
           permissions={permissions}
           receipts={data.receipts}
         />;
       case ReceiptsEnums.allocation:
         return <Allocation
+          afertShow={() => setBottomButton(true)}
           success={success}
           loading={loading}
           permissions={permissions}
           getAction={getAction}
           data={data.receipts}
-          refresh={refresh}
+          refresh={refreshOrder}
         />;
       default:
         return <MyEmpty />;
@@ -111,7 +124,7 @@ const ReceiptData = (
       onInput={addComments}
     />
     <CommentsList taskId={data.processTaskId} ref={commentsListRef} />
-    <div style={{ height: 60, marginTop: 3 }} />
+    <div hidden={!actionButton || !bottomButton} style={{ height: 60, marginTop: 3 }} />
   </div>;
 };
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import style from './index.less';
 import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
@@ -12,11 +12,12 @@ import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
 import IsDev from '../../../../components/IsDev';
 import { Message } from '../../Message';
 import MyActionSheet from '../../MyActionSheet';
+import MyRemoveButton from '../../MyRemoveButton';
 
 const UploadFile = (
   {
     show,
-    value = [],
+    files = [],
     onChange = () => {
     },
     noFile,
@@ -40,13 +41,13 @@ const UploadFile = (
 
   const [visible, { setTrue, setFalse }] = useBoolean();
 
-  const [files, setFiles] = useState(ToolUtil.isArray(value));
+  // const [files, setFiles] = useState(ToolUtil.isArray(value));
 
-  useEffect(() => {
-    if (!noDefault && files.length === 0 && value.length > 0) {
-      setFiles(value);
-    }
-  }, [value]);
+  // useEffect(() => {
+  // if (!noDefault && files.length === 0 && value.length > 0) {
+  //   setFiles(value);
+  // }
+  // }, [value]);
 
   const [loading, setLoading] = useState();
 
@@ -61,8 +62,7 @@ const UploadFile = (
     } else {
       newFile = [...files, { type, mediaId, url }];
     }
-    onChange(newFile.map(item => item.mediaId));
-    setFiles(newFile);
+    onChange(newFile);
   };
 
   const uploadImage = (localId, url) => {
@@ -145,9 +145,14 @@ const UploadFile = (
       {
         files.map((item, index) => {
           return <div key={index} className={style.img} style={{ width: imgSize, height: imgSize }}>
-            <div hidden={show} className={style.remove} onClick={() => {
-              fileChange({ mediaId: item.mediaId, remove: true });
-            }}><CloseOutline /></div>
+            <div hidden={show} className={style.remove}>
+              <MyRemoveButton
+                onRemove={() => {
+                  fileChange({ mediaId: item.mediaId, remove: true });
+                }}
+                dom={CloseOutline}
+              />
+            </div>
             {
               item.type === 'other' ? <FileOutlined style={{ color: 'var(--adm-color-primary)' }} /> :
                 <img onClick={() => {
@@ -163,7 +168,7 @@ const UploadFile = (
                       return currentItem;
                     }
                   });
-                  setFiles(newFile);
+                  onChange(newFile);
                 }} />
             }
 

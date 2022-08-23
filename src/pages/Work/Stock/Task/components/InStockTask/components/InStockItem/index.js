@@ -1,18 +1,14 @@
 import React from 'react';
-import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 
 const InStockItem = (
   {
     item = {},
     index,
+    onClick=()=>{}
   }) => {
 
   const receipts = item.receipts || {};
-
-  const onClick = () => {
-    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-  };
 
   return <TaskItem
     percent={parseInt((receipts.inStockNum / receipts.applyNum) * 100)}
@@ -24,7 +20,7 @@ const InStockItem = (
     skuSize={receipts.skuNum}
     positionSize={receipts.positionNum}
     beginTime={receipts.beginTime}
-    onClick={onClick}
+    onClick={()=>onClick(item)}
   />;
 };
 

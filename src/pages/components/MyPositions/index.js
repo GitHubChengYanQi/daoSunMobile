@@ -23,9 +23,9 @@ const MyPositions = (
     single,
     showAll,
     maxNumber,
+    empty,
   },
 ) => {
-
 
   return <>
     <MyAntPopup
@@ -37,6 +37,7 @@ const MyPositions = (
       onClose={onClose}
     >
       <Positions
+        empty={empty}
         verification={verification}
         skuId={skuId}
         checkShow={checkShow}

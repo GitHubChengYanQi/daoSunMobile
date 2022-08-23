@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { MoreOutline } from 'antd-mobile-icons';
 import Audit from '../../../components/Audit';
-import { ReceiptsEnums } from '../../../index';
-import InStockErrorBottom from './components/InStockErrorBottom';
 import Note from '../../../components/Comments/components/Note';
 import MyActionSheet from '../../../../components/MyActionSheet';
 
@@ -33,15 +31,6 @@ const Bottom = (
 
   if (!detail.permissions) {
     return <></>;
-  }
-
-  if (actions.length > 0) {
-    switch (detail.type) {
-      case ReceiptsEnums.error:
-        return <InStockErrorBottom detail={detail} actions={actions} refresh={refresh} />;
-      default:
-        return <></>;
-    }
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>

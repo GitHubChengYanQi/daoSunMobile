@@ -22,7 +22,6 @@ export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
 
 const SkuError = (
   {
-    permissions,
     onClose = () => {
     },
     anomalyOrderId,
@@ -31,8 +30,11 @@ const SkuError = (
     onSuccess = () => {
     },
     forward,
+    orderComplete = false,
   },
 ) => {
+
+  const [complete, setComplete] = useState(orderComplete);
 
   const { initialState } = useModel('@@initialState');
   const userInfo = ToolUtil.isObject(initialState).userInfo || {};
@@ -67,6 +69,10 @@ const SkuError = (
   const { loading: detailLoading, run: detailRun, refresh } = useRequest(instockErrorDetail, {
     manual: true,
     onSuccess: (res) => {
+
+      if (res.status === 99 && forward) {
+        setComplete(true);
+      }
 
       const checkUsers = res.checkNumbers || [];
 
@@ -227,13 +233,15 @@ const SkuError = (
           bottom: <div style={{ minHeight: 40 }} hidden={forward}>
             <div className={style.bottomAction}>
               <div className={style.action}>
-                <div hidden={!sku.errorNumber}>终止入库 × {sku.errorNumber} </div>
-                <div
-                  className={style.instockNumber}>
-                  入库数量：
+                <div hidden={!sku.errorNumber} className={style.instockNumber}>
+                  <div>终止入库</div>
+                  <ShopNumber textAlign='left' show value={sku.errorNumber} />
+                </div>
+                <div className={style.instockNumber}>
+                  入库数量
                   <ShopNumber
                     min={0}
-                    show={!permissions}
+                    show={complete}
                     max={sku.allowNumber}
                     value={sku.instockNumber}
                     onChange={(number) => {
@@ -242,7 +250,7 @@ const SkuError = (
                 </div>
               </div>
 
-              {permissions && <Button disabled={!handle} color='primary' onClick={() => {
+              {!complete && <Button disabled={!handle} color='primary' onClick={() => {
                 const param = {
                   data: {
                     anomalyId,
@@ -282,7 +290,7 @@ const SkuError = (
               action(item, 2);
             }}>报损</Button>
           </>,
-          bottom: permissions && !forward && <div style={{ minHeight: 60 }}>
+          bottom: !complete && !forward && <div style={{ minHeight: 60 }}>
             <BottomButton
               disabled={!handle || !(inStockNumber > 0 ? inStockNumber === inStockCustomersNumber : true)}
               only
@@ -323,7 +331,9 @@ const SkuError = (
   return <div className={style.error} style={{ maxHeight: height, margin: forward && 0 }} id='errors'>
 
     <Header
-      permissions={permissions}
+      errors={errorItems}
+      type={sku.type}
+      permissions={!complete}
       inStockCustomers={setInStockCustomers}
       checkNumberTitle={errorTypeData().checkNumberTitle}
       otherData={errorTypeData().otherData}
@@ -333,7 +343,6 @@ const SkuError = (
       onClose={onClose}
       forward={forward}
       over={over}
-      loading={saveLoading}
       initialState={initialState}
       saveRun={(params) => {
         setSku({ ...sku, checkUsers: [] });
@@ -365,17 +374,17 @@ const SkuError = (
               <div className={style.index}>{index + 1}</div>
               <span>{inkindId.substring(inkindId.length - 6, inkindId.length)}</span>
               <span className={style.inkindNumber}>× {item.number}</span>
-              <div hidden={item.status === 0}>
+              <div hidden={item.status === 0} style={{ fontSize: 12 }}>
                 {errorTypeData(item, index).showAction}
               </div>
             </div>}
             extra={<>
-              <Space>
+              <Space style={{ fontSize: 12 }}>
                 {
                   (item.userId && (item.userId !== userInfo.id)) ?
                     `已转交：${item.userName}`
                     :
-                    (permissions
+                    (!complete
                       &&
                       item.status !== 0
                       &&
@@ -403,7 +412,7 @@ const SkuError = (
             <div hidden={ToolUtil.isArray(item.media).length === 0} className={ToolUtil.classNames(style.inkindFiled)}>
               <UploadFile
                 show
-                value={item.media}
+                files={item.media}
                 imgSize={36}
               />
             </div>
@@ -420,7 +429,7 @@ const SkuError = (
               /> : (item.opinion || '无')}
             </div>
 
-            <div hidden={handle || !permissions} className={style.actions}>
+            <div hidden={handle || complete} className={style.actions}>
               <div className={style.actionButton}>{errorTypeData(item, index).actions}</div>
               {confirm && (item.status === 0 || item.userId === userInfo.id) && <LinkButton onClick={() => {
                 if (item.userId) {

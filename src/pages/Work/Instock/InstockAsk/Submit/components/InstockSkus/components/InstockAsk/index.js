@@ -12,6 +12,7 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../../../../../Receipts';
 import Title from '../../../../../../../../components/Title';
 import style from '../../../PurchaseOrderInstock/index.less';
+import { history } from 'umi';
 
 const InstockAsk = ({ skus, judge, createType }) => {
 
@@ -46,11 +47,11 @@ const InstockAsk = ({ skus, judge, createType }) => {
         },
       });
     },
-    onError:()=>{
+    onError: () => {
       Message.errorDialog({
-        content:'创建入库任务失败!'
-      })
-    }
+        content: '创建入库任务失败!',
+      });
+    },
   });
 
 
@@ -59,7 +60,7 @@ const InstockAsk = ({ skus, judge, createType }) => {
       if (history.length <= 2) {
         history.push('/');
       } else {
-        history.goBack();
+        history.go(-2);
       }
     }
     setData(array);

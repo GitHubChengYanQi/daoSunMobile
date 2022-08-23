@@ -1,18 +1,15 @@
 import React from 'react';
-import { history } from 'umi';
 import TaskItem from '../../../TaskItem';
 
 const ErrorItem = (
   {
     item = {},
     index,
+    onClick = () => {
+    },
   }) => {
 
   const receipts = item.receipts || {};
-
-  const onClick = () => {
-    history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-  };
 
   return <TaskItem
     percent={parseInt((receipts.handle / receipts.total) * 100)}
@@ -24,7 +21,7 @@ const ErrorItem = (
     positionSize={receipts.positionNum}
     skuSize={receipts.skuNumber}
     beginTime={receipts.beginTime}
-    onClick={onClick}
+    onClick={()=>onClick(item)}
   />;
 };
 

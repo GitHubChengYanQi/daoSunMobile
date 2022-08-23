@@ -29,10 +29,6 @@ const ErrorSku = (
   if (loading) {
     return <MyLoading skeleton />;
   }
-
-  const yearData = ToolUtil.isObject(data);
-  const datas = Object.keys(yearData).map(item => ({ date: item, value: yearData[item] }));
-
   return <div onClick={() => {
     const pathname = history.location.pathname;
     const url = '/Report/SkuErrorData';
@@ -41,23 +37,23 @@ const ErrorSku = (
     }
   }}>
     <Canvas pixelRatio={window.devicePixelRatio} height={height || 200}>
-      <Chart data={datas}>
+      <Chart data={ToolUtil.isArray(data)}>
         <Axis
-          field='date'
+          field='month'
           tickCount={12}
           style={{
             label: { align: 'between' },
           }}
         />
-        <Axis field='value' tickCount={5} />
-        <Line x='date' y='value' />
+        <Axis field='number' tickCount={5} />
+        <Line x='month' y='number' />
         <Tooltip />
-        {datas.map((record) => {
+        {ToolUtil.isArray(data).map((record) => {
           return (
             <TextGuide
-              key={record.date}
+              key={record.month}
               records={[record]}
-              content={record.value}
+              content={record.number}
               offsetY={-10}
               style={{
                 fill: '#EA0000',

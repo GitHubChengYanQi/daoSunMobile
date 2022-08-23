@@ -108,7 +108,6 @@ export const SkuContent = (
 
 const StockDetail = (
   {
-    storehousePositionsId,
     setTask = () => {
     },
     stockDetail = {},
@@ -153,7 +152,7 @@ const StockDetail = (
     <SkuList
       stock
       ref={ref}
-      defaultParams={{ stockView: true, openPosition: true, storehousePositionsId }}
+      defaultParams={{ stockView: true, openPosition: true }}
       SkuContent={SkuContent}
       skuContentProps={{
         type: stockDetail.task,

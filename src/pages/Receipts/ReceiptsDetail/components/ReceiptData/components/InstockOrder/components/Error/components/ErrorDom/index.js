@@ -20,6 +20,7 @@ import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
 import InkindList from '../../../../../../../../../../components/InkindList';
 import Label from '../../../../../../../../../../components/Label';
+import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
 export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: 'POST' };
@@ -180,6 +181,7 @@ const ErrorDom = (
               <Label className={style.inKindFiledTitle}>数量：</Label>
               <ShopNumber
                 show={errorTypeData().errorNumberShow}
+                max={item.maxNumber}
                 min={1}
                 value={item.number}
                 onChange={(number) => {
@@ -226,16 +228,16 @@ const ErrorDom = (
                 }}
               />}
             </div>
-            <div className={style.imgs}>
+            <div hidden={show && ToolUtil.isArray(item.media).length === 0} className={style.imgs}>
               <UploadFile
                 show={show}
-                value={item.media}
+                files={item.media}
                 uploadId={`errorUpload${index}`}
                 imgSize={36}
                 icon={<CameraOutline />}
                 noFile
-                onChange={(mediaIds) => {
-                  inkinsChange(index, { mediaIds });
+                onChange={(medias) => {
+                  inkinsChange(index, { media: medias, mediaIds: medias.map(item => item.mediaId) });
                 }}
               />
             </div>
@@ -300,6 +302,7 @@ const ErrorDom = (
               inkindId: item.inkindId,
               codeId: item.qrCodeId,
               number: 1,
+              maxNumber: item.number,
             };
           });
           if (number > sku.realNumber) {

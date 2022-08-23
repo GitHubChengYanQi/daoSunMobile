@@ -28,7 +28,7 @@ const MyPicking = () => {
       {
         data.map((item, index) => {
           return <div key={index}>
-            <OutStockItem item={item} index={index} />
+            <OutStockItem pick item={item} index={index} />
           </div>;
         })
       }

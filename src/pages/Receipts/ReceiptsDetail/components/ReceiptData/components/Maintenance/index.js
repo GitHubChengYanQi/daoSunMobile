@@ -27,6 +27,7 @@ const Maintenance = (
     getAction = () => {
       return {};
     },
+    afertShow=()=>{},
     loading,
   },
 ) => {
@@ -165,7 +166,7 @@ const Maintenance = (
     <MyCard title='附件'>
       <div className={style.files}>
         {ToolUtil.isArray(receipts.enclosureUrl).length === 0 && '无'}
-        <UploadFile show value={ToolUtil.isArray(receipts.enclosureUrl).map(item => {
+        <UploadFile show files={ToolUtil.isArray(receipts.enclosureUrl).map(item => {
           return {
             url: item,
             type: 'image',
@@ -177,6 +178,7 @@ const Maintenance = (
     {loading && <MyLoading />}
 
     {actionPermissions && <BottomButton
+      afertShow={afertShow}
       only
       disabled={outTime}
       text={outTime ? '任务未开始' : '开始养护'}

@@ -248,6 +248,7 @@ const SkuShop = (
             return <div key={index} className={style.skuItem}>
               <div className={style.sku}>
                 <SkuItem
+                  noView
                   skuResult={skuResult}
                   imgSize={80}
                   gap={8}

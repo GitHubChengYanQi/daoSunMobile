@@ -10,6 +10,7 @@ import BottomButton from '../../components/BottomButton';
 import { Message } from '../../components/Message';
 import CodeNumber from './CodeNumber';
 import { NoticeBar } from 'antd-mobile';
+import { ToolUtil } from '../../components/ToolUtil';
 
 const listByCode = { url: '/productionPickLists/listByCode', method: 'GET' };
 const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
@@ -83,12 +84,13 @@ const OutStockConfirm = () => {
     <div className={style.skus}>
       {
         outSkus.map((item, index) => {
+          const brandNames = ToolUtil.isArray(item.brandNames);
           return <div key={index} className={style.skuItem}>
             <SkuItem
               className={style.sku}
               extraWidth='74px'
               skuResult={item.skuResult}
-              otherData={[item.brandResult ? item.brandResult.brandName : '任意品牌']}
+              otherData={[brandNames.length === 0 ? '任意品牌' : brandNames.join('、')]}
             />
             <div>
               <ShopNumber show value={item.number} />

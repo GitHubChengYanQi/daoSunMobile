@@ -20,8 +20,7 @@ const Skus = (
     judge,
     dataChange = () => {
     },
-    onRemove = () => {
-    },
+    onRemove,
     show,
   },
 ) => {

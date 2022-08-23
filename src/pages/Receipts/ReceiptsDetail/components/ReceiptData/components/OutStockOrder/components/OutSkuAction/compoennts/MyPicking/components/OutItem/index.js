@@ -20,13 +20,12 @@ const OutItem = (
 
   const skuChecked = skuItem.checked;
 
-  const received = parseInt(skuItem.receivedNumber || 0);
-  const collectable = skuItem.collectable || 0;
-  const notPrepared = skuItem.number - collectable - received;
+  const received = Number(skuItem.receivedNumber) || 0;
+  const collectable = Number(skuItem.collectable) || 0;
+  const notPrepared = Number(skuItem.number - collectable - received) || 0;
 
   const successPercent = Number(((received / skuItem.number)).toFixed(2)) * 100;
   const percent = Number(((collectable / skuItem.number)).toFixed(2)) * 100;
-  const trail = Number(((notPrepared / skuItem.number)).toFixed(2)) * 100;
 
   return <div key={skuIndex} className={style.skus}>
     <div className={style.skuItem}>

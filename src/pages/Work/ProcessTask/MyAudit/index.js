@@ -14,13 +14,14 @@ const MyAudit = (
     },
     createUser,
     top = ToolUtil.isQiyeWeixin() ? 0 : 45,
+    listScreentTop,
   }) => {
 
   const [screen, setScreen] = useState();
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], types: type && [type],createUser, };
+  const defaultParams = { auditType, statusList: ['0'], types: type && [type], createUser };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});
@@ -52,11 +53,10 @@ const MyAudit = (
   }, [auditType, type]);
 
   const processListRef = useRef();
-
   return <>
     <div hidden={type}>
       <MySearch
-        placeholder='请输入相关单据信息'
+        placeholder='请输入单据相关信息'
         historyType='process'
         onSearch={(value) => {
           submit({ skuName: value });
@@ -69,7 +69,7 @@ const MyAudit = (
 
 
     <ListScreent
-      top={top}
+      top={typeof listScreentTop === 'number' ? listScreentTop : top}
       setSort={setSort}
       sort={sort}
       screening={screening}
@@ -83,11 +83,11 @@ const MyAudit = (
       numberTitle={<>数量：<span>{number}</span></>}
     />
 
-    <ProcessList setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
+    <ProcessList all={ToolUtil.isArray(params.statusList).includes('99')} setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
 
     <ProcessScreen
       top={top}
-      open={{ type: !type,createUser:!createUser }}
+      open={{ type: !type, createUser: !createUser }}
       skuNumber={number}
       onClose={() => {
         setScreen(false);

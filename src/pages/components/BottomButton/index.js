@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../ToolUtil';
@@ -20,7 +20,13 @@ const BottomButton = (
     square,
     className,
     svg,
+    afertShow = () => {
+    },
   }) => {
+
+  useEffect(() => {
+    afertShow();
+  }, []);
 
 
   return <div className={ToolUtil.classNames(style.bottom, square && style.square, className)}>

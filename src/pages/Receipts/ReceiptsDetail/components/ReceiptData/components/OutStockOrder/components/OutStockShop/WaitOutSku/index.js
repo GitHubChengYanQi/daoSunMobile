@@ -51,7 +51,7 @@ const WaitOutSku = (
                 skuId: item.skuId,
                 brandId: item.brandId,
                 skuResult: item.skuResult,
-                pickListsId:id,
+                pickListsId: id,
               });
             }}>查看异常件</LinkButton>
           </>,
@@ -201,6 +201,7 @@ const WaitOutSku = (
                           }}><MyCheck checked={checked} /></span>}
                           <div className={style.item}>
                             <SkuItem
+                              number={cartItem.stockNumber}
                               skuResult={cartItem.skuResult}
                               imgSize={60}
                               extraWidth='148px'

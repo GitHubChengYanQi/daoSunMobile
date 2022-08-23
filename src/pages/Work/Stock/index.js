@@ -15,14 +15,17 @@ import { MyLoading } from '../../components/MyLoading';
 import { connect } from 'dva';
 import TaskBottom from './Task/components/TaskBottom';
 import Report from '../../Report';
+import KeepAlive from '../../../components/KeepAlive';
 
-const Stock = (props) => {
+export const StockContent = connect(({ qrCode }) => ({ qrCode }))((
+  props,
+) => {
 
   const [key, setKey] = useState('stock');
 
   const shopRef = useRef();
 
-  const ids = props.location.query;
+  const [scrollTop, setScrollTop] = useState(0);
 
   const [stockDetail, setStockDetail] = useState({});
 
@@ -54,7 +57,6 @@ const Stock = (props) => {
         return <StockDetail
           refreshTask={refresh}
           tasks={tasks}
-          storehousePositionsId={ids.storehousePositionsId}
           setTask={(task, judge) => {
             setStockDetail({ ...stockDetail, task, judge });
           }}
@@ -106,11 +108,16 @@ const Stock = (props) => {
     }
   };
 
-
-  return <div className={style.pageIndex}>
+  return <div className={style.pageIndex} style={{
+    scrollMarginTop: scrollTop,
+  }}>
     <MyNavBar title='仓储中心' />
     <div
+      id='content'
       className={style.content}
+      onScroll={(event) => {
+        setScrollTop(event.target.scrollTop);
+      }}
     >
       {content()}
     </div>
@@ -127,7 +134,6 @@ const Stock = (props) => {
             });
             return;
           default:
-            setStockDetail({ ...stockDetail, task: null });
             setKey(key);
             return;
         }
@@ -159,6 +165,12 @@ const Stock = (props) => {
 
     {getDefaultShop && <MyLoading />}
   </div>;
+});
+
+const Stock = () => {
+  return <KeepAlive id='stock' contentId='content'>
+    <StockContent />
+  </KeepAlive>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(Stock);
+export default Stock;

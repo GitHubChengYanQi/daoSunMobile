@@ -112,7 +112,7 @@ const InstockError = (
           type: 'instock',
           skuItem: <SkuItem
             skuResult={skuResult}
-            extraWidth='80px'
+            extraWidth='100px'
             otherData={[
               customerName,
               brandName || '无品牌',
@@ -127,7 +127,7 @@ const InstockError = (
           skuItem: <SkuItem
             hiddenNumber={!showStock}
             skuResult={skuResult}
-            extraWidth='80px'
+            extraWidth='100px'
             otherData={[brandName]}
           />,
         };

@@ -43,7 +43,7 @@ const ReceiptsResult = () => {
 
   useEffect(() => {
     if (!state) {
-      history.replace('/Work/ProcessTask');
+      history.replace('/');
     }
   }, []);
 
@@ -54,7 +54,7 @@ const ReceiptsResult = () => {
         description={
           <div className={style.actions}>
             <Button onClick={() => {
-              history.goBack();
+              history.push('/Work/ProcessTask?key=start');
             }}>返回列表</Button>
             <Button color='primary' className={style.view} onClick={() => {
               history.push(`/Receipts/ReceiptsDetail?type=${state.type}&formId=${state.formId}`);

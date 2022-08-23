@@ -21,6 +21,8 @@ import MyRemoveButton from '../../../../../../../../../../components/MyRemoveBut
 
 const Header = (
   {
+    errors = [],
+    type,
     forward,
     over,
     initialState,
@@ -33,7 +35,6 @@ const Header = (
     },
     anomalyId,
     userInfo,
-    loading,
     otherData,
     checkNumberTitle,
     inStockCustomers = () => {
@@ -42,7 +43,7 @@ const Header = (
   },
 ) => {
 
-  const [mediaIds, setMediaIds] = useState([]);
+  const [medias, setMedias] = useState([]);
   const [note, setNote] = useState();
 
   const inStockNumber = sku.checkNumber - sku.needNumber;
@@ -78,8 +79,8 @@ const Header = (
         return {
           value: customerNum.customerId || item.customerId,
           label: customerNum.customerName || item.customerName,
-          checked: Boolean(customerNum.customerId),
-          number: customerNum.num || 0,
+          checked: customer.length === 1 || Boolean(customerNum.customerId),
+          number: customer.length === 1 ? inStockNumber : (customerNum.num || 0),
         };
       });
       setCustomers(newCustomers);
@@ -91,7 +92,7 @@ const Header = (
     if (sku.skuId && sku.confirm && inStockNumber > 0) {
       getCustomer({ data: { skuId: sku.skuId } });
     }
-  }, [sku.skuId,sku.confirm]);
+  }, [sku.skuId, sku.confirm]);
 
   const customersChange = (id, data = {}) => {
     const newCustomer = customers.map(item => {
@@ -163,7 +164,7 @@ const Header = (
             <div className={style.checkNumber} style={{ display: 'block' }}>
               <Label className={style.title}>附件 </Label>：{urls.length === 0 && '无'}
               <div hidden={urls.length === 0} style={{ paddingTop: 4 }}>
-                <UploadFile refresh={loading} show value={urls.map(item => {
+                <UploadFile show files={urls.map(item => {
                   return { url: item };
                 })} />
               </div>
@@ -182,6 +183,10 @@ const Header = (
                 min={1}
                 value={sku.checkNumber}
                 onChange={(checkNumber) => {
+                  if (checkNumber < errors.length) {
+                    Message.toast('不能小于异常数量！');
+                    return;
+                  }
                   setSku({ ...sku, checkNumber });
                 }} />
               {unitName}
@@ -195,15 +200,14 @@ const Header = (
               }} />
             </div>
           </div>
-          <div hidden={mediaIds.length === 0}>
-            {!loading && <UploadFile
+          <div hidden={medias.length === 0}>
+            <UploadFile
+              files={medias}
               uploadId='verifyImg'
               noAddButton
               ref={addFileRef}
-              onChange={(mediaIds) => {
-                setMediaIds(mediaIds);
-              }}
-            />}
+              onChange={setMedias}
+            />
           </div>
           <div className={style.checkNumber}>
             <Label className={style.title}>添加备注</Label>：
@@ -227,12 +231,12 @@ const Header = (
                     number: sku.checkNumber,
                     name: userInfo.name,
                     userId: userInfo.id,
-                    mediaIds,
+                    mediaIds: medias.map(item => item.mediaId),
                     note,
                   }]),
                 },
               };
-              setMediaIds([]);
+              setMedias([]);
               setNote('');
               saveRun(param);
             }}>确认</Button>
@@ -242,9 +246,10 @@ const Header = (
     </div>
 
     <MyCard
-      title='绑定入库供应商'
-      hidden={!sku.confirm || inStockNumber <= 0} className={style.customerList}
-      extra={permissions && <LinkButton
+      title='盘盈物所属料供应商'
+      hidden={type === 'InstockError' || forward || !sku.confirm || inStockNumber <= 0}
+      className={style.customerList}
+      extra={permissions && customers.length > 1 && <LinkButton
         disabled={noCheckCustomers.length === 0}
         onClick={() => setVisible(true)}
       >
@@ -270,7 +275,7 @@ const Header = (
               }
               customersChange(item.value, { number });
             }} />
-            {permissions && <MyRemoveButton style={{ marginLeft: 8 }} onRemove={() => {
+            {permissions && customers.length > 1 && <MyRemoveButton style={{ marginLeft: 8 }} onRemove={() => {
               customersChange(item.value, { checked: false });
             }} />}
           </div>;

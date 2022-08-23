@@ -34,11 +34,11 @@ const CuringAsk = ({ createType, state }) => {
         },
       });
     },
-    onError:()=>{
+    onError: () => {
       Message.errorDialog({
-        content:'创建养护任务失败!'
-      })
-    }
+        content: '创建养护任务失败!',
+      });
+    },
   });
 
   const [skuView, setSkuView] = useState([]);
@@ -98,15 +98,16 @@ const CuringAsk = ({ createType, state }) => {
       const materials = ToolUtil.isArray(params.materials);
       const skuClasses = ToolUtil.isArray(params.skuClasses);
       const brands = ToolUtil.isArray(params.brands);
+      const newBrands = brands.filter(item => item.brandId);
       const positions = ToolUtil.isArray(params.positions);
       const boms = ToolUtil.isArray(params.boms);
       if (item.brandId) {
-        brands.push(item.brandId);
+        newBrands.push(item.brandId);
       }
       selectParams.push({
         materialIds: materials.map(item => item.value),
         spuClassificationIds: skuClasses.map(item => item.value),
-        brandIds: brands.map(item => item.value),
+        brandIds: newBrands.map(item => item.value),
         storehousePositionsIds: positions.map(item => item.id),
         partsIds: boms.map(item => item.key),
         spuIds: params.spuId && [params.spuId],

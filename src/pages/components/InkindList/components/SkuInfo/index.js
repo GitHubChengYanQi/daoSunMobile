@@ -13,7 +13,7 @@ const SkuInfo = (
   }
 
   return <div className={style.skuInfo}>
-    <SkuItem skuResult={sku} otherData={[`保养周期：${sku.time || 0}天`]} />
+    <SkuItem noView skuResult={sku} otherData={[<>保养周期：{sku.time ? `${sku.time}天` : '暂无'}</>]} />
   </div>;
 };
 

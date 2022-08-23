@@ -41,8 +41,9 @@ const OtherData = (
     <MyCard title='上传附件'>
       <div className={style.files}>
         <UploadFile
-          onChange={(mediaIds) => {
-            setParams({ ...params, mediaIds });
+          files={params.files}
+          onChange={(medias) => {
+            setParams({ ...params, files: medias, mediaIds: medias.map(item => item.mediaId) });
           }}
         />
       </div>

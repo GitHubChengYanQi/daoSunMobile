@@ -21,7 +21,7 @@ const successToast = (
     afterClose();
   }
   Toast.show({
-    maskClassName: style.toastMask,
+    maskClassName: wait && style.toastMask,
     content: title || '成功！',
     icon: 'success',
     afterClose: wait && afterClose,
@@ -39,7 +39,7 @@ const errorToast = (
   }
   Toast.show({
     content: title || '失败！',
-    maskClassName: style.toastMask,
+    maskClassName: wait && style.toastMask,
     icon: 'fail',
     afterClose: wait && afterClose,
   });

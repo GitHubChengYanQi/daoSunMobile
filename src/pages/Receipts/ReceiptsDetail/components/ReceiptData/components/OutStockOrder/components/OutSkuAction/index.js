@@ -32,6 +32,8 @@ const OutSkuAction = (
     action,
     refresh = () => {
     },
+    afertShow = () => {
+    },
     dimension = 'order',
     taskId,
   },
@@ -64,7 +66,7 @@ const OutSkuAction = (
     const complete = item.status === 99;
     const prepare = complete ? false : perpareNumber === item.number;
 
-    if (complete || prepare) {
+    if (complete || prepare || !item.stockNumber) {
       noAction.push({ ...item, complete, prepare, perpareNumber });
     } else {
       actions.push({ ...item, complete, prepare, perpareNumber });
@@ -189,6 +191,7 @@ const OutSkuAction = (
     {action && userInfo.id === order.userId
     &&
     <BottomButton
+      afertShow={afertShow}
       only
       text='领料'
       onClick={() => {

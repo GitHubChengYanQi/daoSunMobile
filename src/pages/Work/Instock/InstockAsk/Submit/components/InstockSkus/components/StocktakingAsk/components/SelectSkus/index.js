@@ -27,8 +27,6 @@ const SelectSkus = (
 
   const [visible, setVisible] = useState();
 
-  const history = useHistory();
-
   const { loading, run } = useRequest(getOne, {
     manual: true,
     onError: () => {
@@ -38,16 +36,6 @@ const SelectSkus = (
 
   const [skus, setSkus] = useState(value);
 
-  const open = () => {
-    history.push({
-      pathname: history.location.pathname,
-      query: {
-        ...history.location.query,
-        popup: 1,
-      },
-    });
-  };
-
   const skusChange = (newSkus) => {
     setSkus(newSkus);
     onChange(newSkus);
@@ -56,6 +44,8 @@ const SelectSkus = (
   return <div className={style.skus}>
     {
       skus.map((item, index) => {
+        const skuResult = item.skuResult || {};
+        const inkindId = skuResult.inkindId;
         return <div key={index} className={style.skuItem}>
           <div className={style.nav} style={{
             background: index % 2 === 0 ? 'rgb(57 116 199 / 20%)' : 'rgb(57 116 199 / 50%)',
@@ -67,7 +57,7 @@ const SelectSkus = (
             <div className={style.skuAction}>
               <div className={style.sku}>
                 <SkuItem
-                  skuResult={item.skuResult}
+                  skuResult={skuResult}
                   otherData={[ToolUtil.isObject(item.brandResult).brandName || '所有品牌']}
                 />
               </div>
@@ -76,12 +66,16 @@ const SelectSkus = (
               }} />
             </div>
             <Divider style={{ margin: '0 24px' }} />
-            <div className={style.text} hidden={!item.params}>
-              <MyEllipsis maxWidth='70vw' width='auto'>{item.filterText}</MyEllipsis>
-              <LinkButton onClick={() => {
-                open();
+            <div className={style.text} hidden={!item.params && !inkindId}>
+              <MyEllipsis
+                maxWidth='70vw'
+                width='auto'
+              >
+                {!inkindId ? item.filterText : `实物养护 (${skuResult.number || 0})`}
+              </MyEllipsis>
+              {!inkindId && <LinkButton onClick={() => {
                 setVisible({ ...item.params, key: index });
-              }}>({item.skuNum}) >></LinkButton>
+              }}>({item.skuNum}) >></LinkButton>}
             </div>
           </div>
 
@@ -90,17 +84,11 @@ const SelectSkus = (
     }
     <Divider style={{ margin: 0, padding: 12, backgroundColor: '#fff' }}>
       <AddButton onClick={() => {
-        open();
         setVisible({});
       }} />
     </Divider>
 
     <Popup
-      afterClose={() => {
-        if (history.location.query.popup === 1) {
-          history.goBack();
-        }
-      }}
       visible={visible}
       position='right'
       destroyOnClose
@@ -122,7 +110,6 @@ const SelectSkus = (
               newSkus = skus.filter((item, index) => index !== params.key);
             }
             skusChange([...newSkus, ...addSkus]);
-            setVisible(null);
             return;
           }
           const filterText = [];
@@ -167,8 +154,6 @@ const SelectSkus = (
             } else {
               skusChange([...skus, { ...sku, filterText: filterText.join('/'), params }]);
             }
-
-            setVisible(null);
           } else {
             Message.warningDialog({ content: '库存不存在此物料!' });
           }

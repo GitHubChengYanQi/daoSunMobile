@@ -16,6 +16,8 @@ import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
 import ErrorDom from './components/ErrorDom';
 import Label from '../../../../../../../../components/Label';
+import { MyDate } from '../../../../../../../../components/MyDate';
+import { UserName } from '../../../../../../../../components/User';
 
 const instockError = { url: '/anomaly/add', method: 'POST' };
 const anomalyTemporary = { url: '/anomaly/temporary', method: 'POST' };
@@ -45,6 +47,7 @@ const Error = (
     maxHeight = '80vh',
     type,
     showStock,
+    title,
     ...props
   },
 ) => {
@@ -144,6 +147,8 @@ const Error = (
       const filedUrls = ToolUtil.isArray(res.filedUrls);
       let sku = {
         ...skuItem,
+        createTime: res.createTime,
+        user: res.user,
         scanNumber: false,
         number: res.needNumber,
         skuId: res.skuId,
@@ -156,6 +161,7 @@ const Error = (
         anomalyId: res.anomalyId,
         realNumber: res.realNumber,
         remark: res.remark,
+        positionsResult: res.positionsResult,
         filedUrls: fileIds.map((item, index) => {
           return {
             mediaIds: item,
@@ -440,7 +446,7 @@ const Error = (
         };
       case ReceiptsEnums.stocktaking:
         return {
-          title: '盘点',
+          title: title || '盘点',
           shopId: 'stocktakingError',
           addErrorHidden: show || inkinds.length === 0,
           errorNumberShow: show || !batch,
@@ -451,24 +457,37 @@ const Error = (
             skuResult={sku.skuResult}
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}
-            otherData={[ToolUtil.isObject(sku.brandResult).brandName || '无品牌']}
+            otherData={[
+              ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
+              ToolUtil.isObject(sku.positionsResult).name,
+            ]}
           />,
           actionNumber: <div className={style.actual} style={{ alignItem: 'flex-start' }}>
             <div className={style.number}>
+              <div hidden={!show} className={style.log}>
+                <div className={style.user}><UserName user={sku.user} /></div>
+                <div className={style.time}>{MyDate.Show(sku.createTime)}</div>
+              </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
                   盘点数量
                 </Label>
-                <ShopNumber
-                  hiddenNumber={!showStock}
-                  show={show}
-                  min={allNumber}
-                  value={sku.realNumber}
-                  onChange={(realNumber) => {
-                    setInkinds([]);
-                    setSku({ ...sku, realNumber, scanNumber: false });
-                  }}
-                />
+                {show ? <>
+                    盘{(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}
+                    <span className='numberBlue'>{Math.abs(sku.realNumber - sku.number) || 0}</span>
+                    {ToolUtil.isObject(spuResult.unitResult).unitName}
+                  </>
+                  :
+                  <ShopNumber
+                    hiddenNumber={!showStock}
+                    show={show}
+                    min={allNumber}
+                    value={sku.realNumber}
+                    onChange={(realNumber) => {
+                      setInkinds([]);
+                      setSku({ ...sku, realNumber, scanNumber: false });
+                    }}
+                  />}
                 <div hidden={show} style={{ flexGrow: 1, textAlign: 'right' }}>
                   <ScanIcon onClick={() => {
                     setErrorInkind(false);
@@ -484,24 +503,24 @@ const Error = (
               </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
-                  上传照片
+                  {show ? '照片' : '上传照片'}
                 </Label>
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
                   show={show}
-                  value={sku.filedUrls}
+                  files={sku.filedUrls}
                   uploadId={`errorUpload`}
                   imgSize={36}
                   icon={<CameraOutline />}
                   noFile
-                  onChange={(mediaIds) => {
-                    setSku({ ...sku, enclosure: mediaIds.toString() });
+                  onChange={(medias) => {
+                    setSku({ ...sku, filedUrls: medias, enclosure: medias.map(item => item.mediaId).toString() });
                   }}
                 />
               </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
-                  添加备注
+                  {show ? '备注' : '添加备注'}
                 </Label>
                 {show ? `${sku.remark || '无'}` : <TextArea
                   className={style.textArea}
