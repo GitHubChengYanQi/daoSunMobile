@@ -133,8 +133,11 @@ const SkuDetail = ({ id }) => {
           max={3}
           noFile
           icon={<CameraOutline />}
-          onChange={(medias) => {
-            console.log(medias);
+          onChange={(medias, show) => {
+            if (show) {
+              setDetail({ ...detail, imgs: medias });
+              return;
+            }
             editAction({ images: medias.map(item => item.mediaId).toString() });
           }}
         />
@@ -151,7 +154,11 @@ const SkuDetail = ({ id }) => {
           files={detail.files}
           noFile
           icon={<CameraOutline />}
-          onChange={(medias) => {
+          onChange={(medias,show) => {
+            if (show) {
+              setDetail({ ...detail, files: medias });
+              return;
+            }
             editAction({ fileId: medias.map(item => item.mediaId).toString() });
           }}
         />
@@ -168,8 +175,12 @@ const SkuDetail = ({ id }) => {
           files={detail.drawings}
           noFile
           icon={<CameraOutline />}
-          onChange={(medias) => {
-            editAction({  drawing: medias.map(item => item.mediaId).toString() });
+          onChange={(medias,show) => {
+            if (show) {
+              setDetail({ ...detail, drawings: medias });
+              return;
+            }
+            editAction({ drawing: medias.map(item => item.mediaId).toString() });
           }}
         />
       </div>
