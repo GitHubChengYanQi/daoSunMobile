@@ -30,7 +30,7 @@ const WaitOutSku = (
 
   const [sys, setSys] = useState();
 
-  const [userIds, setUserIds] = useState([]);
+  const [user, setUser] = useState({});
 
   const [returnSkus, setReturnSkus] = useState([]);
 
@@ -69,25 +69,21 @@ const WaitOutSku = (
         const sku = [];
         ToolUtil.isArray(res).map(userItem => {
           const pickListsResults = userItem.pickListsResults || [];
-          const newPickListsResults = [];
           pickListsResults.map(item => {
             const cartResults = item.cartResults || [];
             if (cartResults.length > 0) {
-              const newCartResults = cartResults.map(item => {
+              cartResults.forEach(item => {
                 const data = { ...item, userId: userItem.userId };
                 sku.push(data);
-                return data;
+                newData.push(data);
               });
-              newPickListsResults.push({ ...item, cartResults: newCartResults });
             }
             return null;
           });
-          if (newPickListsResults.length > 0) {
-            newData.push({ ...userItem, pickListsResults: newPickListsResults });
-          }
           return null;
         });
         setAllSkus(sku);
+        setUser(ToolUtil.isArray(res)[0]);
         setData(newData);
       },
     });
@@ -109,13 +105,15 @@ const WaitOutSku = (
   });
 
 
-  const allChecked = sys ? returnSkus.length === allSkus.length : data.length === userIds.length;
+  const allChecked = returnSkus.length === allSkus.length;
 
   useEffect(() => {
     if (id) {
       run({ data: { pickListsIds: [id] } });
     }
   }, []);
+
+  const checkedSkus = returnSkus.map(item => item.pickListsCart);
 
   return <>
     <div className={style.header}>待出物料</div>
@@ -128,97 +126,35 @@ const WaitOutSku = (
     <div className={style.content}>
       {data.length === 0 && <MyEmpty />}
       {
-        data.map((userItem, userIndex) => {
+        data.map((cartItem, cartIndex) => {
 
-          const pickListsResults = userItem.pickListsResults || [];
+          const checked = checkedSkus.includes(cartItem.pickListsCart);
 
-          const checkUserSkus = returnSkus.filter(item => item.userId === userItem.userId);
-
-          const carts = [];
-          pickListsResults.map(item => {
-            const cartResults = item.cartResults || [];
-            return cartResults.map(item => carts.push(item));
-          });
-
-          const userChecked = sys ? checkUserSkus.length === carts.length : userIds.includes(userItem.userId);
-
-          const pickLists = pickListsResults.filter(item => {
-            const cartResults = item.cartResults || [];
-            return cartResults.length > 0;
-          });
-
-          return <div hidden={pickLists.length !== pickListsResults.length} key={userIndex}>
-            <div className={style.user}>
-              <span onClick={() => {
-                if (sys) {
-                  const newReturnSku = returnSkus.filter(item => item.userId !== userItem.userId);
-                  setReturnSkus(userChecked ? newReturnSku : [...newReturnSku, ...carts]);
+          return <div key={cartIndex}>
+            <div
+              className={style.skuItem}
+            >
+              {sys && <span onClick={() => {
+                if (checked) {
+                  setReturnSkus(returnSkus.filter(item => item.pickListsCart !== cartItem.pickListsCart));
                 } else {
-                  setUserIds(userChecked ? userIds.filter(item => item !== userItem.userId) : [...userIds, userItem.userId]);
+                  setReturnSkus([...returnSkus, cartItem]);
                 }
-              }}>
-                <MyCheck
-                  checked={userChecked}
+              }}><MyCheck checked={checked} /></span>}
+              <div className={style.item}>
+                <SkuItem
+                  number={cartItem.stockNumber}
+                  skuResult={cartItem.skuResult}
+                  imgSize={60}
+                  extraWidth='148px'
+                  otherData={[ToolUtil.isObject(cartItem.brandResult).brandName || '任意品牌']}
                 />
-                领料人：{userItem.userName}
-              </span>
+              </div>
+              <div>
+                {outTypeData(cartItem).skuAction}
+                <ShopNumber value={cartItem.number} show />
+              </div>
             </div>
-
-            {
-              pickListsResults.map((pickItem, pickIndex) => {
-
-                const cartResults = pickItem.cartResults || [];
-
-                const checkPickSkus = checkUserSkus.filter(item => item.pickListsId === pickItem.pickListsId);
-
-                const checked = checkPickSkus.length === cartResults.length;
-
-                return <div hidden={cartResults.length === 0} key={pickIndex}>
-                  <div className={style.orderData} hidden={pickListsResults.length === 1}>
-                    {sys && <span onChange={() => {
-                      const newReruenSkus = returnSkus.filter(item => item.pickListsId !== pickItem.pickListsId);
-                      setReturnSkus(checked ? newReruenSkus : [...newReruenSkus, cartResults]);
-                    }}><MyCheck checked={checked} /></span>}{ToolUtil.isObject(pickItem.createUserResult).name}的出库申请
-                    / {pickItem.coding}
-                  </div>
-
-                  {
-                    cartResults.map((cartItem, cartIndex) => {
-
-                      const checkedSkus = checkPickSkus.map(item => item.pickListsCart);
-                      const checked = checkedSkus.includes(cartItem.pickListsCart);
-
-                      return <div key={cartIndex}>
-                        <div
-                          className={style.skuItem}
-                        >
-                          {sys && <span onClick={() => {
-                            if (checked) {
-                              setReturnSkus(returnSkus.filter(item => item.pickListsCart !== cartItem.pickListsCart));
-                            } else {
-                              setReturnSkus([...returnSkus, cartItem]);
-                            }
-                          }}><MyCheck checked={checked} /></span>}
-                          <div className={style.item}>
-                            <SkuItem
-                              number={cartItem.stockNumber}
-                              skuResult={cartItem.skuResult}
-                              imgSize={60}
-                              extraWidth='148px'
-                              otherData={[ToolUtil.isObject(cartItem.brandResult).brandName || '任意品牌']}
-                            />
-                          </div>
-                          <div>
-                            {outTypeData(cartItem).skuAction}
-                            <ShopNumber value={cartItem.number} show />
-                          </div>
-                        </div>
-                      </div>;
-                    })
-                  }
-                </div>;
-              })
-            }
           </div>;
         })
       }
@@ -234,13 +170,13 @@ const WaitOutSku = (
 
     <div className={style.bottom}>
       <div className={style.all}>
-        <MyCheck fontSize={16} checked={allChecked} onChange={() => {
-          if (sys) {
+        {sys ? <>
+          <MyCheck fontSize={16} checked={allChecked} onChange={() => {
             setReturnSkus(allChecked ? [] : allSkus);
-          } else {
-            setUserIds(allChecked ? [] : data.map(item => item.userId));
-          }
-        }} />{allChecked ? '取消全选' : '全选'}<span>已选中 {sys ? returnSkus.length : userIds.length} 类</span>
+          }} />
+          {allChecked ? '取消全选' : '全选'}
+          <span>已选中 {returnSkus.length} 类</span>
+        </> : `领料人：${user.userName || ''}`}
       </div>
       <div className={style.buttons}>
         {sys && <Button color='danger' disabled={returnSkus.length === 0} onClick={() => {
@@ -254,18 +190,9 @@ const WaitOutSku = (
           backRun({ data: { productionPickListsCartParams } });
         }}>移出</Button>}
         {!sys && <Button
-          disabled={userIds.length === 0}
           color='primary'
           onClick={() => {
-            const pickListsIds = [];
-            data.map(item => {
-              if (userIds.includes(item.userId)) {
-                const pickListsResults = item.pickListsResults || [];
-                pickListsResults.map(item => pickListsIds.push(item.pickListsId));
-              }
-              return null;
-            });
-            pickRun({ data: { userIds: userIds.toString(), pickListsIds, taskId } });
+            pickRun({ data: { userIds: user.userId, taskId } });
           }}
         >通知领料</Button>}
       </div>
