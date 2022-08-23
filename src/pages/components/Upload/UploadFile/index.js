@@ -56,6 +56,10 @@ const UploadFile = (
   const [currentImg, setCurrentImg] = useState(null);
 
   const fileChange = ({ mediaId, url, type, remove }) => {
+    if (!mediaId) {
+      Message.errorToast('上传失败!');
+      return;
+    }
     let newFile;
     if (remove) {
       newFile = files.filter(fileItem => fileItem.mediaId !== mediaId);
@@ -71,16 +75,12 @@ const UploadFile = (
         localId, // 需要上传的图片的本地ID，由chooseImage接口获得
         isShowProgressTips: 0, // 默认为1，显示进度提示
         success: async (res) => {
-          try {
-            const mediaId = await request({
-              url: '/media/getTemporaryFile',
-              method: 'GET',
-              params: { mediaId: res.serverId },
-            });
-            fileChange({ type: 'image', mediaId, url });
-          } catch (e) {
-            Message.errorToast('上传失败!');
-          }
+          const mediaId = await request({
+            url: '/media/getTemporaryFile',
+            method: 'GET',
+            params: { mediaId: res.serverId },
+          });
+          fileChange({ type: 'image', mediaId, url });
           getLoading(false);
           setLoading(false);
         },
