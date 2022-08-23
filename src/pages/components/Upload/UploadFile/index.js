@@ -168,7 +168,7 @@ const UploadFile = (
                       return currentItem;
                     }
                   });
-                  onChange(newFile);
+                  onChange(newFile, true);
                 }} />
             }
 
