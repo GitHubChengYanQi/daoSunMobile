@@ -8,6 +8,7 @@
     "build": "cross-env UMI_ENV=daoxin umi build",
     "buildZjzc": "cross-env UMI_ENV=zjzc umi build",
     "buildHunHe": "cross-env UMI_ENV=hunhe umi build",
+    "buildHunHeBate": "cross-env UMI_ENV=hunheBate umi build",
     "test": "umi test",
     "lint": "eslint {src,mock,tests}/**/*.{js,jsx} --fix",
     "precommit": "lint-staged"
