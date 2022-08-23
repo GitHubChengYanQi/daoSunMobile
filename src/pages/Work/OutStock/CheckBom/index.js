@@ -18,7 +18,7 @@ import { ERPEnums } from '../../Stock/ERPEnums';
 import { Message } from '../../../components/Message';
 import { RightOutline } from 'antd-mobile-icons';
 
-export const list = { url: '/erpPartsDetail/bomList', method: 'POST' };
+export const list = { url: '/erpPartsDetail/v1.1.1/bomList', method: 'POST' };
 
 const CheckBom = () => {
 
