@@ -29,6 +29,7 @@ const Positions = (
     skuId,
     extra,
     empty,
+    hiddenButton,
     ...props
   },
 ) => {
@@ -118,7 +119,7 @@ const Positions = (
 
     {loading && <MyLoading skeleton />}
 
-    <BottomButton
+    {!hiddenButton && <BottomButton
       rightText='确定'
       leftOnClick={() => {
         onClose();
@@ -127,7 +128,7 @@ const Positions = (
       rightOnClick={() => {
         onSuccess(value);
       }}
-    />
+    />}
 
   </div>;
 };

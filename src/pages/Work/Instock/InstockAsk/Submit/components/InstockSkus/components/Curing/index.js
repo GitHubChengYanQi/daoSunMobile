@@ -85,6 +85,7 @@ const Curing = (
     />
 
     <MyCard
+      hidden
       titleBom={<Title className={style.title}>养护类型 <span>*</span></Title>}
       extra={<div onClick={() => {
         setTypeVisible(true);

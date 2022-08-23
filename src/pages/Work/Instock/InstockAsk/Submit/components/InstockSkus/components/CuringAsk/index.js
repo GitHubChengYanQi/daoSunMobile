@@ -64,7 +64,7 @@ const CuringAsk = ({ createType, state }) => {
 
   const createTypeData = () => {
     const maintenanceDisabled = () => {
-      if (!(params.userId && params.startTime && params.endTime && params.type)) {
+      if (!(params.userId && params.startTime && params.endTime)) {
         return true;
       }
 

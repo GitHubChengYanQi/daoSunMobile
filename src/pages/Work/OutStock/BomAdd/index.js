@@ -11,6 +11,7 @@ import { useHistory } from 'react-router-dom';
 import LinkButton from '../../../components/LinkButton';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
+import { LeftOutline, RightOutline } from 'antd-mobile-icons';
 
 const BomAdd = () => {
 
@@ -48,13 +49,13 @@ const BomAdd = () => {
     return list.map((item, index) => {
       return <div key={index} className={style.bomItem}>
         <SkuItem extraWidth='90px' className={style.sku} skuResult={item.skuResult} />
-        {!item.isNull && <Space direction='vertical' align='center'>
+        {!item.isNull && <Space align='center'>
           <Button color='primary' fill='outline' onClick={() => {
-            history.push(`/Work/OutStock/CheckBom?skuId=${item.key}&partsId=${item.partsId}`);
+            history.push(`/Work/OutStock/CheckBom?skuId=${item.key}`);
           }}>选择</Button>
           <LinkButton onClick={() => {
             run({ params: { id: item.key, type: 1 } });
-          }}>下一级</LinkButton>
+          }}> <RightOutline /></LinkButton>
         </Space>}
       </div>;
     });
@@ -77,7 +78,7 @@ const BomAdd = () => {
         setBoms(boms.filter((item, index) => {
           return index !== boms.length - 1;
         }));
-      }}>返回上一级</LinkButton>
+      }}><LeftOutline />返回上一级</LinkButton>
     </div>
     {
       loading ? <MyLoading skeleton /> :

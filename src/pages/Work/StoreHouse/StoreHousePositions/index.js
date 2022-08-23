@@ -48,6 +48,7 @@ const StoreHousePositions = (props) => {
   return <div style={{ backgroundColor: '#fff' }}>
     <MyNavBar title='库位信息' />
     <Positions
+      hiddenButton
       storehouseId={id}
       extra={extra}
     />

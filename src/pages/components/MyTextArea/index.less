@@ -1,11 +1,11 @@
 .textArea {
-  position: relative;
+  display: flex;
+  align-items: flex-end;
 
   .count {
-    position: absolute;
-    z-index: 1;
-    bottom: 4px;
-    right: 8px;
+    min-width: 50px;
+    height: 32px;
+    line-height: 32px;
     color: #999999;
   }
 }
@@ -15,6 +15,6 @@
 
   &:focus {
     border: none;
-    box-shadow:none;
+    box-shadow: none;
   }
 }

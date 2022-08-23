@@ -1,22 +1,29 @@
 .orderItem {
   padding: 0 !important;
 
-  .divider {
-    width: 30vw;
-    margin: 0;
+  .orderHeader {
+    padding: 8px 12px 0;
+
+    svg {
+      color: var(--adm-color-primary);
+    }
+  }
+
+  .orderItemBody {
+    padding: 8px 0;
   }
 }
 
 .orderInfo {
   display: flex;
-  padding: 8px 0;
+  padding: 8px 12px;
   align-items: center;
+  border-top: solid 1px var(--body--background--color);
 
   .orderName {
     flex-grow: 1;
     font-size: 14px;
-    font-weight: bold;
-    color: #000000;
+    color: #444444;
   }
 
   .time {

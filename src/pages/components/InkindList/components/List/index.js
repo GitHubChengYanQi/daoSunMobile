@@ -72,7 +72,7 @@ const List = (
         <div className={style.flexGrow}>
           实物码只显示后6位数字！
         </div>
-        {add && <Button color='primary' fill='outline' onClick={addInkind}>新增二维码</Button>}
+        {add && <Button color='primary' fill='outline' onClick={addInkind}>新增实物码</Button>}
       </div>
       <div className={style.inkindList}>
         <MyList

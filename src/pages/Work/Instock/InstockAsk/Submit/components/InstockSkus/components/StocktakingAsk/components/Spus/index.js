@@ -200,6 +200,7 @@ const Spus = (
                 </div>
                 {dropTitles(item.key)}
               </>}>
+              <div className={style.space} />
               <div className={style.downContent}>
                 {content}
               </div>
