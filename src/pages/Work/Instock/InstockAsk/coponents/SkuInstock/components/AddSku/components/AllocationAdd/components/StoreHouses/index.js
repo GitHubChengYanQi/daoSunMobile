@@ -77,13 +77,15 @@ const StoreHouses = (
       }
     });
     let overflow = false;
+    let overNumber = 0;
     brandNumbers.forEach(item => {
+      overNumber += item.number;
       const brand = initBrands.filter(initItem => initItem.brandId === item.id)[0] || {};
       if (item.number > brand.maxNumber) {
         overflow = true;
       }
     });
-    if (overflow) {
+    if (overflow || overNumber > total) {
       Message.toast('不能超出指定数量！');
       return false;
     }

@@ -108,77 +108,82 @@ const SelectStoreHouse = () => {
     return <MyEmpty />;
   }
 
-  return <div style={{ paddingBottom: 60, backgroundColor: '#fff', height: '100%' }}>
-    <MyNavBar title={params.title} />
-    <div className={style.content}>
-      <User
-        show={user.id}
-        noRequired={user.id}
-        value={user.id ? [{
-          id: user.id,
-          name: user.name,
-          avatar: user.avatar,
-        }] : []}
-        title='负责人'
-        onChange={(users) => {
-          const { id, name, avatar } = users[0] || {};
-          setUser({ id, name, avatar });
-        }}
-      />
-      <MyCard hidden={data.length === 0} title='待分配物料'>
-        {
-          data.map((item, index) => {
+  return <>
+    <div style={{ backgroundColor: '#fff', height: '100%' }}>
+      <MyNavBar title={params.title} />
+      <div className={style.content}>
+        <User
+          show={user.show}
+          noRequired={user.id}
+          value={user.id ? [{
+            id: user.id,
+            name: user.name,
+            avatar: user.avatar,
+          }] : []}
+          title='负责人'
+          onChange={(users) => {
+            const { id, name, avatar } = users[0] || {};
+            setUser({ id, name, avatar });
+          }}
+        />
+        <MyCard hidden={data.length === 0} title='待分配物料'>
+          {
+            data.map((item, index) => {
+              const brands = item.brands || [];
 
-            const brands = item.brands || [];
+              return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
+                <div className={style.sku}>
+                  <SkuItem
+                    skuResult={item.skuResult}
+                    otherData={[
+                      item.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
+                    ]}
+                    extraWidth='140px'
+                  />
+                </div>
+                <div className={style.action}>
+                  <ShopNumber
+                    show
+                    value={item.number}
+                  />
+                  <Button color='primary' fill='outline' onClick={() => {
+                    setVisible(item);
+                  }}>分配</Button>
+                </div>
+              </div>;
+            })
+          }
+        </MyCard>
 
-            return <div key={index} className={style.SkuItem} style={{ border: index === data.length - 1 && 'none' }}>
-              <div className={style.sku}>
-                <SkuItem
-                  skuResult={item.skuResult}
-                  otherData={[
-                    item.haveBrand ? brands.map(item => item.brandName || '无品牌').join(' / ') : '任意品牌',
-                  ]}
-                  extraWidth='140px'
-                />
-              </div>
-              <div className={style.action}>
-                <ShopNumber
-                  show
-                  value={item.number}
-                />
-                <Button color='primary' fill='outline' onClick={() => {
-                  setVisible(item);
-                }}>分配</Button>
-              </div>
-            </div>;
-          })
-        }
-      </MyCard>
+        <MyCard
+          titleBom={<Title className={style.storesTitle}>
+            {params.storeHouseTitle}
+            <span style={{ marginLeft: 8 }}>涉及 <span className='numberBlue'>{storeHouses.length}</span> 个仓库</span>
+          </Title>}
+          headerClassName={style.cardHeader}
+          bodyClassName={style.cardBody}
+        >
+          <Data out={params.out} storeHouses={storeHouses} setVisible={setVisible} />
+        </MyCard>
+      </div>
+      <div style={{height:60}} />
 
-      <MyCard
-        titleBom={<Title className={style.storesTitle}>
-          {params.storeHouseTitle}
-          <span style={{ marginLeft: 8 }}>涉及 <span className='numberBlue'>{storeHouses.length}</span> 个仓库</span>
-        </Title>}
-        headerClassName={style.cardHeader}
-        bodyClassName={style.cardBody}
-      >
-        <Data out={params.out} storeHouses={storeHouses} setVisible={setVisible} />
-      </MyCard>
+      <MyAntPopup title={params.distribution} visible={visible} onClose={() => setVisible(false)} destroyOnClose>
+        <Distribution
+          allocationId={query.id}
+          skuItem={visible}
+          out={params.out}
+          onClose={() => setVisible(false)}
+          refresh={() => {
+            setVisible(false);
+            refresh();
+          }}
+        />
+      </MyAntPopup>
+
+      {(detailLoading || checkCartLoading) && <MyLoading />}
+
     </div>
-
-    <MyAntPopup title={params.distribution} visible={visible} onClose={() => setVisible(false)} destroyOnClose>
-      <Distribution
-        allocationId={query.id}
-        skuItem={visible}
-        out={params.out}
-        onClose={() => setVisible(false)}
-        refresh={() => {
-          setVisible(false);
-          refresh();
-        }}
-      />
-    </MyAntPopup>
 
     <BottomButton
       leftOnClick={() => {
@@ -194,10 +199,7 @@ const SelectStoreHouse = () => {
         });
       }}
     />
-
-    {(detailLoading || checkCartLoading) && <MyLoading />}
-
-  </div>;
+  </>;
 };
 
 export default SelectStoreHouse;

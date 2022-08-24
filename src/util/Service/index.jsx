@@ -10,7 +10,7 @@ const baseURI = process.env.ENV === 'test' ?
   // :
   // 'https://lqscyq.xicp.fun'
   'http://192.168.0.111'
-  // 'https://api.daoxin.gf2025.com'
+  // 'http://10.147.20.68:8881/'
   // 'https://api.hh.gf2025.com'
   :
   process.env.api;

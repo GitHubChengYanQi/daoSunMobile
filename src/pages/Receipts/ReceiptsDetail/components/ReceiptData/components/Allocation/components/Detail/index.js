@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Divider, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
@@ -31,8 +31,13 @@ const Detail = (
     },
   },
 ) => {
+  const [key, setKey] = useState('dis');
 
-  const [key, setKey] = useState('0');
+  useEffect(() => {
+    if (distributionList.length > 0) {
+      setKey('noDis');
+    }
+  }, [distributionList.length]);
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -123,28 +128,28 @@ const Detail = (
     </div>;
   };
 
-  const tabItems = out ? [
-    { key: '0', title: '调出明细' },
-    { key: '1', title: '调入明细' },
-    { key: '2', title: '库内调拨' },
-    { key: '3', title: '未分配' },
+  const tabItems = distributionList.length > 0 ? [
+    { key: 'noDis', title: '未分配' },
+    { key: 'dis', title: '已分配' },
+    { key: 'in', title: '调入明细' },
+    { key: 'all', title: '库内调拨' },
   ] : [
-    { key: '0', title: '调入明细' },
-    { key: '1', title: '调出明细' },
-    { key: '2', title: '库内调拨' },
-    { key: '3', title: '未分配' },
+    { key: 'dis', title: '已分配' },
+    { key: 'in', title: '调入明细' },
+    { key: 'all', title: '库内调拨' },
+    { key: 'noDis', title: '未分配' },
   ];
 
 
   const content = () => {
     switch (key) {
-      case '0':
-        return askData(askList);
-      case '1':
-        return <Data show noLink storeHouses={hopeList} />;
-      case '2':
+      case 'dis':
+        return <Data out={out} show noLink storeHouses={hopeList} />;
+      case 'in':
+        return <MyEmpty />;
+      case 'all':
         return inLibraryListData();
-      case '3':
+      case 'noDis':
         return askData(distributionList, false);
       default:
         return <MyEmpty />;
@@ -159,9 +164,11 @@ const Detail = (
       headerClassName={ToolUtil.classNames(style.headerStyle, style.borderBottom)}
       bodyClassName={style.bodyStyle}
       extra={<Tabs
+        className={style.tab}
         style={{
-          '--title-font-size': '13px',
+          '--title-font-size': '12px',
         }}
+        activeKey={key}
         onChange={(key) => {
           setKey(key);
         }}

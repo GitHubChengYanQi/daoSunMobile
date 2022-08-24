@@ -137,7 +137,6 @@ const Allocation = (
     const distributionList = noDistribution(hopeSkus, carry);
 
     const stores = getStoreHouse(distributionSkus);
-
     setAskList(hopeSkus);
     setHopeList(stores);
     setInLibraryList(inLibrary);
