@@ -20,11 +20,8 @@ const InSkuItem = (
   const skuResult = item.skuResult || {};
 
   let complete;
-
   let error = false;
-
   let text = '';
-
   let number = item.number;
 
   if (detail) {
