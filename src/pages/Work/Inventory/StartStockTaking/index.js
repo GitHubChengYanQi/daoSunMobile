@@ -90,9 +90,13 @@ const StartStockTaking = () => {
   return <div style={{ backgroundColor: '#fff', height: '100%', overflow: 'auto', paddingBottom: 60 }}>
     <MyNavBar title='盘点任务' />
     <MySearch
-      extraIcon={<Icon type='icon-pandiankuwei' style={{ fontSize: 20 }} onClick={() => {
-        setVisible(true);
-      }} />}
+      extraIcon={<Icon
+        type='icon-pandiankuwei'
+        className={params.positionId ? style.check : style.default}
+        style={{ fontSize: 20 }}
+        onClick={() => {
+          setVisible(true);
+        }} />}
       value={searchValue}
       placeholder='搜索物料信息'
       onChange={setSearchValue}

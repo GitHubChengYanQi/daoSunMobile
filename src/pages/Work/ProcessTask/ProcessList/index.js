@@ -35,6 +35,7 @@ const ProcessList = (
     api,
     processListRef,
     all,
+    ReceiptDom,
   },
 ) => {
 
@@ -101,6 +102,9 @@ const ProcessList = (
       >
         {
           data.map((item, index) => {
+            if (ReceiptDom) {
+              return <ReceiptDom item={item} key={index} />;
+            }
             return <div key={index}>{receiptsData(item, index)}</div>;
           })
         }

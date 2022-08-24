@@ -226,7 +226,14 @@ const StoreHouses = (
       }
     });
 
-    if (storeHouse.length === 0) {
+    const storeIds = data.map(item => item.id);
+    const columns = storeHouse.filter(item => {
+      if (checkedPosi === 0) {
+        return item.value !== storehouseId && !storeIds.includes(item.value);
+      }
+      return !storeIds.includes(item.value);
+    });
+    if (columns.length === 0) {
       Message.toast('暂无库存!');
       return;
     }
@@ -367,7 +374,6 @@ const StoreHouses = (
               brandIds: (initBrands.length === 1 && initBrands[0].brandId === null) ? null : initBrands.map(item => item.brandId),
             },
           }).then((res) => {
-            console.log(res);
             outFormat(res);
           });
         }

@@ -20,18 +20,17 @@ import PrintCode from '../../../../../../../../components/PrintCode';
 import jrQrcode from 'jr-qrcode';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
+import Icon from '../../../../../../../../components/Icon';
+import MyPositions from '../../../../../../../../components/MyPositions';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
+export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
 
 const OutSkuAction = (
   {
-    loading,
     order = {},
     pickListsId,
-    data = [],
     action,
-    refresh = () => {
-    },
     afertShow = () => {
     },
     dimension = 'order',
@@ -45,7 +44,22 @@ const OutSkuAction = (
 
   const shopRef = useRef();
 
+  const [data, setData] = useState([]);
+
+  const [params, setParams] = useState({ pickListsId });
+
+  const { loading, run: getOutDetail, refresh } = useRequest({
+    ...outDetailList,
+    data: params,
+  }, {
+    onSuccess: (res) => {
+      setData(res || []);
+    },
+  });
+
   const [visible, setVisible] = useState();
+
+  const [positionVisible, setPositionVisible] = useState();
 
   const [picking, setPicking] = useState();
 
@@ -98,6 +112,12 @@ const OutSkuAction = (
       bodyClassName={style.bodyStyle}
       titleBom={<div className={style.skuTitle}>
         <Title>申请明细</Title>
+        <Icon
+          type='icon-pandiankuwei'
+          className={params.positionId ? style.check : style.default}
+          onClick={() => {
+            setPositionVisible(true);
+          }} />
       </div>}
       extra={<div className={style.extra}>
         合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
@@ -253,6 +273,21 @@ const OutSkuAction = (
         }
       }}
     />
+
+    <MyPositions
+      showAll
+      empty
+      visible={positionVisible}
+      single
+      autoFocus
+      value={params.positionId ? [{ id: params.positionId }] : []}
+      onClose={() => setVisible(false)}
+      onSuccess={(value = []) => {
+        const positions = value[0] || {};
+        setParams({ ...params, positionId: positions.id });
+        getOutDetail({ data: { ...params, storehousePositionsId: positions.id } });
+        setPositionVisible(false);
+      }} />
 
   </div>;
 };

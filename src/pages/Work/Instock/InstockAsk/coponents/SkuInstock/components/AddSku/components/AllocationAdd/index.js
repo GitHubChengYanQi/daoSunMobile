@@ -189,7 +189,7 @@ const AllocationAdd = (
           <div className={style.brandAndPositions}>
             {selectBrandAndPositions()}
           </div>
-          <div hidden={total === 0} style={{ marginTop: 24 }}>
+          {total > 0 && <div style={{ marginTop: 24 }}>
             <StoreHouses
               moveLibrary={moveLibrary}
               open={open}
@@ -201,7 +201,7 @@ const AllocationAdd = (
               onChange={setStoreHouse}
               storehouseId={storehouseId}
             />
-          </div>
+          </div>}
         </div>
       </div>
     </div>
