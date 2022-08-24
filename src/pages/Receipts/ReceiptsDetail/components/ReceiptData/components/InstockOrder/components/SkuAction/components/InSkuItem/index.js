@@ -14,20 +14,17 @@ const InSkuItem = (
     dataLength,
     index,
     detail,
+    ask,
   }) => {
 
   const skuResult = item.skuResult || {};
 
   let complete;
-
   let error = false;
-
   let text = '';
-
-  let number;
+  let number = item.number;
 
   if (detail) {
-    number = item.number;
     complete = true;
     switch (item.type) {
       case 'inStock':
@@ -48,9 +45,9 @@ const InSkuItem = (
       default:
         break;
     }
-  } else {
+  } else if (ask) {
     complete = item.realNumber === 0 && item.status !== 0;
-    number = item.askNumber;
+    number = item.realNumber;
     switch (item.status) {
       case 1:
         text = '待入';
@@ -95,9 +92,9 @@ const InSkuItem = (
               ToolUtil.isObject(item.customerResult).customerName,
               ToolUtil.isObject(item.brandResult).brandName || '无品牌',
             ]}
-            moreDom={!detail && <MyProgress
+            moreDom={!detail && !ask && <MyProgress
               className='progress'
-              percent={parseInt((item.instockNumber / item.askNumber) * 100)}
+              percent={parseInt((item.instockNumber / item.number) * 100)}
               format={(num) => num + '%'}
             />}
           />
