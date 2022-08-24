@@ -1,6 +1,5 @@
 import React from 'react';
 import style from '../../../PurchaseOrderInstock/index.less';
-import { Switch } from 'antd-mobile';
 import User from '../User';
 import StartEndDate from '../../../../../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../../../../../components/Title';

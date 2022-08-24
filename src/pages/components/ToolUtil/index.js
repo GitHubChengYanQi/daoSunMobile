@@ -199,6 +199,10 @@ const back = (
   };
 };
 
+// 最大显示宽度
+const viewWidth = () => {
+  return window.innerWidth > 640 ? 640 : window.innerWidth
+}
 
 export const ToolUtil = {
   queryString,
@@ -211,4 +215,5 @@ export const ToolUtil = {
   createBall,
   timeDifference,
   back,
+  viewWidth,
 };
