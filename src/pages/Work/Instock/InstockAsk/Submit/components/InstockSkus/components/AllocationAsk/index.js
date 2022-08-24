@@ -28,7 +28,6 @@ export const addApi = { url: '/allocation/add', method: 'POST' };
 const AllocationAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
-  console.log(params);
 
   const history = useHistory();
 
