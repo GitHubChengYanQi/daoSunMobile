@@ -17,13 +17,13 @@ import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import LinkButton from '../../../../../../../../components/LinkButton';
-import Details from './components/Details';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
 export const instockHandle = { url: '/instockHandle/listByInstockOrderId', method: 'GET' };
 
 const SkuAction = (
   {
+    handleResults = [],
     loading,
     actionId,
     data = [],
@@ -59,30 +59,40 @@ const SkuAction = (
   const waitShopRef = useRef();
   const errorShopRef = useRef();
 
-  data.map((item) => {
+  let countNumber = 0;
+
+  data.forEach((item) => {
+    countNumber += item.number;
+    if (item.realNumber === 0 && item.status !== 0) {
+      return;
+    }
     if (item.status === 0) {
-      noAction.push(item);
+      actions.push(item);
     } else if (item.status === -1 || item.status === 50) {
       error.push(item);
     } else if (item.status === 1) {
       wait.push(item);
     } else {
-      actions.push(item);
+      noAction.push(item);
     }
-    return null;
   });
 
-  let instockNumber = 0;
-  let countNumber = 0;
-  const items = [...noAction, ...error, ...wait, ...actions].map(item => {
-    countNumber += item.number;
-    instockNumber += (item.instockNumber || 0);
-    return {
-      ...item,
-      number: item.realNumber,
-      askNumber: item.number,
-    };
+  handleResults.forEach((item) => {
+    switch (item.type) {
+      case 'inStock':
+        noAction.push({ ...item, handle: true });
+        break;
+      case 'ErrorCanInstock':
+      case 'ErrorStopInstock':
+      case 'ErrorNumber':
+        error.push({ ...item, handle: true });
+        break;
+      default:
+        break;
+    }
   });
+
+  const inStockDetails = [...actions, ...error, ...wait, ...noAction];
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -132,7 +142,7 @@ const SkuAction = (
         skuId: item.skuId,
         customerId: item.customerId,
         brandId: item.brandId,
-        number: item.number,
+        number: item.realNumber,
         formId: item.instockListId,
       },
     }).then(() => {
@@ -152,30 +162,32 @@ const SkuAction = (
     <MyCard
       titleBom={<div className={style.header}>
         <Title>申请明细</Title>
-        {instockNumber > 0 && <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
-        }}>入库详情</LinkButton>}
+        }}>入库申请</LinkButton>
       </div>}
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={ToolUtil.classNames(style.bodyStyle)}
       extra={<div className={style.extra}>
-        合计：<span>{items.length}</span>类<span>{countNumber}</span>件
+        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
-        {items.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+        {inStockDetails.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
         {
-          items.map((item, index) => {
+          inStockDetails.map((item, index) => {
 
             if (!allSku && index >= 3) {
               return null;
             }
 
-            if (!action || item.status !== 0) {
+            if (!action || item.status !== 0 || item.instockHandleId) {
               return <InSkuItem
+                ask
+                detail={item.handle}
                 index={index}
                 item={item}
-                dataLength={(items.length > 3 && !allSku) ? 2 : items.length - 1}
+                dataLength={(inStockDetails.length > 3 && !allSku) ? 2 : inStockDetails.length - 1}
                 key={index}
               />;
             }
@@ -187,20 +199,21 @@ const SkuAction = (
                   addInstockShop(1, item, index, 'waitInStock');
                 }}
                 onRight={() => {
-                  setVisible(item);
+                  setVisible({ ...item, number: item.realNumber });
                 }}
               >
                 <InSkuItem
+                  ask
                   index={index}
                   item={item}
-                  dataLength={(items.length > 3 && !allSku) ? 2 : items.length - 1}
+                  dataLength={(inStockDetails.length > 3 && !allSku) ? 2 : inStockDetails.length - 1}
                   key={index}
                 />
               </Viewpager>
             </div>;
           })
         }
-        {items.length > 3 && <Divider className={style.allSku}>
+        {inStockDetails.length > 3 && <Divider className={style.allSku}>
           <div onClick={() => {
             toggle();
           }}>
@@ -248,16 +261,20 @@ const SkuAction = (
     </Popup>
 
     <MyAntPopup
-      title='入库详情'
+      title='入库申请'
       onClose={() => {
         setShowDetail(false);
       }}
       visible={showDetail}
       destroyOnClose
     >
-      <Details
-        instockOrderId={instockOrderId}
-      />
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+        {data.map((item, index) => {
+          return <div key={index}>
+            <InSkuItem item={item} key={index} />
+          </div>;
+        })}
+      </div>
     </MyAntPopup>
 
     {action && <InstockShop
