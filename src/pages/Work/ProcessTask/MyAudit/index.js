@@ -15,6 +15,8 @@ const MyAudit = (
     createUser,
     top = ToolUtil.isQiyeWeixin() ? 0 : 45,
     listScreentTop,
+    ReceiptDom,
+    hiddenSearch,
   }) => {
 
   const [screen, setScreen] = useState();
@@ -54,7 +56,7 @@ const MyAudit = (
 
   const processListRef = useRef();
   return <>
-    <div hidden={type}>
+    <div hidden={type || hiddenSearch}>
       <MySearch
         placeholder='请输入单据相关信息'
         historyType='process'
@@ -83,7 +85,13 @@ const MyAudit = (
       numberTitle={<>数量：<span>{number}</span></>}
     />
 
-    <ProcessList all={ToolUtil.isArray(params.statusList).includes('99')} setNumber={setNumber} listRef={listRef} processListRef={processListRef} />
+    <ProcessList
+      ReceiptDom={ReceiptDom}
+      all={ToolUtil.isArray(params.statusList).includes('99')}
+      setNumber={setNumber}
+      listRef={listRef}
+      processListRef={processListRef}
+    />
 
     <ProcessScreen
       top={top}
