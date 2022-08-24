@@ -197,6 +197,7 @@ const Order = (
     <InkindList
       ref={inkindRef}
       onSuccess={(inkinds = []) => {
+        let addNum = 0;
         const newBrands = brands.map(item => {
           const brands = inkinds.filter(inkindItem => inkindItem.brandId === item.brandId);
           if (brands.length > 0) {
@@ -206,7 +207,9 @@ const Order = (
               if (posis.length > 0) {
                 let number = 0;
                 posis.forEach(item => number += item.number);
-                const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNumber + number)) > 0 ? number : (outStockNumber - outNumber) : item.number;
+                const outNum = (outNumber + addNum) - item.outStockNumber;
+                const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNum + number)) > 0 ? number : (outStockNumber - outNum) : item.number;
+                addNum += num;
                 return {
                   ...item,
                   checked: true,
