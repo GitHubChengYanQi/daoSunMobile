@@ -48,7 +48,7 @@ const OutSkuAction = (
 
   const [params, setParams] = useState({ pickListsId });
 
-  const { loading, refresh } = useRequest({
+  const { loading, run: getOutDetail, refresh } = useRequest({
     ...outDetailList,
     data: params,
   }, {
@@ -284,7 +284,8 @@ const OutSkuAction = (
       onClose={() => setVisible(false)}
       onSuccess={(value = []) => {
         const positions = value[0] || {};
-        setParams({ positionId: positions.id });
+        setParams({ ...params, positionId: positions.id });
+        getOutDetail({ data: { ...params, storehousePositionsId: positions.id } });
         setPositionVisible(false);
       }} />
 

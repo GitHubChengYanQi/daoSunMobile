@@ -13,14 +13,20 @@ const InStockItem = (
 
   const receipts = item.receipts || {};
 
+  const percent = parseInt((receipts.inStockNum / receipts.applyNum) * 100);
+
+  const statusName = () => {
+    if (percent === 100) {
+      return <>已 <br />完 <br />成</>;
+    } else {
+      return <>可 <br />入 <br />库</>;
+    }
+  };
+
   return <TaskItem
-    statusName={true ? <>
-      可 <br />入 <br />库
-    </> : <>
-      已 <br />完<br />成
-    </>}
-    statusNameClassName={true ? style.backBlue : style.backEee}
-    percent={parseInt((receipts.inStockNum / receipts.applyNum) * 100)}
+    statusName={statusName()}
+    statusNameClassName={(receipts.canPut && percent !== 100) ? style.backBlue : style.backEee}
+    percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
