@@ -15,7 +15,7 @@ html, body, #root {
 body {
   margin: 0;
   line-height: initial;
-  --body--background--color: rgba(225, 235, 246, 0.62);
+  --body--background--color: #E1EBF6;
 }
 
 :global .am-badge-text {
