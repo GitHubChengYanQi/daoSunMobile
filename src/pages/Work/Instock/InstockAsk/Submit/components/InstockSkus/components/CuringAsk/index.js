@@ -107,7 +107,7 @@ const CuringAsk = ({ createType, state }) => {
       selectParams.push({
         materialIds: materials.map(item => item.value),
         spuClassificationIds: skuClasses.map(item => item.value),
-        brandIds: newBrands.map(item => item.value),
+        brandIds: newBrands,
         storehousePositionsIds: positions.map(item => item.id),
         partsIds: boms.map(item => item.key),
         spuIds: params.spuId && [params.spuId],
@@ -116,6 +116,7 @@ const CuringAsk = ({ createType, state }) => {
         realNumber: item.skuNum,
       });
     });
+    console.log(selectParams);
     return selectParams;
   };
 
