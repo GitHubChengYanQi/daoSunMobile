@@ -116,7 +116,6 @@ const CuringAsk = ({ createType, state }) => {
         realNumber: item.skuNum,
       });
     });
-    console.log(selectParams);
     return selectParams;
   };
 

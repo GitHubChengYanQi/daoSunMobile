@@ -12,7 +12,6 @@ import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { ToolUtil } from '../../../components/ToolUtil';
-import AllocationTask from '../../Stock/Task/components/AllocationTask';
 import AllocationItem from '../../Stock/Task/components/AllocationTask/components/AllocationItem';
 
 
@@ -28,7 +27,7 @@ export const getTaskStatus = {
 
 const ProcessList = (
   {
-    params,
+    manual,
     setNumber = () => {
     },
     listRef,
@@ -92,6 +91,7 @@ const ProcessList = (
     {loading && <MyLoading />}
     <div className={style.list} ref={processListRef}>
       <MyList
+        manual={manual}
         ref={listRef}
         api={api || startList}
         data={data}

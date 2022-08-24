@@ -86,6 +86,7 @@ const MyAudit = (
     />
 
     <ProcessList
+      manual
       ReceiptDom={ReceiptDom}
       all={ToolUtil.isArray(params.statusList).includes('99')}
       setNumber={setNumber}

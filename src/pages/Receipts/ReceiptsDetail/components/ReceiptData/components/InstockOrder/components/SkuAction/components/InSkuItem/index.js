@@ -54,7 +54,7 @@ const InSkuItem = (
         error = false;
         break;
       case -1:
-        text = '异常';
+        text = item.anomalyHandle === 'canInStock' ? '异常待入' : '异常';
         error = true;
         break;
       case 50:
