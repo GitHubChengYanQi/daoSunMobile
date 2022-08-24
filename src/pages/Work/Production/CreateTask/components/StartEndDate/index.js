@@ -5,7 +5,8 @@ import { MyDate } from '../../../../../components/MyDate';
 import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
 
-export const getMinTime = (minTime) => {
+export const getMinTime = (time) => {
+  let minTime = new Date(time);
   if (!minTime) {
     return minTime;
   }
@@ -26,7 +27,6 @@ const StartEndDate = (
     textAlign,
     minWidth,
   }) => {
-
 
   const ref = useRef();
 

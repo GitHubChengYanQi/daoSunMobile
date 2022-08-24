@@ -19,14 +19,22 @@ const OutStockItem = (
 
   const can = pick ? canPick : (canOperate === undefined ? canPick : canOperate);
 
+  const percent = parseInt((receipts.receivedCount / receipts.numberCount) * 100);
+
+  const statusName = () => {
+    if (percent === 100) {
+      return <>已 <br />完 <br />成</>;
+    } else if (pick || canOperate === undefined) {
+      return <>可 <br />领 <br />料</>;
+    } else {
+      return <>可 <br />备 <br />料</>;
+    }
+  };
+
   return <TaskItem
-    statusName={(pick || canOperate === undefined) ? <>
-      可 <br />领 <br />料
-    </> : <>
-      可 <br />备<br />料
-    </>}
-    statusNameClassName={can ? style.backBlue : style.backEee}
-    percent={parseInt((receipts.receivedCount / receipts.numberCount) * 100)}
+    statusName={statusName()}
+    statusNameClassName={(can && percent !== 100) ? style.backBlue : style.backEee}
+    percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
@@ -35,7 +43,7 @@ const OutStockItem = (
     skuSize={receipts.skuCount || 0}
     positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
-    onClick={()=>onClick(item)}
+    onClick={() => onClick(item)}
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '无'}</div>
