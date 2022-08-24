@@ -98,7 +98,7 @@ const Login = (props) => {
             });
             cookie.set('cheng-token', res);
             refresh();
-          });
+          },true);
         } else {
           Message.errorToast('登录失败!');
         }

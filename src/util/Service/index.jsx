@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ToolUtil } from '../../pages/components/ToolUtil';
 import { history } from 'umi';
 import { Message } from '../../pages/components/Message';
+import { goToLogin } from '../../components/Auth';
 
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
@@ -46,16 +47,7 @@ export const errorAction = ({ options = {}, response, noError }) => {
   if (![0, 1001].includes(errCode)) {
     if (errCode === 1502) {
       cookie.remove('cheng-token');
-
-      const backUrl = window.location.href;
-      if (!ToolUtil.queryString('login', backUrl)) {
-        history.push({
-          pathname: '/Login',
-          query: {
-            backUrl,
-          },
-        });
-      }
+      window.location.reload();
     } else if (errCode !== 200 && !options.noError) {
       Message.errorDialog({
         content: response.message,

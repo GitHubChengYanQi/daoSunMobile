@@ -38,7 +38,7 @@ const InSkuItem = (
         error = true;
         break;
       case 'ErrorStopInstock':
-        text = '禁止入库';
+        text = '终止入库';
         error = true;
         break;
       case 'ErrorNumber':

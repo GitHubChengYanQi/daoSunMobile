@@ -28,6 +28,7 @@ export const addApi = { url: '/allocation/add', method: 'POST' };
 const AllocationAsk = ({ createType }) => {
 
   const [params, setParams] = useState({});
+  console.log(params);
 
   const history = useHistory();
 
@@ -318,7 +319,7 @@ const AllocationAsk = ({ createType }) => {
             <MyRadio
               checked={params.askType === 'moveLibrary'}
               onChange={() => {
-                setParams({ ...params, askType: 'moveLibrary' });
+                setParams({ ...params, askType: 'moveLibrary',allocationType: 'out'  });
               }}
             >
               移库

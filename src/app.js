@@ -1,7 +1,7 @@
 import 'antd/dist/antd.css';
 import GetUserInfo from './pages/GetUserInfo';
 import { history } from 'umi';
-import { getUserInfo, goToLogin, loginBycode, userCustomer, wxTicket } from './components/Auth';
+import { getUserInfo, goToLogin, loginBycode,  wxTicket } from './components/Auth';
 import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
@@ -38,7 +38,6 @@ export async function getInitialState() {
   if (!publicInfo) {
     return { init: false };
   }
-
   if (!token) {
     // token不存在
     if (ToolUtil.isQiyeWeixin() && !IsDev()) {
