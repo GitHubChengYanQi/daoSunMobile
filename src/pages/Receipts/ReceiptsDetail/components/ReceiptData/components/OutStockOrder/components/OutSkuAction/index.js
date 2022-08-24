@@ -281,7 +281,7 @@ const OutSkuAction = (
       single
       autoFocus
       value={params.positionId ? [{ id: params.positionId }] : []}
-      onClose={() => setVisible(false)}
+      onClose={() => setPositionVisible(false)}
       onSuccess={(value = []) => {
         const positions = value[0] || {};
         setParams({ ...params, positionId: positions.id });

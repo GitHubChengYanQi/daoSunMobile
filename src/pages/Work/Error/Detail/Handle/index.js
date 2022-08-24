@@ -13,7 +13,7 @@ const Handle = () => {
   }
 
   return <>
-    <SkuError anomalyId={query.id} forward />
+    <SkuError createUser anomalyId={query.id} forward />
   </>;
 };
 
