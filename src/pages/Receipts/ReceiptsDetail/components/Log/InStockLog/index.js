@@ -7,8 +7,10 @@ import { MyDate } from '../../../../../components/MyDate';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
 import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../components/LinkButton';
+import { ScanIcon } from '../../../../../components/Icon';
+import { useHistory } from 'dva';
+import { SystemQRcodeOutline } from 'antd-mobile-icons';
 
 export const logList = { url: '/instockLogDetail/timeHistory', method: 'POST' };
 
@@ -17,6 +19,8 @@ const InStockLog = (
     instockOrderId,
   },
 ) => {
+
+  const history = useHistory();
 
   const { loading, data, run } = useRequest(logList, { manual: true });
 
@@ -57,7 +61,14 @@ const InStockLog = (
               </div>
               <div className={style.errorData}>
                 <span hidden={!error} className={style.error}>异常未入库</span>
-                <div hidden={error}><LinkButton><SystemQRcodeOutline /></LinkButton></div>
+                <div hidden={error}><LinkButton onClick={() => {
+                  history.push({
+                    pathname: '/Work/Inkind/InkindList',
+                    query:{
+                      inkindIds:ToolUtil.isArray(item.inkindIds).toString()
+                    }
+                  });
+                }}><SystemQRcodeOutline /></LinkButton></div>
                 <ShopNumber textAlign='right' show value={item.number} />
               </div>
             </div>
