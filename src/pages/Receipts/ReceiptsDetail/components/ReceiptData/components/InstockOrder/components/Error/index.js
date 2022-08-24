@@ -173,6 +173,7 @@ const Error = (
       let inkinds = ToolUtil.isArray(res.details).map((item) => {
         const imgs = item.reasonImg ? ToolUtil.isArray(JSON.parse(item.reasonImg)) : [];
         return {
+          codeId:item.codeId,
           inkindId: item.inkindId,
           description: item.description,
           mediaIds: item.reasonImg,

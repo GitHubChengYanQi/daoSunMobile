@@ -55,8 +55,10 @@ const SelectStoreHouse = () => {
   const { loading: detailLoading, run: getDetail, refresh } = useRequest(detailApi, {
     manual: true,
     onSuccess: (res = {}) => {
-      const user = res.userResult || {};
-      setUser({ id: user.userId, name: user.name, avatar: user.avatar });
+      const user = res.userResult;
+      if (user){
+        setUser({ id: user.userId, name: user.name, avatar: user.avatar,show:true });
+      }
       const detail = res || {};
       const detailResults = detail.detailResults || [];
       const askSkus = getStartData(detailResults);
@@ -112,7 +114,7 @@ const SelectStoreHouse = () => {
     <MyNavBar title={params.title} />
     <div className={style.content}>
       <User
-        show={user.id}
+        show={user.show}
         noRequired={user.id}
         value={user.id ? [{
           id: user.id,
