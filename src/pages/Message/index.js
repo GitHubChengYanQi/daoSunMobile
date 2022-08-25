@@ -12,6 +12,7 @@ import { Message as MyMessage } from '../components/Message';
 
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
+export const messageDelete = { url: '/message/delete', method: 'POST' };
 
 const MessageList = () => {
 
@@ -20,6 +21,7 @@ const MessageList = () => {
   const [data, setData] = useState([]);
 
   const { run: edit } = useRequest(messageEdit, { manual: true });
+  const { run: deleteRun } = useRequest(messageDelete, { manual: true });
 
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -32,28 +34,28 @@ const MessageList = () => {
     listRef.current.submit({ ...params, ...newParams });
   };
 
-  const rightActions = [
-    {
-      key: '0',
-      text: '标为已读',
-      color: 'primary',
-    },
-    {
-      key: '1',
-      text: '置顶',
-      color: 'warning',
-    },
-    {
-      key: '2',
-      text: '删除',
-      color: 'danger',
-    },
-  ];
-
   const actions = [
     { key: 'delete', icon: <DeleteOutline />, text: '删除全部已读' },
     { key: 'view', icon: <PushpinOutlined />, text: '全部标记已读' },
   ];
+
+  const messageChange = (param = {}, item, index, del) => {
+    let newData;
+    if (del) {
+      deleteRun({ data: { messageId: item.messageId } });
+      newData = data.filter((item, clickIndex) => clickIndex !== index);
+    } else {
+      edit({ data: { messageId: item.messageId, ...param } });
+      newData = data.map((item, clickIndex) => {
+        if (clickIndex === index) {
+          return { ...item, ...param };
+        }
+        return item;
+      });
+    }
+
+    setData(newData);
+  };
 
   return <div
     style={{
@@ -96,19 +98,47 @@ const MessageList = () => {
       <MyList ref={listRef} data={data} getData={setData} api={messageList}>
         {
           data.map((item, index) => {
+            const rightActions = [
+              {
+                key: '0',
+                text: item.view === 0 ? '标为已读' : '标为未读',
+                color: 'primary',
+              },
+              {
+                key: '1',
+                text: '置顶',
+                color: 'warning',
+              },
+              {
+                key: '2',
+                text: '删除',
+                color: 'danger',
+              },
+            ];
             return <SwipeAction
               key={index}
               rightActions={rightActions}
+              onAction={(action) => {
+                switch (action.key) {
+                  case '0':
+                    messageChange({ view: item.view === 0 ? 1 : 0 }, item, index);
+                    break;
+                  case '1':
+                    break;
+                  case '2':
+                    MyMessage.warningDialog({
+                      content: '您要删除此条消息吗？',
+                      onConfirm: () => {
+                        messageChange({}, item, index, true);
+                      },
+                      only: false,
+                    });
+                    break;
+                }
+              }}
             >
               <div className={ToolUtil.classNames(style.item, style.flexCenter)} key={index} onClick={() => {
-                edit({ data: { messageId: item.messageId, view: 1 } });
-                const newData = data.map((item, clickIndex) => {
-                  if (clickIndex === index) {
-                    return { ...item, view: 1 };
-                  }
-                  return item;
-                });
-                setData(newData);
+                messageChange({ view: 1 }, item, index);
                 switch (item.source) {
                   case 'instockOrder':
                   case 'instock':
