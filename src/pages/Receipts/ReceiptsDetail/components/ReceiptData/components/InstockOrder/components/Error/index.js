@@ -509,7 +509,7 @@ const Error = (
                 {show && ToolUtil.isArray(sku.filedUrls).length === 0 && '无'}
                 <UploadFile
                   show={show}
-                  files={sku.filedUrls}
+                  files={ToolUtil.isArray(sku.filedUrls)}
                   uploadId={`errorUpload`}
                   imgSize={36}
                   icon={<CameraOutline />}
