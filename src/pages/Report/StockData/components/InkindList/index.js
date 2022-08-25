@@ -35,7 +35,7 @@ const InkindList = ({ anomaly, inkindIds }) => {
               const position = positions[newPositionIndex];
               positions[newPositionIndex] = { ...position, inkindList: [...position.inkindList, item] };
             } else {
-              newData.push({
+              positions.push({
                 positionId: item.positionId,
                 name: positionsResult.name,
                 storehouseName: ToolUtil.isObject(positionsResult.storehouseResult).name,
