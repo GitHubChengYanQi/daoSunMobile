@@ -238,7 +238,7 @@ const Spus = (
                         extraWidth='60px'
                         skuResult={item}
                         otherData={[
-                          ToolUtil.isArray(item.brandResults).map(item => item.brandName).join('`、'),
+                          ToolUtil.isArray(item.brandResults).map(item => item.brandName).join('、'),
                           inkind && item.stockNumber > 0 && <LinkButton onClick={() => {
                             setErrorSku({
                               skuId: item.skuId,
@@ -265,7 +265,11 @@ const Spus = (
       onSuccess={(inkindList = []) => {
         let sku = {};
         inkindList.forEach(item => {
-          sku = { ...ToolUtil.isObject(item.skuResult), ...item, number: (sku.number || 0) + item.number };
+          sku = {
+            ...ToolUtil.isObject(item.skuResult), ...item,
+            inkindIds: inkindList.map(item => item.inkindId),
+            number: (sku.number || 0) + item.number,
+          };
         });
         select(params, [sku]);
         setErrorSku(false);

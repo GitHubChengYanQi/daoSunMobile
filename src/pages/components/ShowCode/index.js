@@ -9,7 +9,6 @@ const ShowCode = ({ code }) => {
 
   const [open, setOpen] = useState();
 
-
   return <>
     <QrCodeIcon style={{color:'var(--adm-color-primary)'}} onClick={() => setOpen(code)} />
     <Dialog
@@ -27,7 +26,7 @@ const ShowCode = ({ code }) => {
             setOpen('');
             return;
           case 'print':
-            PrintCode.print([`<img src={${jrQrcode.getQrBase64(code)}} alt='' />`], 0);
+            PrintCode.print([`<img src=${jrQrcode.getQrBase64(code)} alt='' />`], 0);
             return;
           default:
             return;

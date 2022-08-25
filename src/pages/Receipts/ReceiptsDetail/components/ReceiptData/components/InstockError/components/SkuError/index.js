@@ -22,6 +22,7 @@ export const edit = { url: '/anomalyDetail/edit', method: 'POST' };
 
 const SkuError = (
   {
+    createUser,
     onClose = () => {
     },
     anomalyOrderId,
@@ -361,7 +362,7 @@ const SkuError = (
 
           const handle = !confirm || item.status !== 0 || (item.userId && (item.userId !== userInfo.id));
 
-          if (forward && item.userId !== userInfo.id) {
+          if (forward && ![item.userId,createUser].includes(userInfo.id)) {
             return null;
           }
 

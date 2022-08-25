@@ -1,7 +1,5 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
-import { ToolUtil } from '../../pages/components/ToolUtil';
-import { history } from 'umi';
 import { Message } from '../../pages/components/Message';
 
 const baseURI = process.env.ENV === 'test' ?
@@ -9,7 +7,7 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://lqscyq.xicp.fun'
-  'http://10.147.20.67/'
+  'http://192.168.0.111'
   // 'http://10.147.20.68:8881/'
   // 'https://api.hh.gf2025.com'
   :
@@ -46,16 +44,7 @@ export const errorAction = ({ options = {}, response, noError }) => {
   if (![0, 1001].includes(errCode)) {
     if (errCode === 1502) {
       cookie.remove('cheng-token');
-
-      const backUrl = window.location.href;
-      if (!ToolUtil.queryString('login', backUrl)) {
-        history.push({
-          pathname: '/Login',
-          query: {
-            backUrl,
-          },
-        });
-      }
+      window.location.reload();
     } else if (errCode !== 200 && !options.noError) {
       Message.errorDialog({
         content: response.message,

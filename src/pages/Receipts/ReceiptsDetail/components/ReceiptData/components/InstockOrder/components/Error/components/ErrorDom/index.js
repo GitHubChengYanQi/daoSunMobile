@@ -202,7 +202,7 @@ const ErrorDom = (
             </div>
             <div className={style.inKindRow}>
               <Label className={style.inKindFiledTitle}>
-                原因 <span>*</span>：
+                原因 <span hidden={show}>*</span>：
               </Label>
               <Careful
                 className={style.inkindCareful}

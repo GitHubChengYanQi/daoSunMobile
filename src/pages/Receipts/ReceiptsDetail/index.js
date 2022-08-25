@@ -200,7 +200,7 @@ const ReceiptsDetail = () => {
     case ReceiptsEnums.errorForWard:
       return <>
         <MyNavBar title='异常处理' />
-        <SkuError anomalyId={detail.formId} forward />
+        <SkuError createUser={detail.createUser} anomalyId={detail.formId} forward />
       </>;
     default:
       return <div className={style.receipts}>

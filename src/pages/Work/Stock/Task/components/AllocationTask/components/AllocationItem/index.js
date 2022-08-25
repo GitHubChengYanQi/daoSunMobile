@@ -16,6 +16,8 @@ const AllocationItem = (
     coding={receipts.coding}
     createTime={item.createTime}
     taskName={item.taskName}
+    skuSize={receipts.skuCount || 0}
+    positionSize={receipts.positionCount || 0}
     index={index}
     onClick={()=>onClick(item)}
     otherData={

@@ -28,10 +28,12 @@ const InstockOrder = (
   let announcementsList = [];
   let remake;
   let fileUrls = [];
+  let handleResults = [];
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
       details = ToolUtil.isArray(data.instockListResults);
+      handleResults = ToolUtil.isArray(data.handleResults);
       announcementsList = data.announcementsList || [];
       remake = data.remark;
       fileUrls = ToolUtil.isArray(data.url);
@@ -51,6 +53,7 @@ const InstockOrder = (
       case ReceiptsEnums.instockOrder:
         return <SkuAction
           loading={loading}
+          handleResults={handleResults}
           order={data}
           data={details}
           actionId={getAction('performInstock').id}
@@ -86,12 +89,12 @@ const InstockOrder = (
     />
 
     <MyCard title='注意事项'>
-        {announcementsList.length === 0 && <div>无</div>}
-        {announcementsList.map((item, index) => {
-          return <div key={index} className={style.carefulShow} style={{margin:index === 0 && 0}}>
-            {item.content}
-          </div>;
-        })}
+      {announcementsList.length === 0 && <div>无</div>}
+      {announcementsList.map((item, index) => {
+        return <div key={index} className={style.carefulShow} style={{ margin: index === 0 && 0 }}>
+          {item.content}
+        </div>;
+      })}
     </MyCard>
 
     <MyCard title='备注'>

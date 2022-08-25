@@ -39,31 +39,8 @@ const ReportSwiper = (
 
   return <>
     <Swiper loop autoplay onIndexChange={(index) => {
-      let title = '';
-      switch (index) {
-        case 0:
-          title = '库存统计';
-          break;
-        case 1:
-          title = '异常分析';
-          break;
-        case 2:
-          title = '在库天数';
-          break;
-        case 3:
-          title = '单据统计';
-          break;
-        case 4:
-          title = '任务统计';
-          break;
-        case 5:
-          title = '物料分析';
-          break;
-        default:
-          title = '库存统计';
-          break;
-      }
-      titleChange(title);
+      const charts = (userChart.length === 0 ? defaultChart : userChart);
+      titleChange(charts[index].name);
     }}>
       {
         (userChart.length === 0 ? defaultChart : userChart).map((item, index) => {

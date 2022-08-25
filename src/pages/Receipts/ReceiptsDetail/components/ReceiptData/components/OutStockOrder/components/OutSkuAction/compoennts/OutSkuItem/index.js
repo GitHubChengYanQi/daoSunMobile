@@ -74,15 +74,15 @@ const OutSkuItem = ({ item, dataLength, index }) => {
           strokeColor={collectableColor}
         />
         <div className={style.status}>
-          <div className={style.statusItem} style={{ margin: 0 }}>
+          <div hidden={!received} className={style.statusItem} style={{ margin: 0 }}>
             <div className={style.radius} style={{ backgroundColor: receivedColor }} />
             已领 {received}
           </div>
-          <div className={style.statusItem}>
+          <div hidden={!collectable} className={style.statusItem}>
             <div className={style.radius} style={{ backgroundColor: collectableColor }} />
             可领 {collectable}
           </div>
-          <div className={style.statusItem}>
+          <div hidden={!notPrepared} className={style.statusItem}>
             <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
             未备 {notPrepared}
           </div>

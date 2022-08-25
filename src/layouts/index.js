@@ -8,7 +8,7 @@ import GetUserInfo from '../pages/GetUserInfo';
 import { ToolUtil } from '../pages/components/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
-import KeepAlive, { AliveScope } from '../components/KeepAlive';
+import { AliveScope } from '../components/KeepAlive';
 
 
 const BasicLayout = (props) => {
@@ -56,7 +56,7 @@ const BasicLayout = (props) => {
   }, 1000);
 
   useEffect(() => {
-    if (!GetUserInfo().token) {
+    if (!GetUserInfo().token && state.init) {
       if (ToolUtil.queryString('Login', history.location.pathname) || ToolUtil.queryString('Sms', history.location.pathname)) {
         return;
       }

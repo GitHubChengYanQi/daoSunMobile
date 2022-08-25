@@ -56,7 +56,7 @@ const SkuItem = (
       </div>
       <div
         className={style.sku}
-        style={{ maxWidth: `calc(100vw - ${imgSize}px - 13px - ${extraWidth})` }}
+        style={{ maxWidth: `calc(${ToolUtil.viewWidth()}px - ${imgSize}px - 13px - ${extraWidth})` }}
       >
         <MyEllipsis width='100%'>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
@@ -85,7 +85,7 @@ const SkuItem = (
     {moreDom || <div
       hidden={!more}
       className={style.more}
-      style={{ maxWidth: `calc(100vw - 13px - ${extraWidth})` }}
+      style={{ maxWidth: `calc(${ToolUtil.viewWidth()} - 13px - ${extraWidth})` }}
       onClick={moreClick}
     >
       <MyEllipsis width='100%'>

@@ -1,4 +1,4 @@
-import React  from 'react';
+import React, { useEffect } from 'react';
 import { NavBar } from 'antd-mobile';
 import { history, useModel } from 'umi';
 import { ToolUtil } from '../ToolUtil';
@@ -8,17 +8,20 @@ const MyNavBar = ({ title }) => {
   const { initialState } = useModel('@@initialState');
 
   const state = initialState || {};
+  useEffect(() => {
+    setTimeout(()=>{
+      document.title = state.systemName ? `${title}-${state.systemName}` : title;
+    },0)
+  }, []);
 
-  window.document.title = state.systemName ? `${title}-${state.systemName}` : title;
-
-  return !ToolUtil.isQiyeWeixin() && <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
+  return !ToolUtil.isQiyeWeixin() ? <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
     <NavBar style={{
       '--border-bottom': '1px #eee solid',
       backgroundColor: '#fff',
     }} onBack={() => {
       history.goBack();
     }}>{title || '标题'}</NavBar>
-  </div>;
+  </div> : <></>;
 };
 
 export default MyNavBar;

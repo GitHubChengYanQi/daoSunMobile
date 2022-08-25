@@ -85,13 +85,21 @@ const CuringAsk = ({ createType, state }) => {
 
     ToolUtil.isArray(skuList).forEach(item => {
       const params = item.params;
-
+      const skuResult = item.skuResult || {};
       if (!params) {
-        selectParams.push({
-          skuId: item.skuResult && item.skuResult.skuId,
-          skuIds: item.skuResult && [item.skuResult.skuId],
-          realNumber: item.skuNum || 1,
-        });
+        if (ToolUtil.isArray(skuResult.inkindIds).length > 0) {
+          selectParams.push({
+            skuId:skuResult.skuId,
+            inkindIds: skuResult.inkindIds,
+            realNumber: skuResult.number,
+          });
+        } else {
+          selectParams.push({
+            skuId:skuResult.skuId,
+            skuIds: skuResult.skuId && [skuResult.skuId],
+            realNumber: item.skuNum || 1,
+          });
+        }
         return;
       }
 
@@ -107,12 +115,12 @@ const CuringAsk = ({ createType, state }) => {
       selectParams.push({
         materialIds: materials.map(item => item.value),
         spuClassificationIds: skuClasses.map(item => item.value),
-        brandIds: newBrands.map(item => item.value),
+        brandIds: newBrands,
         storehousePositionsIds: positions.map(item => item.id),
         partsIds: boms.map(item => item.key),
         spuIds: params.spuId && [params.spuId],
         brandId: item.brandId || 0,
-        skuId: item.skuResult && item.skuResult.skuId,
+        skuId: skuResult.skuId,
         realNumber: item.skuNum,
       });
     });
@@ -130,7 +138,6 @@ const CuringAsk = ({ createType, state }) => {
       note: params.remark,
       selectParams: getSelectParams(params.skuList),
     };
-
     maintenanceRun({
       data,
     });
