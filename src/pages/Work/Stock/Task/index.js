@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Tabs } from 'antd-mobile';
 import style from './index.less';
 import MySearch from '../../../components/MySearch';
@@ -25,11 +25,13 @@ export const TaskList = (
 
   const history = useHistory();
 
+  const ref = useRef();
+
   const [key, setKey] = useState(ReceiptsEnums.instockOrder);
 
   useEffect(() => {
     if (query.type) {
-      if (query.type !== key){
+      if (query.type !== key) {
         setKey(query.type);
       }
     } else if (activeKey) {
@@ -60,6 +62,8 @@ export const TaskList = (
     }
   };
 
+  const [searchValue, setSearchValue] = useState();
+
   return <div
     id='taskList'
     style={query.type ? {
@@ -72,13 +76,17 @@ export const TaskList = (
     }}>
     {query.type && <MyNavBar title='任务列表' />}
     <MySearch
+      value={searchValue}
+      onChange={setSearchValue}
+      onClear={() => ref.current.submit({ skuName: '' })}
+      onSearch={(value) => ref.current.submit({ skuName: value })}
       placeholder='请输入单据相关信息'
       extraIcon={extraIcon()}
     />
     <div hidden={activeKey}>
       <Tabs activeKey={key} onChange={(key) => {
-        if (query.type){
-          history.replace(`/Work/Stock/Task?type=${key}`)
+        if (query.type) {
+          history.replace(`/Work/Stock/Task?type=${key}`);
         }
         setKey(key);
         keyChange(key);
@@ -92,6 +100,7 @@ export const TaskList = (
     </div>
 
     <MyAudit
+      ref={ref}
       listScreentTop={!query.type && 0}
       auditType='audit'
       type={key}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import { ToolUtil } from '../../../components/ToolUtil';
 import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
@@ -17,7 +17,7 @@ const MyAudit = (
     listScreentTop,
     ReceiptDom,
     hiddenSearch,
-  }) => {
+  }, ref) => {
 
   const [screen, setScreen] = useState();
 
@@ -43,6 +43,12 @@ const MyAudit = (
     listRef.current.submit(newParmas, { ...sort, ...newSort });
   };
 
+  useImperativeHandle(ref, () => {
+    return {
+      submit,
+    };
+  });
+
   const clear = () => {
     setParams(defaultParams);
     paramsChange(defaultParams);
@@ -55,6 +61,7 @@ const MyAudit = (
   }, [auditType, type]);
 
   const processListRef = useRef();
+
   return <>
     <div hidden={type || hiddenSearch}>
       <MySearch
@@ -112,4 +119,4 @@ const MyAudit = (
   </>;
 };
 
-export default MyAudit;
+export default React.forwardRef(MyAudit);

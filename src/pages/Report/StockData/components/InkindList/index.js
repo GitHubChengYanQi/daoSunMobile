@@ -9,7 +9,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import InkindItem from '../../../../components/InkindList/components/InkindItem';
 import { Space } from 'antd-mobile';
 
-const list = { url: '/inkind/list', method: 'POST' };
+const list = { url: '/inkind/stockInkind', method: 'POST' };
 
 const InkindList = ({ anomaly, inkindIds }) => {
 
@@ -72,9 +72,9 @@ const InkindList = ({ anomaly, inkindIds }) => {
                 <LinkButton onClick={() => {
                   const newData = data.map((dataItem, dataIndex) => {
                     if (dataIndex === index) {
-                      return { ...item, open: !dataItem.open };
+                      return { ...dataItem, open: !dataItem.open };
                     }
-                    return item;
+                    return dataItem;
                   });
                   setData(newData);
                 }}><Space align='center'>明细{item.open ? <UpOutline /> : <DownOutline />}</Space></LinkButton>
