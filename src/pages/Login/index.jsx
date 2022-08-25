@@ -8,7 +8,7 @@ import { useLocation, useModel } from 'umi';
 import Icon from '../components/Icon';
 import { useBoolean } from 'ahooks';
 import { EyeInvisibleOutline, EyeOutline } from 'antd-mobile-icons';
-import { FormProvider,Field } from '@formily/react';
+import { FormProvider, Field } from '@formily/react';
 import { createForm } from '@formily/core';
 import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
@@ -98,7 +98,7 @@ const Login = (props) => {
             });
             cookie.set('cheng-token', res);
             refresh();
-          },true);
+          }, true);
         } else {
           Message.errorToast('登录失败!');
         }
@@ -133,7 +133,7 @@ const Login = (props) => {
     const userInfo = GetUserInfo().userInfo || {};
     const type = userInfo.hasOwnProperty('type');
 
-    if (token && !type && query.backUrl && ToolUtil.queryString('login', history.location.pathname)) {
+    if (token && !(ToolUtil.isQiyeWeixin() && type)) {
       history.push('/');
     }
   }, []);

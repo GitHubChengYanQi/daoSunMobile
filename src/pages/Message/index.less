@@ -1,3 +1,13 @@
+.item {
+  padding: 12px;
+}
+
+.border {
+  background-color: #F8F8F8;
+  height: 1px;
+  margin-left: 64px;
+}
+
 .flexCenter {
   display: flex;
   align-items: center;
@@ -7,6 +17,7 @@
     width: 10px;
     height: 10px;
     margin-left: 8px;
+
     .badge {
       width: 100%;
       height: 100%;
@@ -16,30 +27,46 @@
   }
 
   .fontColor {
-    color: #bbb8b8;
+    color: #8D8D8D;
+    font-size: 12px;
   }
 
   .avatar {
-    padding: 0 12px;
+    padding-right: 8px;
   }
 
-  .card {
-    padding: 16px 0 ;
-    margin: 0;
+  .content {
     flex-grow: 1;
-    border-bottom: 1px #eee solid;
-
-    .bodyStyle {
-      padding: 8px 0 0 0;
-    }
 
     .title {
-      font-weight: bold;
+      color: #3D3D3D;
+      margin-bottom: 4px;
     }
 
-    .content {
-      width: calc(100vw - 85px);
-      word-break: break-all;
+    .describe {
+
+    }
+  }
+
+}
+
+.screen {
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 1px;
+  position: sticky;
+  top: 0;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.1);
+  z-index: 1;
+
+
+  .status {
+    flex-grow: 1;
+
+    button {
+      margin-right: 12px;
     }
   }
 }
