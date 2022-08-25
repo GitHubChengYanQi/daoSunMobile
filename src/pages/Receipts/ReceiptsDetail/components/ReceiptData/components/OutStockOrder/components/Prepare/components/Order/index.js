@@ -26,6 +26,7 @@ const Order = (
     className,
     storehouseId,
     inkindRef,
+    storehousePositionsId,
   },
 ) => {
 
@@ -61,7 +62,7 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId, brandId, storehouseId } });
+      run({ data: { skuId, brandId,storehousePositionsId, storehouseId } });
     }
   }, [skuId]);
 

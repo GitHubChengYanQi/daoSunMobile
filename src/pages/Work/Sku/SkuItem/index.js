@@ -41,9 +41,8 @@ const SkuItem = (
     }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
   };
-
   const getStockNumber = () => {
-    const stockNumber = (skuResult.stockNumber || 0) - (skuResult.lockStockDetailNumbe || 0);
+    const stockNumber = (skuResult.stockNumber || 0) - (skuResult.lockStockDetailNumber || 0);
     return typeof number === 'number' ? number : stockNumber;
   };
 

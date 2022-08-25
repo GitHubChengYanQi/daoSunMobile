@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Tabs } from 'antd-mobile';
+import { Divider, Popup, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -15,6 +15,7 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import Prepare from '../../../OutStockOrder/components/Prepare';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
@@ -31,7 +32,9 @@ const Detail = (
     },
   },
 ) => {
-  const [key, setKey] = useState('dis');
+  const [key, setKey] = useState('out');
+
+  const [allocation, setAllocation] = useState();
 
   useEffect(() => {
     if (distributionList.length > 0) {
@@ -96,16 +99,25 @@ const Detail = (
             />
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                run({
-                  data: {
-                    allocationId,
-                    skuId: item.skuId,
-                    brandId: item.brandId,
-                    storehousePositionsId: item.positionId,
-                    toStorehousePositionsId: item.toPositionId,
-                    number: item.number,
-                  },
+                console.log(item);
+                setAllocation({
+                  skuResult: item.skuResult,
+                  skuId: item.skuId,
+                  brandId: item.brandId,
+                  brandResult: { brandName: item.brandName },
+                  positionId: item.positionId,
+                  number: item.number,
                 });
+                // run({
+                //   data: {
+                //     allocationId,
+                //     skuId: item.skuId,
+                //     brandId: item.brandId,
+                //     storehousePositionsId: item.positionId,
+                //     toStorehousePositionsId: item.toPositionId,
+                //     number: item.number,
+                //   },
+                // });
               }}>调拨</LinkButton>}
               <ShopNumber show value={item.complete ? item.num : item.number} />
             </div>
@@ -130,11 +142,11 @@ const Detail = (
 
   const tabItems = distributionList.length > 0 ? [
     { key: 'noDis', title: '未分配' },
-    { key: 'dis', title: '已分配' },
+    { key: 'out', title: '调出明细' },
     { key: 'in', title: '调入明细' },
     { key: 'all', title: '库内调拨' },
   ] : [
-    { key: 'dis', title: '已分配' },
+    { key: 'out', title: '调出明细' },
     { key: 'in', title: '调入明细' },
     { key: 'all', title: '库内调拨' },
     { key: 'noDis', title: '未分配' },
@@ -143,8 +155,8 @@ const Detail = (
 
   const content = () => {
     switch (key) {
-      case 'dis':
-        return <Data out={out} show noLink storeHouses={hopeList} />;
+      case 'out':
+        return <Data noStoreHouse out={out} show noLink storeHouses={hopeList} />;
       case 'in':
         return <MyEmpty />;
       case 'all':
@@ -181,6 +193,23 @@ const Detail = (
       </Tabs>}>
       {content()}
     </MyCard>
+
+    <Popup
+      onMaskClick={() => setAllocation(false)}
+      visible={allocation}
+      destroyOnClose
+    >
+      <Prepare
+        allocation
+        skuItem={allocation}
+        onSuccess={(data) => {
+          console.log(data);
+        }}
+        onClose={() => {
+          setAllocation(false);
+        }}
+      />
+    </Popup>
 
     {loading && <MyLoading />}
   </>;

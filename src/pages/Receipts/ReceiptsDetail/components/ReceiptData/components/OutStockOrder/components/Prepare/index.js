@@ -24,13 +24,14 @@ const Prepare = (
     onSuccess = () => {
     },
     taskId,
+    allocation,
   },
 ) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
-  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
+  const outStockNumber = allocation ? skuItem.number : skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
 
@@ -106,6 +107,7 @@ const Prepare = (
     switch (dimension) {
       case 'order':
         return <Order
+          storehousePositionsId={allocation && skuItem.positionId}
           inkindRef={inkindRef}
           customerId={skuItem.customerId}
           brandId={skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
@@ -161,6 +163,10 @@ const Prepare = (
       rightDisabled={outStockSkus.length === 0}
       rightText='确定'
       rightOnClick={() => {
+        if (allocation) {
+          onSuccess(outStockSkus);
+          return;
+        }
         addCart({ data: { productionPickListsCartParams: outStockSkus, taskId } });
       }}
     />
