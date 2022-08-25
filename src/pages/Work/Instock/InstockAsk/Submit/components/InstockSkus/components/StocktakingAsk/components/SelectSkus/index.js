@@ -22,6 +22,7 @@ const SelectSkus = (
     value = [],
     onChange = () => {
     },
+    backTitle,
   },
 ) => {
 
@@ -94,6 +95,7 @@ const SelectSkus = (
       destroyOnClose
     >
       <Spus
+        backTitle={backTitle}
         inkind={inkind}
         noChecked={noChecked}
         value={visible}

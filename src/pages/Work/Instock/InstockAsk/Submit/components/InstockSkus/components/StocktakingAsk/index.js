@@ -17,7 +17,7 @@ import MySwitch from '../../../../../../../../components/MySwitch';
 
 export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST' };
 
-const StocktakingAsk = ({ createType }) => {
+const StocktakingAsk = ({ createType,backTitle }) => {
 
   const [params, setParams] = useState({});
 
@@ -130,7 +130,7 @@ const StocktakingAsk = ({ createType }) => {
         }}
         />
       }>
-      {!params.all && <SelectSkus value={params.skuList} onChange={(skuList) => {
+      {!params.all && <SelectSkus backTitle={backTitle} value={params.skuList} onChange={(skuList) => {
         setParams({ ...params, skuList });
       }} />}
     </MyCard>

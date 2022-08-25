@@ -17,7 +17,7 @@ import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
 export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: 'POST' };
 
-const CuringAsk = ({ createType, state }) => {
+const CuringAsk = ({ createType, state, backTitle }) => {
 
   const [params, setParams] = useState({});
 
@@ -89,13 +89,13 @@ const CuringAsk = ({ createType, state }) => {
       if (!params) {
         if (ToolUtil.isArray(skuResult.inkindIds).length > 0) {
           selectParams.push({
-            skuId:skuResult.skuId,
+            skuId: skuResult.skuId,
             inkindIds: skuResult.inkindIds,
             realNumber: skuResult.number,
           });
         } else {
           selectParams.push({
-            skuId:skuResult.skuId,
+            skuId: skuResult.skuId,
             skuIds: skuResult.skuId && [skuResult.skuId],
             realNumber: item.skuNum || 1,
           });
@@ -151,7 +151,7 @@ const CuringAsk = ({ createType, state }) => {
       className={style.noPadding}
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}>
-      <SelectSkus inkind value={params.skuList} onChange={(skuList) => {
+      <SelectSkus backTitle={backTitle} inkind value={params.skuList} onChange={(skuList) => {
         viewRun({ data: { selectParams: getSelectParams(skuList), nearMaintenance: params.nearMaintenance } });
         setParams({ ...params, skuList });
       }} />

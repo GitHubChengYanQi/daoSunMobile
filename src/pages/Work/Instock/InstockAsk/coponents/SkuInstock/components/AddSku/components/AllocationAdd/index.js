@@ -149,7 +149,6 @@ const AllocationAdd = (
       <div className={style.addSku} style={{ padding: 0 }}>
         <SkuItem
           className={style.sku}
-          number={sku.stockNumber}
           imgId='skuImg'
           skuResult={sku}
           imgSize={80}
@@ -176,7 +175,7 @@ const AllocationAdd = (
               </div>
               <div className={style.total}>
                 调拨总数：<ShopNumber
-                max={out ? sku.stockNumber : undefined}
+                max={out ? (sku.stockNumber || 0) - (sku.lockStockDetailNumber || 0) : undefined}
                 show={checkBrand}
                 value={total}
                 onChange={(number) => {

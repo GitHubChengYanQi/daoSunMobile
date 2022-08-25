@@ -162,7 +162,6 @@ const back = (
     key,
     onBack = () => {
     },
-    noBack,
     disabled,
   }) => {
 
@@ -179,9 +178,8 @@ const back = (
     const state = event.state || {};
     console.log(state);
     if (state.key) {
-      if (noBack) {
+      if (['spus'].includes(state.key)) {
         onBack();
-        noBack = false;
         return;
       }
       Message.warningDialog({

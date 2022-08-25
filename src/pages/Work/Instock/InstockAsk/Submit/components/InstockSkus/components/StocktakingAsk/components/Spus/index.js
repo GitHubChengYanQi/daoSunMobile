@@ -27,6 +27,7 @@ const Spus = (
     },
     onChange = () => {
     },
+    backTitle,
   },
 ) => {
 
@@ -124,8 +125,8 @@ const Spus = (
   useEffect(() => {
     submit();
     ToolUtil.back({
+      title:backTitle,
       key: 'spus',
-      noBack: true,
       onBack: onClose,
     });
   }, []);
@@ -279,7 +280,6 @@ const Spus = (
     <BottomButton
       leftOnClick={() => {
         history.goBack();
-        onClose();
       }}
       rightText={params.key !== undefined ? '修改' : '确认'}
       rightOnClick={() => {

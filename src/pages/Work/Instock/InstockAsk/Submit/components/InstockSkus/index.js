@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ERPEnums } from '../../../../../Stock/ERPEnums';
 import OutstockAsk from './components/OutstockAsk';
 import MyEmpty from '../../../../../../components/MyEmpty';
@@ -14,6 +14,8 @@ export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
 export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
+
+  const [backTitle, setBackTitle] = useState();
 
   useEffect(() => {
     const winHistory = window.history || {};
@@ -39,11 +41,13 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
       default:
         break;
     }
+
+    const backTitle = `${title}申请未提交，是否退出？`;
+    setBackTitle(backTitle);
     ToolUtil.back({
-      title: `${title}申请未提交，是否退出？`,
+      title: backTitle,
       key: 'ask',
-      disabled: ['spus', 'ask'].includes(historyState.title),
-      noBack: historyState.title === 'spus',
+      disabled: ['spus', 'ask'].includes(historyState.title || historyState.key),
     });
 
     if (historyState.title === 'spus') {
@@ -58,9 +62,9 @@ const InstockSkus = ({ skus = [], createType, judge, state = {} }) => {
     case ERPEnums.directInStock:
       return <InstockAsk skus={skus} judge={judge} createType={createType} />;
     case ERPEnums.curing:
-      return <CuringAsk createType={createType} state={state} />;
+      return <CuringAsk createType={createType} state={state} backTitle={backTitle} />;
     case ERPEnums.stocktaking:
-      return <StocktakingAsk skus={skus} createType={createType} state={state} />;
+      return <StocktakingAsk backTitle={backTitle} skus={skus} createType={createType} state={state} />;
     case ERPEnums.allocation:
       return <AllocationAsk skus={skus} createType={createType} />;
     default:
