@@ -99,7 +99,6 @@ const Detail = (
             />
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                console.log(item);
                 setAllocation({
                   skuResult: item.skuResult,
                   skuId: item.skuId,
@@ -107,7 +106,8 @@ const Detail = (
                   brandResult: { brandName: item.brandName },
                   positionId: item.positionId,
                   number: item.number,
-                  positionName:item.positionName,
+                  positionName: item.positionName,
+                  toPositionId: item.toPositionId,
                 });
                 // run({
                 //   data: {
@@ -204,8 +204,15 @@ const Detail = (
         dimension='order'
         allocation
         skuItem={allocation}
-        onSuccess={(data) => {
-          console.log(data);
+        onSuccess={(data = []) => {
+          const allocationParams = data.map(item => ({
+            skuId: item.skuId,
+            brandId: item.brandId,
+            storehouseId: item.storehouseId,
+            storehousePositionsId: item.storehousePositionsId,
+            inkindIds: item.inkindIds,
+          }));
+          console.log({ allocationParams, toStorehousePositionsId: allocation.toPositionId });
         }}
         onClose={() => {
           setAllocation(false);

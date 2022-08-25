@@ -82,7 +82,7 @@ const Order = (
             customerId,
             number: positionItem.outStockNumber,
             pickListsId: id,
-            inkindId: positionItem.inkindId,
+            inkindIds: positionItem.inkindIds,
           });
         }
         return null;
@@ -183,7 +183,7 @@ const Order = (
                           if (num > positionItem.num) {
                             return Message.toast('不能超过库存数量！');
                           }
-                          positionChange(index, positionIndex, { outStockNumber: num });
+                          positionChange(index, positionIndex, { outStockNumber: num, inkindIds: null });
                         }} />
                     </div>
 
@@ -216,6 +216,7 @@ const Order = (
                   ...item,
                   checked: true,
                   outStockNumber: num,
+                  inkindIds: posis.map(item => item.inkindId),
                 };
               }
               return item;
