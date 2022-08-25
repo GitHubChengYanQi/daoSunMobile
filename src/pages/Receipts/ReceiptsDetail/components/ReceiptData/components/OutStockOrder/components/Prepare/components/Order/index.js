@@ -85,7 +85,7 @@ const Order = (
           }
           if (ToolUtil.isArray(positionItem.inkinds).length > 0) {
             ToolUtil.isArray(positionItem.inkinds).forEach(inkindItem => {
-              array.push({...data,inkindId: inkindItem.inkindId,});
+              array.push({...data,inkindId: inkindItem.inkindId,number:inkindItem.number});
             });
           } else {
             array.push(data);
