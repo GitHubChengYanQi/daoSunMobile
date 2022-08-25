@@ -19,10 +19,11 @@ import LinkButton from '../../components/LinkButton';
 import Relation from './components/Relation';
 import { useBoolean } from 'ahooks';
 import Log from './components/Log';
+import KeepAlive from '../../../components/KeepAlive';
 
 const getTaskIdApi = { url: '/activitiProcessTask/getTaskIdByFromId', method: 'GET' };
 
-const ReceiptsDetail = () => {
+export const ReceiptsDetailContent = () => {
 
   const location = useLocation();
 
@@ -34,6 +35,8 @@ const ReceiptsDetail = () => {
 
   const [hidden, setHidden] = useState(false);
 
+  const [receiptsInfo, setReceiptsInfo] = useState({});
+
   const [success, { setTrue, setFalse }] = useBoolean();
 
   const [currentNode, setCurrentNode] = useState([]);
@@ -41,6 +44,8 @@ const ReceiptsDetail = () => {
   const [key, setKey] = useState('data');
 
   const [type, setType] = useState();
+
+  const [scrollTop, setScrollTop] = useState(0);
 
   // 获取当前节点
   const getCurrentNode = (data) => {
@@ -116,11 +121,21 @@ const ReceiptsDetail = () => {
   const loading = getTaskIdLoading || detailLoading;
 
   useEffect(() => {
+    if (!query.id && !query.formId) {
+      return;
+    }
+    if (receiptsInfo.id === query.id && receiptsInfo.formId === query.formId) {
+      return;
+    }
+    setReceiptsInfo({
+      id: query.id,
+      formId: query.formId,
+    });
     getTaskId();
     setDetail();
     setKey('data');
     setHidden(false);
-  }, [query.id, query.formId, query.type]);
+  }, [query.id, query.formId]);
 
   const content = () => {
     switch (key) {
@@ -203,8 +218,15 @@ const ReceiptsDetail = () => {
         <SkuError createUser={detail.createUser} anomalyId={detail.formId} forward />
       </>;
     default:
-      return <div className={style.receipts}>
-        <div className={style.content}>
+      return <div className={style.receipts} style={{
+        scrollMarginTop: scrollTop,
+      }}>
+        <div
+          className={style.content}
+          id='content'
+          onScroll={(event) => {
+            setScrollTop(event.target.scrollTop);
+          }}>
           <MyNavBar title='审批详情' />
           <Header data={detail} />
           <div className={topStyle.top} style={{ top: ToolUtil.isQiyeWeixin() ? 0 : 45 }}>
@@ -234,6 +256,12 @@ const ReceiptsDetail = () => {
 
       </div>;
   }
+};
+
+const ReceiptsDetail = () => {
+  return <KeepAlive id='receiptsDetail' contentId='content'>
+    <ReceiptsDetailContent />
+  </KeepAlive>;
 };
 
 export default ReceiptsDetail;

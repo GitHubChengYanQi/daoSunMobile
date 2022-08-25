@@ -36,7 +36,7 @@ const SkuItem = (
   const history = useHistory();
 
   const view = () => {
-    if (noView) {
+    if (noView || document.getElementsByTagName('body').item(0).classList.contains('adm-overflow-hidden')) {
       return;
     }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);

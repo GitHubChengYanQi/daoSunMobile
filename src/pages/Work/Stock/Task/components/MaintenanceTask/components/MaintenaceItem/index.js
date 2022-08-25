@@ -27,7 +27,7 @@ const MaintenaceItem = (
     onClick={()=>onClick(item)}
     otherData={
       <div className={style.orderData}>
-        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.user).name}</div>
+        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name}</div>
       </div>}
   />;
 };

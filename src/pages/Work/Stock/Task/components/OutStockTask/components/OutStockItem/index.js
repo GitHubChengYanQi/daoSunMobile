@@ -2,6 +2,7 @@ import React from 'react';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { rulesUser } from '../../../InStockTask/components/InStockItem';
 
 const OutStockItem = (
   {
@@ -46,7 +47,9 @@ const OutStockItem = (
     onClick={() => onClick(item)}
     otherData={
       <div className={style.orderData}>
-        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '无'}</div>
+        <div className={style.user}>
+          负责人：{rulesUser(item.rules).length > 0 ? rulesUser(item.rules).toString() : ToolUtil.isObject(item.user).name}
+        </div>
       </div>}
   />;
 };
