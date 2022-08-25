@@ -112,7 +112,7 @@ const SelectStoreHouse = () => {
 
   return <>
     <div style={{ backgroundColor: '#fff', height: '100%' }}>
-      <MyNavBar title={params.title} />
+      {params.title && <MyNavBar title={params.title} />}
       <div className={style.content}>
         <User
           show={user.show}

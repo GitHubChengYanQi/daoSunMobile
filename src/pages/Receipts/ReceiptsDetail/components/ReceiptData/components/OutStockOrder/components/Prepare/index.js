@@ -34,6 +34,7 @@ const Prepare = (
   const outStockNumber = allocation ? skuItem.number : skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
+  console.log(outStockSkus);
 
   const skuResult = skuItem.skuResult || {};
 
