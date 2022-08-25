@@ -25,6 +25,8 @@ const StartStockTaking = () => {
 
   const show = { ...query }.hasOwnProperty('show');
 
+  const [positionIds,setPositionIds] = useState([]);
+
   const history = useHistory();
 
   const listRef = useRef();
@@ -145,6 +147,7 @@ const StartStockTaking = () => {
     </div>
 
     <StocktaskingHandle
+      getPositionIds={setPositionIds}
       refresh={statisticsRefresh}
       shopCartNum={statistics.shopCartNum}
       show={show}
@@ -163,6 +166,7 @@ const StartStockTaking = () => {
 
     <MyPositions
       showAll
+      showPositionIds={positionIds}
       empty
       visible={visible}
       single

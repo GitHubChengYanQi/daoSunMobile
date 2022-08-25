@@ -73,7 +73,7 @@ export async function getInitialState() {
       const query = location.query || {};
       if (query.backUrl) {
         window.location.href = query.backUrl;
-      } else if (location.pathname === '/Login') {
+      } else if (ToolUtil.queryString('login',location.pathname)) {
         history.push('/');
       }
 

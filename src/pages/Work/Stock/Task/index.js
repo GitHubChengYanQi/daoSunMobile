@@ -110,7 +110,6 @@ export const TaskList = (
       }}
     />
 
-
     {query.type && <TaskBottom taskKey={key} task />}
 
   </div>;

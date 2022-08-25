@@ -3,12 +3,25 @@ import style from '../../index.less';
 import { CaretDownFilled, CaretRightFilled } from '@ant-design/icons';
 import MyCheck from '../../../../../../../../../components/MyCheck';
 
+export const getChildrenKeys = (data, keys = []) => {
+  if (!Array.isArray(data)) {
+    return keys;
+  }
+  data.map((item) => {
+    const childrens = item.children || item.loops;
+    keys.push(item.key);
+    return getChildrenKeys(childrens, keys);
+  });
+  return keys;
+};
+
 const CheckPosition = (
   {
     extra,
     skuId,
     single,
     data = [],
+    showPositionIds = [],
     value = [],
     onChange = () => {
     },
@@ -35,18 +48,6 @@ const CheckPosition = (
   };
 
 
-  const getChildrenKeys = (data, keys = []) => {
-    if (!Array.isArray(data)) {
-      return keys;
-    }
-    data.map((item) => {
-      const childrens = item.children || item.loops;
-      keys.push(item.key);
-      return getChildrenKeys(childrens, keys);
-    });
-    return keys;
-  };
-
   const openPositions = (open, children) => {
     let newOpenKey;
     if (open) {
@@ -59,6 +60,7 @@ const CheckPosition = (
     setOpenKey(newOpenKey);
   };
 
+  // console.log(showPositionIds);
 
   const positions = (data, left = 0) => {
 
@@ -70,8 +72,18 @@ const CheckPosition = (
       const childrens = item.children || item.loops || [];
       const open = childrens.filter(item => openKey.includes(item.key)).length === childrens.length;
 
+      let exits = false;
+      if (showPositionIds.length > 0) {
+        const childrenKeys = getChildrenKeys(childrens);
+        showPositionIds.forEach(id => {
+          if ([item.key, ...childrenKeys].includes(id)) {
+            exits = true;
+          }
+        });
+      }
+
       const checked = value.map(item => item.id).includes(item.key);
-      return <div key={index} className={style.positions}>
+      return <div hidden={showPositionIds.length > 0 ? !exits : exits} key={index} className={style.positions}>
         {openKey.includes(item.key) && <div className={style.positionItem} style={{ paddingLeft: left }}>
           <div
             style={{ visibility: childrens.length === 0 && 'hidden' }}

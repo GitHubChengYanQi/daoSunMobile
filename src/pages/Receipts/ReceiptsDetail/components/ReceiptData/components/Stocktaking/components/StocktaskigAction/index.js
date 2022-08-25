@@ -31,6 +31,8 @@ const StocktaskigAction = (
     api,
     params,
     listRef,
+    getPositionIds = () => {
+    },
   },
 ) => {
 
@@ -159,6 +161,9 @@ const StocktaskigAction = (
       api
         ?
         <MyList
+          response={(res) => {
+            getPositionIds(res.search);
+          }}
           api={api}
           params={params}
           data={data}

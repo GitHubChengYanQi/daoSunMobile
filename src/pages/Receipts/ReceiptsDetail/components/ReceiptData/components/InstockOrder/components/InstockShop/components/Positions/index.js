@@ -16,6 +16,7 @@ const Positions = (
   {
     single,
     ids = [],
+    showPositionIds = [],
     onClose = () => {
     },
     onSuccess = () => {
@@ -98,6 +99,7 @@ const Positions = (
 
     <div style={{ padding: 12, overflow: 'auto', flexGrow: 1 }}>
       <CheckPosition
+        showPositionIds={showPositionIds}
         extra={extra}
         skuId={skuId}
         disabled={disabled}

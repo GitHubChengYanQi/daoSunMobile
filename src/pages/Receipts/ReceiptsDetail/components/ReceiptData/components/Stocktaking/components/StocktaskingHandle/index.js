@@ -5,6 +5,8 @@ import BottomButton from '../../../../../../../../components/BottomButton';
 
 const StocktaskingHandle = (
   {
+    getPositionIds = () => {
+    },
     data = [],
     setData = () => {
     },
@@ -85,6 +87,7 @@ const StocktaskingHandle = (
 
   return <>
     <StocktaskigAction
+      getPositionIds={getPositionIds}
       show={show}
       listRef={listRef}
       params={params}
