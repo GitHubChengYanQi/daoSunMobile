@@ -134,7 +134,13 @@ const Login = (props) => {
     const type = userInfo.hasOwnProperty('type');
 
     if (token && !(ToolUtil.isQiyeWeixin() && type)) {
-      history.push('/');
+      if (query.backUrl){
+        if (ToolUtil.queryString('login', history.location.pathname)){
+          history.push('/');
+        }
+      }else {
+        history.push('/');
+      }
     }
   }, []);
 
