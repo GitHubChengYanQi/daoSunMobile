@@ -25,6 +25,7 @@ const Order = (
     },
     className,
     storehouseId,
+    allocation,
     inkindRef,
     storehousePositionsId,
   },
@@ -62,7 +63,7 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId, brandId,storehousePositionsId, storehouseId } });
+      run({ data: { skuId, brandId, storehousePositionsId, storehouseId } });
     }
   }, [skuId]);
 
@@ -177,7 +178,7 @@ const Order = (
                             return newPositions.map(item => number += (item.outStockNumber || 0));
                           });
                           if (typeof outStockNumber === 'number' && (number + num) > outStockNumber) {
-                            return Message.toast('不能超过出库数量！');
+                            return Message.toast(`不能超过${allocation ? '调拨' : '出库'}数量！`);
                           }
                           if (num > positionItem.num) {
                             return Message.toast('不能超过库存数量！');

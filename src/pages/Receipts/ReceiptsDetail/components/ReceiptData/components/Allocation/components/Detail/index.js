@@ -107,6 +107,7 @@ const Detail = (
                   brandResult: { brandName: item.brandName },
                   positionId: item.positionId,
                   number: item.number,
+                  positionName:item.positionName,
                 });
                 // run({
                 //   data: {
@@ -200,6 +201,7 @@ const Detail = (
       destroyOnClose
     >
       <Prepare
+        dimension='order'
         allocation
         skuItem={allocation}
         onSuccess={(data) => {
