@@ -68,7 +68,7 @@ const TaskItem = (
             </div>
           </div>
           <div hidden={noPosition} className={style.show} style={{ borderLeft: !noBorder && 'solid 1px #F5F5F5' }}>
-            <Icon type='icon-pandiankuwei' />
+            <Icon type='icon-pandiankuwei1' />
             <div className={style.showNumber}>
               <span>涉及 <span className={style.number}>{positionSize}</span> 个库位</span>
             </div>

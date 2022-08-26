@@ -14,6 +14,8 @@ const TaskData = () => {
 
   const history = useHistory();
 
+  const { type } = history.location.query;
+
   const ReceiptDom = ({ item, index }) => {
     const receipts = item.receipts || {};
     const coding = receipts.coding;
@@ -35,7 +37,7 @@ const TaskData = () => {
       <TaskStatisicalChart />
     </MyCard>
     <MyCard title='任务明细'>
-      <MyAudit ReceiptDom={ReceiptDom} hiddenSearch />
+      <MyAudit defaultType={type} ReceiptDom={ReceiptDom} hiddenSearch />
     </MyCard>
   </>;
 };

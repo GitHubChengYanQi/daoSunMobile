@@ -1,42 +1,73 @@
 import React from 'react';
-import style from '../Order/index.less';
+import LinkButton from '../../../components/LinkButton';
+import MyCard from '../../../components/MyCard';
 import { MyDate } from '../../../components/MyDate';
 import { RightOutline } from 'antd-mobile-icons';
-import { startList } from '../../../Work/ProcessTask/ProcessList';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import MyEmpty from '../../../components/MyEmpty';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { history } from 'umi';
+import { useHistory } from 'react-router-dom';
+import Icon from '../../../components/Icon';
+import { ERPEnums } from '../../../Work/Stock/ERPEnums';
+import style from '../Order/index.less';
+import { startList } from '../../../Work/ProcessTask/ProcessList';
+import MyEmpty from '../../../components/MyEmpty';
+import { ReceiptsEnums } from '../../../Receipts';
 
-const TaskList = () => {
+export const TaskItem = (
+  {
+    taskItem = {},
+  },
+) => {
 
-  const { loading, data } = useRequest({ ...startList, params: { limit: 3, page: 1 } });
+  const history = useHistory();
+
+  const { loading, data } = useRequest({
+    ...startList,
+    params: { limit: 3, page: 1 },
+    data: { type: taskItem.type },
+  });
 
   if (loading) {
     return <MyLoading skeleton />;
   }
 
-  if (!data) {
-    return <MyEmpty />;
-  }
-
-  return <>
+  return <MyCard
+    className={style.orderItem}
+    headerClassName={style.orderHeader}
+    titleBom={<div><Icon type='icon-dian' />{taskItem.title}</div>}
+    extra={<LinkButton onClick={() => {
+      history.push(`/Report/TaskData?type=${taskItem.type}`);
+    }}>更多</LinkButton>}
+    bodyClassName={style.orderItemBody}
+  >
+    {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
         const receipts = item.receipts || {};
-        const coding = receipts.coding;
-        return <div
-          key={index}
-          className={style.orderInfo}
-          style={{padding:'8px 0'}}
-          onClick={() => {
-            history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-          }}
-        >
-          <div className={style.orderName}>{item.taskName} <br /> {coding}</div>
+        return <div key={index} className={style.orderInfo}>
+          <div className={style.orderName}>{item.taskName} / {receipts.coding}</div>
           <div className={style.time}>{MyDate.Show(item.createTime)} <RightOutline /></div>
         </div>;
+      })
+    }
+  </MyCard>;
+};
+
+const TaskList = () => {
+
+  const orderType = [
+    { title: '入库', type: ReceiptsEnums.instockOrder },
+    { title: '出库', type: ReceiptsEnums.outstockOrder },
+    { title: '盘点', type: ReceiptsEnums.stocktaking },
+    { title: '养护', type: ReceiptsEnums.maintenance },
+    { title: '调拨', type: ReceiptsEnums.allocation },
+  ];
+
+  return <>
+    {
+      orderType.map((taskItem, taskIndex) => {
+        return <TaskItem key={taskIndex} taskItem={taskItem} />;
       })
     }
   </>;

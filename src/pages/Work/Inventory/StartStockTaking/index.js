@@ -93,8 +93,7 @@ const StartStockTaking = () => {
     <MyNavBar title='盘点任务' />
     <MySearch
       extraIcon={<Icon
-        type='icon-pandiankuwei'
-        className={params.positionId ? style.check : style.default}
+        type={params.positionId ?'icon-pandiankuwei1' : 'icon-pandiankuwei'}
         style={{ fontSize: 20 }}
         onClick={() => {
           setVisible(true);

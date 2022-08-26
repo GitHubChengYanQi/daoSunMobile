@@ -32,9 +32,7 @@ const Report = () => {
     <MyCard
       bodyClassName={style.taskBody}
       title='任务'
-      extra={<LinkButton onClick={() => {
-        history.push('/Work/ProcessTask');
-      }}>更多</LinkButton>}>
+    >
       <TaskList />
     </MyCard>
 

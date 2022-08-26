@@ -10,6 +10,7 @@ const MyAudit = (
   {
     auditType,
     type,
+    defaultType,
     paramsChange = () => {
     },
     createUser,
@@ -23,7 +24,12 @@ const MyAudit = (
 
   const [number, setNumber] = useState(0);
 
-  const defaultParams = { auditType, statusList: ['0'], types: type && [type], createUser };
+  const defaultParams = {
+    auditType,
+    statusList: ['0'],
+    types: (type || defaultType) && [type || defaultType],
+    createUser,
+  };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
   const [params, setParams] = useState({});

@@ -113,8 +113,7 @@ const OutSkuAction = (
       titleBom={<div className={style.skuTitle}>
         <Title>申请明细</Title>
         <Icon
-          type='icon-pandiankuwei'
-          className={params.positionId ? style.check : style.default}
+          type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
           onClick={() => {
             setPositionVisible(true);
           }} />

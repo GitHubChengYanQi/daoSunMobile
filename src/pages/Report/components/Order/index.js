@@ -11,6 +11,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { billPageList } from '../../OrderData';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../components/Icon';
+import MyEmpty from '../../../components/MyEmpty';
 
 export const OrderList = (
   {
@@ -27,11 +28,7 @@ export const OrderList = (
   });
 
   if (loading) {
-    return <MyLoading />;
-  }
-
-  if (ToolUtil.isArray(data).length === 0) {
-    return <></>;
+    return <MyLoading skeleton />;
   }
 
   return <MyCard
@@ -43,10 +40,11 @@ export const OrderList = (
     }}>更多</LinkButton>}
     bodyClassName={style.orderItemBody}
   >
+    {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
         return <div key={index} className={style.orderInfo}>
-          <div className={style.orderName}>{orderItem.title}{item.coding}</div>
+          <div className={style.orderName}>{item.coding}</div>
           <div className={style.time}>{MyDate.Show(item.createTime)} <RightOutline /></div>
         </div>;
       })

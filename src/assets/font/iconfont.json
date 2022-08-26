@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31476183",
+      "name": "盘点库位",
+      "font_class": "pandiankuwei1",
+      "unicode": "e6cc",
+      "unicode_decimal": 59084
+    },
+    {
       "icon_id": "30989217",
       "name": "出库确认1",
       "font_class": "chukuqueren1",

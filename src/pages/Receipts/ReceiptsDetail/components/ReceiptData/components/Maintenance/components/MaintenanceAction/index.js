@@ -35,7 +35,7 @@ const MaintenanceAction = (
         className={style.positionItem}
       >
         <div className={style.positionName}>
-          <Icon type='icon-pandiankuwei' />
+          <Icon type='icon-pandiankuwei1' />
           {positionItem.name} / {ToolUtil.isObject(positionItem.storehouseResult).name || '-'}
         </div>
         <div className={style.skus}>
