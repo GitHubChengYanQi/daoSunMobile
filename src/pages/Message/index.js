@@ -13,17 +13,14 @@ import { Message as MyMessage } from '../components/Message';
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
 export const messageDelete = { url: '/message/delete', method: 'POST' };
+export const messageTop = { url: '/message/top', method: 'GET' };
+export const messageCancelTop = { url: '/message/cancelTop', method: 'GET' };
 
 const MessageList = () => {
 
   const history = useHistory();
 
   const [data, setData] = useState([]);
-
-  const { run: edit } = useRequest(messageEdit, { manual: true });
-  const { run: deleteRun } = useRequest(messageDelete, { manual: true });
-
-  const [scrollTop, setScrollTop] = useState(0);
 
   const [params, setParams] = useState({});
 
@@ -33,6 +30,13 @@ const MessageList = () => {
     setParams({ ...params, ...newParams });
     listRef.current.submit({ ...params, ...newParams });
   };
+
+  const { run: edit } = useRequest(messageEdit, { manual: true });
+  const { run: deleteRun } = useRequest(messageDelete, { manual: true });
+  const { run: top } = useRequest(messageTop, { manual: true, onSuccess: () => submit() });
+  const { run: cancelTop } = useRequest(messageCancelTop, { manual: true, onSuccess: () => submit() });
+
+  const [scrollTop, setScrollTop] = useState(0);
 
   const actions = [
     { key: 'delete', icon: <DeleteOutline />, text: '删除全部已读' },
@@ -70,8 +74,12 @@ const MessageList = () => {
   >
     <div className={style.screen}>
       <div className={style.status}>
-        <Button color={params.view === 1 ? 'primary' : 'default'} onClick={() => submit({ view: 1 })}>查看已读</Button>
-        <Button color={params.view === 0 ? 'primary' : 'default'} onClick={() => submit({ view: 0 })}>查看未读</Button>
+        <Button
+          className={params.view !== 1 ? style.default : style.checked}
+          onClick={() => submit({ view: 1 })}>查看已读</Button>
+        <Button
+          className={params.view !== 0 ? style.default : style.checked}
+          onClick={() => submit({ view: 0 })}>查看未读</Button>
       </div>
       <Popover.Menu
         actions={actions}
@@ -106,7 +114,7 @@ const MessageList = () => {
               },
               {
                 key: '1',
-                text: '置顶',
+                text: item.sort === 0 ? '置顶' : '取消置顶',
                 color: 'warning',
               },
               {
@@ -124,6 +132,7 @@ const MessageList = () => {
                     messageChange({ view: item.view === 0 ? 1 : 0 }, item, index);
                     break;
                   case '1':
+                    item.sort === 0 ? top({ params: { messageId: item.messageId } }) : cancelTop({ params: { messageId: item.messageId } });
                     break;
                   case '2':
                     MyMessage.warningDialog({
@@ -137,7 +146,7 @@ const MessageList = () => {
                 }
               }}
             >
-              <div className={ToolUtil.classNames(style.item, style.flexCenter)} key={index} onClick={() => {
+              <div className={ToolUtil.classNames(style.item, style.flexCenter,item.sort !== 0 && style.top)} key={index} onClick={() => {
                 messageChange({ view: 1 }, item, index);
                 switch (item.source) {
                   case 'instockOrder':

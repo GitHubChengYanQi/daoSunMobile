@@ -274,6 +274,7 @@ const OutSkuAction = (
     />
 
     <MyPositions
+      showPositionIds={order.positionIds}
       showAll
       empty
       visible={positionVisible}
