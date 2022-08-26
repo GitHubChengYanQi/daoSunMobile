@@ -19,7 +19,7 @@ const ShopNumber = (
   const [visible, setVisible] = useState();
 
   return <>
-    <div className={ToolUtil.classNames(style.shopNumber)}>
+    <div style={{backgroundColor:!show && "#fff"}} className={ToolUtil.classNames(style.shopNumber)}>
       <div
         className={ToolUtil.classNames(style.number,className)}
         style={{ border: show && 'none', padding: show && 0, textAlign }}

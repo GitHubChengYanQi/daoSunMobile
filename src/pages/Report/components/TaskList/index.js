@@ -13,6 +13,7 @@ import style from '../Order/index.less';
 import { startList } from '../../../Work/ProcessTask/ProcessList';
 import MyEmpty from '../../../components/MyEmpty';
 import { ReceiptsEnums } from '../../../Receipts';
+import MyEllipsis from '../../../components/MyEllipsis';
 
 export const TaskItem = (
   {
@@ -46,7 +47,8 @@ export const TaskItem = (
       ToolUtil.isArray(data).map((item, index) => {
         const receipts = item.receipts || {};
         return <div key={index} className={style.orderInfo}>
-          <div className={style.orderName}>{item.taskName} / {receipts.coding}</div>
+          <div className={style.orderName}>
+            <MyEllipsis maxWidth={ToolUtil.viewWidth() / 2}>{item.taskName} / {receipts.coding}</MyEllipsis></div>
           <div className={style.time}>{MyDate.Show(item.createTime)} <RightOutline /></div>
         </div>;
       })
