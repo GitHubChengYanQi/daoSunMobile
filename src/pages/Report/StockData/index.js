@@ -65,11 +65,14 @@ const StockData = () => {
       }
     </MyCard>
 
-    <MyAntPopup title='异常件明细' visible={viewAll || inkindIds.length > 0} onClose={() => {
-      setInkindIds([]);
-      setViewAll(false);
-    }}>
-      <InkindList anomaly={viewAll} inkindIds={inkindIds} />
+    <MyAntPopup
+      title='异常件明细'
+      visible={viewAll || inkindIds.length > 0}
+      onClose={() => {
+        setInkindIds([]);
+        setViewAll(false);
+      }}>
+      {(viewAll || inkindIds.length > 0) && <InkindList anomaly={viewAll} inkindIds={inkindIds} />}
     </MyAntPopup>
   </>;
 };

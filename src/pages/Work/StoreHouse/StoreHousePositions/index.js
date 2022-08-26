@@ -12,7 +12,6 @@ import Positions
 const StoreHousePositions = (props) => {
 
   const { id } = props.location.query;
-  console.log(id);
 
   const { run: getCode } = useRequest(
     {
@@ -48,6 +47,7 @@ const StoreHousePositions = (props) => {
   return <div style={{ backgroundColor: '#fff' }}>
     <MyNavBar title='库位信息' />
     <Positions
+      height='100vh'
       hiddenButton
       storehouseId={id}
       extra={extra}

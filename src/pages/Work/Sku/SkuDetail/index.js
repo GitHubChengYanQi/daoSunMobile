@@ -108,8 +108,15 @@ const SkuDetail = ({ id }) => {
         {detail.specifications}
       </div>
       <div className={style.item}>
-        <Label
-          className={style.label}>单位：</Label>
+        <Label className={style.label}>库存数：</Label>
+        {detail.stockNumber || 0}
+      </div>
+      <div className={style.item}>
+        <Label className={style.label}>备料数：</Label>
+        {detail.lockStockDetailNumber || 0}
+      </div>
+      <div className={style.item}>
+        <Label className={style.label}>单位：</Label>
         {detail.spuResult && detail.spuResult.unitResult && detail.spuResult.unitResult.unitName}
       </div>
       <div className={style.item}>
@@ -154,7 +161,7 @@ const SkuDetail = ({ id }) => {
           files={detail.files}
           noFile
           icon={<CameraOutline />}
-          onChange={(medias,show) => {
+          onChange={(medias, show) => {
             if (show) {
               setDetail({ ...detail, files: medias });
               return;
@@ -175,7 +182,7 @@ const SkuDetail = ({ id }) => {
           files={detail.drawings}
           noFile
           icon={<CameraOutline />}
-          onChange={(medias,show) => {
+          onChange={(medias, show) => {
             if (show) {
               setDetail({ ...detail, drawings: medias });
               return;

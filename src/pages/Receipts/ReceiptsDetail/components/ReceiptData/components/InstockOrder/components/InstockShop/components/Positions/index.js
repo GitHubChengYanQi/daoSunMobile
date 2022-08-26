@@ -31,6 +31,7 @@ const Positions = (
     extra,
     empty,
     hiddenButton,
+    height,
     ...props
   },
 ) => {
@@ -75,7 +76,7 @@ const Positions = (
     }
   }, [codeId]);
 
-  return <div style={{ height: '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
+  return <div style={{ height: height || '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
 
     <MySearch
       id='positionSearch'
