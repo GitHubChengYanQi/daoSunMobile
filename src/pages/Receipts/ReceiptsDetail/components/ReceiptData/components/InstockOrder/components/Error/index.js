@@ -538,6 +538,7 @@ const Error = (
                   添加异常
                 </Label>
                 <Button
+                  disabled={sku.realNumber <= 0}
                   className={style.addError}
                   color='danger'
                   onClick={() => {

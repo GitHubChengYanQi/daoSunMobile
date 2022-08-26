@@ -35,6 +35,7 @@ const InkindList = (
 
   return <>
     <Actions
+      addInkind={addInkind}
       searchDisabled={searchDisabled}
       skuInfo={skuInfo}
       visible={actionVisible}

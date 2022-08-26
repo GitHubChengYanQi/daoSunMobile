@@ -14,6 +14,8 @@ const Actions = (
     skuInfo,
     onSuccess = () => {
     },
+    addInkind = () => {
+    },
     searchDisabled,
     ...props
   }) => {
@@ -45,7 +47,7 @@ const Actions = (
           onSuccess([{
             inkind: inkind.inkindId,
             ...details,
-            qrCodeId:codeId,
+            qrCodeId: codeId,
           }]);
         }
       } else {
@@ -65,7 +67,7 @@ const Actions = (
   return <MyActionSheet
     onClose={() => setVisible(false)}
     visible={visible}
-    actions={[{ text: '扫码', key: 'scan' }, { text: '查询实物', key: 'search', disabled: searchDisabled }]}
+    actions={[{ text: '扫码', key: 'scan' }, { text: searchDisabled ? '新增实物' : '查询实物', key: 'search' }]}
     onAction={(action) => {
       if (action.key === 'scan') {
         props.dispatch({
@@ -75,6 +77,10 @@ const Actions = (
           },
         });
       } else {
+        if (searchDisabled) {
+          addInkind();
+          return;
+        }
         setVisible(false);
         search();
       }

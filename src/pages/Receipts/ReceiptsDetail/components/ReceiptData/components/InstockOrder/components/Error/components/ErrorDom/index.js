@@ -279,7 +279,7 @@ const ErrorDom = (
     </div>
 
     <InkindList
-      searchDisabled={!showStock}
+      searchDisabled={errorInkind && !showStock}
       add={errorInkind}
       ref={inkindRef}
       addInkind={() => {
