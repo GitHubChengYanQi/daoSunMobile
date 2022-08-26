@@ -12,7 +12,7 @@ const MyNavBar = ({ title }) => {
     setTimeout(()=>{
       document.title = state.systemName ? `${title}-${state.systemName}` : title;
     },0)
-  }, []);
+  }, [title]);
 
   return !ToolUtil.isQiyeWeixin() ? <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
     <NavBar style={{

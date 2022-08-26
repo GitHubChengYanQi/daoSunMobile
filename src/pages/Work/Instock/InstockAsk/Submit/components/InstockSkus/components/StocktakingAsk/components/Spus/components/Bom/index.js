@@ -117,6 +117,7 @@ const Bom = (
             >
               <div className={style.listItem}>
                 <MyCheck
+                  disabled={item.isNull}
                   checked={keys.includes(item.key)}
                   onChange={(checked) => {
                     if (checked) {
