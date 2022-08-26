@@ -100,9 +100,9 @@ const Detail = (
             />
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                if (transfer){
+                if (transfer) {
 
-                }else {
+                } else {
                   setAllocation({
                     skuResult: item.skuResult,
                     skuId: item.skuId,
@@ -210,14 +210,21 @@ const Detail = (
         allocation
         skuItem={allocation}
         onSuccess={(data = []) => {
-          const allocationParams = data.map(item => ({
+          const allocationCartParams = data.map(item => ({
             skuId: item.skuId,
             brandId: item.brandId,
             storehouseId: item.storehouseId,
             storehousePositionsId: item.storehousePositionsId,
             inkindIds: item.inkindIds,
+            toStorehousePositionsId: allocation.toPositionId,
           }));
-          console.log({ allocationParams, toStorehousePositionsId: allocation.toPositionId });
+          run({
+            data: {
+              allocationId,
+              allocationCartParams,
+              toStorehousePositionsId: allocation.toPositionId,
+            },
+          });
         }}
         onClose={() => {
           setAllocation(false);
