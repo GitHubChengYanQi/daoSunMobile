@@ -15,6 +15,7 @@ import MyPositions from '../../../../../../../../../../../components/MyPositions
 
 const AddPosition = (
   {
+    storehouseId,
     positions = [],
     setPositions = () => {
 
@@ -130,6 +131,7 @@ const AddPosition = (
 
 
     <MyPositions
+      storehouseId={storehouseId}
       visible={visible}
       value={positions}
       verification={verification}

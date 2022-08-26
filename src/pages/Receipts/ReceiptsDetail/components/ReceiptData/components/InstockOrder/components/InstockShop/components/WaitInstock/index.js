@@ -220,6 +220,7 @@ const WaitInstock = (
     </div>
 
     <MyPositions
+      storehouseId={visible && visible.storehouseId}
       visible={visible}
       value={visible ? [visible.position] : []}
       single
