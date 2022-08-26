@@ -21,6 +21,7 @@ export const transferInStorehouse = { url: '/allocation/transferInStorehouse', m
 
 const Detail = (
   {
+    transfer,
     allocationId,
     out,
     hopeList = [],
@@ -99,16 +100,20 @@ const Detail = (
             />
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                setAllocation({
-                  skuResult: item.skuResult,
-                  skuId: item.skuId,
-                  brandId: item.brandId,
-                  brandResult: { brandName: item.brandName },
-                  positionId: item.positionId,
-                  number: item.number,
-                  positionName: item.positionName,
-                  toPositionId: item.toPositionId,
-                });
+                if (transfer){
+
+                }else {
+                  setAllocation({
+                    skuResult: item.skuResult,
+                    skuId: item.skuId,
+                    brandId: item.brandId,
+                    brandResult: { brandName: item.brandName },
+                    positionId: item.positionId,
+                    number: item.number,
+                    positionName: item.positionName,
+                    toPositionId: item.toPositionId,
+                  });
+                }
                 // run({
                 //   data: {
                 //     allocationId,

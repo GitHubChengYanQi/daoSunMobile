@@ -41,6 +41,7 @@ const Allocation = (
   const [distributionList, setDistributionList] = useState([]);
 
   const out = data.allocationType !== 1;
+  const transfer = data.type !== 'allocation';
 
   useEffect(() => {
     const detail = data || {};
@@ -147,6 +148,7 @@ const Allocation = (
   return <>
 
     <Detail
+      transfer={transfer}
       allocationId={data.allocationId}
       skus={skus}
       carryAllocation={carryAllocation}
