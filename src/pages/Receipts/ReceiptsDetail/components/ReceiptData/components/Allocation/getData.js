@@ -121,7 +121,7 @@ export const getEndData = (array = [], endData = []) => {
                   number: (current || !haveBrand) ? item.number + brandItem.number : brandItem.number,
                   checked: current || !haveBrand || brandItem.checked,
                   maxNumber: item.number,
-                  doneNumber: (current || !haveBrand) ? item.doneNumber : brandItem.doneNumber,
+                  doneNumber: (current || !haveBrand) ? item.doneNumber+brandItem.doneNumber : brandItem.doneNumber,
                 };
               }),
             };

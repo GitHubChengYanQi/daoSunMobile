@@ -63,6 +63,7 @@ const Allocation = (
 
 
     const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
+
     const inLibrary = [];
     const outPositions = [];
     const inPositions = [];
@@ -116,7 +117,7 @@ const Allocation = (
         inItem.positionId !== outItem.positionId,
       );
       library.forEach(inItem => {
-        const doneNumber = out ? inItem.doneNumber : out.doneNumber;
+        const doneNumber = out ? inItem.doneNumber : outItem.doneNumber;
         const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
         if (allNumber <= 0) {
           return;

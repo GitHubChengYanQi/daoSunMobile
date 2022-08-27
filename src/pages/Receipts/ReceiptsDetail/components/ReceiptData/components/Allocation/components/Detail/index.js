@@ -49,6 +49,7 @@ const Detail = (
     manual: true,
     onSuccess: () => {
       Message.successToast('调拨成功！', () => {
+        setAllocation(false);
         refresh();
       });
     },
@@ -217,6 +218,8 @@ const Detail = (
             storehousePositionsId: item.storehousePositionsId,
             inkindIds: item.inkindIds,
             toStorehousePositionsId: allocation.toPositionId,
+            number: item.number,
+            allocationId,
           }));
           run({
             data: {
