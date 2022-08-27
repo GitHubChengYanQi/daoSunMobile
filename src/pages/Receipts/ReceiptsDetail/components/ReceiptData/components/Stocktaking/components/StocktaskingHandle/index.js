@@ -87,6 +87,7 @@ const StocktaskingHandle = (
 
   return <>
     <StocktaskigAction
+      complete={complete}
       getPositionIds={getPositionIds}
       show={show}
       listRef={listRef}

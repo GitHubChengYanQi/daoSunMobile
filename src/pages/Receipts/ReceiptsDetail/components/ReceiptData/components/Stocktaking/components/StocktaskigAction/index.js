@@ -33,6 +33,8 @@ const StocktaskigAction = (
     listRef,
     getPositionIds = () => {
     },
+    complete = () => {
+    },
   },
 ) => {
 
@@ -162,6 +164,19 @@ const StocktaskigAction = (
         ?
         <MyList
           response={(res) => {
+            if (res.count === 0) {
+              Message.warningDialog({
+                content: '任务盘点暂无绑定库位和库存，是否结束任务',
+                only: false,
+                onConfirm: complete,
+                onCancel: () => {
+
+                },
+                cancelText: '否',
+                confirmText: '是',
+              });
+              return;
+            }
             getPositionIds(res.search);
           }}
           api={api}
