@@ -216,7 +216,7 @@ const Detail = (
             brandId: item.brandId,
             storehouseId: item.storehouseId,
             storehousePositionsId: item.storehousePositionsId,
-            inkindIds: item.inkindIds,
+            inkindId: item.inkindId,
             toStorehousePositionsId: allocation.toPositionId,
             number: item.number,
             allocationId,
