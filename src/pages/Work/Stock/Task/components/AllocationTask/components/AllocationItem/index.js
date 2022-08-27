@@ -13,6 +13,7 @@ const AllocationItem = (
   const receipts = item.receipts || {};
 
   return <TaskItem
+    percent={parseInt((receipts.doneNumber / (receipts.detailNumber / 1)) * 100)}
     coding={receipts.coding}
     createTime={item.createTime}
     taskName={item.taskName}
