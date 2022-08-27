@@ -102,7 +102,21 @@ const Detail = (
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
                 if (transfer) {
-
+                  run({
+                    data: {
+                      allocationId,
+                      allocationCartParams:[{
+                        skuId: item.skuId,
+                        brandId: item.brandId,
+                        storehouseId: item.storehouseId,
+                        storehousePositionsId: item.storehousePositionsId,
+                        toStorehousePositionsId: item.toPositionId,
+                        number: item.number,
+                        allocationId,
+                      }],
+                      toStorehousePositionsId: item.toPositionId,
+                    },
+                  });
                 } else {
                   setAllocation({
                     skuResult: item.skuResult,
@@ -115,16 +129,6 @@ const Detail = (
                     toPositionId: item.toPositionId,
                   });
                 }
-                // run({
-                //   data: {
-                //     allocationId,
-                //     skuId: item.skuId,
-                //     brandId: item.brandId,
-                //     storehousePositionsId: item.positionId,
-                //     toStorehousePositionsId: item.toPositionId,
-                //     number: item.number,
-                //   },
-                // });
               }}>调拨</LinkButton>}
               <ShopNumber show value={item.complete ? item.num : item.number} />
             </div>
