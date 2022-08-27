@@ -9,12 +9,48 @@ import pickStyle from '../MyPicking/index.less';
 import ShopNumber
   from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 
+export const OutProgress = (
+  {
+    percent,
+    successPercent,
+    received,
+    collectable,
+    notPrepared,
+  }) => {
+  return <div className={pickStyle.dataNumber}>
+    <Progress
+      className={pickStyle.progress}
+      format={() => {
+        return <></>;
+      }}
+      percent={percent + successPercent}
+      success={{ percent: successPercent, strokeColor: receivedColor }}
+      trailColor={notPreparedColor}
+      strokeColor={collectableColor}
+    />
+    <div className={style.status}>
+      <div hidden={!received} className={style.statusItem}>
+        <div className={style.radius} style={{ backgroundColor: receivedColor }} />
+        已领 {received}
+      </div>
+      <div hidden={!collectable} className={style.statusItem}>
+        <div className={style.radius} style={{ backgroundColor: collectableColor }} />
+        可领 {collectable}
+      </div>
+      <div hidden={!notPrepared} className={style.statusItem}>
+        <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
+        未备 {notPrepared}
+      </div>
+    </div>
+  </div>;
+};
+
 const OutSkuItem = ({ item, dataLength, index }) => {
   const skuResult = item.skuResult || {};
 
-  const received = Number(item.receivedNumber) || 0;
-  const collectable = Number(item.perpareNumber) || 0;
-  const notPrepared = Number(item.number - collectable - received) || 0;
+  const received = item.received || 0;
+  const collectable = item.collectable || 0;
+  const notPrepared = item.notPrepared || 0;
 
   const successPercent = Number(((received / item.number)).toFixed(2)) * 100;
   const percent = Number(((collectable / item.number)).toFixed(2)) * 100;
@@ -53,7 +89,7 @@ const OutSkuItem = ({ item, dataLength, index }) => {
               extraWidth='124px'
               otherData={[
                 ToolUtil.isObject(item.brandResult).brandName || '任意品牌',
-                ToolUtil.isArray(item.positionNames).join('、')
+                ToolUtil.isArray(item.positionNames).join('、'),
               ]}
             />
           </div>
@@ -62,32 +98,13 @@ const OutSkuItem = ({ item, dataLength, index }) => {
           </div>
         </div>
       </div>
-      <div className={pickStyle.dataNumber}>
-        <Progress
-          className={pickStyle.progress}
-          format={() => {
-            return <></>;
-          }}
-          percent={percent + successPercent}
-          success={{ percent: successPercent, strokeColor: receivedColor }}
-          trailColor={notPreparedColor}
-          strokeColor={collectableColor}
-        />
-        <div className={style.status}>
-          <div hidden={!received} className={style.statusItem} style={{ margin: 0 }}>
-            <div className={style.radius} style={{ backgroundColor: receivedColor }} />
-            已领 {received}
-          </div>
-          <div hidden={!collectable} className={style.statusItem}>
-            <div className={style.radius} style={{ backgroundColor: collectableColor }} />
-            可领 {collectable}
-          </div>
-          <div hidden={!notPrepared} className={style.statusItem}>
-            <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
-            未备 {notPrepared}
-          </div>
-        </div>
-      </div>
+      <OutProgress
+        collectable={collectable}
+        notPrepared={notPrepared}
+        received={received}
+        percent={percent}
+        successPercent={successPercent}
+      />
       <div hidden={index === dataLength} className={style.space} />
     </div>
 

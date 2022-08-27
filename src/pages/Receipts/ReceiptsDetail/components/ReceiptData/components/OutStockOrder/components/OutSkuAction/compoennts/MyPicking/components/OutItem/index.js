@@ -6,7 +6,7 @@ import MyCheck from '../../../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
   from '../../../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
-import pickStyle from '../../index.less';
+import { OutProgress } from '../../../OutSkuItem';
 
 const OutItem = (
   {
@@ -47,32 +47,13 @@ const OutItem = (
         }} />
       </div>
     </div>
-    <div className={pickStyle.dataNumber}>
-      <Progress
-        className={pickStyle.progress}
-        format={() => {
-          return <></>;
-        }}
-        percent={percent + successPercent}
-        success={{ percent: successPercent, strokeColor: receivedColor }}
-        trailColor={notPreparedColor}
-        strokeColor={collectableColor}
-      />
-      <div className={style.status}>
-        <div hidden={!received} className={style.statusItem} style={{ margin: 0 }}>
-          <div className={style.radius} style={{ backgroundColor: receivedColor }} />
-          已领 {received}
-        </div>
-        <div hidden={!collectable} className={style.statusItem}>
-          <div className={style.radius} style={{ backgroundColor: collectableColor }} />
-          可领 {collectable}
-        </div>
-        <div hidden={!notPrepared} className={style.statusItem}>
-          <div className={style.radius} style={{ backgroundColor: notPreparedColor }} />
-          未备 {notPrepared}
-        </div>
-      </div>
-    </div>
+    <OutProgress
+      collectable={collectable}
+      notPrepared={notPrepared}
+      received={received}
+      percent={percent}
+      successPercent={successPercent}
+    />
 
   </div>;
 };

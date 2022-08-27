@@ -166,8 +166,6 @@ const Add = (
   };
 
   const add = () => {
-
-
     if (snameAction === 'edit') {
       shopEdit({ data: { cartId: data.cartId || disabled.cartId, ...params } });
       return;

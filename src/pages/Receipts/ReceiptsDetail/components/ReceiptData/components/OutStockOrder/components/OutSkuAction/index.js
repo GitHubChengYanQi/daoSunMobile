@@ -48,12 +48,52 @@ const OutSkuAction = (
 
   const [params, setParams] = useState({ pickListsId });
 
+  const [countNumber, setCountNumber] = useState();
+
+  const [allPerpareNumber, setAllPerpareNumber] = useState();
+
   const { loading, run: getOutDetail, refresh } = useRequest({
     ...outDetailList,
     data: params,
   }, {
     onSuccess: (res) => {
-      setData(res || []);
+      const actions = [];
+      const noAction = [];
+      const other = [];
+
+      let countNumber = 0;
+      let allPerpareNumber = 0;
+
+      ToolUtil.isArray(res).map(item => {
+        let perpareNumber = 0;
+        ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
+
+        const received = Number(item.receivedNumber) || 0;
+        const collectable = Number(perpareNumber) || 0;
+        const notPrepared = Number(item.number - collectable - received) || 0;
+
+
+        if (item.number === received || item.number === (received + collectable) || !item.stockNumber) {
+          if (notPrepared > 0) {
+            other.push({ ...item, perpareNumber, received, collectable, notPrepared });
+          } else {
+            noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
+          }
+        } else {
+          actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
+        }
+        allPerpareNumber += perpareNumber;
+        return countNumber += (item.number || 0);
+      });
+      setCountNumber(countNumber);
+      setAllPerpareNumber(allPerpareNumber);
+      setData([
+        ...actions,
+        ...other.sort((a, b) => {
+          return a.notPrepared - b.notPrepared;
+        }),
+        ...noAction,
+      ]);
     },
   });
 
@@ -66,29 +106,6 @@ const OutSkuAction = (
   const [code, setCode] = useState('');
   const imgSrc = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
-  const actions = [];
-  const noAction = [];
-
-  let countNumber = 0;
-
-  let allPerpareNumber = 0;
-
-  data.map(item => {
-    let perpareNumber = 0;
-    ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
-
-    const complete = item.status === 99;
-    const prepare = complete ? false : perpareNumber === item.number;
-
-    if (complete || prepare || !item.stockNumber) {
-      noAction.push({ ...item, complete, prepare, perpareNumber });
-    } else {
-      actions.push({ ...item, complete, prepare, perpareNumber });
-    }
-    allPerpareNumber += perpareNumber;
-    return countNumber += (item.number || 0);
-  });
-
   const [success, { setTrue, setFalse }] = useBoolean();
 
   const { run, cancel } = useRequest(checkCode, {
@@ -100,8 +117,6 @@ const OutSkuAction = (
       }
     },
   });
-
-  const outSkus = [...actions, ...noAction];
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -119,25 +134,22 @@ const OutSkuAction = (
           }} />
       </div>}
       extra={<div className={style.extra}>
-        合计：<span>{outSkus.length}</span>类<span>{countNumber}</span>件
+        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
-        {outSkus.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+        {data.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
         {
-          outSkus.map((item, index) => {
-
-            const complete = item.complete;
-            const prepare = item.prepare;
+          data.map((item, index) => {
 
             if (!allSku && index >= 3) {
               return null;
             }
 
-            if (!action || complete || prepare || !item.stockNumber) {
+            if (!action || !item.action) {
               return <OutSkuItem
                 item={item}
                 index={index}
-                dataLength={(outSkus.length > 3 && !allSku) ? 2 : outSkus.length - 1}
+                dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
                 key={index}
               />;
             }
@@ -155,7 +167,7 @@ const OutSkuAction = (
                 <OutSkuItem
                   item={item}
                   index={index}
-                  dataLength={(outSkus.length > 3 && !allSku) ? 2 : outSkus.length - 1}
+                  dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
                   key={index}
                 />
               </Viewpager>

@@ -213,34 +213,37 @@ const AddSku = (
       className={style.addSkuPopup}
       visible={visible}
     >
-      {oneAdd ? <Add
-        params={getParams()}
-        addShop={addShop}
-        shopEdit={shopEdit}
-        setData={setData}
-        data={data}
-        onChange={onChange}
-        skus={skus}
-        other={other}
-        type={type}
-        query={query}
-        state={state}
-        defaultAction={defaultAction}
-        sku={sku}
-        onClose={() => {
-          close(false);
-        }}
-      /> : <AllocationAdd
-        setOver={setOver}
-        query={query}
-        sku={sku}
-        onClose={() => {
-          close(false);
-        }}
-        addShop={(data) => {
-          addShop({ data: { ...data, type } });
-        }}
-      />}
+      {visible && <>
+        {oneAdd ? <Add
+          params={getParams()}
+          addShop={addShop}
+          shopEdit={shopEdit}
+          setData={setData}
+          data={data}
+          onChange={onChange}
+          skus={skus}
+          other={other}
+          type={type}
+          query={query}
+          state={state}
+          defaultAction={defaultAction}
+          sku={sku}
+          onClose={() => {
+            close(false);
+          }}
+        /> : <AllocationAdd
+          setOver={setOver}
+          query={query}
+          sku={sku}
+          onClose={() => {
+            close(false);
+          }}
+          addShop={(data) => {
+            addShop({ data: { ...data, type } });
+          }}
+        />}
+      </>}
+
     </MyAntPopup>
 
     {(addLoading || editloading) && <MyLoading />}
