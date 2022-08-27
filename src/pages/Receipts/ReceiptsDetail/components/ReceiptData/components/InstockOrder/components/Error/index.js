@@ -173,7 +173,7 @@ const Error = (
       let inkinds = ToolUtil.isArray(res.details).map((item) => {
         const imgs = item.reasonImg ? ToolUtil.isArray(JSON.parse(item.reasonImg)) : [];
         return {
-          codeId:item.codeId,
+          codeId: item.codeId,
           inkindId: item.inkindId,
           description: item.description,
           mediaIds: item.reasonImg,
@@ -473,7 +473,7 @@ const Error = (
                 <Label className={style.inKindTitle}>
                   盘点数量
                 </Label>
-                {show ? <>
+                {show ? (sku.realNumber - sku.number) === 0 ? '无差异' : <>
                     盘{(sku.realNumber - sku.number) > 0 ? `盈` : `亏`}
                     <span className='numberBlue'>{Math.abs(sku.realNumber - sku.number) || 0}</span>
                     {ToolUtil.isObject(spuResult.unitResult).unitName}
