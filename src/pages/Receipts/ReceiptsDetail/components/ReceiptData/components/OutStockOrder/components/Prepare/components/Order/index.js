@@ -25,7 +25,9 @@ const Order = (
     },
     className,
     storehouseId,
+    allocation,
     inkindRef,
+    storehousePositionsId,
   },
 ) => {
 
@@ -61,7 +63,7 @@ const Order = (
 
   useEffect(() => {
     if (skuId) {
-      run({ data: { skuId, brandId, storehouseId } });
+      run({ data: { skuId, brandId, storehousePositionsId, storehouseId } });
     }
   }, [skuId]);
 
@@ -71,7 +73,7 @@ const Order = (
       const positions = item.positionsResults || [];
       return positions.map((positionItem) => {
         if (positionItem.outStockNumber > 0) {
-          array.push({
+          const data = {
             skuId,
             pickListsDetailId,
             storehouseId: positionItem.storehouseId,
@@ -80,8 +82,15 @@ const Order = (
             customerId,
             number: positionItem.outStockNumber,
             pickListsId: id,
-            inkindId: positionItem.inkindId,
-          });
+          }
+          if (ToolUtil.isArray(positionItem.inkinds).length > 0) {
+            ToolUtil.isArray(positionItem.inkinds).forEach(inkindItem => {
+              array.push({...data,inkindId: inkindItem.inkindId,number:inkindItem.number});
+            });
+          } else {
+            array.push(data);
+          }
+
         }
         return null;
       });
@@ -176,7 +185,7 @@ const Order = (
                             return newPositions.map(item => number += (item.outStockNumber || 0));
                           });
                           if (typeof outStockNumber === 'number' && (number + num) > outStockNumber) {
-                            return Message.toast('不能超过出库数量！');
+                            return Message.toast(`不能超过${allocation ? '调拨' : '出库'}数量！`);
                           }
                           if (num > positionItem.num) {
                             return Message.toast('不能超过库存数量！');
@@ -210,10 +219,22 @@ const Order = (
                 const outNum = (outNumber + addNum) - item.outStockNumber;
                 const num = typeof outStockNumber === 'number' ? (outStockNumber - (outNum + number)) > 0 ? number : (outStockNumber - outNum) : item.number;
                 addNum += num;
+
+                let inkindNums = num;
+                const inkinds = [];
+                posis.forEach(item => {
+                  const number = (inkindNums - item.number) > 0 ? item.number : inkindNums;
+                  if (number > 0) {
+                    inkindNums -= number;
+                    inkinds.push({ inkindId: item.inkindId, number });
+                  }
+                });
+
                 return {
                   ...item,
                   checked: true,
                   outStockNumber: num,
+                  inkinds,
                 };
               }
               return item;

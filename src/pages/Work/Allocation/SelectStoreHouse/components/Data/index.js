@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MyCard from '../../../../../components/MyCard';
 import style from '../../index.less';
 import SkuItem from '../../../../Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';
 import ShopNumber from '../../../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyEmpty from '../../../../../components/MyEmpty';
-import View
-  from '../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/components/AllocationSkuItem/components/View';
-import MyAntPopup from '../../../../../components/MyAntPopup';
 
 const Data = (
   {
-    out,
     storeHouses = [],
     setVisible = () => {
     },
     noLink,
-    show,
+    noStoreHouse,
   }) => {
-
-  const [view, setView] = useState();
 
   if (!Array.isArray(storeHouses) || storeHouses.length === 0) {
     return <MyEmpty />;
@@ -32,15 +26,16 @@ const Data = (
     skus.map(item => number += item.storeNumber);
 
     return <MyCard
+      style={{padding:noStoreHouse && 0}}
       className={style.card}
       headerClassName={style.cardHeader}
       key={index}
-      titleBom={<div className={style.storeTitle}>
+      titleBom={<div hidden={noStoreHouse} className={style.storeTitle}>
         {item.name}
       </div>}
-      extra={<>
+      extra={<div hidden={noStoreHouse}>
         合计 <span className='numberBlue'>{skus.length}</span> 类 <span className='numberBlue'>{number}</span>件
-      </>}
+      </div>}
     >
       {
         skus.map((item, index) => {
@@ -62,6 +57,7 @@ const Data = (
           });
           return <div
             key={index}
+            style={{border:index === skus.length - 1 && 'none'}}
             className={style.SkuItem}
           >
             <div className={style.sku}>
@@ -69,7 +65,6 @@ const Data = (
                 skuResult={item.skuResult}
                 otherData={[
                   brandNames.join('/'),
-                  show && <LinkButton onClick={() => setView(item)}>查看详情</LinkButton>,
                 ]}
                 extraWidth='140px'
               />
@@ -86,9 +81,6 @@ const Data = (
           </div>;
         })
       }
-      <MyAntPopup title='申请详情' visible={view} onClose={() => setView(false)}>
-        <View out={out} sku={view} />
-      </MyAntPopup>
     </MyCard>;
   });
 };

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Divider, Tabs } from 'antd-mobile';
+import React, { useEffect, useState } from 'react';
+import { Divider, Popup, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -15,11 +15,13 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { Message } from '../../../../../../../../components/Message';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import Prepare from '../../../OutStockOrder/components/Prepare';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
 const Detail = (
   {
+    transfer,
     allocationId,
     out,
     hopeList = [],
@@ -31,8 +33,15 @@ const Detail = (
     },
   },
 ) => {
+  const [key, setKey] = useState('out');
 
-  const [key, setKey] = useState('0');
+  const [allocation, setAllocation] = useState();
+
+  useEffect(() => {
+    if (distributionList.length > 0) {
+      setKey('noDis');
+    }
+  }, [distributionList.length]);
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -40,6 +49,7 @@ const Detail = (
     manual: true,
     onSuccess: () => {
       Message.successToast('调拨成功！', () => {
+        setAllocation(false);
         refresh();
       });
     },
@@ -91,16 +101,30 @@ const Detail = (
             />
             <div hidden={!carryAllocation} className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                run({
-                  data: {
-                    allocationId,
+                if (transfer) {
+
+                } else {
+                  setAllocation({
+                    skuResult: item.skuResult,
                     skuId: item.skuId,
                     brandId: item.brandId,
-                    storehousePositionsId: item.positionId,
-                    toStorehousePositionsId: item.toPositionId,
+                    brandResult: { brandName: item.brandName },
+                    positionId: item.positionId,
                     number: item.number,
-                  },
-                });
+                    positionName: item.positionName,
+                    toPositionId: item.toPositionId,
+                  });
+                }
+                // run({
+                //   data: {
+                //     allocationId,
+                //     skuId: item.skuId,
+                //     brandId: item.brandId,
+                //     storehousePositionsId: item.positionId,
+                //     toStorehousePositionsId: item.toPositionId,
+                //     number: item.number,
+                //   },
+                // });
               }}>调拨</LinkButton>}
               <ShopNumber show value={item.complete ? item.num : item.number} />
             </div>
@@ -123,28 +147,28 @@ const Detail = (
     </div>;
   };
 
-  const tabItems = out ? [
-    { key: '0', title: '调出明细' },
-    { key: '1', title: '调入明细' },
-    { key: '2', title: '库内调拨' },
-    { key: '3', title: '未分配' },
+  const tabItems = distributionList.length > 0 ? [
+    { key: 'noDis', title: '未分配' },
+    { key: 'out', title: '调出明细' },
+    { key: 'in', title: '调入明细' },
+    { key: 'all', title: '库内调拨' },
   ] : [
-    { key: '0', title: '调入明细' },
-    { key: '1', title: '调出明细' },
-    { key: '2', title: '库内调拨' },
-    { key: '3', title: '未分配' },
+    { key: 'out', title: '调出明细' },
+    { key: 'in', title: '调入明细' },
+    { key: 'all', title: '库内调拨' },
+    { key: 'noDis', title: '未分配' },
   ];
 
 
   const content = () => {
     switch (key) {
-      case '0':
-        return askData(askList);
-      case '1':
-        return <Data show noLink storeHouses={hopeList} />;
-      case '2':
+      case 'out':
+        return <Data noStoreHouse out={out} show noLink storeHouses={hopeList} />;
+      case 'in':
+        return <MyEmpty />;
+      case 'all':
         return inLibraryListData();
-      case '3':
+      case 'noDis':
         return askData(distributionList, false);
       default:
         return <MyEmpty />;
@@ -159,9 +183,11 @@ const Detail = (
       headerClassName={ToolUtil.classNames(style.headerStyle, style.borderBottom)}
       bodyClassName={style.bodyStyle}
       extra={<Tabs
+        className={style.tab}
         style={{
-          '--title-font-size': '13px',
+          '--title-font-size': '12px',
         }}
+        activeKey={key}
         onChange={(key) => {
           setKey(key);
         }}
@@ -174,6 +200,40 @@ const Detail = (
       </Tabs>}>
       {content()}
     </MyCard>
+
+    <Popup
+      onMaskClick={() => setAllocation(false)}
+      visible={allocation}
+      destroyOnClose
+    >
+      <Prepare
+        dimension='order'
+        allocation
+        skuItem={allocation}
+        onSuccess={(data = []) => {
+          const allocationCartParams = data.map(item => ({
+            skuId: item.skuId,
+            brandId: item.brandId,
+            storehouseId: item.storehouseId,
+            storehousePositionsId: item.storehousePositionsId,
+            inkindId: item.inkindId,
+            toStorehousePositionsId: allocation.toPositionId,
+            number: item.number,
+            allocationId,
+          }));
+          run({
+            data: {
+              allocationId,
+              allocationCartParams,
+              toStorehousePositionsId: allocation.toPositionId,
+            },
+          });
+        }}
+        onClose={() => {
+          setAllocation(false);
+        }}
+      />
+    </Popup>
 
     {loading && <MyLoading />}
   </>;

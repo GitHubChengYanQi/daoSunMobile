@@ -41,6 +41,7 @@ const Allocation = (
   const [distributionList, setDistributionList] = useState([]);
 
   const out = data.allocationType !== 1;
+  const transfer = data.type !== 'allocation';
 
   useEffect(() => {
     const detail = data || {};
@@ -62,6 +63,7 @@ const Allocation = (
 
 
     const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
+
     const inLibrary = [];
     const outPositions = [];
     const inPositions = [];
@@ -115,7 +117,7 @@ const Allocation = (
         inItem.positionId !== outItem.positionId,
       );
       library.forEach(inItem => {
-        const doneNumber = out ? inItem.doneNumber : out.doneNumber;
+        const doneNumber = out ? inItem.doneNumber : outItem.doneNumber;
         const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
         if (allNumber <= 0) {
           return;
@@ -137,7 +139,6 @@ const Allocation = (
     const distributionList = noDistribution(hopeSkus, carry);
 
     const stores = getStoreHouse(distributionSkus);
-
     setAskList(hopeSkus);
     setHopeList(stores);
     setInLibraryList(inLibrary);
@@ -148,6 +149,7 @@ const Allocation = (
   return <>
 
     <Detail
+      transfer={transfer}
       allocationId={data.allocationId}
       skus={skus}
       carryAllocation={carryAllocation}

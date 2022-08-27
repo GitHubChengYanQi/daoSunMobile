@@ -144,6 +144,7 @@ const SkuAction = (
         brandId: item.brandId,
         number: item.realNumber,
         formId: item.instockListId,
+        storehouseId: item.storeHouseId,
       },
     }).then(() => {
       addShopCart(imgUrl, `skuImg${index}`, () => {

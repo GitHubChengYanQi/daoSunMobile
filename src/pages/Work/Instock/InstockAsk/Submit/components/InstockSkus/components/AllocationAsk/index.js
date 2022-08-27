@@ -185,6 +185,7 @@ const AllocationAsk = ({ createType }) => {
     return <MyEmpty description='暂无仓库' />;
   }
 
+  console.log(data);
   const submit = () => {
     const skuAndNumbers = [];
     const storehouseAndPositions = [];
@@ -197,19 +198,17 @@ const AllocationAsk = ({ createType }) => {
       const brands = start.brands || [];
       const showBrands = brands.filter(brandItem => {
         if (brandItem.show) {
-          const positions = brandItem.positions || [];
+          const positions = ToolUtil.isArray(brandItem.positions).filter(item => item.checked);
           if (positions.length > 0) {
             positions.forEach(positionItem => {
-              if (positionItem.checked) {
-                skuAndNumbers.push({
-                  skuId: item.skuId,
-                  brandId: brandItem.brandId,
-                  storehousePositionsId: positionItem.id,
-                  storehouseId: query.storeHouseId,
-                  number: positionItem.outStockNumber,
-                  haveBrand: brandItem.brandId !== undefined ? 1 : 0,
-                });
-              }
+              skuAndNumbers.push({
+                skuId: item.skuId,
+                brandId: brandItem.brandId,
+                storehousePositionsId: positionItem.id,
+                storehouseId: query.storeHouseId,
+                number: positionItem.outStockNumber,
+                haveBrand: brandItem.brandId !== undefined ? 1 : 0,
+              });
             });
           } else {
             skuAndNumbers.push({
@@ -318,7 +317,7 @@ const AllocationAsk = ({ createType }) => {
             <MyRadio
               checked={params.askType === 'moveLibrary'}
               onChange={() => {
-                setParams({ ...params, askType: 'moveLibrary',allocationType: 'out'  });
+                setParams({ ...params, askType: 'moveLibrary', allocationType: 'out' });
               }}
             >
               移库

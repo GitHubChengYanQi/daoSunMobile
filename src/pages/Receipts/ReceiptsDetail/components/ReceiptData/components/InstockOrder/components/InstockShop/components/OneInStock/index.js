@@ -80,6 +80,7 @@ const OneInStock = (
     </div>
 
     <AddPosition
+      storehouseId={skuItem.storehouseId}
       verification
       maxNumber={skuItem.number}
       skuId={skuItem.skuId}

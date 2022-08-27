@@ -24,15 +24,17 @@ const Prepare = (
     onSuccess = () => {
     },
     taskId,
+    allocation,
   },
 ) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
-  const outStockNumber = skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
+  const outStockNumber = allocation ? skuItem.number : skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
+  console.log(outStockSkus);
 
   const skuResult = skuItem.skuResult || {};
 
@@ -101,27 +103,6 @@ const Prepare = (
     },
   });
 
-
-  const dimensionAction = () => {
-    switch (dimension) {
-      case 'order':
-        return <Order
-          inkindRef={inkindRef}
-          customerId={skuItem.customerId}
-          brandId={skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
-          id={id}
-          pickListsDetailId={skuItem.pickListsDetailId}
-          skuId={skuItem.skuId}
-          outStockNumber={outStockNumber}
-          onChange={(array) => {
-            setOutStockSkus(array);
-          }}
-        />;
-      default:
-        return <></>;
-    }
-  };
-
   return <>
 
     <div className={style.header}>
@@ -135,10 +116,12 @@ const Prepare = (
         <SkuItem
           imgId='pickSkuImg'
           number={skuItem.stockNumber}
-          imgSize={60}
           skuResult={skuResult}
           extraWidth='124px'
-          otherData={[ToolUtil.isObject(skuItem.brandResult).brandName || '任意品牌']}
+          otherData={[
+            ToolUtil.isObject(skuItem.brandResult).brandName || '任意品牌',
+            allocation && skuItem.positionName,
+          ]}
         />
       </div>
       <div className={style.scan}>
@@ -147,13 +130,27 @@ const Prepare = (
           inkindRef.current.open({
             skuId: skuItem.skuId,
             brandId: skuItem.brandId,
+            positionId: allocation && skuItem.positionId,
             skuResult,
           });
         }}><ScanIcon style={{ fontSize: 24 }} /></LinkButton>
       </div>
     </div>
     <div style={{ paddingBottom: 60 }}>
-      {dimensionAction()}
+      <Order
+        allocation={allocation}
+        storehousePositionsId={allocation && skuItem.positionId}
+        inkindRef={inkindRef}
+        customerId={skuItem.customerId}
+        brandId={allocation ? skuItem.brandId : skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
+        id={id}
+        pickListsDetailId={skuItem.pickListsDetailId}
+        skuId={skuItem.skuId}
+        outStockNumber={outStockNumber}
+        onChange={(array) => {
+          setOutStockSkus(array);
+        }}
+      />
     </div>
 
     <BottomButton
@@ -161,6 +158,10 @@ const Prepare = (
       rightDisabled={outStockSkus.length === 0}
       rightText='确定'
       rightOnClick={() => {
+        if (allocation) {
+          onSuccess(outStockSkus);
+          return;
+        }
         addCart({ data: { productionPickListsCartParams: outStockSkus, taskId } });
       }}
     />

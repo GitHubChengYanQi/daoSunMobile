@@ -188,13 +188,9 @@ export const ReceiptsDetailContent = () => {
           logTitle: '养护记录',
         };
       case ReceiptsEnums.allocation:
-        return {
-          logTitle: '调拨记录',
-        };
+        return {};
       case ReceiptsEnums.error:
-        return {
-          logTitle: '处理记录',
-        };
+        return {};
       default:
         return {};
     }
@@ -235,7 +231,7 @@ export const ReceiptsDetailContent = () => {
               setHidden(key !== 'data');
             }} className={topStyle.tab}>
               <Tabs.Tab title='基本信息' key='data' />
-              <Tabs.Tab title={receiptsType().logTitle} key='log' />
+              {receiptsType().logTitle && <Tabs.Tab title={receiptsType().logTitle} key='log' />}
               <Tabs.Tab title='动态日志' key='dynamic' />
               <Tabs.Tab title='关联单据' key='relation' />
             </Tabs>
