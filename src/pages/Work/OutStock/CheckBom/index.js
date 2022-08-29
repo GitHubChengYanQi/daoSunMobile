@@ -51,7 +51,6 @@ const CheckBom = () => {
   const skuId = query.skuId;
 
   const [boms, setBoms] = useState([skuId]);
-  console.log(boms);
 
   const submit = (data) => {
     run({ data });
@@ -59,6 +58,7 @@ const CheckBom = () => {
 
   useEffect(() => {
     if (skuId) {
+      setType('all');
       getSkuDetail({ data: { skuId } });
       submit({ skuId, all: true });
     }
@@ -126,10 +126,10 @@ const CheckBom = () => {
               />
               <Space align='end'>
                 <div>{item.number}{unitResult.unitName} / 每套</div>
-                <LinkButton onClick={() => {
+                {item.haveBom && <LinkButton onClick={() => {
                   setBoms([...boms, item.skuId]);
                   history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);
-                }}> <RightOutline /></LinkButton>
+                }}> <RightOutline /></LinkButton>}
               </Space>
             </div>;
           })
