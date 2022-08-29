@@ -50,6 +50,9 @@ const CheckBom = () => {
 
   const skuId = query.skuId;
 
+  const [boms, setBoms] = useState([skuId]);
+  console.log(boms);
+
   const submit = (data) => {
     run({ data });
   };
@@ -57,13 +60,26 @@ const CheckBom = () => {
   useEffect(() => {
     if (skuId) {
       getSkuDetail({ data: { skuId } });
-      submit({ skuId,all:true });
+      submit({ skuId, all: true });
     }
   }, [skuId]);
 
   if (skuLoading || loading) {
     return <MyLoading skeleton />;
   }
+
+  const add = () => {
+    const shopCartParams = data.map(item => {
+      const brand = item.brand || {};
+      return {
+        skuId: item.skuId,
+        brandId: brand.brandId,
+        number: number * item.number,
+        type: ERPEnums.outStock,
+      };
+    });
+    addShop({ data: { shopCartParams } });
+  };
 
   return <>
     <MyNavBar title='选择BOM' />
@@ -76,11 +92,11 @@ const CheckBom = () => {
       <Space>
         <MyRadio onChange={() => {
           setType('all');
-          submit({ skuId,all:true });
+          submit({ skuId, all: true });
         }} checked={type === 'all'}>基础物料</MyRadio>
         <MyRadio onChange={() => {
           setType('next');
-          submit({ skuId,all:false });
+          submit({ skuId, all: false });
         }} checked={type === 'next'}>子级物料</MyRadio>
       </Space>
     }>
@@ -108,12 +124,13 @@ const CheckBom = () => {
                   });
                 }}>{brand.brandName || '任意品牌'}</LinkButton> : '任意品牌']}
               />
-                <Space align='end'>
-                  <div>{item.number}{unitResult.unitName} / 每套</div>
-                  <LinkButton onClick={() => {
-                    history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);
-                  }}> <RightOutline /></LinkButton>
-                </Space>
+              <Space align='end'>
+                <div>{item.number}{unitResult.unitName} / 每套</div>
+                <LinkButton onClick={() => {
+                  setBoms([...boms, item.skuId]);
+                  history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);
+                }}> <RightOutline /></LinkButton>
+              </Space>
             </div>;
           })
         }
@@ -121,18 +138,17 @@ const CheckBom = () => {
       </div>
     </MyCard>
 
-    <BottomButton disabled={data.length === 0} only onClick={() => {
-      const shopCartParams = data.map(item => {
-        const brand = item.brand || {};
-        return {
-          skuId: item.skuId,
-          brandId: brand.brandId,
-          number: number * item.number,
-          type: ERPEnums.outStock,
-        };
-      });
-      addShop({ data: { shopCartParams } });
-    }} />
+    <BottomButton
+      leftText='返回上一级'
+      leftOnClick={() => {
+        setBoms(boms.filter((item, index) => index !== boms.length - 1));
+        history.replace(`/Work/OutStock/CheckBom?skuId=${boms[boms.length - 2]}`);
+      }}
+      only={boms.length === 1}
+      disabled={data.length === 0}
+      rightDisabled={data.length === 0}
+      rightOnClick={add}
+      onClick={add} />
 
     <Picker
       destroyOnClose
