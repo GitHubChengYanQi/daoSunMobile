@@ -73,7 +73,11 @@ const WaitOutSku = (
             const cartResults = item.cartResults || [];
             if (cartResults.length > 0) {
               cartResults.forEach(item => {
-                const data = { ...item, userId: userItem.userId };
+                const data = {
+                  ...item,
+                  userId: userItem.userId,
+                  key: item.skuId + item.brandId + item.pickListsDetailId,
+                };
                 sku.push(data);
                 newData.push(data);
               });
@@ -113,7 +117,7 @@ const WaitOutSku = (
     }
   }, []);
 
-  const checkedSkus = returnSkus.map(item => item.pickListsCart);
+  const checkedSkus = returnSkus.map(item => item.key);
 
   return <>
     <div className={style.header}>待出物料</div>
@@ -128,7 +132,7 @@ const WaitOutSku = (
       {
         data.map((cartItem, cartIndex) => {
 
-          const checked = checkedSkus.includes(cartItem.pickListsCart);
+          const checked = checkedSkus.includes(cartItem.key);
 
           return <div key={cartIndex}>
             <div
@@ -136,7 +140,7 @@ const WaitOutSku = (
             >
               {sys && <span onClick={() => {
                 if (checked) {
-                  setReturnSkus(returnSkus.filter(item => item.pickListsCart !== cartItem.pickListsCart));
+                  setReturnSkus(returnSkus.filter(item => item.key !== cartItem.key));
                 } else {
                   setReturnSkus([...returnSkus, cartItem]);
                 }
