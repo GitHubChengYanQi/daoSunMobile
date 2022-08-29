@@ -100,6 +100,7 @@ export const TaskList = (
     </div>
 
     <MyAudit
+      skuName={searchValue}
       ref={ref}
       listScreentTop={!query.type && 0}
       auditType='audit'

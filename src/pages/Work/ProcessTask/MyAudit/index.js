@@ -8,6 +8,7 @@ import ListScreent from '../../Sku/SkuList/components/ListScreent';
 
 const MyAudit = (
   {
+    skuName,
     auditType,
     type,
     defaultType,
@@ -25,6 +26,7 @@ const MyAudit = (
   const [number, setNumber] = useState(0);
 
   const defaultParams = {
+    skuName,
     auditType,
     statusList: ['0'],
     types: (type || defaultType) && [type || defaultType],
