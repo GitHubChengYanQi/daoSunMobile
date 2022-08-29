@@ -18,7 +18,6 @@ const Prepare = (
   {
     id,
     skuItem = {},
-    dimension,
     onClose = () => {
     },
     onSuccess = () => {

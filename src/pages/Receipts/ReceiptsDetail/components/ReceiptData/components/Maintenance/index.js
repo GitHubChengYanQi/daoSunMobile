@@ -145,7 +145,7 @@ const Maintenance = (
     <MyCard title='负责人' extra={<UserName user={receipts.userResult} />} />
 
     <MyCard title='任务时间' extra={<div>
-      {MyDate.Show(receipts.createTime)} - {MyDate.Show(receipts.endTime)}
+      {MyDate.Show(receipts.startTime)} - {MyDate.Show(receipts.endTime)}
     </div>} />
 
     <MyCard title='养护类型' extra={receipts.type === 'check' ? '复检复调' : '无'} />

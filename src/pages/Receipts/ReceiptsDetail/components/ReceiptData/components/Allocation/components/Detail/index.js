@@ -113,7 +113,7 @@ const Detail = (
                         skuId: item.skuId,
                         brandId: item.brandId,
                         storehouseId: item.storehouseId,
-                        storehousePositionsId: item.storehousePositionsId,
+                        storehousePositionsId: item.positionId,
                         toStorehousePositionsId: item.toPositionId,
                         number: item.number,
                         allocationId,
@@ -218,7 +218,6 @@ const Detail = (
       destroyOnClose
     >
       <Prepare
-        dimension='order'
         allocation
         skuItem={allocation}
         onSuccess={(data = []) => {

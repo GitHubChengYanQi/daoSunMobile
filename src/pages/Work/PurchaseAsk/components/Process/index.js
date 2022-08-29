@@ -11,6 +11,7 @@ import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 import { MyDate } from '../../../../components/MyDate';
 import MyCard from '../../../../components/MyCard';
 import UploadFile from '../../../../components/Upload/UploadFile';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const Process = (
   {
@@ -174,28 +175,30 @@ const Process = (
       }
 
 
-      return <div className={style.user} key={index}>
-        <div className={style.nameAvatar}>
-          <Badge
-            color='#fff'
-            content={content}
-          >
-            <Avatar
-              size={26}
-              shape='square'
-              key={index}
-              src={items.avatar}
-            >{items.name.substring(0, 1)}</Avatar>
-          </Badge>
-          {items.name}
+      return <div key={index}>
+        <div className={style.user} key={index}>
+          <div className={style.nameAvatar}>
+            <Badge
+              color='#fff'
+              content={content}
+            >
+              <Avatar
+                size={26}
+                shape='square'
+                key={index}
+                src={items.avatar}
+              >{items.name.substring(0, 1)}</Avatar>
+            </Badge>
+            {items.name}
+          </div>
+          <div hidden={!stepsStatus}>
+            {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
+          </div>
         </div>
-        <div hidden={!stepsStatus}>
-          {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
-          {logRemark && <div>
-            {logRemark.content}
-            <UploadFile imgSize={14} show files={imgs} />
-          </div>}
-        </div>
+        {logRemark && stepsStatus && <Space align='center' wrap>
+          {logRemark.content}
+          <UploadFile imgSize={14} show files={imgs} />
+        </Space>}
       </div>;
     });
   };
@@ -385,7 +388,7 @@ const Process = (
   };
 
   if (loading) {
-    return <Skeleton loading={loading} />;
+    return <MyLoading skeleton />;
   }
 
   if (!(auditData || data)) {

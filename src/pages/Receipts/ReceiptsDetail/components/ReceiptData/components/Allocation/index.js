@@ -125,6 +125,7 @@ const Allocation = (
         inLibrary.push({
           ...inItem,
           number,
+          doneNumber,
           complete: number <= 0,
           num: allNumber,
           positionId: outItem.positionId,

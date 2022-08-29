@@ -81,7 +81,7 @@ const CheckBom = () => {
     addShop({ data: { shopCartParams } });
   };
 
-  return <>
+  return <div style={{ height: '100%', backgroundColor: '#fff' }}>
     <MyNavBar title='选择BOM' />
     <div className={style.bom}>
       <SkuItem skuResult={skuResult} className={style.sku} extraWidth='80px' />
@@ -175,7 +175,7 @@ const CheckBom = () => {
     />
 
     {addLoading && <MyLoading />}
-  </>;
+  </div>;
 };
 
 export default CheckBom;
