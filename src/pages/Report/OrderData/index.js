@@ -50,7 +50,7 @@ const OrderData = () => {
 
   const [screening, setScreeing] = useState();
 
-  const [params, setParams] = useState({type});
+  const [params, setParams] = useState({ type });
 
   const submit = (data = {}) => {
     const newParmas = { ...params, ...data };
@@ -60,8 +60,8 @@ const OrderData = () => {
   };
 
   const clear = () => {
-    setParams({type});
-    listRef.current.submit({type});
+    setParams({ type });
+    listRef.current.submit({ type });
   };
 
   return <>
@@ -122,6 +122,7 @@ const OrderData = () => {
       </div>
     </MyCard>
     <OrderDataScreen
+      orderType={type}
       top={ToolUtil.isQiyeWeixin() ? 0 : 45}
       skuNumber={total}
       onClose={() => {

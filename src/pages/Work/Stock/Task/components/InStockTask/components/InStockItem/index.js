@@ -2,40 +2,8 @@ import React from 'react';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-
-export const rulesUser = (rules = []) => {
-  const users = [];
-  if (rules.length > 0) {
-    rules.map((items) => {
-      switch (items.type) {
-        case 'AppointUsers':
-          items.appointUsers && items.appointUsers.map((itemuser) => {
-            return users.push(itemuser.title);
-          });
-          break;
-        case 'DeptPositions':
-          items.deptPositions && items.deptPositions.map((itemdept) => {
-            return users.push(`${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
-              return items.label;
-            })})`);
-          });
-          break;
-        case 'AllPeople':
-          users.push('所有人');
-          break;
-        case 'MasterDocumentPromoter':
-          users.push('主单据发起人');
-          break;
-        case 'Director':
-          users.push('单据负责人');
-          break;
-        default:
-          break;
-      }
-    });
-  }
-  return users;
-};
+import { Space } from 'antd-mobile';
+import { UserOutline } from 'antd-mobile-icons';
 
 const InStockItem = (
   {
@@ -73,9 +41,16 @@ const InStockItem = (
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>
-          负责人：{rulesUser(item.rules).length > 0 ? rulesUser(item.rules).toString() : ToolUtil.isObject(item.user).name}
+          <Space align='center'>
+            <UserOutline />
+            <div>
+              <span>执行人：</span>
+              {ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+            </div>
+          </Space>
         </div>
-      </div>}
+      </div>
+    }
   />;
 };
 

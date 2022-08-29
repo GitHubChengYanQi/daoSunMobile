@@ -125,7 +125,9 @@ const PositionInventory = () => {
         <div className={style.logs}>
           {
             logs.map((item, index) => {
-              return <div key={index} className={style.logData}>
+              return <div key={index} className={style.logData} onClick={()=>{
+                history.push(`/Work/Inventory/RealTimeInventory/Detail?inventoryTaskId=${item.inventoryTaskId}`);
+              }}>
                 <div>
                   盘点人员：{ToolUtil.isObject(item.user).name}
                 </div>

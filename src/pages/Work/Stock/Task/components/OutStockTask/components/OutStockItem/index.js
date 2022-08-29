@@ -2,7 +2,8 @@ import React from 'react';
 import TaskItem from '../../../TaskItem';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-import { rulesUser } from '../../../InStockTask/components/InStockItem';
+import { UserOutline } from 'antd-mobile-icons';
+import { Space } from 'antd-mobile';
 
 const OutStockItem = (
   {
@@ -48,9 +49,16 @@ const OutStockItem = (
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>
-          负责人：{rulesUser(item.rules).length > 0 ? rulesUser(item.rules).toString() : ToolUtil.isObject(item.user).name}
+          <Space align='center'>
+            <UserOutline />
+            <div>
+              <span>执行人：</span>
+              {ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+            </div>
+          </Space>
         </div>
-      </div>}
+      </div>
+    }
   />;
 };
 
