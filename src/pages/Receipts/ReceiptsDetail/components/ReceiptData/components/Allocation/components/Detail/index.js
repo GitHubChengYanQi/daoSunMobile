@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Divider, Popup, Tabs } from 'antd-mobile';
+import { Divider, Popup, Space, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Data from '../../../../../../../../Work/Allocation/SelectStoreHouse/components/Data';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
@@ -16,6 +16,8 @@ import { Message } from '../../../../../../../../components/Message';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import Prepare from '../../../OutStockOrder/components/Prepare';
+import Title from '../../../../../../../../components/Title';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
@@ -36,6 +38,8 @@ const Detail = (
   const [key, setKey] = useState('out');
 
   const [allocation, setAllocation] = useState();
+
+  const [askShow, setAskShow] = useState();
 
   useEffect(() => {
     if (distributionList.length > 0) {
@@ -105,7 +109,7 @@ const Detail = (
                   run({
                     data: {
                       allocationId,
-                      allocationCartParams:[{
+                      allocationCartParams: [{
                         skuId: item.skuId,
                         brandId: item.brandId,
                         storehouseId: item.storehouseId,
@@ -182,7 +186,10 @@ const Detail = (
   return <>
 
     <MyCard
-      title='任务明细'
+      titleBom={<Space>
+        <Title>任务明细</Title>
+        <LinkButton onClick={() => setAskShow(true)}>申请明细</LinkButton>
+      </Space>}
       className={style.cardStyle}
       headerClassName={ToolUtil.classNames(style.headerStyle, style.borderBottom)}
       bodyClassName={style.bodyStyle}
@@ -238,6 +245,16 @@ const Detail = (
         }}
       />
     </Popup>
+
+    <MyAntPopup visible={askShow} title='申请明细' onClose={() => setAskShow(false)}>
+      <div className={style.askContent}>
+        {
+          askList.map((item, index) => {
+            return <AllocationSkuItem item={item} key={index} />;
+          })
+        }
+      </div>
+    </MyAntPopup>
 
     {loading && <MyLoading />}
   </>;

@@ -15,7 +15,6 @@ const Allocation = (
     success,
     data = {},
     getAction = () => {
-
     },
     permissions,
     refresh = () => {

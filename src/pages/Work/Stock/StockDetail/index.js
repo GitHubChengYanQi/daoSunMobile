@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import MySearch from '../../../components/MySearch';
 import Icon from '../../../components/Icon';
@@ -13,6 +13,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { ERPEnums } from '../ERPEnums';
 import MyActionSheet from '../../../components/MyActionSheet';
 import SearchInkind from '../../../components/InkindList/components/SearchInkind';
+import { useLocation } from 'react-router-dom';
 
 export const shopCartShow = { url: '/shopCart/backType', method: 'POST' };
 
@@ -131,6 +132,14 @@ const StockDetail = (
   const [skuItem, setSkuItem] = useState();
 
   const [taskVisible, setTaskVisible] = useState();
+
+  const { query } = useLocation();
+
+  useEffect(()=>{
+    if (query.storehousePositionsId){
+      ref.current.submit({storehousePositionsId: query.storehousePositionsId});
+    }
+  },[query.storehousePositionsId])
 
   return <>
 
