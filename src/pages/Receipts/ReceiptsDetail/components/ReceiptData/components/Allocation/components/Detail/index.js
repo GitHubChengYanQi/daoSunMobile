@@ -35,6 +35,7 @@ const Detail = (
     },
   },
 ) => {
+
   const [key, setKey] = useState('out');
 
   const [allocation, setAllocation] = useState();
@@ -55,7 +56,7 @@ const Detail = (
       Message.successToast('调拨成功！', () => {
         setAllocation(false);
         refresh();
-      },true);
+      }, true);
     },
   });
 
@@ -105,34 +106,16 @@ const Detail = (
             />
             <div className={style.inLibrary}>
               {item.complete ? '已完成' : <LinkButton onClick={() => {
-                if (transfer) {
-                  run({
-                    data: {
-                      allocationId,
-                      allocationCartParams: [{
-                        skuId: item.skuId,
-                        brandId: item.brandId,
-                        storehouseId: item.storehouseId,
-                        storehousePositionsId: item.positionId,
-                        toStorehousePositionsId: item.toPositionId,
-                        number: item.number,
-                        allocationId,
-                      }],
-                      toStorehousePositionsId: item.toPositionId,
-                    },
-                  });
-                } else {
-                  setAllocation({
-                    skuResult: item.skuResult,
-                    skuId: item.skuId,
-                    brandId: item.brandId,
-                    brandResult: { brandName: item.brandName },
-                    positionId: item.positionId,
-                    number: item.number,
-                    positionName: item.positionName,
-                    toPositionId: item.toPositionId,
-                  });
-                }
+                setAllocation({
+                  skuResult: item.skuResult,
+                  skuId: item.skuId,
+                  brandId: item.brandId,
+                  brandResult: { brandName: item.brandName },
+                  positionId: item.positionId,
+                  number: item.number,
+                  positionName: item.positionName,
+                  toPositionId: item.toPositionId,
+                });
               }}>调拨</LinkButton>}
               <ShopNumber show value={item.complete ? item.num : item.number} />
             </div>
