@@ -35,6 +35,7 @@ const OutSkuAction = (
     },
     dimension = 'order',
     taskId,
+    refresh: orderRefresh,
   },
 ) => {
 
@@ -273,6 +274,7 @@ const OutSkuAction = (
           case 'close':
             if (success) {
               refresh();
+              orderRefresh();
             }
             setCode('');
             return;

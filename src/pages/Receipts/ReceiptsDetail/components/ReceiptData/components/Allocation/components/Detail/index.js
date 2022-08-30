@@ -55,7 +55,7 @@ const Detail = (
       Message.successToast('调拨成功！', () => {
         setAllocation(false);
         refresh();
-      });
+      },true);
     },
   });
 
