@@ -111,7 +111,7 @@ const Detail = (
                 setAllocation({
                   skuResult: item.skuResult,
                   skuId: item.skuId,
-                  brandId: item.brandId,
+                  brandId: item.haveBrand ? item.brandId : null,
                   brandResult: { brandName: item.brandName },
                   positionId: item.positionId,
                   number: item.number,

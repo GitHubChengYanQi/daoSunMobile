@@ -140,7 +140,7 @@ const Prepare = (
         storehousePositionsId={allocation && skuItem.positionId}
         inkindRef={inkindRef}
         customerId={skuItem.customerId}
-        brandId={allocation ? skuItem.brandId : skuItem.brandId && skuItem.brandId !== '0' ? skuItem.brandId : null}
+        brandId={allocation ? skuItem.brandId : skuItem.brandId && !['0',0].includes(skuItem.brandId) ? skuItem.brandId : null}
         id={id}
         pickListsDetailId={skuItem.pickListsDetailId}
         skuId={skuItem.skuId}
