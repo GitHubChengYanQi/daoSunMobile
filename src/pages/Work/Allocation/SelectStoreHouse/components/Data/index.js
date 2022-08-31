@@ -5,9 +5,12 @@ import SkuItem from '../../../../Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';
 import ShopNumber from '../../../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import MyEmpty from '../../../../../components/MyEmpty';
+import { ToolUtil } from '../../../../../components/ToolUtil';
+import moment from 'moment';
 
 const Data = (
   {
+    show,
     storeHouses = [],
     setVisible = () => {
     },
@@ -26,7 +29,7 @@ const Data = (
     skus.map(item => number += item.storeNumber);
 
     return <MyCard
-      style={{padding:noStoreHouse && 0}}
+      style={{ padding: noStoreHouse && 0 }}
       className={style.card}
       headerClassName={style.cardHeader}
       key={index}
@@ -42,7 +45,13 @@ const Data = (
           const brandNames = [];
           const brands = item.storeBrands || [];
           const positions = item.storePositions || [];
+
+          let complete = false;
+
           brands.forEach(item => {
+            if (item.instockOrderId) {
+              complete = true;
+            }
             if (!brandNames.includes(item.brandName)) {
               brandNames.push(item.brandName || '无品牌');
             }
@@ -50,16 +59,23 @@ const Data = (
           positions.forEach(item => {
             const brands = item.brands || [];
             brands.forEach(item => {
+              if (item.instockOrderId) {
+                complete = true;
+              }
               if (!brandNames.includes(item.brandName)) {
                 brandNames.push(item.brandName || '无品牌');
               }
             });
           });
+
           return <div
             key={index}
-            style={{border:index === skus.length - 1 && 'none'}}
+            style={{ border: index === skus.length - 1 && 'none', alignItems: show && complete && 'flex-start' }}
             className={style.SkuItem}
           >
+            <div hidden={!(show && complete)} className={style.logo}>
+              <span>{moment(item.updateTime).format('YYYY-MM-DD')}</span>
+            </div>
             <div className={style.sku}>
               <SkuItem
                 skuResult={item.skuResult}

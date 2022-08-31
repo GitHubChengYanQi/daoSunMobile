@@ -33,7 +33,6 @@ const Prepare = (
   const outStockNumber = allocation ? skuItem.number : skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
-  console.log(outStockSkus);
 
   const skuResult = skuItem.skuResult || {};
 
@@ -105,7 +104,7 @@ const Prepare = (
   return <>
 
     <div className={style.header}>
-      备料
+      {allocation ? '调拨' : '备料'}
     </div>
 
     <div

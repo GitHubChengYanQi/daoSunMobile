@@ -12,6 +12,7 @@ import { MyLoading } from '../../../../../../components/MyLoading';
 
 const Allocation = (
   {
+    taskId,
     success,
     data = {},
     getAction = () => {
@@ -59,7 +60,6 @@ const Allocation = (
     const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
 
     const distributionSkuIds = carry.map(item => item.skuId);
-
 
     const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
 
@@ -149,6 +149,7 @@ const Allocation = (
   return <>
 
     <Detail
+      taskId={taskId}
       transfer={transfer}
       allocationId={data.allocationId}
       skus={skus}

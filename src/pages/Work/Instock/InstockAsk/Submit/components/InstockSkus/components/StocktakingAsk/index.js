@@ -34,11 +34,6 @@ const StocktakingAsk = ({ createType,backTitle }) => {
         },
       });
     },
-    onError: () => {
-      Message.errorDialog({
-        content: '创建盘点任务失败!',
-      });
-    },
   });
 
   useEffect(() => {

@@ -18,11 +18,13 @@ import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import Prepare from '../../../OutStockOrder/components/Prepare';
 import Title from '../../../../../../../../components/Title';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
+import InLibrary from './components/InLibrary';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
 const Detail = (
   {
+    taskId,
     transfer,
     allocationId,
     out,
@@ -156,7 +158,7 @@ const Detail = (
       case 'out':
         return <Data noStoreHouse out={out} show noLink storeHouses={hopeList} />;
       case 'in':
-        return <MyEmpty />;
+        return <InLibrary taskId={taskId} />;
       case 'all':
         return inLibraryListData();
       case 'noDis':

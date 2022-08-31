@@ -9,12 +9,15 @@ import { useRequest } from '../../util/Request';
 import KeepAlive from '../../components/KeepAlive';
 import { AlignLeftOutlined, CloseCircleOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Message as MyMessage } from '../components/Message';
+import { MyLoading } from '../components/MyLoading';
 
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
 export const messageDelete = { url: '/message/delete', method: 'POST' };
 export const messageTop = { url: '/message/top', method: 'GET' };
 export const messageCancelTop = { url: '/message/cancelTop', method: 'GET' };
+export const allRead = { url: '/message/allRead', method: 'GET' };
+export const removeAllRead = { url: '/message/removeAllRead', method: 'GET' };
 
 const MessageList = () => {
 
@@ -33,9 +36,17 @@ const MessageList = () => {
 
 
   const { run: edit } = useRequest(messageEdit, { manual: true });
+  const { loading: allReadLoading, run: allReadRun } = useRequest(allRead, { manual: true, onSuccess: () => submit() });
+  const { loading: removeAllReadLoading, run: removeAllReadRun } = useRequest(removeAllRead, {
+    manual: true,
+    onSuccess: () => submit(),
+  });
   const { run: deleteRun } = useRequest(messageDelete, { manual: true });
-  const { run: top } = useRequest(messageTop, { manual: true, onSuccess: () => submit() });
-  const { run: cancelTop } = useRequest(messageCancelTop, { manual: true, onSuccess: () => submit() });
+  const { loading: topLoading, run: top } = useRequest(messageTop, { manual: true, onSuccess: () => submit() });
+  const { loading: cancelTopLoading, run: cancelTop } = useRequest(messageCancelTop, {
+    manual: true,
+    onSuccess: () => submit(),
+  });
 
   const [scrollTop, setScrollTop] = useState(0);
 
@@ -90,12 +101,12 @@ const MessageList = () => {
             MyMessage.warningDialog({
               content: '是否删除全部已读？',
               onConfirm: () => {
-
+                removeAllReadRun();
               },
               only: false,
             });
           } else {
-
+            allReadRun();
           }
         }}
         trigger='click'
@@ -147,7 +158,8 @@ const MessageList = () => {
                 }
               }}
             >
-              <div className={ToolUtil.classNames(style.item, style.flexCenter,item.sort !== 0 && style.top)} key={index} onClick={() => {
+              <div className={ToolUtil.classNames(style.item, style.flexCenter, item.sort !== 0 && style.top)}
+                   key={index} onClick={() => {
                 messageChange({ view: 1 }, item, index);
                 switch (item.source) {
                   case 'instockOrder':
@@ -182,7 +194,7 @@ const MessageList = () => {
                     {item.content}
                   </div>
                 </div>
-                <div className={ToolUtil.classNames(style.flexCenter, style.fontColor)}>
+                <div className={ToolUtil.classNames(style.flexCenter, style.fontColor,style.time)}>
                   {ToolUtil.timeDifference(item.time)}
                   <RightOutline style={{ marginLeft: 8 }} />
                 </div>
@@ -193,6 +205,8 @@ const MessageList = () => {
         }
       </MyList>
     </div>
+
+    {(allReadLoading || removeAllReadLoading || topLoading || cancelTopLoading) && <MyLoading />}
   </div>;
 };
 

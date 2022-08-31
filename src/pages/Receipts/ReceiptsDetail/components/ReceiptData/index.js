@@ -91,6 +91,7 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.allocation:
         return <Allocation
+          taskId={data.processTaskId}
           afertShow={() => setBottomButton(true)}
           success={success}
           loading={loading}

@@ -87,6 +87,7 @@ export const getEndData = (array = [], endData = []) => {
           checked: (current || !haveBrand),
           maxNumber: item.number,
           doneNumber: (current || !haveBrand) ? item.doneNumber : 0,
+          instockOrderId: item.instockOrderId,
         };
       });
       const snameStore = item.storehouseId === sku.storehouseId;
@@ -121,7 +122,8 @@ export const getEndData = (array = [], endData = []) => {
                   number: (current || !haveBrand) ? item.number + brandItem.number : brandItem.number,
                   checked: current || !haveBrand || brandItem.checked,
                   maxNumber: item.number,
-                  doneNumber: (current || !haveBrand) ? item.doneNumber+brandItem.doneNumber : brandItem.doneNumber,
+                  doneNumber: (current || !haveBrand) ? item.doneNumber + brandItem.doneNumber : brandItem.doneNumber,
+                  instockOrderId: item.brandItem ? brandItem.instockOrderId : null,
                 };
               }),
             };
@@ -141,6 +143,7 @@ export const getEndData = (array = [], endData = []) => {
               checked: current || !haveBrand || brandItem.checked,
               maxNumber: item.number,
               doneNumber: (current || !haveBrand) ? item.doneNumber : brandItem.doneNumber,
+              instockOrderId: item.brandItem ? brandItem.instockOrderId : null,
             };
           }),
         };
