@@ -5,6 +5,7 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
+import { ExclamationCircleOutline, ExclamationOutline, ExclamationTriangleOutline } from 'antd-mobile-icons';
 
 const SkuItem = (
   {
@@ -52,6 +53,9 @@ const SkuItem = (
         <img src={imgUrl || state.imgLogo} width={imgSize} height={imgSize} alt='' />
         <div hidden={hiddenNumber} className={style.number}>
           {getStockNumber()}{unitName || unitResult.unitName}
+          {skuResult.lockStockDetailNumber > 0 && <span className={style.error}>
+          <ExclamationTriangleOutline />
+          </span>}
         </div>
       </div>
       <div
