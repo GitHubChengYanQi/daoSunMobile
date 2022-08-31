@@ -10,6 +10,8 @@ import MyRemoveButton from '../components/MyRemoveButton';
 import MyList from '../components/MyList';
 import MyCard from '../components/MyCard';
 import { ToolUtil } from '../components/ToolUtil';
+import MyEmpty from '../components/MyEmpty';
+import { useHistory } from 'react-router-dom';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
@@ -19,7 +21,9 @@ const userDynamic = { url: '/dynamic/listByUser', method: 'POST' };
 
 const User = ({ userId }) => {
 
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState();
+
+  const history = useHistory();
 
   const { loading, run } = useRequest(getUserInfo, {
     manual: true,
@@ -32,16 +36,20 @@ const User = ({ userId }) => {
         positionNames: user.positionNames,
       });
     },
+    onError: () => {
+      if (userId) {
+        history.goBack();
+      }
+    },
   });
 
-  const { run:logOutRun } = useRequest(logOut, {
+  const { run: logOutRun } = useRequest(logOut, {
     manual: true,
     onSuccess: (res) => {
       cookie.remove('cheng-token');
       window.location.reload();
     },
   });
-
 
   const [dynamicData, setDynamicData] = useState([]);
 
@@ -51,9 +59,9 @@ const User = ({ userId }) => {
   const userInfo = state.userInfo || {};
 
   useEffect(() => {
-    if (userId){
-      run({ params: { userId: userId} });
-    }else {
+    if (userId) {
+      run({ params: { userId: userId } });
+    } else {
       setUserData({
         avatar: userInfo.avatar,
         name: userInfo.name,
@@ -65,6 +73,10 @@ const User = ({ userId }) => {
 
   if (loading) {
     return <MyLoading />;
+  }
+
+  if (!userData) {
+    return <MyEmpty description='暂无人员信息' />;
   }
 
   return <div>

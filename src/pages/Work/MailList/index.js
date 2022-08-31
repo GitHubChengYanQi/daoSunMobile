@@ -9,7 +9,7 @@ const MailList = () => {
 
   return <>
     <MyNavBar title='通讯录' />
-    <UserList show onShow={(user) => {
+    <UserList hiddenCurrentUser show onShow={(user) => {
       history.push(`/Work/MailList/UserInfo?id=${user.id}`);
     }} />
   </>;
