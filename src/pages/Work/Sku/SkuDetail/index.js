@@ -108,6 +108,14 @@ const SkuDetail = ({ id }) => {
         {detail.specifications}
       </div>
       <div className={style.item}>
+        <Label className={style.label}>库存数：</Label>
+        {detail.stockNumber || 0}
+      </div>
+      <div className={style.item}>
+        <Label className={style.label}>备料数：</Label>
+        {detail.lockStockDetailNumber || 0}
+      </div>
+      <div className={style.item}>
         <Label
           className={style.label}>单位：</Label>
         {detail.spuResult && detail.spuResult.unitResult && detail.spuResult.unitResult.unitName}
