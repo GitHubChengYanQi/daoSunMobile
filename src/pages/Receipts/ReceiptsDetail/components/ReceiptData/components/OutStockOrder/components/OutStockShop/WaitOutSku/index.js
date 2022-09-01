@@ -23,20 +23,19 @@ const WaitOutSku = (
     id,
     refresh = () => {
     },
+    listRefresh = () => {
+    },
     outType,
     taskId,
+    user,
+    data,
+    allSkus,
   },
 ) => {
 
   const [sys, setSys] = useState();
 
-  const [user, setUser] = useState({});
-
   const [returnSkus, setReturnSkus] = useState([]);
-
-  const [data, setData] = useState([]);
-
-  const [allSkus, setAllSkus] = useState([]);
 
   const [errorSku, setErrorSku] = useState();
 
@@ -61,37 +60,6 @@ const WaitOutSku = (
     }
   };
 
-  const { loading, run, refresh: listRefresh } = useRequest(listByUser,
-    {
-      manual: true,
-      onSuccess: (res) => {
-        const newData = [];
-        const sku = [];
-        ToolUtil.isArray(res).map(userItem => {
-          const pickListsResults = userItem.pickListsResults || [];
-          pickListsResults.map(item => {
-            const cartResults = item.cartResults || [];
-            if (cartResults.length > 0) {
-              cartResults.forEach(item => {
-                const data = {
-                  ...item,
-                  userId: userItem.userId,
-                  key: item.skuId + item.brandId + item.pickListsDetailId,
-                };
-                sku.push(data);
-                newData.push(data);
-              });
-            }
-            return null;
-          });
-          return null;
-        });
-        setAllSkus(sku);
-        setUser(ToolUtil.isArray(res)[0]);
-        setData(newData);
-      },
-    });
-
   const { loading: pickLoading, run: pickRun } = useRequest(productionPickListsSend, {
     manual: true,
     onSuccess: () => {
@@ -110,12 +78,6 @@ const WaitOutSku = (
 
 
   const allChecked = returnSkus.length === allSkus.length;
-
-  useEffect(() => {
-    if (id) {
-      run({ data: { pickListsIds: [id] } });
-    }
-  }, []);
 
   const checkedSkus = returnSkus.map(item => item.key);
 
@@ -151,7 +113,7 @@ const WaitOutSku = (
                   skuResult={cartItem.skuResult}
                   imgSize={60}
                   extraWidth='148px'
-                  otherData={[ToolUtil.isObject(cartItem.brandResult).brandName || '任意品牌']}
+                  otherData={[ToolUtil.isObject(cartItem.brandResult).brandName || '无品牌']}
                 />
               </div>
               <div>
@@ -202,7 +164,7 @@ const WaitOutSku = (
       </div>
     </div>
 
-    {(loading || pickLoading || backLoading) && <MyLoading />}
+    {(pickLoading || backLoading) && <MyLoading />}
 
   </>;
 };

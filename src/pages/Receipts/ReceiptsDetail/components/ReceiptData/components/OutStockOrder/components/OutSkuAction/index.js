@@ -22,6 +22,7 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import Icon from '../../../../../../../../components/Icon';
 import MyPositions from '../../../../../../../../components/MyPositions';
+import { listByUser } from '../../../../../../../../Work/Production/components/Url';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
@@ -51,8 +52,6 @@ const OutSkuAction = (
 
   const [countNumber, setCountNumber] = useState();
 
-  const [allPerpareNumber, setAllPerpareNumber] = useState();
-
   const { loading, run: getOutDetail, refresh } = useRequest({
     ...outDetailList,
     data: params,
@@ -63,7 +62,6 @@ const OutSkuAction = (
       const other = [];
 
       let countNumber = 0;
-      let allPerpareNumber = 0;
 
       ToolUtil.isArray(res).map(item => {
         let perpareNumber = 0;
@@ -83,11 +81,9 @@ const OutSkuAction = (
         } else {
           actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
         }
-        allPerpareNumber += perpareNumber;
         return countNumber += (item.number || 0);
       });
       setCountNumber(countNumber);
-      setAllPerpareNumber(allPerpareNumber);
       setData([
         ...actions,
         ...other.sort((a, b) => {
@@ -203,7 +199,7 @@ const OutSkuAction = (
         onSuccess={(number) => {
           shopRef.current.jump(() => {
             refresh();
-          }, number);
+          });
         }}
         onClose={() => {
           setVisible(false);
@@ -215,7 +211,6 @@ const OutSkuAction = (
       shopRef={shopRef}
       taskId={taskId}
       outType={order.source}
-      allPerpareNumber={allPerpareNumber}
       id={pickListsId}
       refresh={refresh}
     />}

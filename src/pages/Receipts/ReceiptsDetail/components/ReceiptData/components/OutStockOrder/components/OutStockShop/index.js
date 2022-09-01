@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FloatingBubble, Popup } from 'antd-mobile';
 import style from '../../../InstockOrder/components/InstockShop/index.less';
 import WaitOutSku from './WaitOutSku';
 import outShop from '../../../../../../../../../assets/outShop.png';
 import Bouncing from '../../../../../../../../components/Bouncing';
+import { useRequest } from '../../../../../../../../../util/Request';
+import { listByUser } from '../../../../../../../../Work/Production/components/Url';
+import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 const OutStockShop = (
   {
@@ -12,13 +15,55 @@ const OutStockShop = (
     taskId,
     refresh = () => {
     },
-    allPerpareNumber = 0,
     shopRef,
   }) => {
 
   const [visible, setVisible] = useState();
 
   const [refreshOrder, setRefreshOrder] = useState();
+
+  const [user, setUser] = useState({});
+
+  const [data, setData] = useState([]);
+
+  const [allSkus, setAllSkus] = useState([]);
+
+  const { loading, run, refresh: listRefresh } = useRequest(listByUser,
+    {
+      manual: true,
+      onSuccess: (res) => {
+        const newData = [];
+        const sku = [];
+        ToolUtil.isArray(res).map(userItem => {
+          const pickListsResults = userItem.pickListsResults || [];
+          pickListsResults.map(item => {
+            const cartResults = item.cartResults || [];
+            if (cartResults.length > 0) {
+              cartResults.forEach(item => {
+                const data = {
+                  ...item,
+                  userId: userItem.userId,
+                  key: item.skuId + item.brandId + item.pickListsDetailId,
+                };
+                sku.push(data);
+                newData.push(data);
+              });
+            }
+            return null;
+          });
+          return null;
+        });
+        setAllSkus(sku);
+        setUser(ToolUtil.isArray(res)[0]);
+        setData(newData);
+      },
+    });
+
+  useEffect(() => {
+    if (id) {
+      run({ data: { pickListsIds: [id] } });
+    }
+  }, []);
 
   return <div>
     <FloatingBubble
@@ -36,7 +81,16 @@ const OutStockShop = (
           setVisible(true);
         }}>
           <div className={style.actionButton}>
-            <Bouncing ref={shopRef} size={24} height={18} img={outShop} number={allPerpareNumber} />
+            <Bouncing
+              ref={shopRef}
+              size={24}
+              height={18}
+              img={outShop}
+              number={loading ? undefined : allSkus.length}
+              addAfter={() => {
+                listRefresh();
+              }}
+            />
           </div>
         </div>
       </div>
@@ -55,7 +109,16 @@ const OutStockShop = (
       destroyOnClose
       visible={visible}
     >
-      <WaitOutSku taskId={taskId} outType={outType} id={id} refresh={() => setRefreshOrder(true)} />
+      <WaitOutSku
+        listRefresh={listRefresh}
+        taskId={taskId}
+        outType={outType}
+        id={id}
+        refresh={() => setRefreshOrder(true)}
+        user={user}
+        data={data}
+        allSkus={allSkus}
+      />
     </Popup>
   </div>;
 };

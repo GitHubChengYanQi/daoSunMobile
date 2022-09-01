@@ -11,6 +11,8 @@ const Bouncing = (
     color,
     height,
     width,
+    addAfter = () => {
+    },
   },
   ref,
 ) => {
@@ -20,11 +22,13 @@ const Bouncing = (
   const [num, setNum] = useState(0);
 
   useEffect(() => {
-    setNum(number);
+    if (typeof number === 'number') {
+      setNum(number);
+    }
   }, [number]);
 
   const jump = (
-    alter = () => {
+    after = () => {
     },
     number = 1,
   ) => {
@@ -35,7 +39,8 @@ const Bouncing = (
       if (number !== null) {
         setNum(num + number);
       }
-      alter();
+      after();
+      addAfter();
     };
   };
 
