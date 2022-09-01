@@ -140,7 +140,7 @@ const Allocation = (
 
     const stores = getStoreHouse(distributionSkus);
     setAskList(hopeSkus);
-    setHopeList(stores);
+    setHopeList(stores.filter(item=>item.id !== data.storehouseId));
     setInLibraryList(inLibrary);
     setSkus(distributionSkus);
     setDistributionList(distributionList);
