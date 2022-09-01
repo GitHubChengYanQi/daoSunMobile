@@ -163,7 +163,7 @@ export const ReceiptsDetailContent = () => {
       case 'log':
         return <Log type={type} detail={detail} />;
       case 'relation':
-        return <Relation type={type} receipts={detail.receipts} />;
+        return <Relation type={type} receipts={detail.receipts} taskId={detail.processTaskId} />;
       default:
         return <MyEmpty />;
     }

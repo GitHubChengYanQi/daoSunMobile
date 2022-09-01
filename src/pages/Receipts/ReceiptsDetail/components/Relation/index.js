@@ -11,8 +11,9 @@ import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
 export const inStockRelation = { url: '/instockOrder/document', method: 'GET' };
+export const getChildrenTasks = { url: '/audit/getChildrenTasks', method: 'GET' };
 
-const Relation = ({ type, receipts = {} }) => {
+const Relation = ({ type, receipts = {}, taskId }) => {
 
   const history = useHistory();
 
@@ -21,6 +22,22 @@ const Relation = ({ type, receipts = {} }) => {
   const { loading: inStockLoading, run: inStockRun } = useRequest(inStockRelation, {
     manual: true,
     onSuccess: (res) => {
+      setRelations(ToolUtil.isArray(res).map(item => {
+        const receipts = item.receipts || {};
+        return {
+          taskId: item.processTaskId,
+          user: item.user,
+          orderInfo: item.taskName + ' / ' + receipts.coding,
+          statusName: receipts.statusName || '进行中',
+        };
+      }));
+    },
+  });
+
+  const { loading: getTaskLoading, run: getTasks } = useRequest(getChildrenTasks, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res);
       setRelations(ToolUtil.isArray(res).map(item => {
         const receipts = item.receipts || {};
         return {
@@ -44,12 +61,15 @@ const Relation = ({ type, receipts = {} }) => {
       case ReceiptsEnums.error:
         inStockRun({ params: { id: receipts.orderId, type } });
         break;
+      case ReceiptsEnums.allocation:
+        getTasks({ params: { taskId: taskId } });
+        break;
       default:
         break;
     }
   }, []);
 
-  if (inStockLoading) {
+  if (inStockLoading || getTaskLoading) {
     return <MyLoading skeleton />;
   }
 
