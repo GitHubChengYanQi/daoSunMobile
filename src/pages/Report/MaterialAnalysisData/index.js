@@ -18,7 +18,6 @@ export const bomResult = { url: '/asynTask/v1.1.1/bomResult', method: 'GET' };
 const MaterialAnalysisData = () => {
 
   const [data, setData] = useState([]);
-  console.log(data);
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -26,10 +25,11 @@ const MaterialAnalysisData = () => {
     onSuccess: (res) => {
       const newData = [];
       ToolUtil.isArray(res).forEach(item => {
+        const sku = item.result[0] || {};
         newData.push({
-          name: item.name,
+          skuResult: sku.skuResult,
           num: item.num,
-          skuId: item.skuId,
+          skuId: sku.skuId,
         });
       });
       setData(newData);
@@ -116,13 +116,13 @@ const MaterialAnalysisData = () => {
             className={style.card}
             headerClassName={style.header}
             bodyClassName={style.body}
-            titleBom={<SkuItem extraWidth='150px' skuResult={{ skuName: item.name, spuResult: { name: item.name } }} />}
+            titleBom={<SkuItem extraWidth='150px' skuResult={item.skuResult} />}
             key={skuIndex}
             extra={<Space direction='vertical' align='end'>
               <div>可生产 <span className='numberBlue'>{item.num}</span>台</div>
               <LinkButton onClick={() => {
                 dataChange({ loading: true, open: !item.open }, skuIndex);
-                if (!item.open){
+                if (!item.open) {
                   setCurrentIndex(skuIndex);
                   getBoms({ params: { skuId: item.skuId } });
                 }

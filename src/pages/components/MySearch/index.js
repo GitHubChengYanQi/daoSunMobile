@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, SearchBar, Popover, Card } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
@@ -6,6 +6,8 @@ import { ClockCircleOutline, DeleteOutline, SearchOutline } from 'antd-mobile-ic
 import MyAntList from '../MyAntList';
 import { useRequest } from '../../../util/Request';
 import { ToolUtil } from '../ToolUtil';
+import MyRemoveButton from '../MyRemoveButton';
+import { useLocation } from 'react-router-dom';
 
 const historyList = { url: '/queryLog/list', method: 'POST' };
 const historyAdd = { url: '/queryLog/add', method: 'POST' };
@@ -15,8 +17,8 @@ const MySearch = (
   {
     id = 'searchBar',
     placeholder,
-    style:searchStyle,
-    searchIcon = <SearchOutline /> ,
+    style: searchStyle,
+    searchIcon = <SearchOutline />,
     extraIcon,
     className,
     onSearch = () => {
@@ -34,6 +36,8 @@ const MySearch = (
   }) => {
 
   const [visible, setVisible] = useState();
+
+  const location = useLocation();
 
   const { data, refresh } = useRequest({
     ...historyList,
@@ -84,9 +88,9 @@ const MySearch = (
     return <Card
       title='历史记录'
       headerStyle={{ fontSize: 14, padding: '8px 0' }}
-      extra={<LinkButton onClick={() => {
+      extra={<MyRemoveButton onRemove={() => {
         deleteRun({ data: { formType: historyType } });
-      }}><DeleteOutline /></LinkButton>}
+      }} />}
       style={{ padding: 0 }}
       bodyStyle={{ padding: 0 }}
     >
@@ -107,6 +111,10 @@ const MySearch = (
       </MyAntList>
     </Card>;
   };
+
+  useEffect(() => {
+    setVisible(false);
+  }, [location]);
 
   const search = (value) => {
     historyType && run({ data: { record: value, formType: historyType } });

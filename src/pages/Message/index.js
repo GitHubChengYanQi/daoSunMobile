@@ -7,7 +7,7 @@ import style from './index.less';
 import { Avatar, Badge, Button, Popover, SwipeAction } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
 import KeepAlive from '../../components/KeepAlive';
-import { AlignLeftOutlined, CloseCircleOutlined, PushpinOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Message as MyMessage } from '../components/Message';
 import { MyLoading } from '../components/MyLoading';
 
