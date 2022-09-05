@@ -150,7 +150,10 @@ const StockDetail = (
         onSearch={(value) => {
           ref.current.submit({ skuName: value });
         }}
-        onChange={setSkuName}
+        onChange={(value)=>{
+          ref.current.submit({ skuName: value });
+          setSkuName(value);
+        }}
         value={skuName}
         onClear={() => {
           ref.current.submit({ skuName: null });
@@ -159,6 +162,7 @@ const StockDetail = (
     </div>
 
     <SkuList
+      debounceInterval={300}
       stock
       ref={ref}
       defaultParams={{ stockView: true, openPosition: true }}

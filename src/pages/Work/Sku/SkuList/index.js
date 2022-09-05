@@ -22,6 +22,7 @@ const SkuList = (
     },
     openBatch,
     batch,
+    debounceInterval,
     onChange = () => {
     },
   },
@@ -136,6 +137,7 @@ const SkuList = (
 
     <div ref={skuListRef} className={ToolUtil.classNames(style.skuList, skuClassName)}>
       <MyList
+        debounceInterval={debounceInterval}
         params={params}
         ref={listRef}
         api={skuList}

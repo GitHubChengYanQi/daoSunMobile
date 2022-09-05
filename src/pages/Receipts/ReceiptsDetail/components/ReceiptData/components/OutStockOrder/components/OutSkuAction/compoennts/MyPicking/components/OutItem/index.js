@@ -37,7 +37,7 @@ const OutItem = (
       <div className={style.sku}>
         <SkuItem
           skuResult={skuItem.skuResult}
-          extraWidth='58px'
+          extraWidth='100px'
           otherData={[skuItem.brandResult ? skuItem.brandResult.brandName : '任意品牌']}
         />
       </div>

@@ -22,7 +22,8 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import Icon from '../../../../../../../../components/Icon';
 import MyPositions from '../../../../../../../../components/MyPositions';
-import { listByUser } from '../../../../../../../../Work/Production/components/Url';
+import LinkButton from '../../../../../../../../components/LinkButton';
+import InSkuItem from '../../../InstockOrder/components/SkuAction/components/InSkuItem';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
@@ -47,6 +48,8 @@ const OutSkuAction = (
   const shopRef = useRef();
 
   const [data, setData] = useState([]);
+
+  const askData = order.detailResults || [];
 
   const [params, setParams] = useState({ pickListsId });
 
@@ -117,13 +120,19 @@ const OutSkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
+
+  const [showDetail, setShowDetail] = useState();
+
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       className={style.cardStyle}
       headerClassName={style.headerStyle}
       bodyClassName={style.bodyStyle}
       titleBom={<div className={style.skuTitle}>
-        <Title>申请明细</Title>
+        <Title>出库明细</Title>
+        <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+          setShowDetail(true);
+        }}>申请明细</LinkButton>
         <Icon
           type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
           onClick={() => {
@@ -281,6 +290,27 @@ const OutSkuAction = (
         }
       }}
     />
+
+    <MyAntPopup
+      title='出库申请'
+      onClose={() => {
+        setShowDetail(false);
+      }}
+      visible={showDetail}
+      destroyOnClose
+    >
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+        {askData.map((item, index) => {
+          return <OutSkuItem
+            ask
+            item={item}
+            index={index}
+            key={index}
+            dataLength={askData.length - 1}
+          />;
+        })}
+      </div>
+    </MyAntPopup>
 
     <MyPositions
       showPositionIds={order.positionIds}

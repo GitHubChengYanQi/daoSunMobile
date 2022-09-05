@@ -134,6 +134,7 @@ const SkuDetail = ({ id }) => {
           图片:
         </Label>
         <UploadFile
+          showImgs={detail.imgUrls}
           noDefault
           uploadId='imgUpload'
           files={detail.imgs}

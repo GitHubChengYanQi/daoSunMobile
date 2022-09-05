@@ -45,7 +45,7 @@ export const OutProgress = (
   </div>;
 };
 
-const OutSkuItem = ({ item, dataLength, index }) => {
+const OutSkuItem = ({ item, dataLength, index,ask }) => {
   const skuResult = item.skuResult || {};
 
   const received = item.received || 0;
@@ -69,7 +69,7 @@ const OutSkuItem = ({ item, dataLength, index }) => {
   }
 
   return <div className={style.out}>
-    <div className={ToolUtil.classNames(style.statusName, noAction && style.noStatusName)}>
+    <div hidden={ask} className={ToolUtil.classNames(style.statusName, noAction && style.noStatusName)}>
       {statusDom}
     </div>
     <div className={style.skuData}>
@@ -98,13 +98,13 @@ const OutSkuItem = ({ item, dataLength, index }) => {
           </div>
         </div>
       </div>
-      <OutProgress
+      {!ask && <OutProgress
         collectable={collectable}
         notPrepared={notPrepared}
         received={received}
         percent={percent}
         successPercent={successPercent}
-      />
+      />}
       <div hidden={index === dataLength} className={style.space} />
     </div>
 

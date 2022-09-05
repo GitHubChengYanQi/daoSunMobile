@@ -162,7 +162,7 @@ const SkuAction = (
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       titleBom={<div className={style.header}>
-        <Title>申请明细</Title>
+        <Title>入库明细</Title>
         <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
         }}>申请明细</LinkButton>

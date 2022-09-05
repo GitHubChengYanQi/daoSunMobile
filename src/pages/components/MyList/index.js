@@ -21,6 +21,7 @@ const MyList = (
     sorter: defaultSorter,
     noEmpty,
     manual,
+    debounceInterval,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -46,6 +47,7 @@ const MyList = (
       ...params,
     },
   }, {
+    debounceInterval,
     manual,
     response: true,
     onSuccess: (res) => {
