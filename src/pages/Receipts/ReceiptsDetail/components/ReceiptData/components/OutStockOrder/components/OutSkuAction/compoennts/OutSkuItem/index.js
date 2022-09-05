@@ -98,13 +98,13 @@ const OutSkuItem = ({ item, dataLength, index,ask }) => {
           </div>
         </div>
       </div>
-      {!ask && <OutProgress
+      <OutProgress
         collectable={collectable}
         notPrepared={notPrepared}
         received={received}
         percent={percent}
         successPercent={successPercent}
-      />}
+      />
       <div hidden={index === dataLength} className={style.space} />
     </div>
 

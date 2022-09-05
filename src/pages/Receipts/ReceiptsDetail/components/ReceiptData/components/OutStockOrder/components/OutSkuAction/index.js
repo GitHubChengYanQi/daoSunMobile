@@ -23,7 +23,6 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import Icon from '../../../../../../../../components/Icon';
 import MyPositions from '../../../../../../../../components/MyPositions';
 import LinkButton from '../../../../../../../../components/LinkButton';
-import InSkuItem from '../../../InstockOrder/components/SkuAction/components/InSkuItem';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
@@ -38,6 +37,7 @@ const OutSkuAction = (
     dimension = 'order',
     taskId,
     refresh: orderRefresh,
+    loading: orderLoading,
   },
 ) => {
 
@@ -55,47 +55,57 @@ const OutSkuAction = (
 
   const [countNumber, setCountNumber] = useState();
 
-  const { loading, run: getOutDetail, refresh } = useRequest({
+  const format = (list = [], countNumber = 0) => {
+    const actions = [];
+    const noAction = [];
+    const other = [];
+
+    list.map(item => {
+      let perpareNumber = 0;
+      ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
+
+      const received = Number(item.receivedNumber) || 0;
+      const collectable = Number(perpareNumber) || 0;
+      const notPrepared = Number(item.number - collectable - received) || 0;
+
+
+      if (item.number === received || item.number === (received + collectable) || !item.stockNumber) {
+        if (notPrepared > 0) {
+          other.push({ ...item, perpareNumber, received, collectable, notPrepared });
+        } else {
+          noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
+        }
+      } else {
+        actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
+      }
+      return countNumber += (item.number || 0);
+    });
+    return [
+      ...actions,
+      ...other.sort((a, b) => {
+        return a.notPrepared - b.notPrepared;
+      }),
+      ...noAction,
+    ];
+  };
+
+  const { loading, run: getOutDetail, refresh: detailRefresh } = useRequest({
     ...outDetailList,
     data: params,
   }, {
     onSuccess: (res) => {
-      const actions = [];
-      const noAction = [];
-      const other = [];
-
       let countNumber = 0;
 
-      ToolUtil.isArray(res).map(item => {
-        let perpareNumber = 0;
-        ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
-
-        const received = Number(item.receivedNumber) || 0;
-        const collectable = Number(perpareNumber) || 0;
-        const notPrepared = Number(item.number - collectable - received) || 0;
-
-
-        if (item.number === received || item.number === (received + collectable) || !item.stockNumber) {
-          if (notPrepared > 0) {
-            other.push({ ...item, perpareNumber, received, collectable, notPrepared });
-          } else {
-            noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
-          }
-        } else {
-          actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
-        }
-        return countNumber += (item.number || 0);
-      });
+      const newData = format(ToolUtil.isArray(res), countNumber);
       setCountNumber(countNumber);
-      setData([
-        ...actions,
-        ...other.sort((a, b) => {
-          return a.notPrepared - b.notPrepared;
-        }),
-        ...noAction,
-      ]);
+      setData(newData);
     },
   });
+
+  const refresh = () => {
+    orderRefresh();
+    detailRefresh();
+  };
 
   const [visible, setVisible] = useState();
 
@@ -142,8 +152,8 @@ const OutSkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
-      <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
-        {data.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
+      <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading || orderLoading}>
+        {data.length === 0 && <MyEmpty description={`物料全部出库完成`} />}
         {
           data.map((item, index) => {
 
@@ -278,7 +288,6 @@ const OutSkuAction = (
           case 'close':
             if (success) {
               refresh();
-              orderRefresh();
             }
             setCode('');
             return;
@@ -300,7 +309,7 @@ const OutSkuAction = (
       destroyOnClose
     >
       <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
-        {askData.map((item, index) => {
+        {format(askData).map((item, index) => {
           return <OutSkuItem
             ask
             item={item}
