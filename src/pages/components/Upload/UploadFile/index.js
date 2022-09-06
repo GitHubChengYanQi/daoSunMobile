@@ -30,7 +30,6 @@ const UploadFile = (
     refresh,
     max,
     noDefault,
-    showImgs = [],
   }, ref,
 ) => {
 
@@ -52,7 +51,7 @@ const UploadFile = (
 
   const [loading, setLoading] = useState();
 
-  const imgs = files.filter(item => item.type !== 'other').map(item => item.url);
+  const imgs = files.filter(item => item.type !== 'other').map(item => (item.showUrl || item.url));
 
   const [currentImg, setCurrentImg] = useState(null);
 
@@ -160,11 +159,7 @@ const UploadFile = (
                   if (!ToolUtil.isQiyeWeixin()) {
                     return setCurrentImg(index);
                   }
-                  if (showImgs.length > 0) {
-                    previewImage(showImgs[index], imgUrls);
-                  } else {
-                    previewImage(item.url, imgs);
-                  }
+                  previewImage(item.showUrl || item.url, imgs);
                 }} src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
                   const newFile = files.map((currentItem, currentIndex) => {
                     if (currentIndex === index) {
@@ -234,7 +229,7 @@ const UploadFile = (
     />
 
     <ImageViewer.Multi
-      images={showImgs.length > 0 ? showImgs : imgs}
+      images={imgs}
       visible={currentImg !== null}
       defaultIndex={currentImg}
       onClose={() => {

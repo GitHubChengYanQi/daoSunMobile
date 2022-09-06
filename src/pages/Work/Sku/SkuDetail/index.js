@@ -27,13 +27,13 @@ const SkuDetail = ({ id }) => {
     manual: true,
     onSuccess: (res) => {
       const detail = res || {};
-      const imgs = detail.images ? ToolUtil.isArray(detail.images.split(',')).map((item, index) => {
-        const url = ToolUtil.isArray(detail.imgThumbUrls)[index];
+      const imgs = ToolUtil.isArray(detail.imgResults).map((item) => {
         return {
-          url,
-          mediaId: item,
+          showUrl: item.url,
+          url: item.thumbUrl,
+          mediaId: item.mediaId,
         };
-      }) : [];
+      });
 
       const files = detail.fileId ? ToolUtil.isArray(detail.fileId.split(',')).map((item, index) => {
         const url = ToolUtil.isArray(detail.filedUrls)[index];
@@ -134,7 +134,6 @@ const SkuDetail = ({ id }) => {
           图片:
         </Label>
         <UploadFile
-          showImgs={detail.imgUrls}
           noDefault
           uploadId='imgUpload'
           files={detail.imgs}
