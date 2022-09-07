@@ -4,7 +4,7 @@ import style from './index.less';
 import MyList from '../../components/MyList';
 import OutStockItem from '../Stock/Task/components/OutStockTask/components/OutStockItem';
 import { ReceiptsEnums } from '../../Receipts';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 
 const list = { url: '/productionPickLists/selfPickTasks', method: 'POST' };
 
@@ -27,7 +27,9 @@ const MyPicking = () => {
     >
       {
         data.map((item, index) => {
-          return <div key={index}>
+          return <div key={index} onClick={()=>{
+            history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
+          }}>
             <OutStockItem pick item={item} index={index} />
           </div>;
         })

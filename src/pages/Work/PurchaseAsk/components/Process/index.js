@@ -195,7 +195,7 @@ const Process = (
             {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
           </div>
         </div>
-        {logRemark && stepsStatus && <Space align='center' wrap>
+        {logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>
           {logRemark.content}
           <UploadFile imgSize={14} show files={imgs} />
         </Space>}
@@ -209,40 +209,50 @@ const Process = (
     const rules = ToolUtil.isObject(step.auditRule).rules || [];
 
     if (rules.length > 0) {
-      rules.map((items) => {
-        switch (items.type) {
-          case 'AppointUsers':
-            items.appointUsers && items.appointUsers.map((itemuser) => {
-              return users.push({
-                name: itemuser.title,
-                avatar: itemuser.avatar,
-                auditStatus: status || itemuser.auditStatus,
-              });
+      rules.forEach((items) => {
+        const appointUsers = items.appointUsers || [];
+        if (appointUsers.length > 0) {
+          appointUsers.map((itemuser) => {
+            return users.push({
+              name: itemuser.title,
+              avatar: itemuser.avatar,
+              auditStatus: status || itemuser.auditStatus,
             });
-            break;
-          case 'DeptPositions':
-            items.deptPositions && items.deptPositions.map((itemdept) => {
-              return users.push({
-                name: `${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
-                  return items.label;
-                })})`,
-                auditStatus: status,
+          });
+        } else {
+          switch (items.type) {
+            case 'AppointUsers':
+              appointUsers.map((itemuser) => {
+                return users.push({
+                  name: itemuser.title,
+                  avatar: itemuser.avatar,
+                  auditStatus: status || itemuser.auditStatus,
+                });
               });
-            });
-            break;
-          case 'AllPeople':
-            users.push({ name: '所有人', auditStatus: status || 99 });
-            break;
-          case 'MasterDocumentPromoter':
-            users.push({ name: '主单据发起人', auditStatus: status });
-            break;
-          case 'Director':
-            users.push({ name: '单据负责人', auditStatus: status });
-            break;
-          default:
-            break;
+              break;
+            case 'DeptPositions':
+              items.deptPositions && items.deptPositions.map((itemdept) => {
+                return users.push({
+                  name: `${itemdept.title}(${itemdept.positions && itemdept.positions.map((items) => {
+                    return items.label;
+                  })})`,
+                  auditStatus: status,
+                });
+              });
+              break;
+            case 'AllPeople':
+              users.push({ name: '所有人', auditStatus: status || 99 });
+              break;
+            case 'MasterDocumentPromoter':
+              users.push({ name: '主单据发起人', auditStatus: status });
+              break;
+            case 'Director':
+              users.push({ name: '单据负责人', auditStatus: status });
+              break;
+            default:
+              break;
+          }
         }
-        return null;
       });
       return <div className={style.users}>
         {auditUsers(users, step)}
