@@ -18,15 +18,6 @@ const ReportSwiper = (
 
   const userChart = props.data && props.data.userChart || [];
 
-  const defaultChart = [
-    { code: 'Stock', name: '库存统计', sort: 0 },
-    { code: 'ErrorSku', name: '异常分析', sort: 1 },
-    { code: 'InventoryRotation', name: '在库天数', sort: 2 },
-    { code: 'OrderStatisicalChart', name: '单据统计', sort: 3 },
-    { code: 'MaterialAnalysis', name: '物料分析', sort: 4 },
-    { code: 'TaskStatisicalChart', name: '任务统计', sort: 5 },
-  ];
-
   useEffect(() => {
     if (userChart.length === 0) {
       props.dispatch({ type: 'data/getUserChar' });
@@ -34,16 +25,16 @@ const ReportSwiper = (
   }, []);
 
   useEffect(() => {
-    titleChange(userChart.length === 0 ? defaultChart[0].name : userChart[0].name);
+    titleChange(userChart[0].name);
   }, [userChart.length]);
 
   return <>
     <Swiper loop autoplay onIndexChange={(index) => {
-      const charts = (userChart.length === 0 ? defaultChart : userChart);
+      const charts = (userChart);
       titleChange(charts[index].name);
     }}>
       {
-        (userChart.length === 0 ? defaultChart : userChart).map((item, index) => {
+        userChart.map((item, index) => {
           switch (item.code) {
             case 'Stock':
               return <Swiper.Item key={index}>

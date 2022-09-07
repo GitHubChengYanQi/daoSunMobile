@@ -41,6 +41,10 @@ const StatisticalChart = ({ ...props }) => {
         }else {
           details = details.filter(item=>item.code !== code);
         }
+        if (details.length === 0){
+          Message.toast('最少保留一个图表！')
+          return;
+        }
         addRun({
           data: { details:details.map((item,index)=>({...item,sort:index})), type: 1 },
         });
