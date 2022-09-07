@@ -163,6 +163,8 @@ const back = (
     onBack = () => {
     },
     disabled,
+    onOk = () => {
+    },
   }) => {
 
   const winHistory = window.history || {};
@@ -171,7 +173,7 @@ const back = (
   const url = '#' + history.location.pathname + '?' + search;
   if (!disabled) {
     winHistory.replaceState({ key }, title, url);
-    winHistory.pushState({ title:key }, title, url);
+    winHistory.pushState({ title: key }, title, url);
   }
 
   window.onpopstate = (event) => {
@@ -186,11 +188,12 @@ const back = (
         only: false,
         content: title || '是否退出当前页面？',
         onConfirm: () => {
+          onOk();
           history.goBack();
         },
         onCancel: () => {
           winHistory.replaceState({ key }, title, url);
-          winHistory.pushState({ title:key }, title, url);
+          winHistory.pushState({ title: key }, title, url);
         },
       });
     }
@@ -199,8 +202,8 @@ const back = (
 
 // 最大显示宽度
 const viewWidth = () => {
-  return window.innerWidth > 640 ? 640 : window.innerWidth
-}
+  return window.innerWidth > 640 ? 640 : window.innerWidth;
+};
 
 export const ToolUtil = {
   queryString,

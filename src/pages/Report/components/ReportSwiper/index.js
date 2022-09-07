@@ -25,7 +25,7 @@ const ReportSwiper = (
   }, []);
 
   useEffect(() => {
-    titleChange(userChart[0].name);
+    titleChange(userChart[0] && userChart[0].name);
   }, [userChart.length]);
 
   return <>

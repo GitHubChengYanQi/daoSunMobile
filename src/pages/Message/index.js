@@ -25,7 +25,7 @@ const MessageList = () => {
 
   const [data, setData] = useState([]);
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState({ view: null });
 
   const listRef = useRef();
 
@@ -87,11 +87,14 @@ const MessageList = () => {
     <div className={style.screen}>
       <div className={style.status}>
         <Button
+          className={params.view !== null ? style.default : style.checked}
+          onClick={() => submit({ view: null })}>全部</Button>
+        <Button
           className={params.view !== 1 ? style.default : style.checked}
-          onClick={() => submit({ view: 1 })}>查看已读</Button>
+          onClick={() => submit({ view: 1 })}>已读</Button>
         <Button
           className={params.view !== 0 ? style.default : style.checked}
-          onClick={() => submit({ view: 0 })}>查看未读</Button>
+          onClick={() => submit({ view: 0 })}>未读</Button>
       </div>
       <Popover.Menu
         actions={actions}
@@ -194,7 +197,7 @@ const MessageList = () => {
                     {item.content}
                   </div>
                 </div>
-                <div className={ToolUtil.classNames(style.flexCenter, style.fontColor,style.time)}>
+                <div className={ToolUtil.classNames(style.flexCenter, style.fontColor, style.time)}>
                   {ToolUtil.timeDifference(item.time)}
                   <RightOutline style={{ marginLeft: 8 }} />
                 </div>
