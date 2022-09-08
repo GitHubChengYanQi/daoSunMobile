@@ -21,7 +21,7 @@ const MyList = (
     sorter: defaultSorter,
     noEmpty,
     manual,
-    debounceInterval,
+    options = {},
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -47,7 +47,7 @@ const MyList = (
       ...params,
     },
   }, {
-    debounceInterval,
+    ...options,
     manual,
     response: true,
     onSuccess: (res) => {
@@ -167,7 +167,7 @@ const MyList = (
       className={style.top}
     >
       <VerticalAlignTopOutlined style={{ fontSize: 24 }} onClick={() => {
-        submit(params,sorter);
+        submit(params, sorter);
       }} />
     </FloatingBubble>}
   </div>;

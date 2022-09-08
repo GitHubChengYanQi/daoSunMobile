@@ -18,6 +18,7 @@ import UploadFile from '../../../../../../components/Upload/UploadFile';
 import Icon from '../../../../../../components/Icon';
 import { useModel } from 'umi';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import MyProgress from '../../../../../../components/MyProgress';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -48,7 +49,8 @@ const Stocktaking = (
     getAction = () => {
       return {};
     },
-    afertShow=()=>{}
+    afertShow = () => {
+    },
   },
 ) => {
 
@@ -86,7 +88,7 @@ const Stocktaking = (
       {(data.length === 1 && data[0].type === 'all') ?
         <div style={{ padding: 8 }}>
           <ErrorBlock
-            style={{'--image-height':'50px'}}
+            style={{ '--image-height': '50px' }}
             status='empty'
             title='全局盘点'
             image={<Icon type='icon-pandian1' style={{ fontSize: 50 }} />}
@@ -152,12 +154,21 @@ const Stocktaking = (
         },
       });
     }}>
-      <TaskItem
-        percent={parseInt((receipts.handle / receipts.total) * 100)}
-        skuSize={receipts.skuSize}
-        positionSize={receipts.positionSize}
-        noBorder
-      />
+      <div className={style.dateShow}>
+        <div className={style.show}>
+          <Icon type='icon-pandianwuliao' />
+          <div className={style.showNumber}>
+            <span>涉及  <span className={style.number}>{receipts.skuSize}</span> 类物料</span>
+          </div>
+        </div>
+        <div className={style.show}>
+          <Icon type='icon-pandiankuwei1' />
+          <div className={style.showNumber}>
+            <span>涉及 <span className={style.number}>{receipts.positionSize}</span> 个库位</span>
+          </div>
+        </div>
+      </div>
+      <MyProgress percent={parseInt((receipts.handle / receipts.total) * 100)} />
     </MyCard>
 
     <MyCard title='任务时间' extra={<div>

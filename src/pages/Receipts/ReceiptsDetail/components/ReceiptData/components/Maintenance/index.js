@@ -19,6 +19,8 @@ import { SkuResultSkuJsons } from '../../../../../../Scan/Sku/components/SkuResu
 import { useModel } from 'umi';
 import { nowInDateBetwen } from '../Stocktaking';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import Icon from '../../../../../../components/Icon';
+import MyProgress from '../../../../../../components/MyProgress';
 
 const Maintenance = (
   {
@@ -27,7 +29,8 @@ const Maintenance = (
     getAction = () => {
       return {};
     },
-    afertShow=()=>{},
+    afertShow = () => {
+    },
     loading,
   },
 ) => {
@@ -134,12 +137,21 @@ const Maintenance = (
         },
       });
     }}>
-      <TaskItem
-        percent={parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100)}
-        skuSize={receipts.skuCount}
-        positionSize={receipts.positionCount}
-        noBorder
-      />
+      <div className={style.dateShow}>
+        <div className={style.show}>
+          <Icon type='icon-pandianwuliao' />
+          <div className={style.showNumber}>
+            <span>涉及  <span className={style.number}>{receipts.skuCount}</span> 类物料</span>
+          </div>
+        </div>
+        <div className={style.show}>
+          <Icon type='icon-pandiankuwei1' />
+          <div className={style.showNumber}>
+            <span>涉及 <span className={style.number}>{receipts.positionCount}</span> 个库位</span>
+          </div>
+        </div>
+      </div>
+      <MyProgress percent={parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100)} />
     </MyCard>
 
     <MyCard title='负责人' extra={<UserName user={receipts.userResult} />} />

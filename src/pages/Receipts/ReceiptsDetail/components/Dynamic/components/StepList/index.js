@@ -55,16 +55,20 @@ const StepList = (
 
         const replys = item.childrens || [];
 
-        const user = ToolUtil.isObject(item.user);
+        const user = ToolUtil.isObject(item.user || item.userResult);
 
         const imgs = item.photoId ? item.photoId.split(',').map(item => {
           return { url: item };
         }) : [];
 
-        return <div key={index} className={ToolUtil.classNames(style.dynamic,className)} style={{ borderTop: index === 0 && 'none' }}>
+        return <div
+          key={index}
+          className={ToolUtil.classNames(style.dynamic, className)}
+          style={{ borderTop: index === 0 && 'none' }}
+        >
 
           <div className={style.avatar}>
-            <Avatar src={user.avatar} style={{'--size':'32px'}} />
+            <Avatar src={user.avatar} style={{ '--size': '32px' }} />
           </div>
 
           <div>

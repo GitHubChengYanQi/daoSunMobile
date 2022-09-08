@@ -11,8 +11,20 @@ const ErrorItem = (
 
   const receipts = item.receipts || {};
 
+  const percent = parseInt((receipts.handle / receipts.total) * 100);
+
+  const statusName = () => {
+    if (percent === 100) {
+      return <>已完成</>;
+    } else {
+      return <>可处理</>;
+    }
+  };
+
   return <TaskItem
-    percent={parseInt((receipts.handle / receipts.total) * 100)}
+    percent={percent}
+    statusName={statusName()}
+    action
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}

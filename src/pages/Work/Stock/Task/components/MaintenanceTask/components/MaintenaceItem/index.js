@@ -14,8 +14,20 @@ const MaintenaceItem = (
 
   const receipts = item.receipts || {};
 
+  const percent = parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100);
+
+  const statusName = () => {
+    if (percent === 100) {
+      return <>已完成</>;
+    } else {
+      return <>可养护</>;
+    }
+  };
+
   return <TaskItem
-    percent={parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100)}
+    statusName={statusName()}
+    action
+    percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
@@ -24,7 +36,7 @@ const MaintenaceItem = (
     skuSize={receipts.skuCount}
     positionSize={receipts.positionCount}
     beginTime={receipts.startTime}
-    onClick={()=>onClick(item)}
+    onClick={() => onClick(item)}
     otherData={
       <div className={style.orderData}>
         <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name}</div>

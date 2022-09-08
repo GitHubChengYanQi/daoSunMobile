@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2837038 */
-  src: url('iconfont.woff2?t=1661471852494') format('woff2'),
-       url('iconfont.woff?t=1661471852494') format('woff'),
-       url('iconfont.ttf?t=1661471852494') format('truetype');
+  src: url('iconfont.woff2?t=1662604093519') format('woff2'),
+       url('iconfont.woff?t=1662604093519') format('woff'),
+       url('iconfont.ttf?t=1662604093519') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-a-zu1:before {
+  content: "\e6cd";
+}
+
+.icon-a-zu1-copy:before {
+  content: "\ec1f";
 }
 
 .icon-pandiankuwei1:before {

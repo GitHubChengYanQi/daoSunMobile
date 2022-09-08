@@ -23,6 +23,7 @@ const SkuItem = (
     more,
     moreDom,
     noView,
+    oneRow,
     moreClick = () => {
     },
   }) => {
@@ -66,7 +67,7 @@ const SkuItem = (
         <MyEllipsis width='100%'>
           {title || SkuResultSkuJsons({ skuResult, spu: true })}
         </MyEllipsis>
-        <div className={style.describe}>
+        <div hidden={oneRow} className={style.describe}>
           <MyEllipsis width='100%'>
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>

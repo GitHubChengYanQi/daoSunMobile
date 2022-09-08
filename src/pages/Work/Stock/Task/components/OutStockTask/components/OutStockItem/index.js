@@ -35,7 +35,7 @@ const OutStockItem = (
 
   return <TaskItem
     statusName={statusName()}
-    statusNameClassName={(can && percent !== 100) ? style.backBlue : style.backEee}
+    action={(can && percent !== 100)}
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}

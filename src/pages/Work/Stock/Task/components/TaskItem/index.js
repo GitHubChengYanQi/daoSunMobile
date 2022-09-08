@@ -1,10 +1,11 @@
 import React from 'react';
 import style from './index.less';
-import { RightOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
+import SkuItem from '../../../../Sku/SkuItem';
+import { SkuResultSkuJsons } from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const TaskItem = (
   {
@@ -18,14 +19,14 @@ const TaskItem = (
     onClick = () => {
     },
     index,
-    otherData,
     percent = 0,
     noSku,
     noPosition,
     noProgress,
     statusName,
-    statusNameClassName,
-    noBorder,
+    action,
+    users,
+    userLabel,
   },
 ) => {
 
@@ -44,22 +45,15 @@ const TaskItem = (
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
-    <div className={style.data} hidden={!taskName}>
-      <div className={style.taskData}>
-        <div className={style.name}>
-          <span className={style.title}>{taskName} {coding && '/'}{coding}</span>
-          <RightOutline style={{ color: '#B9B9B9' }} />
-        </div>
-      </div>
-      <div className={style.status} style={{ color: '#808080', width: 130, textAlign: 'right' }}>
-        {MyDate.Show(createTime)}
-      </div>
+    <div className={style.title}>
+      {taskName} {coding && '/'} {coding}
     </div>
     <div className={style.content}>
       <div className={style.orderData}>
-        <div hidden={noSku} className={style.dateShow} style={{ border: noBorder && 'none' }}>
-          <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, statusNameClassName)}>
-            {statusName}
+        <div hidden={noSku} className={style.dateShow}>
+          <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, action && style.action)}>
+            <div style={{zIndex:1}}>{statusName}</div>
+            <div className={style.svg}><Icon type='icon-a-zu1' /></div>
           </div>
           <div className={style.show}>
             <Icon type='icon-pandianwuliao' />
@@ -67,32 +61,70 @@ const TaskItem = (
               <span>涉及  <span className={style.number}>{skuSize}</span> 类物料</span>
             </div>
           </div>
-          <div hidden={noPosition} className={style.show} style={{ borderLeft: !noBorder && 'solid 1px #F5F5F5' }}>
+          <div hidden={noPosition} className={style.show}>
             <Icon type='icon-pandiankuwei1' />
             <div className={style.showNumber}>
               <span>涉及 <span className={style.number}>{positionSize}</span> 个库位</span>
             </div>
           </div>
-
         </div>
-        {otherData}
-      </div>
+        <div className={style.taskContent}>
+          <div className={style.skus}>
+            <SkuItem
+              extraWidth='64px'
+              className={style.sku}
+              imgSize={24}
+              hiddenNumber
+              oneRow
+              title={SkuResultSkuJsons({
+                skuResult: {
+                  specifications: '2*700mm黑色内螺',
+                  skuName: '黑色内口冷却管',
+                  spuResult: { name: ' lqg-700' },
+                },
+              })} />
+            <SkuItem
+              extraWidth='64px'
+              className={style.sku}
+              imgSize={24}
+              hiddenNumber
+              oneRow
+              title={SkuResultSkuJsons({
+                skuResult: {
+                  specifications: '2*700mm黑色内螺',
+                  skuName: '黑色内口冷却管',
+                  spuResult: { name: ' lqg-700qweqweqweqweqw' },
+                },
+              })} />
+          </div>
+          <div
+            id='scale'
+            hidden={!beginTime}
+            className={style.timeBar}
+          >
+            {
+              scaleItems.map((item, index) => {
+                return <div key={index}
+                            className={ToolUtil.classNames(style.scale, index < overScale && style.over)} />;
+              })
+            }
+          </div>
+        </div>
 
-      <div
-        id='scale'
-        hidden={!beginTime}
-        className={style.timeBar}
-      >
-        {
-          scaleItems.map((item, index) => {
-            return <div key={index} className={ToolUtil.classNames(style.scale, index < overScale && style.over)} />;
-          })
-        }
+        <div className={style.progress}>
+          <MyProgress hidden={noProgress} percent={percent} />
+        </div>
+        <div className={style.taskData}>
+          <div className={style.user}>
+            {userLabel || '执行人'}：{users}
+          </div>
+          <div className={style.status} style={{ color: '#808080', width: 130, textAlign: 'right' }}>
+            {MyDate.Show(createTime)}
+          </div>
+        </div>
       </div>
     </div>
-    <div className={style.progress}>
-      <MyProgress hidden={noProgress} percent={percent} />
-    </div>
+
   </div>;
 };
 

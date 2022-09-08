@@ -567,3 +567,34 @@
   overflow: auto;
 }
 
+.dateShow {
+  display: flex;
+  border-bottom: solid 1px #F5F5F5;
+
+  .show {
+    flex-grow: 1;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .showNumber {
+      display: flex;
+      flex-direction: column;
+      padding-left: 16px;
+
+      .number {
+        font-size: 18px;
+        margin: 0 4px;
+        color: var(--adm-color-primary);
+      }
+    }
+
+    svg {
+      font-size: 26px;
+      color: var(--body--background--color);
+    }
+  }
+}
+
+

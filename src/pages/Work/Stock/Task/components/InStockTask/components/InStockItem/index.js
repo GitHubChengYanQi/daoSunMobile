@@ -1,9 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
-import { Space } from 'antd-mobile';
-import { UserOutline } from 'antd-mobile-icons';
 
 const InStockItem = (
   {
@@ -19,16 +16,16 @@ const InStockItem = (
 
   const statusName = () => {
     if (percent === 100) {
-      return <>已 <br />完 <br />成</>;
+      return <>已完成</>;
     } else {
-      return <>可 <br />入 <br />库</>;
+      return <>可入库</>;
     }
   };
 
   return <TaskItem
     statusName={statusName()}
-    statusNameClassName={(receipts.canPut && percent !== 100) ? style.backBlue : style.backEee}
     percent={percent}
+    action={(receipts.canPut && percent !== 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
@@ -38,19 +35,7 @@ const InStockItem = (
     positionSize={receipts.positionNum}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
-    otherData={
-      <div className={style.orderData}>
-        <div className={style.user}>
-          <Space align='center'>
-            <UserOutline />
-            <div>
-              <span>执行人：</span>
-              {ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
-            </div>
-          </Space>
-        </div>
-      </div>
-    }
+    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
   />;
 };
 

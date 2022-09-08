@@ -1,6 +1,5 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import style from './index.less';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const StocktakingItem = (
@@ -9,27 +8,37 @@ const StocktakingItem = (
     index,
     onClick = () => {
     },
-  }
+  },
 ) => {
 
   const receipts = item.receipts;
 
+  const percent = parseInt((receipts.handle / receipts.total) * 100);
+
+  const statusName = () => {
+    if (percent === 100) {
+      return <>已完成</>;
+    } else {
+      return <>可盘点</>;
+    }
+  };
+
   return <>
     <TaskItem
-      percent={parseInt((receipts.handle / receipts.total) * 100)}
+      percent={percent}
       coding={receipts.coding}
       endTime={receipts.endTime}
       createTime={item.createTime}
       taskName={item.taskName}
+      statusName={statusName()}
+      action
       index={index}
       skuSize={receipts.skuSize}
       positionSize={receipts.positionSize}
       beginTime={receipts.beginTime}
-      onClick={()=>onClick(item)}
-      otherData={
-        <div className={style.orderData}>
-          <div className={style.user}>负责人：{ToolUtil.isObject(receipts.user).name}</div>
-        </div>}
+      onClick={() => onClick(item)}
+      userLabel='负责人'
+      users={ToolUtil.isObject(receipts.user).name}
     />
   </>;
 };

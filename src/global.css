@@ -3,6 +3,7 @@ html, body, #root {
   max-width: 640px;
   overflow: hidden;
   margin: auto;
+
 }
 
 #root {
@@ -11,6 +12,7 @@ html, body, #root {
   margin: auto;
   background-color: #E1EBF6;
 }
+
 
 body {
   margin: 0;

@@ -185,7 +185,6 @@ const AllocationAsk = ({ createType }) => {
     return <MyEmpty description='暂无仓库' />;
   }
 
-  console.log(data);
   const submit = () => {
     const skuAndNumbers = [];
     const storehouseAndPositions = [];
@@ -247,6 +246,7 @@ const AllocationAsk = ({ createType }) => {
                     storehousePositionsId: positionItem.id,
                     storehouseId: storeItem.id,
                     number: brandItem.number,
+                    haveBrand: brandItem.brandId !== undefined ? 1 : 0,
                   });
                 }
               });
@@ -261,6 +261,7 @@ const AllocationAsk = ({ createType }) => {
                   // storehousePositionsId: positionItem.id,
                   storehouseId: storeItem.id,
                   number: brandItem.number,
+                  haveBrand: brandItem.brandId !== undefined ? 1 : 0,
                 });
               }
             });

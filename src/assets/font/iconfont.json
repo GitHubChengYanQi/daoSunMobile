@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31721114",
+      "name": "书签背景",
+      "font_class": "a-zu1",
+      "unicode": "e6cd",
+      "unicode_decimal": 59085
+    },
+    {
+      "icon_id": "31725196",
+      "name": "书签背景-copy",
+      "font_class": "a-zu1-copy",
+      "unicode": "ec1f",
+      "unicode_decimal": 60447
+    },
+    {
       "icon_id": "31476183",
       "name": "盘点库位",
       "font_class": "pandiankuwei1",
