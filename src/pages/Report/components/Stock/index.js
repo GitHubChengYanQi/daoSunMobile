@@ -47,7 +47,10 @@ const Stock = (
     }
   }}>
     <div className={style.flexGap}>
-      <div className={style.row}>全部库存
+      <div>
+        全部库存
+      </div>
+      <div className={style.row} style={{padding:8}}>
         <span className='numberBlue' style={{ fontSize: 16 }}>{getData('skuNumber').number}</span>类
         <span className='numberBlue' style={{ fontSize: 16 }}>{getData('stockCount').number}</span> 件
       </div>

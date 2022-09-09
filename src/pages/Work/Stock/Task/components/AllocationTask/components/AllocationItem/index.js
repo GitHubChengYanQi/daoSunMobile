@@ -26,6 +26,7 @@ const AllocationItem = (
     percent={percent}
     statusName={statusName()}
     action
+    skus={receipts.skuResults}
     coding={receipts.coding}
     createTime={item.createTime}
     taskName={item.taskName}

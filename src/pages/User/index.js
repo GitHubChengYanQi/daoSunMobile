@@ -12,6 +12,7 @@ import MyCard from '../components/MyCard';
 import { ToolUtil } from '../components/ToolUtil';
 import MyEmpty from '../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
+import { dynamicList } from '../Receipts/ReceiptsDetail/components/Dynamic';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
@@ -114,8 +115,8 @@ const User = ({ userId }) => {
         headerClassName={style.dynamicHeader}
       >
         <MyList
-          api={userId ? userDynamic : selfDynamic}
-          params={{ userId }}
+          api={dynamicList}
+          params={{ userId: userId || userInfo.id }}
           data={dynamicData}
           getData={setDynamicData}
         >

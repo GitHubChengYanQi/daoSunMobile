@@ -31,6 +31,7 @@ const InStockItem = (
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
+    skus={ToolUtil.isArray(receipts.instockListResults).filter((item,index)=>index < 2)}
     skuSize={receipts.skuNum}
     positionSize={receipts.positionNum}
     beginTime={receipts.beginTime}

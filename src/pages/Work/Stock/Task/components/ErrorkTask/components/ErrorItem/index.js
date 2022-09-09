@@ -1,5 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
+import { ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ErrorItem = (
   {
@@ -25,6 +26,7 @@ const ErrorItem = (
     percent={percent}
     statusName={statusName()}
     action
+    skus={ToolUtil.isArray(receipts.anomalyResults).filter((item, index) => index < 2)}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
@@ -33,7 +35,7 @@ const ErrorItem = (
     positionSize={receipts.positionNum}
     skuSize={receipts.skuNumber}
     beginTime={receipts.beginTime}
-    onClick={()=>onClick(item)}
+    onClick={() => onClick(item)}
   />;
 };
 

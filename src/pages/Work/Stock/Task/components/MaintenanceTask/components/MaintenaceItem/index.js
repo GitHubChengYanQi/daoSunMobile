@@ -29,6 +29,7 @@ const MaintenaceItem = (
     action
     percent={percent}
     coding={receipts.coding}
+    skus={receipts.skuResults}
     endTime={receipts.endTime}
     createTime={item.createTime}
     taskName={item.taskName}

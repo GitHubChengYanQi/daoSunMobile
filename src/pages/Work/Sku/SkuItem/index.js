@@ -44,6 +44,7 @@ const SkuItem = (
     }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
   };
+
   const getStockNumber = () => {
     const stockNumber = (skuResult.stockNumber || 0) - (skuResult.lockStockDetailNumber || 0);
     return typeof number === 'number' ? number : stockNumber;
@@ -65,7 +66,7 @@ const SkuItem = (
         style={{ maxWidth: `calc(${ToolUtil.viewWidth()}px - ${imgSize}px - 13px - ${extraWidth})` }}
       >
         <MyEllipsis width='100%'>
-          {title || SkuResultSkuJsons({ skuResult, spu: true })}
+          {title || SkuResultSkuJsons({ skuResult, spu: !oneRow })}
         </MyEllipsis>
         <div hidden={oneRow} className={style.describe}>
           <MyEllipsis width='100%'>

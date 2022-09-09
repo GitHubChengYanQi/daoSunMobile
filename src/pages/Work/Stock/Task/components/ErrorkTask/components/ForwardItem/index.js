@@ -43,6 +43,7 @@ const ForwardItem = (
     statusName={statusName()}
     percent={percent}
     action
+    skus={[receipts]}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}

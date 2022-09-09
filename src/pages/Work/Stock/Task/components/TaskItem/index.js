@@ -5,7 +5,6 @@ import Icon from '../../../../../components/Icon';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
-import { SkuResultSkuJsons } from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const TaskItem = (
   {
@@ -18,6 +17,7 @@ const TaskItem = (
     skuSize = 0,
     onClick = () => {
     },
+    skus = [],
     index,
     percent = 0,
     noSku,
@@ -52,7 +52,7 @@ const TaskItem = (
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
           <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, action && style.action)}>
-            <div style={{zIndex:1}}>{statusName}</div>
+            <div style={{ zIndex: 1 }}>{statusName}</div>
             <div className={style.svg}><Icon type='icon-a-zu1' /></div>
           </div>
           <div className={style.show}>
@@ -68,34 +68,21 @@ const TaskItem = (
             </div>
           </div>
         </div>
-        <div className={style.taskContent}>
+        <div className={style.taskContent} hidden={skus.length === 0}>
           <div className={style.skus}>
-            <SkuItem
-              extraWidth='64px'
-              className={style.sku}
-              imgSize={24}
-              hiddenNumber
-              oneRow
-              title={SkuResultSkuJsons({
-                skuResult: {
-                  specifications: '2*700mm黑色内螺',
-                  skuName: '黑色内口冷却管',
-                  spuResult: { name: ' lqg-700' },
-                },
-              })} />
-            <SkuItem
-              extraWidth='64px'
-              className={style.sku}
-              imgSize={24}
-              hiddenNumber
-              oneRow
-              title={SkuResultSkuJsons({
-                skuResult: {
-                  specifications: '2*700mm黑色内螺',
-                  skuName: '黑色内口冷却管',
-                  spuResult: { name: ' lqg-700qweqweqweqweqw' },
-                },
-              })} />
+            {
+              skus.map((item, index) => {
+                return <SkuItem
+                  key={index}
+                  extraWidth='64px'
+                  className={style.sku}
+                  imgSize={24}
+                  hiddenNumber
+                  oneRow
+                  skuResult={item.skuResult || item}
+                />;
+              })
+            }
           </div>
           <div
             id='scale'
@@ -104,8 +91,9 @@ const TaskItem = (
           >
             {
               scaleItems.map((item, index) => {
-                return <div key={index}
-                            className={ToolUtil.classNames(style.scale, index < overScale && style.over)} />;
+                return <div
+                  key={index}
+                  className={ToolUtil.classNames(style.scale, index < overScale && style.over)} />;
               })
             }
           </div>

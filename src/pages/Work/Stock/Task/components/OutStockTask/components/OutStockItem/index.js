@@ -25,11 +25,11 @@ const OutStockItem = (
 
   const statusName = () => {
     if (percent === 100) {
-      return <>已 <br />完 <br />成</>;
+      return <>已完成</>;
     } else if (pick || canOperate === undefined) {
-      return <>可 <br />领 <br />料</>;
+      return <>可领料</>;
     } else {
-      return <>可 <br />备 <br />料</>;
+      return <>可备料</>;
     }
   };
 
@@ -39,6 +39,7 @@ const OutStockItem = (
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
+    skus={receipts.skuResults}
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
