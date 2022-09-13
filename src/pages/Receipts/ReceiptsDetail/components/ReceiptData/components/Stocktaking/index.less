@@ -112,5 +112,41 @@
   }
 }
 
+.progre {
+  line-height: 14px;
+  height: 14px;
+
+  :global .ant-progress-line {
+    line-height: 14px;
+    height: 100%;
+  }
+
+  :global .ant-progress-outer {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+
+  :global .ant-progress-inner, :global .ant-progress-bg {
+    border-radius: 0;
+    height: 100% !important;
+    vertical-align: baseline;
+  }
+
+  :global .ant-progress-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    text-align: right;
+    margin: 0;
+    line-height: 14px;
+
+    .text {
+      display: inline-block;
+    }
+  }
+}
+
 
 

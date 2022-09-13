@@ -119,8 +119,8 @@ const SkuInstock = ({ type, title, judge }) => {
           shopSkuIds,
           type,
         }}
-        defaultParams={{ stockView: true }}
-        open={{ time: true, user: true }}
+        defaultParams={{ stockView: true, openPosition: true }}
+        open={{ bom: true, position: true, state: true, number: true }}
         onChange={setSkuData}
       />
     </div>

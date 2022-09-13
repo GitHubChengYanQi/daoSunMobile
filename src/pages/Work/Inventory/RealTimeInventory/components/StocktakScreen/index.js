@@ -31,7 +31,8 @@ const StocktakScreen = (
 
   const positionId = params.positionId;
   const createUser = params.createUser;
-  const createTime = params.createTime;
+  const startTime = params.startTime;
+  const endTime = params.endTime;
 
   const { loading, data } = useRequest(positions);
 
@@ -50,7 +51,7 @@ const StocktakScreen = (
         screened = createUser;
         break;
       case 'createTime':
-        screened = createTime;
+        screened = startTime || endTime;
         break;
       default:
         break;
@@ -81,9 +82,9 @@ const StocktakScreen = (
       case 'createTime':
         return <Time
           title={item.title}
-          value={createTime}
+          value={[startTime, endTime]}
           onChange={(createTime) => {
-            paramsOnChange({ ...params, createTime });
+            paramsOnChange({ ...params, startTime: createTime[0], endTime: createTime[1] });
           }}
         />;
       default:

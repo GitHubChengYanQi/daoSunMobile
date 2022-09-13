@@ -43,12 +43,13 @@ const SkuScreen = (
   const spuClassIds = ToolUtil.isArray(params.spuClassIds);
   const customerIds = ToolUtil.isArray(params.customerIds);
   const brandIds = ToolUtil.isArray(params.brandIds);
-  const statusIds = ToolUtil.isArray(params.statusIds);
+  const status = params.status;
   const partsSkuId = params.partsSkuId;
   const storehousePositionsId = params.storehousePositionsId;
   const time = params.startTime || params.endTime;
   const createUser = params.createUser;
-  const number = params.number;
+  const mixNum = params.mixNum;
+  const maxNum = params.maxNum;
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -89,7 +90,7 @@ const SkuScreen = (
         overLength = overLengths.brand;
         break;
       case 'state':
-        screened = statusIds.length > 0;
+        screened = status;
         break;
       case 'bom':
         screened = partsSkuId;
@@ -104,7 +105,7 @@ const SkuScreen = (
         screened = createUser;
         break;
       case 'number':
-        screened = number;
+        screened = mixNum || maxNum;
         break;
       case 'material':
         screened = false;
@@ -189,7 +190,7 @@ const SkuScreen = (
           columns={2}
           options={getOptions(item.key)}
           title={item.title}
-          value={[params.status]}
+          value={[status]}
           onChange={(status) => {
             paramsOnChange({ ...params, status: status[0] });
           }}
