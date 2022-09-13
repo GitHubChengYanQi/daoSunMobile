@@ -19,6 +19,7 @@ import Prepare from '../../../OutStockOrder/components/Prepare';
 import Title from '../../../../../../../../components/Title';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import InLibrary from './components/InLibrary';
+import MyProgress from '../../../../../../../../components/MyProgress';
 
 export const transferInStorehouse = { url: '/allocation/transferInStorehouse', method: 'POST' };
 
@@ -96,32 +97,36 @@ const Detail = (
           if (!allSku && index > 2) {
             return null;
           }
-          return <div key={index} className={style.skuItem}>
-            <SkuItem
-              className={style.item}
-              skuResult={item.skuResult}
-              extraWidth='124px'
-              otherData={[
-                item.brandName,
-                <PositionShow inPositionName={item.toPositionName} outPositionName={item.positionName} />,
-              ]}
-            />
-            <div className={style.inLibrary}>
-              {item.complete ? '已完成' : <LinkButton onClick={() => {
-                setAllocation({
-                  skuResult: item.skuResult,
-                  skuId: item.skuId,
-                  brandId: item.haveBrand ? item.brandId : null,
-                  brandResult: { brandName: item.brandName },
-                  positionId: item.positionId,
-                  number: item.number,
-                  positionName: item.positionName,
-                  toPositionId: item.toPositionId,
-                });
-              }}>调拨</LinkButton>}
-              <ShopNumber show value={item.complete ? item.num : item.number} />
-            </div>
+          const percent = parseInt((item.doneNumber / item.num) * 100);
 
+          return <div key={index}>
+            <div className={style.skuItem}>
+              <SkuItem
+                className={style.item}
+                skuResult={item.skuResult}
+                extraWidth='124px'
+                otherData={[
+                  item.brandName,
+                  <PositionShow inPositionName={item.toPositionName} outPositionName={item.positionName} />,
+                ]}
+              />
+              <div className={style.inLibrary}>
+                {item.complete ? '已完成' : <LinkButton onClick={() => {
+                  setAllocation({
+                    skuResult: item.skuResult,
+                    skuId: item.skuId,
+                    brandId: item.haveBrand ? item.brandId : null,
+                    brandResult: { brandName: item.brandName },
+                    positionId: item.positionId,
+                    number: item.number,
+                    positionName: item.positionName,
+                    toPositionId: item.toPositionId,
+                  });
+                }}>调拨</LinkButton>}
+                <ShopNumber show value={item.num} />
+              </div>
+            </div>
+            <MyProgress noRadio percent={percent} />
           </div>;
         })
       }

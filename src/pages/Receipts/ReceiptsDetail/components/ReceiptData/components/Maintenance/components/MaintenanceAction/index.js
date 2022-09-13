@@ -90,7 +90,7 @@ const MaintenanceAction = (
                     </Button>
                   </div>
                 </div>
-                <MyProgress className={style.progre} percent={percent} />
+                <MyProgress noRadio percent={percent} />
               </div>;
             })
           }
