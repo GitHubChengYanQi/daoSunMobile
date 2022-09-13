@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import MySearch from '../../../components/MySearch';
 import scanImg from '../../../../assets/scan.png';
@@ -14,6 +14,9 @@ import MyList from '../../../components/MyList';
 import { MyDate } from '../../../components/MyDate';
 import MyPositions from '../../../components/MyPositions';
 import { ScanIcon } from '../../../components/Icon';
+import ListScreent from '../../Sku/SkuList/components/ListScreent';
+import Title from '../../../components/Title';
+import StocktakScreen from './components/StocktakScreen';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
@@ -30,6 +33,8 @@ const RealTimeInventory = (props) => {
   const codeId = qrCode.codeId;
 
   const [data, setData] = useState([]);
+
+  const [number, setNumber] = useState(0);
 
   useEffect(() => {
     if (codeId) {
@@ -49,6 +54,27 @@ const RealTimeInventory = (props) => {
       }
     }
   }, [codeId]);
+
+  const [screen, setScreen] = useState();
+  const [screening, setScreeing] = useState();
+  const screenRef = useRef();
+  const listRef = useRef();
+  const ref = useRef();
+
+  const [params, setParams] = useState({});
+
+  const submit = (data = {}) => {
+    const newParmas = { ...params, ...data };
+    setParams(newParmas);
+    setScreeing(true);
+    ref.current.submit(newParmas);
+  };
+
+
+  const clear = () => {
+    setParams();
+    ref.current.submit();
+  };
 
   return <>
     <MyNavBar title='即时盘点' />
@@ -71,9 +97,18 @@ const RealTimeInventory = (props) => {
       </div>
     </div>
 
+    <ListScreent
+      top={ToolUtil.isQiyeWeixin() ? 0 : 45}
+      numberTitle={<Title className={style.title}>盘点记录</Title>}
+      screening={screening}
+      listRef={listRef}
+      screen={screen}
+      screenChange={setScreen}
+      screenRef={screenRef}
+    />
     <div className={style.inventoryLog}>
-      <MyCard title='盘点记录'>
-        <MyList api={inventoryPageList} getData={setData} data={data}>
+      <div ref={listRef}>
+        <MyList ref={ref} api={inventoryPageList} getData={setData} data={data} response={(res) => setNumber(res.count)}>
           <div className={style.logs}>
             {
               data.map((item, index) => {
@@ -96,7 +131,7 @@ const RealTimeInventory = (props) => {
             }
           </div>
         </MyList>
-      </MyCard>
+      </div>
     </div>
 
     <div className={style.stocktakingButtom} onClick={() => {
@@ -126,6 +161,18 @@ const RealTimeInventory = (props) => {
         setPosition(value[0] || {});
       }} />
 
+    <StocktakScreen
+      skuNumber={number}
+      onClose={() => {
+        setScreen(false);
+        ToolUtil.isObject(listRef.current).removeAttribute('style');
+      }}
+      params={params}
+      onClear={clear}
+      screen={screen}
+      onChange={(params) => {
+        submit(params);
+      }} />
     {qrCode.loading && <MyLoading />}
   </>;
 

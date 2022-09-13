@@ -6,6 +6,9 @@ import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
 
 export const getMinTime = (time) => {
+  if (!time) {
+    return undefined;
+  }
   let minTime = new Date(time);
   if (!minTime) {
     return minTime;

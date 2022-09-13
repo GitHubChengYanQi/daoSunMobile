@@ -59,7 +59,7 @@ const ListScreent = (
       return <Icon type='icon-paixu' />;
     }
 
-    const order = sort.field !== field ? finalSorts : sort.order
+    const order = sort.field !== field ? finalSorts : sort.order;
 
     switch (order) {
       case  'ascend' :
@@ -73,7 +73,7 @@ const ListScreent = (
 
   return <div
     style={{ top }}
-    className={ToolUtil.classNames(style.screen,className)}
+    className={ToolUtil.classNames(style.screen, className)}
     ref={screenRef}
   >
     <div className={style.stockNumber}>{numberTitle}</div>

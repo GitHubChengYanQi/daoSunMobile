@@ -4,6 +4,7 @@ import State from '../../../../Sku/SkuList/components/SkuScreen/components/State
 import { ReceiptsEnums } from '../../../../../Receipts';
 import User from '../../../../Sku/SkuList/components/SkuScreen/components/User';
 import OutTime from '../../../../Sku/SkuList/components/SkuScreen/components/OutTime';
+import Time from '../../../../Sku/SkuList/components/SkuScreen/components/Time';
 
 const ProcessScreen = (
   {
@@ -26,10 +27,12 @@ const ProcessScreen = (
     { key: 'status', title: '状态', open: true },
     { key: 'createUser', title: '发起人', open: open.createUser },
     { key: 'outTime', title: '是否超期', open: true },
+    { key: 'creatTime', title: '创建时间', open: true },
   ];
 
   const types = params.types || [];
   const createUser = params.createUser;
+  const creatTime = params.creatTime;
   const outTime = params.outTime;
   const statusList = params.statusList || [];
 
@@ -49,8 +52,11 @@ const ProcessScreen = (
       case 'createUser':
         screened = createUser;
         break;
-      case 'time':
+      case 'outTime':
         screened = outTime;
+        break;
+      case 'creatTime':
+        screened = creatTime;
         break;
       default:
         break;
@@ -87,6 +93,7 @@ const ProcessScreen = (
           options={[
             { label: '待处理', value: '0' },
             { label: '已处理', value: '99' },
+            { label: '待审批', value: '1' },
           ]}
           multiple
           title={item.title}
@@ -115,6 +122,14 @@ const ProcessScreen = (
           value={outTime}
           onChange={(outTime) => {
             paramsOnChange({ ...params, outTime });
+          }}
+        />;
+        case 'creatTime':
+        return <Time
+          title={item.title}
+          value={creatTime}
+          onChange={(creatTime) => {
+            paramsOnChange({ ...params, creatTime });
           }}
         />;
       default:

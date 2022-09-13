@@ -3,6 +3,7 @@ import style from './index.less';
 import { Button, Popup, SideBar } from 'antd-mobile';
 import { useThrottleFn } from 'ahooks';
 import { ToolUtil } from '../ToolUtil';
+import MyEllipsis from '../MyEllipsis';
 
 const Screen = (
   {
@@ -102,7 +103,7 @@ const Screen = (
                 key={item.key}
                 title={<div className={style.sideBarTitle}>
                   {screened && <div className={style.screened} />}
-                  <div>{item.title}</div>
+                  <MyEllipsis width='calc(20vw - 20px)'>{item.title}</MyEllipsis>
                 </div>}
               />;
             })}

@@ -56,8 +56,8 @@ const SelectStoreHouse = () => {
     manual: true,
     onSuccess: (res = {}) => {
       const user = res.userResult;
-      if (user){
-        setUser({ id: user.userId, name: user.name, avatar: user.avatar,show:true });
+      if (user) {
+        setUser({ id: user.userId, name: user.name, avatar: user.avatar, show: true });
       }
       const detail = res || {};
       const detailResults = detail.detailResults || [];
@@ -81,7 +81,7 @@ const SelectStoreHouse = () => {
       const hopeSkus = getEndData(askSkus, hope);
       const distributionSkus = getEndData(waitCarry, carry.filter(item => item.status === 0)).filter(item => distributionSkuIds.includes(item.skuId));
 
-      const newHopeSkus = noDistribution(hopeSkus, carry);
+      const newHopeSkus = noDistribution(hopeSkus, carry, true);
 
       const stores = getStoreHouse(distributionSkus);
 
@@ -168,7 +168,7 @@ const SelectStoreHouse = () => {
           <Data out={params.out} storeHouses={storeHouses} setVisible={setVisible} />
         </MyCard>
       </div>
-      <div style={{height:60}} />
+      <div style={{ height: 60 }} />
 
       <MyAntPopup title={params.distribution} visible={visible} onClose={() => setVisible(false)} destroyOnClose>
         <Distribution

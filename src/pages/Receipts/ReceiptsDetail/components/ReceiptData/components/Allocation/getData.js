@@ -209,12 +209,12 @@ export const getStoreHouse = (distributionSkus = []) => {
 };
 
 
-export const noDistribution = (hopeSkus, carry) => {
+export const noDistribution = (hopeSkus, carry, action) => {
   const newHopeSkus = [];
   hopeSkus.forEach(item => {
     let carryNumber = 0;
     carry.forEach(carryItem => {
-      if (carryItem.skuId === item.skuId) {
+      if (carryItem.skuId === item.skuId && (action || carryItem.status !== 0)) {
         carryNumber += carryItem.number;
       }
     });
