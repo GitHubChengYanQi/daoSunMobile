@@ -112,7 +112,7 @@ const OrderData = () => {
                 }}
               >
                 <div className={ToolUtil.classNames(style.row, style.title)}>
-                  {getTitle(type)}记录单 /{item.coding}
+                  {item.coding}
                 </div>
                 <div className={style.time}><Space>{MyDate.Show(item.createTime)}<RightOutline /></Space></div>
               </div>;

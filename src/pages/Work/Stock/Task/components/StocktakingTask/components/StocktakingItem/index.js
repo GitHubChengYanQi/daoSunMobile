@@ -33,6 +33,7 @@ const StocktakingItem = (
       statusName={statusName()}
       action
       index={index}
+      skus={ToolUtil.isArray(receipts.stockResults)}
       skuSize={receipts.skuSize}
       positionSize={receipts.positionSize}
       beginTime={receipts.beginTime}

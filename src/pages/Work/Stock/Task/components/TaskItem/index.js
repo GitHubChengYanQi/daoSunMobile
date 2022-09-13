@@ -71,7 +71,7 @@ const TaskItem = (
         <div className={style.taskContent} hidden={skus.length === 0}>
           <div className={style.skus}>
             {
-              skus.map((item, index) => {
+              ToolUtil.isArray(skus).map((item, index) => {
                 return <SkuItem
                   key={index}
                   extraWidth='64px'
