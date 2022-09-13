@@ -168,7 +168,7 @@ const ErrorDom = (
               <span>{codeId.substring(codeId.length - 6, codeId.length)}</span>
             </div>}
             extra={<Space>
-              <ShowCode code={codeId} />
+              <ShowCode code={codeId} inkindId={item.inkindId} />
               {!show && <MyRemoveButton onRemove={() => {
                 const newItem = inkinds.filter((item, currentIndex) => {
                   return currentIndex !== index;

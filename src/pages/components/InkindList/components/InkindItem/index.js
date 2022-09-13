@@ -54,7 +54,7 @@ const InkindItem = (
             }}>
               {!noActions && <MyCheck checked={checked} />}
               实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
-              <ShowCode code={inkindItem.inkindId} />
+              <ShowCode code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>
             </div>
 
