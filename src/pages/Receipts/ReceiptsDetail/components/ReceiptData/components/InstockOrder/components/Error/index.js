@@ -281,7 +281,8 @@ const Error = (
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
-  const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0];
+  const imgResults = ToolUtil.isArray(skuResult.imgResults)[0] || {};
+  const imgUrl = imgResults.thumbUrl;
 
   const [over, setOver] = useState(0);
 
