@@ -99,7 +99,7 @@ const TaskItem = (
           </div>
         </div>
 
-        <div className={style.progress}>
+        <div className={style.progress} style={{border:skus.length === 0 && 'none'}}>
           <MyProgress hidden={noProgress} percent={percent} />
         </div>
         <div className={style.taskData}>
