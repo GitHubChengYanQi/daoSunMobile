@@ -23,6 +23,8 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import Icon from '../../../../../../../../components/Icon';
 import MyPositions from '../../../../../../../../components/MyPositions';
 import LinkButton from '../../../../../../../../components/LinkButton';
+import MySearch from '../../../../../../../../components/MySearch';
+import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
@@ -48,6 +50,8 @@ const OutSkuAction = (
   const shopRef = useRef();
 
   const [data, setData] = useState([]);
+
+  const [defaultData, setDefaultData] = useState([]);
 
   const askData = order.detailResults || [];
 
@@ -99,6 +103,7 @@ const OutSkuAction = (
       const newData = format(ToolUtil.isArray(res), countNumber);
       setCountNumber(countNumber);
       setData(newData);
+      setDefaultData(newData);
     },
   });
 
@@ -133,6 +138,8 @@ const OutSkuAction = (
 
   const [showDetail, setShowDetail] = useState();
 
+  const [seacrchValue, setSearchValue] = useState();
+
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       className={style.cardStyle}
@@ -152,6 +159,20 @@ const OutSkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
+      <MySearch
+        placeholder='请输入物料名称查询'
+        style={{ padding: '8px 12px' }}
+        onClear={() => setData(defaultData)}
+        onChange={(value) => {
+          const newData = defaultData.filter(item => {
+            const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
+            return ToolUtil.queryString(value,sku);
+          });
+          setData(newData);
+          setSearchValue(value);
+        }}
+        value={seacrchValue}
+      />
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading || orderLoading}>
         {data.length === 0 && <MyEmpty description={`物料全部出库完成`} />}
         {
