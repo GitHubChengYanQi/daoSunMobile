@@ -34,6 +34,7 @@ const OutStockItem = (
   };
 
   return <TaskItem
+    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
     statusName={statusName()}
     action={(can && percent !== 100)}
     percent={percent}
@@ -47,19 +48,6 @@ const OutStockItem = (
     positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
-    otherData={
-      <div className={style.orderData}>
-        <div className={style.user}>
-          <Space align='center'>
-            <UserOutline />
-            <div>
-              <span>执行人：</span>
-              {ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
-            </div>
-          </Space>
-        </div>
-      </div>
-    }
   />;
 };
 

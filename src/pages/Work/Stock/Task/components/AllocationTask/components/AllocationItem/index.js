@@ -23,6 +23,7 @@ const AllocationItem = (
   };
 
   return <TaskItem
+    users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
     percent={percent}
     statusName={statusName()}
     action
@@ -34,10 +35,6 @@ const AllocationItem = (
     positionSize={receipts.positionCount || 0}
     index={index}
     onClick={()=>onClick(item)}
-    otherData={
-      <div className={style.orderData}>
-        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name || '未分配'}</div>
-      </div>}
   />;
 };
 
