@@ -18,6 +18,8 @@ import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
+import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import MySearch from '../../../../../../../../components/MySearch';
 
 export const instockHandle = { url: '/instockHandle/listByInstockOrderId', method: 'GET' };
 
@@ -92,7 +94,13 @@ const SkuAction = (
     }
   });
 
-  const inStockDetails = [...actions, ...error, ...wait, ...noAction];
+  const details = [...actions, ...error, ...wait, ...noAction];
+
+  const [seacrchValue, setSearchValue] = useState();
+
+  const [filterData, setFilterData] = useState([]);
+
+  const inStockDetails = seacrchValue ? filterData : details;
 
   const [allSku, { toggle }] = useBoolean();
 
@@ -173,6 +181,20 @@ const SkuAction = (
       extra={<div className={style.extra}>
         合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
+      <MySearch
+        placeholder='请输入物料名称查询'
+        style={{ padding: '8px 12px' }}
+        onClear={() => setFilterData([])}
+        onChange={(value) => {
+          const newData = details.filter(item => {
+            const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
+            return ToolUtil.queryString(value, sku);
+          });
+          setFilterData(newData);
+          setSearchValue(value);
+        }}
+        value={seacrchValue}
+      />
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
         {inStockDetails.length === 0 && <MyEmpty description={`已全部操作完毕`} />}
         {

@@ -49,7 +49,7 @@ const BasicLayout = (props) => {
     };
   };
 
-  setInterval(() => {
+  const checkWxLogin = setInterval(() => {
     if (GetUserInfo().token && ToolUtil.queryString('wxLogin', history.location.pathname)) {
       window.location.href = wxUrl(false);
     }
@@ -82,6 +82,7 @@ const BasicLayout = (props) => {
   }
 
   if (state.init === true) {
+    // clearInterval(checkWxLogin);
     return <AliveScope>
       <div className={styles.safeArea}>
         {props.children}

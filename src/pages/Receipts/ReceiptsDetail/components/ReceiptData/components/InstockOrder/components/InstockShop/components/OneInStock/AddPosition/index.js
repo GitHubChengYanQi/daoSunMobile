@@ -143,10 +143,11 @@ const AddPosition = (
         const newPosition = value.filter(item => {
           return !ids.includes(item.id);
         });
+
         if (newPosition.length === 1) {
           return setPositions(value.map(item => {
             if (item.id === newPosition[0].id) {
-              return { number: skuNumber, ...item };
+              return { ...item,number: skuNumber };
             }
             return item;
           }));

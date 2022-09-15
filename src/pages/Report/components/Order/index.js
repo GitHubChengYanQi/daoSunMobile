@@ -43,7 +43,23 @@ export const OrderList = (
     {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
-        return <div key={index} className={style.orderInfo}>
+        return <div key={index} className={style.orderInfo} onClick={()=>{
+          switch (orderItem.type) {
+            case 'instockLog':
+              history.push({
+                pathname: '/Report/OrderLog',
+                query: {
+                  receiptId: item.receiptId,
+                  type:orderItem.type,
+                  time: MyDate.Show(item.createTime),
+                  coding: item.coding,
+                },
+              });
+              break;
+            default:
+              break;
+          }
+        }}>
           <div className={style.orderName}>{item.coding}</div>
           <div className={style.time}>{MyDate.Show(item.createTime)} <RightOutline /></div>
         </div>;

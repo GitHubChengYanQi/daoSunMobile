@@ -7,6 +7,7 @@ import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import MyCard from '../../../../../../components/MyCard';
 import { UserName } from '../../../../../../components/User';
+import LinkButton from '../../../../../../components/LinkButton';
 
 const InstockOrder = (
   {
@@ -29,6 +30,7 @@ const InstockOrder = (
   let remake;
   let fileUrls = [];
   let handleResults = [];
+  let origin = '';
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
@@ -81,6 +83,10 @@ const InstockOrder = (
 
   return <>
     {action()}
+
+    <MyCard title='来源' hidden={!origin}>
+      <LinkButton>{origin}</LinkButton>
+    </MyCard>
 
     <MyCard
       hidden={type !== ReceiptsEnums.outstockOrder}

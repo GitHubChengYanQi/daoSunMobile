@@ -33,11 +33,6 @@ const OrderData = () => {
     { title: '异常', type: 'anomaly' },
   ];
 
-  const getTitle = (type) => {
-    const tab = tabs.filter(item => item.type === type)[0] || {};
-    return tab.title;
-  };
-
   const [data, setData] = useState([1, 2]);
 
   const [total, setTotal] = useState(0);
@@ -108,7 +103,21 @@ const OrderData = () => {
                 key={index}
                 className={ToolUtil.classNames(style.flexCenter, style.orderItem)}
                 onClick={() => {
-                  history.push(`/Report/OrderLog?id=${1}`);
+                  switch (type) {
+                    case 'instockLog':
+                      history.push({
+                        pathname: '/Report/OrderLog',
+                        query: {
+                          receiptId: item.receiptId,
+                          type,
+                          time: MyDate.Show(item.createTime),
+                          coding: item.coding,
+                        },
+                      });
+                      break;
+                    default:
+                      break;
+                  }
                 }}
               >
                 <div className={ToolUtil.classNames(style.row, style.title)}>
