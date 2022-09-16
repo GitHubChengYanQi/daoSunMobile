@@ -5,7 +5,7 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import { useModel } from 'umi';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
-import { ExclamationCircleOutline, ExclamationOutline, ExclamationTriangleOutline } from 'antd-mobile-icons';
+import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 
 const SkuItem = (
   {

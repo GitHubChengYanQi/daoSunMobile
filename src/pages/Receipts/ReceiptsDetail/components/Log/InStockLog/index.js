@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import MyEmpty from '../../../../../components/MyEmpty';
@@ -11,6 +11,7 @@ import LinkButton from '../../../../../components/LinkButton';
 import { ScanIcon } from '../../../../../components/Icon';
 import { useHistory } from 'dva';
 import { SystemQRcodeOutline } from 'antd-mobile-icons';
+import MySearch from '../../../../../components/MySearch';
 
 export const logList = { url: '/instockLogDetail/timeHistory', method: 'POST' };
 
@@ -24,9 +25,15 @@ const InStockLog = (
 
   const { loading, data, run } = useRequest(logList, { manual: true });
 
+  const [searchValue, setSearchValue] = useState();
+
+  const submit = (skuName) => {
+    run({ data: { instockOrderId, skuName } });
+  };
+
   useEffect(() => {
     if (instockOrderId) {
-      run({ data: { instockOrderId } });
+      submit();
     }
   }, []);
 
@@ -39,6 +46,14 @@ const InStockLog = (
   }
 
   return <>
+    <MySearch
+      onChange={setSearchValue}
+      value={searchValue}
+      onClear={() => submit()}
+      onSearch={(value) => {
+        submit(value);
+      }}
+    />
     {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
@@ -64,9 +79,9 @@ const InStockLog = (
                 <div hidden={error}><LinkButton onClick={() => {
                   history.push({
                     pathname: '/Work/Inkind/InkindList',
-                    query:{
-                      inkindIds:ToolUtil.isArray(item.inkindIds).toString()
-                    }
+                    query: {
+                      inkindIds: ToolUtil.isArray(item.inkindIds).toString(),
+                    },
                   });
                 }}><SystemQRcodeOutline /></LinkButton></div>
                 <ShopNumber textAlign='right' show value={item.number} />

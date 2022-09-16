@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
@@ -9,13 +9,21 @@ import { MyDate } from '../../../../../components/MyDate';
 import { Button, Popup } from 'antd-mobile';
 import Error from '../../ReceiptData/components/InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../index';
+import MySearch from '../../../../../components/MySearch';
 
 export const historyList = { url: '/instockLogDetail/list', method: 'POST' };
 
 const StocktaskingLog = ({ detail = {} }) => {
 
+  const ref = useRef();
+
   const [data, setData] = useState([]);
 
+  const [searchValue, setSearchValue] = useState();
+
+  const submit = (skuName) => {
+    ref.current.submit({ sourceId: detail.inventoryTaskId, skuName });
+  };
   const [visible, setVisible] = useState({});
 
   const showStock = detail.method === 'OpenDisc';
@@ -66,7 +74,16 @@ const StocktaskingLog = ({ detail = {} }) => {
   };
 
   return <div className={style.stocktaking}>
+    <MySearch
+      onChange={setSearchValue}
+      value={searchValue}
+      onClear={() => submit()}
+      onSearch={(value) => {
+        submit(value);
+      }}
+    />
     <MyList
+      ref={ref}
       api={historyList}
       params={{ sourceId: detail.inventoryTaskId }}
       data={data}

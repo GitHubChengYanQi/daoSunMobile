@@ -8,6 +8,7 @@ import { Divider } from 'antd-mobile';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import styles from '../../index.less';
+import { ToolUtil } from '../../../../components/ToolUtil';
 
 export const instockLog = { url: '/instockReceipt/detail', method: 'POST' };
 
@@ -33,8 +34,17 @@ const InstockLog = ({ receiptId }) => {
           return <div key={index} className={styles.customer}>
             <Divider className={styles.divider} contentPosition='left'>{key}</Divider>
             {skus.map((item, index) => {
+              const position = ToolUtil.isObject(item.storehousePositionsResult);
               return <div key={index} className={styles.sku}>
-                <SkuItem skuResult={item.skuResult} className={styles.skuItem} extraWidth='90px' />
+                <SkuItem
+                  skuResult={item.skuResult}
+                  className={styles.skuItem}
+                  extraWidth='90px'
+                  otherData={[
+                    ToolUtil.isObject(item.brandResult).brandName,
+                    position.name + ' / ' + ToolUtil.isObject(position.storehouseResult).name,
+                  ]}
+                />
                 <ShopNumber show value={item.number} />
               </div>;
             })}

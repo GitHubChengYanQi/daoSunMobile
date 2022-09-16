@@ -1,23 +1,28 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
-import Icon from '../../../../../components/Icon';
 import { UserName } from '../../../../../components/User';
 import { MyDate } from '../../../../../components/MyDate';
-import { Button, Popup } from 'antd-mobile';
-import Error from '../../ReceiptData/components/InstockOrder/components/Error';
-import { ReceiptsEnums } from '../../../../index';
 import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import LinkButton from '../../../../../components/LinkButton';
 import SearchInkind from '../../../../../components/InkindList/components/SearchInkind';
+import MySearch from '../../../../../components/MySearch';
 
 export const maintenanceLogList = { url: '/maintenanceLog/list', method: 'POST' };
 
 const MaintenanceLog = ({ detail = {} }) => {
 
+  const ref = useRef();
+
   const [data, setData] = useState([]);
+
+  const [searchValue, setSearchValue] = useState();
+
+  const submit = (skuName) => {
+    ref.current.submit({ sourceId: detail.inventoryTaskId, skuName });
+  };
 
   const [visible, setVisible] = useState();
 
@@ -66,7 +71,16 @@ const MaintenanceLog = ({ detail = {} }) => {
   };
 
   return <div className={style.stocktaking}>
+    <MySearch
+      onChange={setSearchValue}
+      value={searchValue}
+      onClear={() => submit()}
+      onSearch={(value) => {
+        submit(value);
+      }}
+    />
     <MyList
+      ref={ref}
       api={maintenanceLogList}
       params={{ sourceId: detail.inventoryTaskId }}
       data={data}
@@ -75,7 +89,6 @@ const MaintenanceLog = ({ detail = {} }) => {
     </MyList>
 
     <SearchInkind
-      className={skus.length > 0 ? style.inkindShop : style.inkindList}
       noActions
       skuInfo={visible}
       onClose={() => setVisible()}

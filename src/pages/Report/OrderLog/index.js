@@ -1,6 +1,5 @@
 import React from 'react';
 import { TextOutline } from 'antd-mobile-icons';
-import { MyDate } from '../../components/MyDate';
 import style from './index.less';
 import { CloudDownloadOutlined } from '@ant-design/icons';
 import MyNavBar from '../../components/MyNavBar';
@@ -26,7 +25,7 @@ const OrderLog = () => {
     },
     onError: () => message.error('模板发送失败，请联系管理员'),
   });
-  console.log(type);
+
   const typeContent = () => {
     switch (type) {
       case 'instockLog':

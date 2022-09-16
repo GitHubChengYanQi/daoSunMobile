@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
@@ -9,6 +9,7 @@ import LinkButton from '../../../../../components/LinkButton';
 import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
 import { MyDate } from '../../../../../components/MyDate';
+import MySearch from '../../../../../components/MySearch';
 
 export const logList = { url: '/instockLogDetail/getOutStockLogs', method: 'POST' };
 
@@ -20,13 +21,17 @@ const OutStockLog = (
 
   const { loading, data, run } = useRequest(logList, { manual: true });
 
+  const [searchValue, setSearchValue] = useState();
+
+  const submit = (skuName) => {
+    run({ data: { sourceId: outstockOrderId, skuName } });
+  };
+
   useEffect(() => {
     if (outstockOrderId) {
-      run({ data: { sourceId: outstockOrderId } });
+      submit();
     }
   }, []);
-
-  // const [data, setData] = useState([]);
 
   if (loading) {
     return <MyLoading skeleton />;
@@ -37,6 +42,14 @@ const OutStockLog = (
   }
 
   return <>
+    <MySearch
+      onChange={setSearchValue}
+      value={searchValue}
+      onClear={() => submit()}
+      onSearch={(value) => {
+        submit(value);
+      }}
+    />
     {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
