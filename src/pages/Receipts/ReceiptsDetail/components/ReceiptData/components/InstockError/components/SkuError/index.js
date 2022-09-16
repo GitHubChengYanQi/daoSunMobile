@@ -196,7 +196,7 @@ const SkuError = (
         }
       });
     }
-  }, []);
+  }, [anomalyId]);
 
   const action = (item, stauts) => {
     editRun({

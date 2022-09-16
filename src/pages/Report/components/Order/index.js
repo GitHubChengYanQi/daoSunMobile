@@ -8,7 +8,7 @@ import { RightOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { ToolUtil } from '../../../components/ToolUtil';
-import { billPageList } from '../../OrderData';
+import { billPageList, LogDetail, logDetail } from '../../OrderData';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../components/Icon';
 import MyEmpty from '../../../components/MyEmpty';
@@ -43,22 +43,8 @@ export const OrderList = (
     {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
-        return <div key={index} className={style.orderInfo} onClick={()=>{
-          switch (orderItem.type) {
-            case 'instockLog':
-              history.push({
-                pathname: '/Report/OrderLog',
-                query: {
-                  receiptId: item.receiptId,
-                  type:orderItem.type,
-                  time: MyDate.Show(item.createTime),
-                  coding: item.coding,
-                },
-              });
-              break;
-            default:
-              break;
-          }
+        return <div key={index} className={style.orderInfo} onClick={() => {
+          LogDetail({ type:orderItem.type, item });
         }}>
           <div className={style.orderName}>{item.coding}</div>
           <div className={style.time}>{MyDate.Show(item.createTime)} <RightOutline /></div>

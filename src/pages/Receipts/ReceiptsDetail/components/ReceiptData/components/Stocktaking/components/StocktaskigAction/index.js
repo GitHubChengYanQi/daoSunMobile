@@ -33,6 +33,7 @@ const StocktaskigAction = (
     listRef,
     getPositionIds = () => {
     },
+    noTips,
     complete = () => {
     },
   },
@@ -130,7 +131,7 @@ const StocktaskigAction = (
                 }}>
                   <SkuItem
                     skuResult={skuItem.skuResult}
-                    extraWidth='100px'
+                    extraWidth='124px'
                     hiddenNumber={!showStock}
                     number={(skuItem.number || 0) - (skuItem.lockNumber || 0)}
                     otherData={[
@@ -163,6 +164,7 @@ const StocktaskigAction = (
       api
         ?
         <MyList
+          noTips={noTips}
           response={(res) => {
             getPositionIds(res.search);
           }}

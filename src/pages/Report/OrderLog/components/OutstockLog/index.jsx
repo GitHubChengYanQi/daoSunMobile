@@ -26,7 +26,7 @@ const OutstockLog = ({ outstockOrderId }) => {
   const listing = data.listing || [];
 
   return <>
-    <MyCard title='出库明细'>
+    <MyCard title='出库明细' bodyStyle={{padding:0}}>
       {
         listing.map((item, index) => {
           const sku = item.listingResult || {};

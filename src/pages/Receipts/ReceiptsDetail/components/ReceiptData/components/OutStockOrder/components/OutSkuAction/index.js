@@ -59,7 +59,8 @@ const OutSkuAction = (
 
   const [countNumber, setCountNumber] = useState();
 
-  const format = (list = [], countNumber = 0) => {
+  const format = (list = []) => {
+    let countNumber = 0;
     const actions = [];
     const noAction = [];
     const other = [];
@@ -84,13 +85,16 @@ const OutSkuAction = (
       }
       return countNumber += (item.number || 0);
     });
-    return [
-      ...actions,
-      ...other.sort((a, b) => {
-        return a.notPrepared - b.notPrepared;
-      }),
-      ...noAction,
-    ];
+    return {
+      countNumber,
+      array: [
+        ...actions,
+        ...other.sort((a, b) => {
+          return a.notPrepared - b.notPrepared;
+        }),
+        ...noAction,
+      ],
+    };
   };
 
   const { loading, run: getOutDetail, refresh: detailRefresh } = useRequest({
@@ -98,12 +102,12 @@ const OutSkuAction = (
     data: params,
   }, {
     onSuccess: (res) => {
-      let countNumber = 0;
 
-      const newData = format(ToolUtil.isArray(res), countNumber);
+      const { countNumber, array } = format(ToolUtil.isArray(res), countNumber);
+
       setCountNumber(countNumber);
-      setData(newData);
-      setDefaultData(newData);
+      setData(array);
+      setDefaultData(array);
     },
   });
 
@@ -139,7 +143,6 @@ const OutSkuAction = (
   const [showDetail, setShowDetail] = useState();
 
   const [seacrchValue, setSearchValue] = useState();
-
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       className={style.cardStyle}
@@ -166,7 +169,7 @@ const OutSkuAction = (
         onChange={(value) => {
           const newData = defaultData.filter(item => {
             const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
-            return ToolUtil.queryString(value,sku);
+            return ToolUtil.queryString(value, sku);
           });
           setData(newData);
           setSearchValue(value);
@@ -330,7 +333,7 @@ const OutSkuAction = (
       destroyOnClose
     >
       <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
-        {format(askData).map((item, index) => {
+        {format(askData).array.map((item, index) => {
           return <OutSkuItem
             ask
             item={item}

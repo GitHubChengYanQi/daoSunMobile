@@ -27,7 +27,7 @@ const InstockLog = ({ receiptId }) => {
   const customerMap = data.customerMap || [];
 
   return <>
-    <MyCard title='入库明细' bodyClassName={styles.cardBody}>
+    <MyCard title='入库明细' bodyStyle={{padding:0}}>
       {
         Object.keys(customerMap).map((key, index) => {
           const skus = customerMap[key] || [];

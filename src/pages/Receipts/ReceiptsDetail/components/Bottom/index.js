@@ -34,16 +34,6 @@ const Bottom = (
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <Note
-      textAreaId='auditTextArea'
-      autoFocus={false}
-      noAdd
-      className={style.note}
-      value={params}
-      uploadId='auditImg'
-      onChange={setParams}
-      loading={setLoading}
-    />
     <div className={style.actions}>
       <div className={style.all} onClick={() => {
         setVisible(true);

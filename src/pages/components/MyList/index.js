@@ -22,6 +22,7 @@ const MyList = (
     noEmpty,
     manual,
     options = {},
+    noTips,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -150,7 +151,7 @@ const MyList = (
             downLoading
             title='努力加载中...'
             noLoadingTitle
-          /> : <span hidden={noEmpty}>--- 我是有底线的 ---</span>
+          /> : <span hidden={noEmpty || noTips}>--- 我是有底线的 ---</span>
         }
       </>
     </InfiniteScroll>}

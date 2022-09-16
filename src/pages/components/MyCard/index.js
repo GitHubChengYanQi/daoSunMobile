@@ -11,24 +11,27 @@ const MyCard = (
     children,
     bodyClassName,
     headerClassName,
+    headerStyle,
+    bodyStyle,
     className,
     noHeader,
     hidden,
     onClick = () => {
     },
-    style:cardStyle,
+    style: cardStyle,
   },
 ) => {
 
 
-  return <div style={cardStyle} onClick={onClick} hidden={hidden} className={ToolUtil.classNames(className, style.card)}>
-    <div hidden={noHeader} className={ToolUtil.classNames(headerClassName, style.header)}>
+  return <div style={cardStyle} onClick={onClick} hidden={hidden}
+              className={ToolUtil.classNames(className, style.card)}>
+    <div style={headerStyle} hidden={noHeader} className={ToolUtil.classNames(headerClassName, style.header)}>
       <div className={style.title}>{titleBom || <Title>{title}</Title>}</div>
       <div className={style.extra}>
         {extra}
       </div>
     </div>
-    <div hidden={!children} className={ToolUtil.classNames(bodyClassName, style.content)}>
+    <div hidden={!children} style={bodyStyle} className={ToolUtil.classNames(bodyClassName, style.content)}>
       {children}
     </div>
   </div>;

@@ -23,6 +23,7 @@ const StocktaskingHandle = (
     refresh = () => {
     },
     noSubmit,
+    noTips,
   },
 ) => {
 
@@ -87,6 +88,7 @@ const StocktaskingHandle = (
 
   return <>
     <StocktaskigAction
+      noTips={noTips}
       complete={complete}
       getPositionIds={getPositionIds}
       show={show}

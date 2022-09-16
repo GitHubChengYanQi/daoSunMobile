@@ -4,7 +4,6 @@ import { Badge, Space, Steps } from 'antd-mobile';
 import { Avatar } from 'antd';
 import Icon from '../../../../components/Icon';
 import { AuditOutlined, CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
-import { Skeleton } from 'weui-react-v2';
 import style from './index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
@@ -304,6 +303,11 @@ const Process = (
       case 1:
         stepStatus = 'success';
         iconColor = style.success;
+        break;
+      case 3:
+        stepStatus = 'wait';
+        iconColor = style.action;
+        actioning = true;
         break;
       default:
         break;

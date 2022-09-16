@@ -9,6 +9,10 @@ import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import { message } from 'antd';
 import OutstockLog from './components/OutstockLog';
+import StocktakingLog from './components/StocktakingLog';
+import ErrorLog from './components/ErrorLog';
+import MaintenaceLog from './components/MaintenaceLog';
+import AllocationLog from './components/AllocationLog';
 
 export const createWord = { url: '/instockReceipt/createWord', method: 'POST' };
 
@@ -16,7 +20,7 @@ const OrderLog = () => {
 
   const { query } = useLocation();
 
-  const { receiptId, type, time, coding, outstockOrderId } = query;
+  const { id, type, time, coding } = query;
 
   const { loading, run } = useRequest(createWord, {
     manual: true,
@@ -31,12 +35,32 @@ const OrderLog = () => {
       case 'instockLog':
         return {
           title: '入库',
-          content: <InstockLog receiptId={receiptId} />,
+          content: <InstockLog receiptId={id} />,
         };
       case 'outstockLog':
         return {
           title: '出库',
-          content: <OutstockLog outstockOrderId={outstockOrderId} />,
+          content: <OutstockLog outstockOrderId={id} />,
+        };
+      case 'inventoryLog':
+        return {
+          title: '盘点',
+          content: <StocktakingLog inventoryTaskId={id} />,
+        };
+      case 'anomaly':
+        return {
+          title: '异常',
+          content: <ErrorLog orderId={id} />,
+        };
+      case 'maintenanceLog':
+        return {
+          title: '养护',
+          content: <MaintenaceLog maintenanceLogId={id} />,
+        };
+        case 'allocationLog':
+        return {
+          title: '养护',
+          content: <AllocationLog allocationLogId={id} />,
         };
       default:
         return {
@@ -56,7 +80,30 @@ const OrderLog = () => {
         </div>
       </div>
       <CloudDownloadOutlined onClick={() => {
-        run({ data: { receiptId } });
+        let module = '';
+        switch (type) {
+          case 'instockLog':
+            module = 'inStock';
+            break;
+          case 'outstockLog':
+            module = 'outStock';
+            break;
+          case 'inventoryLog':
+            module = 'stocktaking';
+            break;
+          case 'maintenanceLog':
+            module = 'curing';
+            break;
+          case 'allocationLog':
+            module = 'allocation';
+            break;
+          case 'anomaly':
+            module = 'error';
+            break;
+          default:
+            break;
+        }
+        run({ data: { receiptId: id, module } });
       }} />
     </div>
 
@@ -65,34 +112,6 @@ const OrderLog = () => {
     {typeContent().content}
 
     {loading && <MyLoading />}
-
-    {/*<MyCard title={`${typeContent().title}明细`}>*/}
-
-    {/*</MyCard>*/}
-
-    {/*<MyCard title='执行人' extra={<UserName />} />*/}
-
-    {/*<MyCard title='提交人' extra={<UserName />} />*/}
-
-    {/*<MyCard title='领料人' extra='无' />*/}
-
-    {/*<MyCard title='仓库' extra='无' />*/}
-
-    {/*<MyCard title='调出仓库' extra='无' />*/}
-
-    {/*<MyCard title='出货人' extra='无' />*/}
-
-    {/*<MyCard title='调入仓库' extra='无' />*/}
-
-    {/*<MyCard title='收货人' extra='无' />*/}
-
-    {/*<MyCard title='来源' extra='无' />*/}
-
-    {/*<MyCard title='提报时间' extra='无' />*/}
-
-    {/*<MyCard title='审批人'>*/}
-
-    {/*</MyCard>*/}
   </>;
 };
 

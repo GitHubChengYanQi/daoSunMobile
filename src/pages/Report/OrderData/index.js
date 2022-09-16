@@ -11,8 +11,44 @@ import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 import ListScreent from '../../Work/Sku/SkuList/components/ListScreent';
 import OrderDataScreen from './components/OrderDataScreen';
+import { history } from 'umi';
 
 export const billPageList = { url: '/statisticalView/billPageList', method: 'POST' };
+
+export const LogDetail = ({ type, item }) => {
+  let id = '';
+  switch (type) {
+    case 'instockLog':
+      id = item.receiptId;
+      break;
+    case 'outstockLog':
+      id = item.outstockOrderId;
+      break;
+    case 'inventoryLog':
+      id = item.inventoryTaskId;
+      break;
+    case 'anomaly':
+      id = item.orderId;
+      break;
+    case 'maintenanceLog':
+      id = item.maintenanceLogId;
+      break;
+    case 'allocationLog':
+      id = item.allocationLogId;
+      break;
+    default:
+      break;
+  }
+  history.push({
+    pathname: '/Report/OrderLog',
+    query: {
+      type,
+      id,
+      time: MyDate.Show(item.createTime),
+      coding: item.coding,
+    },
+  });
+};
 
 const OrderData = () => {
 
@@ -103,33 +139,7 @@ const OrderData = () => {
                 key={index}
                 className={ToolUtil.classNames(style.flexCenter, style.orderItem)}
                 onClick={() => {
-                  switch (type) {
-                    case 'instockLog':
-                      history.push({
-                        pathname: '/Report/OrderLog',
-                        query: {
-                          receiptId: item.receiptId,
-                          type,
-                          time: MyDate.Show(item.createTime),
-                          coding: item.coding,
-                        },
-                      });
-                      break;
-                    case 'outstockLog':
-                      history.push({
-                        pathname: '/Report/OrderLog',
-                        query: {
-                          // receiptId: item.receiptId,
-                          type,
-                          outstockOrderId: item.outstockOrderId,
-                          time: MyDate.Show(item.createTime),
-                          coding: item.coding,
-                        },
-                      });
-                      break;
-                    default:
-                      break;
-                  }
+                  LogDetail({ type, item });
                 }}
               >
                 <div className={ToolUtil.classNames(style.row, style.title)}>
