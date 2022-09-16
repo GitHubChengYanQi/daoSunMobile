@@ -9,6 +9,7 @@ import InstockLog from './components/InstockLog';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import { message } from 'antd';
+import OutstockLog from './components/OutstockLog';
 
 export const createWord = { url: '/instockReceipt/createWord', method: 'POST' };
 
@@ -16,7 +17,7 @@ const OrderLog = () => {
 
   const { query } = useLocation();
 
-  const { receiptId, type, time, coding } = query;
+  const { receiptId, type, time, coding, outstockOrderId } = query;
 
   const { loading, run } = useRequest(createWord, {
     manual: true,
@@ -25,13 +26,18 @@ const OrderLog = () => {
     },
     onError: () => message.error('模板发送失败，请联系管理员'),
   });
-
+  console.log(type);
   const typeContent = () => {
     switch (type) {
       case 'instockLog':
         return {
           title: '入库',
           content: <InstockLog receiptId={receiptId} />,
+        };
+      case 'outstockLog':
+        return {
+          title: '出库',
+          content: <OutstockLog outstockOrderId={outstockOrderId} />,
         };
       default:
         return {

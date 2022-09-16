@@ -115,6 +115,18 @@ const OrderData = () => {
                         },
                       });
                       break;
+                    case 'outstockLog':
+                      history.push({
+                        pathname: '/Report/OrderLog',
+                        query: {
+                          // receiptId: item.receiptId,
+                          type,
+                          outstockOrderId: item.outstockOrderId,
+                          time: MyDate.Show(item.createTime),
+                          coding: item.coding,
+                        },
+                      });
+                      break;
                     default:
                       break;
                   }
