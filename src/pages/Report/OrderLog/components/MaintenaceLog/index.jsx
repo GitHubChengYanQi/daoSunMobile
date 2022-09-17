@@ -62,7 +62,7 @@ const MaintenaceLog = ({ maintenanceLogId }) => {
       },
     },
   );
-  console.log(info);
+
   const [open, setOpen] = useState();
 
   if (loading) {
@@ -126,8 +126,8 @@ const MaintenaceLog = ({ maintenanceLogId }) => {
                     >
                       实物码：
                       {item.codeId.substring(item.codeId.length - 6,item.codeId.length)}
-                      <ShowCode code={item.codeId} inkindId={item.inkindId} />
-                      <span style={{marginLeft:8}}>× {item.number}</span>
+                     <span style={{padding:'0 8px'}}> <ShowCode code={item.codeId} inkindId={item.inkindId} /></span>
+                      × {item.number}
                     </div>;
                   })
                 }
