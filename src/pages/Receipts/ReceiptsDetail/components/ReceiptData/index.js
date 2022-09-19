@@ -33,14 +33,13 @@ const ReceiptData = (
 
   const actions = [];
   currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push({ action: item.action, id: item.documentsActionId });
+    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+      return item.auditRule.actionStatuses.map((item) => {
+        return actions.push({ action: item.action, id: item.actionId });
       });
     }
     return null;
   });
-
   const getAction = (action) => {
     const actionData = actions.filter(item => {
       return item.action === action;

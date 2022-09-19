@@ -21,9 +21,9 @@ const Bottom = (
 
   const actions = [];
   currentNode.map((item) => {
-    if (item.auditRule && Array.isArray(item.auditRule.actionResults)) {
-      return item.auditRule.actionResults.map((item) => {
-        return actions.push({ action: item.actionName, id: item.actionId });
+    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+      return item.auditRule.actionStatuses.map((item) => {
+        return actions.push({ action: item.action, id: item.actionId });
       });
     }
     return null;
