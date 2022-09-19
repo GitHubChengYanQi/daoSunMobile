@@ -180,7 +180,7 @@ const SkuScreen = (
         return <Material
           refresh={refresh}
           title={item.title}
-          value={params.Material}
+          value={params.materialId}
           onChange={(materialId) => {
             paramsOnChange({ ...params, materialId });
           }}
@@ -248,7 +248,7 @@ const SkuScreen = (
   return <>
     <Screen
       screen={screen}
-      buttonTitle={skuNumber === 0 ? '完成' : `查看 ${skuNumber} 类物料`}
+      buttonTitle={`查看 ${skuNumber} 类物料`}
       onClose={onClose}
       onClear={onClear}
       searchtype={searchtype.filter(item => item.open)}

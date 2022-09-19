@@ -148,9 +148,6 @@ const SkuList = (
         data={skuData}
         response={(res) => {
           setSkuNumber(res.count || 0);
-          if (!res.count || res.count === 0) {
-            Toast.show({ content: '没有找到匹配的物料，修改筛选条件试试', duration: 2000, icon: 'fail' });
-          }
           const resSearch = res.search || [];
           let overs = {};
           resSearch.map(item => {
