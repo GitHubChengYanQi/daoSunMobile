@@ -36,13 +36,19 @@ const Audit = (
     },
   );
 
+  const logIds = [];
+  currentNode.map(item => {
+    const logResults = item.logResults || [];
+    logResults.map(item => {
+      logIds.push(item.logId);
+    });
+  });
+
   const audit = (status) => {
     processLogRun({
       data: {
         taskId: id,
-        logIds: currentNode.map(item => {
-          return ToolUtil.isObject(item.logResult).logId;
-        }),
+        logIds,
         status,
         userIds: userIds.toString(),
         photoId: mediaIds.toString(),

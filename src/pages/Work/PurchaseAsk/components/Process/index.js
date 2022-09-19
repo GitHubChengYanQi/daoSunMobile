@@ -155,11 +155,11 @@ const Process = (
       return { url: item };
     }) : [];
 
-    return users.map((items, index) => {
-      let stepsStatus;
-      let content;
-      if (items.auditStatus) {
-        switch (logResult.status) {
+    return <div className={style.users}>
+      {users.map((items, index) => {
+        let stepsStatus;
+        let content;
+        switch (items.status) {
           case 1:
             stepsStatus = 'success';
             content = <span className={style.auditSuccess}><CheckCircleFill /></span>;
@@ -171,35 +171,35 @@ const Process = (
           default:
             break;
         }
-      }
 
 
-      return <div key={index}>
-        <div className={style.user} key={index}>
-          <div className={style.nameAvatar}>
-            <Badge
-              color='#fff'
-              content={content}
-            >
-              <Avatar
-                size={26}
-                shape='square'
-                key={index}
-                src={items.avatar}
-              >{items.name.substring(0, 1)}</Avatar>
-            </Badge>
-            {items.name}
+        return <div key={index}>
+          <div className={style.user} key={index}>
+            <div className={style.nameAvatar}>
+              <Badge
+                color='#fff'
+                content={content}
+              >
+                <Avatar
+                  size={26}
+                  shape='square'
+                  key={index}
+                  src={items.avatar}
+                >{(items.name || '').substring(0, 1)}</Avatar>
+              </Badge>
+              {items.name}
+            </div>
+            <div hidden={!stepsStatus}>
+              {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(items.updateTime)}
+            </div>
           </div>
-          <div hidden={!stepsStatus}>
-            {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
-          </div>
-        </div>
-        {logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>
-          {logRemark.content}
-          <UploadFile imgSize={14} show files={imgs} />
-        </Space>}
-      </div>;
-    });
+          {logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>
+            {logRemark.content}
+            <UploadFile imgSize={14} show files={imgs} />
+          </Space>}
+        </div>;
+      })}
+    </div>;
   };
 
   // 审批人列表
@@ -277,7 +277,7 @@ const Process = (
 
     const minHeight = 60;
 
-    let stepStatus = 'wait';
+    let stepStatus;
 
     let iconColor = '';
 
@@ -285,32 +285,33 @@ const Process = (
 
     const hidden = hiddenStep.includes(index);
 
-    switch (step.logResult && step.logResult.status) {
-      case -1:
-        if (next) {
-          stepStatus = 'wait';
-          iconColor = style.action;
-          actioning = true;
-          break;
-        }
-        stepStatus = 'wait';
-        iconColor = style.wait;
-        break;
-      case 0:
-        stepStatus = 'error';
-        iconColor = style.error;
-        break;
-      case 1:
-        stepStatus = 'success';
-        iconColor = style.success;
-        break;
-      case 3:
+    const logResults = step.logResults || [];
+
+    const nextWait = logResults.filter((item) => item.status === 3).length === logResults.length;
+    const error = logResults.filter((item) => item.status === 0).length > 0;
+    const success = logResults.filter((item) => item.status === 1).length > 0;
+    if (logResults.length === 0 ) {
+      if (next){
         stepStatus = 'wait';
         iconColor = style.action;
         actioning = true;
-        break;
-      default:
-        break;
+      }else {
+        stepStatus = 'wait';
+        iconColor = style.wait;
+      }
+    }else if (success) {
+      stepStatus = 'success';
+      iconColor = style.success;
+    } else if (error) {
+      stepStatus = 'error';
+      iconColor = style.error;
+    } else if (nextWait) {
+      stepStatus = 'wait';
+      iconColor = style.action;
+      actioning = true;
+    } else {
+      stepStatus = 'wait';
+      iconColor = style.wait;
     }
 
     switch (step.auditType) {
@@ -323,17 +324,13 @@ const Process = (
               <span>发起人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>
               {visiable(hidden, index)}
             </div>}
-            description={!hidden && (createUser.name ? auditUsers([{
-              name: createUser.name,
-              avatar: createUser.avatar,
-              auditStatus: 99,
-            }], step, stepStatus) : rules(step))}
+            description={!hidden && (createUser.name ? auditUsers(logResults, step) : rules(step))}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
             )}>{status(step)}</div>}
           />
-          {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+          {steps(step.childNode, success, index + 1)}
         </div>;
       case 'route':
         return <div>
@@ -358,7 +355,7 @@ const Process = (
               iconColor,
             )}>{status(step)}</div>}
           />
-          {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+          {steps(step.childNode, success, index + 1)}
         </div>;
       case 'send':
       case 'process':
@@ -368,7 +365,6 @@ const Process = (
         } else if (step.auditRule.type === 'audit') {
           title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>;
         } else {
-
           const actionStatuses = step.auditRule.actionStatuses || [];
           title = <span>
             {actionStatuses.map(item => item.actionName || '执行动作').join('、')} · {nodeStatusName('action', stepStatus, actioning)}
@@ -382,13 +378,13 @@ const Process = (
               {title}
               {visiable(hidden, index)}
             </div>}
-            description={!hidden && rules(step, step.auditType === 'send')}
+            description={!hidden && auditUsers(logResults, step)}
             icon={<div className={ToolUtil.classNames(
               style.stepIcon,
               iconColor,
             )}>{status(step)}</div>}
           />
-          {steps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+          {steps(step.childNode, success, index + 1)}
         </div>;
       default:
         break;
