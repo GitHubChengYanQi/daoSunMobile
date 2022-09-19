@@ -137,7 +137,7 @@ const FixedBrand = (
                       }
                     }}>
                       <MyCheck fontSize={16} checked={positionItem.checked} />
-                      <span>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
+                      <span className={style.name}>{positionItem.name}<span hidden={!out}>({positionItem.number})</span></span>
                     </div>
 
                     <div hidden={!positionItem.checked}>

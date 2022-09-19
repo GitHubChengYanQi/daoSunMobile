@@ -71,7 +71,7 @@ const InstockOrder = (
           taskId={taskId}
           data={details}
           actionId={getAction('outStock').id}
-          action={getAction('outStock').id}
+          action={true}
           pickListsId={data.pickListsId}
           refresh={refresh}
         />;

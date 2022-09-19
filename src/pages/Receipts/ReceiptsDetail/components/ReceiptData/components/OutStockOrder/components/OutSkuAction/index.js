@@ -241,8 +241,9 @@ const OutSkuAction = (
         skuItem={visible}
         dimension={dimension}
         onSuccess={(number) => {
+          refresh();
           shopRef.current.jump(() => {
-            refresh();
+            // refresh();
           });
         }}
         onClose={() => {

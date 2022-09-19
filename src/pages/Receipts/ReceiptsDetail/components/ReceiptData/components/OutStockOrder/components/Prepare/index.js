@@ -73,11 +73,10 @@ const Prepare = (
   const addShop = () => {
     onClose();
     const imgUrl = ToolUtil.isArray(skuResult.imgThumbUrls || skuResult.imgUrls)[0] || state.homeLogo;
-    addShopCart(imgUrl, 'pickSkuImg', () => {
-      let number = 0;
-      outStockSkus.forEach(item => number += item.number);
-      onSuccess(number);
-    });
+    addShopCart(imgUrl, 'pickSkuImg', );
+    let number = 0;
+    outStockSkus.forEach(item => number += item.number);
+    onSuccess(number);
   };
 
 

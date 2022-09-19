@@ -76,15 +76,17 @@ const InStockLog = (
               </div>
               <div className={style.errorData}>
                 <span hidden={!error} className={style.error}>异常未入库</span>
-                <div hidden={error}><LinkButton onClick={() => {
+                <div hidden={error}>
+                  <LinkButton onClick={() => {
                   history.push({
                     pathname: '/Work/Inkind/InkindList',
                     query: {
                       inkindIds: ToolUtil.isArray(item.inkindIds).toString(),
                     },
                   });
-                }}><SystemQRcodeOutline /></LinkButton></div>
-                <ShopNumber textAlign='right' show value={item.number} />
+                }}><SystemQRcodeOutline /></LinkButton>
+                </div>
+                <ShopNumber show value={item.number} />
               </div>
             </div>
 

@@ -341,7 +341,7 @@ const StoreHouses = (
           brandChange({ checked: !brandItem.checked, number: 1 }, storehouseId, brandItem.brandId, positionId);
         }}>
           <MyCheck fontSize={14} checked={brandItem.checked} />
-          <span>{brandItem.brandName}<span hidden={out}>({brandItem.maxNumber})</span></span>
+          <span className={style.name}>{brandItem.brandName}<span hidden={out}>({brandItem.maxNumber})</span></span>
         </div>
 
         <div hidden={!brandItem.checked}>

@@ -168,7 +168,7 @@ const Order = (
                       }
                     }}>
                       <MyCheck checked={positionItem.checked} />
-                      <span>{positionItem.name} ({positionItem.number})</span>
+                      <span className={style.name}>{positionItem.name} ({positionItem.number})</span>
                     </div>
 
                     <div hidden={!positionItem.checked}>

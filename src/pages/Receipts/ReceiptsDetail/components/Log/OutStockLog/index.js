@@ -10,6 +10,7 @@ import { SystemQRcodeOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
 import { MyDate } from '../../../../../components/MyDate';
 import MySearch from '../../../../../components/MySearch';
+import { useHistory } from 'react-router-dom';
 
 export const logList = { url: '/instockLogDetail/getOutStockLogs', method: 'POST' };
 
@@ -18,6 +19,8 @@ const OutStockLog = (
     outstockOrderId,
   },
 ) => {
+
+  const history = useHistory();
 
   const { loading, data, run } = useRequest(logList, { manual: true });
 
@@ -53,7 +56,7 @@ const OutStockLog = (
     {ToolUtil.isArray(data).length === 0 && <MyEmpty />}
     {
       ToolUtil.isArray(data).map((item, index) => {
-
+        const storehousePositionsResult = item.storehousePositionsResult || {};
         return <div key={index}>
           <div className={style.skuItem}>
             <div className={style.sku}>
@@ -67,13 +70,23 @@ const OutStockLog = (
                 />
               </div>
               <div className={style.errorData}>
-                <div><LinkButton><SystemQRcodeOutline /></LinkButton></div>
+                <div>
+                  <LinkButton onClick={() => {
+                    history.push({
+                      pathname: '/Work/Inkind/InkindList',
+                      query: {
+                        inkindIds: ToolUtil.isArray(item.inkindIds).toString(),
+                      },
+                    });
+                  }}><SystemQRcodeOutline /></LinkButton>
+                </div>
                 <ShopNumber show value={item.number} />
               </div>
             </div>
 
             <div className={style.log} key={index}>
               <div className={style.data}>
+                <div className={style.left}>库位：{storehousePositionsResult.name || '无'}</div>
                 <div>{ToolUtil.isObject(item.user).name} / {MyDate.Show(item.createTime)}</div>
               </div>
             </div>

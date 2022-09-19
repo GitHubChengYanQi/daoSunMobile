@@ -5,12 +5,17 @@ import jrQrcode from 'jr-qrcode';
 import MyNavBar from '../../../components/MyNavBar';
 import LinkButton from '../../../components/LinkButton';
 import PrintCode from '../../../components/PrintCode';
+import MyEmpty from '../../../components/MyEmpty';
 
 const InkindList = () => {
 
   const { query } = useLocation();
 
   const inkindIds = query.inkindIds ? query.inkindIds.split(',') : [];
+
+  if (inkindIds.length === 0){
+    return <MyEmpty description='暂无实物数据' />
+  }
 
   return <>
     <MyNavBar title='二维码列表' />
