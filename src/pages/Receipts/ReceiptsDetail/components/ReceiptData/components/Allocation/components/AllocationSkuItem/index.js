@@ -3,7 +3,7 @@ import { ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import moment from 'moment';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import View from './components/View';

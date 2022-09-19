@@ -5,7 +5,7 @@ import style from '../../ReceiptData/components/Stocktaking/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import { UserName } from '../../../../../components/User';
 import { MyDate } from '../../../../../components/MyDate';
-import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
 import LinkButton from '../../../../../components/LinkButton';
 import SearchInkind from '../../../../../components/InkindList/components/SearchInkind';
 import MySearch from '../../../../../components/MySearch';

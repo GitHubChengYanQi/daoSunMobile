@@ -6,7 +6,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import InkindList from '../../../../../../../../../../components/InkindList';
 import { TrademarkCircleOutlined } from '@ant-design/icons';

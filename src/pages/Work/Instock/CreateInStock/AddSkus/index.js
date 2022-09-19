@@ -372,7 +372,7 @@ const AddSkus = (
     <MyPopup
       title='物料信息'
       position='bottom'
-      height='80vh'
+      height='90vh'
       ref={detailRef}
       component={Detail}
     />

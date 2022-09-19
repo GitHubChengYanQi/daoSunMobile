@@ -54,7 +54,7 @@ const SelectUsers = ({ value, onChange, multiple }, ref) => {
             });
           }} />
         <Divider />
-        <div style={{ height: '80vh', overflowY: 'auto', textAlign: 'center' }}>
+        <div style={{ height: '90vh', overflowY: 'auto', textAlign: 'center' }}>
           {loading ? <Spin style={{ padding: 16 }} /> :
             <Selector
               value={user.map((items) => {

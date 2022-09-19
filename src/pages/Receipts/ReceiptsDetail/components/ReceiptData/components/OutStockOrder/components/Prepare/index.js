@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import style from './index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import { ScanIcon } from '../../../../../../../../components/Icon';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import { Message } from '../../../../../../../../components/Message';

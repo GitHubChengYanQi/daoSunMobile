@@ -7,7 +7,7 @@ import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Button } from 'antd-mobile';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url';
 import { Message } from '../../../../../../../../../../components/Message';

@@ -10,7 +10,7 @@ import { useRequest } from '../../../../../../../../../util/Request';
 import { useModel } from 'umi';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import { connect } from 'dva';
 import { ReceiptsEnums } from '../../../../../../../index';
 import BottomButton from '../../../../../../../../components/BottomButton';
@@ -44,7 +44,7 @@ const Error = (
     },
     refreshOrder = () => {
     },
-    maxHeight = '80vh',
+    maxHeight = '90vh',
     type,
     showStock,
     title,

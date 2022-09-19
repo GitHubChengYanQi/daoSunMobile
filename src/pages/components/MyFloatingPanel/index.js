@@ -30,7 +30,7 @@ const MyFloatingPanel = (
   }, []);
 
   return <>
-    <div id='backgroundDom' style={{maxHeight:'80vh',overflowY:'auto'}}>
+    <div id='backgroundDom' style={{maxHeight:'90vh',overflowY:'auto'}}>
       {backgroundDom}
     </div>
     <FloatingPanel

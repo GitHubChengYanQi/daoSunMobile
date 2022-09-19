@@ -5,7 +5,7 @@ import { collectableColor, notPreparedColor, receivedColor } from '../../index';
 import MyCheck from '../../../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
-  from '../../../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { OutProgress } from '../../../OutSkuItem';
 
 const OutItem = (

@@ -3,7 +3,7 @@ import style from './index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../../util/Request';
 import MyNavBar from '../../../../../../components/MyNavBar';
-import InstockSkus from '../InstockSkus';
+import CreateTask from '../../../../../CreateTask';
 
 export const contractDetail = { url: '/contract/detail', method: 'POST' };
 
@@ -31,7 +31,7 @@ const PurchaseOrderInstock = ({ data = {} }) => {
       <div className={style.value}>{ToolUtil.isObject(contract).coding || '-'}</div>
     </div>
 
-    <InstockSkus skus={details.map(item => {
+    <CreateTask skus={details.map(item => {
       return {
         skuId: ToolUtil.isObject(item.skuResult).skuId,
         skuResult: item.skuResult,

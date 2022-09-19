@@ -8,7 +8,7 @@ import { instockErrorDetail } from '../../../InstockOrder/components/Error';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import CheckUser from '../../../../../../../../components/CheckUser';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import { Message } from '../../../../../../../../components/Message';
 import { useModel } from 'umi';
 import BottomButton from '../../../../../../../../components/BottomButton';

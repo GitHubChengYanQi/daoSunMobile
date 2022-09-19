@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import style from './index.less';
 import SkuItem from '../../../../Sku/SkuItem';
 import BottomButton from '../../../../../components/BottomButton';
-import ShopNumber from '../../../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import StoreHouses
-  from '../../../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku/components/AllocationAdd/components/StoreHouses';
+  from '../../../../AddShop/components/AddSku/components/AllocationAdd/components/StoreHouses';
 import { useRequest } from '../../../../../../util/Request';
 import { Message } from '../../../../../components/Message';
 import { MyLoading } from '../../../../../components/MyLoading';

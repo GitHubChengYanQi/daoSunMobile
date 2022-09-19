@@ -7,7 +7,7 @@ import MyAntList from '../../../components/MyAntList';
 import { List } from 'antd-mobile';
 import SkuItem from '../../Sku/SkuItem';
 import LinkButton from '../../../components/LinkButton';
-import AddSku from '../../Instock/InstockAsk/coponents/SkuInstock/components/AddSku';
+import AddSku from '../../AddShop/components/AddSku';
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { ERPEnums } from '../ERPEnums';

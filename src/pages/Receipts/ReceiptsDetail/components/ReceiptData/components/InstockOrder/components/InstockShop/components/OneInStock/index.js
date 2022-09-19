@@ -3,7 +3,7 @@ import style from '../../index.less';
 import { CloseOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';

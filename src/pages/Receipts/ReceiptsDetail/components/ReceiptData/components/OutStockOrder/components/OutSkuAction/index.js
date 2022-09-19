@@ -153,16 +153,17 @@ const OutSkuAction = (
         <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
         }}>申请明细</LinkButton>
-        <Icon
-          type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
-          onClick={() => {
-            setPositionVisible(true);
-          }} />
       </div>}
       extra={<div className={style.extra}>
         合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
       <MySearch
+        extraIcon={ <Icon
+          style={{fontSize:20}}
+          type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
+          onClick={() => {
+            setPositionVisible(true);
+          }} />}
         placeholder='请输入物料名称查询'
         style={{ padding: '8px 12px' }}
         onClear={() => setData(defaultData)}
@@ -332,7 +333,7 @@ const OutSkuAction = (
       visible={showDetail}
       destroyOnClose
     >
-      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+      <div style={{ maxHeight: '90vh', overflow: 'auto' }}>
         {format(askData).array.map((item, index) => {
           return <OutSkuItem
             ask

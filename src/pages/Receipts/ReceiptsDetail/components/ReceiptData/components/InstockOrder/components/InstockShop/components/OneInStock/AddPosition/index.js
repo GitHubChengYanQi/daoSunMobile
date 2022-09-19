@@ -9,7 +9,7 @@ import { getPositionsBySkuIds } from '../index';
 import MyRemoveButton from '../../../../../../../../../../../components/MyRemoveButton';
 import { AddButton } from '../../../../../../../../../../../components/MyButton';
 import ShopNumber
-  from '../../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
 import MyPositions from '../../../../../../../../../../../components/MyPositions';
 

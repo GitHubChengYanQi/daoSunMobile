@@ -5,7 +5,7 @@ import style from './index.less';
 import StockDetail, { shopCartShow } from './StockDetail';
 import MyNavBar from '../../components/MyNavBar';
 import MyTablBar from '../../components/MyTablBar';
-import SkuShop from '../Instock/InstockAsk/coponents/SkuInstock/components/SkuShop';
+import SkuShop from '../AddShop/components/SkuShop';
 import Dynamic from './Dynamic';
 import Task from './Task';
 import { useRequest } from '../../../util/Request';

@@ -5,7 +5,7 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import styles from '../../index.less';
 import SkuItem from '../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import Label from '../../../../components/Label';
 import { Divider, Space } from 'antd-mobile';
 import style from '../../../StatisticalChart/index.less';
@@ -25,7 +25,8 @@ const MaintenaceLog = ({ maintenanceLogId }) => {
   });
 
   const { loading } = useRequest({
-      ...maintenanceLog, params: {
+      ...maintenanceLog,
+      params: {
         id: maintenanceLogId,
       },
     }, {

@@ -5,7 +5,7 @@ import { AddCircleOutline, CloseOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../../../../../../../../components/Upload/UploadFile';
 import { Button, Space, TextArea } from 'antd-mobile';

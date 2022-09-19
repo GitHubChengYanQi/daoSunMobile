@@ -7,7 +7,7 @@ import style from '../InStockLog/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';
 import { SystemQRcodeOutline } from 'antd-mobile-icons';
-import ShopNumber from '../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
 import { MyDate } from '../../../../../components/MyDate';
 import MySearch from '../../../../../components/MySearch';
 

@@ -6,7 +6,7 @@ import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import skuStyle
-  from '../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/StocktakingAsk/components/SelectSkus/index.less';
+  from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import { MyDate } from '../../../../../../components/MyDate';

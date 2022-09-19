@@ -1,7 +1,7 @@
 import React from 'react';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import style from './index.less';
 import { Divider } from 'antd-mobile';
 

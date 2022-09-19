@@ -7,7 +7,7 @@ import { Button, Popup } from 'antd-mobile';
 import Error from '../../../InstockOrder/components/Error';
 import { ReceiptsEnums } from '../../../../../../../index';
 import ErrorShop from '../ErrorShop';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import MyList from '../../../../../../../../components/MyList';
 import Icon from '../../../../../../../../components/Icon';
 import { Message } from '../../../../../../../../components/Message';

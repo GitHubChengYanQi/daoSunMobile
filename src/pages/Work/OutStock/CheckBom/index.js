@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import MyCard from '../../../components/MyCard';
 import { Picker, Space } from 'antd-mobile';
 import MyRadio from '../../../components/MyRadio';
-import ShopNumber from '../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../AddShop/components/ShopNumber';
 import MyNavBar from '../../../components/MyNavBar';
 import BottomButton from '../../../components/BottomButton';
 import LinkButton from '../../../components/LinkButton';

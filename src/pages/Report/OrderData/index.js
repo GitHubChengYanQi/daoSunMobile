@@ -69,7 +69,7 @@ const OrderData = () => {
     { title: '异常', type: 'anomaly' },
   ];
 
-  const [data, setData] = useState([1, 2]);
+  const [data, setData] = useState([]);
 
   const [total, setTotal] = useState(0);
 

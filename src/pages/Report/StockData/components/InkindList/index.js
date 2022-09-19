@@ -3,7 +3,7 @@ import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import style from './index.less';
-import ShopNumber from '../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import LinkButton from '../../../../components/LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import InkindItem from '../../../../components/InkindList/components/InkindItem';

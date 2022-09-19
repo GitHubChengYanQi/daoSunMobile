@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { history } from 'umi';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import { useRequest } from '../../../../../../util/Request';
-import { judgeLoginUser } from '../../../../Instock/InstockAsk/Submit/components/InstockSkus';
+import { judgeLoginUser } from '../../../../CreateTask';
 import { MyLoading } from '../../../../../components/MyLoading';
 import MyActionSheet from '../../../../../components/MyActionSheet';
 

@@ -1,7 +1,7 @@
 import style from '../../index.less';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
 import { AddOutline, CameraOutline, CloseOutline } from 'antd-mobile-icons';
 import MyCard from '../../../../../../../../../../components/MyCard';
@@ -9,7 +9,7 @@ import { Space, TextArea } from 'antd-mobile';
 import MyRemoveButton from '../../../../../../../../../../components/MyRemoveButton';
 import { Message } from '../../../../../../../../../../components/Message';
 import Careful
-  from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
+  from '../../../../../../../../../../Work/CreateTask/components/Careful';
 import UploadFile from '../../../../../../../../../../components/Upload/UploadFile';
 import { AddButton } from '../../../../../../../../../../components/MyButton';
 import { ReceiptsEnums } from '../../../../../../../../../index';

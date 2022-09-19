@@ -6,7 +6,7 @@ import MyEmpty from '../../../../components/MyEmpty';
 import { UserName } from '../../../../components/User';
 import { Divider } from 'antd-mobile';
 import SkuItem from '../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import styles from '../../index.less';
 import { ToolUtil } from '../../../../components/ToolUtil';
 

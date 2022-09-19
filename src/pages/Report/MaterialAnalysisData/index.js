@@ -7,7 +7,7 @@ import { ToolUtil } from '../../components/ToolUtil';
 import SkuItem from '../../Work/Sku/SkuItem';
 import React, { useState } from 'react';
 import MaterialAnalysis from '../components/MaterialAnalysis';
-import ShopNumber from '../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../Work/AddShop/components/ShopNumber';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import { Space } from 'antd-mobile';

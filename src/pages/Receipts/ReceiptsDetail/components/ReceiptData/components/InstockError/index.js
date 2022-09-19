@@ -118,7 +118,7 @@ const InstockError = (
 
     <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError
-        height='80vh'
+        height='90vh'
         anomalyOrderId={data.orderId}
         orderComplete={data.complete === 99 || !permissions}
         anomalyId={visible}

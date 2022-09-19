@@ -4,7 +4,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 import { DownOutline, ExclamationCircleOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../Sku/SkuItem';
 import { Divider } from 'antd-mobile';
-import ShopNumber from '../../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../AddShop/components/ShopNumber';
 import MyCheck from '../../../../components/MyCheck';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';

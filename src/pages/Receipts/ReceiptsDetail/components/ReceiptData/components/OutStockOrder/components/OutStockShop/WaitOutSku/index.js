@@ -3,7 +3,7 @@ import style from './index.less';
 import LinkButton from '../../../../../../../../../components/LinkButton';
 import MyCheck from '../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { Button } from 'antd-mobile';
 import { useRequest } from '../../../../../../../../../../util/Request';
 import {

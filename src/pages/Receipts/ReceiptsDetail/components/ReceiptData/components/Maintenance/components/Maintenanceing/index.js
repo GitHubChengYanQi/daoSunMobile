@@ -11,9 +11,9 @@ import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../components/Message';
 import { useRequest } from '../../../../../../../../../util/Request';
 import InkindList from '../../../../../../../../components/InkindList';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import MyTextArea from '../../../../../../../../components/MyTextArea';
-import Careful from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/Careful';
+import Careful from '../../../../../../../../Work/CreateTask/components/Careful';
 import { ReceiptsEnums } from '../../../../../../../index';
 import MyCard from '../../../../../../../../components/MyCard';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
@@ -97,7 +97,7 @@ const Maintenanceing = (
     });
   };
 
-  return <div style={{ paddingBottom: 60, maxWidth: '80vh', overflow: 'hidden' }}>
+  return <div style={{ paddingBottom: 60, maxWidth: '90vh', overflow: 'hidden' }}>
     <div className={style.skuItem}>
       <div className={style.sku}>
         <SkuItem extraWidth='94px' skuResult={skuItem.skuResult} otherData={[skuItem.positionName]} />

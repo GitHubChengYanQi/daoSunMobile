@@ -7,7 +7,7 @@ import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';
 import pickStyle from '../MyPicking/index.less';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 
 export const OutProgress = (
   {

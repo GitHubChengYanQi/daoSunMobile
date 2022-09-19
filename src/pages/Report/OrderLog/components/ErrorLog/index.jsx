@@ -6,7 +6,7 @@ import { useRequest } from '../../../../../util/Request';
 import styles from '../../index.less';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import { ToolUtil } from '../../../../components/ToolUtil';
-import ShopNumber from '../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import { Popup } from 'antd-mobile';
 import SkuError
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockError/components/SkuError';
@@ -78,7 +78,7 @@ const ErrorLog = ({ orderId }) => {
 
       <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
         <SkuError
-          height='80vh'
+          height='90vh'
           orderComplete
           anomalyId={visible}
           onClose={() => setVisible(false)}

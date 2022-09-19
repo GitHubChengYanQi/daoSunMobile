@@ -3,7 +3,7 @@ import MyCard from '../../../../../../components/MyCard';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { Divider } from 'antd-mobile';
 import skuStyle
-  from '../../../../../../Work/Instock/InstockAsk/Submit/components/InstockSkus/components/StocktakingAsk/components/SelectSkus/index.less';
+  from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
 import { ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import MyEllipsis from '../../../../../../components/MyEllipsis';

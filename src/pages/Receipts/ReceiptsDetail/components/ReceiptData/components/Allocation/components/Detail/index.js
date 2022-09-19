@@ -8,7 +8,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyCard from '../../../../../../../../components/MyCard';
 import { useBoolean } from 'ahooks';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import { PositionShow } from '../PositionShow';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import { useRequest } from '../../../../../../../../../util/Request';

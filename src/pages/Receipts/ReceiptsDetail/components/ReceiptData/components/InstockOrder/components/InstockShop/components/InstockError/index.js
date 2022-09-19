@@ -14,7 +14,7 @@ import { Message } from '../../../../../../../../../../components/Message';
 import { sendBack } from '../WaitInstock';
 import { ReceiptsEnums } from '../../../../../../../../../index';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 
 const InstockError = (
   {

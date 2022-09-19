@@ -3,7 +3,7 @@ import MyCard from '../../../../../components/MyCard';
 import style from '../../index.less';
 import SkuItem from '../../../../Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';
-import ShopNumber from '../../../../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { ToolUtil } from '../../../../../components/ToolUtil';
 import moment from 'moment';

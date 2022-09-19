@@ -4,7 +4,7 @@ import style
 import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import ShopNumber
-  from '../../../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+  from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import moment from 'moment';
 import MyProgress from '../../../../../../../../../../components/MyProgress';
 

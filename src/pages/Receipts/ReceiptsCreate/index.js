@@ -4,11 +4,8 @@ import AskAdd from '../../Work/PurchaseAsk/AskAdd';
 import Errors from '../../Work/Instock/Errors';
 import MyEmpty from '../../components/MyEmpty';
 import { ReceiptsEnums } from '../index';
-import InStockAsk from '../../Work/Instock/InstockAsk';
-import OutStockAsk from '../../Work/OutStock/OutStockAsk';
-import InventoryAsk from '../../Work/Inventory/InventoryAsk';
 import { ERPEnums } from '../../Work/Stock/ERPEnums';
-import AllocationAsk from '../../Work/Allocation/AllocationAsk';
+import SkuInstock from '../../Work/AddShop';
 
 
 const ReceiptsCreate = () => {
@@ -27,13 +24,13 @@ const ReceiptsCreate = () => {
   switch (query.type) {
     case ReceiptsEnums.instockOrder:
       const judge = { ...query }.hasOwnProperty('directInStock');
-      return <InStockAsk type={judge ? ERPEnums.directInStock : ERPEnums.inStock} judge={judge} />;
+      return <SkuInstock type={judge ? ERPEnums.directInStock : ERPEnums.inStock} judge={judge} />;
     case ReceiptsEnums.outstockOrder:
-      return <OutStockAsk />;
+      return <SkuInstock title='出库申请' type={ERPEnums.outStock} />;
     case ReceiptsEnums.stocktaking:
-      return <InventoryAsk />;
+      return <SkuInstock title='盘点申请' type={ERPEnums.stocktaking} />;
     case ReceiptsEnums.allocation:
-      return <AllocationAsk />;
+      return <SkuInstock title='调拨申请' type={ERPEnums.allocation} />;
     case 'purchaseAsk':
       return <AskAdd />;
     case ReceiptsEnums.error:

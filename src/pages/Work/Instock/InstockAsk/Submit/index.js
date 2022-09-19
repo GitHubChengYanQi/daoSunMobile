@@ -6,7 +6,7 @@ import { orderDetail } from '../../../Order/Url';
 import MyEmpty from '../../../../components/MyEmpty';
 import PurchaseOrderInstock from './components/PurchaseOrderInstock';
 import { MyLoading } from '../../../../components/MyLoading';
-import InstockSkus from './components/InstockSkus';
+import CreateTask from '../../../CreateTask';
 
 const Submit = () => {
 
@@ -52,7 +52,7 @@ const Submit = () => {
     case 'outItem':
       return <MyEmpty />;
     default:
-      return <InstockSkus state={state} skus={skus} createType={query.createType} judge={judge} />;
+      return <CreateTask state={state} skus={skus} createType={query.createType} judge={judge} />;
   }
 };
 

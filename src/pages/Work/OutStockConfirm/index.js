@@ -5,7 +5,7 @@ import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import style from './index.less';
 import SkuItem from '../Sku/SkuItem';
-import ShopNumber from '../Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../AddShop/components/ShopNumber';
 import BottomButton from '../../components/BottomButton';
 import { Message } from '../../components/Message';
 import CodeNumber from './CodeNumber';

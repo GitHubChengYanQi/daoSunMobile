@@ -1,7 +1,7 @@
 import React from 'react';
 import style from '../../index.less';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
-import ShopNumber from '../../../../../../../../Work/Instock/InstockAsk/coponents/SkuInstock/components/ShopNumber';
+import ShopNumber from '../../../../../../../../Work/AddShop/components/ShopNumber';
 import { Button } from 'antd-mobile';
 
 const ErrorItem = (
