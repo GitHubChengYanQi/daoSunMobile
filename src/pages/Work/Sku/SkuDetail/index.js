@@ -148,7 +148,7 @@ const SkuDetail = ({ id }) => {
             skuId: detail.skuId,
           });
         }}>
-          <Space align='center'><Icon type='icon-kucunmingxi' />库存明细</Space>
+        <Icon type='icon-kucunmingxi1' />库存明细
         </div>
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           history.push({
@@ -156,7 +156,7 @@ const SkuDetail = ({ id }) => {
             query: { skuId: detail.skuId },
           });
         }}>
-          <Space align='center'> <Icon type='icon-renwu1' />关联任务</Space>
+         <Icon type='icon-guanlianrenwu' />关联任务
         </div>
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           history.push({
@@ -164,12 +164,12 @@ const SkuDetail = ({ id }) => {
             query: { skuId: detail.skuId },
           });
         }}>
-          <Space align='center'> <Icon type='icon-bianji' />编辑</Space>
+          <Icon type='icon-bianji1' />编辑
         </div>
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           setVisible('log');
         }}>
-          <Space align='center'> <Icon type='icon-chat-history-fill' />操作记录</Space>
+         <Icon type='icon-caozuojilu' />操作记录
         </div>
       </div>
     </div>
