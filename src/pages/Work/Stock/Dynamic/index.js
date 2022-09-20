@@ -3,8 +3,6 @@ import MyList from '../../../components/MyList';
 import StepList from '../../../Receipts/ReceiptsDetail/components/Dynamic/components/StepList';
 import { dynamicList } from '../../../Receipts/ReceiptsDetail/components/Dynamic';
 
-export const remakeList = { url: '/remarks/list', method: 'POST' };
-
 const Dynamic = () => {
 
   const [data, setData] = useState([]);
