@@ -172,10 +172,9 @@ const StocktaskigAction = (
           params={params}
           data={data}
           ref={listRef}
-          getData={(list = [], newList = []) => {
-            const positionIds = list.map(item => item.positionId);
-            const newData = data.filter(item => positionIds.includes(item.positionId));
-            newList.forEach(item => {
+          getData={(list = []) => {
+            const newData = [];
+            list.forEach(item => {
               const newPositionIds = newData.map(item => item.positionId);
               const newPositionIndex = newPositionIds.indexOf(item.positionId);
               if (newPositionIndex !== -1) {

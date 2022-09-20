@@ -19,7 +19,12 @@ const InkindItem = (
 
   const inkindList = positionItem.inkindList || [];
 
-  const checkInkinds = inkindList.filter(item => inkindIds.includes(item.inkindId));
+  let number = 0;
+
+  const checkInkinds = inkindList.filter(item => {
+    number += item.number;
+    return inkindIds.includes(item.inkindId);
+  });
 
   const checked = checkInkinds.length === inkindList.length;
 
@@ -34,7 +39,7 @@ const InkindItem = (
       }
     }}>
       {!noActions && <MyCheck checked={checked} />}
-     {positionItem.name} / {positionItem.storehouseName}
+      {positionItem.name} / {positionItem.storehouseName} ({number})
     </div>
 
     {
@@ -54,13 +59,12 @@ const InkindItem = (
             }}>
               {!noActions && <MyCheck checked={checked} />}
               实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
-              <ShowCode code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
+              <ShowCode size={20} code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>
             </div>
 
             <div className={style.brand}>
               {ToolUtil.isObject(inkindItem.brandResult).brandName || '无品牌'}
-              {/*<LinkButton>更多</LinkButton>*/}
             </div>
           </div>
           <div className={style.otherData}>

@@ -5,13 +5,13 @@ import { Message } from '../Message';
 import { history } from 'umi';
 
 // 判断是否是企业微信或者微信开发者工具
-const isQiyeWeixin = () => {
+export const isQiyeWeixin = () => {
   const ua = window.navigator.userAgent.toLowerCase();
   return ua.indexOf('wechatdevtools') !== -1 || ua.indexOf('wxwork') !== -1;
 };
 
 // 查找字符串返回 true / false
-const queryString = (value='', string) => {
+export const queryString = (value='', string) => {
   if (value.includes('\\')){
     value = value.replaceAll('\\','|');
   }
@@ -20,17 +20,17 @@ const queryString = (value='', string) => {
 };
 
 // 返回空对象
-const isObject = (object) => {
+export const isObject = (object) => {
   return (object && typeof object === 'object') ? object : {};
 };
 
 // 返回空集合
-const isArray = (array) => {
+export const isArray = (array) => {
   return Array.isArray(array) ? array : [];
 };
 
 // base64解压返回JSON对象
-const unzip = (base64) => {
+export const unzip = (base64) => {
   const strData = atob(base64);
   // Convert binary string to character-number array
   const charData = strData.split('').map(function(x) {
@@ -44,7 +44,7 @@ const unzip = (base64) => {
 };
 
 // 返回多个className
-const classNames = (...props) => {
+export const classNames = (...props) => {
 
   if (!Array.isArray(props)) {
     return '';
@@ -54,7 +54,7 @@ const classNames = (...props) => {
 };
 
 // 监听键盘按下@事件
-const listenOnKeyUp = (
+export const listenOnKeyUp = (
   {
     even,
     value = '',
@@ -75,7 +75,7 @@ const listenOnKeyUp = (
 };
 
 // 动画
-const createBall = (
+export const createBall = (
   {
     top,
     left,
@@ -129,7 +129,7 @@ const createBall = (
 };
 
 // 计算时间差
-const timeDifference = (tmpTime) => {
+export const timeDifference = (tmpTime) => {
   const mm = 1000;//1000毫秒 代表1秒
   const minute = mm * 60;
   const hour = minute * 60;
@@ -159,7 +159,7 @@ const timeDifference = (tmpTime) => {
 };
 
 // 监听浏览器后退事件
-const back = (
+export const back = (
   {
     title,
     key,
@@ -204,7 +204,7 @@ const back = (
 };
 
 // 最大显示宽度
-const viewWidth = () => {
+export const viewWidth = () => {
   return window.innerWidth > 640 ? 640 : window.innerWidth;
 };
 

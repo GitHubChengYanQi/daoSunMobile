@@ -19,10 +19,9 @@ const InkindList = ({ anomaly, inkindIds }) => {
     <MyList
       api={list}
       params={{ inkindIds, anomaly: anomaly ? 1 : null }}
-      getData={(list, newList) => {
-        const skuIds = list.map(item => item.skuId);
-        const newData = data.filter(item => skuIds.includes(item.skuId));
-        newList.forEach(item => {
+      getData={(list) => {
+        const newData = [];
+        list.forEach(item => {
           const positionsResult = ToolUtil.isObject(item.positionsResult);
           const newSkuIds = newData.map(item => item.skuId);
           const newSkuIndex = newSkuIds.indexOf(item.skuId);

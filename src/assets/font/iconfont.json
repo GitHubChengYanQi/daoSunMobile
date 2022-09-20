@@ -6,6 +6,41 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31935198",
+      "name": "操作记录",
+      "font_class": "chat-history-fill",
+      "unicode": "e6d0",
+      "unicode_decimal": 59088
+    },
+    {
+      "icon_id": "31935199",
+      "name": "编辑",
+      "font_class": "bianji",
+      "unicode": "e6d1",
+      "unicode_decimal": 59089
+    },
+    {
+      "icon_id": "31935200",
+      "name": "库存明细",
+      "font_class": "kucunmingxi",
+      "unicode": "e6d2",
+      "unicode_decimal": 59090
+    },
+    {
+      "icon_id": "31922936",
+      "name": "PDF",
+      "font_class": "PDF",
+      "unicode": "e6ce",
+      "unicode_decimal": 59086
+    },
+    {
+      "icon_id": "31922937",
+      "name": "WORD",
+      "font_class": "WORD",
+      "unicode": "e6cf",
+      "unicode_decimal": 59087
+    },
+    {
       "icon_id": "31721114",
       "name": "书签背景",
       "font_class": "a-zu1",

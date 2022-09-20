@@ -80,10 +80,9 @@ const List = (
           params={skuInfo}
           api={api || inkindList}
           data={data}
-          getData={(list, newList) => {
-            const positionIds = list.map(item => item.storehousePositionsId);
-            const newData = data.filter(item => positionIds.includes(item.positionId));
-            newList.forEach(item => {
+          getData={(list) => {
+            const newData = [];
+            list.forEach(item => {
               const newPositionIds = newData.map(item => item.positionId);
               const newPositionIndex = newPositionIds.indexOf(item.storehousePositionsId);
               if (newPositionIndex !== -1) {
