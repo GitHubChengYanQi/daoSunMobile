@@ -8,6 +8,7 @@ import { useRequest } from '../../../util/Request';
 import style from './index.less';
 
 const inkindDetail = { url: '/inkind/detail', method: 'POST' };
+const skuDetail = { url: '/sku/printSkuTemplate', method: 'GET' };
 
 const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
 
@@ -17,6 +18,13 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
     manual: true,
     onSuccess: (res) => {
       PrintCode.print([ToolUtil.isObject(res.printTemplateResult).templete], 0);
+    },
+  });
+
+  const { loading: skuPrintLoading, run: skuPrint } = useRequest(skuDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      PrintCode.print([res], 0);
     },
   });
 
@@ -35,11 +43,10 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
   const codePrint = () => {
     switch (type) {
       case 'inkind':
-        title = '实物';
         run({ data: { inkindId: id } });
         break;
       case 'sku':
-        title = '物料';
+        skuPrint({ params: { skuId: id } });
         break;
       default:
         break;
@@ -67,7 +74,7 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
       </div>}
       actions={[[
         { text: '取消', key: 'close' },
-        { text: loading ? <Loading /> : '打印', key: 'print', disabled: ToolUtil.isQiyeWeixin() },
+        { text: (loading || skuPrintLoading) ? <Loading /> : '打印', key: 'print', disabled: ToolUtil.isQiyeWeixin() },
       ]]}
       onAction={(action) => {
         switch (action.key) {

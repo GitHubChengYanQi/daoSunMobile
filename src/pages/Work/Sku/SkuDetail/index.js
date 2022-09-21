@@ -12,7 +12,6 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import Label from '../../../components/Label';
 import { useModel } from 'umi';
 import Expand from '../../../components/Expand';
-import UploadFile from '../../../components/Upload/UploadFile';
 import LinkButton from '../../../components/LinkButton';
 import SkuItem from '../SkuItem';
 import ShopNumber from '../../AddShop/components/ShopNumber';
@@ -22,10 +21,10 @@ import { RightOutline } from 'antd-mobile-icons';
 import Icon from '../../../components/Icon';
 import MyAntPopup from '../../../components/MyAntPopup';
 import MyCard from '../../../components/MyCard';
-import { Avatar } from 'antd';
-import MyEllipsis from '../../../components/MyEllipsis';
 import Drawings from './components/Drawings';
 import Files from './components/Files';
+import Supply from './components/Supply';
+import Doms from './components/Doms';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
@@ -87,9 +86,19 @@ const SkuDetail = ({ id }) => {
     <MyNavBar title='物料详情' />
     <Swiper
       indicator={(total, current) => (
-        <div className={styles.customIndicator}>
-          {`${current + 1} / ${total}`}
-        </div>
+        <>
+          <div className={styles.edit}>
+            <Icon type='icon-bianji1' onClick={() => {
+              history.push({
+                pathname: '/Work/Sku/Edit',
+                query: { skuId: detail.skuId },
+              });
+            }} />
+          </div>
+          <div className={styles.customIndicator}>
+            {`${current + 1} / ${total}`}
+          </div>
+        </>
       )}
     >
       {
@@ -121,7 +130,7 @@ const SkuDetail = ({ id }) => {
           </div>
         </div>
         <div className={styles.otherData}>
-          <ShowCode type='sku' size={20} code={detail.skuId} />
+          <ShowCode type='sku' size={20} code={detail.skuId} id={detail.skuId} />
           <div className={styles.number}>
             <span>×{stockNumber}</span>
             {unitResult.unitName}
@@ -170,72 +179,10 @@ const SkuDetail = ({ id }) => {
     </div>
 
 
+    <Supply skuId={detail.skuId} />
+    <Doms skuId={detail.skuId} />
     <Drawings skuId={detail.skuId} />
     <Files skuId={detail.skuId} />
-
-    <div className={styles.bom}>
-      <div className={styles.title}>
-        关联物料清单 (2)
-        <span className={styles.extra}><LinkButton onClick={() => {
-          setVisible('bom');
-        }}>查看更多<RightOutline /></LinkButton></span>
-      </div>
-      {
-        [1, 2].map((item, index) => {
-          return <div key={index} className={classNames(styles.flexCenter, styles.bomItem)}>
-            <SkuItem
-              extraWidth='100px'
-              title='数控车床/HTC2050i / 500*1000'
-              className={styles.flexGrow}
-              oneRow
-              otherData={[
-                '版本号：2205080512 ',
-                '创建时间：2022/05/08  05:12',
-                '备注内容',
-              ]}
-            />
-            <ShopNumber show value={20} />
-          </div>;
-        })
-      }
-    </div>
-
-    <div className={styles.supply}>
-      <div className={styles.title}>
-        供应商(2)
-        <span className={styles.extra}><LinkButton onClick={() => {
-          setVisible('supply');
-        }}>查看更多<RightOutline /></LinkButton></span>
-      </div>
-      {
-        [1, 2].map((item, index) => {
-          return <div key={index} className={classNames(styles.flexCenter, styles.supplyItem)}>
-            <div className={styles.flexGrow}>沈阳第一机床厂</div>
-            <span>交货期：30 天</span>
-          </div>;
-        })
-      }
-    </div>
-
-    <FloatingBubble
-      axis='xy'
-      magnetic='x'
-      style={{
-        '--size': '32px',
-        '--initial-position-top': '64px',
-        '--initial-position-right': '12px',
-        '--edge-distance': '24px',
-        '--background': 'rgba(0, 0, 0, 0.5)',
-      }}
-    >
-      <Icon type='icon-bianji1' onClick={() => {
-        history.push({
-          pathname: '/Work/Sku/Edit',
-          query: { skuId: detail.skuId },
-        });
-      }} />
-    </FloatingBubble>
-
 
     <SearchInkind
       noActions
@@ -253,63 +200,6 @@ const SkuDetail = ({ id }) => {
       <MyEmpty />
     </MyAntPopup>
 
-    <MyAntPopup
-      visible={visible === 'bom'}
-      title='关联物料清单'
-      onClose={() => setVisible('')}
-    >
-      <div style={{ padding: 12 }}>
-        {
-          [1, 2].map((item, index) => {
-            return <div key={index} className={classNames(styles.flexCenter, styles.bomItem)}>
-              <SkuItem
-                extraWidth='100px'
-                title='数控车床/HTC2050i / 500*1000'
-                className={styles.flexGrow}
-                oneRow
-                otherData={[
-                  '版本号：2205080512 ',
-                  '创建时间：2022/05/08  05:12',
-                  '备注内容',
-                ]}
-              />
-              <ShopNumber show value={20} />
-            </div>;
-          })
-        }
-      </div>
-    </MyAntPopup>
-
-    <MyAntPopup
-      visible={visible === 'supply'}
-      title='供应商'
-      onClose={() => setVisible('')}
-    >
-      <div style={{ padding: 12 }}>
-        {
-          [1, 2].map((item, index) => {
-            return <MyCard
-              className={styles.supplyCard}
-              key={index}
-              titleBom='沈阳第一机床厂'
-              extra='交货期：30天'
-              bodyClassName={styles.supplyContent}
-              headerClassName={styles.supplyHeader}
-            >
-              <Space wrap>
-                {
-                  [1, 2, 3, 4, 5].map((item, index) => {
-                    return <div className={styles.brands} key={index}>
-                      丹东汉克
-                    </div>;
-                  })
-                }
-              </Space>
-            </MyCard>;
-          })
-        }
-      </div>
-    </MyAntPopup>
   </div>;
 };
 

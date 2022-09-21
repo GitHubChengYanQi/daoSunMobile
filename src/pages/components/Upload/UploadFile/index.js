@@ -1,13 +1,12 @@
 import React, { useImperativeHandle, useState } from 'react';
 import style from './index.less';
-import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
 import { ImageViewer, ProgressBar, Space } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
 import { queryString, ToolUtil } from '../../ToolUtil';
-import { CloseOutline } from 'antd-mobile-icons';
+import { CameraOutline, CloseOutline } from 'antd-mobile-icons';
 import {
   FileOutlined,
   LoadingOutlined,
@@ -30,7 +29,6 @@ const UploadFile = (
     },
     file,
     noFile,
-    icon,
     imgSize,
     uploadId = 'myUpload',
     noAddButton,
@@ -191,7 +189,7 @@ const UploadFile = (
         className={style.img}
         style={{ width: imgSize, height: imgSize }}
         onClick={() => addFile()}>
-        {icon || <img src={add} alt='' width='100%' height='100%' />}
+        <CameraOutline />
       </div>
     </div>}
 

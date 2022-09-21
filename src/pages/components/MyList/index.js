@@ -136,7 +136,7 @@ const MyList = (
     </PullToRefresh>
 
     {error && <InfiniteScroll
-      style={{ padding: noEmpty && 0 }}
+      style={{ padding: (noEmpty || noTips) && 0 }}
       threshold={0}
       loadMore={async () => {
         onLoading(true);

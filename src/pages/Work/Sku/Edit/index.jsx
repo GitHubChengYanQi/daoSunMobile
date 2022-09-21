@@ -110,17 +110,19 @@ const Edit = () => {
     <MyCard title='重量' extra={<span onClick={() => {
       setVisible('weight');
     }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>} />
-    <MyCard title='尺寸' extra={<Space>
+    <MyCard title='尺寸' extra={<Space align='center'>
       <div onClick={() => {
         setVisible('length');
       }}>
         长<span style={{ padding: '0 2px' }}>{detail.length || 0}</span>cm
       </div>
+      ×
       <div onClick={() => {
         setVisible('width');
       }}>
         宽<span style={{ padding: '0 2px' }}>{detail.width || 0}</span>cm
       </div>
+      ×
       <div onClick={() => {
         setVisible('height');
       }}>
@@ -149,20 +151,6 @@ const Edit = () => {
           detailChange({ imgResults: medias, images: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
-    <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
-      skuFiles.current.addFile();
-    }}>
-      <PaperClipOutlined />
-    </LinkButton>}>
-      <UploadFile
-        file
-        uploadId='skuFiles'
-        ref={skuFiles}
-        files={isArray(detail.filedResults)}
-        onChange={(medias) => {
-          detailChange({ filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
-        }} />
-    </MyCard>
     <MyCard title='图纸' extra={isArray(detail.drawingResults).length < 5 && <LinkButton onClick={() => {
       skuDrawings.current.addFile();
     }}>
@@ -175,6 +163,20 @@ const Edit = () => {
         files={isArray(detail.drawingResults)}
         onChange={(medias) => {
           detailChange({ drawingResults: medias, drawing: medias.map(item => item.mediaId).toString() });
+        }} />
+    </MyCard>
+    <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
+      skuFiles.current.addFile();
+    }}>
+      <PaperClipOutlined />
+    </LinkButton>}>
+      <UploadFile
+        file
+        uploadId='skuFiles'
+        ref={skuFiles}
+        files={isArray(detail.filedResults)}
+        onChange={(medias) => {
+          detailChange({ filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
 

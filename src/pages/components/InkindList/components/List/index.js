@@ -5,7 +5,7 @@ import { Button, Popover } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
-import { AlignLeftOutlined } from '@ant-design/icons';
+import { AlignLeftOutlined, CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import LinkButton from '../../../LinkButton';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };
@@ -37,6 +37,8 @@ const List = (
 
   const [status, setStatus] = useState('全部');
 
+  const [visible, setVisible] = useState(false);
+
   const actions = [
     { text: '全部', key: 'all', id: null },
     { text: '正常', key: 'init', id: 99 },
@@ -46,7 +48,9 @@ const List = (
   return <div className={className}>
     <MySearch
       style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}
-      extraIcon={ <Popover.Menu
+      extraIcon={<Popover.Menu
+        onVisibleChange={setVisible}
+        visible={visible}
         className={style.actions}
         actions={actions}
         placement='bottom-start'
@@ -56,7 +60,9 @@ const List = (
         }}
         trigger='click'
       >
-        <LinkButton>{status}</LinkButton>
+        <div>
+          {status} {visible ? <CaretUpOutlined /> : <CaretDownOutlined />}
+        </div>
       </Popover.Menu>}
       className={style.search}
       value={searchValue}
