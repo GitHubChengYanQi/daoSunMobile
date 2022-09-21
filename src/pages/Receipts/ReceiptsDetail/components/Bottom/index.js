@@ -21,17 +21,17 @@ const Bottom = (
 
   const actions = [];
   currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push({ action: item.action, id: item.documentsActionId });
+    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+      return item.auditRule.actionStatuses.map((item) => {
+        return actions.push({ action: item.action, id: item.actionId });
       });
     }
     return null;
   });
 
-  if (!detail.permissions) {
-    return <></>;
-  }
+  // if (!detail.permissions) {
+  //   return <></>;
+  // }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
     <div className={style.actions}>

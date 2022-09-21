@@ -52,7 +52,9 @@ export const ReceiptsDetailContent = () => {
     if (!data) {
       return {};
     }
-    if (data.logResult && data.logResult.status === -1) {
+    const logResults = data.logResults || [];
+    const currentNode = logResults.filter(item => item.status === 3).length === logResults.length;
+    if (currentNode) {
       if (data.stepType === 'route') {
         return data.conditionNodeList.map((item) => {
           return getCurrentNode(item.childNode);
@@ -66,7 +68,7 @@ export const ReceiptsDetailContent = () => {
   // 审批详情接口
   const { loading: detailLoading, run, refresh } = useRequest(
     {
-      url: '/audit/detail',
+      url: '/audit/v1.1/detail',
       method: 'GET',
     },
     {
