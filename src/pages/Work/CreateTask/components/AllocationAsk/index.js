@@ -120,8 +120,9 @@ const AllocationAsk = ({ createType }) => {
     manual: true,
     onSuccess: (res) => {
       history.push({
-        pathname: '/Work/AddShop',
+        pathname: '/Receipts/ReceiptsCreate',
         query: {
+          type: ReceiptsEnums.allocation,
           askType: params.askType,
           allocationType: params.allocationType,
           storeHouseId: params.storeHouse.value,

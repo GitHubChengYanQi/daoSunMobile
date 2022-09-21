@@ -1,7 +1,9 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import MyList from '../../../../../components/MyList';
-import { remakeList } from '../../../../../Work/Stock/Dynamic';
 import StepList from '../../Dynamic/components/StepList';
+
+
+export const remakeList = { url: '/remarks/list', method: 'POST' };
 
 const CommentsList = ({ taskId }, ref) => {
 
