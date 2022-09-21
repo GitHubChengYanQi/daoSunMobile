@@ -10,8 +10,6 @@ import { queryString, ToolUtil } from '../../ToolUtil';
 import { CloseOutline } from 'antd-mobile-icons';
 import {
   FileOutlined,
-  FilePdfOutlined,
-  FileWordOutlined,
   LoadingOutlined,
   FileExcelOutlined,
   FilePptOutlined,
@@ -41,6 +39,7 @@ const UploadFile = (
     refresh,
     max,
     noDefault,
+    fileRender,
   }, ref,
 ) => {
 
@@ -58,7 +57,7 @@ const UploadFile = (
 
   const imgs = files.filter(item => item.type !== 'other').map(item => (item.showUrl || item.url));
 
-  const fileChange = ({ mediaId, url, name, type, remove }) => {
+  const fileChange = ({ mediaId, url, filedName, type, remove }) => {
     if (!mediaId) {
       Message.errorToast('上传失败!');
       return;
@@ -67,7 +66,7 @@ const UploadFile = (
     if (remove) {
       newFile = files.filter(fileItem => fileItem.mediaId !== mediaId);
     } else {
-      newFile = [...files, { type, mediaId, url, name }];
+      newFile = [...files, { type, mediaId, url, filedName }];
     }
     onChange(newFile);
   };
@@ -144,7 +143,7 @@ const UploadFile = (
 
   return <>
 
-    <div className={style.imgs} hidden={file}>
+    {!file && <div className={style.imgs}>
       {
         files.map((item, index) => {
           return <div key={index} className={style.img} style={{ width: imgSize, height: imgSize }}>
@@ -194,7 +193,7 @@ const UploadFile = (
         onClick={() => addFile()}>
         {icon || <img src={add} alt='' width='100%' height='100%' />}
       </div>
-    </div>
+    </div>}
 
     {file && [...files, { loading: true }].map((item, index) => {
       if (item.loading) {
@@ -212,20 +211,24 @@ const UploadFile = (
         </div>;
       }
       let icon;
-      if (queryString('pdf', item.url)) {
+      if (queryString('pdf', item.type)) {
         icon = <Icon type='icon-PDF' />;
-      } else if (queryString('doc', item.url)) {
+      } else if (queryString('doc', item.type)) {
         icon = <Icon type='icon-WORD' />;
-      } else if (queryString('xls', item.url)) {
+      } else if (queryString('xls', item.type)) {
         icon = <FileExcelOutlined />;
-      } else if (queryString('ppt', item.url)) {
+      } else if (queryString('ppt', item.type)) {
         icon = <FilePptOutlined />;
       } else {
         icon = <FileOutlined />;
       }
+
+      if (typeof fileRender === 'function') {
+        return <div key={index} style={{ display: 'inline-block' }}>{fileRender({ ...item, icon })}</div>;
+      }
       return <div className={style.fileItem} key={index}>
         <Avatar shape='square' size={26} src={item.url} icon={icon} className={style.showImg} />
-        <MyEllipsis>{item.name || item.url}</MyEllipsis>
+        <MyEllipsis>{item.filedName || ''}</MyEllipsis>
         {!show && <MyRemoveButton
           className={style.remove}
           onRemove={() => fileChange({ mediaId: item.mediaId, remove: true })}
@@ -246,7 +249,7 @@ const UploadFile = (
       id={uploadId}
       onChange={(url, mediaId, file) => {
         setPercent(0);
-        fileChange({ type: file.type, mediaId, url, name: file.name });
+        fileChange({ type: file.type, mediaId, url, filedName: file.name });
         setFalse();
       }}
     />

@@ -51,29 +51,6 @@ const Edit = () => {
       manual: !query.skuId,
       onSuccess: (res) => {
         const detail = res || {};
-        const imgs = isArray(detail.imgResults).map((item) => {
-          return {
-            showUrl: item.url,
-            url: item.thumbUrl,
-            mediaId: item.mediaId,
-          };
-        });
-
-        const files = detail.fileId ? isArray(detail.fileId.split(',')).map((item, index) => {
-          const url = isArray(detail.filedUrls)[index];
-          return {
-            url,
-            mediaId: item,
-          };
-        }) : [];
-
-        const drawings = detail.drawing ? isArray(detail.drawing.split(',')).map((item, index) => {
-          const url = isArray(detail.drawingUrls)[index];
-          return {
-            url,
-            mediaId: item,
-          };
-        }) : [];
         const sku = isArray(detail.skuJsons).length > 0 ? detail.skuJsons.map((items) => {
           return {
             label: isObject(items.attribute).attribute,
@@ -82,7 +59,7 @@ const Edit = () => {
           };
         }) : [];
         const spuResult = detail.spuResult || {};
-        setDetail({ ...detail, spu: spuResult, sku, unitId: spuResult.unitId, imgs, files, drawings });
+        setDetail({ ...detail, spu: spuResult, sku, unitId: spuResult.unitId });
       },
     });
 
@@ -90,9 +67,6 @@ const Edit = () => {
     return <MyLoading />;
   }
 
-  const imgs = detail.imgs || [];
-  const files = detail.files || [];
-  const drawings = detail.drawings || [];
   const spuResult = detail.spuResult || {};
   const spuClassificationResult = spuResult.spuClassificationResult || {};
   const unitResult = spuResult.unitResult || {};
@@ -116,7 +90,7 @@ const Edit = () => {
       default:
         break;
     }
-  }
+  };
 
   return <div style={{ paddingBottom: 60 }}>
     <MyNavBar title='编辑物料' />
@@ -162,27 +136,46 @@ const Edit = () => {
       />
     </MyCard>
     <MyCard title='照片'>
-      <UploadFile max={5} noFile uploadId='skuImgs' files={imgs} onChange={(medias) => {
-        detailChange({ imgs: medias, images: medias.map(item => item.mediaId).toString() });
-      }} />
+      <UploadFile
+        max={5}
+        noFile
+        uploadId='skuImgs'
+        files={isArray(detail.imgResults).map(item => ({
+          ...item,
+          showUrl: item.url,
+          url: item.thumbUrl,
+        }))}
+        onChange={(medias) => {
+          detailChange({ imgs: medias, images: medias.map(item => item.mediaId).toString() });
+        }} />
     </MyCard>
-    <MyCard title='附件' extra={files.length < 5 && <LinkButton onClick={() => {
+    <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
       skuFiles.current.addFile();
     }}>
       <PaperClipOutlined />
     </LinkButton>}>
-      <UploadFile file uploadId='skuFiles' ref={skuFiles} files={files} onChange={(medias) => {
-        detailChange({ files: medias, fileId: medias.map(item => item.mediaId).toString() });
-      }} />
+      <UploadFile
+        file
+        uploadId='skuFiles'
+        ref={skuFiles}
+        files={isArray(detail.filedResults)}
+        onChange={(medias) => {
+          detailChange({ filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
+        }} />
     </MyCard>
-    <MyCard title='图纸' extra={drawings.length < 5 && <LinkButton onClick={() => {
+    <MyCard title='图纸' extra={isArray(detail.drawingResults).length < 5 && <LinkButton onClick={() => {
       skuDrawings.current.addFile();
     }}>
       <PaperClipOutlined />
     </LinkButton>}>
-      <UploadFile file uploadId='skuDrawings' ref={skuDrawings} files={drawings} onChange={(medias) => {
-        detailChange({ drawings: medias, drawing: medias.map(item => item.mediaId).toString() });
-      }} />
+      <UploadFile
+        file
+        uploadId='skuDrawings'
+        ref={skuDrawings}
+        files={isArray(detail.drawingResults)}
+        onChange={(medias) => {
+          detailChange({ drawingResults: medias, drawing: medias.map(item => item.mediaId).toString() });
+        }} />
     </MyCard>
 
     <MyPicker
@@ -198,7 +191,7 @@ const Edit = () => {
 
     <MyKeybord
       decimal={visible !== 'maintenancePeriod' && 2}
-      visible={['maintenancePeriod', 'weight','length','width','height'].includes(visible)}
+      visible={['maintenancePeriod', 'weight', 'length', 'width', 'height'].includes(visible)}
       setVisible={() => setVisible('')}
       value={getNumber(visible)}
       min={0}

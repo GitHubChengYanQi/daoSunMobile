@@ -22,6 +22,10 @@ import { RightOutline } from 'antd-mobile-icons';
 import Icon from '../../../components/Icon';
 import MyAntPopup from '../../../components/MyAntPopup';
 import MyCard from '../../../components/MyCard';
+import { Avatar } from 'antd';
+import MyEllipsis from '../../../components/MyEllipsis';
+import Drawings from './components/Drawings';
+import Files from './components/Files';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
@@ -55,23 +59,7 @@ const SkuDetail = ({ id }) => {
           mediaId: item.mediaId,
         };
       });
-
-      const files = detail.fileId ? isArray(detail.fileId.split(',')).map((item, index) => {
-        const url = isArray(detail.filedUrls)[index];
-        return {
-          url,
-          mediaId: item,
-        };
-      }) : [];
-
-      const drawings = detail.drawing ? isArray(detail.drawing.split(',')).map((item, index) => {
-        const url = isArray(detail.drawingUrls)[index];
-        return {
-          url,
-          mediaId: item,
-        };
-      }) : [];
-      setDetail({ ...detail, imgs, files, drawings });
+      setDetail({ ...detail, imgs });
     },
   });
 
@@ -90,8 +78,6 @@ const SkuDetail = ({ id }) => {
   }
 
   const imgs = isArray(detail.imgs).length > 0 ? detail.imgs : [{ showUrl: state.imgLogo }];
-  const files = detail.files || [];
-  const drawings = detail.drawings || [];
   const spuResult = detail.spuResult || {};
   const spuClassificationResult = spuResult.spuClassificationResult || {};
   const unitResult = spuResult.unitResult || {};
@@ -183,15 +169,9 @@ const SkuDetail = ({ id }) => {
       <Expand expand={expand} onExpand={setExpand} />
     </div>
 
-    <div className={styles.files}>
-      <div className={styles.title}>图纸</div>
-      <UploadFile files={drawings} show file />
-    </div>
 
-    <div className={styles.files}>
-      <div className={styles.title}>附件</div>
-      <UploadFile files={files} show file />
-    </div>
+    <Drawings skuId={detail.skuId} />
+    <Files skuId={detail.skuId} />
 
     <div className={styles.bom}>
       <div className={styles.title}>
@@ -241,11 +221,11 @@ const SkuDetail = ({ id }) => {
       axis='xy'
       magnetic='x'
       style={{
-        '--size':'32px',
+        '--size': '32px',
         '--initial-position-top': '64px',
         '--initial-position-right': '12px',
         '--edge-distance': '24px',
-        '--background':'rgba(0, 0, 0, 0.5)'
+        '--background': 'rgba(0, 0, 0, 0.5)',
       }}
     >
       <Icon type='icon-bianji1' onClick={() => {
