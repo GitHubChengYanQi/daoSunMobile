@@ -143,6 +143,7 @@ const OutSkuAction = (
   const [showDetail, setShowDetail] = useState();
 
   const [seacrchValue, setSearchValue] = useState();
+
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       className={style.cardStyle}
@@ -158,9 +159,9 @@ const OutSkuAction = (
         合计：<span>{data.length}</span>类<span>{countNumber}</span>件
       </div>}>
       <MySearch
-        extraIcon={ <Icon
-          style={{fontSize:20}}
-          type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
+        extraIcon={<Icon
+          style={{ fontSize: 20 }}
+          type='icon-pandiankuwei1'
           onClick={() => {
             setPositionVisible(true);
           }} />}
@@ -178,7 +179,8 @@ const OutSkuAction = (
         value={seacrchValue}
       />
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading || orderLoading}>
-        {data.length === 0 && <MyEmpty description={`物料全部出库完成`} />}
+        {defaultData.length === 0 && <MyEmpty description={`物料全部出库完成`} image={<Icon style={{fontSize:45}} type='icon-chukuchenggong' />} />}
+        {defaultData.length !== 0 && data.length === 0 && <MyEmpty description={`没有找到相关物料`} />}
         {
           data.map((item, index) => {
 
@@ -348,6 +350,7 @@ const OutSkuAction = (
     </MyAntPopup>
 
     <MyPositions
+      title='相关库位'
       showPositionIds={order.positionIds}
       showAll
       empty
