@@ -13,7 +13,7 @@ export const skuFiles = { url: '/sku/getSkuFile', method: 'GET' };
 const Files = ({ skuId }) => {
 
   const { loading, data } = useRequest({ ...skuFiles, params: { skuId } });
-  console.log(data);
+
   if (loading) {
     return <MyLoading skeleton />;
   }

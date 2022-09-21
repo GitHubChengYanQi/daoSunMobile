@@ -143,10 +143,10 @@ const Edit = () => {
         files={isArray(detail.imgResults).map(item => ({
           ...item,
           showUrl: item.url,
-          url: item.thumbUrl,
+          url: item.thumbUrl || item.url,
         }))}
         onChange={(medias) => {
-          detailChange({ imgs: medias, images: medias.map(item => item.mediaId).toString() });
+          detailChange({ imgResults: medias, images: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
     <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
