@@ -147,13 +147,13 @@ const Process = (
     if (step.auditRule.type === 'status') {
       auditType = 'action';
     }
-    const logResult = step.logResult || {};
-
-    const logRemark = remarks.filter(item => item.logId === logResult.logId)[0];
-
-    const imgs = (logRemark && logRemark.photoId) ? logRemark.photoId.split(',').map(item => {
-      return { url: item };
-    }) : [];
+    // const logResult = step.logResult || {};
+    //
+    // const logRemark = remarks.filter(item => item.logId === logResult.logId)[0];
+    //
+    // const imgs = (logRemark && logRemark.photoId) ? logRemark.photoId.split(',').map(item => {
+    //   return { url: item };
+    // }) : [];
 
     return <div className={style.users}>
       {users.map((items, index) => {
@@ -172,7 +172,10 @@ const Process = (
             break;
         }
 
-
+        const auditUserResult = items.auditUserResult;
+        if (!auditUserResult){
+          return <div key={index} />
+        }
         return <div key={index}>
           <div className={style.user} key={index}>
             <div className={style.nameAvatar}>
@@ -184,19 +187,19 @@ const Process = (
                   size={26}
                   shape='square'
                   key={index}
-                  src={items.avatar}
-                >{(items.name || '').substring(0, 1)}</Avatar>
+                  src={auditUserResult.avatar}
+                >{(auditUserResult.name || '').substring(0, 1)}</Avatar>
               </Badge>
-              {items.name}
+              {auditUserResult.name}
             </div>
             <div hidden={!stepsStatus}>
               {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(items.updateTime)}
             </div>
           </div>
-          {logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>
-            {logRemark.content}
-            <UploadFile imgSize={14} show files={imgs} />
-          </Space>}
+          {/*{logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>*/}
+          {/*  {logRemark.content}*/}
+          {/*  <UploadFile imgSize={14} show files={imgs} />*/}
+          {/*</Space>}*/}
         </div>;
       })}
     </div>;
@@ -290,16 +293,16 @@ const Process = (
     const nextWait = logResults.filter((item) => item.status === 3).length === logResults.length;
     const error = logResults.filter((item) => item.status === 0).length > 0;
     const success = logResults.filter((item) => item.status === 1).length > 0;
-    if (logResults.length === 0 ) {
-      if (next){
+    if (logResults.length === 0) {
+      if (next) {
         stepStatus = 'wait';
         iconColor = style.action;
         actioning = true;
-      }else {
+      } else {
         stepStatus = 'wait';
         iconColor = style.wait;
       }
-    }else if (success) {
+    } else if (success) {
       stepStatus = 'success';
       iconColor = style.success;
     } else if (error) {
