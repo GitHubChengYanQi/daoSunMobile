@@ -35,6 +35,9 @@ const ProcessList = (
     processListRef,
     all,
     ReceiptDom,
+    onLoading = () => {
+
+    },
   },
 ) => {
 
@@ -91,6 +94,7 @@ const ProcessList = (
     {loading && <MyLoading />}
     <div className={style.list} ref={processListRef}>
       <MyList
+        onLoading={onLoading}
         manual={manual}
         ref={listRef}
         api={api || startList}

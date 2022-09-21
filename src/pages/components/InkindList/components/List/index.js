@@ -1,11 +1,12 @@
 import React, { useRef, useState } from 'react';
 import MySearch from '../../../MySearch';
 import MyList from '../../../MyList';
-import { Button, Space } from 'antd-mobile';
+import { Button, Popover } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
-import MyRadio from '../../../MyRadio';
+import { AlignLeftOutlined } from '@ant-design/icons';
+import LinkButton from '../../../LinkButton';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };
 
@@ -34,16 +35,29 @@ const List = (
 
   const [searchValue, setSearchValue] = useState();
 
-  const [status, setStatus] = useState('all');
+  const [status, setStatus] = useState('全部');
 
-  const screen = [
-    { text: '全部', value: 'all', id: null },
-    { text: '正常', value: 'init', id: 99 },
-    { text: '异常', value: 'error', id: -1 },
+  const actions = [
+    { text: '全部', key: 'all', id: null },
+    { text: '正常', key: 'init', id: 99 },
+    { text: '异常', key: 'error', id: -1 },
   ];
 
   return <div className={className}>
     <MySearch
+      style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}
+      extraIcon={ <Popover.Menu
+        className={style.actions}
+        actions={actions}
+        placement='bottom-start'
+        onAction={node => {
+          ref.current.submit({ ...skuInfo, qrCodeid: searchValue, status: node.id });
+          setStatus(node.text);
+        }}
+        trigger='click'
+      >
+        <LinkButton>{status}</LinkButton>
+      </Popover.Menu>}
       className={style.search}
       value={searchValue}
       onChange={setSearchValue}
@@ -55,23 +69,11 @@ const List = (
         ref.current.submit({ ...skuInfo, qrCodeid: null });
       }}
     />
-    <div className={style.statusList} style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}>
-      <Space className={style.status}>
-        {screen.map((item, index) => {
-          return <MyRadio key={index} checked={status === item.value} onChange={() => {
-            ref.current.submit({ ...skuInfo, qrCodeid: searchValue, status: item.id });
-            setStatus(item.value);
-          }}>{item.text}</MyRadio>;
-        })}
-      </Space>
-    </div>
 
 
     <div className={style.list}>
-      <div className={style.flex} style={{ padding: '8px 0' }}>
-        <div className={style.flexGrow}>
-          实物码只显示后6位数字！
-        </div>
+      <div className={style.flex} hidden={!add} style={{ padding: '8px 0' }}>
+        <div className={style.flexGrow} />
         {add && <Button color='primary' fill='outline' onClick={addInkind}>新增实物码</Button>}
       </div>
       <div className={style.inkindList}>

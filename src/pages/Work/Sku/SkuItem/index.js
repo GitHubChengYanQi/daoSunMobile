@@ -24,6 +24,7 @@ const SkuItem = (
     moreDom,
     noView,
     oneRow,
+    textView,
     moreClick = () => {
     },
   }) => {
@@ -62,6 +63,7 @@ const SkuItem = (
         </div>
       </div>
       <div
+        onClick={()=>textView && view()}
         className={style.sku}
         style={{ maxWidth: `calc(${ToolUtil.viewWidth()}px - ${imgSize}px - 13px - ${extraWidth})` }}
       >

@@ -1,5 +1,5 @@
 .search {
-  padding: 4px 12px 4px 12px;
+  padding: 8px 12px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -33,19 +33,19 @@
     align-items: center;
     gap: 8px;
     border-bottom: solid 1px var(--body--background--color);
-    font-weight: bold;
+    color: var(--adm-color-primary);
   }
 
   .inkindItem {
-    padding: 12px;
+    margin: 8px 12px;
     border-radius: 2px;
-    border-bottom: solid 1px var(--body--background--color);
+    border: solid 1px var(--adm-color-primary);
 
     .inkindData {
-      padding: 12px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #e1ebf670;
+      background-color: var(--body--background--color);
 
       .inkindId {
         display: flex;
@@ -63,7 +63,7 @@
     }
 
     .otherData {
-      padding: 8px 12px;
+      padding: 8px 12px 0;
       color: #666666;
     }
   }
@@ -81,6 +81,14 @@
 
   .flexGrow {
     flex-grow: 1;
+  }
+}
+
+.actions {
+  :global {
+    .adm-popover-menu-list {
+      min-width: 30px;
+    }
   }
 }
 

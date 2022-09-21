@@ -5,7 +5,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.less';
 import { classNames, isArray, viewWidth } from '../../../components/ToolUtil';
-import { ImageViewer, Space, Swiper } from 'antd-mobile';
+import { FloatingBubble, ImageViewer, Space, Swiper } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
@@ -148,7 +148,7 @@ const SkuDetail = ({ id }) => {
             skuId: detail.skuId,
           });
         }}>
-        <Icon type='icon-kucunmingxi1' />库存明细
+          <Icon type='icon-kucunmingxi1' />库存明细
         </div>
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           history.push({
@@ -156,20 +156,12 @@ const SkuDetail = ({ id }) => {
             query: { skuId: detail.skuId },
           });
         }}>
-         <Icon type='icon-guanlianrenwu' />关联任务
-        </div>
-        <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
-          history.push({
-            pathname: '/Work/Sku/Edit',
-            query: { skuId: detail.skuId },
-          });
-        }}>
-          <Icon type='icon-bianji1' />编辑
+          <Icon type='icon-guanlianrenwu' />关联任务
         </div>
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           setVisible('log');
         }}>
-         <Icon type='icon-caozuojilu' />操作记录
+          <Icon type='icon-caozuojilu' />操作记录
         </div>
       </div>
     </div>
@@ -181,7 +173,7 @@ const SkuDetail = ({ id }) => {
         {expand && <Space direction='vertical'>
           <div><Label className={styles.label}>材质</Label>{detail.none || '无'}</div>
           <div><Label className={styles.label}>重量</Label>{detail.none || '无'}</div>
-          <div><Label className={styles.label}>养护周期</Label>{detail.maintenancePeriod}</div>
+          <div><Label className={styles.label}>养护周期</Label>{detail.maintenancePeriod}天</div>
           <div><Label className={styles.label}>物料描述</Label>{SkuResultSkuJsons({ skuResult: detail, describe: true })}
           </div>
           <div><Label className={styles.label}>备注</Label>{detail.remarks || '无'}</div>
@@ -192,13 +184,13 @@ const SkuDetail = ({ id }) => {
     </div>
 
     <div className={styles.files}>
-      <div className={styles.title}>附件</div>
-      <UploadFile files={files} show file />
+      <div className={styles.title}>图纸</div>
+      <UploadFile files={drawings} show file />
     </div>
 
     <div className={styles.files}>
-      <div className={styles.title}>图纸</div>
-      <UploadFile files={drawings} show file />
+      <div className={styles.title}>附件</div>
+      <UploadFile files={files} show file />
     </div>
 
     <div className={styles.bom}>
@@ -244,6 +236,25 @@ const SkuDetail = ({ id }) => {
         })
       }
     </div>
+
+    <FloatingBubble
+      axis='xy'
+      magnetic='x'
+      style={{
+        '--size':'32px',
+        '--initial-position-top': '64px',
+        '--initial-position-right': '12px',
+        '--edge-distance': '24px',
+        '--background':'rgba(0, 0, 0, 0.5)'
+      }}
+    >
+      <Icon type='icon-bianji1' onClick={() => {
+        history.push({
+          pathname: '/Work/Sku/Edit',
+          query: { skuId: detail.skuId },
+        });
+      }} />
+    </FloatingBubble>
 
 
     <SearchInkind

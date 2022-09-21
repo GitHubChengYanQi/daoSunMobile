@@ -77,7 +77,7 @@ const InkindItem = (
               </div>
             </div>
           </div>
-          <div className={style.otherData}>
+          <div className={style.otherData} style={{paddingBottom:8}}>
             <div className={style.flex}>
               <div className={style.flexGrow}>
                 上次养护：{maintenanceLogResult.createTime ? MyDate.Show(maintenanceLogResult.createTime) : '暂无'}

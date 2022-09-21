@@ -9,7 +9,7 @@ import MyCard from '../../../components/MyCard';
 import LinkButton from '../../../components/LinkButton';
 import MyPicker from '../../../components/MyPicker';
 import { RightOutline } from 'antd-mobile-icons';
-import { Input, TextArea } from 'antd-mobile';
+import { Input, Space, TextArea } from 'antd-mobile';
 import MyKeybord from '../../../components/MyKeybord';
 import styles from './index.less';
 import UploadFile from '../../../components/Upload/UploadFile';
@@ -101,6 +101,23 @@ const Edit = () => {
     setDetail({ ...detail, ...newDetail });
   };
 
+  const getNumber = (type) => {
+    switch (type) {
+      case 'maintenancePeriod':
+        return detail.maintenancePeriod;
+      case 'weight':
+        return detail.weight;
+      case 'length':
+        return detail.length;
+      case 'width':
+        return detail.width;
+      case 'height':
+        return detail.height;
+      default:
+        break;
+    }
+  }
+
   return <div style={{ paddingBottom: 60 }}>
     <MyNavBar title='编辑物料' />
     <MyCard title='物料编码' extra={<span className={styles.disabled}>{detail.standard}</span>} />
@@ -119,7 +136,23 @@ const Edit = () => {
     <MyCard title='重量' extra={<span onClick={() => {
       setVisible('weight');
     }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>} />
-    <MyCard title='尺寸' extra={<Input className={styles.input} placeholder='请输入尺寸' />} />
+    <MyCard title='尺寸' extra={<Space>
+      <div onClick={() => {
+        setVisible('length');
+      }}>
+        长<span style={{ padding: '0 2px' }}>{detail.length || 0}</span>cm
+      </div>
+      <div onClick={() => {
+        setVisible('width');
+      }}>
+        宽<span style={{ padding: '0 2px' }}>{detail.width || 0}</span>cm
+      </div>
+      <div onClick={() => {
+        setVisible('height');
+      }}>
+        高<span style={{ padding: '0 2px' }}>{detail.height || 0}</span>cm
+      </div>
+    </Space>} />
     <MyCard title='备注'>
       <TextArea
         style={{ '--font-size': '14px' }}
@@ -164,24 +197,31 @@ const Edit = () => {
     />
 
     <MyKeybord
-      visible={visible === 'maintenancePeriod'}
+      decimal={visible !== 'maintenancePeriod' && 2}
+      visible={['maintenancePeriod', 'weight','length','width','height'].includes(visible)}
       setVisible={() => setVisible('')}
-      value={detail.maintenancePeriod}
+      value={getNumber(visible)}
       min={0}
-      onChange={(maintenancePeriod) => {
-        detailChange({ maintenancePeriod });
-        setVisible('');
-      }}
-    />
-
-    <MyKeybord
-      decimal={2}
-      visible={visible === 'weight'}
-      setVisible={() => setVisible('')}
-      value={detail.weight || 0}
-      min={0}
-      onChange={(weight) => {
-        detailChange({ weight });
+      onChange={(number) => {
+        switch (visible) {
+          case 'maintenancePeriod':
+            detailChange({ maintenancePeriod: number });
+            break;
+          case 'weight':
+            detailChange({ weight: number });
+            break;
+          case 'length':
+            detailChange({ length: number });
+            break;
+          case 'width':
+            detailChange({ width: number });
+            break;
+          case 'height':
+            detailChange({ height: number });
+            break;
+          default:
+            break;
+        }
         setVisible('');
       }}
     />
