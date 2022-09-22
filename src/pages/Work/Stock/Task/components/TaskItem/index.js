@@ -6,6 +6,8 @@ import { isArray, isObject, ToolUtil } from '../../../../../components/ToolUtil'
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
+import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
+import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 
 const TaskItem = (
   {
@@ -53,9 +55,11 @@ const TaskItem = (
     <div className={style.content}>
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
-          <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, action && style.action)}>
+          <div className={style.svg}>
+            <img src={action ? receiptsOk : receiptsNo} alt='' height={24} />
+          </div>
+          <div hidden={!statusName} className={style.statusName}>
             <div style={{ zIndex: 1 }}>{statusName}</div>
-            <div className={style.svg}><Icon type='icon-a-zu1' /></div>
           </div>
           <div className={style.show}>
             <Icon type='icon-pandianwuliao' />

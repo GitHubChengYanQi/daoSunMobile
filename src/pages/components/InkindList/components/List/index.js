@@ -5,8 +5,6 @@ import { Button, Popover } from 'antd-mobile';
 import style from './index.less';
 import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
-import { AlignLeftOutlined, CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import LinkButton from '../../../LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };

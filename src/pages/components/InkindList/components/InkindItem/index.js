@@ -62,7 +62,7 @@ const InkindItem = (
               实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
               <ShowCode size={20} code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>
-              {inkindItem.anomaly && <ExclamationTriangleOutline className='red' />}
+              {inkindItem.anomaly ? <ExclamationTriangleOutline className='red' /> : <></>}
             </div>
 
             <div className={style.brand}>
