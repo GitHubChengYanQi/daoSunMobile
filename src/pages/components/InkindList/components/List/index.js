@@ -7,6 +7,7 @@ import { ToolUtil } from '../../../ToolUtil';
 import InkindItem from '../InkindItem';
 import { AlignLeftOutlined, CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import LinkButton from '../../../LinkButton';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
 
 const inkindList = { url: '/stockDetails/list', method: 'POST' };
 
@@ -47,6 +48,7 @@ const List = (
 
   return <div className={className}>
     <MySearch
+      searchBarStyle={{ '--border-radius': '0' }}
       style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}
       extraIcon={<Popover.Menu
         onVisibleChange={setVisible}
@@ -60,8 +62,8 @@ const List = (
         }}
         trigger='click'
       >
-        <div>
-          {status} {visible ? <CaretUpOutlined /> : <CaretDownOutlined />}
+        <div className={style.statusType}>
+          {status} {visible ? <UpOutline /> : <DownOutline />}
         </div>
       </Popover.Menu>}
       className={style.search}
@@ -78,10 +80,7 @@ const List = (
 
 
     <div className={style.list}>
-      <div className={style.flex} hidden={!add} style={{ padding: '8px 0' }}>
-        <div className={style.flexGrow} />
-        {add && <Button color='primary' fill='outline' onClick={addInkind}>新增实物码</Button>}
-      </div>
+      {add && <Button color='primary' fill='outline' onClick={addInkind}>新增实物码</Button>}
       <div className={style.inkindList}>
         <MyList
           ref={ref}

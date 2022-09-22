@@ -1,10 +1,11 @@
 import React from 'react';
 import style from '../List/index.less';
 import MyCheck from '../../../MyCheck';
-import { ToolUtil } from '../../../ToolUtil';
+import { isObject, ToolUtil } from '../../../ToolUtil';
 import { MyDate } from '../../../MyDate';
 import { UserName } from '../../../User';
 import ShowCode from '../../../ShowCode';
+import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 
 const InkindItem = (
   {
@@ -61,6 +62,7 @@ const InkindItem = (
               实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
               <ShowCode size={20} code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
               <div>× {inkindItem.number}</div>
+              {inkindItem.anomaly && <ExclamationTriangleOutline className='red' />}
             </div>
 
             <div className={style.brand}>
@@ -73,7 +75,7 @@ const InkindItem = (
                 入库时间：{MyDate.Show(inkindItem.createTime)}
               </div>
               <div>
-                <UserName user={inkindItem.user} />
+                {isObject(inkindItem.user).name}
               </div>
             </div>
           </div>
@@ -83,7 +85,7 @@ const InkindItem = (
                 上次养护：{maintenanceLogResult.createTime ? MyDate.Show(maintenanceLogResult.createTime) : '暂无'}
               </div>
               <div hidden={!maintenanceLogResult.createTime}>
-                <UserName user={maintenanceLogResult.userResult} />
+                {isObject(maintenanceLogResult.userResult).name}
               </div>
             </div>
           </div>

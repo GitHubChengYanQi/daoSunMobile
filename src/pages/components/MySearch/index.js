@@ -18,6 +18,7 @@ const MySearch = (
     id = 'searchBar',
     placeholder,
     style: searchStyle,
+    searchBarStyle,
     searchIcon = <SearchOutline />,
     extraIcon,
     className,
@@ -133,6 +134,7 @@ const MySearch = (
       >
         <div id={id} className={style.searchBar}>
           <SearchBar
+            style={searchBarStyle}
             icon={<div onClick={() => {
               searchIconClick();
             }}>
