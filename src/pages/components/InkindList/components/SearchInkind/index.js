@@ -23,6 +23,7 @@ const SearchInkind = (
     api,
     noActions,
     className,
+    hiddenHeader,
   },
 ) => {
 
@@ -63,17 +64,17 @@ const SearchInkind = (
       }
     }}
     visible={visible && skuInfo.skuId}
-    title={over ? <div className={style.skuShow}>
+    title={(!hiddenHeader && over) ? <div className={style.skuShow}>
       <img src={imgUrl || state.imgLogo} width='30' height='30' alt='' />
       {SkuResultSkuJsons({ skuResult, spu: true })} / {SkuResultSkuJsons({ skuResult, sku: true })}
-    </div> : '库存实物'}
+    </div> : '库存明细'}
     onClose={() => {
       setData([]);
       onClose();
     }}
   >
     <div className={style.content} id='inkindList'>
-      <SkuInfo sku={skuInfo.skuResult} />
+      {!hiddenHeader && <SkuInfo sku={skuInfo.skuResult} />}
       <List
         over={over}
         className={className}

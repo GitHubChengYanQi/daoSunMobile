@@ -11,9 +11,11 @@ import Time from './components/Time';
 import User from './components/User';
 import StockNumber from './components/StockNumber';
 import Material from './components/Material';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const SkuScreen = (
   {
+    loading,
     screen,
     overLengths,
     refresh,
@@ -248,7 +250,14 @@ const SkuScreen = (
   return <>
     <Screen
       screen={screen}
-      buttonTitle={`查看 ${skuNumber} 类物料`}
+      fill={loading && 'outline'}
+      buttonTitle={loading ? <MyLoading
+        imgWidth={10}
+        loaderWidth={20}
+        skeleton
+        downLoading
+        title='正在查找物料...'
+        noLoadingTitle /> : `查看 ${skuNumber} 类物料`}
       onClose={onClose}
       onClear={onClear}
       searchtype={searchtype.filter(item => item.open)}

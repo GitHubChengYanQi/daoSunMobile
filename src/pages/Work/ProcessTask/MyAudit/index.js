@@ -40,6 +40,8 @@ const MyAudit = (
 
   const [screening, setScreeing] = useState();
 
+  const [loading, setLoading] = useState(false);
+
   const listRef = useRef();
   const screenRef = useRef();
 
@@ -101,6 +103,7 @@ const MyAudit = (
     />
 
     <ProcessList
+      onLoading={setLoading}
       manual
       ReceiptDom={ReceiptDom}
       all={ToolUtil.isArray(params.statusList).includes('99')}
@@ -110,6 +113,7 @@ const MyAudit = (
     />
 
     <ProcessScreen
+      loading={loading}
       top={top}
       open={{ type: !type, createUser: !createUser }}
       skuNumber={number}

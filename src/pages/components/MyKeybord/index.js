@@ -7,7 +7,6 @@ import { ToolUtil } from '../ToolUtil';
 
 const MyKeybord = (
   {
-    noMask,
     popupClassName,
     noStepper,
     numberClick = () => {
@@ -128,14 +127,21 @@ const MyKeybord = (
                     )}
                   >
                     <Button onClick={() => {
-                      const num = Number(number);
-                      if (num > 999999999) {
-                        return;
-                      }
-                      numberClick(item);
-                      if (!decimal || decimalLength < decimal) {
+                      if (decimal){
+                        if (number > 999999999) {
+                          return;
+                        }
+                        if (decimalLength < decimal) {
+                          numberChange(`${number || ''}` + item);
+                        }
+                      }else {
+                        const num = Number(number);
+                        if (num > 999999999) {
+                          return;
+                        }
                         numberChange(`${num || ''}` + item);
                       }
+                      numberClick(item);
                     }}>{item}</Button>
                   </div>;
               }

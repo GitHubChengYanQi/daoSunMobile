@@ -7,6 +7,7 @@ import { skuList } from '../../../Scan/Url';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
 import Screen from './components/Screen';
+import { loading } from '@formily/antd/lib/__builtins__';
 
 const SkuList = (
   {
@@ -40,6 +41,8 @@ const SkuList = (
   const [position, setPsoition] = useState([]);
   const [boms, setBoms] = useState([]);
   const [overLengths, setOverLengths] = useState({});
+
+  const [loading,setLoading] = useState(false);
 
   const [stockNumber, setStockNumber] = useState(0);
   const [skuNumber, setSkuNumber] = useState(0);
@@ -137,7 +140,7 @@ const SkuList = (
 
     <div ref={skuListRef} className={ToolUtil.classNames(style.skuList, skuClassName)}>
       <MyList
-        debounceInterval={debounceInterval}
+        onLoading={setLoading}
         params={params}
         ref={listRef}
         api={skuList}
@@ -196,6 +199,7 @@ const SkuList = (
     </div>
 
     <SkuScreen
+      loading={loading}
       screen={screen}
       overLengths={overLengths}
       refresh={refresh}

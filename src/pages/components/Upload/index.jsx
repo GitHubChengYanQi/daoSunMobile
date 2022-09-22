@@ -21,6 +21,8 @@ const UpLoadImg = (
     uploadRef,
     capture,
     imageType,
+    onPercent = () => {
+    },
     uploadLoading = () => {
     },
     hidden,
@@ -113,6 +115,7 @@ const UpLoadImg = (
           typeof onRemove === 'function' && onRemove(file);
         }}
         onChange={({ file }) => {
+          onPercent(file.percent);
           if (file.status === 'done') {
             setImageUrl(`${oss.host}/${oss.key}`);
             uploadLoading(false);

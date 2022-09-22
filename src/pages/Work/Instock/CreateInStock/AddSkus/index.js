@@ -8,8 +8,6 @@ import Search from '../../../../Scan/InStock/PositionFreeInstock/components/Sear
 import { CloseCircleOutline } from 'antd-mobile-icons';
 import style from '../../../../components/Number/index.css';
 import MyDatePicker from '../../../../components/MyDatePicker';
-import MyPopup from '../../../../components/MyPopup';
-import Detail from '../../../Sku/Detail';
 
 const AddSkus = (
   {
@@ -367,14 +365,6 @@ const AddSkus = (
           break;
       }
     }}
-    />
-
-    <MyPopup
-      title='物料信息'
-      position='bottom'
-      height='90vh'
-      ref={detailRef}
-      component={Detail}
     />
   </>;
 };

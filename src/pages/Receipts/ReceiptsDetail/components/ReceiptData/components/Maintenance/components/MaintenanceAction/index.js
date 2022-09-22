@@ -101,10 +101,9 @@ const MaintenanceAction = (
   };
 
   return <div className={style.stocktaking}>
-    <MyList params={params} ref={listRef} api={api} data={data} getData={(list = [], newList = []) => {
-      const positionIds = list.map(item => item.storehousePositionsId);
-      const newData = data.filter(item => positionIds.includes(item.positionId));
-      newList.forEach(item => {
+    <MyList params={params} ref={listRef} api={api} data={data} getData={(list = []) => {
+      const newData = [];
+      list.forEach(item => {
         const newPositionIds = newData.map(item => item.positionId);
         const newPositionIndex = newPositionIds.indexOf(item.storehousePositionsId);
 

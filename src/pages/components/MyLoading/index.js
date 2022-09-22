@@ -38,7 +38,9 @@ export const MyLoading = (
   });
 
   useDebounceEffect(() => {
-    setError(true);
+    if (!noLoadingTitle) {
+      setError(true);
+    }
   }, [], {
     wait: 60000,
   });
@@ -69,12 +71,10 @@ export const MyLoading = (
             <circle className={style.path} cx='50' cy='50' r='20' fill='none' strokeWidth='1' strokeMiterlimit='10' />
           </svg>
         </div>
-        <div
-          className={style.loadingLogo}
-          style={{ top: `calc(50% - ${imgWidth / 2}px)`, left: `calc(50% - ${imgWidth / 2}px)` }}
-        >
-          {state.homeLogo && <img src={state.homeLogo} width={imgWidth} height={imgWidth} alt='' />}
-        </div>
+        {state.homeLogo && <img src={state.homeLogo} width={imgWidth} height={imgWidth} alt='' style={{
+          top: `calc(50% - ${imgWidth / 2}px)`,
+          left: `calc(50% - ${imgWidth / 2}px)`,
+        }} />}
       </div>
       <div className={style.loadingTitle}>
         {loadingTitle || <div>

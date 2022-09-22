@@ -513,7 +513,6 @@ const Error = (
                   files={ToolUtil.isArray(sku.filedUrls)}
                   uploadId={`errorUpload`}
                   imgSize={36}
-                  icon={<CameraOutline />}
                   noFile
                   onChange={(medias) => {
                     setSku({ ...sku, filedUrls: medias, enclosure: medias.map(item => item.mediaId).toString() });

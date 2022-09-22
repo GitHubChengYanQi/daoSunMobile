@@ -7,6 +7,7 @@ const Time = (
   {
     value = [],
     title,
+    max,
     onChange = () => {
     },
   }) => {
@@ -21,6 +22,7 @@ const Time = (
         minWidth='100%'
         textAlign='left'
         value={value}
+        max={max}
         onChange={onChange}
       />
     </Card>
