@@ -37,7 +37,6 @@ const Relation = ({ type, receipts = {}, taskId }) => {
   const { loading: getTaskLoading, run: getTasks } = useRequest(getChildrenTasks, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
       setRelations(ToolUtil.isArray(res).map(item => {
         const receipts = item.receipts || {};
         return {

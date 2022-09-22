@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 
 const MaintenaceItem = (
@@ -29,9 +29,10 @@ const MaintenaceItem = (
     action
     percent={percent}
     coding={receipts.coding}
-    skus={receipts.skuResults}
+    skus={receipts.detailResults}
     endTime={receipts.endTime}
     createTime={item.createTime}
+    origin={isObject(item.themeAndOrigin)}
     taskName={item.taskName}
     index={index}
     skuSize={receipts.skuCount}

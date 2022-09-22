@@ -60,6 +60,7 @@ const ReceiptData = (
           refresh={refreshOrder}
           loading={loading}
           type={data.type}
+          taskDetail={data}
         />;
       case ReceiptsEnums.error:
         return <InstockError

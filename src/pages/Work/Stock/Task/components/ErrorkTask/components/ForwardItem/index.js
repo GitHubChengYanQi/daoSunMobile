@@ -1,6 +1,7 @@
 import React from 'react';
 import { useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
+import { isObject } from '../../../../../../../components/ToolUtil';
 
 const ForwardItem = (
   {
@@ -47,6 +48,7 @@ const ForwardItem = (
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
+    origin={isObject(item.themeAndOrigin)}
     taskName={item.taskName}
     skuSize={1}
     positionSize={1}

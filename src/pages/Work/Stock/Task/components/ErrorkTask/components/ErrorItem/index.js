@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ErrorItem = (
   {
@@ -33,6 +33,7 @@ const ErrorItem = (
     taskName={item.taskName}
     index={index}
     positionSize={receipts.positionNum}
+    origin={isObject(item.themeAndOrigin)}
     skuSize={receipts.skuNumber}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}

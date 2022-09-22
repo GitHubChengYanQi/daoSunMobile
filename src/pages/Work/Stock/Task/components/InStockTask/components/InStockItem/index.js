@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const InStockItem = (
   {
@@ -34,6 +34,7 @@ const InStockItem = (
     skus={ToolUtil.isArray(receipts.instockListResults).filter((item,index)=>index < 2)}
     skuSize={receipts.skuNum}
     positionSize={receipts.positionNum}
+    origin={isObject(item.themeAndOrigin)}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
     users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}

@@ -1,7 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const AllocationItem = (
   {
@@ -27,13 +26,14 @@ const AllocationItem = (
     percent={percent}
     statusName={statusName()}
     action
-    skus={receipts.skuResults}
+    skus={receipts.detailResults}
     coding={receipts.coding}
     createTime={item.createTime}
     taskName={item.taskName}
     skuSize={receipts.skuCount || 0}
     positionSize={receipts.positionCount || 0}
     index={index}
+    origin={isObject(item.themeAndOrigin)}
     onClick={()=>onClick(item)}
   />;
 };

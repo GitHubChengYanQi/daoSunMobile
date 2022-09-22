@@ -1,6 +1,6 @@
 import React from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuAction from './components/SkuAction';
 import { ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
@@ -8,9 +8,11 @@ import UploadFile from '../../../../../../components/Upload/UploadFile';
 import MyCard from '../../../../../../components/MyCard';
 import { UserName } from '../../../../../../components/User';
 import LinkButton from '../../../../../../components/LinkButton';
+import { useHistory } from 'react-router-dom';
 
 const InstockOrder = (
   {
+    taskDetail = {},
     loading,
     data = {},
     refresh = () => {
@@ -25,12 +27,14 @@ const InstockOrder = (
     taskId,
   }) => {
 
+  const history = useHistory();
+
   let details = [];
   let announcementsList = [];
   let remake;
   let fileUrls = [];
   let handleResults = [];
-  let origin = '';
+  const origin = isArray(isObject(taskDetail.themeAndOrigin).parent)[0]?.ret;
 
   switch (type) {
     case ReceiptsEnums.instockOrder:
@@ -85,7 +89,9 @@ const InstockOrder = (
     {action()}
 
     <MyCard title='来源' hidden={!origin}>
-      <LinkButton>{origin}</LinkButton>
+      <LinkButton onClick={() => history.push(`/Receipts/ReceiptsDetail?id=${origin.fromId}`)}>
+        {origin?.title} / {origin?.coding}
+      </LinkButton>
     </MyCard>
 
     <MyCard

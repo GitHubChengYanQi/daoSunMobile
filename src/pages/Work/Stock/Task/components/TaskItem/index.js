@@ -2,9 +2,10 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 
 const TaskItem = (
   {
@@ -27,9 +28,10 @@ const TaskItem = (
     action,
     users,
     userLabel,
+    origin = {},
   },
 ) => {
-
+  const originRet = isArray(origin?.parent)[0]?.ret;
   const scaleItems = Array(10).fill('');
 
   const getHour = (begin, end) => {
@@ -72,15 +74,17 @@ const TaskItem = (
           <div className={style.skus}>
             {
               ToolUtil.isArray(skus).map((item, index) => {
-                return <SkuItem
-                  key={index}
-                  extraWidth='64px'
-                  className={style.sku}
-                  imgSize={24}
-                  hiddenNumber
-                  oneRow
-                  skuResult={item.skuResult || item}
-                />;
+                return <div key={index} className={style.skuItem}>
+                  <SkuItem
+                    extraWidth='120px'
+                    className={style.sku}
+                    imgSize={24}
+                    hiddenNumber
+                    oneRow
+                    skuResult={item.skuResult || item}
+                  />
+                  <ShopNumber show value={item.number || 0} />
+                </div>;
               })
             }
           </div>
@@ -98,8 +102,10 @@ const TaskItem = (
             }
           </div>
         </div>
-
-        <div className={style.progress} style={{border:skus.length === 0 && 'none'}}>
+        <div className={style.progress} style={{ border: skus.length === 0 && 'none' }}>
+          <div className={style.origin} hidden={!originRet}>
+            <span className='blue'>来源</span> <Icon type='icon-laiyuan' /> {originRet?.title} / {originRet?.coding}
+          </div>
           <MyProgress hidden={noProgress} percent={percent} />
         </div>
         <div className={style.taskData}>

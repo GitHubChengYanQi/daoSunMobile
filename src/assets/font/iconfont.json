@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31968946",
+      "name": "来源",
+      "font_class": "laiyuan",
+      "unicode": "e6d7",
+      "unicode_decimal": 59095
+    },
+    {
       "icon_id": "31937545",
       "name": "出库成功",
       "font_class": "chukuchenggong",

@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const StocktakingItem = (
   {
@@ -31,6 +31,7 @@ const StocktakingItem = (
       createTime={item.createTime}
       taskName={item.taskName}
       statusName={statusName()}
+      origin={isObject(item.themeAndOrigin)}
       action
       index={index}
       skus={ToolUtil.isArray(receipts.stockResults)}
