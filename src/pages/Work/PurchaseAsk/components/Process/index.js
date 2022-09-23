@@ -17,6 +17,7 @@ const Process = (
     type,
     createUser = {},
     auditData,
+    version,
     remarks = [],
   }) => {
 
@@ -147,13 +148,6 @@ const Process = (
     if (step.auditRule.type === 'status') {
       auditType = 'action';
     }
-    // const logResult = step.logResult || {};
-    //
-    // const logRemark = remarks.filter(item => item.logId === logResult.logId)[0];
-    //
-    // const imgs = (logRemark && logRemark.photoId) ? logRemark.photoId.split(',').map(item => {
-    //   return { url: item };
-    // }) : [];
 
     return <div className={style.users}>
       {users.map((items, index) => {
@@ -173,8 +167,8 @@ const Process = (
         }
 
         const auditUserResult = items.auditUserResult;
-        if (!auditUserResult){
-          return <div key={index} />
+        if (!auditUserResult) {
+          return <div key={index} />;
         }
         return <div key={index}>
           <div className={style.user} key={index}>
@@ -257,7 +251,7 @@ const Process = (
         }
       });
       return <div className={style.users}>
-        {auditUsers(users, step)}
+        {oldAuditUsers(users, step)}
       </div>;
     }
   };
@@ -273,6 +267,192 @@ const Process = (
         setHiddenStep([...hiddenStep, index]);
       }}
     />;
+  };
+
+  // 老版本审批人
+  const oldAuditUsers = (users, step) => {
+
+    let auditType = step.auditType;
+    if (step.auditRule.type === 'status') {
+      auditType = 'action';
+    }
+    const logResult = step.logResult || {};
+
+    const logRemark = remarks.filter(item => item.logId === logResult.logId)[0];
+
+    const imgs = (logRemark && logRemark.photoId) ? logRemark.photoId.split(',').map(item => {
+      return { url: item };
+    }) : [];
+
+    return users.map((items, index) => {
+      let stepsStatus;
+      let content;
+      if (items.auditStatus) {
+        switch (logResult.status) {
+          case 1:
+            stepsStatus = 'success';
+            content = <span className={style.auditSuccess}><CheckCircleFill /></span>;
+            break;
+          case 0:
+            stepsStatus = 'error';
+            content = <span className={style.auditError}><CloseCircleFill /></span>;
+            break;
+          default:
+            break;
+        }
+      }
+
+
+      return <div key={index}>
+        <div className={style.user} key={index}>
+          <div className={style.nameAvatar}>
+            <Badge
+              color='#fff'
+              content={content}
+            >
+              <Avatar
+                size={26}
+                shape='square'
+                key={index}
+                src={items.avatar}
+              >{items.name.substring(0, 1)}</Avatar>
+            </Badge>
+            {items.name}
+          </div>
+          <div hidden={!stepsStatus}>
+            {nodeStatusName(auditType, stepsStatus)} · {MyDate.Show(logResult.updateTime)}
+          </div>
+        </div>
+        {logRemark && stepsStatus && (logRemark.content || imgs.length > 0) && <Space align='center' wrap>
+          {logRemark.content}
+          <UploadFile imgSize={14} show files={imgs} />
+        </Space>}
+      </div>;
+    });
+  };
+
+
+  // 老版本渲染单据节点
+  const oldSteps = (step, next, index = 0) => {
+
+    const minHeight = 60;
+
+    let stepStatus = 'wait';
+
+    let iconColor = '';
+
+    let actioning = false;
+
+    const hidden = hiddenStep.includes(index);
+
+    switch (step.logResult && step.logResult.status) {
+      case -1:
+        if (next) {
+          stepStatus = 'wait';
+          iconColor = style.action;
+          actioning = true;
+          break;
+        }
+        stepStatus = 'wait';
+        iconColor = style.wait;
+        break;
+      case 0:
+        stepStatus = 'error';
+        iconColor = style.error;
+        break;
+      case 1:
+        stepStatus = 'success';
+        iconColor = style.success;
+        break;
+      case 3:
+        stepStatus = 'wait';
+        iconColor = style.action;
+        actioning = true;
+        break;
+      default:
+        break;
+    }
+
+    switch (step.auditType) {
+      case 'start':
+        return <div>
+          <Steps.Step
+            style={{ minHeight, fontSize: '5vw' }}
+            status={stepStatus}
+            title={<div className={style.title}>
+              <span>发起人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>
+              {visiable(hidden, index)}
+            </div>}
+            description={!hidden && (createUser.name ? oldAuditUsers([{
+              name: createUser.name,
+              avatar: createUser.avatar,
+              auditStatus: 99,
+            }], step, stepStatus) : rules(step))}
+            icon={<div className={ToolUtil.classNames(
+              style.stepIcon,
+              iconColor,
+            )}>{status(step)}</div>}
+          />
+          {oldSteps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+        </div>;
+      case 'route':
+        return <div>
+          <Steps.Step
+            title={<div className={style.title}>
+              <span>审批人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>
+              {visiable(hidden, index)}
+            </div>}
+            style={{ minHeight }}
+            status={stepStatus}
+            description={!hidden &&
+            <div style={{ maxWidth: '100vw', overflowX: 'auto' }}>
+              <Space>
+                {step.conditionNodeList.map((items, index) => {
+                  return allStep(items.childNode, next, index);
+                })}
+              </Space>
+            </div>
+            }
+            icon={<div className={ToolUtil.classNames(
+              style.stepIcon,
+              iconColor,
+            )}>{status(step)}</div>}
+          />
+          {oldSteps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+        </div>;
+      case 'send':
+      case 'process':
+        let title;
+        if (step.auditType === 'send') {
+          title = <span>抄送人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>;
+        } else if (step.auditRule.type === 'audit') {
+          title = <span>审批人 · {nodeStatusName(step.auditType, stepStatus, actioning)}</span>;
+        } else {
+
+          const actionStatuses = step.auditRule.actionStatuses || [];
+          title = <span>
+            {actionStatuses.map(item => item.actionName || '执行动作').join('、')} · {nodeStatusName('action', stepStatus, actioning)}
+          </span>;
+        }
+        return <div>
+          <Steps.Step
+            style={{ minHeight }}
+            status={stepStatus}
+            title={<div className={style.title}>
+              {title}
+              {visiable(hidden, index)}
+            </div>}
+            description={!hidden && rules(step, step.auditType === 'send')}
+            icon={<div className={ToolUtil.classNames(
+              style.stepIcon,
+              iconColor,
+            )}>{status(step)}</div>}
+          />
+          {oldSteps(step.childNode, step.logResult && step.logResult.status === 1, index + 1)}
+        </div>;
+      default:
+        break;
+    }
   };
 
   // 渲染单据节点
@@ -396,7 +576,7 @@ const Process = (
 
   const allStep = (audit, next, index) => {
     return <Steps key={index} direction='vertical' className={style.step}>
-      {steps(audit, next)}
+      {version ? steps(audit, next) : oldSteps(audit, next)}
     </Steps>;
   };
 

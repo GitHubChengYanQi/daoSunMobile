@@ -114,6 +114,7 @@ const ReceiptData = (
     <Process
       remarks={remarks.filter(item => 'audit' === item.type)}
       auditData={data.stepsResult}
+      version={data.version}
       createUser={data.user}
     />
     <Comments
