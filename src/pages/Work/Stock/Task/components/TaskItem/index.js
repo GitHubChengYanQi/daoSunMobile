@@ -60,7 +60,7 @@ const TaskItem = (
             <img src={action ? receiptsOk : receiptsNo} alt='' height={24} />
           </div>
           <div hidden={!statusName} className={style.statusName}>
-            <div style={{ zIndex: 1 }}>{statusName}</div>
+            <div>{statusName}</div>
           </div>
           <div className={style.show}>
             <Icon type='icon-pandianwuliao' />
