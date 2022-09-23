@@ -92,6 +92,9 @@ const Edit = () => {
     }
   };
 
+  const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
+  console.log([][2]);
+
   return <div style={{ paddingBottom: 60 }}>
     <MyNavBar title='编辑物料' />
     <MyCard title='物料编码' extra={<span className={styles.disabled}>{detail.standard}</span>} />
@@ -114,19 +117,19 @@ const Edit = () => {
       <div onClick={() => {
         setVisible('length');
       }}>
-        长<span style={{ padding: '0 2px' }}>{detail.length || 0}</span>cm
+        长<span style={{ padding: '0 2px' }}>{skuSize[0] || 0}</span>cm
       </div>
       ×
       <div onClick={() => {
         setVisible('width');
       }}>
-        宽<span style={{ padding: '0 2px' }}>{detail.width || 0}</span>cm
+        宽<span style={{ padding: '0 2px' }}>{skuSize[1] || 0}</span>cm
       </div>
       ×
       <div onClick={() => {
         setVisible('height');
       }}>
-        高<span style={{ padding: '0 2px' }}>{detail.height || 0}</span>cm
+        高<span style={{ padding: '0 2px' }}>{skuSize[2] || 0}</span>cm
       </div>
     </Space>} />
     <MyCard title='备注'>
@@ -206,13 +209,13 @@ const Edit = () => {
             detailChange({ weight: number });
             break;
           case 'length':
-            detailChange({ length: number });
+            detailChange({ skuSize: `${number || 0},${skuSize[1] || 0},${skuSize[2] || 0}` });
             break;
           case 'width':
-            detailChange({ width: number });
+            detailChange({ skuSize: `${skuSize[0] || 0},${number || 0},${skuSize[2] || 0}` });
             break;
           case 'height':
-            detailChange({ height: number });
+            detailChange({ skuSize: `${skuSize[0] || 0},${skuSize[1] || 0},${number || 0}` });
             break;
           default:
             break;

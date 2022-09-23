@@ -15,7 +15,13 @@ import { MyDate } from '../../../../../components/MyDate';
 
 const Doms = ({ skuId }) => {
 
-  const { loading, data: boms } = useRequest({ ...partsList, data: { skuId }, params: { limit: 2, page: 1 } });
+  const { loading, data: boms = {} } = useRequest({
+    ...partsList,
+    data: { skuId },
+    params: { limit: 2, page: 1 },
+  }, {
+    response: true,
+  });
 
   const [visible, setVisible] = useState(false);
 
@@ -25,26 +31,26 @@ const Doms = ({ skuId }) => {
     return <MyLoading skeleton />;
   }
 
-  if (isArray(boms).length === 0) {
+  if (isArray(boms.data).length === 0) {
     return <></>;
   }
 
   return <>
     <div className={styles.bom}>
       <div className={styles.title}>
-        关联物料清单 (2)
+        关联物料清单 ({boms.count})
         <span className={styles.extra}><LinkButton onClick={() => {
           setVisible(true);
         }}>查看更多<RightOutline /></LinkButton></span>
       </div>
       {
-        boms.map((item, index) => {
+        boms.data.map((item, index) => {
           return <div key={index} className={classNames(styles.flexCenter, styles.bomItem)}>
             <SkuItem
               hiddenNumber
               extraWidth='100px'
               skuResult={item.skuResult}
-              title={SkuResultSkuJsons({skuResult:item.skuResult})}
+              title={SkuResultSkuJsons({ skuResult: item.skuResult })}
               className={styles.flexGrow}
               oneRow
               otherData={[
@@ -72,7 +78,7 @@ const Doms = ({ skuId }) => {
                   hiddenNumber
                   extraWidth='100px'
                   skuResult={item.skuResult}
-                  title={SkuResultSkuJsons({skuResult:item.skuResult})}
+                  title={SkuResultSkuJsons({ skuResult: item.skuResult })}
                   className={styles.flexGrow}
                   oneRow
                   otherData={[

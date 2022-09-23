@@ -19,7 +19,7 @@ const Supply = ({ skuId }) => {
   const { loading } = useRequest({ ...supplyList, data: { skuId } }, {
     onSuccess: (res) => {
       const newData = [];
-      res.forEach(item => {
+      isArray(res).forEach(item => {
         const customerIds = newData.map(item => item.customerId);
         const customerIndex = customerIds.indexOf(item.customerId);
         const brandResult = item.brandResult || {};
@@ -33,7 +33,6 @@ const Supply = ({ skuId }) => {
       setData(newData);
     },
   });
-
   const [visible, setVisible] = useState(false);
 
   if (loading) {
@@ -43,7 +42,7 @@ const Supply = ({ skuId }) => {
   return <>
     <div className={styles.supply}>
       <div className={styles.title}>
-        供应商(2)
+        供应商({data.length})
         <span className={styles.extra}><LinkButton onClick={() => {
           setVisible(true);
         }}>查看更多<RightOutline /></LinkButton></span>

@@ -172,7 +172,7 @@ const SkuDetail = ({ id }) => {
           <div><Label className={styles.label}>物料描述</Label>{SkuResultSkuJsons({ skuResult: detail, describe: true })}
           </div>
           <div><Label className={styles.label}>备注</Label>{detail.remarks || '无'}</div>
-          <div><Label className={styles.label}>尺寸</Label>{detail.none || '无'}</div>
+          <div><Label className={styles.label}>尺寸</Label>{detail.skuSize && detail.skuSize.split(',').join('×') || '无'}</div>
         </Space>}
       </Space>
       <Expand expand={expand} onExpand={setExpand} />
