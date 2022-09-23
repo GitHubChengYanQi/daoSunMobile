@@ -15,14 +15,6 @@ const StocktakingItem = (
 
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>{receipts.statusName || '进行中'}</>;
-    }
-  };
-
   return <>
     <TaskItem
       percent={percent}
@@ -30,9 +22,9 @@ const StocktakingItem = (
       endTime={receipts.endTime}
       createTime={item.createTime}
       taskName={item.taskName}
-      statusName={statusName()}
+      statusName={receipts.statusName || '进行中'}
+      action={receipts.status === 99}
       origin={isObject(item.themeAndOrigin)}
-      action
       index={index}
       skus={ToolUtil.isArray(receipts.stockResults)}
       skuSize={receipts.skuSize}

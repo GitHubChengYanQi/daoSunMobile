@@ -57,7 +57,7 @@ const TaskItem = (
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
           <div className={style.svg}>
-            <img src={action ? receiptsOk : receiptsNo} alt='' height={24} />
+            <img src={action ? receiptsOk : receiptsNo} alt='' height={24} width={70} />
           </div>
           <div hidden={!statusName} className={style.statusName}>
             <div>{statusName}</div>

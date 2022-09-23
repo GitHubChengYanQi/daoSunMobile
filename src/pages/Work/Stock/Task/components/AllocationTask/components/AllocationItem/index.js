@@ -13,19 +13,11 @@ const AllocationItem = (
 
   const percent = parseInt((receipts.doneNumber / (receipts.detailNumber / 1)) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>{receipts.statusName || '进行中'}</>;
-    }
-  };
-
   return <TaskItem
     users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
     percent={percent}
-    statusName={statusName()}
-    action
+    statusName={receipts.statusName || '进行中'}
+    action={receipts.status === 99}
     skus={receipts.detailResults}
     coding={receipts.coding}
     createTime={item.createTime}

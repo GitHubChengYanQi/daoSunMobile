@@ -16,17 +16,9 @@ const MaintenaceItem = (
 
   const percent = parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>{receipts.statusName || '进行中'}</>;
-    }
-  };
-
   return <TaskItem
-    statusName={statusName()}
-    action
+    statusName={receipts.statusName || '进行中'}
+    action={receipts.status === 99}
     percent={percent}
     coding={receipts.coding}
     skus={receipts.detailResults}

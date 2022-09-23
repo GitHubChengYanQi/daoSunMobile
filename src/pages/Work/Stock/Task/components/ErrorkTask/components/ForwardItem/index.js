@@ -32,18 +32,10 @@ const ForwardItem = (
 
   const percent = parseInt((complete / myDetails) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>{receipts.statusName || '进行中'}</>;
-    }
-  };
-
   return <TaskItem
-    statusName={statusName()}
     percent={percent}
-    action
+    statusName={receipts.statusName || '进行中'}
+    action={receipts.status === 99}
     skus={[receipts]}
     coding={receipts.coding}
     endTime={receipts.endTime}
