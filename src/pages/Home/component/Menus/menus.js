@@ -74,17 +74,17 @@ export const menus = [
   {
     code: 'curingAsk',
     icon: 'icon-kucunyanghu',
-    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.curing}`,
+    url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.maintenance}`,
   },
   {
     code: 'inventoryAsk',
     icon: 'icon-pandian1',
-    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.stocktaking}`,
+    url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.stocktaking}`,
   },
   {
     code: 'allocationAsk',
     icon: 'icon-kujiantiaobo',
-    url: `/Work/Instock/InstockAsk/Submit?createType=${ERPEnums.allocation}`,
+    url: `/Receipts/ReceiptsCreate?type=${ReceiptsEnums.allocation}`,
   }, {
     code: 'allocation',
     icon: 'icon-kujiantiaobo',

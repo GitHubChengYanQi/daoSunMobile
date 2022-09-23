@@ -17,7 +17,7 @@ import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
 export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: 'POST' };
 
-const CuringAsk = ({ createType, state, backTitle }) => {
+const CuringAsk = ({ createType, backTitle }) => {
 
   const [params, setParams] = useState({});
 
@@ -57,10 +57,6 @@ const CuringAsk = ({ createType, state, backTitle }) => {
       setSkuTotal(total);
     },
   });
-
-  useEffect(() => {
-    setParams({ ...ToolUtil.isObject(state.data) });
-  }, []);
 
   const createTypeData = () => {
     const maintenanceDisabled = () => {
