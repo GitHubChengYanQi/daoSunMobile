@@ -3,16 +3,20 @@ import { NavBar } from 'antd-mobile';
 import { history, useModel } from 'umi';
 import { ToolUtil } from '../ToolUtil';
 
-const MyNavBar = ({ title }) => {
+const MyNavBar = ({ title, noDom }) => {
 
   const { initialState } = useModel('@@initialState');
 
   const state = initialState || {};
   useEffect(() => {
-    setTimeout(()=>{
+    setTimeout(() => {
       document.title = state.systemName ? `${title}-${state.systemName}` : title;
-    },0)
+    }, 0);
   }, [title]);
+
+  if (noDom) {
+    return <></>;
+  }
 
   return !ToolUtil.isQiyeWeixin() ? <div style={{ height: 45, position: 'sticky', top: 0, zIndex: 999 }}>
     <NavBar style={{

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyCard from '../components/MyCard';
 import LinkButton from '../components/LinkButton';
 import ReportSwiper from './components/ReportSwiper';
@@ -6,6 +6,7 @@ import Order from './components/Order';
 import style from './index.less';
 import TaskList from './components/TaskList';
 import { useHistory } from 'react-router-dom';
+import MyNavBar from '../components/MyNavBar';
 
 const Report = () => {
 
@@ -14,6 +15,7 @@ const Report = () => {
   const [title, setTitle] = useState();
 
   return <div className={style.report}>
+    <MyNavBar title='数据' noDom />
     <MyCard title={title} extra={<LinkButton onClick={() => {
       history.push('/Report/StatisticalChart');
     }}>更多</LinkButton>}>

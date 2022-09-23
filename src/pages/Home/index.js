@@ -10,6 +10,7 @@ import DefaultMenus from './component/DefaultMenus';
 import MenusItem from './component/MenusItem';
 import ReportSwiper from '../Report/components/ReportSwiper';
 import { useHistory } from 'react-router-dom';
+import MyNavBar from '../components/MyNavBar';
 
 export const getUserInfo = { url: '/cpuserInfo/backHeadPortrait', method: 'GET' };
 
@@ -43,11 +44,11 @@ const Home = (
         },
       });
     }
-    window.document.title = state.systemName ? `首页-${state.systemName}` : '首页';
   }, []);
 
 
   return <div className={style.home}>
+    <MyNavBar title='首页' noDom />
     <div className={style.enterprise}>
       <div className={style.enterpriseLeft}>
         <div className={style.logo}>
