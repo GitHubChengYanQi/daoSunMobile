@@ -12,12 +12,10 @@ import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import { partsList } from '../../../SkuList/components/SkuScreen/components/Url';
 import { SkuResultSkuJsons } from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { MyDate } from '../../../../../components/MyDate';
-import { supplyList } from '../Supply';
 
 const Doms = ({ skuId }) => {
 
   const { loading, data: boms } = useRequest({ ...partsList, data: { skuId }, params: { limit: 2, page: 1 } });
-  console.log(boms);
 
   const [visible, setVisible] = useState(false);
 

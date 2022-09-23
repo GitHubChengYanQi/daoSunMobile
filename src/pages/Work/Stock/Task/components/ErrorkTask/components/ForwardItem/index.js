@@ -35,7 +35,7 @@ const ForwardItem = (
   return <TaskItem
     percent={percent}
     statusName={receipts.statusName || '进行中'}
-    action={receipts.status === 99}
+    action={receipts.status !== 99}
     skus={[receipts]}
     coding={receipts.coding}
     endTime={receipts.endTime}

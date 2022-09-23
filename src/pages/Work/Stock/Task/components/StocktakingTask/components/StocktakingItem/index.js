@@ -23,7 +23,7 @@ const StocktakingItem = (
       createTime={item.createTime}
       taskName={item.taskName}
       statusName={receipts.statusName || '进行中'}
-      action={receipts.status === 99}
+      action={receipts.status !== 99}
       origin={isObject(item.themeAndOrigin)}
       index={index}
       skus={ToolUtil.isArray(receipts.stockResults)}
