@@ -20,7 +20,7 @@ const MaintenaceItem = (
     if (percent === 100) {
       return <>已完成</>;
     } else {
-      return <>可养护</>;
+      return <>{receipts.statusName || '进行中'}</>;
     }
   };
 

@@ -18,7 +18,7 @@ const ErrorItem = (
     if (percent === 100) {
       return <>已完成</>;
     } else {
-      return <>可处理</>;
+      return <>{receipts.statusName || '进行中'}</>;
     }
   };
 

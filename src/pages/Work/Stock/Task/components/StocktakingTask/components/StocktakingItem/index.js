@@ -11,7 +11,7 @@ const StocktakingItem = (
   },
 ) => {
 
-  const receipts = item.receipts;
+  const receipts = item.receipts || {};
 
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
@@ -19,7 +19,7 @@ const StocktakingItem = (
     if (percent === 100) {
       return <>已完成</>;
     } else {
-      return <>可盘点</>;
+      return <>{receipts.statusName || '进行中'}</>;
     }
   };
 

@@ -72,11 +72,15 @@ const MyAudit = (
 
   const processListRef = useRef();
 
+  const [searchValue, setSearchValue] = useState('');
+
   return <>
     <div hidden={type || hiddenSearch}>
       <MySearch
         placeholder='请输入单据相关信息'
         historyType='process'
+        value={searchValue}
+        onChange={setSearchValue}
         onSearch={(value) => {
           submit({ skuName: value });
         }}
