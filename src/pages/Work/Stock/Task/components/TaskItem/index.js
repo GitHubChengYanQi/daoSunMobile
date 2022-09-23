@@ -2,12 +2,13 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { isArray, isObject, ToolUtil } from '../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
 import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
+import MyEllipsis from '../../../../../components/MyEllipsis';
 
 const TaskItem = (
   {
@@ -114,7 +115,7 @@ const TaskItem = (
         </div>
         <div className={style.taskData}>
           <div className={style.user}>
-            {userLabel || '执行人'}：{users}
+            <MyEllipsis maxWidth={viewWidth() / 2}>{userLabel || '执行人'}：{users}</MyEllipsis>
           </div>
           <div className={style.status} style={{ color: '#808080', width: 130, textAlign: 'right' }}>
             {MyDate.Show(createTime)}

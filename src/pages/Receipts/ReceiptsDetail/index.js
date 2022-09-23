@@ -48,21 +48,21 @@ export const ReceiptsDetailContent = () => {
   const [scrollTop, setScrollTop] = useState(0);
 
   // 获取当前节点
-  const getCurrentNode = (data) => {
+  const getCurrentNode = (data, version) => {
     if (!data) {
       return {};
     }
     const logResults = data.logResults || [];
-    const currentNode = logResults.filter(item => item.status === 3).length === logResults.length;
+    const currentNode = version ? logResults.filter(item => item.status === 3).length === logResults.length : data.logResult && data.logResult.status === -1;
     if (currentNode) {
       if (data.stepType === 'route') {
         return data.conditionNodeList.map((item) => {
-          return getCurrentNode(item.childNode);
+          return getCurrentNode(item.childNode, version);
         });
       }
       return data;
     }
-    return getCurrentNode(data.childNode);
+    return getCurrentNode(data.childNode, version);
   };
 
   // 审批详情接口
@@ -80,7 +80,7 @@ export const ReceiptsDetailContent = () => {
           //类型
           setType(res.type);
           //当前节点
-          const node = getCurrentNode(res.stepsResult);
+          const node = getCurrentNode(res.stepsResult, res.version);
           const currentNode = Array.isArray(node) ? node : [node];
           setCurrentNode(currentNode);
           setTrue();

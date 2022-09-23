@@ -29,9 +29,9 @@ const Bottom = (
     return null;
   });
 
-  // if (!detail.permissions) {
-  //   return <></>;
-  // }
+  if (!detail.permissions) {
+    return <></>;
+  }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
     <div className={style.actions}>
