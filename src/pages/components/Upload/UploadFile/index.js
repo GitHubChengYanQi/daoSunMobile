@@ -53,7 +53,7 @@ const UploadFile = (
 
   const [loading, setLoading] = useState();
 
-  const imgs = files.filter(item => item.type !== 'other').map(item => (item.showUrl || item.url));
+  const imgs = files.map(item => (item.showUrl || item.url));
 
   const fileChange = ({ mediaId, url, filedName, type, remove }) => {
     if (!mediaId) {
@@ -135,6 +135,22 @@ const UploadFile = (
     }
   };
 
+  const fileIcon = (type) => {
+    let icon;
+    if (queryString('pdf', type)) {
+      icon = <Icon type='icon-PDF' />;
+    } else if (queryString('doc', type)) {
+      icon = <Icon type='icon-WORD' />;
+    } else if (queryString('xls', type)) {
+      icon = <FileExcelOutlined />;
+    } else if (queryString('ppt', type)) {
+      icon = <FilePptOutlined />;
+    } else {
+      icon = <FileOutlined />;
+    }
+    return icon;
+  };
+
   useImperativeHandle(ref, () => ({
     addFile,
   }));
@@ -153,29 +169,23 @@ const UploadFile = (
                 dom={CloseOutline}
               />
             </div>
-            {
-              item.type === 'other' ? <FileOutlined style={{ color: 'var(--adm-color-primary)' }} /> :
-                <img onClick={() => {
-                  if (!ToolUtil.isQiyeWeixin()) {
-                    ImageViewer.Multi.show({
-                      images: imgs,
-                      defaultIndex: index,
-                    });
-                    return;
-                  }
-                  previewImage(item.showUrl || item.url, imgs);
-                }} src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
-                  const newFile = files.map((currentItem, currentIndex) => {
-                    if (currentIndex === index) {
-                      return { ...currentItem, type: 'other' };
-                    } else {
-                      return currentItem;
-                    }
+            <Avatar
+              shape='square'
+              size={60}
+              src={item.url}
+              icon={fileIcon(item.type)}
+              className={style.showImg}
+              onClick={() => {
+                if (!ToolUtil.isQiyeWeixin()) {
+                  ImageViewer.Multi.show({
+                    images: imgs,
+                    defaultIndex: index,
                   });
-                  onChange(newFile, true);
-                }} />
-            }
-
+                  return;
+                }
+                previewImage(item.showUrl || item.url, imgs);
+              }}
+            />
           </div>;
         })
       }
@@ -189,7 +199,8 @@ const UploadFile = (
         className={style.img}
         style={{ width: imgSize, height: imgSize }}
         onClick={() => addFile()}>
-        <CameraOutline />
+        <CameraOutline
+        />
       </div>
     </div>}
 
@@ -208,24 +219,15 @@ const UploadFile = (
           />
         </div>;
       }
-      let icon;
-      if (queryString('pdf', item.type)) {
-        icon = <Icon type='icon-PDF' />;
-      } else if (queryString('doc', item.type)) {
-        icon = <Icon type='icon-WORD' />;
-      } else if (queryString('xls', item.type)) {
-        icon = <FileExcelOutlined />;
-      } else if (queryString('ppt', item.type)) {
-        icon = <FilePptOutlined />;
-      } else {
-        icon = <FileOutlined />;
-      }
 
       if (typeof fileRender === 'function') {
-        return <div key={index} style={{ display: 'inline-block' }}>{fileRender({ ...item, icon })}</div>;
+        return <div key={index} style={{ display: 'inline-block' }}>{fileRender({
+          ...item,
+          icon: fileIcon(item.type),
+        })}</div>;
       }
       return <div className={style.fileItem} key={index}>
-        <Avatar shape='square' size={26} src={item.url} icon={icon} className={style.showImg} />
+        <Avatar shape='square' size={26} src={item.url} icon={fileIcon(item.type)} className={style.showImg} />
         <MyEllipsis>{item.filedName || ''}</MyEllipsis>
         {!show && <MyRemoveButton
           className={style.remove}

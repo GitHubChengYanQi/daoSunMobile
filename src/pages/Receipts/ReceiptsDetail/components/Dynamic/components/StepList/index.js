@@ -57,9 +57,7 @@ const StepList = (
 
         const user = ToolUtil.isObject(item.user || item.userResult);
 
-        const imgs = item.photoId ? item.photoId.split(',').map(item => {
-          return { url: item };
-        }) : [];
+        const imgs = item.mediaResults || [];
 
         return <div
           key={index}
@@ -80,7 +78,10 @@ const StepList = (
                 {getContent(item)}
               </div>
               <div className={style.photos} hidden={imgs.length === 0}>
-                <UploadFile show files={imgs} />
+                <UploadFile
+                  show
+                  files={imgs.map(item => ({ ...item, showUrl: item.url,url:item.thumbUrl || item.url }))}
+                />
               </div>
               <div className={style.time}>
                 {ToolUtil.timeDifference(item.createTime)}

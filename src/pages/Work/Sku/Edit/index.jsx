@@ -17,6 +17,8 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 
+export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
+
 const Edit = () => {
 
   const { query } = useLocation();
@@ -45,7 +47,7 @@ const Edit = () => {
     },
   );
 
-  const { loading } = useRequest(
+  const { loading, refresh } = useRequest(
     { ...skuDetail, data: { skuId: query.skuId } },
     {
       manual: !query.skuId,
@@ -63,7 +65,19 @@ const Edit = () => {
       },
     });
 
-  if (loading) {
+  const { loading: editEnclosureLoading, run: editEnclosureRun } = useRequest(editEnclosure, {
+    manual: true,
+    onSuccess: () => {
+      refresh();
+    },
+    onError: () => {
+      Message.errorToast('修改失败!', () => {
+        refresh();
+      });
+    },
+  });
+
+  if (loading && !detail.skuId) {
     return <MyLoading />;
   }
 
@@ -93,7 +107,18 @@ const Edit = () => {
   };
 
   const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
-  console.log([][2]);
+
+
+  const editAction = (newData = {}) => {
+    editEnclosureRun({
+      data: {
+        skuId: detail.skuId,
+        images: detail.images,
+        fileId: detail.fileId,
+        drawing: detail.drawing, ...newData,
+      },
+    });
+  };
 
   return <div style={{ paddingBottom: 60 }}>
     <MyNavBar title='编辑物料' />
@@ -151,7 +176,7 @@ const Edit = () => {
           url: item.thumbUrl || item.url,
         }))}
         onChange={(medias) => {
-          detailChange({ imgResults: medias, images: medias.map(item => item.mediaId).toString() });
+          editAction({ images: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
     <MyCard title='图纸' extra={isArray(detail.drawingResults).length < 5 && <LinkButton onClick={() => {
@@ -165,7 +190,7 @@ const Edit = () => {
         ref={skuDrawings}
         files={isArray(detail.drawingResults)}
         onChange={(medias) => {
-          detailChange({ drawingResults: medias, drawing: medias.map(item => item.mediaId).toString() });
+          editAction({ drawing: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
     <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
@@ -179,7 +204,7 @@ const Edit = () => {
         ref={skuFiles}
         files={isArray(detail.filedResults)}
         onChange={(medias) => {
-          detailChange({ filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
+          editAction({ fileId: medias.map(item => item.mediaId).toString() });
         }} />
     </MyCard>
 
@@ -234,7 +259,7 @@ const Edit = () => {
       text='保存'
     />
 
-    {editLoading && <MyLoading />}
+    {(loading || editLoading || editEnclosureLoading) && <MyLoading />}
   </div>;
 };
 

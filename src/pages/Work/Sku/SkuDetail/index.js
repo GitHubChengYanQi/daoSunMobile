@@ -12,21 +12,14 @@ import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJso
 import Label from '../../../components/Label';
 import { useModel } from 'umi';
 import Expand from '../../../components/Expand';
-import LinkButton from '../../../components/LinkButton';
-import SkuItem from '../SkuItem';
-import ShopNumber from '../../AddShop/components/ShopNumber';
 import SearchInkind from '../../../components/InkindList/components/SearchInkind';
 import ShowCode from '../../../components/ShowCode';
-import { RightOutline } from 'antd-mobile-icons';
 import Icon from '../../../components/Icon';
 import MyAntPopup from '../../../components/MyAntPopup';
-import MyCard from '../../../components/MyCard';
 import Drawings from './components/Drawings';
 import Files from './components/Files';
 import Supply from './components/Supply';
 import Doms from './components/Doms';
-
-export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
 const SkuDetail = ({ id }) => {
 
