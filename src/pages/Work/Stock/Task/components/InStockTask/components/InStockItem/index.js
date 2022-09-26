@@ -25,6 +25,7 @@ const InStockItem = (
   return <TaskItem
     statusName={statusName()}
     percent={percent}
+    complete={receipts.status === 99}
     action={(receipts.canPut && percent !== 100)}
     coding={receipts.coding}
     endTime={receipts.endTime}

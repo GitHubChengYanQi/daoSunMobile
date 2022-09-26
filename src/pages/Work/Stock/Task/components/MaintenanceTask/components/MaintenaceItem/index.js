@@ -19,6 +19,7 @@ const MaintenaceItem = (
   return <TaskItem
     statusName={receipts.statusName || '进行中'}
     action={receipts.status !== 99}
+    complete={receipts.status === 99}
     percent={percent}
     coding={receipts.coding}
     skus={receipts.detailResults}

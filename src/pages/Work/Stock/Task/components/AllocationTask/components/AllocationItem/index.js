@@ -6,7 +6,8 @@ const AllocationItem = (
   {
     item = {},
     index,
-    onClick=()=>{}
+    onClick = () => {
+    },
   }) => {
 
   const receipts = item.receipts || {};
@@ -18,6 +19,7 @@ const AllocationItem = (
     percent={percent}
     statusName={receipts.statusName || '进行中'}
     action={receipts.status !== 99}
+    complete={receipts.status === 99}
     skus={receipts.detailResults}
     coding={receipts.coding}
     createTime={item.createTime}
@@ -26,7 +28,7 @@ const AllocationItem = (
     positionSize={receipts.positionCount || 0}
     index={index}
     origin={isObject(item.themeAndOrigin)}
-    onClick={()=>onClick(item)}
+    onClick={() => onClick(item)}
   />;
 };
 

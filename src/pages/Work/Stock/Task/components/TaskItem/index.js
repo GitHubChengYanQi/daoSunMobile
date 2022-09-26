@@ -7,6 +7,7 @@ import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
+import receipts from '../../../../../../assets/receiptsTask.png';
 import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 
@@ -32,6 +33,7 @@ const TaskItem = (
     users,
     userLabel,
     origin = {},
+    complete,
   },
 ) => {
   const originRet = isArray(origin?.parent)[0]?.ret;
@@ -49,6 +51,15 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
+  let img;
+  if (action) {
+   img = receipts;
+  }else if (complete){
+    img = receiptsOk
+  }else {
+    img = receiptsNo
+  }
+
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.title}>
       {taskName} {coding && '/'} {coding}
@@ -57,7 +68,7 @@ const TaskItem = (
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
           <div className={style.svg}>
-            <img src={action ? receiptsOk : receiptsNo} alt='' height={26} width={70} />
+            <img src={img} alt='' height={26} width={70} />
           </div>
           <div hidden={!statusName} className={style.statusName}>
             <div>{statusName}</div>

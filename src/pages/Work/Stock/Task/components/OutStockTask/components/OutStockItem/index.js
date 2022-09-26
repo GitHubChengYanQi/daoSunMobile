@@ -37,6 +37,7 @@ const OutStockItem = (
     users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
     statusName={statusName()}
     action={(can && percent !== 100)}
+    complete={receipts.status === 99}
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
