@@ -8,6 +8,7 @@ import { Message } from '../../../components/Message';
 
 const Audit = (
   {
+    version,
     id,
     refresh,
     mediaIds = [],
@@ -37,7 +38,12 @@ const Audit = (
   );
 
   const logIds = [];
-  currentNode.map(item => {
+  currentNode.forEach(item => {
+    if (version) {
+      const logResult = item.logResult || {};
+      logIds.push(logResult.logId);
+      return;
+    }
     const logResults = item.logResults || [];
     logResults.map(item => {
       logIds.push(item.logId);

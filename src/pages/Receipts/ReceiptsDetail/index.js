@@ -146,8 +146,7 @@ export const ReceiptsDetailContent = () => {
           actionButton={
             !hidden &&
             !loading &&
-            detail.permissions &&
-            currentNode.filter(item => item.stepType === 'audit').length > 0
+            detail.permissions
           }
           success={success}
           permissions={detail.permissions}
@@ -246,7 +245,7 @@ export const ReceiptsDetailContent = () => {
           &&
           !loading
           &&
-          <Bottom loading={loading} currentNode={currentNode} detail={detail} refresh={() => {
+          <Bottom version={detail.version} loading={loading} currentNode={currentNode} detail={detail} refresh={() => {
             setFalse();
             refresh();
           }} />

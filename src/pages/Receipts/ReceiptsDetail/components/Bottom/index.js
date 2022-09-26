@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { MoreOutline } from 'antd-mobile-icons';
 import Audit from '../../../components/Audit';
-import Note from '../../../components/Comments/components/Note';
 import MyActionSheet from '../../../../components/MyActionSheet';
 
 const Bottom = (
   {
+    version,
     currentNode = [],
     detail = {},
     refresh = () => {
@@ -41,7 +41,7 @@ const Bottom = (
         更多
         <MoreOutline style={{ fontSize: 15 }} />
       </div>
-      <Audit loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
+      <Audit version={version} loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
     </div>
 
     <MyActionSheet onAction={() => setVisible(false)} visible={visible} actions={[
