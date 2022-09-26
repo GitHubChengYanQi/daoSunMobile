@@ -29,11 +29,11 @@ const ReceiptsCreate = () => {
     case ReceiptsEnums.outstockOrder:
       return <AddShop title='出库申请' type={ERPEnums.outStock} />;
     case ReceiptsEnums.stocktaking:
-      return <CreateTask type={ERPEnums.stocktaking} />;
+      return <CreateTask createType={ERPEnums.stocktaking} />;
     case ReceiptsEnums.allocation:
-      return <CreateTask type={ERPEnums.allocation} />;
+      return <CreateTask createType={ERPEnums.allocation} />;
     case ReceiptsEnums.maintenance:
-      return <CreateTask type={ERPEnums.curing} />;
+      return <CreateTask createType={ERPEnums.curing} />;
     case 'purchaseAsk':
       return <AskAdd />;
     case ReceiptsEnums.error:

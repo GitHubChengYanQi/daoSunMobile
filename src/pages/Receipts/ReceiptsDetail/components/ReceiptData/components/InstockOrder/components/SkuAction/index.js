@@ -13,19 +13,26 @@ import InSkuItem from './components/InSkuItem';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../../../components/ToolUtil';
 import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MySearch from '../../../../../../../../components/MySearch';
+import ActionButtons from '../../../../../ActionButtons';
+import { useHistory } from 'react-router-dom';
+import { ERPEnums } from '../../../../../../../../Work/Stock/ERPEnums';
 
 export const instockHandle = { url: '/instockHandle/listByInstockOrderId', method: 'GET' };
 
 const SkuAction = (
   {
+    taskId,
+    logIds = [],
+    nodeActions = [],
     handleResults = [],
+    permissions,
     loading,
     actionId,
     data = [],
@@ -33,9 +40,13 @@ const SkuAction = (
     instockOrderId,
     refresh = () => {
     },
+    afertShow = () => {
+    },
     order,
   },
 ) => {
+
+  const history = useHistory();
 
   let orderInfo = order || {};
 
@@ -299,6 +310,50 @@ const SkuAction = (
         })}
       </div>
     </MyAntPopup>
+
+    <ActionButtons
+      refresh={refresh}
+      afertShow={afertShow}
+      taskId={taskId}
+      logIds={logIds}
+      createUser={order.createUser}
+      permissions={permissions}
+      actions={nodeActions.filter((item) => item.action !== 'performInstock')}
+      onClick={(value) => {
+        switch (value) {
+          case 'revokeAndAsk':
+            history.push({
+              pathname: '/Work/CreateTask',
+              query: {
+                createType: ERPEnums.inStock,
+              },
+              state: {
+                skus: data.map(item => {
+                  return {
+                    brandId: item.brandId,
+                    brandName: isObject(item.brandResult).brandName,
+                    customerId: item.brandId,
+                    customerName: isObject(item.customerResult).customerName,
+                    number: item.number,
+                    skuId: item.skuId,
+                    skuResult: item.skuResult,
+                  };
+                }),
+                files: isArray(order.url).map((item, index) => ({
+                  mediaId: order.mediaIds[index],
+                  url: item,
+                })),
+                mediaIds: order.mediaIds,
+                noticeIds: order.noticeIds,
+                remark: order.remark,
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      }}
+    />
 
     {action && <InstockShop
       errorShopRef={errorShopRef}

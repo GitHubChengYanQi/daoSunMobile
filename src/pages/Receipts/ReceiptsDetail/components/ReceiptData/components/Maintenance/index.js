@@ -4,7 +4,7 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider } from 'antd-mobile';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
@@ -21,6 +21,8 @@ import { nowInDateBetwen } from '../Stocktaking';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import Icon from '../../../../../../components/Icon';
 import MyProgress from '../../../../../../components/MyProgress';
+import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
+import ActionButtons from '../../../ActionButtons';
 
 const Maintenance = (
   {
@@ -31,7 +33,12 @@ const Maintenance = (
     },
     afertShow = () => {
     },
+    taskId,
+    logIds = [],
+    refresh = () => {
+    },
     loading,
+    nodeActions,
   },
 ) => {
 
@@ -204,6 +211,61 @@ const Maintenance = (
           },
         });
       }} />}
+
+    <ActionButtons
+      refresh={refresh}
+      afertShow={afertShow}
+      taskId={taskId}
+      logIds={logIds}
+      createUser={isObject(receipts.createUserResult).userId}
+      permissions={actionPermissions}
+      actions={nodeActions.map(item => {
+        if (item.action === 'maintenanceing') {
+          return { ...item, name: outTime ? '任务未开始' : '开始养护', disabled: outTime };
+        }
+        return item;
+      })}
+      onClick={(value) => {
+        switch (value) {
+          case 'maintenanceing':
+            history.push({
+              pathname: '/Work/Maintenance/StartMaintenance',
+              query: {
+                id: receipts.maintenanceId,
+                skuCount: receipts.skuCount,
+                positionCount: receipts.positionCount,
+              },
+            });
+            break;
+          case 'revokeAndAsk':
+            history.push({
+              pathname: '/Work/CreateTask',
+              query: {
+                createType: ERPEnums.curing,
+              },
+              state: {
+                skuList: receipts.selectParamResults,
+                startTime: receipts.startTime,
+                endTime: receipts.endTime,
+                nearMaintenance: receipts.nearMaintenance,
+                files: isArray(receipts.enclosureUrl).map((item, index) => ({
+                  mediaId: receipts.enclosure && receipts.enclosure.split(',')[index],
+                  url: item,
+                })),
+                mediaIds: receipts.enclosure && receipts.enclosure.split(','),
+                noticeIds: receipts.notice && receipts.notice.split(','),
+                remark: receipts.note,
+                userId: receipts.userId,
+                userName: isObject(receipts.userResult).name,
+                avatar: isObject(receipts.userResult).avatar,
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      }}
+    />
 
   </>;
 };

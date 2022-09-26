@@ -111,7 +111,7 @@ const InstockShop = (
       axis='xy'
       magnetic='x'
       style={{
-        '--initial-position-bottom': '24px',
+        '--initial-position-bottom': '84px',
         '--initial-position-right': '24px',
         '--edge-distance': '24px',
       }}

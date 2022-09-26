@@ -15,14 +15,17 @@ export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 
 const CreateTask = (
   {
-    type,
+    createType,
   }) => {
 
   const { query, state = {} } = useLocation();
 
-  const skus = ToolUtil.isArray(state && state.skus);
-  const judge = state && state.judge;
-  const createType = query.createType;
+  const skus = ToolUtil.isArray(state.skus);
+  const judge = state.judge;
+
+  if (query.createType){
+    createType = query.createType;
+  }
 
   const [backTitle, setBackTitle] = useState();
 
@@ -66,16 +69,16 @@ const CreateTask = (
 
   switch (createType || type) {
     case ERPEnums.outStock:
-      return <OutstockAsk skus={skus} judge={judge} createType={createType} />;
+      return <OutstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
     case ERPEnums.inStock:
     case ERPEnums.directInStock:
-      return <InstockAsk skus={skus} judge={judge} createType={createType} />;
+      return <InstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
     case ERPEnums.curing:
-      return <CuringAsk createType={createType} backTitle={backTitle} />;
+      return <CuringAsk createType={createType} backTitle={backTitle} defaultParams={state} />;
     case ERPEnums.stocktaking:
-      return <StocktakingAsk backTitle={backTitle} createType={createType} />;
+      return <StocktakingAsk backTitle={backTitle} createType={createType} defaultParams={state} />;
     case ERPEnums.allocation:
-      return <AllocationAsk createType={createType} />;
+      return <AllocationAsk createType={createType} defaultParams={state} />;
     default:
       return <MyEmpty />;
   }

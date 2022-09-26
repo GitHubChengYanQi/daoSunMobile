@@ -12,15 +12,14 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { history } from 'umi';
 
-const InstockAsk = ({ skus, judge, createType }) => {
+const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
 
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState(defaultParams || {});
 
   const history = useHistory();
 

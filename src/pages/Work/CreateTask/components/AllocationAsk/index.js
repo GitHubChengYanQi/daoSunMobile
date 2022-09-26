@@ -25,7 +25,7 @@ import { clearAllocationShopCart, shopCartApplyList, shopCartDelete, shopCartEdi
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
-const AllocationAsk = ({ createType }) => {
+const AllocationAsk = ({ createType, defaultParams }) => {
 
   const [params, setParams] = useState({});
 
@@ -151,6 +151,7 @@ const AllocationAsk = ({ createType }) => {
         askType: query.askType || 'allocation',
         allocationType: query.allocationType || 'out',
         storeHouse: { label: query.storeHouse, value: query.storeHouseId },
+        ...defaultParams,
       });
     } else {
       getStoreHouses();

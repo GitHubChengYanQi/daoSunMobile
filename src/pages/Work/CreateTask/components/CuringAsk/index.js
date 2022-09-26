@@ -17,10 +17,10 @@ import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
 export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: 'POST' };
 
-const CuringAsk = ({ createType, backTitle }) => {
+const CuringAsk = ({ createType, backTitle, defaultParams }) => {
 
-  const [params, setParams] = useState({});
-
+  const [params, setParams] = useState(defaultParams || {});
+  console.log(params);
   const history = useHistory();
 
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
@@ -32,11 +32,6 @@ const CuringAsk = ({ createType, backTitle }) => {
           type: ReceiptsEnums.maintenance,
           formId: res.maintenanceId,
         },
-      });
-    },
-    onError: () => {
-      Message.errorDialog({
-        content: '创建养护任务失败!',
       });
     },
   });

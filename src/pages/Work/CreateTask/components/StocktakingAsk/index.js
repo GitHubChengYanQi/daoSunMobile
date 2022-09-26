@@ -17,9 +17,9 @@ import MySwitch from '../../../../components/MySwitch';
 
 export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST' };
 
-const StocktakingAsk = ({ createType,backTitle }) => {
+const StocktakingAsk = ({ createType, backTitle, defaultParams = {} }) => {
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState({ method: 'OpenDisc', ...defaultParams });
 
   const history = useHistory();
 
@@ -35,10 +35,6 @@ const StocktakingAsk = ({ createType,backTitle }) => {
       });
     },
   });
-
-  useEffect(() => {
-    setParams({ method: 'OpenDisc' });
-  }, []);
 
   const createTypeData = (item = {}) => {
     const stocktakingDisabled = () => {
@@ -110,7 +106,6 @@ const StocktakingAsk = ({ createType,backTitle }) => {
     });
   };
 
-
   return <div style={{ marginBottom: 60 }}>
     <MyNavBar title={createTypeData().title} />
 
@@ -120,7 +115,7 @@ const StocktakingAsk = ({ createType,backTitle }) => {
       headerClassName={style.cardHeader}
       bodyClassName={style.noPadding}
       extra={
-        <MySwitch  checked={params.all} onChange={(checked) => {
+        <MySwitch checked={params.all} onChange={(checked) => {
           setParams({ ...params, all: checked, mode: checked ? 'staticState' : 'dynamic' });
         }}
         />

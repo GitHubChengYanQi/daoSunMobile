@@ -24,7 +24,9 @@ const InstockOrder = (
     afertShow = () => {
     },
     type,
+    logIds = [],
     taskId,
+    actions = [],
   }) => {
 
   const history = useHistory();
@@ -58,22 +60,31 @@ const InstockOrder = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return <SkuAction
+          logIds={logIds}
+          taskId={taskId}
           loading={loading}
           handleResults={handleResults}
           order={data}
+          nodeActions={actions}
           data={details}
+          permissions={permissions}
           actionId={getAction('performInstock').id}
           action={getAction('performInstock').id && permissions}
           instockOrderId={data.instockOrderId}
           refresh={refresh}
+          afertShow={afertShow}
         />;
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
+          logIds={logIds}
           afertShow={afertShow}
+          nodeActions={actions.map(item => ({ ...item, name: item.action === 'outStock' ? '领料' : item.name }))}
+          taskDetail={taskDetail}
           loading={loading}
           order={data}
           taskId={taskId}
           data={details}
+          permissions={permissions}
           actionId={getAction('outStock').id}
           action={getAction('outStock').id}
           pickListsId={data.pickListsId}
