@@ -1,5 +1,5 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Button, Popup, Space } from 'antd-mobile';
+import { Button, Card, Popup, Space } from 'antd-mobile';
 import { FormOutlined } from '@ant-design/icons';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
@@ -8,6 +8,7 @@ import { Message } from '../../../components/Message';
 
 const Comments = (
   {
+    all,
     detail = {},
     id,
     refresh = () => {
@@ -48,7 +49,9 @@ const Comments = (
   }));
 
   return <>
-    <div style={{ padding: 12, backgroundColor: '#fff' }}>
+    {all ? <Card title='评论' extra={<FormOutlined onClick={() => {
+      setVisible(true);
+    }} />} /> :<div style={{ padding: 12, backgroundColor: '#fff' }}>
       <Button
         fill='none'
         style={{ width: '100%', height: 40 }}
@@ -58,7 +61,7 @@ const Comments = (
       >
         <Space align='center'><FormOutlined />{title}</Space>
       </Button>
-    </div>
+    </div>}
 
     <Popup destroyOnClose visible={visible} onMaskClick={() => {
       onInput(false);

@@ -107,8 +107,6 @@ const ReceiptData = (
 
   const remarks = data.remarks || [];
 
-  const commentsListRef = useRef();
-
   return <div>
     {receiptType()}
     <Process
@@ -117,15 +115,7 @@ const ReceiptData = (
       version={data.version}
       createUser={data.user}
     />
-    <Comments
-      placeholder='添加评论,可@相关人员'
-      title='添加评论'
-      detail={data}
-      id={data.processTaskId}
-      refresh={() => commentsListRef.current.submit()}
-      onInput={addComments}
-    />
-    <CommentsList taskId={data.processTaskId} ref={commentsListRef} />
+    <CommentsList detail={data} addComments={addComments} taskId={data.processTaskId} />
     <div hidden={!actionButton || !bottomButton} style={{ height: 60, marginTop: 3 }} />
   </div>;
 };

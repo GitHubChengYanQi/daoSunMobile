@@ -161,8 +161,15 @@ const SkuDetail = ({ id }) => {
         {expand && <Space direction='vertical'>
           <div><Label className={styles.label}>材质</Label>{detail.none || '无'}</div>
           <div><Label className={styles.label}>重量</Label>{detail.none || '无'}</div>
-          <div><Label className={styles.label}>养护周期</Label>{detail.maintenancePeriod}天</div>
-          <div><Label className={styles.label}>物料描述</Label>{SkuResultSkuJsons({ skuResult: detail, describe: true })}
+          <div><Label
+            className={styles.label}>养护周期</Label>{detail.maintenancePeriod ? detail.maintenancePeriod + '天' : '无'}
+          </div>
+          <div>
+            <Label className={styles.label}>物料描述</Label>{SkuResultSkuJsons({
+            skuResult: detail,
+            describe: true,
+            emptyText: '无',
+          })}
           </div>
           <div><Label className={styles.label}>备注</Label>{detail.remarks || '无'}</div>
           <div><Label className={styles.label}>尺寸</Label>{detail.skuSize && detail.skuSize.split(',').join('×') || '无'}</div>
