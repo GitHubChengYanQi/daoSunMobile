@@ -194,11 +194,7 @@ const Stocktaking = (
 
     <MyCard title='盘点原因'>
       {ToolUtil.isArray(receipts.announcements).length === 0 && <div>无</div>}
-      {ToolUtil.isArray(receipts.announcements).map((item, index) => {
-        return <div key={index} className={style.carefulShow}>
-          {item.content}
-        </div>;
-      })}
+      {ToolUtil.isArray(receipts.announcements).map(item => item.content).join('、')}
     </MyCard>
 
     <MyCard title='备注'>

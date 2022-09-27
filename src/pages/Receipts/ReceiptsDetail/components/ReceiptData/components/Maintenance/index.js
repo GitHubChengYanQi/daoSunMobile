@@ -164,11 +164,7 @@ const Maintenance = (
 
     <MyCard title='养护原因'>
       {ToolUtil.isArray(receipts.announcementsResults).length === 0 && <div>无</div>}
-      {ToolUtil.isArray(receipts.announcementsResults).map((item, index) => {
-        return <div key={index} className={style.carefulShow}>
-          {item.content}
-        </div>;
-      })}
+      {ToolUtil.isArray(receipts.announcementsResults).map(item => item.content).join('、')}
     </MyCard>
 
     <MyCard title='备注'>

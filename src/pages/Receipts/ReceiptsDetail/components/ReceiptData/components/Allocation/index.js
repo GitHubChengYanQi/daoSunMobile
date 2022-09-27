@@ -168,11 +168,7 @@ const Allocation = (
     <MyCard title='仓库' extra={ToolUtil.isObject(data.storehouseResult).name} />
     <MyCard title='注意事项'>
       {[].length === 0 && <div>无</div>}
-      {[].map((item, index) => {
-        return <div key={index} className={style.carefulShow} style={{ margin: index === 0 && 0 }}>
-          {item.content}
-        </div>;
-      })}
+      {[].map(item => item.content).join('、')}
     </MyCard>
 
     <MyCard title='备注'>
