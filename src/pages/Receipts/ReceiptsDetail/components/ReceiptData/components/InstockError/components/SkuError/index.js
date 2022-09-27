@@ -400,11 +400,7 @@ const SkuError = (
           >
             <div className={ToolUtil.classNames(style.careful, style.inkindFiled)}>
               <Label className={style.inkindTitle}>原因</Label>：
-              {ToolUtil.isArray(item.notices).map((item, index) => {
-                return <div key={index} className={style.notices} style={{ margin: index === 0 && 0 }}>
-                  {item}
-                </div>;
-              })}
+              {ToolUtil.isArray(item.notices).join('、')}
             </div>
             <div className={ToolUtil.classNames(style.inkindFiled)}>
               <Label className={style.inkindTitle}>描述</Label>：
