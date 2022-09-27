@@ -155,8 +155,8 @@ const OutSkuAction = (
           setShowDetail(true);
         }}>申请明细</LinkButton>
       </div>}
-      extra={<div className={style.extra}>
-        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
+      extra={<div className={style.extra} hidden={defaultData.length === 0}>
+        合计：<span>{data.length}</span>类<span>{countNumber || 0}</span>件
       </div>}>
       <MySearch
         extraIcon={<Icon
