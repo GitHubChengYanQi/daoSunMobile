@@ -76,6 +76,7 @@ const InSkuItem = (
       style={{ margin: 0 }}
     >
       <div
+        style={{ alignItems: complete && 'flex-start' }}
         className={ToolUtil.classNames(
           style.skuItem,
           style.inStockSkuItem,
@@ -103,7 +104,7 @@ const InSkuItem = (
         </div>
       </div>
       {
-        !detail && !ask && !other && <div style={{marginBottom:12}}>
+        !detail && !ask && !other && <div style={{ marginBottom: 12 }}>
           <MyProgress
             percent={parseInt((item.instockNumber / item.number) * 100)}
           />
