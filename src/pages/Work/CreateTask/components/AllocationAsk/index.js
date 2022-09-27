@@ -83,13 +83,6 @@ const AllocationAsk = ({ createType, defaultParams }) => {
     manual: !query.storeHouseId,
     onSuccess: (res) => {
       const newData = ToolUtil.isArray(res);
-      if (newData.length === 0) {
-        if (history.length <= 2) {
-          history.push('/');
-        } else {
-          history.goBack();
-        }
-      }
       setData(newData.map((item) => {
         return {
           cartId: item.cartId,
