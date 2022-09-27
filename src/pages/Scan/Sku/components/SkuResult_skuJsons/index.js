@@ -1,4 +1,4 @@
-export const SkuResultSkuJsons = ({ skuResult, describe, spu, sku }) => {
+export const SkuResultSkuJsons = ({ skuResult, describe, spu, sku, emptyText }) => {
 
   if (!(skuResult && skuResult.spuResult)) {
     return '-';
@@ -14,7 +14,7 @@ export const SkuResultSkuJsons = ({ skuResult, describe, spu, sku }) => {
       &&
       skuResult.skuJsons.map((items) => {
         return `${items.attribute.attribute}:${items.values.attributeValues}`;
-      }).join(' , ') || '-'
+      }).join(' , ') || (emptyText || '-')
     }`;
   }
 
@@ -22,7 +22,7 @@ export const SkuResultSkuJsons = ({ skuResult, describe, spu, sku }) => {
     return `${skuResult.spuResult.name}`;
   }
 
-  if (sku){
+  if (sku) {
     return `${skuResult.skuName}${skuResult.specifications ? ` / ${skuResult.specifications}` : ''}`;
   }
 
