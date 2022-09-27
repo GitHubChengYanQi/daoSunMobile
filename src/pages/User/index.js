@@ -125,7 +125,7 @@ const User = ({ userId }) => {
           {
             dynamicData.map((item, index) => {
               return <div key={index} className={style.dynamicItem}>
-                <div>{item.type}{item.sourceName}</div>
+                <div>{item.content}</div>
                 <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
               </div>;
             })
