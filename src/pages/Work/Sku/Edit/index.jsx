@@ -138,25 +138,21 @@ const Edit = () => {
     <MyCard title='重量' extra={<span onClick={() => {
       setVisible('weight');
     }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>} />
-    <MyCard title='尺寸' extra={<Space align='center'>
-      <div onClick={() => {
-        setVisible('length');
-      }}>
-        长<span style={{ padding: '0 2px' }}>{skuSize[0] || 0}</span>cm
-      </div>
-      ×
-      <div onClick={() => {
-        setVisible('width');
-      }}>
-        宽<span style={{ padding: '0 2px' }}>{skuSize[1] || 0}</span>cm
-      </div>
-      ×
-      <div onClick={() => {
-        setVisible('height');
-      }}>
-        高<span style={{ padding: '0 2px' }}>{skuSize[2] || 0}</span>cm
-      </div>
-    </Space>} />
+    <MyCard title='长' extra={<div onClick={() => {
+      setVisible('length');
+    }}>
+      {skuSize[0] || 0}&nbsp;&nbsp;cm
+    </div>} />
+    <MyCard title='宽' extra={<div onClick={() => {
+      setVisible('width');
+    }}>
+      {skuSize[1] || 0}&nbsp;&nbsp;cm
+    </div>} />
+    <MyCard title='高' extra={<div onClick={() => {
+      setVisible('height');
+    }}>
+      {skuSize[2] || 0}&nbsp;&nbsp;cm
+    </div>} />
     <MyCard title='备注'>
       <TextArea
         style={{ '--font-size': '14px' }}
