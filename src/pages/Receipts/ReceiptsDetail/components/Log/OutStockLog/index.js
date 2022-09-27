@@ -67,7 +67,7 @@ const OutStockLog = (
                 />
               </div>
               <div className={style.errorData}>
-                <div><LinkButton><SystemQRcodeOutline /></LinkButton></div>
+                {/* <div><LinkButton><SystemQRcodeOutline /></LinkButton></div> */}
                 <ShopNumber show value={item.number} />
               </div>
             </div>
