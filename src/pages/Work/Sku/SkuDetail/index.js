@@ -46,7 +46,7 @@ const SkuDetail = ({ id }) => {
   const [expand, setExpand] = useState(false);
 
   const [typeSetting, setTypeSetting] = useState([]);
-  console.log(typeSetting);
+
   const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
     manual: true,
     onSuccess: (res) => {
