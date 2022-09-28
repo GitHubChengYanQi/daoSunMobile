@@ -46,7 +46,7 @@ const SkuDetail = ({ id }) => {
   const [expand, setExpand] = useState(false);
 
   const [typeSetting, setTypeSetting] = useState([]);
-  console.log(typeSetting);
+
   const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
     manual: true,
     onSuccess: (res) => {
@@ -119,7 +119,7 @@ const SkuDetail = ({ id }) => {
               images: imgs.map(item => item.showUrl),
               defaultIndex: index,
             })}>
-              <img src={item.showUrl} width={viewWidth()} height={214} alt='' />
+              <img src={item.showUrl} width={viewWidth()} height={viewWidth()} alt='' />
             </div>
           </Swiper.Item>
         ))

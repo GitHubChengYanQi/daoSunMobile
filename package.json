@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "start": "cross-env UMI_ENV=test umi dev",
+    "start": "cross-env PORT=3000 UMI_ENV=test umi dev",
     "ren": "cross-env UMI_ENV=ren umi dev",
     "song": "cross-env UMI_ENV=song umi dev",
     "build": "cross-env UMI_ENV=daoxin umi build",
