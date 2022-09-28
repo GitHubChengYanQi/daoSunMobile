@@ -4,7 +4,7 @@ import { skuDetail } from '../../../Scan/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.less';
-import { classNames, isArray, viewWidth } from '../../../components/ToolUtil';
+import { classNames, isArray, isObject, viewWidth } from '../../../components/ToolUtil';
 import { FloatingBubble, ImageViewer, Space, Swiper } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
@@ -20,6 +20,11 @@ import Drawings from './components/Drawings';
 import Files from './components/Files';
 import Supply from './components/Supply';
 import Doms from './components/Doms';
+
+export const spuClassificationDetail = {
+  url: '/spuClassification/detail',
+  method: 'POST',
+};
 
 const SkuDetail = ({ id }) => {
 
@@ -40,9 +45,22 @@ const SkuDetail = ({ id }) => {
 
   const [expand, setExpand] = useState(false);
 
+  const [typeSetting, setTypeSetting] = useState([]);
+
+  const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      setTypeSetting(res && res.typeSetting && JSON.parse(res.typeSetting) || []);
+    },
+  });
+
   const { loading, run } = useRequest(skuDetail, {
     manual: true,
     onSuccess: (res) => {
+      const spuClassificationId = res?.spuClass;
+      if (spuClassificationId) {
+        getSkuForm({ data: { spuClassificationId } });
+      }
       const detail = res || {};
       const imgs = isArray(detail.imgResults).map((item) => {
         return {
@@ -61,7 +79,7 @@ const SkuDetail = ({ id }) => {
     }
   }, []);
 
-  if (loading) {
+  if (loading || skuFormLoading) {
     return <MyLoading skeleton />;
   }
 
@@ -101,7 +119,7 @@ const SkuDetail = ({ id }) => {
               images: imgs.map(item => item.showUrl),
               defaultIndex: index,
             })}>
-              <img src={item.showUrl} width={viewWidth()} height={214} alt='' />
+              <img src={item.showUrl} width={viewWidth()} height={viewWidth()} alt='' />
             </div>
           </Swiper.Item>
         ))
@@ -155,26 +173,64 @@ const SkuDetail = ({ id }) => {
     </div>
 
     <div className={styles.skuData}>
-      <Space direction='vertical'>
-        <div><Label className={styles.label}>物料编码</Label>{detail.standard}</div>
-        <div><Label className={styles.label}>分类</Label>{spuClassificationResult.name}</div>
-        {expand && <Space direction='vertical'>
-          <div><Label className={styles.label}>材质</Label>{detail.none || '无'}</div>
-          <div><Label className={styles.label}>重量</Label>{detail.none || '无'}</div>
-          <div><Label
-            className={styles.label}>养护周期</Label>{detail.maintenancePeriod ? detail.maintenancePeriod + '天' : '无'}
-          </div>
-          <div>
-            <Label className={styles.label}>物料描述</Label>{SkuResultSkuJsons({
-            skuResult: detail,
-            describe: true,
-            emptyText: '无',
-          })}
-          </div>
-          <div><Label className={styles.label}>备注</Label>{detail.remarks || '无'}</div>
-          <div><Label className={styles.label}>尺寸</Label>{detail.skuSize && detail.skuSize.split(',').join('×') || '无'}
-          </div>
-        </Space>}
+      <Space direction='vertical' style={{width:'100%'}}>
+        {
+          typeSetting
+            .filter((item, index) => !['images', 'drawing', 'fileId'].includes(item.key) && item.show && (!expand ? index <= 3 : true))
+            .map((item, index) => {
+              let children;
+              switch (item.key) {
+                case 'spuClass':
+                  children = spuClassificationResult.name;
+                  break;
+                case 'standard':
+                  children = detail.standard;
+                  break;
+                case 'spu':
+                  children = spuResult.name;
+                  break;
+                case 'batch':
+                  children = detail.batch ? '一批一码' : '一物一码';
+                  break;
+                case 'unitId':
+                  children = isObject(detail.unit).unitName || '-';
+                  break;
+                case 'weight':
+                  children = `${detail[item.key] || 0} kg`;
+                  break;
+                case 'maintenancePeriod':
+                  children = `${detail[item.key] || 0} 天`;
+                  break;
+                case 'sku':
+                  children = SkuResultSkuJsons({
+                    skuResult: detail,
+                    describe: true,
+                    emptyText: '无',
+                  });
+                  break;
+                case 'materialId':
+                  children = isArray(detail.materialResultList).map(item => item.name).join('、') || '-';
+                  break;
+                case 'brandIds':
+                  children = isArray(detail.brandResults).map(item => item.brandName).join('、') || '-';
+                  break;
+                case 'skuSize':
+                  children = detail.skuSize && detail.skuSize.split(',').join('×') || '-';
+                  break;
+                default:
+                  children = detail[item.key] || '-';
+              }
+              return <div className={styles.flexCenter} key={index}>
+                <Label className={styles.label}>
+                  {item.filedName}
+                </Label>
+                <div className={styles.value}>
+                  {children}
+                </div>
+
+              </div>;
+            })
+        }
       </Space>
       <Expand expand={expand} onExpand={setExpand} />
     </div>
