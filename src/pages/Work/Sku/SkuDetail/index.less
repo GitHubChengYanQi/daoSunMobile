@@ -97,9 +97,20 @@
     border-radius: 6px;
 
     .label {
-      width: 60px;
+      min-width: 80px;
+      width: 80px;
       color: #9A9A9A;
       margin-right: 12px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .value {
+      flex-grow: 1;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
 
@@ -128,6 +139,7 @@
 .flexCenter {
   display: flex;
   align-items: center;
+  height: 100%;
 
   .flexGrow {
     flex-grow: 1;
