@@ -209,13 +209,13 @@ const SkuDetail = ({ id }) => {
                   });
                   break;
                 case 'materialId':
-                  children = isArray(detail.materialResultList).map(item => item.name).join('、');
+                  children = isArray(detail.materialResultList).map(item => item.name).join('、') || '-';
                   break;
                 case 'brandIds':
-                  children = isArray(detail.brandResults).map(item => item.brandName).join('、');
+                  children = isArray(detail.brandResults).map(item => item.brandName).join('、') || '-';
                   break;
                 case 'skuSize':
-                  children = detail.skuSize && detail.skuSize.split(',').join('×') || '无';
+                  children = detail.skuSize && detail.skuSize.split(',').join('×') || '-';
                   break;
                 default:
                   children = detail[item.key] || '-';
