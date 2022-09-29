@@ -21,10 +21,8 @@ const Search = (
     },
     onClose = () => {
     },
+    searchRef,
   }) => {
-
-  const ref = useRef();
-
   const [value, setValue] = useState(defaultValue);
 
   const { data, refresh } = useRequest({
@@ -81,9 +79,6 @@ const Search = (
   };
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
     ToolUtil.back({
       title: '',
       key: 'popup',
@@ -96,7 +91,7 @@ const Search = (
     <div className={style.searchDiv}>
       <div className={style.search}>
         <SearchBar
-          ref={ref}
+          ref={searchRef}
           clearable
           value={value}
           onChange={(value) => {
