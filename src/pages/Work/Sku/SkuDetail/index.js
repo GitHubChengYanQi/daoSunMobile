@@ -101,7 +101,7 @@ const SkuDetail = ({ id }) => {
               images: imgs.map(item => item.showUrl),
               defaultIndex: index,
             })}>
-              <img src={item.showUrl} width={viewWidth()} height={214} alt='' />
+              <img src={item.showUrl} width={viewWidth()} height={viewWidth()} alt='' />
             </div>
           </Swiper.Item>
         ))
