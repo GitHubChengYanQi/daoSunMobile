@@ -19,7 +19,10 @@ const ErrorItem = (
     statusName={receipts.statusName || '进行中'}
     action={receipts.status !== 99}
     complete={receipts.status === 99}
-    skus={ToolUtil.isArray(receipts.anomalyResults).filter((item, index) => index < 2)}
+    skus={ToolUtil.isArray(receipts.anomalyResults).filter((item, index) => index < 2).map(item => ({
+      ...item,
+      number: realNumber,
+    }))}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
