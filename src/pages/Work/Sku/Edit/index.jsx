@@ -103,6 +103,8 @@ const Edit = () => {
     setDetail({ ...detail, ...newDetail });
   };
 
+  const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
+
   const getNumber = (type) => {
     switch (type) {
       case 'maintenancePeriod':
@@ -110,17 +112,15 @@ const Edit = () => {
       case 'weight':
         return detail.weight;
       case 'length':
-        return detail.length;
+        return skuSize[0];
       case 'width':
-        return detail.width;
+        return skuSize[1];
       case 'height':
-        return detail.height;
+        return skuSize[2];
       default:
         break;
     }
   };
-
-  const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
 
 
   const editAction = (newData = {}) => {
@@ -154,6 +154,9 @@ const Edit = () => {
               break;
             case 'spu':
               extra = <span className={styles.disabled}>{spuResult.name}</span>;
+              break;
+            case 'spuCoding':
+              extra = <span className={styles.disabled}>{spuResult.coding}</span>;
               break;
             case 'batch':
               extra = <span onClick={() => {
@@ -250,7 +253,14 @@ const Edit = () => {
                 }} />;
               break;
             default:
-              extra = <Input value={detail[item.key]} placeholder={`请输入${item.filedName}`} />;
+              extra = <Input
+                value={detail[item.key]}
+                placeholder={`请输入${item.filedName}`}
+                onChange={(value) => {
+                  detail[item.key] = value;
+                  detailChange(detail);
+                }}
+              />;
               break;
           }
           return <MyCard className={styles.card} key={index} title={item.filedName} extra={extra}>
@@ -316,4 +326,3 @@ const Edit = () => {
 };
 
 export default Edit;
-;
