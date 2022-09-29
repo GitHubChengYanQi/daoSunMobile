@@ -107,6 +107,7 @@ const ProcessScreen = (
           onChange={(statusList = []) => {
             if (statusList.includes('99')) {
               statusList.push('50');
+              statusList.push('49');
             } else {
               statusList = statusList.filter(item => item !== '50');
             }
