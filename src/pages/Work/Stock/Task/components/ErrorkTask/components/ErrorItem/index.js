@@ -21,7 +21,7 @@ const ErrorItem = (
     complete={receipts.status === 99}
     skus={ToolUtil.isArray(receipts.anomalyResults).filter((item, index) => index < 2).map(item => ({
       ...item,
-      number: realNumber,
+      number: item.realNumber,
     }))}
     coding={receipts.coding}
     endTime={receipts.endTime}
