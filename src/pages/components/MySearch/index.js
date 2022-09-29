@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Popup, SearchBar } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
@@ -31,6 +31,8 @@ const MySearch = (
 
   const [visible, setVisible] = useState();
 
+  const searchRef = useRef();
+
   const [historyVisible, setHistoryVisible] = useState(false);
 
   const search = (value) => {
@@ -38,57 +40,60 @@ const MySearch = (
   };
 
   return <div style={searchStyle} className={ToolUtil.classNames(style.searchDiv, className)}>
-    <div className={style.search}>
-      <SearchBar
-        style={searchBarStyle}
-        icon={<div onClick={() => {
-          searchIconClick();
-        }}>
-          {searchIcon}
-        </div>}
-        clearable
-        onSearch={(value) => {
-          search(value);
-        }}
-        value={value}
-        className={style.searchBar}
-        placeholder={placeholder || '请输入搜索内容'}
-        onChange={(value) => {
-          onChange(value);
-        }}
-        onClear={() => {
-          onChange('');
-          onClear();
-        }}
-        onFocus={() => {
-          if (historyType) {
-            setHistoryVisible(true);
-            return;
-          }
-          setVisible(true);
-          onFocus();
-        }}
-        onBlur={() => {
-          setTimeout(() => {
-            setVisible(false);
-          }, 0);
-        }}
-      />
-
-      {
-        (visible || value)
-          ?
-          <LinkButton className={style.submit} onClick={() => {
+    <div onClick={() => historyType && setHistoryVisible(true)}>
+      <div className={style.search} style={{ pointerEvents: historyType && 'none' }}>
+        <SearchBar
+          style={searchBarStyle}
+          icon={<div onClick={() => {
+            searchIconClick();
+          }}>
+            {searchIcon}
+          </div>}
+          clearable
+          onSearch={(value) => {
             search(value);
-          }}>搜索</LinkButton>
-          :
-          <div hidden={!extraIcon} className={style.icon}>
-            {extraIcon}
-          </div>
-      }
+          }}
+          value={value}
+          className={style.searchBar}
+          placeholder={placeholder || '请输入搜索内容'}
+          onChange={(value) => {
+            onChange(value);
+          }}
+          onClear={() => {
+            onChange('');
+            onClear();
+          }}
+          onFocus={() => {
+            setVisible(true);
+            onFocus();
+          }}
+          onBlur={() => {
+            setTimeout(() => {
+              setVisible(false);
+            }, 0);
+          }}
+        />
+
+        {
+          (visible || value)
+            ?
+            <LinkButton className={style.submit} onClick={() => {
+              search(value);
+            }}>搜索</LinkButton>
+            :
+            <div hidden={!extraIcon} className={style.icon}>
+              {extraIcon}
+            </div>
+        }
+      </div>
     </div>
 
     <Popup
+      afterShow={() => {
+        if (searchRef.current) {
+          searchRef.current.focus();
+        }
+      }}
       style={{
         '--z-index': '1003',
       }}
@@ -98,6 +103,7 @@ const MySearch = (
       onClose={() => setHistoryVisible(false)}
     >
       <Search
+        searchRef={searchRef}
         defaultValue={value}
         onChange={(value) => {
           onSearch(value);
