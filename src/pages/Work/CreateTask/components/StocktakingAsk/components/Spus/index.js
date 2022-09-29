@@ -126,7 +126,7 @@ const Spus = (
     submit();
     ToolUtil.back({
       title:backTitle,
-      key: 'spus',
+      key: 'popup',
       onBack: onClose,
     });
   }, []);

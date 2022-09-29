@@ -1,17 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { List, SearchBar, Card } from 'antd-mobile';
+import { Popup, SearchBar } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
-import { ClockCircleOutline, DeleteOutline, SearchOutline } from 'antd-mobile-icons';
-import MyAntList from '../MyAntList';
-import { useRequest } from '../../../util/Request';
+import { SearchOutline } from 'antd-mobile-icons';
 import { ToolUtil } from '../ToolUtil';
-import MyRemoveButton from '../MyRemoveButton';
 import { useHistory, useLocation } from 'react-router-dom';
-
-const historyList = { url: '/queryLog/list', method: 'POST' };
-const historyAdd = { url: '/queryLog/add', method: 'POST' };
-const historyDelete = { url: '/queryLog/deleteBatch', method: 'POST' };
+import Search from './components/Search';
 
 const MySearch = (
   {
@@ -35,57 +29,11 @@ const MySearch = (
     },
   }) => {
 
-  const history = useHistory();
-
   const [visible, setVisible] = useState();
 
-  const { data, refresh } = useRequest({
-    ...historyList,
-    data: {
-      formType: historyType,
-    },
-  }, {
-    manual: !historyType,
-    onSuccess: () => {
-      like(value);
-    },
-  });
-
-  const { run } = useRequest(historyAdd, {
-    manual: true,
-    onSuccess: () => {
-      refresh();
-    },
-  });
-  const { run: deleteRun } = useRequest(historyDelete, {
-    manual: true,
-    onSuccess: () => {
-      refresh();
-    },
-  });
-
-  const actions = Array.isArray(data) ? data.map(item => {
-    return {
-      text: item.record,
-    };
-  }) : [];
-
-  const [historys, setHistorys] = useState(actions || []);
-
-
-  const like = (value) => {
-    const newArray = actions.filter(item => {
-      if (value) {
-        const patt = new RegExp(value, 'i');
-        return patt.test(item.text);
-      }
-      return true;
-    });
-    setHistorys(newArray);
-  };
+  const [historyVisible, setHistoryVisible] = useState(false);
 
   const search = (value) => {
-    historyType && run({ data: { record: value, formType: historyType } });
     onSearch(value);
   };
 
@@ -107,7 +55,6 @@ const MySearch = (
         placeholder={placeholder || '请输入搜索内容'}
         onChange={(value) => {
           onChange(value);
-          like(value);
         }}
         onClear={() => {
           onChange('');
@@ -115,12 +62,7 @@ const MySearch = (
         }}
         onFocus={() => {
           if (historyType) {
-            history.push({
-              pathname: '/Work/Search',
-              query: {
-                historyType,
-              },
-            });
+            setHistoryVisible(true);
             return;
           }
           setVisible(true);
@@ -145,6 +87,27 @@ const MySearch = (
           </div>
       }
     </div>
+
+    <Popup
+      style={{
+        '--z-index': '1003',
+      }}
+      position='right'
+      destroyOnClose
+      visible={historyVisible}
+      onClose={() => setHistoryVisible(false)}
+    >
+      <Search
+        defaultValue={value}
+        onChange={(value) => {
+          onSearch(value);
+          onChange(value);
+          setHistoryVisible(false);
+        }}
+        onClose={() => setHistoryVisible(false)}
+        historyType={historyType}
+      />
+    </Popup>
   </div>;
 };
 
