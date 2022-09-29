@@ -189,7 +189,7 @@ const Search = ({ onChange, ...props }, ref) => {
             }}
           />
         </div>
-        <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
           <List>
             {
               skuLoading || skuBindLoading || storehouseLoading || itemsLoading

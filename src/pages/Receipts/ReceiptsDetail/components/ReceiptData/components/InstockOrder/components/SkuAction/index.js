@@ -291,7 +291,7 @@ const SkuAction = (
       visible={showDetail}
       destroyOnClose
     >
-      <div style={{ maxHeight: '90vh', overflow: 'auto' }}>
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
         {data.map((item, index) => {
           return <div key={index}>
             <InSkuItem item={item} key={index} />

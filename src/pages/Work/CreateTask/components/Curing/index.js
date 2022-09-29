@@ -105,7 +105,7 @@ const Curing = (
     />
 
     <MyAntPopup title='任务预览' visible={visible} onClose={() => setVisible(false)}>
-      <div style={{ maxHeight: '90vh', overflow: 'auto' }}>
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
         {
           skuView.map((item, index) => {
             return <div key={index} className={style.info} style={{ padding: 12 }}>

@@ -97,7 +97,7 @@ const Maintenanceing = (
     });
   };
 
-  return <div style={{ paddingBottom: 60, maxWidth: '90vh', overflow: 'hidden' }}>
+  return <div style={{ paddingBottom: 60, maxWidth: '80vh', overflow: 'hidden' }}>
     <div className={style.skuItem}>
       <div className={style.sku}>
         <SkuItem extraWidth='94px' skuResult={skuItem.skuResult} otherData={[skuItem.positionName]} />

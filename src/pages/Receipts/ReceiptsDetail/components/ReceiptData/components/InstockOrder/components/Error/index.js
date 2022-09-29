@@ -44,7 +44,7 @@ const Error = (
     },
     refreshOrder = () => {
     },
-    maxHeight = '90vh',
+    maxHeight = '80vh',
     type,
     showStock,
     title,
