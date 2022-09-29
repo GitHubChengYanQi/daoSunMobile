@@ -15,7 +15,7 @@ import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 
-const OutstockAsk = ({ skus, judge, createType }) => {
+const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
   const { initialState } = useModel('@@initialState');
   const userInfo = ToolUtil.isObject(initialState).userInfo || {};
@@ -69,7 +69,7 @@ const OutstockAsk = ({ skus, judge, createType }) => {
 
 
   useEffect(() => {
-    setParams({ userId: userInfo.id, userName: userInfo.name });
+    setParams({ userId: userInfo.id, userName: userInfo.name, userAvatar: userInfo.avatar, ...defaultParams });
     dataChange(skus);
   }, []);
 
@@ -126,15 +126,10 @@ const OutstockAsk = ({ skus, judge, createType }) => {
       rightText='提交'
       rightDisabled={createTypeData().disabled}
       rightOnClick={() => {
-        const pickListsDetailParams = [];
-        normalSku.map(item => {
-          pickListsDetailParams.push(item);
-          return null;
-        });
         outStock({
           data: {
             source: 'outstock',
-            pickListsDetailParams,
+            pickListsDetailParams: normalSku,
             enclosure: ToolUtil.isArray(params.mediaIds).toString(),
             remarks: ToolUtil.isArray(params.noticeIds).toString(),
             note: params.remark,

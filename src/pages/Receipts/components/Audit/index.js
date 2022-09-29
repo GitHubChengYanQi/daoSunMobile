@@ -70,7 +70,7 @@ const Audit = (
       }}>
         驳回
       </Button>
-      <Button disabled={loading} color='primary' onClick={() => {
+      <Button disabled={loading} className={style.ok} color='primary' onClick={() => {
         audit(1);
       }}>
         同意

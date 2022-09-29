@@ -38,8 +38,8 @@ const Bottom = (
       <div className={style.all} onClick={() => {
         setVisible(true);
       }}>
-        更多
-        <MoreOutline style={{ fontSize: 15 }} />
+        <div>更多</div>
+        <MoreOutline />
       </div>
       <Audit version={version} loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
     </div>
