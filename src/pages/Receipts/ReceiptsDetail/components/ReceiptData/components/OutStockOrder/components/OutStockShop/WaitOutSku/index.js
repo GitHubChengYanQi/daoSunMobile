@@ -82,7 +82,6 @@ const WaitOutSku = (
   const checkedSkus = returnSkus.map(item => item.key);
 
   return <>
-    <div className={style.header}>待出物料</div>
     <div className={style.sys}>
       <span>数量：{allSkus.length} 类</span>
       <LinkButton disabled={outTypeData().noSys} onClick={() => {

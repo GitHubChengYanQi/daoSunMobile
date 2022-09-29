@@ -7,6 +7,7 @@ import Bouncing from '../../../../../../../../components/Bouncing';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { listByUser } from '../../../../../../../../Work/Production/components/Url';
 import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
 const OutStockShop = (
   {
@@ -97,16 +98,15 @@ const OutStockShop = (
     </FloatingBubble>
 
 
-    <Popup
-      onMaskClick={() => {
+    <MyAntPopup
+      title='待出物料'
+      onClose={() => {
         if (refreshOrder) {
           setRefreshOrder(false);
           refresh();
         }
         setVisible(false);
       }}
-      mask
-      destroyOnClose
       visible={visible}
     >
       <WaitOutSku
@@ -119,7 +119,7 @@ const OutStockShop = (
         data={data}
         allSkus={allSkus}
       />
-    </Popup>
+    </MyAntPopup>
   </div>;
 };
 

@@ -104,7 +104,7 @@ const Sku = () => {
 
     <MyPopup
       title='物料库存信息'
-      height='90vh'
+      height='80vh'
       position='bottom'
       component={SkuStockDetail}
       ref={ref}

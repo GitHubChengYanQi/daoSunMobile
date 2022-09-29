@@ -336,7 +336,7 @@ const OutSkuAction = (
       visible={showDetail}
       destroyOnClose
     >
-      <div style={{ maxHeight: '90vh', overflow: 'auto' }}>
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
         {format(askData).array.map((item, index) => {
           return <OutSkuItem
             ask
