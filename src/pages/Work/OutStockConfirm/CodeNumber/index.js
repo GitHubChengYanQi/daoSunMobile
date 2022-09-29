@@ -3,7 +3,7 @@ import style from '../index.less';
 import MyKeybord from '../../../components/MyKeybord';
 import { ScanIcon } from '../../../components/Icon';
 import { connect } from 'dva';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { classNames, ToolUtil } from '../../../components/ToolUtil';
 import { Divider } from 'antd-mobile';
 
 const CodeNumber = (
@@ -67,11 +67,17 @@ const CodeNumber = (
       <div className={style.inputNumber}>
         {
           code.map((item, index) => {
+            let next = false;
+            if (index === 0 && item.number === undefined){
+              next = true;
+            }else  if (code[index - 1]?.number !== undefined && item.number === undefined) {
+              next = true;
+            }
             return <div key={index} className={style.codeItem} onClick={() => {
               setVisible(true);
             }}>
               <div
-                className={style.box}
+                className={classNames(style.box, next && style.next)}
                 style={{
                   width: inputSize,
                   height: inputSize,
