@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import style from './index.less';
@@ -16,6 +16,8 @@ const listByCode = { url: '/productionPickLists/listByCode', method: 'GET' };
 const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
 
 const OutStockConfirm = () => {
+
+  const history = useHistory();
 
   const { query } = useLocation();
 
@@ -41,6 +43,7 @@ const OutStockConfirm = () => {
     onSuccess: () => {
       Message.successToast('出库成功！', () => {
           setOutSkus([]);
+          history.goBack();
         },
       );
     },
