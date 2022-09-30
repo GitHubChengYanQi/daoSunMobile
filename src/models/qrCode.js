@@ -66,10 +66,10 @@ export default {
       if (IsDev()) {
         let code = '';
         // code = '1476356885154385921'; // 入库
-        code = '1546731644352798722'; // 库位
+        // code = '1546731644352798722'; // 库位
         // code = '1475358083438198786'; // 出库
         // code = '1550048516712488969'; // 实物
-        // code = '1539423628024688642'; // sku
+        code = '1575655153842323457'; // sku
         yield put({ type: 'backObject', payload: { code, ...payload } });
       } else {
         const result = yield call(scan);
@@ -141,8 +141,7 @@ export default {
             break;
           default:
             // 没有动作跳路由
-            // 获取数据
-            yield put({ type: 'router', payload: { codeId,object:res} });
+            yield put({ type: 'router', payload: { codeId, object: res } });
             break;
         }
 
@@ -195,6 +194,9 @@ export default {
       console.log(object);
       yield put({ type: 'clearCode' });
       switch (object.type) {
+        case 'sku':
+          history.push(`/Work/Sku/SkuDetail?skuId=${object?.result?.skuId}`);
+          break;
         case 'spu':
           // history.push(`/Scan/Spu?id=${codeId}`);
           break;
