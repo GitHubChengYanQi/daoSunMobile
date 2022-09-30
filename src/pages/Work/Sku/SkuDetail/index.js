@@ -4,7 +4,7 @@ import { skuDetail } from '../../../Scan/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.less';
-import { classNames, isArray, viewWidth } from '../../../components/ToolUtil';
+import { classNames, isArray, ToolUtil, viewWidth } from '../../../components/ToolUtil';
 import { FloatingBubble, ImageViewer, Space, Swiper } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
@@ -20,6 +20,7 @@ import Drawings from './components/Drawings';
 import Files from './components/Files';
 import Supply from './components/Supply';
 import Doms from './components/Doms';
+import { previewImage } from '../../../components/Upload/UploadFile';
 
 const SkuDetail = ({ id }) => {
 
@@ -75,7 +76,7 @@ const SkuDetail = ({ id }) => {
   const unitResult = spuResult.unitResult || {};
   const stockNumber = (detail.stockNumber || 0) - (detail.lockStockDetailNumber || 0);
 
-  return <div className={styles.skuDetail}>
+  return <div className={styles.skuDetail} id='skuDetail'>
     <MyNavBar title='物料详情' />
     <Swiper
       indicator={(total, current) => (
@@ -97,10 +98,17 @@ const SkuDetail = ({ id }) => {
       {
         imgs.map((item, index) => (
           <Swiper.Item key={index}>
-            <div className={styles.imgs} onClick={() => ImageViewer.Multi.show({
-              images: imgs.map(item => item.showUrl),
-              defaultIndex: index,
-            })}>
+            <div className={styles.imgs} onClick={() => {
+              const images = imgs.map(item => item.showUrl) || [];
+              if (!ToolUtil.isQiyeWeixin()) {
+                ImageViewer.Multi.show({
+                  getContainer: () => document.getElementById('skuDetail'),
+                  images,
+                  defaultIndex: index,
+                })
+              }
+              previewImage(item.showUrl || item.url, images);
+            }}>
               <img src={item.showUrl} width={viewWidth()} height={viewWidth()} alt='' />
             </div>
           </Swiper.Item>
