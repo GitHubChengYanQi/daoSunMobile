@@ -81,6 +81,7 @@ const List = (
       {add && <Button color='primary' fill='outline' onClick={addInkind}>新增实物码</Button>}
       <div className={style.inkindList}>
         <MyList
+          pullDisabled
           ref={ref}
           params={skuInfo}
           api={api || inkindList}

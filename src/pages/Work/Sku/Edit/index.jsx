@@ -17,6 +17,7 @@ import { PaperClipOutlined } from '@ant-design/icons';
 import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import { spuClassificationDetail } from '../SkuDetail';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
@@ -174,13 +175,23 @@ const Edit = () => {
               }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
-
+              extra = <span className={styles.disabled}>
+                {SkuResultSkuJsons({
+                  skuResult: detail,
+                  describe: true,
+                  emptyText: '无',
+                })}
+              </span>;
               break;
             case 'brandIds':
-
+              extra = <span className={styles.disabled}>
+                {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
+              </span>;
               break;
             case 'materialId':
-
+              extra = <span className={styles.disabled}>
+                {isArray(detail.materialResultList).map(item => item.name).join('、') || '-'}
+              </span>;
               break;
             case 'remarks':
               content = <TextArea
