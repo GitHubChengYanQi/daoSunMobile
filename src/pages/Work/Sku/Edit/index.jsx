@@ -16,6 +16,8 @@ import UploadFile from '../../../components/Upload/UploadFile';
 import { PaperClipOutlined } from '@ant-design/icons';
 import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
+import { spuClassificationDetail } from '../SkuDetail';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
@@ -27,10 +29,19 @@ const Edit = () => {
 
   const [visible, setVisible] = useState('');
 
+  const [typeSetting, setTypeSetting] = useState([]);
+
   const history = useHistory();
 
   const skuFiles = useRef();
   const skuDrawings = useRef();
+
+  const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      setTypeSetting(res && res.typeSetting && JSON.parse(res.typeSetting) || []);
+    },
+  });
 
   const { loading: editLoading, run: edit } = useRequest(skuEdit,
     {
@@ -52,6 +63,10 @@ const Edit = () => {
     {
       manual: !query.skuId,
       onSuccess: (res) => {
+        const spuClassificationId = res?.spuClass;
+        if (spuClassificationId) {
+          getSkuForm({ data: { spuClassificationId } });
+        }
         const detail = res || {};
         const sku = isArray(detail.skuJsons).length > 0 ? detail.skuJsons.map((items) => {
           return {
@@ -77,7 +92,7 @@ const Edit = () => {
     },
   });
 
-  if (loading && !detail.skuId) {
+  if ((loading || skuFormLoading) && !detail.skuId) {
     return <MyLoading />;
   }
 
@@ -89,6 +104,8 @@ const Edit = () => {
     setDetail({ ...detail, ...newDetail });
   };
 
+  const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
+
   const getNumber = (type) => {
     switch (type) {
       case 'maintenancePeriod':
@@ -96,17 +113,15 @@ const Edit = () => {
       case 'weight':
         return detail.weight;
       case 'length':
-        return detail.length;
+        return skuSize[0];
       case 'width':
-        return detail.width;
+        return skuSize[1];
       case 'height':
-        return detail.height;
+        return skuSize[2];
       default:
         break;
     }
   };
-
-  const skuSize = detail.skuSize && detail.skuSize.split(',') || [];
 
 
   const editAction = (newData = {}) => {
@@ -122,87 +137,149 @@ const Edit = () => {
 
   return <div style={{ paddingBottom: 60 }}>
     <MyNavBar title='编辑物料' />
-    <MyCard title='物料编码' extra={<span className={styles.disabled}>{detail.standard}</span>} />
-    <MyCard title='型号' extra={<span className={styles.disabled}>{spuResult.name}</span>} />
-    <MyCard title='名称' extra={<span className={styles.disabled}>{detail.skuName}</span>} />
-    <MyCard title='规格' extra={<span className={styles.disabled}>{detail.specifications}</span>} />
-    <MyCard title='分类' extra={<span className={styles.disabled}>{spuClassificationResult.name}</span>} />
-    <MyCard title='单位' extra={<span className={styles.disabled}>{unitResult.unitName}</span>} />
-    <MyCard title='实物码' extra={<span onClick={() => {
-      setVisible('batch');
-    }}>{detail.batch === 0 ? '一件一码' : '一批一码'} <RightOutline /></span>} />
-    <MyCard title='材质' extra={<span>钢铁铜铝</span>} />
-    <MyCard title='养护周期' extra={<span onClick={() => {
-      setVisible('maintenancePeriod');
-    }}>{detail.maintenancePeriod}&nbsp;&nbsp;天</span>} />
-    <MyCard title='重量' extra={<span onClick={() => {
-      setVisible('weight');
-    }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>} />
-    <MyCard title='长' extra={<div onClick={() => {
-      setVisible('length');
-    }}>
-      {skuSize[0] || 0}&nbsp;&nbsp;cm
-    </div>} />
-    <MyCard title='宽' extra={<div onClick={() => {
-      setVisible('width');
-    }}>
-      {skuSize[1] || 0}&nbsp;&nbsp;cm
-    </div>} />
-    <MyCard title='高' extra={<div onClick={() => {
-      setVisible('height');
-    }}>
-      {skuSize[2] || 0}&nbsp;&nbsp;cm
-    </div>} />
-    <MyCard title='备注'>
-      <TextArea
-        style={{ '--font-size': '14px' }}
-        placeholder='请输入备注'
-        value={detail.remarks}
-        onChange={(remarks) => detailChange({ remarks })}
-      />
-    </MyCard>
-    <MyCard title='照片'>
-      <UploadFile
-        max={5}
-        noFile
-        uploadId='skuImgs'
-        files={isArray(detail.imgResults).map(item => ({
-          ...item,
-          showUrl: item.url,
-          url: item.thumbUrl || item.url,
-        }))}
-        onChange={(medias) => {
-          editAction({ images: medias.map(item => item.mediaId).toString() });
-        }} />
-    </MyCard>
-    <MyCard title='图纸' extra={isArray(detail.drawingResults).length < 5 && <LinkButton onClick={() => {
-      skuDrawings.current.addFile();
-    }}>
-      <PaperClipOutlined />
-    </LinkButton>}>
-      <UploadFile
-        file
-        uploadId='skuDrawings'
-        ref={skuDrawings}
-        files={isArray(detail.drawingResults)}
-        onChange={(medias) => {
-          editAction({ drawing: medias.map(item => item.mediaId).toString() });
-        }} />
-    </MyCard>
-    <MyCard title='附件' extra={isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
-      skuFiles.current.addFile();
-    }}>
-      <PaperClipOutlined />
-    </LinkButton>}>
-      <UploadFile
-        file
-        uploadId='skuFiles'
-        ref={skuFiles}
-        files={isArray(detail.filedResults)}
-        onChange={(medias) => {
-          editAction({ fileId: medias.map(item => item.mediaId).toString() });
-        }} />
-    </MyCard>
+    {
+      typeSetting
+        .filter((item) => item.show)
+        .map((item, index) => {
+          let extra;
+          let content;
+          switch (item.key) {
+            case 'spuClass':
+              extra = <span className={styles.disabled}>{spuClassificationResult.name}</span>;
+              break;
+            case 'unitId':
+              extra = <span className={styles.disabled}>{unitResult.unitName}</span>;
+              break;
+            case 'standard':
+              extra = <span className={styles.disabled}>{detail.standard}</span>;
+              break;
+            case 'spu':
+              extra = <span className={styles.disabled}>{spuResult.name}</span>;
+              break;
+            case 'spuCoding':
+              extra = <span className={styles.disabled}>{spuResult.coding}</span>;
+              break;
+            case 'batch':
+              extra = <span onClick={() => {
+                setVisible('batch');
+              }}>{detail.batch === 0 ? '一件一码' : '一批一码'} <RightOutline /></span>;
+              break;
+            case 'maintenancePeriod':
+              extra = <span onClick={() => {
+                setVisible('maintenancePeriod');
+              }}>{detail.maintenancePeriod}&nbsp;&nbsp;天</span>;
+              break;
+            case 'weight':
+              extra = <span onClick={() => {
+                setVisible('weight');
+              }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>;
+              break;
+            case 'sku':
+              extra = <span className={styles.disabled}>
+                {SkuResultSkuJsons({
+                  skuResult: detail,
+                  describe: true,
+                  emptyText: '无',
+                })}
+              </span>;
+              break;
+            case 'brandIds':
+              extra = <span className={styles.disabled}>
+                {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
+              </span>;
+              break;
+            case 'materialId':
+              extra = <span className={styles.disabled}>
+                {isArray(detail.materialResultList).map(item => item.name).join('、') || '-'}
+              </span>;
+              break;
+            case 'remarks':
+              content = <TextArea
+                style={{ '--font-size': '14px' }}
+                placeholder={`请输入${item.filedName}`}
+                value={detail.remarks}
+                onChange={(remarks) => detailChange({ remarks })}
+              />;
+              break;
+            case 'skuSize':
+              return <div key={index}>
+                <MyCard title='长' extra={<div onClick={() => {
+                  setVisible('length');
+                }}>
+                  {skuSize[0] || 0}&nbsp;&nbsp;cm
+                </div>} />
+                <MyCard title='宽' extra={<div onClick={() => {
+                  setVisible('width');
+                }}>
+                  {skuSize[1] || 0}&nbsp;&nbsp;cm
+                </div>} />
+                <MyCard title='高' extra={<div onClick={() => {
+                  setVisible('height');
+                }}>
+                  {skuSize[2] || 0}&nbsp;&nbsp;cm
+                </div>} />
+              </div>;
+            case 'fileId':
+              extra = isArray(detail.filedResults).length < 5 && <LinkButton onClick={() => {
+                skuFiles.current.addFile();
+              }}>
+                <PaperClipOutlined />
+              </LinkButton>;
+              content = <UploadFile
+                file
+                uploadId='skuFiles'
+                ref={skuFiles}
+                files={isArray(detail.filedResults)}
+                onChange={(medias) => {
+                  editAction({ fileId: medias.map(item => item.mediaId).toString() });
+                }} />;
+              break;
+            case 'images':
+              content = <UploadFile
+                max={5}
+                noFile
+                uploadId='skuImgs'
+                files={isArray(detail.imgResults).map(item => ({
+                  ...item,
+                  showUrl: item.url,
+                  url: item.thumbUrl || item.url,
+                }))}
+                onChange={(medias) => {
+                  editAction({ images: medias.map(item => item.mediaId).toString() });
+                }} />;
+              break;
+            case 'drawing':
+              extra = isArray(detail.drawingResults).length < 5 && <LinkButton onClick={() => {
+                skuDrawings.current.addFile();
+              }}>
+                <PaperClipOutlined />
+              </LinkButton>;
+              content = <UploadFile
+                file
+                uploadId='skuDrawings'
+                ref={skuDrawings}
+                files={isArray(detail.drawingResults)}
+                onChange={(medias) => {
+                  editAction({ drawing: medias.map(item => item.mediaId).toString() });
+                }} />;
+              break;
+            default:
+              extra = <Input
+                value={detail[item.key]}
+                placeholder={`请输入${item.filedName}`}
+                onChange={(value) => {
+                  detail[item.key] = value;
+                  detailChange(detail);
+                }}
+              />;
+              break;
+          }
+          return <MyCard className={styles.card} key={index} title={item.filedName} extra={extra}>
+            {content}
+          </MyCard>;
+        })
+    }
+
 
     <MyPicker
       visible={visible === 'batch'}
@@ -255,7 +332,7 @@ const Edit = () => {
       text='保存'
     />
 
-    {(loading || editLoading || editEnclosureLoading) && <MyLoading />}
+    {(loading || editLoading || editEnclosureLoading || skuFormLoading) && <MyLoading />}
   </div>;
 };
 
