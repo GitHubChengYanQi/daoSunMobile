@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, Loading } from 'antd-mobile';
 import jrQrcode from 'jr-qrcode';
 import PrintCode from '../PrintCode';
@@ -6,11 +6,13 @@ import { ToolUtil } from '../ToolUtil';
 import { QrCodeIcon } from '../Icon';
 import { useRequest } from '../../../util/Request';
 import style from './index.less';
+import { MyLoading } from '../MyLoading';
+import { connect } from 'dva';
 
 const inkindDetail = { url: '/inkind/detail', method: 'POST' };
 const skuDetail = { url: '/sku/printSkuTemplate', method: 'GET' };
 
-const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
+const ShowCode = ({ code, id, children, type = 'inkind', size, source ,...props}) => {
 
   const [open, setOpen] = useState();
 
@@ -27,6 +29,21 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
       PrintCode.print([res], 0);
     },
   });
+
+  const [codes, setCodes] = useState(code);
+
+  const { loading: geCodeLoaidng, run: getCode } = useRequest(
+    {
+      url: '/orCode/backCode',
+      method: 'POST',
+    },
+    {
+      manual: true,
+      onSuccess: (res) => {
+        setCodes(res);
+        setOpen(true);
+      },
+    });
 
   let title = '';
   switch (type) {
@@ -54,7 +71,16 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
   };
 
   const click = () => {
-    setOpen(code);
+    if (source && id) {
+      getCode({
+        data: {
+          source,
+          id,
+        },
+      });
+    } else {
+      setOpen(true);
+    }
   };
 
   return <>
@@ -62,14 +88,14 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
       style={{ color: 'var(--adm-color-primary)', fontSize: size }}
       onClick={click}
     />}
-
+    {geCodeLoaidng && <MyLoading />}
     <Dialog
       visible={open}
       className={style.codeDialog}
       content={<div style={{ textAlign: 'center' }}>
         <div className={style.codeTitle}>是否打印{title}码</div>
         <div style={{ paddingTop: 19 }}>
-          <img src={jrQrcode.getQrBase64(code)} alt='' width={187} />
+          <img src={jrQrcode.getQrBase64(codes)} alt='' width={187} />
         </div>
       </div>}
       actions={[[
@@ -92,4 +118,4 @@ const ShowCode = ({ code, id, children, type = 'inkind', size }) => {
   </>;
 };
 
-export default ShowCode;
+export default connect(({ qrCode }) => ({ qrCode }))(ShowCode);

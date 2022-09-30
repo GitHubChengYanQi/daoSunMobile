@@ -59,7 +59,7 @@ const SkuDetail = ({ id }) => {
     if (skuId) {
       run({ data: { skuId } });
     }
-  }, []);
+  }, [skuId]);
 
   if (loading) {
     return <MyLoading skeleton />;
@@ -123,7 +123,7 @@ const SkuDetail = ({ id }) => {
           </div>
         </div>
         <div className={styles.otherData}>
-          <ShowCode type='sku' size={20} code={detail.skuId} id={detail.skuId} />
+          <ShowCode type='sku' size={20} source='sku' id={detail.skuId} />
           <div className={styles.number}>
             <span>×{stockNumber}</span>
             {unitResult.unitName}
