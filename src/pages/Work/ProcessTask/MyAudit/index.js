@@ -32,7 +32,7 @@ const MyAudit = (
     types: (type || defaultType) && [type || defaultType],
     createUser,
   };
-  const defaultSort = { field: 'createTime', order: 'ascend' };
+  const defaultSort = { field: 'createTime', order: 'descend' };
 
   const [params, setParams] = useState({});
 
