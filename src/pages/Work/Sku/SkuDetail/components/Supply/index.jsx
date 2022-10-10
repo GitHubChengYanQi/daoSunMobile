@@ -42,7 +42,7 @@ const Supply = ({ skuId }) => {
   return <>
     <div className={styles.supply}>
       <div className={styles.title}>
-        供应商({data.length})
+        供应商{data.length > 1 ? `(${data.length})` : ''}
         <span className={styles.extra}><LinkButton onClick={() => {
           setVisible(true);
         }}>查看更多<RightOutline /></LinkButton></span>

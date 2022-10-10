@@ -38,7 +38,7 @@ const Doms = ({ skuId }) => {
   return <>
     <div className={styles.bom}>
       <div className={styles.title}>
-        关联物料清单 ({boms.count})
+        关联物料清单 {boms.length > 1 ? `(${boms.length})` : ''}
         <span className={styles.extra}><LinkButton onClick={() => {
           setVisible(true);
         }}>查看更多<RightOutline /></LinkButton></span>
