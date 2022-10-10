@@ -125,7 +125,7 @@ const CheckBom = () => {
                 }}>{brand.brandName || '任意品牌'}</LinkButton> : '任意品牌']}
               />
               <Space align='end'>
-                <div>{item.number}{unitResult.unitName} / 每套</div>
+                <div>{item.number}{unitResult.unitName} / 套</div>
                 {item.haveBom && <LinkButton onClick={() => {
                   setBoms([...boms, item.skuId]);
                   history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);
