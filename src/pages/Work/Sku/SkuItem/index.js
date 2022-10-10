@@ -63,7 +63,7 @@ const SkuItem = (
         </div>
       </div>
       <div
-        onClick={() => textView && view()}
+        onClick={()=>view()}
         className={style.sku}
         style={{
           height: imgSize,
