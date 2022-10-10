@@ -4,7 +4,7 @@ import { skuDetail } from '../../../Scan/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.less';
-import { classNames, isArray, ToolUtil, viewWidth } from '../../../components/ToolUtil';
+import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../components/ToolUtil';
 import { FloatingBubble, ImageViewer, Space, Swiper } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
