@@ -19,6 +19,7 @@ const MyAudit = (
     listScreentTop,
     ReceiptDom,
     hiddenSearch,
+    skuId,
   }, ref) => {
 
   const [screen, setScreen] = useState();
@@ -31,6 +32,7 @@ const MyAudit = (
     statusList: ['0'],
     types: (type || defaultType) && [type || defaultType],
     createUser,
+    skuId,
   };
   const defaultSort = { field: 'createTime', order: 'ascend' };
 
