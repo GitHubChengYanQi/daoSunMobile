@@ -169,7 +169,8 @@ const AddSku = (
     setType(type);
     setSku(sku);
     setOther(other);
-    const imgUrl = Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo;
+    const imgResults = ToolUtil.isArray(sku.imgResults)[0] || {};
+    const imgUrl = imgResults.thumbUrl || state.homeLogo;
     const newData = {
       imgUrl,
       imgId: sku.imgId,
