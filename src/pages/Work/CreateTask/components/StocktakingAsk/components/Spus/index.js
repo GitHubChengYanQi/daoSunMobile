@@ -125,6 +125,7 @@ const Spus = (
   useEffect(() => {
     submit();
     ToolUtil.back({
+      getContainer:document.getElementById('createTask'),
       title:backTitle,
       key: 'popup',
       onBack: onClose,
@@ -136,7 +137,7 @@ const Spus = (
     history.goBack();
   };
 
-  return <>
+  return <div>
     <div className={style.content}>
       <MySearch
         value={searchValue}
@@ -286,7 +287,7 @@ const Spus = (
         select(params, checkSkus);
       }}
     />
-  </>;
+  </div>;
 };
 
 export default Spus;

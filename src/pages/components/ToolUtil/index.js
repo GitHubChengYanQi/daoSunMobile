@@ -3,6 +3,7 @@ import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 import { MyDate } from '../MyDate';
 import { Message } from '../Message';
 import { history } from 'umi';
+import { Dialog } from 'antd-mobile';
 
 // 判断是否是企业微信或者微信开发者工具
 export const isQiyeWeixin = () => {
@@ -11,9 +12,9 @@ export const isQiyeWeixin = () => {
 };
 
 // 查找字符串返回 true / false
-export const queryString = (value='', string) => {
-  if (value.includes('\\')){
-    value = value.replaceAll('\\','|');
+export const queryString = (value = '', string) => {
+  if (value.includes('\\')) {
+    value = value.replaceAll('\\', '|');
   }
   const patt = new RegExp(value, 'i');
   return patt.test(string);
@@ -168,6 +169,7 @@ export const back = (
     disabled,
     onOk = () => {
     },
+    getContainer,
   }) => {
 
   const winHistory = window.history || {};
@@ -187,13 +189,15 @@ export const back = (
         return;
       }
       Message.warningDialog({
+        getContainer,
+        closeOnMaskClick:true,
         only: false,
         content: title || '是否退出当前页面？',
         onConfirm: () => {
           onOk();
           history.goBack();
         },
-        onCancel: () => {
+        onClose: () => {
           winHistory.replaceState({ key }, title, url);
           winHistory.pushState({ title: key }, title, url);
         },

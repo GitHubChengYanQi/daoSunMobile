@@ -23,7 +23,7 @@ const CreateTask = (
   const skus = ToolUtil.isArray(state.skus);
   const judge = state.judge;
 
-  if (query.createType){
+  if (query.createType) {
     createType = query.createType;
   }
 
@@ -57,6 +57,7 @@ const CreateTask = (
     const backTitle = `${title}申请未提交，是否退出？`;
     setBackTitle(backTitle);
     ToolUtil.back({
+      getContainer: document.getElementById('createTask'),
       title: backTitle,
       key: 'ask',
       disabled: ['spus', 'ask'].includes(historyState.title || historyState.key),
@@ -67,21 +68,28 @@ const CreateTask = (
     }
   }, []);
 
-  switch (createType || type) {
-    case ERPEnums.outStock:
-      return <OutstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
-    case ERPEnums.inStock:
-    case ERPEnums.directInStock:
-      return <InstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
-    case ERPEnums.curing:
-      return <CuringAsk createType={createType} backTitle={backTitle} defaultParams={state} />;
-    case ERPEnums.stocktaking:
-      return <StocktakingAsk backTitle={backTitle} createType={createType} defaultParams={state} />;
-    case ERPEnums.allocation:
-      return <AllocationAsk createType={createType} defaultParams={state} />;
-    default:
-      return <MyEmpty />;
-  }
+  const content = () => {
+    switch (createType || type) {
+      case ERPEnums.outStock:
+        return <OutstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
+      case ERPEnums.inStock:
+      case ERPEnums.directInStock:
+        return <InstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
+      case ERPEnums.curing:
+        return <CuringAsk createType={createType} backTitle={backTitle} defaultParams={state} />;
+      case ERPEnums.stocktaking:
+        return <StocktakingAsk backTitle={backTitle} createType={createType} defaultParams={state} />;
+      case ERPEnums.allocation:
+        return <AllocationAsk createType={createType} defaultParams={state} />;
+      default:
+        return <MyEmpty />;
+    }
+  };
+
+  return <div id='createTask'>
+    {content()}
+  </div>;
+
 };
 
 export default CreateTask;
