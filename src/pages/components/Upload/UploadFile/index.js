@@ -21,6 +21,15 @@ import { Avatar, Upload } from 'antd';
 import MyEllipsis from '../../MyEllipsis';
 import Icon from '../../Icon';
 
+export const previewImage = (current, urls = []) => {
+  wx.ready(() => {
+    wx.previewImage({
+      current, // 第一张显示的图片链接
+      urls, // 需要预加载的图片http链接列表，预加载后，可以滑动浏览这些图片
+    });
+  });
+};
+
 const UploadFile = (
   {
     show,
@@ -114,15 +123,6 @@ const UploadFile = (
             uploadImage(localIds[0], localIds[0]);
           }
         },
-      });
-    });
-  };
-
-  const previewImage = (current, urls = []) => {
-    wx.ready(() => {
-      wx.previewImage({
-        current, // 第一张显示的图片链接
-        urls, // 需要预加载的图片http链接列表，预加载后，可以滑动浏览这些图片
       });
     });
   };

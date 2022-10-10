@@ -36,7 +36,7 @@ const ForwardItem = (
     percent={percent}
     statusName={receipts.statusName || '进行中'}
     action={receipts.status !== 99}
-    skus={[receipts]}
+    skus={[{ ...receipts, number: receipts.realNumber }]}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
