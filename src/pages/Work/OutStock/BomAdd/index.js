@@ -12,6 +12,7 @@ import LinkButton from '../../../components/LinkButton';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { LeftOutline, RightOutline } from 'antd-mobile-icons';
+import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const BomAdd = () => {
 
@@ -27,13 +28,20 @@ const BomAdd = () => {
 
   const [boms, setBoms] = useState([]);
 
+  const [defaultBoms, setDefaultBoms] = useState([]);
+
+  const saveBom = (array) => {
+    setBoms(array);
+    setDefaultBoms(array);
+  }
+
   const [number, setNumber] = useState(0);
 
   const { loading, run } = useRequest(backDetails, {
     manual: true,
     onSuccess: (res) => {
       if (Array.isArray(res)) {
-        setBoms([...boms, res.map(item => {
+        saveBom([...boms, res.map(item => {
           return {
             key: item.skuId,
             skuResult: item.skuResult,
@@ -70,12 +78,22 @@ const BomAdd = () => {
       value={value}
       onChange={setValue}
       onSearch={(skuName) => {
-        listRef.current.submit({ ...defaultParams, skuName });
-      }} />
+        if (boms.length === 0){
+          listRef.current.submit({ ...defaultParams, skuName });
+          return;
+        }
+        const newData = defaultBoms[defaultBoms.length - 1].filter(item => {
+          const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
+          return ToolUtil.queryString(skuName, sku);
+        });
+        setBoms([...boms.filter((item,index)=>index !== boms.length - 1),newData])
+      }}
+      onClear={()=>setBoms(defaultBoms)}
+    />
     <div className={style.header}>
       <span>BOM数量：{boms.length === 0 ? number : boms[boms.length - 1].length}</span>
       <LinkButton disabled={boms.length === 0} className={style.back} onClick={() => {
-        setBoms(boms.filter((item, index) => {
+        saveBom(boms.filter((item, index) => {
           return index !== boms.length - 1;
         }));
       }}><LeftOutline />返回上一级</LinkButton>

@@ -26,7 +26,7 @@ export const Tasks = () => {
       case 'create':
         return <Create />;
       case 'audit':
-        return <MyAudit auditType='audit' />;
+        return <MyAudit auditType='audit' skuId={query.skuId} />;
       case 'start':
         return <MyAudit createUser={userInfo.id} />;
       case 'send':
