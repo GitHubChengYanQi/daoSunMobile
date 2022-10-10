@@ -78,7 +78,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
       title: '出库申请',
       type: '出库',
       otherData: [item.brandName || '任意品牌'],
-      disabled: ToolUtil.isArray(params.noticeIds).length === 0 || !params.userId || normalSku.length === 0,
+      disabled: !params.userId || normalSku.length === 0,
     };
   };
 
@@ -114,7 +114,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
     <OtherData
       createType={createType}
-      careful={<Title className={style.title}>注意事项 <span>*</span></Title>}
+      careful={<Title>注意事项</Title>}
       params={params}
       setParams={setParams}
     />
