@@ -203,6 +203,7 @@ const Detail = (
     </MyCard>
 
     <Popup
+      getContainer={null}
       onMaskClick={() => setAllocation(false)}
       visible={allocation}
       destroyOnClose

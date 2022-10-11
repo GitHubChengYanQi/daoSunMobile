@@ -198,7 +198,8 @@ const StocktaskigAction = (
     }
 
 
-    <Popup
+     <Popup
+      getContainer={null}
       onMaskClick={() => {
         setVisible(false);
       }}

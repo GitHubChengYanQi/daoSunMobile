@@ -232,7 +232,8 @@ const OutSkuAction = (
       </MyLoading>
     </MyCard>
 
-    <Popup
+     <Popup
+      getContainer={null}
       onMaskClick={() => setVisible(false)}
       visible={visible}
       destroyOnClose

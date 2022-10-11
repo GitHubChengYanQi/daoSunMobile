@@ -110,7 +110,8 @@ const ErrorShop = (
       </div>
     </FloatingBubble>
 
-    <Popup
+     <Popup
+      getContainer={null}
       onMaskClick={() => {
         if (refreshOrder) {
           refresh();

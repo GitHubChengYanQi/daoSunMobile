@@ -34,7 +34,8 @@ const PurchaseAsk = ({ detail }) => {
       <List.Item>备注：{detail.remark || '无'}</List.Item>
       <List.Item>创建时间：{detail.createTime}</List.Item>
 
-      <Popup
+       <Popup
+      getContainer={null}
         visible={visible}
         onMaskClick={() => {
           setVisible(false);

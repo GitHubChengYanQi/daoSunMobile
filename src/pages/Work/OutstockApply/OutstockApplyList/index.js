@@ -258,7 +258,8 @@ const OutstockApplyList = ({ select }) => {
         ]}
       />
 
-      <Popup
+       <Popup
+      getContainer={null}
         visible={popupVisible}
         onMaskClick={() => {
           setPopupVisible(false)

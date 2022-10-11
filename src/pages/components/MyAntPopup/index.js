@@ -22,6 +22,7 @@ const MyAntPopup = (
 
   return <>
     <Popup
+      getContainer={null}
       afterShow={afterShow}
       afterClose={afterClose}
       visible={visible}

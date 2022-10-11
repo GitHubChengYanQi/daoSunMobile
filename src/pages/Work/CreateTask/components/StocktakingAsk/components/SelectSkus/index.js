@@ -89,7 +89,8 @@ const SelectSkus = (
       }} />
     </Divider>
 
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       position='right'
       destroyOnClose
