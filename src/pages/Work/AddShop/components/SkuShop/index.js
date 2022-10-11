@@ -212,7 +212,9 @@ const SkuShop = (
   }
 
   return <>
-    <Popup
+     <Popup
+      getContainer={null}
+      getContainer={null}
       className={ToolUtil.classNames(style.popup, className)}
       visible={visible}
       onMaskClick={() => {

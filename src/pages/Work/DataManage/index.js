@@ -44,7 +44,8 @@ const DataManage = () => {
             setScreening(true);
           }} />
 
-          <Popup
+           <Popup
+      getContainer={null}
             visible={screening}
             onMaskClick={() => {
               setScreening(false);

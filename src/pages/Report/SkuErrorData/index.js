@@ -115,7 +115,7 @@ const SkuErrorData = () => {
       }
     </MyCard>
 
-    <Popup visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
+    <Popup getContainer={null} visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
       <Error
         noDelete
         onClose={()=>setVisible({})}
