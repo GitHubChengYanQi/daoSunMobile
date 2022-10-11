@@ -28,7 +28,7 @@ const CheckBom = () => {
 
   const [skuBrand, setSkuBrand] = useState({});
 
-  const [number, setNumber] = useState(1);
+  const [number, setNumber] = useState(0);
 
   const [data, setData] = useState([]);
 
@@ -69,6 +69,10 @@ const CheckBom = () => {
   }
 
   const add = () => {
+    if (!number) {
+      Message.toast('请输入BOM出库数量');
+      return;
+    }
     const shopCartParams = data.map(item => {
       const brand = item.brand || {};
       return {
