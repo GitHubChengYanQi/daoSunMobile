@@ -71,7 +71,7 @@ const MyAudit = (
 
   useEffect(() => {
     clear();
-  }, [auditType, type]);
+  }, [auditType, type,skuId]);
 
   const processListRef = useRef();
 
