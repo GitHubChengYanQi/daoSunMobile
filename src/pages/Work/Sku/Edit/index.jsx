@@ -172,7 +172,7 @@ const Edit = () => {
             case 'weight':
               extra = <span onClick={() => {
                 setVisible('weight');
-              }}>{detail.weight || 0}&nbsp;&nbsp;kg</span>;
+              }}>{detail.weight || <span style={{color:'#ccc'}}>请输入重量</span>}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
               extra = <span className={styles.disabled}>
@@ -203,20 +203,20 @@ const Edit = () => {
               break;
             case 'skuSize':
               return <div key={index}>
-                <MyCard title='长' extra={<div onClick={() => {
+                <MyCard  extraClassName={styles.extra} title='长' extra={<div onClick={() => {
                   setVisible('length');
                 }}>
-                  {skuSize[0] || 0}&nbsp;&nbsp;cm
+                  {skuSize[0] || <span style={{color:'#ccc'}}>请输入长度</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard title='宽' extra={<div onClick={() => {
+                <MyCard  extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
                   setVisible('width');
                 }}>
-                  {skuSize[1] || 0}&nbsp;&nbsp;cm
+                  {skuSize[1] || <span style={{color:'#ccc'}}>请输入宽度</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard title='高' extra={<div onClick={() => {
+                <MyCard  extraClassName={styles.extra} title='高' extra={<div onClick={() => {
                   setVisible('height');
                 }}>
-                  {skuSize[2] || 0}&nbsp;&nbsp;cm
+                  {skuSize[2] || <span style={{color:'#ccc'}}>请输入高度</span>}&nbsp;&nbsp;cm
                 </div>} />
               </div>;
             case 'fileId':
@@ -274,7 +274,13 @@ const Edit = () => {
               />;
               break;
           }
-          return <MyCard className={styles.card} key={index} title={item.filedName} extra={extra}>
+          return <MyCard
+            className={styles.card}
+            key={index}
+            title={item.filedName}
+            extra={extra}
+            extraClassName={styles.extra}
+          >
             {content}
           </MyCard>;
         })
