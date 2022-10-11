@@ -137,7 +137,7 @@ const Spus = (
     history.goBack();
   };
 
-  return <div>
+  return <>
     <div className={style.content}>
       <MySearch
         value={searchValue}
@@ -287,7 +287,7 @@ const Spus = (
         select(params, checkSkus);
       }}
     />
-  </div>;
+  </>;
 };
 
 export default Spus;
