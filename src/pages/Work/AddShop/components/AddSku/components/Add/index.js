@@ -222,7 +222,7 @@ const Add = (
               className={style.flex}
             >
               <div className={style.instockNumber}>
-                {taskData().title}数量
+                数量
                 <ShopNumber value={data.number} max={taskData().max} onChange={(number) => {
                   setData({ ...data, number });
                 }} />
