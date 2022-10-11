@@ -34,7 +34,8 @@ const MyAudit = (
     createUser,
     skuId,
   };
-  const defaultSort = { field: 'createTime', order: 'descend' };
+
+  const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [params, setParams] = useState({});
 
@@ -95,7 +96,10 @@ const MyAudit = (
 
     <ListScreent
       top={typeof listScreentTop === 'number' ? listScreentTop : top}
-      setSort={setSort}
+      setSort={(sort) => {
+        localStorage.setItem('processTaskTimeSort', sort.order);
+        setSort(sort);
+      }}
       sort={sort}
       screening={screening}
       submit={submit}
