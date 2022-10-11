@@ -17,6 +17,7 @@ const MaintenaceItem = (
   const percent = parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100);
 
   return <TaskItem
+    users={receipts.userResult?.name}
     statusName={receipts.statusName || '进行中'}
     action={receipts.status !== 99}
     complete={receipts.status === 99}
