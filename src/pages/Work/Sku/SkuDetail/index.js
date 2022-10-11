@@ -173,7 +173,7 @@ const SkuDetail = ({ id }) => {
     </div>
 
     <div className={styles.skuData}>
-      <Space direction='vertical' style={{width:'100%'}}>
+      <Space direction='vertical' style={{ width: '100%' }}>
         {
           typeSetting
             .filter((item, index) => !['images', 'drawing', 'fileId'].includes(item.key) && item.show && (!expand ? index <= 3 : true))
@@ -215,7 +215,7 @@ const SkuDetail = ({ id }) => {
                   children = isArray(detail.brandResults).map(item => item.brandName).join('、') || '-';
                   break;
                 case 'skuSize':
-                  children = detail.skuSize && detail.skuSize.split(',').join('×') || '-';
+                  children = detail.skuSize && detail.skuSize.split(',').filter(item => parseInt(item)).join('×') || '-';
                   break;
                 default:
                   children = detail[item.key] || '-';
