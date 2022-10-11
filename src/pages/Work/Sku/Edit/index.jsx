@@ -206,17 +206,17 @@ const Edit = () => {
                 <MyCard  extraClassName={styles.extra} title='长' extra={<div onClick={() => {
                   setVisible('length');
                 }}>
-                  {skuSize[0] || <span style={{color:'#ccc'}}>请输入长度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[0]) || <span style={{color:'#ccc'}}>请输入长度</span>}&nbsp;&nbsp;cm
                 </div>} />
                 <MyCard  extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
                   setVisible('width');
                 }}>
-                  {skuSize[1] || <span style={{color:'#ccc'}}>请输入宽度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[1]) || <span style={{color:'#ccc'}}>请输入宽度</span>}&nbsp;&nbsp;cm
                 </div>} />
                 <MyCard  extraClassName={styles.extra} title='高' extra={<div onClick={() => {
                   setVisible('height');
                 }}>
-                  {skuSize[2] || <span style={{color:'#ccc'}}>请输入高度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[2]) || <span style={{color:'#ccc'}}>请输入高度</span>}&nbsp;&nbsp;cm
                 </div>} />
               </div>;
             case 'fileId':
