@@ -20,6 +20,10 @@ import { spuClassificationDetail } from '../SkuDetail';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
+export const materialListSelect = {
+  url: '/material/listSelect',
+  method: 'POST',
+};
 
 const Edit = () => {
 
@@ -35,6 +39,8 @@ const Edit = () => {
 
   const skuFiles = useRef();
   const skuDrawings = useRef();
+
+  const { loading: meterialLoading, data: materialList } = useRequest(materialListSelect);
 
   const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
     manual: true,
@@ -172,7 +178,7 @@ const Edit = () => {
             case 'weight':
               extra = <span onClick={() => {
                 setVisible('weight');
-              }}>{parseInt(detail.weight) || <span style={{color:'#ccc'}}>请输入</span>}&nbsp;&nbsp;kg</span>;
+              }}>{parseInt(detail.weight) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
               extra = <span className={styles.disabled}>
@@ -189,9 +195,9 @@ const Edit = () => {
               </span>;
               break;
             case 'materialId':
-              extra = <span className={styles.disabled}>
-                {isArray(detail.materialResultList).map(item => item.name).join('、') || '-'}
-              </span>;
+              extra = <span onClick={() => {
+                setVisible('materialId');
+              }}>{isArray(detail.materialResultList).map(item => item.name).join('、') || '请选择'} <RightOutline /></span>;
               break;
             case 'remarks':
               content = <TextArea
@@ -203,20 +209,20 @@ const Edit = () => {
               break;
             case 'skuSize':
               return <div key={index}>
-                <MyCard  extraClassName={styles.extra} title='长' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='长' extra={<div onClick={() => {
                   setVisible('length');
                 }}>
-                  {parseInt(skuSize[0]) || <span style={{color:'#ccc'}}>请输入</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[0]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard  extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
                   setVisible('width');
                 }}>
-                  {parseInt(skuSize[1]) || <span style={{color:'#ccc'}}>请输入</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[1]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard  extraClassName={styles.extra} title='高' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='高' extra={<div onClick={() => {
                   setVisible('height');
                 }}>
-                  {parseInt(skuSize[2]) || <span style={{color:'#ccc'}}>请输入</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[2]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
               </div>;
             case 'fileId':
@@ -294,6 +300,17 @@ const Edit = () => {
       onClose={() => setVisible('')}
       onChange={(option) => {
         detailChange({ batch: option.value });
+        setVisible('');
+      }}
+    />
+
+    <MyPicker
+      visible={visible === 'materialId'}
+      options={materialList || []}
+      value={JSON.parse(detail.materialId || '[]')[0]}
+      onClose={() => setVisible('')}
+      onChange={(option) => {
+        detailChange({ materialId: [option.value],materialResultList:[{name:option.label}] });
         setVisible('');
       }}
     />
