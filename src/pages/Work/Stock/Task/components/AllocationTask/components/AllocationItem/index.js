@@ -18,8 +18,8 @@ const AllocationItem = (
     users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
     percent={percent}
     statusName={receipts.statusName || '进行中'}
-    action={receipts.status !== 99}
-    complete={receipts.status === 99}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
     skus={receipts.detailResults}
     coding={receipts.coding}
     createTime={item.createTime}

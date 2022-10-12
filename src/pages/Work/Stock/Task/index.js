@@ -76,6 +76,7 @@ export const TaskList = (
     }}>
     {query.type && <MyNavBar title='任务列表' />}
     <MySearch
+      historyType='stockTask'
       value={searchValue}
       onChange={setSearchValue}
       onClear={() => ref.current.submit({ skuName: '' })}

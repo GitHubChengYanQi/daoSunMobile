@@ -17,8 +17,8 @@ const ErrorItem = (
   return <TaskItem
     percent={percent}
     statusName={receipts.statusName || '进行中'}
-    action={receipts.status !== 99}
-    complete={receipts.status === 99}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
     skus={ToolUtil.isArray(receipts.anomalyResults).filter((item, index) => index < 2).map(item => ({
       ...item,
       number: item.realNumber,

@@ -19,11 +19,11 @@ const MaintenaceItem = (
   return <TaskItem
     users={receipts.userResult?.name}
     statusName={receipts.statusName || '进行中'}
-    action={receipts.status !== 99}
-    complete={receipts.status === 99}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
     percent={percent}
     coding={receipts.coding}
-    skus={receipts.detailResults}
+    skus={receipts.maintenanceDetailResults}
     endTime={receipts.endTime}
     createTime={item.createTime}
     origin={isObject(item.themeAndOrigin)}
