@@ -23,21 +23,11 @@ const OutStockItem = (
 
   const percent = parseInt((receipts.receivedCount / receipts.numberCount) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else if (pick || canOperate === undefined) {
-      return <>可领料</>;
-    } else {
-      return <>可备料</>;
-    }
-  };
-
   return <TaskItem
     users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
-    statusName={statusName()}
-    action={(can && percent !== 100)}
-    complete={receipts.status === 99}
+    statusName={receipts.statusName}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
