@@ -44,6 +44,7 @@ const PositionInventory = () => {
       const winHistory = window.history || {};
       const historyState = winHistory.state || {};
       ToolUtil.back({
+        getContainer:document.getElementById('timelyInventory'),
         title: '盘点结果未提交，是否退出？',
         key: 'timelyInventory',
         disabled: historyState.title === 'timelyInventory',
@@ -92,7 +93,7 @@ const PositionInventory = () => {
     return <MyLoading skeleton />;
   }
 
-  return <div style={{ height: '100%', backgroundColor: '#fff', paddingBottom: 60 }}>
+  return <div id='timelyInventory' style={{ height: '100%', backgroundColor: '#fff', paddingBottom: 60 }}>
     <MyNavBar title='即时盘点' />
     <StocktaskingHandle
       anomalyType='timelyInventory'

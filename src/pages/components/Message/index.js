@@ -47,12 +47,15 @@ const errorToast = (
 
 const MyDialog = (
   {
+    getContainer,
     only,
     content,
     confirmText = '确认',
     onConfirm,
     cancelText,
     onCancel,
+    onClose,
+    closeOnMaskClick,
   }) => {
   if (only) {
     Dialog.alert({
@@ -67,6 +70,9 @@ const MyDialog = (
       cancelText,
       onCancel,
       onConfirm,
+      onClose,
+      closeOnMaskClick,
+      getContainer,
     });
   }
 };
@@ -106,9 +112,13 @@ const warningDialog = (
     cancelText,
     onCancel = () => {
     },
+    onClose = () => {
+    },
     onConfirm = () => {
     },
+    getContainer,
     only = true,
+    closeOnMaskClick,
   }) => {
 
   const contentDom = <div className={style.warningContent}>
@@ -117,10 +127,13 @@ const warningDialog = (
   </div>;
 
   MyDialog({
+    getContainer,
+    onClose,
     confirmText,
     cancelText,
     onCancel,
     onConfirm,
+    closeOnMaskClick,
     only,
     content: contentDom,
   });

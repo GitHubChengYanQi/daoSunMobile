@@ -125,6 +125,7 @@ const Spus = (
   useEffect(() => {
     submit();
     ToolUtil.back({
+      getContainer:document.getElementById('createTask'),
       title:backTitle,
       key: 'spus',
       onBack: onClose,
