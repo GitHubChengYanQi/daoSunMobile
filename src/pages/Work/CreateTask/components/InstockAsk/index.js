@@ -12,7 +12,8 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { history } from 'umi';
+import MyCard from '../../../../components/MyCard';
+import { Input } from 'antd-mobile';
 
 const InstockAsk = ({ skus, judge, createType }) => {
 
@@ -131,6 +132,12 @@ const InstockAsk = ({ skus, judge, createType }) => {
   return <div style={{ marginBottom: 60 }}>
     <MyNavBar title={createTypeData().title} />
     {content()}
+
+    <MyCard title='主题' extra={<Input
+      className={style.theme}
+      placeholder='请输入'
+      onChange={(theme) => setParams({ ...params, theme })} />}
+    />
 
     <OtherData
       createType={createType}
