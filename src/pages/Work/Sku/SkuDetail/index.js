@@ -167,7 +167,7 @@ const SkuDetail = ({ id }) => {
         <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           history.push({
             pathname: '/Work/ProcessTask',
-            query: { skuId: detail.skuId },
+            query: { taskSkuId: detail.skuId },
           });
         }}>
           <Icon type='icon-guanlianrenwu' />关联任务
