@@ -92,6 +92,7 @@ const TaskItem = (
               ToolUtil.isArray(skus).map((item, index) => {
                 return <div key={index} className={style.skuItem}>
                   <SkuItem
+                    noView
                     extraWidth='120px'
                     className={style.sku}
                     imgSize={24}
