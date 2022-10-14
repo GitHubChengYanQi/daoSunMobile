@@ -149,7 +149,7 @@ const Header = (
       </div>
       <div className={style.verify} hidden={forward}>
         <div className={style.checkNumber}>
-          <Label className={style.title}>{checkNumberTitle}：</Label>
+          <Label className={style.title}>{checkNumberTitle}</Label>：
           <ShopNumber show value={sku.realNumber} /> {unitName}
           <div style={{ padding: '0 8px' }}>({ToolUtil.isObject(sku.user).name || '-'})</div>
         </div>
