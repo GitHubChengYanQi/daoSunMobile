@@ -28,6 +28,7 @@ const MaintenanceLog = ({ detail = {} }) => {
 
   const dataList = () => {
     return data.map((skuItem, skuIndex) => {
+      const inkindResult = skuItem.inkindResult || {};
       return <div key={skuIndex} className={style.positionItem}>
         <div className={style.skus}>
           <div
@@ -38,21 +39,21 @@ const MaintenanceLog = ({ detail = {} }) => {
 
             }}>
               <SkuItem
-                skuResult={skuItem.skuResult}
+                skuResult={inkindResult.skuResult}
                 extraWidth='100px'
                 number={skuItem.number}
                 otherData={[
-                  ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
-                  ToolUtil.isObject(skuItem.storehousePositionsResult).name,
+                  ToolUtil.isObject(inkindResult.brandResult).brandName || '无品牌',
+                  ToolUtil.isObject(inkindResult.storehousePositionsResult).name,
                 ]}
               />
             </div>
             <div className={style.info} style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <ShopNumber show value={skuItem.number || 0} />
+              <ShopNumber show value={inkindResult.number || 0} />
               <LinkButton onClick={() => {
                 setVisible({
-                  skuId: item.skuId,
-                  skuResult: item,
+                  skuId: inkindResult.skuId,
+                  skuResult: inkindResult.skuResult,
                   brandId: 0,
                   positionId: 0,
                 });
