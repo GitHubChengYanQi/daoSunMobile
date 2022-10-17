@@ -42,7 +42,7 @@ const Supply = ({ skuId }) => {
   return <>
     <div className={styles.supply}>
       <div className={styles.title}>
-        供应商({data.length})
+        供应商{data.length > 1 ? `(${data.length})` : ''}
         <span className={styles.extra}><LinkButton onClick={() => {
           setVisible(true);
         }}>查看更多<RightOutline /></LinkButton></span>
@@ -51,7 +51,7 @@ const Supply = ({ skuId }) => {
         data.filter((item, index) => index < 2).map((item, index) => {
           return <div key={index} className={classNames(styles.flexCenter, styles.supplyItem)}>
             <div className={styles.flexGrow}>{isObject(item.customerResult).customerName}</div>
-            <span>交货期：30 天</span>
+            {/*<span>交货期：30 天</span>*/}
           </div>;
         })
       }
@@ -69,7 +69,7 @@ const Supply = ({ skuId }) => {
               className={styles.supplyCard}
               key={index}
               titleBom={isObject(item.customerResult).customerName}
-              extra='交货期：30天'
+              // extra='交货期：30天'
               bodyClassName={styles.supplyContent}
               headerClassName={styles.supplyHeader}
             >

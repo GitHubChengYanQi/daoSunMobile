@@ -19,6 +19,7 @@ const MyAudit = (
     listScreentTop,
     ReceiptDom,
     hiddenSearch,
+    taskSkuId,
   }, ref) => {
 
   const [screen, setScreen] = useState();
@@ -31,8 +32,10 @@ const MyAudit = (
     statusList: ['0'],
     types: (type || defaultType) && [type || defaultType],
     createUser,
+    skuId:taskSkuId,
   };
-  const defaultSort = { field: 'createTime', order: 'ascend' };
+
+  const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [params, setParams] = useState({});
 
@@ -68,7 +71,7 @@ const MyAudit = (
 
   useEffect(() => {
     clear();
-  }, [auditType, type]);
+  }, [auditType, type,taskSkuId]);
 
   const processListRef = useRef();
 
@@ -93,7 +96,10 @@ const MyAudit = (
 
     <ListScreent
       top={typeof listScreentTop === 'number' ? listScreentTop : top}
-      setSort={setSort}
+      setSort={(sort) => {
+        localStorage.setItem('processTaskTimeSort', sort.order);
+        setSort(sort);
+      }}
       sort={sort}
       screening={screening}
       submit={submit}

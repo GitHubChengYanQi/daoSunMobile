@@ -183,9 +183,8 @@ export const back = (
 
   window.onpopstate = (event) => {
     const state = event.state || {};
-    console.log(state);
     if (state.key) {
-      if (['spus'].includes(state.key)) {
+      if (['popup'].includes(state.key)) {
         onBack();
         return;
       }

@@ -82,7 +82,6 @@ const ErrorShop = (
     }
   };
 
-
   return <>
 
     <FloatingBubble
@@ -102,7 +101,7 @@ const ErrorShop = (
         }}>
           <div className={style.actionButton}>
             <Badge
-              content={errorNumber || null}
+              content={errorNumber}
               style={{ '--right': '5%', '--top': '5%' }}>
               <Bouncing ref={errorShopRef} size={24} img={instockErrorShop} />
             </Badge></div>

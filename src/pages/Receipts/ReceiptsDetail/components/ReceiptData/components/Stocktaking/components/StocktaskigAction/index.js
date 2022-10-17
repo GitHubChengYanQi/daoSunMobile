@@ -135,7 +135,9 @@ const StocktaskigAction = (
                     hiddenNumber={!showStock}
                     number={(skuItem.number || 0) - (skuItem.lockNumber || 0)}
                     otherData={[
-                      ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
+                      <span style={{ color: 'var(--adm-color-primary)' }}>
+                        {ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌'}
+                      </span>,
                     ]}
                   />
                 </div>

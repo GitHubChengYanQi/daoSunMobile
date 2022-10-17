@@ -36,7 +36,8 @@ const Add = (
   const [dataVisible, setDataVisible] = useState();
 
   useEffect(() => {
-    const imgUrl = Array.isArray(sku.imgUrls) && sku.imgUrls[0] || state.homeLogo;
+    const imgResults = ToolUtil.isArray(sku.imgResults)[0] || {};
+    const imgUrl = imgResults.thumbUrl || state.homeLogo;
     setSnameAction(defaultAction);
     const brands = ToolUtil.isArray(sku.brandResults);
     let number = 1;
@@ -221,7 +222,7 @@ const Add = (
               className={style.flex}
             >
               <div className={style.instockNumber}>
-                {taskData().title}数量
+                数量
                 <ShopNumber value={data.number} max={taskData().max} onChange={(number) => {
                   setData({ ...data, number });
                 }} />

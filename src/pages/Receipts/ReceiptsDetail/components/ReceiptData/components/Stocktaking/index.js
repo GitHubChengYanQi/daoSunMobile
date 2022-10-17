@@ -3,7 +3,7 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider, ErrorBlock, Space } from 'antd-mobile';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
@@ -19,6 +19,8 @@ import Icon from '../../../../../../components/Icon';
 import { useModel } from 'umi';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import MyProgress from '../../../../../../components/MyProgress';
+import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
+import ActionButtons from '../../../ActionButtons';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -43,6 +45,7 @@ export const nowInDateBetwen = (d1, d2) => {
 
 const Stocktaking = (
   {
+    nodeActions,
     loading,
     permissions,
     receipts = {},
@@ -51,6 +54,10 @@ const Stocktaking = (
     },
     afertShow = () => {
     },
+    refresh = () => {
+    },
+    taskId,
+    logIds = [],
   },
 ) => {
 
@@ -215,19 +222,63 @@ const Stocktaking = (
 
     {loading && <MyLoading />}
 
-    {actionPermissions && <BottomButton
+    <ActionButtons
+      refresh={refresh}
       afertShow={afertShow}
-      only
-      disabled={outTime}
-      text={outTime ? '任务未开始' : '开始盘点'}
-      onClick={() => {
-        history.push({
-          pathname: '/Work/Inventory/StartStockTaking',
-          query: {
-            id: receipts.inventoryTaskId,
-          },
-        });
-      }} />}
+      taskId={taskId}
+      logIds={logIds}
+      createUser={receipts.createUser}
+      permissions={actionPermissions}
+      actions={nodeActions.map(item => {
+        if (item.action === 'check') {
+          return { ...item, name: outTime ? '任务未开始' : '开始盘点', disabled: outTime };
+        }
+        return item;
+      })}
+      onClick={(value) => {
+        switch (value) {
+          case 'check':
+            history.push({
+              pathname: '/Work/Inventory/StartStockTaking',
+              query: {
+                id: receipts.inventoryTaskId,
+              },
+            });
+            break;
+          case 'revokeAndAsk':
+            history.push({
+              pathname: '/Work/CreateTask',
+              query: {
+                createType: ERPEnums.stocktaking,
+              },
+              state: {
+                skuList: receipts.taskList,
+                beginTime: receipts.beginTime,
+                endTime: receipts.endTime,
+                method: receipts.method,
+                files: isArray(receipts.mediaUrls).map((item, index) => ({
+                  mediaId: receipts.enclosure && JSON.parse(receipts.enclosure)[index],
+                  url: item,
+                })),
+                participants: isArray(receipts.participantList).map(item => ({
+                  id: item.userId,
+                  name: item.name,
+                  avatar: item.avatar,
+                })),
+                mediaIds: receipts.enclosure && JSON.parse(receipts.enclosure),
+                noticeIds: receipts.notice && JSON.parse(receipts.notice),
+                remark: receipts.remark,
+                userId: receipts.userId,
+                userName: isObject(receipts.user).name,
+                avatar: isObject(receipts.user).avatar,
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      }}
+    />
 
   </>;
 

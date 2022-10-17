@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
-import { isObject } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ForwardItem = (
   {
@@ -35,8 +35,9 @@ const ForwardItem = (
   return <TaskItem
     percent={percent}
     statusName={receipts.statusName || '进行中'}
-    action={receipts.status !== 99}
-    skus={[receipts]}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
+    skus={[{ ...receipts, number: receipts.realNumber }]}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
@@ -45,6 +46,7 @@ const ForwardItem = (
     skuSize={1}
     positionSize={1}
     onClick={() => onClick(item)}
+    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
   />;
 };
 

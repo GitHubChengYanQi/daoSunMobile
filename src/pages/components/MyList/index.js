@@ -25,6 +25,7 @@ const MyList = (
     manual,
     options = {},
     noTips,
+    pullDisabled,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -125,6 +126,7 @@ const MyList = (
 
   return <div id='list' className={style.list}>
     <PullToRefresh
+      disabled={pullDisabled}
       onRefresh={async () => {
         await submit(params, sorter, true);
       }}

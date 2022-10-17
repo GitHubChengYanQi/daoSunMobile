@@ -35,7 +35,7 @@ const ProcessScreen = (
 
   const types = params.types || [];
   const createUser = params.createUser;
-  const creatTime = params.creatTime;
+  const creatTime = params.startTime ? [params.startTime, params.endTime] : [];
   const outTime = params.outTime;
   const statusList = params.statusList || [];
   const queryType = params.queryType;
@@ -63,7 +63,7 @@ const ProcessScreen = (
         screened = outTime;
         break;
       case 'creatTime':
-        screened = creatTime;
+        screened = creatTime.length > 0;
         break;
       default:
         break;
@@ -107,6 +107,7 @@ const ProcessScreen = (
           onChange={(statusList = []) => {
             if (statusList.includes('99')) {
               statusList.push('50');
+              statusList.push('49');
             } else {
               statusList = statusList.filter(item => item !== '50');
             }
@@ -148,7 +149,7 @@ const ProcessScreen = (
           title={item.title}
           value={creatTime}
           onChange={(creatTime) => {
-            paramsOnChange({ ...params, creatTime });
+            paramsOnChange({ ...params, startTime: creatTime[0], endTime: creatTime[1] });
           }}
         />;
       default:

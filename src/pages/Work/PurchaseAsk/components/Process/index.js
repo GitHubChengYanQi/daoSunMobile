@@ -131,6 +131,8 @@ const Process = (
         switch (stepStatus) {
           case 'success':
             return '已执行';
+          case 'error':
+            return '已撤回';
           case 'wait':
             return '未执行';
           default:
@@ -159,6 +161,7 @@ const Process = (
             content = <span className={style.auditSuccess}><CheckCircleFill /></span>;
             break;
           case 0:
+          case 2:
             stepsStatus = 'error';
             content = <span className={style.auditError}><CloseCircleFill /></span>;
             break;
@@ -471,7 +474,7 @@ const Process = (
     const logResults = step.logResults || [];
 
     const nextWait = logResults.filter((item) => item.status === 3).length === logResults.length;
-    const error = logResults.filter((item) => item.status === 0).length > 0;
+    const error = logResults.filter((item) => item.status === 0 || item.status === 2).length > 0;
     const success = logResults.filter((item) => item.status === 1).length > 0;
     if (logResults.length === 0) {
       if (next) {

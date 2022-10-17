@@ -1,11 +1,13 @@
 import moment from 'moment';
 import { useEffect, useState } from 'react';
+import Data from '../../Work/Allocation/SelectStoreHouse/components/Data';
 
 const Show = (date) => {
   if (!date) {
     return <></>;
   }
-  return moment(date).format('YYYY/MM/DD HH:mm');
+  const oneYear = moment(date).diff(new Date(), 'year') >= 1;
+  return moment(date).format(oneYear ? 'YYYY/MM/DD HH:mm' : 'MM/DD HH:mm');
 };
 
 const formatDate = (date) => {
