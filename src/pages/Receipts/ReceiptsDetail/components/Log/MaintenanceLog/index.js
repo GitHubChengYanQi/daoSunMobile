@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../components/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
@@ -21,7 +21,7 @@ const MaintenanceLog = ({ detail = {} }) => {
   const [searchValue, setSearchValue] = useState();
 
   const submit = (skuName) => {
-    ref.current.submit({ sourceId: detail.inventoryTaskId, skuName });
+    ref.current.submit({ maintenanceId: detail.inventoryTaskId, skuName });
   };
 
   const [visible, setVisible] = useState();
@@ -29,6 +29,16 @@ const MaintenanceLog = ({ detail = {} }) => {
   const dataList = () => {
     return data.map((skuItem, skuIndex) => {
       const inkindResult = skuItem.inkindResult || {};
+      const detailResults = skuItem.detailResults || [];
+      const brandNames = [];
+      let number = 0;
+      detailResults.map(item => {
+        number += item.number;
+        const brandName = isObject(item.brandResult).brandName;
+        if (!brandNames.includes(brandName || '无品牌')) {
+          brandNames.push(brandName || '无品牌');
+        }
+      });
       return <div key={skuIndex} className={style.positionItem}>
         <div className={style.skus}>
           <div
@@ -41,15 +51,14 @@ const MaintenanceLog = ({ detail = {} }) => {
               <SkuItem
                 skuResult={inkindResult.skuResult}
                 extraWidth='100px'
-                number={skuItem.number}
                 otherData={[
-                  ToolUtil.isObject(inkindResult.brandResult).brandName || '无品牌',
+                  brandNames.join('、'),
                   ToolUtil.isObject(inkindResult.storehousePositionsResult).name,
                 ]}
               />
             </div>
             <div className={style.info} style={{ justifyContent: 'center', alignItems: 'center' }}>
-              <ShopNumber show value={inkindResult.number || 0} />
+              <ShopNumber show value={number || 0} />
               <LinkButton onClick={() => {
                 setVisible({
                   skuId: inkindResult.skuId,
@@ -83,7 +92,7 @@ const MaintenanceLog = ({ detail = {} }) => {
     <MyList
       ref={ref}
       api={maintenanceLogList}
-      params={{ sourceId: detail.inventoryTaskId }}
+      params={{ maintenanceId: detail.maintenanceId }}
       data={data}
       getData={setData}>
       {dataList()}
