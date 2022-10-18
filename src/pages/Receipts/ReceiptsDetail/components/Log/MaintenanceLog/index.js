@@ -71,7 +71,7 @@ const MaintenanceLog = ({ detail = {} }) => {
           </div>
           <div className={style.update}>
             <div className={style.time}>{MyDate.Show(skuItem.createTime)}</div>
-            <div><UserName user={skuItem.user} /></div>
+            <div><UserName user={skuItem.createUserResult} /></div>
           </div>
         </div>
 
