@@ -64,6 +64,7 @@ const TaskItem = (
 
   return <>
     <MyCard
+      onClick={onClick}
       className={style.card}
       titleBom={
         <div className={style.header}>

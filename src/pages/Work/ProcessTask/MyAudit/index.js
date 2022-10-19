@@ -289,7 +289,6 @@ const MyAudit = (
       noProgress={['audit', 'complete', 'audited'].includes(key)}
       manual
       ReceiptDom={ReceiptDom}
-      all={ToolUtil.isArray(params.statusList).includes('99')}
       listRef={listRef}
       processListRef={processListRef}
     />

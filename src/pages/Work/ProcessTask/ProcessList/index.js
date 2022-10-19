@@ -34,7 +34,6 @@ const ProcessList = (
     listRef,
     api,
     processListRef,
-    all,
     ReceiptDom,
     onLoading = () => {
 
@@ -44,29 +43,7 @@ const ProcessList = (
 
   const [data, setData] = useState([]);
 
-  const { query, pathname } = history.location;
-
-  const { loading, run } = useRequest(getTaskStatus, {
-    manual: true,
-    onSuccess: (res) => {
-      if (ToolUtil.isObject(res).status !== 0 && !all) {
-        const newData = data.filter(item => item.processTaskId !== res.processTaskId);
-        setData(newData);
-      }
-    },
-  });
-
-  useEffect(() => {
-    if (query.actionTaskId) {
-      run({ params: { taskId: query.actionTaskId } });
-    }
-  }, [query.actionTaskId]);
-
   const onClick = (item) => {
-    history.replace({
-      pathname,
-      query: { ...query, actionTaskId: item.processTaskId },
-    });
     history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
   };
 
@@ -92,7 +69,6 @@ const ProcessList = (
   };
 
   return <>
-    {loading && <MyLoading />}
     <div className={style.list} ref={processListRef}>
       <MyList
         onLoading={onLoading}
