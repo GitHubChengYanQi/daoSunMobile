@@ -25,14 +25,22 @@ const StartEndDate = (
     value = [],
     onChange = () => {
     },
+    onClose = () => {
+    },
     min,
     max,
+    precision,
     className,
     textAlign,
     minWidth,
+    render,
+    dataRef,
   }) => {
 
-  const ref = useRef();
+  let clickRef = dataRef;
+  if (!dataRef) {
+    clickRef = useRef();
+  }
 
   const [startDate, setStartDate] = useState();
 
@@ -41,13 +49,13 @@ const StartEndDate = (
       style={{ display: 'inline-block', minWidth: minWidth || 100, textAlign: textAlign || 'right' }}
       className={className}
       onClick={() => {
-        ref.current.open();
+        clickRef.current.open();
       }}
     >
-      <Space align='center'>
+      {render || <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
         {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
-      </Space>
+      </Space>}
     </div>
     <MyDatePicker
       max={max}
@@ -58,16 +66,17 @@ const StartEndDate = (
       }}
       title={startDate ? '终止时间' : '起始时间'}
       value={value[0]}
-      ref={ref}
+      ref={dataRef}
       show
       min={getMinTime(startDate ? MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)) : min)}
-      precision='minute'
+      precision={precision || 'minute'}
       onCancel={() => {
         setStartDate();
       }}
       afterClose={() => {
+        onClose();
         if (startDate) {
-          ref.current.open();
+          clickRef.current.open();
         }
       }}
       onChange={(date) => {

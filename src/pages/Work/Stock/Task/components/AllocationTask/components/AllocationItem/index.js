@@ -8,6 +8,7 @@ const AllocationItem = (
     index,
     onClick = () => {
     },
+    noProgress,
   }) => {
 
   const receipts = item.receipts || {};
@@ -15,6 +16,7 @@ const AllocationItem = (
   const percent = parseInt((receipts.doneNumber / (receipts.detailNumber / 1)) * 100);
 
   return <TaskItem
+    noProgress={noProgress}
     users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
     percent={percent}
     statusName={receipts.statusName || '进行中'}

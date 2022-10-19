@@ -8,6 +8,7 @@ const ErrorItem = (
     index,
     onClick = () => {
     },
+    noProgress,
   }) => {
 
   const receipts = item.receipts || {};
@@ -15,6 +16,7 @@ const ErrorItem = (
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
   return <TaskItem
+    noProgress={noProgress}
     percent={percent}
     statusName={receipts.statusName || '进行中'}
     action={![99, 50].includes(receipts.status)}

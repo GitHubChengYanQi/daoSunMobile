@@ -26,11 +26,9 @@ export const Tasks = () => {
       case 'create':
         return <Create />;
       case 'audit':
-        return <MyAudit auditType='audit' taskSkuId={query.taskSkuId} />;
+        return <MyAudit taskSkuId={query.taskSkuId} />;
       case 'start':
         return <MyAudit createUser={userInfo.id} />;
-      case 'send':
-        return <MyAudit auditType='send' />;
       default:
         return <Create />;
     }
@@ -60,10 +58,6 @@ export const Tasks = () => {
           title: '我发起的',
           key: 'start',
           icon: <Icon type='icon-wofaqide1' />,
-        }, {
-          title: '抄送我的',
-          key: 'send',
-          icon: <Icon type='icon-caigou_chaosong' />,
         }]
       } />
 

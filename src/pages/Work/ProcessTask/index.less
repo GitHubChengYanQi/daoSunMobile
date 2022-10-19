@@ -9,3 +9,61 @@
   }
 
 }
+
+.tabs {
+  background-color: #fff;
+  margin: 1px 0;
+}
+
+.screent {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  margin-bottom: 1px;
+
+  .dropDown {
+    flex-grow: 1;
+    margin-bottom: 1px;
+    padding: 10px 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+
+    .titleBox {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      svg {
+        font-size: 10px;
+        margin-left: 4px;
+      }
+
+      .title {
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        max-width: 70px;
+      }
+    }
+  }
+
+  .checked {
+    color: var(--adm-color-primary);
+
+    svg {
+      color: var(--adm-color-primary);
+    }
+  }
+
+  .sort {
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    grid-gap: 8px;
+    gap: 8px;
+    border-left: 1px solid #D8D8D8;
+  }
+}
