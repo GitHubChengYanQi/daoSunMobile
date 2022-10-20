@@ -5,6 +5,7 @@ import { CloseOutline } from 'antd-mobile-icons';
 
 const MyAntPopup = (
   {
+    zIndex,
     visible,
     children,
     title,
@@ -16,12 +17,19 @@ const MyAntPopup = (
     },
     afterClose = () => {
     },
+    leftText,
+    rightText,
+    onLeft = () => {
+    },
+    onRight = () => {
+    },
   },
 ) => {
 
 
   return <>
     <Popup
+      style={{ '--z-index': zIndex }}
       getContainer={null}
       afterShow={afterShow}
       afterClose={afterClose}
@@ -31,10 +39,12 @@ const MyAntPopup = (
       className={className}
     >
       <div className={style.header}>
+        <span hidden={!leftText} className={style.left} onClick={onLeft}>{leftText}</span>
         {title || '无题'}
-        <span onClick={() => {
+        <span className={style.right} onClick={() => {
           onClose();
-        }}><CloseOutline /></span>
+          onRight();
+        }}>{rightText || <CloseOutline />}</span>
       </div>
       {children}
     </Popup>

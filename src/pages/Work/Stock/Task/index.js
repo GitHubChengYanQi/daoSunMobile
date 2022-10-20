@@ -13,13 +13,7 @@ import KeepAlive from '../../../../components/KeepAlive';
 export const processTask = { url: '/activitiProcessTask/auditList', method: 'POST' };
 
 
-export const TaskList = (
-  {
-    activeKey,
-    keyChange = () => {
-    },
-  },
-) => {
+export const TaskList = () => {
 
   const { query } = useLocation();
 
@@ -27,30 +21,10 @@ export const TaskList = (
 
   const ref = useRef();
 
-  const [key, setKey] = useState(ReceiptsEnums.instockOrder);
-
-  useEffect(() => {
-    if (query.type) {
-      if (query.type !== key) {
-        setKey(query.type);
-      }
-    } else if (activeKey) {
-      setKey(activeKey);
-    }
-  }, [query.type]);
-
   const [scrollTop, setScrollTop] = useState(0);
 
-  const tabs = [
-    { title: '调拨任务', key: ReceiptsEnums.allocation },
-    { title: '出库任务', key: ReceiptsEnums.outstockOrder },
-    { title: '入库任务', key: ReceiptsEnums.instockOrder },
-    { title: '养护任务', key: ReceiptsEnums.maintenance },
-    { title: '盘点任务', key: ReceiptsEnums.stocktaking },
-  ];
-
   const extraIcon = () => {
-    switch (key) {
+    switch (query.type) {
       case ReceiptsEnums.stocktaking:
         return <Button fill='outline' color='primary' onClick={() => {
           history.push('/Work/Inventory/RealTimeInventory');
@@ -62,7 +36,6 @@ export const TaskList = (
     }
   };
 
-  const [searchValue, setSearchValue] = useState();
 
   return <div
     id='taskList'
@@ -75,44 +48,18 @@ export const TaskList = (
       setScrollTop(event.target.scrollTop);
     }}>
     {query.type && <MyNavBar title='任务列表' />}
-    <MySearch
-      historyType='stockTask'
-      value={searchValue}
-      onChange={setSearchValue}
-      onClear={() => ref.current.submit({ skuName: '' })}
-      onSearch={(value) => ref.current.submit({ skuName: value })}
-      placeholder='请输入单据相关信息'
-      extraIcon={extraIcon()}
-    />
-    <div hidden={activeKey}>
-      <Tabs activeKey={key} onChange={(key) => {
-        if (query.type) {
-          history.replace(`/Work/Stock/Task?type=${key}`);
-        }
-        setKey(key);
-        keyChange(key);
-      }} className={style.tab}>
-        {
-          tabs.map((item) => {
-            return <Tabs.Tab {...item} />;
-          })
-        }
-      </Tabs>
-    </div>
 
     <MyAudit
-      skuName={searchValue}
+      extraIcon={extraIcon()}
+      task
       ref={ref}
-      listScreentTop={!query.type && 0}
-      auditType='audit'
-      type={key}
+      type={query.type}
       paramsChange={(param = {}) => {
         const types = param.types || [];
-        setKey(types[0]);
       }}
     />
 
-    {query.type && <TaskBottom taskKey={key} task />}
+    {query.type && <TaskBottom taskKey={query.type} task />}
 
   </div>;
 };

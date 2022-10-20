@@ -134,7 +134,6 @@ const AddSku = (
       type,
       skuId: data.skuId,
       brandId: data.brandId,
-      customerId: data.customerId,
       number: data.number,
       storehousePositionsId: data.positionId,
       positionNums,

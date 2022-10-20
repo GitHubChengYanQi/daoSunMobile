@@ -144,7 +144,7 @@ const UserList = (
           })}
         </IndexBar>}
 
-      {!show && <BottomButton leftOnClick={onClose} rightDisabled={users.length === 0} rightOnClick={() => {
+      {!show && <BottomButton leftOnClick={onClose} rightOnClick={() => {
         onChange(users);
       }} />}
     </div>

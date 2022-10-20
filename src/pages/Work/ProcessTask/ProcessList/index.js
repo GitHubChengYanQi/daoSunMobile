@@ -27,13 +27,13 @@ export const getTaskStatus = {
 
 const ProcessList = (
   {
+    noProgress,
     manual,
     setNumber = () => {
     },
     listRef,
     api,
     processListRef,
-    all,
     ReceiptDom,
     onLoading = () => {
 
@@ -50,19 +50,19 @@ const ProcessList = (
   const receiptsData = (item, index) => {
     switch (item.type) {
       case ReceiptsEnums.instockOrder:
-        return <InStockItem onClick={onClick} item={item} index={index} />;
+        return <InStockItem noProgress={noProgress} onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.outstockOrder:
-        return <OutStockItem onClick={onClick} item={item} index={index} />;
+        return <OutStockItem noProgress={noProgress} onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.maintenance:
-        return <MaintenaceItem onClick={onClick} item={item} index={index} />;
+        return <MaintenaceItem noProgress={noProgress} onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.stocktaking:
-        return <StocktakingItem onClick={onClick} item={item} index={index} />;
+        return <StocktakingItem noProgress={noProgress} onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.allocation:
-        return <AllocationItem onClick={onClick} item={item} index={index} />;
+        return <AllocationItem noProgress={noProgress} onClick={onClick} item={item} index={index} />;
       case ReceiptsEnums.error:
-        return <ErrorItem onClick={onClick} item={item} />;
+        return <ErrorItem noProgress={noProgress} onClick={onClick} item={item} />;
       case ReceiptsEnums.errorForWard:
-        return <ForwardItem onClick={onClick} item={item} />;
+        return <ForwardItem noProgress={noProgress} onClick={onClick} item={item} />;
       default:
         return <></>;
     }

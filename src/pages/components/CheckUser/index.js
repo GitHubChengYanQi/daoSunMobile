@@ -13,6 +13,7 @@ const getUserByCpUserId = { url: '/ucMember/getUserByCps', method: 'POST' };
 
 const CheckUser = (
   {
+    zIndex,
     value = [],
     multiple,
     onChange = () => {
@@ -97,6 +98,7 @@ const CheckUser = (
   return <>
     {getUserLoading && <MyLoading />}
     <MyAntPopup
+      zIndex={zIndex}
       afterShow={afterShow}
       title='选择人员'
       className={style.popup}
