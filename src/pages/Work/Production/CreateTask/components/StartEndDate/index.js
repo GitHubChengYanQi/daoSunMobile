@@ -66,7 +66,7 @@ const StartEndDate = (
       }}
       title={startDate ? '终止时间' : '起始时间'}
       value={value[0]}
-      ref={dataRef}
+      ref={clickRef}
       show
       min={getMinTime(startDate ? MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)) : min)}
       precision={precision || 'minute'}

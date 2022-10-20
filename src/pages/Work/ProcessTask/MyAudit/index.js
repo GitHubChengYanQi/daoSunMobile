@@ -280,7 +280,7 @@ const MyAudit = (
             order = 'descend';
             break;
         }
-        localStorage.setItem('processTaskTimeSort', sort.order);
+        localStorage.setItem('processTaskTimeSort', order);
         setSort({ field: 'createTime', order });
         submit({}, { field: 'createTime', order });
       }}>
