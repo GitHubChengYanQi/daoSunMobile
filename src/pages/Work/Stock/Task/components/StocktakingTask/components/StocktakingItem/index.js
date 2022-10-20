@@ -19,6 +19,7 @@ const StocktakingItem = (
 
   return <>
     <TaskItem
+      task={item}
       noProgress={noProgress}
       otherData={MyDate.Show(receipts.beginTime)+' - '+MyDate.Show(receipts.endTime)}
       percent={percent}

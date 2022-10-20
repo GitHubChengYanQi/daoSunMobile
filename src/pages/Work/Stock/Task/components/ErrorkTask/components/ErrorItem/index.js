@@ -16,6 +16,7 @@ const ErrorItem = (
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
   return <TaskItem
+    task={item}
     noProgress={noProgress}
     percent={percent}
     statusName={receipts.statusName || '进行中'}

@@ -16,6 +16,7 @@ const InStockItem = (
   const percent = parseInt((receipts.inStockNum / receipts.applyNum) * 100);
 
   return <TaskItem
+    task={item}
     noProgress={noProgress}
     statusName={receipts.statusName || '进行中'}
     percent={percent}

@@ -22,6 +22,7 @@ const OutStockItem = (
   const percent = parseInt((receipts.receivedCount / receipts.numberCount) * 100);
 
   return <TaskItem
+    task={item}
     noProgress={noProgress}
     otherData={<>领料人：{receipts?.userResult?.name}</>}
     otherUserLabel='领料人'

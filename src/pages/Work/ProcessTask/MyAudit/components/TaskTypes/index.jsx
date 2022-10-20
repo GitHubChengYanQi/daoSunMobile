@@ -44,6 +44,7 @@ const TaskTypes = (
 
   return <>
     <MyAntPopup
+      onClose={onClose}
       zIndex={zIndex}
       title='任务类型'
       visible={visible}

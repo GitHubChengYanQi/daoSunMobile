@@ -16,6 +16,7 @@ const AllocationItem = (
   const percent = parseInt((receipts.doneNumber / (receipts.detailNumber / 1)) * 100);
 
   return <TaskItem
+    task={item}
     noProgress={noProgress}
     users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
     percent={percent}

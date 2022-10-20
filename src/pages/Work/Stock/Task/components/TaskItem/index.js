@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
+import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
@@ -36,6 +36,7 @@ const TaskItem = (
     otherData,
     origin = {},
     complete,
+    task={},
   },
 ) => {
   const originRet = isArray(origin?.parent)[0]?.ret;
@@ -69,7 +70,7 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={style.status}>
+          <div className={classNames(style.status,['50','49'].includes(task.status) && style.error)}>
             {statusName}
           </div>
         </div>

@@ -18,6 +18,7 @@ const MaintenaceItem = (
   const percent = parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100);
 
   return <TaskItem
+    task={item}
     noProgress={noProgress}
     otherData={MyDate.Show(receipts.startTime)+' - '+MyDate.Show(receipts.endTime)}
     users={receipts.userResult?.name}

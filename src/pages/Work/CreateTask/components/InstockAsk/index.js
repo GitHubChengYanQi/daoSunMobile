@@ -113,6 +113,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     });
     inStock({
       data: {
+        customerId:params.customerId,
         shopCardType: createType,
         directInStock,
         module: 'createInstock',
