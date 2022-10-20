@@ -135,7 +135,9 @@ const StocktaskigAction = (
                     hiddenNumber={!showStock}
                     number={(skuItem.number || 0) - (skuItem.lockNumber || 0)}
                     otherData={[
-                      ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
+                      <span style={{ color: 'var(--adm-color-primary)' }}>
+                        {ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌'}
+                      </span>,
                     ]}
                   />
                 </div>
@@ -172,10 +174,9 @@ const StocktaskigAction = (
           params={params}
           data={data}
           ref={listRef}
-          getData={(list = [], newList = []) => {
-            const positionIds = list.map(item => item.positionId);
-            const newData = data.filter(item => positionIds.includes(item.positionId));
-            newList.forEach(item => {
+          getData={(list = []) => {
+            const newData = [];
+            list.forEach(item => {
               const newPositionIds = newData.map(item => item.positionId);
               const newPositionIndex = newPositionIds.indexOf(item.positionId);
               if (newPositionIndex !== -1) {

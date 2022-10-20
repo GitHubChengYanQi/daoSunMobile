@@ -1,5 +1,5 @@
 .search {
-  padding: 4px 12px;
+  padding: 8px 12px;
   position: sticky;
   top: 0;
   z-index: 1;
@@ -8,7 +8,7 @@
 .statusList {
   text-align: center;
   position: sticky;
-  top: 35px;
+  top: 43px;
   background-color: #fff;
   z-index: 1;
 
@@ -24,28 +24,25 @@
 
 .positionItem {
   border-radius: 2px;
-  border: solid 1px var(--body--background--color);
-  margin-bottom: 12px;
+  margin: 16px 0;
 
   .positionName {
-    padding: 12px;
     display: flex;
     align-items: center;
-    gap: 8px;
-    border-bottom: solid 1px var(--body--background--color);
     font-weight: bold;
+    gap: 8px;
   }
 
   .inkindItem {
-    padding: 12px;
+    margin: 8px 0;
     border-radius: 2px;
-    border-bottom: solid 1px var(--body--background--color);
+    border: solid 1px var(--body--background--color);
 
     .inkindData {
-      padding: 12px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
-      border-bottom: 1px solid #e1ebf670;
+      background-color: var(--body--background--color);
 
       .inkindId {
         display: flex;
@@ -63,7 +60,7 @@
     }
 
     .otherData {
-      padding: 8px 12px;
+      padding: 8px 12px 0;
       color: #666666;
     }
   }
@@ -72,7 +69,7 @@
 .inkindList {
   //max-height: 50vh;
   //overflow: auto;
-  padding: 12px 0;
+  //padding: 12px 0;
 }
 
 .flex {
@@ -82,5 +79,23 @@
   .flexGrow {
     flex-grow: 1;
   }
+}
+
+.actions {
+  color: var(--adm-color-primary);
+
+  :global {
+    .adm-popover-menu-list {
+      min-width: 30px;
+    }
+  }
+}
+
+.statusType {
+  background-color: #F5F5F5;
+  height: 35px;
+  line-height: 35px;
+  padding: 0 8px;
+  color: #808080;
 }
 

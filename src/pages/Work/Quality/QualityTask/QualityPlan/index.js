@@ -312,7 +312,7 @@ const QualityPlan = (
     <Divider>质检项</Divider>
 
     <Row gutter={24}>
-      <Col span={7} style={{ backgroundColor: '#f5f5f5', padding: 0, maxHeight: '90vh', overflowY: 'auto',overflowX:'hidden' }}>
+      <Col span={7} style={{ backgroundColor: '#f5f5f5', padding: 0, maxHeight: '80vh', overflowY: 'auto',overflowX:'hidden' }}>
         <div>
           <SideBar
             style={{ '--width': '100%', overflowY: 'auto', overflowX: 'hidden'}}
@@ -351,7 +351,7 @@ const QualityPlan = (
           </SideBar>
         </div>
       </Col>
-      <Col span={16} style={{ padding: 8, maxHeight: '90vh', overflowY: 'auto',overflowX:'hidden' }}>
+      <Col span={16} style={{ padding: 8, maxHeight: '80vh', overflowY: 'auto',overflowX:'hidden' }}>
         <div>
           <Card
             title={<div style={{ display: 'flex' }}>

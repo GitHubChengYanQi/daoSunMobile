@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import MyAudit from '../Work/ProcessTask/MyAudit';
 import KeepAlive from '../../components/KeepAlive';
+import MyNavBar from '../components/MyNavBar';
 
 export const NoticeList = () => {
   const [scrollTop, setScrollTop] = useState(0);
@@ -21,6 +22,7 @@ export const NoticeList = () => {
 
 const Notice = () => {
   return <KeepAlive id='task' contentId='content'>
+    <MyNavBar title='任务' noDom />
     <NoticeList />
   </KeepAlive>;
 };

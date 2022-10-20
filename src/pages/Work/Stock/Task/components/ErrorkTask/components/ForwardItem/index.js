@@ -1,6 +1,7 @@
 import React from 'react';
 import { useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const ForwardItem = (
   {
@@ -31,26 +32,21 @@ const ForwardItem = (
 
   const percent = parseInt((complete / myDetails) * 100);
 
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>可处理</>;
-    }
-  };
-
   return <TaskItem
-    statusName={statusName()}
     percent={percent}
-    action
-    skus={[receipts]}
+    statusName={receipts.statusName || '进行中'}
+    action={![99, 50].includes(receipts.status)}
+    complete={[99, 50].includes(receipts.status)}
+    skus={[{ ...receipts, number: receipts.realNumber }]}
     coding={receipts.coding}
     endTime={receipts.endTime}
     createTime={item.createTime}
+    origin={isObject(item.themeAndOrigin)}
     taskName={item.taskName}
     skuSize={1}
     positionSize={1}
     onClick={() => onClick(item)}
+    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
   />;
 };
 

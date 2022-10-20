@@ -125,8 +125,9 @@ const Spus = (
   useEffect(() => {
     submit();
     ToolUtil.back({
+      getContainer:document.getElementById('createTask'),
       title:backTitle,
-      key: 'spus',
+      key: 'popup',
       onBack: onClose,
     });
   }, []);

@@ -12,9 +12,13 @@ const SkuInfo = (
     return <></>;
   }
 
-  return <div className={style.skuInfo}>
-    <SkuItem noView skuResult={sku} otherData={[<>保养周期：{sku.time ? `${sku.time}天` : '暂无'}</>]} />
-  </div>;
+  return <>
+    <div className={style.space} />
+    <div className={style.skuInfo}>
+      <SkuItem noView skuResult={sku} otherData={[<>保养周期：{sku.time ? `${sku.time}天` : '暂无'}</>]} />
+    </div>
+    <div className={style.space} />
+  </>;
 };
 
 export default SkuInfo;

@@ -37,7 +37,7 @@ const Note = (
 
   return <>
     <div className={ToolUtil.classNames(style.content, className)}>
-      <div hidden={mediaIds.length === 0} className={style.imgs}>
+      <div className={style.imgs}>
         <UploadFile
           files={noAdd ? value.files : medias}
           loading={loading}

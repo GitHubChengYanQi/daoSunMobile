@@ -25,7 +25,7 @@ import { clearAllocationShopCart, shopCartApplyList, shopCartDelete, shopCartEdi
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
-const AllocationAsk = ({ createType }) => {
+const AllocationAsk = ({ createType, defaultParams }) => {
 
   const [params, setParams] = useState({});
 
@@ -83,13 +83,6 @@ const AllocationAsk = ({ createType }) => {
     manual: !query.storeHouseId,
     onSuccess: (res) => {
       const newData = ToolUtil.isArray(res);
-      if (newData.length === 0) {
-        if (history.length <= 2) {
-          history.push('/');
-        } else {
-          history.goBack();
-        }
-      }
       setData(newData.map((item) => {
         return {
           cartId: item.cartId,
@@ -120,8 +113,9 @@ const AllocationAsk = ({ createType }) => {
     manual: true,
     onSuccess: (res) => {
       history.push({
-        pathname: '/Work/AddShop',
+        pathname: '/Work/Allocation/Ask',
         query: {
+          type: ReceiptsEnums.allocation,
           askType: params.askType,
           allocationType: params.allocationType,
           storeHouseId: params.storeHouse.value,
@@ -150,6 +144,7 @@ const AllocationAsk = ({ createType }) => {
         askType: query.askType || 'allocation',
         allocationType: query.allocationType || 'out',
         storeHouse: { label: query.storeHouse, value: query.storeHouseId },
+        ...defaultParams,
       });
     } else {
       getStoreHouses();

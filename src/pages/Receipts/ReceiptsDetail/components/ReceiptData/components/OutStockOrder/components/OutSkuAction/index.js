@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Dialog, Divider, Popup } from 'antd-mobile';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../../../components/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { CheckCircleFill, DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
@@ -25,12 +25,19 @@ import MyPositions from '../../../../../../../../components/MyPositions';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import MySearch from '../../../../../../../../components/MySearch';
 import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { ERPEnums } from '../../../../../../../../Work/Stock/ERPEnums';
+import ActionButtons from '../../../../../ActionButtons';
+import { useHistory } from 'react-router-dom';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
 
 const OutSkuAction = (
   {
+    taskDetail,
+    permissions,
+    nodeActions = [],
+    logIds = [],
     order = {},
     pickListsId,
     action,
@@ -42,6 +49,8 @@ const OutSkuAction = (
     loading: orderLoading,
   },
 ) => {
+
+  const history = useHistory();
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -143,6 +152,7 @@ const OutSkuAction = (
   const [showDetail, setShowDetail] = useState();
 
   const [seacrchValue, setSearchValue] = useState();
+
   return <div style={{ backgroundColor: '#fff' }}>
     <MyCard
       className={style.cardStyle}
@@ -154,13 +164,13 @@ const OutSkuAction = (
           setShowDetail(true);
         }}>申请明细</LinkButton>
       </div>}
-      extra={<div className={style.extra}>
-        合计：<span>{data.length}</span>类<span>{countNumber}</span>件
+      extra={<div className={style.extra} hidden={defaultData.length === 0}>
+        合计：<span>{data.length}</span>类<span>{countNumber || 0}</span>件
       </div>}>
       <MySearch
-        extraIcon={ <Icon
-          style={{fontSize:20}}
-          type={params.positionId ? 'icon-pandiankuwei1' : 'icon-pandiankuwei'}
+        extraIcon={<Icon
+          style={{ fontSize: 20 }}
+          type='icon-pandiankuwei1'
           onClick={() => {
             setPositionVisible(true);
           }} />}
@@ -178,7 +188,9 @@ const OutSkuAction = (
         value={seacrchValue}
       />
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading || orderLoading}>
-        {data.length === 0 && <MyEmpty description={`物料全部出库完成`} />}
+        {defaultData.length === 0 &&
+        <MyEmpty description={`物料全部出库完成`} image={<Icon style={{ fontSize: 45 }} type='icon-chukuchenggong' />} />}
+        {defaultData.length !== 0 && data.length === 0 && <MyEmpty description={`没有找到相关物料`} />}
         {
           data.map((item, index) => {
 
@@ -260,16 +272,55 @@ const OutSkuAction = (
       refresh={refresh}
     />}
 
-    {action && userInfo.id === order.userId
-    &&
-    <BottomButton
+    <ActionButtons
+      refresh={refresh}
       afertShow={afertShow}
-      only
-      text='领料'
-      onClick={() => {
-        setPicking(true);
+      taskId={taskId}
+      logIds={logIds}
+      createUser={taskDetail.createUser}
+      permissions={permissions}
+      actions={nodeActions.filter((item) => item.action === 'outStock' ? userInfo.id === order.userId : true)}
+      onClick={(value) => {
+        switch (value) {
+          case 'outStock':
+            setPicking(true);
+            break;
+          case 'revokeAndAsk':
+            history.push({
+              pathname: '/Work/CreateTask',
+              query: {
+                createType: ERPEnums.outStock,
+              },
+              state: {
+                skus: data.map(item => {
+                  return {
+                    brandId: item.brandId,
+                    brandName: isObject(item.brandResult).brandName,
+                    customerId: item.brandId,
+                    customerName: isObject(item.customerResult).customerName,
+                    number: item.number,
+                    skuId: item.skuId,
+                    skuResult: item.skuResult,
+                  };
+                }),
+                files: isArray(order.enclosureUrl).map((item, index) => ({
+                  mediaId: order.enclosure[index],
+                  url: item,
+                })),
+                mediaIds: order.enclosure && order.enclosure.split(','),
+                noticeIds: order.remarks && order.remarks.split(','),
+                remark: order.note,
+                userId: order.userId,
+                userName: isObject(order.userResult).name,
+                userAvatar: isObject(order.userResult).avatar,
+              },
+            });
+            break;
+          default:
+            break;
+        }
       }}
-    />}
+    />
 
     <MyAntPopup
       title='领料'
@@ -334,7 +385,7 @@ const OutSkuAction = (
       visible={showDetail}
       destroyOnClose
     >
-      <div style={{ maxHeight: '90vh', overflow: 'auto' }}>
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
         {format(askData).array.map((item, index) => {
           return <OutSkuItem
             ask
@@ -348,6 +399,7 @@ const OutSkuAction = (
     </MyAntPopup>
 
     <MyPositions
+      title='相关库位'
       showPositionIds={order.positionIds}
       showAll
       empty

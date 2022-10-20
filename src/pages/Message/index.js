@@ -10,6 +10,7 @@ import KeepAlive from '../../components/KeepAlive';
 import { AlignLeftOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Message as MyMessage } from '../components/Message';
 import { MyLoading } from '../components/MyLoading';
+import MyNavBar from '../components/MyNavBar';
 
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
@@ -215,6 +216,7 @@ const MessageList = () => {
 
 const Message = () => {
   return <KeepAlive id='message' contentId='content'>
+    <MyNavBar title='消息' noDom />
     <MessageList />
   </KeepAlive>;
 };

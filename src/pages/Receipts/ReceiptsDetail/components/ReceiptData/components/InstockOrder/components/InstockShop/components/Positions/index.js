@@ -76,10 +76,9 @@ const Positions = (
     }
   }, [codeId]);
 
-  return <div style={{ height: height || '90vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
+  return <div style={{ height: height || '80vh', display: 'flex', flexDirection: 'column', paddingBottom: 60 }}>
 
     <MySearch
-      id='positionSearch'
       searchIcon={<ScanIcon />}
       placeholder='搜索库位'
       onChange={setName}

@@ -2,9 +2,14 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
+import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
+import receipts from '../../../../../../assets/receiptsTask.png';
+import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
+import MyEllipsis from '../../../../../components/MyEllipsis';
 
 const TaskItem = (
   {
@@ -27,9 +32,11 @@ const TaskItem = (
     action,
     users,
     userLabel,
+    origin = {},
+    complete,
   },
 ) => {
-
+  const originRet = isArray(origin?.parent)[0]?.ret;
   const scaleItems = Array(10).fill('');
 
   const getHour = (begin, end) => {
@@ -44,6 +51,15 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
+  let img;
+  if (action) {
+   img = receipts;
+  }else if (complete){
+    img = receiptsOk
+  }else {
+    img = receiptsNo
+  }
+
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.title}>
       {taskName} {coding && '/'} {coding}
@@ -51,9 +67,11 @@ const TaskItem = (
     <div className={style.content}>
       <div className={style.orderData}>
         <div hidden={noSku} className={style.dateShow}>
-          <div hidden={!statusName} className={ToolUtil.classNames(style.statusName, action && style.action)}>
-            <div style={{ zIndex: 1 }}>{statusName}</div>
-            <div className={style.svg}><Icon type='icon-a-zu1' /></div>
+          <div className={style.svg}>
+            <img src={img} alt='' height={26} width={70} />
+          </div>
+          <div hidden={!statusName} className={style.statusName}>
+            <div>{statusName}</div>
           </div>
           <div className={style.show}>
             <Icon type='icon-pandianwuliao' />
@@ -72,15 +90,18 @@ const TaskItem = (
           <div className={style.skus}>
             {
               ToolUtil.isArray(skus).map((item, index) => {
-                return <SkuItem
-                  key={index}
-                  extraWidth='64px'
-                  className={style.sku}
-                  imgSize={24}
-                  hiddenNumber
-                  oneRow
-                  skuResult={item.skuResult || item}
-                />;
+                return <div key={index} className={style.skuItem}>
+                  <SkuItem
+                    noView
+                    extraWidth='120px'
+                    className={style.sku}
+                    imgSize={24}
+                    hiddenNumber
+                    oneRow
+                    skuResult={item.skuResult || item}
+                  />
+                  <ShopNumber show value={item.number || 0} />
+                </div>;
               })
             }
           </div>
@@ -98,13 +119,15 @@ const TaskItem = (
             }
           </div>
         </div>
-
-        <div className={style.progress} style={{border:skus.length === 0 && 'none'}}>
+        <div className={style.progress} style={{ border: skus.length === 0 && 'none' }}>
+          <div className={style.origin} hidden={!originRet}>
+            <span className='blue'>来源</span> <Icon type='icon-laiyuan' /> {originRet?.title} / {originRet?.coding}
+          </div>
           <MyProgress hidden={noProgress} percent={percent} />
         </div>
         <div className={style.taskData}>
           <div className={style.user}>
-            {userLabel || '执行人'}：{users}
+            <MyEllipsis maxWidth={viewWidth() / 2}>{userLabel || '执行人'}：{users}</MyEllipsis>
           </div>
           <div className={style.status} style={{ color: '#808080', width: 130, textAlign: 'right' }}>
             {MyDate.Show(createTime)}

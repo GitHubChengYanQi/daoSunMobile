@@ -26,6 +26,7 @@ const StartEndDate = (
     onChange = () => {
     },
     min,
+    max,
     className,
     textAlign,
     minWidth,
@@ -49,6 +50,7 @@ const StartEndDate = (
       </Space>
     </div>
     <MyDatePicker
+      max={max}
       filter={{
         'minute': (number) => {
           return [0, 15, 30, 45].includes(number);

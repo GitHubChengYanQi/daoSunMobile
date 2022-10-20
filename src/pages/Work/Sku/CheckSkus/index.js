@@ -9,7 +9,6 @@ import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import MyBottom from '../../../components/MyBottom';
 import MyPopup from '../../../components/MyPopup';
-import Detail from '../Detail';
 
 const CheckSkus = (
   {
@@ -121,15 +120,6 @@ const CheckSkus = (
 
       </MyList>
     </MyBottom>
-
-
-    <MyPopup
-      title='物料信息'
-      position='bottom'
-      height='90vh'
-      ref={detailRef}
-      component={Detail}
-    />
 
   </div>;
 };

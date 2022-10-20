@@ -24,6 +24,7 @@ const SkuItem = (
     moreDom,
     noView,
     oneRow,
+    textView,
     moreClick = () => {
     },
   }) => {
@@ -62,8 +63,12 @@ const SkuItem = (
         </div>
       </div>
       <div
+        onClick={()=>view()}
         className={style.sku}
-        style={{ maxWidth: `calc(${ToolUtil.viewWidth()}px - ${imgSize}px - 13px - ${extraWidth})` }}
+        style={{
+          height: imgSize,
+          maxWidth: `calc(${ToolUtil.viewWidth()}px - ${imgSize}px - 13px - ${extraWidth})`,
+        }}
       >
         <MyEllipsis width='100%'>
           {title || SkuResultSkuJsons({ skuResult, spu: !oneRow })}
@@ -73,7 +78,7 @@ const SkuItem = (
             {describe || SkuResultSkuJsons({ skuResult, sku: true })}
           </MyEllipsis>
         </div>
-        <div hidden={otherData.length === 0}>
+        <div hidden={otherData.length === 0 || !otherData.some(item => item)}>
           {
             otherData.map((item, index) => {
               if (!item) {

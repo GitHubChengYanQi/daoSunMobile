@@ -78,7 +78,7 @@ const ErrorLog = ({ orderId }) => {
 
       <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
         <SkuError
-          height='90vh'
+          height='80vh'
           orderComplete
           anomalyId={visible}
           onClose={() => setVisible(false)}

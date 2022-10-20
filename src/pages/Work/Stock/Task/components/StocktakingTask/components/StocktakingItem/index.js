@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 
 const StocktakingItem = (
   {
@@ -11,17 +11,9 @@ const StocktakingItem = (
   },
 ) => {
 
-  const receipts = item.receipts;
+  const receipts = item.receipts || {};
 
   const percent = parseInt((receipts.handle / receipts.total) * 100);
-
-  const statusName = () => {
-    if (percent === 100) {
-      return <>已完成</>;
-    } else {
-      return <>可盘点</>;
-    }
-  };
 
   return <>
     <TaskItem
@@ -30,8 +22,10 @@ const StocktakingItem = (
       endTime={receipts.endTime}
       createTime={item.createTime}
       taskName={item.taskName}
-      statusName={statusName()}
-      action
+      statusName={receipts.statusName || '进行中'}
+      action={![99, 50].includes(receipts.status)}
+      complete={[99, 50].includes(receipts.status)}
+      origin={isObject(item.themeAndOrigin)}
       index={index}
       skus={ToolUtil.isArray(receipts.stockResults)}
       skuSize={receipts.skuSize}

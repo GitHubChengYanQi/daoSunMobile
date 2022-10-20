@@ -57,7 +57,7 @@ export const Users = ({ onChange }) => {
             });
           }} />
         <Divider />
-        <div style={{ maxHeight: '90vh', overflowY: 'auto' }}>
+        <div style={{ maxHeight: '80vh', overflowY: 'auto' }}>
           <Selector
             value={userIds.map((items) => {
               return items.value;

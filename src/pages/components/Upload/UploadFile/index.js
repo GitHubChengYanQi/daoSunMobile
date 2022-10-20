@@ -1,18 +1,34 @@
 import React, { useImperativeHandle, useState } from 'react';
 import style from './index.less';
-import add from '../../../../assets/add-file.png';
 import { useBoolean } from 'ahooks';
-import { ImageViewer } from 'antd-mobile';
+import { ImageViewer, ProgressBar, Space } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
-import { ToolUtil } from '../../ToolUtil';
-import { CloseOutline } from 'antd-mobile-icons';
-import { FileOutlined, LoadingOutlined } from '@ant-design/icons';
+import { queryString, ToolUtil } from '../../ToolUtil';
+import { CameraOutline, CloseOutline } from 'antd-mobile-icons';
+import {
+  FileOutlined,
+  LoadingOutlined,
+  FileExcelOutlined,
+  FilePptOutlined,
+} from '@ant-design/icons';
 import IsDev from '../../../../components/IsDev';
 import { Message } from '../../Message';
 import MyActionSheet from '../../MyActionSheet';
 import MyRemoveButton from '../../MyRemoveButton';
+import { Avatar, Upload } from 'antd';
+import MyEllipsis from '../../MyEllipsis';
+import Icon from '../../Icon';
+
+export const previewImage = (current, urls = []) => {
+  wx.ready(() => {
+    wx.previewImage({
+      current, // 第一张显示的图片链接
+      urls, // 需要预加载的图片http链接列表，预加载后，可以滑动浏览这些图片
+    });
+  });
+};
 
 const UploadFile = (
   {
@@ -20,8 +36,8 @@ const UploadFile = (
     files = [],
     onChange = () => {
     },
+    file,
     noFile,
-    icon,
     imgSize,
     uploadId = 'myUpload',
     noAddButton,
@@ -30,6 +46,7 @@ const UploadFile = (
     refresh,
     max,
     noDefault,
+    fileRender,
   }, ref,
 ) => {
 
@@ -41,21 +58,13 @@ const UploadFile = (
 
   const [visible, { setTrue, setFalse }] = useBoolean();
 
-  // const [files, setFiles] = useState(ToolUtil.isArray(value));
-
-  // useEffect(() => {
-  // if (!noDefault && files.length === 0 && value.length > 0) {
-  //   setFiles(value);
-  // }
-  // }, [value]);
+  const [percent, setPercent] = useState(0);
 
   const [loading, setLoading] = useState();
 
-  const imgs = files.filter(item => item.type !== 'other').map(item => (item.showUrl || item.url));
+  const imgs = files.map(item => (item.showUrl || item.url));
 
-  const [currentImg, setCurrentImg] = useState(null);
-
-  const fileChange = ({ mediaId, url, type, remove }) => {
+  const fileChange = ({ mediaId, url, filedName, type, remove }) => {
     if (!mediaId) {
       Message.errorToast('上传失败!');
       return;
@@ -64,7 +73,7 @@ const UploadFile = (
     if (remove) {
       newFile = files.filter(fileItem => fileItem.mediaId !== mediaId);
     } else {
-      newFile = [...files, { type, mediaId, url }];
+      newFile = [...files, { type, mediaId, url, filedName }];
     }
     onChange(newFile);
   };
@@ -118,15 +127,6 @@ const UploadFile = (
     });
   };
 
-  const previewImage = (current, urls = []) => {
-    wx.ready(() => {
-      wx.previewImage({
-        current, // 第一张显示的图片链接
-        urls, // 需要预加载的图片http链接列表，预加载后，可以滑动浏览这些图片
-      });
-    });
-  };
-
   const addFile = () => {
     if (ToolUtil.isQiyeWeixin() && !IsDev()) {
       setTrue();
@@ -135,13 +135,29 @@ const UploadFile = (
     }
   };
 
+  const fileIcon = (type) => {
+    let icon;
+    if (queryString('pdf', type)) {
+      icon = <Icon type='icon-PDF' />;
+    } else if (queryString('doc', type)) {
+      icon = <Icon type='icon-WORD' />;
+    } else if (queryString('xls', type)) {
+      icon = <FileExcelOutlined />;
+    } else if (queryString('ppt', type)) {
+      icon = <FilePptOutlined />;
+    } else {
+      icon = <FileOutlined />;
+    }
+    return icon;
+  };
+
   useImperativeHandle(ref, () => ({
     addFile,
   }));
 
   return <>
 
-    <div className={style.imgs}>
+    {!file && <div className={style.imgs}>
       {
         files.map((item, index) => {
           return <div key={index} className={style.img} style={{ width: imgSize, height: imgSize }}>
@@ -153,25 +169,23 @@ const UploadFile = (
                 dom={CloseOutline}
               />
             </div>
-            {
-              item.type === 'other' ? <FileOutlined style={{ color: 'var(--adm-color-primary)' }} /> :
-                <img onClick={() => {
-                  if (!ToolUtil.isQiyeWeixin()) {
-                    return setCurrentImg(index);
-                  }
-                  previewImage(item.showUrl || item.url, imgs);
-                }} src={item.url} alt='' width='100%' height='100%' nonce={<FileOutlined />} onError={() => {
-                  const newFile = files.map((currentItem, currentIndex) => {
-                    if (currentIndex === index) {
-                      return { ...currentItem, type: 'other' };
-                    } else {
-                      return currentItem;
-                    }
+            <Avatar
+              shape='square'
+              size={60}
+              src={item.url}
+              icon={fileIcon(item.type)}
+              className={style.showImg}
+              onClick={() => {
+                if (!ToolUtil.isQiyeWeixin()) {
+                  ImageViewer.Multi.show({
+                    images: imgs,
+                    defaultIndex: index,
                   });
-                  onChange(newFile, true);
-                }} />
-            }
-
+                  return;
+                }
+                previewImage(item.showUrl || item.url, imgs);
+              }}
+            />
           </div>;
         })
       }
@@ -185,21 +199,57 @@ const UploadFile = (
         className={style.img}
         style={{ width: imgSize, height: imgSize }}
         onClick={() => addFile()}>
-        {icon || <img src={add} alt='' width='100%' height='100%' />}
+        <CameraOutline
+        />
       </div>
-    </div>
+    </div>}
+
+    {file && [...files, { loading: true }].map((item, index) => {
+      if (item.loading) {
+        if (!loading) {
+          return <div key={index} />;
+        }
+        return <div key={index}>
+          <Space><LoadingOutlined /><span style={{ fontSize: 12 }}>上传中</span></Space>
+          <ProgressBar
+            percent={percent}
+            style={{
+              '--track-width': '4px',
+            }}
+          />
+        </div>;
+      }
+
+      if (typeof fileRender === 'function') {
+        return <div key={index} style={{ display: 'inline-block' }}>{fileRender({
+          ...item,
+          icon: fileIcon(item.type),
+        })}</div>;
+      }
+      return <div className={style.fileItem} key={index}>
+        <Avatar shape='square' size={26} src={item.url} icon={fileIcon(item.type)} className={style.showImg} />
+        <MyEllipsis>{item.filedName || ''}</MyEllipsis>
+        {!show && <MyRemoveButton
+          className={style.remove}
+          onRemove={() => fileChange({ mediaId: item.mediaId, remove: true })}
+        />}
+      </div>;
+    })}
 
     <UpLoadImg
       hidden
+      onPercent={setPercent}
       uploadLoading={(loading) => {
         getLoading(loading);
         setLoading(loading);
       }}
+      // value={files.map(item => item.url)}
       maxCount={5}
       type='picture'
       id={uploadId}
       onChange={(url, mediaId, file) => {
-        fileChange({ type: file.type, mediaId, url, name: file.name });
+        setPercent(0);
+        fileChange({ type: file.type, mediaId, url, filedName: file.name });
         setFalse();
       }}
     />
@@ -227,16 +277,6 @@ const UploadFile = (
         }
       }}
     />
-
-    <ImageViewer.Multi
-      images={imgs}
-      visible={currentImg !== null}
-      defaultIndex={currentImg}
-      onClose={() => {
-        setCurrentImg(null);
-      }}
-    />
-
   </>;
 };
 

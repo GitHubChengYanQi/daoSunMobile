@@ -7,6 +7,7 @@ import { skuList } from '../../../Scan/Url';
 import MyEmpty from '../../../components/MyEmpty';
 import SkuScreen from './components/SkuScreen';
 import Screen from './components/Screen';
+import { loading } from '@formily/antd/lib/__builtins__';
 
 const SkuList = (
   {
@@ -31,7 +32,7 @@ const SkuList = (
 
   const listRef = useRef();
 
-  const skuDefaultParams = {...defaultParams,sortMap: {stockNumber: "desc", createTime: "desc"}}
+  const skuDefaultParams = { ...defaultParams, sortMap: { stockNumber: 'desc', } };
 
   const [skuClass, setSkuClass] = useState([]);
   const [supplys, setSupplys] = useState([]);
@@ -40,6 +41,8 @@ const SkuList = (
   const [position, setPsoition] = useState([]);
   const [boms, setBoms] = useState([]);
   const [overLengths, setOverLengths] = useState({});
+
+  const [loading, setLoading] = useState(false);
 
   const [stockNumber, setStockNumber] = useState(0);
   const [skuNumber, setSkuNumber] = useState(0);
@@ -57,8 +60,6 @@ const SkuList = (
 
   const [refresh, setRefresh] = useState(false);
 
-  const [sort, setSort] = useState({ field: 'createTime', order: 'descend' });
-
   const clear = () => {
     setSkuClass([]);
     setSupplys([]);
@@ -69,14 +70,13 @@ const SkuList = (
     setScreeing(false);
     setRefresh(false);
     setParams({ ...skuDefaultParams, skuName: params.skuName });
-    setSort({});
     listRef.current.submit({ ...skuDefaultParams, skuName: params.skuName });
   };
 
-  const submit = (newParams = {}, newSort = {}) => {
+  const submit = (newParams = {}) => {
     setRefresh(false);
     setParams({ ...params, ...newParams });
-    listRef.current.submit({ ...params, ...newParams }, { ...sort, ...newSort });
+    listRef.current.submit({ ...params, ...newParams });
   };
 
   useImperativeHandle(ref, () => ({
@@ -108,19 +108,19 @@ const SkuList = (
         submit({
           sortMap: {
             stockNumber: orderField.field === 'stockNumber' ? order : sortMap.stockNumber,
-            createTime: orderField.field === 'createTime' ? order : sortMap.createTime,
+            spuName: orderField.field === 'spuName' ? order : sortMap.spuName,
           },
         });
       }}
       sorts={[
         { field: 'stockNumber', title: '数量', order: sortMap.stockNumber },
-        { field: 'createTime', title: '时间', order: sortMap.createTime },
+        { field: 'spuName', title: '名称', order: sortMap.spuName },
       ]}
       listRef={skuListRef}
       screen={screen}
       screenChange={setScreen}
       screenRef={screenRef}
-      numberTitle={<>{numberTitle}：<span>{stock ? stockNumber : skuNumber}</span></>}
+      numberTitle={<>合计：<span>{skuNumber}</span>类<span>{stockNumber}</span>件</>}
     />
 
     <Tabs stretch={false} activeKey={spuClassId || 'all'} className={style.skuClass} onChange={(key) => {
@@ -137,7 +137,7 @@ const SkuList = (
 
     <div ref={skuListRef} className={ToolUtil.classNames(style.skuList, skuClassName)}>
       <MyList
-        debounceInterval={debounceInterval}
+        onLoading={setLoading}
         params={params}
         ref={listRef}
         api={skuList}
@@ -196,6 +196,7 @@ const SkuList = (
     </div>
 
     <SkuScreen
+      loading={loading}
       screen={screen}
       overLengths={overLengths}
       refresh={refresh}

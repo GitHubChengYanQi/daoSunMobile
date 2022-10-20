@@ -36,7 +36,8 @@ const print = (array, index) => {
         </html>
 `;
   });
-  if (/(Android)/i.test(navigator.userAgent)) { //判断Android
+  if (/(Android)/i.test(navigator.userAgent)) {
+    //判断Android
     window.Android && window.Android.nPrint(canvas[index]);
   } else { //pc
     const win = window.open();

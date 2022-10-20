@@ -15,6 +15,8 @@ const MyList = (
     },
     data,
     api,
+    onLoading = () => {
+    },
     params: paramsData,
     response = () => {
     },
@@ -23,6 +25,7 @@ const MyList = (
     manual,
     options = {},
     noTips,
+    pullDisabled,
   }, ref) => {
 
   const [hasMore, setHasMore] = useState(false);
@@ -52,6 +55,7 @@ const MyList = (
     manual,
     response: true,
     onSuccess: (res) => {
+      onLoading(false);
       const resData = res.data || [];
       response(res);
       if (resData.length > 0) {
@@ -60,7 +64,7 @@ const MyList = (
           return array.push(items);
         });
         setContents(array);
-        getData(array.filter(() => true), resData);
+        getData(array.filter(() => true));
         setPage(pages + 1);
         setHasMore(resData.length === 10);
       } else {
@@ -71,6 +75,7 @@ const MyList = (
       }
     },
     onError: () => {
+      onLoading(false);
       setError(false);
     },
   });
@@ -82,6 +87,7 @@ const MyList = (
     setParams(value);
     setSorter(sorter);
     !pull && getData([], []);
+    onLoading(true);
     await run({
       params: { limit, page: 1, sorter },
       data: value,
@@ -120,6 +126,7 @@ const MyList = (
 
   return <div id='list' className={style.list}>
     <PullToRefresh
+      disabled={pullDisabled}
       onRefresh={async () => {
         await submit(params, sorter, true);
       }}
@@ -131,9 +138,10 @@ const MyList = (
     </PullToRefresh>
 
     {error && <InfiniteScroll
-      style={{ padding: noEmpty && 0 }}
+      style={{ padding: (noEmpty || noTips) && 0 }}
       threshold={0}
       loadMore={async () => {
+        onLoading(true);
         return await run({
           data: {
             ...params,

@@ -12,15 +12,14 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { history } from 'umi';
 
-const InstockAsk = ({ skus, judge, createType }) => {
+const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
 
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
-  const [params, setParams] = useState({});
+  const [params, setParams] = useState(defaultParams || {});
 
   const history = useHistory();
 
@@ -81,7 +80,7 @@ const InstockAsk = ({ skus, judge, createType }) => {
       }).join('、'),
       careful: '注意事项',
       buttonHidden: judge,
-      disabled: ToolUtil.isArray(params.noticeIds).length === 0 || (judge ? false : normalSku.length === 0),
+      disabled: (judge ? false : normalSku.length === 0),
     };
   };
 
@@ -134,7 +133,7 @@ const InstockAsk = ({ skus, judge, createType }) => {
 
     <OtherData
       createType={createType}
-      careful={<Title className={style.title}>注意事项 <span>*</span></Title>}
+      careful={<Title>注意事项</Title>}
       params={params}
       setParams={setParams}
     />

@@ -8,6 +8,7 @@ import { Message } from '../../../components/Message';
 
 const Audit = (
   {
+    version,
     id,
     refresh,
     mediaIds = [],
@@ -20,7 +21,7 @@ const Audit = (
   // 执行审批接口
   const { loading: auditLoading, run: processLogRun } = useRequest(
     {
-      url: '/audit/post',
+      url: '/audit/v1.1/post',
       method: 'POST',
     },
     {
@@ -36,13 +37,24 @@ const Audit = (
     },
   );
 
+  const logIds = [];
+  currentNode.forEach(item => {
+    if (version) {
+      const logResult = item.logResult || {};
+      logIds.push(logResult.logId);
+      return;
+    }
+    const logResults = item.logResults || [];
+    logResults.map(item => {
+      logIds.push(item.logId);
+    });
+  });
+
   const audit = (status) => {
     processLogRun({
       data: {
         taskId: id,
-        logIds: currentNode.map(item => {
-          return ToolUtil.isObject(item.logResult).logId;
-        }),
+        logIds,
         status,
         userIds: userIds.toString(),
         photoId: mediaIds.toString(),
@@ -58,7 +70,7 @@ const Audit = (
       }}>
         驳回
       </Button>
-      <Button disabled={loading} color='primary' onClick={() => {
+      <Button disabled={loading} className={style.ok} color='primary' onClick={() => {
         audit(1);
       }}>
         同意

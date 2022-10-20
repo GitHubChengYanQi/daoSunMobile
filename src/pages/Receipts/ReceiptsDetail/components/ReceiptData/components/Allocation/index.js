@@ -6,13 +6,17 @@ import BottomButton from '../../../../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
 import { getEndData, getStartData, getStoreHouse, noDistribution } from './getData';
 import { UserName } from '../../../../../../components/User';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import Detail from './components/Detail';
 import { MyLoading } from '../../../../../../components/MyLoading';
+import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
+import ActionButtons from '../../../ActionButtons';
 
 const Allocation = (
   {
     taskId,
+    nodeActions = [],
+    logIds,
     success,
     data = {},
     getAction = () => {
@@ -23,17 +27,13 @@ const Allocation = (
     afertShow = () => {
     },
     loading,
+    createUser,
   },
 ) => {
 
   const history = useHistory();
 
-  // const [total, setTotal] = useState(0);
-
-  const assign = getAction('assign').id && permissions;
   const carryAllocation = getAction('carryAllocation').id && permissions;
-
-  const [skus, setSkus] = useState([]);
 
   const [hopeList, setHopeList] = useState([]);
   const [askList, setAskList] = useState([]);
@@ -44,105 +44,53 @@ const Allocation = (
   const transfer = data.type !== 'allocation';
 
   useEffect(() => {
+    if (!success) {
+      return;
+    }
     const detail = data || {};
-    const askSkus = getStartData(detail.detailResults);
-    const hope = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'hope');
-    const hopeSkus = getEndData(askSkus, hope);
+    const allocationCartResults = detail.allocationCartResults || [];
+    const detailResults = detail.detailResults || [];
 
-    // if (!carryAllocation) {
-    //   let number = 0;
-    //   askSkus.forEach(item => number += item.number);
-    //   setTotal(number);
-    //   setSkus(hopeSkus);
-    //   return;
-    // }
+    const askSkus = getStartData(detailResults);
+    const hope = allocationCartResults.filter(item => item.type === 'hope');
+    const hopeSkus = getEndData(askSkus, hope);
 
     const carry = ToolUtil.isArray(detail.allocationCartResults).filter(item => item.type === 'carry');
 
     const distributionSkuIds = carry.map(item => item.skuId);
 
-    const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
-
     const inLibrary = [];
-    const outPositions = [];
-    const inPositions = [];
-    distributionSkus.forEach(item => {
-
-      const brands = item.brands || [];
-      const storeHouse = item.storeHouse || [];
-      brands.forEach(brandItem => {
-        const positions = brandItem.positions || [];
-        positions.forEach(positionItem => {
-          const object = {
-            skuId: item.skuId,
-            skuResult: item.skuResult,
-            brandId: brandItem.brandId || 0,
-            brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
-            number: positionItem.number,
-            positionId: positionItem.id,
-            positionName: positionItem.name,
-            haveBrand: item.haveBrand,
-          };
-          out ? outPositions.push(object) : inPositions.push(object);
-        });
-      });
-
-      storeHouse.forEach(storeItem => {
-        const positions = storeItem.positions || [];
-        positions.forEach(positionItem => {
-          const brands = positionItem.brands || [];
-          brands.forEach(brandItem => {
-            const object = {
-              skuId: item.skuId,
-              skuResult: item.skuResult,
-              brandId: brandItem.brandId || 0,
-              brandName: item.haveBrand ? brandItem.brandName : '任意品牌',
-              number: brandItem.number,
-              storehouseId: storeItem.id,
-              positionId: positionItem.id,
-              positionName: positionItem.name,
-              haveBrand: item.haveBrand,
-              doneNumber: brandItem.doneNumber || 0,
-            };
-            out ? inPositions.push(object) : outPositions.push(object);
-          });
-        });
+    allocationCartResults.forEach(cartItem => {
+      if (!cartItem.storehousePositionsId) {
+        return;
+      }
+      const detail = detailResults.find(detailItem => detailItem.allocationDetailId === cartItem.allocationDetailId);
+      const brandResult = detail.brandResult || {};
+      inLibrary.push({
+        skuId: detail.skuId,
+        skuResult: detail.skuResult,
+        brandId: detail.brandId || 0,
+        brandName: detail.haveBrand ? brandResult.brandName : '任意品牌',
+        haveBrand: detail.haveBrand,
+        number: cartItem.number - cartItem.doneNumber,
+        doneNumber: cartItem.doneNumber,
+        complete: (cartItem.number - cartItem.doneNumber) <= 0,
+        num: cartItem.number,
+        positionId: out ? detail.storehousePositionsId : cartItem.storehousePositionsId,
+        positionName: out ? isObject(detail.positionsResult).name : isObject(cartItem.positionsResult).name,
+        toPositionId: !out ? detail.storehousePositionsId : cartItem.storehousePositionsId,
+        toPositionName: !out ? isObject(detail.positionsResult).name : isObject(cartItem.positionsResult).name,
       });
     });
-    outPositions.forEach(outItem => {
-      const library = inPositions.filter(inItem =>
-        inItem.skuId === outItem.skuId &&
-        (!inItem.haveBrand || inItem.brandId === outItem.brandId) &&
-        inItem.positionId !== outItem.positionId,
-      );
-      library.forEach(inItem => {
-        const doneNumber = out ? inItem.doneNumber : outItem.doneNumber;
-        const allNumber = outItem.number > inItem.number ? inItem.number : outItem.number;
-        if (allNumber <= 0) {
-          return;
-        }
-        const number = allNumber - (doneNumber > 0 ? doneNumber : 0);
-        inLibrary.push({
-          ...inItem,
-          number,
-          doneNumber,
-          complete: number <= 0,
-          num: allNumber,
-          positionId: outItem.positionId,
-          positionName: outItem.positionName,
-          toPositionId: inItem.positionId,
-          toPositionName: inItem.positionName,
-        });
-      });
-    });
+
+    const distributionSkus = getEndData(askSkus, carry).filter(item => distributionSkuIds.includes(item.skuId));
 
     const distributionList = noDistribution(hopeSkus, carry);
 
     const stores = getStoreHouse(distributionSkus);
     setAskList(hopeSkus);
-    setHopeList(stores.filter(item=>item.id !== data.storehouseId));
+    setHopeList(stores.filter(item => item.id !== data.storehouseId));
     setInLibraryList(inLibrary);
-    setSkus(distributionSkus);
     setDistributionList(distributionList);
   }, [success]);
 
@@ -152,7 +100,6 @@ const Allocation = (
       taskId={taskId}
       transfer={transfer}
       allocationId={data.allocationId}
-      skus={skus}
       carryAllocation={carryAllocation}
       hopeList={hopeList}
       askList={askList}
@@ -168,11 +115,7 @@ const Allocation = (
     <MyCard title='仓库' extra={ToolUtil.isObject(data.storehouseResult).name} />
     <MyCard title='注意事项'>
       {[].length === 0 && <div>无</div>}
-      {[].map((item, index) => {
-        return <div key={index} className={style.carefulShow} style={{ margin: index === 0 && 0 }}>
-          {item.content}
-        </div>;
-      })}
+      {[].map(item => item.content).join('、')}
     </MyCard>
 
     <MyCard title='备注'>
@@ -193,13 +136,46 @@ const Allocation = (
 
     {loading && <MyLoading />}
 
-    {assign && <BottomButton
+
+    <ActionButtons
+      refresh={refresh}
       afertShow={afertShow}
-      only
-      text='分配调拨物料'
-      onClick={() => {
-        history.push(`/Work/Allocation/SelectStoreHouse?id=${data.allocationId}`);
-      }} />}
+      taskId={taskId}
+      logIds={logIds}
+      createUser={createUser}
+      permissions={permissions}
+      actions={nodeActions}
+      onClick={(value) => {
+        switch (value) {
+          case 'assign':
+            history.push(`/Work/Allocation/SelectStoreHouse?id=${data.allocationId}`);
+            break;
+          case 'revokeAndAsk':
+            history.push({
+              pathname: '/Work/CreateTask',
+              query: {
+                createType: ERPEnums.allocation,
+                askType: data.type,
+                allocationType: data.allocationType === 1 ? 'in' : 'out',
+                storeHouseId: data.storehouseId,
+                storeHouse: isObject(data.storehouseResult).name,
+              },
+              state: {
+                files: isArray(data.enclosureUrl).map((item, index) => ({
+                  mediaId: data.enclosure && data.enclosure.split(',')[index],
+                  url: item,
+                })),
+                mediaIds: data.enclosure && data.enclosure.split(','),
+                noticeIds: data.reason && data.reason.split(','),
+                remark: data.remark,
+              },
+            });
+            break;
+          default:
+            break;
+        }
+      }}
+    />
   </>;
 };
 

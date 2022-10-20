@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { MoreOutline } from 'antd-mobile-icons';
 import Audit from '../../../components/Audit';
-import Note from '../../../components/Comments/components/Note';
 import MyActionSheet from '../../../../components/MyActionSheet';
 
 const Bottom = (
   {
+    version,
     currentNode = [],
     detail = {},
     refresh = () => {
@@ -21,9 +21,9 @@ const Bottom = (
 
   const actions = [];
   currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push({ action: item.action, id: item.documentsActionId });
+    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+      return item.auditRule.actionStatuses.map((item) => {
+        return actions.push({ action: item.action, id: item.actionId });
       });
     }
     return null;
@@ -38,10 +38,10 @@ const Bottom = (
       <div className={style.all} onClick={() => {
         setVisible(true);
       }}>
-        更多
-        <MoreOutline style={{ fontSize: 15 }} />
+        <div>更多</div>
+        <MoreOutline />
       </div>
-      <Audit loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
+      <Audit version={version} loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
     </div>
 
     <MyActionSheet onAction={() => setVisible(false)} visible={visible} actions={[

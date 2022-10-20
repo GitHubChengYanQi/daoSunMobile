@@ -6,7 +6,6 @@ import MyEllipsis from '../../../../../components/MyEllipsis';
 import Label from '../../../../../components/Label';
 import MySearchBar from '../../../../../components/MySearchBar';
 import LinkButton from '../../../../../components/LinkButton';
-import Detail from '../../../../Sku/Detail';
 import MyPopup from '../../../../../components/MyPopup';
 import Number from '../../../../../components/Number';
 import MySelector from '../../../../../components/MySelector';
@@ -540,14 +539,6 @@ const InstockDetails = (
         }
       </div>
     </div>
-
-    <MyPopup
-      title='物料信息'
-      position='bottom'
-      height='90vh'
-      ref={detailRef}
-      component={Detail}
-    />
 
     <MyPopup title='选择仓库' position='bottom' ref={storeHouseRef}>
       <MySelector

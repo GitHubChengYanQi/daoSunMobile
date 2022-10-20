@@ -13,6 +13,7 @@ import { ToolUtil } from '../components/ToolUtil';
 import MyEmpty from '../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { dynamicList } from '../Receipts/ReceiptsDetail/components/Dynamic';
+import MyNavBar from '../components/MyNavBar';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
@@ -81,6 +82,7 @@ const User = ({ userId }) => {
   }
 
   return <div>
+    <MyNavBar title='我的' noDom />
     <div style={{ padding: 12 }}>
       <div className={style.card}>
         <div className={style.flexStart}>
@@ -123,7 +125,7 @@ const User = ({ userId }) => {
           {
             dynamicData.map((item, index) => {
               return <div key={index} className={style.dynamicItem}>
-                <div>{item.type}{item.sourceName}</div>
+                <div>{item.content}</div>
                 <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
               </div>;
             })

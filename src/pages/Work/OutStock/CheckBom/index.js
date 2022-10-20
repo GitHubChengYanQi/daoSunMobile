@@ -28,7 +28,7 @@ const CheckBom = () => {
 
   const [skuBrand, setSkuBrand] = useState({});
 
-  const [number, setNumber] = useState(1);
+  const [number, setNumber] = useState(0);
 
   const [data, setData] = useState([]);
 
@@ -69,6 +69,10 @@ const CheckBom = () => {
   }
 
   const add = () => {
+    if (!number) {
+      Message.toast('请输入BOM出库数量');
+      return;
+    }
     const shopCartParams = data.map(item => {
       const brand = item.brand || {};
       return {
@@ -125,7 +129,7 @@ const CheckBom = () => {
                 }}>{brand.brandName || '任意品牌'}</LinkButton> : '任意品牌']}
               />
               <Space align='end'>
-                <div>{item.number}{unitResult.unitName} / 每套</div>
+                <div>{item.number}{unitResult.unitName} / 套</div>
                 {item.haveBom && <LinkButton onClick={() => {
                   setBoms([...boms, item.skuId]);
                   history.replace(`/Work/OutStock/CheckBom?skuId=${item.skuId}`);

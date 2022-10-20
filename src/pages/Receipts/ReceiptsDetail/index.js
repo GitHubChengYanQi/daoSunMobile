@@ -48,25 +48,27 @@ export const ReceiptsDetailContent = () => {
   const [scrollTop, setScrollTop] = useState(0);
 
   // 获取当前节点
-  const getCurrentNode = (data) => {
+  const getCurrentNode = (data, version) => {
     if (!data) {
       return {};
     }
-    if (data.logResult && data.logResult.status === -1) {
+    const logResults = data.logResults || [];
+    const currentNode = version ? logResults.filter(item => item.status === 3).length === logResults.length : data.logResult && data.logResult.status === -1;
+    if (currentNode) {
       if (data.stepType === 'route') {
         return data.conditionNodeList.map((item) => {
-          return getCurrentNode(item.childNode);
+          return getCurrentNode(item.childNode, version);
         });
       }
       return data;
     }
-    return getCurrentNode(data.childNode);
+    return getCurrentNode(data.childNode, version);
   };
 
   // 审批详情接口
   const { loading: detailLoading, run, refresh } = useRequest(
     {
-      url: '/audit/detail',
+      url: '/audit/v1.1/detail',
       method: 'GET',
     },
     {
@@ -78,7 +80,7 @@ export const ReceiptsDetailContent = () => {
           //类型
           setType(res.type);
           //当前节点
-          const node = getCurrentNode(res.stepsResult);
+          const node = getCurrentNode(res.stepsResult, res.version);
           const currentNode = Array.isArray(node) ? node : [node];
           setCurrentNode(currentNode);
           setTrue();
@@ -141,12 +143,7 @@ export const ReceiptsDetailContent = () => {
     switch (key) {
       case 'data':
         return <ReceiptData
-          actionButton={
-            !hidden &&
-            !loading &&
-            detail.permissions &&
-            currentNode.filter(item => item.stepType === 'audit').length > 0
-          }
+          actionButton={!hidden &&!loading}
           success={success}
           permissions={detail.permissions}
           data={detail}
@@ -244,7 +241,7 @@ export const ReceiptsDetailContent = () => {
           &&
           !loading
           &&
-          <Bottom loading={loading} currentNode={currentNode} detail={detail} refresh={() => {
+          <Bottom version={detail.version} loading={loading} currentNode={currentNode} detail={detail} refresh={() => {
             setFalse();
             refresh();
           }} />

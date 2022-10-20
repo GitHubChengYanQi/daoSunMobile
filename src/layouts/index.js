@@ -49,7 +49,7 @@ const BasicLayout = (props) => {
     };
   };
 
-  const checkWxLogin = setInterval(() => {
+  setInterval(() => {
     if (GetUserInfo().token && ToolUtil.queryString('wxLogin', history.location.pathname)) {
       window.location.href = wxUrl(false);
     }

@@ -32,15 +32,25 @@ const ReceiptData = (
   };
 
   const actions = [];
-  currentNode.map((item) => {
-    if (item.logResult && Array.isArray(item.logResult.actionResults)) {
-      return item.logResult.actionResults.map((item) => {
-        return actions.push({ action: item.action, id: item.documentsActionId });
+  const logIds = [];
+  currentNode.forEach((item) => {
+    if (data.version) {
+      const logResult = item.logResult || {};
+      logIds.push(logResult.logId);
+    } else {
+      const logResults = item.logResults || [];
+      logResults.map(item => {
+        logIds.push(item.logId);
+      });
+    }
+
+    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+      item.auditRule.actionStatuses.map((item) => {
+        actions.push({ action: item.action, id: item.actionId, name: item.actionName });
       });
     }
     return null;
   });
-
   const getAction = (action) => {
     const actionData = actions.filter(item => {
       return item.action === action;
@@ -53,14 +63,17 @@ const ReceiptData = (
       case ReceiptsEnums.instockOrder:
       case ReceiptsEnums.outstockOrder:
         return <InstockOrder
-          afertShow={() => setBottomButton(true)}
+          logIds={logIds}
           taskId={data.processTaskId}
+          afertShow={() => setBottomButton(true)}
           permissions={permissions}
           data={data.receipts}
+          actions={actions}
           getAction={getAction}
           refresh={refreshOrder}
           loading={loading}
           type={data.type}
+          taskDetail={data}
         />;
       case ReceiptsEnums.error:
         return <InstockError
@@ -79,9 +92,15 @@ const ReceiptData = (
           receipts={data.receipts}
           getAction={getAction}
           refresh={refreshOrder}
+          nodeActions={actions}
+          logIds={logIds}
+          taskId={data.processTaskId}
         />;
       case ReceiptsEnums.maintenance:
         return <Maintenance
+          nodeActions={actions}
+          logIds={logIds}
+          taskId={data.processTaskId}
           afertShow={() => setBottomButton(true)}
           loading={loading}
           getAction={getAction}
@@ -91,6 +110,8 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.allocation:
         return <Allocation
+          nodeActions={actions}
+          logIds={logIds}
           taskId={data.processTaskId}
           afertShow={() => setBottomButton(true)}
           success={success}
@@ -99,6 +120,7 @@ const ReceiptData = (
           getAction={getAction}
           data={data.receipts}
           refresh={refreshOrder}
+          createUser={data.createUser}
         />;
       default:
         return <MyEmpty />;
@@ -107,24 +129,15 @@ const ReceiptData = (
 
   const remarks = data.remarks || [];
 
-  const commentsListRef = useRef();
-
   return <div>
     {receiptType()}
     <Process
       remarks={remarks.filter(item => 'audit' === item.type)}
       auditData={data.stepsResult}
+      version={data.version}
       createUser={data.user}
     />
-    <Comments
-      placeholder='添加评论,可@相关人员'
-      title='添加评论'
-      detail={data}
-      id={data.processTaskId}
-      refresh={() => commentsListRef.current.submit()}
-      onInput={addComments}
-    />
-    <CommentsList taskId={data.processTaskId} ref={commentsListRef} />
+    <CommentsList detail={data} addComments={addComments} taskId={data.processTaskId} />
     <div hidden={!actionButton || !bottomButton} style={{ height: 60, marginTop: 3 }} />
   </div>;
 };

@@ -1,9 +1,12 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import MyList from '../../../../../components/MyList';
-import { remakeList } from '../../../../../Work/Stock/Dynamic';
 import StepList from '../../Dynamic/components/StepList';
+import Comments from '../../../../components/Comments';
 
-const CommentsList = ({ taskId }, ref) => {
+
+export const remakeList = { url: '/remarks/list', method: 'POST' };
+
+const CommentsList = ({ taskId,addComments,detail }) => {
 
   const [data, setData] = useState([]);
 
@@ -11,16 +14,19 @@ const CommentsList = ({ taskId }, ref) => {
 
   const defaultParams = { type: 'comments', taskId };
 
-  const submit = () => {
-    commentsListRef.current.submit(defaultParams);
-  };
-
-  useImperativeHandle(ref, () => ({ submit }));
-
   return <div style={{ backgroundColor: '#fff' }}>
+    <Comments
+      all={data.length > 0}
+      placeholder='添加评论,可@相关人员'
+      title='添加评论'
+      detail={detail}
+      id={detail.processTaskId}
+      refresh={() => commentsListRef.current.submit(defaultParams)}
+      onInput={addComments}
+    />
     <MyList noEmpty ref={commentsListRef} api={remakeList} params={defaultParams} data={data} getData={setData}>
       <StepList remarks={data} />
     </MyList>
   </div>;
 };
-export default React.forwardRef(CommentsList);
+export default CommentsList;

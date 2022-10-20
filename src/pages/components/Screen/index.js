@@ -20,6 +20,7 @@ const Screen = (
     },
     SideBarDisabled = () => {
     },
+    fill,
     noNavBar,
   }) => {
 
@@ -132,6 +133,7 @@ const Screen = (
           <Button
             className={ToolUtil.classNames(style.ok, style.button)}
             color='primary'
+            fill={fill}
             onClick={() => {
               onClose();
             }}>

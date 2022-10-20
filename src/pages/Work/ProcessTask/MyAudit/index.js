@@ -19,6 +19,7 @@ const MyAudit = (
     listScreentTop,
     ReceiptDom,
     hiddenSearch,
+    taskSkuId,
   }, ref) => {
 
   const [screen, setScreen] = useState();
@@ -31,14 +32,18 @@ const MyAudit = (
     statusList: ['0'],
     types: (type || defaultType) && [type || defaultType],
     createUser,
+    skuId:taskSkuId,
   };
-  const defaultSort = { field: 'createTime', order: 'ascend' };
+
+  const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [params, setParams] = useState({});
 
   const [sort, setSort] = useState();
 
   const [screening, setScreeing] = useState();
+
+  const [loading, setLoading] = useState(false);
 
   const listRef = useRef();
   const screenRef = useRef();
@@ -66,15 +71,19 @@ const MyAudit = (
 
   useEffect(() => {
     clear();
-  }, [auditType, type]);
+  }, [auditType, type,taskSkuId]);
 
   const processListRef = useRef();
+
+  const [searchValue, setSearchValue] = useState('');
 
   return <>
     <div hidden={type || hiddenSearch}>
       <MySearch
         placeholder='请输入单据相关信息'
         historyType='process'
+        value={searchValue}
+        onChange={setSearchValue}
         onSearch={(value) => {
           submit({ skuName: value });
         }}
@@ -87,7 +96,10 @@ const MyAudit = (
 
     <ListScreent
       top={typeof listScreentTop === 'number' ? listScreentTop : top}
-      setSort={setSort}
+      setSort={(sort) => {
+        localStorage.setItem('processTaskTimeSort', sort.order);
+        setSort(sort);
+      }}
       sort={sort}
       screening={screening}
       submit={submit}
@@ -101,6 +113,7 @@ const MyAudit = (
     />
 
     <ProcessList
+      onLoading={setLoading}
       manual
       ReceiptDom={ReceiptDom}
       all={ToolUtil.isArray(params.statusList).includes('99')}
@@ -110,6 +123,7 @@ const MyAudit = (
     />
 
     <ProcessScreen
+      loading={loading}
       top={top}
       open={{ type: !type, createUser: !createUser }}
       skuNumber={number}
