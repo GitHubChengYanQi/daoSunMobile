@@ -16,7 +16,7 @@ export const NoticeList = () => {
       setScrollTop(event.target.scrollTop);
     }}
   >
-    <MyAudit auditType='audit' top={0} />
+    <MyAudit task />
   </div>;
 };
 

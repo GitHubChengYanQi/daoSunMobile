@@ -1,6 +1,7 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
 import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
+import { MyDate } from '../../../../../../../components/MyDate';
 
 const StocktakingItem = (
   {
@@ -8,6 +9,7 @@ const StocktakingItem = (
     index,
     onClick = () => {
     },
+    noProgress,
   },
 ) => {
 
@@ -17,6 +19,9 @@ const StocktakingItem = (
 
   return <>
     <TaskItem
+      task={item}
+      noProgress={noProgress}
+      otherData={MyDate.Show(receipts.beginTime)+' - '+MyDate.Show(receipts.endTime)}
       percent={percent}
       coding={receipts.coding}
       endTime={receipts.endTime}

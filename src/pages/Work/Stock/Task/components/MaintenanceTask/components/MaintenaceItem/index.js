@@ -1,7 +1,7 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
-import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
+import { isObject } from '../../../../../../../components/ToolUtil';
+import { MyDate } from '../../../../../../../components/MyDate';
 
 const MaintenaceItem = (
   {
@@ -9,6 +9,7 @@ const MaintenaceItem = (
     index,
     onClick = () => {
     },
+    noProgress,
   },
 ) => {
 
@@ -17,6 +18,9 @@ const MaintenaceItem = (
   const percent = parseInt((receipts.doneNumberCount / (receipts.numberCount / 1)) * 100);
 
   return <TaskItem
+    task={item}
+    noProgress={noProgress}
+    otherData={MyDate.Show(receipts.startTime)+' - '+MyDate.Show(receipts.endTime)}
     users={receipts.userResult?.name}
     statusName={receipts.statusName || '进行中'}
     action={![99, 50].includes(receipts.status)}
@@ -33,10 +37,6 @@ const MaintenaceItem = (
     positionSize={receipts.positionCount}
     beginTime={receipts.startTime}
     onClick={() => onClick(item)}
-    otherData={
-      <div className={style.orderData}>
-        <div className={style.user}>负责人：{ToolUtil.isObject(receipts.userResult).name}</div>
-      </div>}
   />;
 };
 

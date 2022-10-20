@@ -37,7 +37,7 @@ const TaskData = () => {
       <TaskStatisicalChart />
     </MyCard>
     <MyCard title='任务明细'>
-      <MyAudit defaultType={type} ReceiptDom={ReceiptDom} hiddenSearch />
+      <MyAudit type={type} task ReceiptDom={ReceiptDom} hiddenSearch />
     </MyCard>
   </>;
 };
