@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "32227410",
+      "name": "下载",
+      "font_class": "download-2-fill",
+      "unicode": "e6d8",
+      "unicode_decimal": 59096
+    },
+    {
       "icon_id": "31968946",
       "name": "来源",
       "font_class": "laiyuan",

@@ -30,6 +30,7 @@ const StartEndDate = (
     className,
     textAlign,
     minWidth,
+    render,
   }) => {
 
   const ref = useRef();
@@ -44,10 +45,10 @@ const StartEndDate = (
         ref.current.open();
       }}
     >
-      <Space align='center'>
+      {render || <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
         {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
-      </Space>
+      </Space>}
     </div>
     <MyDatePicker
       max={max}
