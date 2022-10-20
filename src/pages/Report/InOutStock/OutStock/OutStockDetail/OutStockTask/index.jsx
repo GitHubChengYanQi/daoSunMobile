@@ -15,20 +15,20 @@ import MyAntPopup from '../../../../../components/MyAntPopup';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
 
-const InStockTask = () => {
+const OutStockTask = () => {
 
   const [date, setDate] = useState([]);
 
   const [visible, setVisible] = useState(false);
 
   return <>
-    <MyNavBar title='入库任务明细' />
+    <MyNavBar title='出库任务明细' />
     <div style={{ margin: '1px 0' }}>
       <MySearch placeholder='搜索' />
     </div>
     <MyCard
       className={style.customerCard}
-      titleBom='辽宁辽工智能装备制造有限...'
+      titleBom='程彦祺'
       extra={<StartEndDate
         max={new Date()}
         value={date}
@@ -49,7 +49,7 @@ const InStockTask = () => {
     }}>
       <div className={style.number}>
         <div>
-          入库总数
+          出库总数
           <span className='numberBlue'>216</span>类
           <span className='numberBlue'>10342</span>件
         </div>
@@ -61,7 +61,7 @@ const InStockTask = () => {
 
     {
       [1, 2].map((item, index) => {
-        return <TaskItem noProgress createTime={new Date()} key={index} taskName='xxx的入库申请' statusName='进行中' />;
+        return <TaskItem noProgress createTime={new Date()} key={index} taskName='xxx的出库申请' statusName='进行中' />;
       })
     }
 
@@ -83,4 +83,4 @@ const InStockTask = () => {
   </>;
 };
 
-export default InStockTask;
+export default OutStockTask;

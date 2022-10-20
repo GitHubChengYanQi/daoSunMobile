@@ -13,7 +13,7 @@ import SkuItem from '../../../../Work/Sku/SkuItem';
 import Icon from '../../../../components/Icon';
 import MyFloatingBubble from '../../../../components/FloatingBubble';
 
-const InStockDetail = () => {
+const OutStockDetail = () => {
 
   const { query } = useLocation();
 
@@ -24,13 +24,13 @@ const InStockDetail = () => {
   const history = useHistory();
 
   return <>
-    <MyNavBar title='入库统计详情' />
+    <MyNavBar title='出库统计详情' />
     <div style={{margin:'1px 0'}}>
       <MySearch placeholder='搜索' />
     </div>
     <MyCard
       className={style.customerCard}
-      titleBom='辽宁辽工智能装备制造有限...'
+      titleBom='程彦祺'
       extra={<StartEndDate
         max={new Date()}
         value={date}
@@ -49,36 +49,20 @@ const InStockDetail = () => {
     <div className={style.total}>
       <div className={style.number}>
         <div>
-          入库总数
+          出库总数
           <span className='numberBlue'>216</span>类
           <span className='numberBlue'>10342</span>件
         </div>
         <div className={style.taskTotal} onClick={() => {
           history.push({
-            pathname: '/Report/InOutStock/InStock/InStockDetail/InStockTask',
+            pathname: '/Report/InOutStock/OutStock/OutStockDetail/OutStockTask',
             query: {
-              customerId: 1,
+              userId: 1,
             },
           });
         }}>
           <div>任务数</div>
           <div className='numberBlue'>1558</div>
-        </div>
-      </div>
-      <div className={style.otherNUmber}>
-        <div>
-          <div>收货总数</div>
-          <div className={style.num}>
-            <span className='numberBlue'>216</span>类
-            <span style={{ marginLeft: 12 }} className='numberBlue'>10342</span>件
-          </div>
-        </div>
-        <div>
-          <div>退货总数</div>
-          <div className={style.num}>
-            <span className='numberRed'>216</span>类
-            <span style={{ marginLeft: 12 }} className='numberRed'>10342</span>件
-          </div>
         </div>
       </div>
     </div>
@@ -90,7 +74,7 @@ const InStockDetail = () => {
               title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'
               describe='丹东汉克'
               otherData={[
-                <><span className='numberBlue'>入库</span> ×50 &nbsp;&nbsp; <span className='numberRed'>退货</span>×30</>,
+                <><span className='numberBlue'>领取</span> ×50 &nbsp;&nbsp; <span>出库</span>×30</>,
               ]}
             />
           </div>;
@@ -99,4 +83,4 @@ const InStockDetail = () => {
   </>;
 };
 
-export default InStockDetail;
+export default OutStockDetail;

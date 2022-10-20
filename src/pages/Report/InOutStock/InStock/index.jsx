@@ -2,16 +2,12 @@ import React from 'react';
 import style from '../index.less';
 import MySearch from '../../../components/MySearch';
 import MyCard from '../../../components/MyCard';
-import { FloatingBubble, Space } from 'antd-mobile';
+import { Space } from 'antd-mobile';
 import Icon from '../../../components/Icon';
 import { useHistory, useLocation } from 'react-router-dom';
 import MyFloatingBubble from '../../../components/FloatingBubble';
 
 const InStock = () => {
-
-  const { query } = useLocation();
-  console.log(query);
-
   const history = useHistory();
 
   return <>

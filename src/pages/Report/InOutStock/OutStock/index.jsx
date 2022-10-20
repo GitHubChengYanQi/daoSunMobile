@@ -7,9 +7,12 @@ import Bouncing from '../../../components/Bouncing';
 import waitInstockShop from '../../../../assets/waitInstockShop.png';
 import instockErrorShop from '../../../../assets/instockErrorShop.png';
 import Icon from '../../../components/Icon';
+import MyFloatingBubble from '../../../components/FloatingBubble';
+import { useHistory } from 'react-router-dom';
 
 const OutStock = () => {
 
+  const history = useHistory();
 
   return <>
     <div className={style.total}>
@@ -24,6 +27,14 @@ const OutStock = () => {
       [1, 2].map((item, index) => {
         return <MyCard
           key={index}
+          onClick={() => {
+            history.push({
+              pathname: '/Report/InOutStock/OutStock/OutStockDetail',
+              query: {
+                userId: 1,
+              },
+            });
+          }}
           className={style.card}
           headerClassName={style.cardHeader}
           titleBom={<Space align='center'>
@@ -51,19 +62,7 @@ const OutStock = () => {
       })
     }
 
-    <FloatingBubble
-      axis='xy'
-      magnetic='x'
-      style={{
-        '--initial-position-bottom': '84px',
-        '--initial-position-right': '24px',
-        '--edge-distance': '24px',
-        '--size': '40px',
-      }}
-      className={style.float}
-    >
-      <Icon type='icon-download-2-fill' />
-    </FloatingBubble>
+    <MyFloatingBubble><Icon type='icon-download-2-fill' /></MyFloatingBubble>;
   </>;
 };
 
