@@ -85,7 +85,7 @@ const MyAudit = (
     default:
       break;
   }
-  console.log(screens);
+
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [screen, setScreen] = useState({});

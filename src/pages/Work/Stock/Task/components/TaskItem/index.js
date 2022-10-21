@@ -13,6 +13,7 @@ import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
 import { UserName } from '../../../../../components/User';
 import { Avatar } from 'antd';
+import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -84,11 +85,12 @@ const TaskItem = (
       <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
       <div className={style.user}>
         <div style={{ width: otherData ? '50%' : '100%' }}>
-          <MyEllipsis width='100%'>{userLabel || '执行人'}：{
+          <MyEllipsis width='100%'>{userLabel || '执行人'}：
+          <Space>{
             isArray(users).map((item,index)=>{
-              // return <Avatar src={item.avatar || ''} >{item}</Avatar>
+              return <Avatar size={16} key={index} src={item.avatar || ''}>{item.name ? item?.name.substring(0, 1) : ''}</Avatar>;
             })
-          }</MyEllipsis>
+          }</Space></MyEllipsis>
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>
