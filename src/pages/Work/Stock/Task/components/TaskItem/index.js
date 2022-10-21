@@ -86,11 +86,19 @@ const TaskItem = (
       <div className={style.user}>
         <div style={{ width: otherData ? '50%' : '100%' }}>
           <MyEllipsis width='100%'>{userLabel || '执行人'}：
-          <Space>{
-            isArray(users).map((item,index)=>{
-              return <Avatar size={16} key={index} src={item.avatar || ''}>{item.name ? item?.name.substring(0, 1) : ''}</Avatar>;
-            })
-          }</Space></MyEllipsis>
+            {isArray(users).length === 0 && '无'}
+            {
+              isArray(users).map((item, index) => {
+                return <Avatar
+                  size={18}
+                  key={index}
+                  style={{marginRight:4}}
+                  src={item.avatar || ''}
+                >
+                  {item.name ? item?.name.substring(0, 1) : ''}
+                </Avatar>;
+              })
+            }</MyEllipsis>
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>

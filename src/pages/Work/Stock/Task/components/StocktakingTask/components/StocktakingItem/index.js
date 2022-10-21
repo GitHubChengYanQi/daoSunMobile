@@ -38,7 +38,7 @@ const StocktakingItem = (
       beginTime={receipts.beginTime}
       onClick={() => onClick(item)}
       userLabel='负责人'
-      users={ToolUtil.isObject(receipts.user).name}
+      users={receipts.user ? [receipts.user] : []}
     />
   </>;
 };
