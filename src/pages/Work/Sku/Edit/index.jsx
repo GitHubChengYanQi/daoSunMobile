@@ -88,13 +88,8 @@ const Edit = () => {
 
   const { loading: editEnclosureLoading, run: editEnclosureRun } = useRequest(editEnclosure, {
     manual: true,
-    onSuccess: () => {
-      refresh();
-    },
     onError: () => {
-      Message.errorToast('修改失败!', () => {
-        refresh();
-      });
+      Message.errorToast('修改失败!');
     },
   });
 
@@ -130,8 +125,8 @@ const Edit = () => {
   };
 
 
-  const editAction = (newData = {}) => {
-    editEnclosureRun({
+  const editAction = async (newData = {}) => {
+    return await editEnclosureRun({
       data: {
         skuId: detail.skuId,
         images: detail.images,
@@ -236,8 +231,10 @@ const Edit = () => {
                 uploadId='skuFiles'
                 ref={skuFiles}
                 files={isArray(detail.filedResults)}
-                onChange={(medias) => {
-                  editAction({ fileId: medias.map(item => item.mediaId).toString() });
+                onChange={async (medias) => {
+                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,filedResults:medias})
+                  })
                 }} />;
               break;
             case 'images':
@@ -251,7 +248,9 @@ const Edit = () => {
                   url: item.thumbUrl || item.url,
                 }))}
                 onChange={(medias) => {
-                  editAction({ images: medias.map(item => item.mediaId).toString() });
+                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,imgResults:medias})
+                  })
                 }} />;
               break;
             case 'drawing':
@@ -266,7 +265,9 @@ const Edit = () => {
                 ref={skuDrawings}
                 files={isArray(detail.drawingResults)}
                 onChange={(medias) => {
-                  editAction({ drawing: medias.map(item => item.mediaId).toString() });
+                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,drawingResults:medias})
+                  })
                 }} />;
               break;
             default:
