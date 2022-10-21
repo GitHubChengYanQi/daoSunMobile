@@ -79,7 +79,10 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
     return {
       title: '出库申请',
       type: '出库',
-      otherData: [item.brandName || '任意品牌'],
+      otherData: [
+        item.brandName || '任意品牌',
+        item?.skuResult?.spuResult?.spuClassificationResult?.name,
+      ],
       disabled: !params.userId || normalSku.length === 0 || !params.theme,
     };
   };
