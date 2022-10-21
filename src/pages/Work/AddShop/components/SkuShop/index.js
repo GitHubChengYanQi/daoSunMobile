@@ -154,6 +154,7 @@ const SkuShop = (
   }, [type]);
 
   const taskData = (item = {}) => {
+    const skuClassName = item?.skuResult?.spuResult?.spuClassificationResult?.name;
     switch (type) {
       case ERPEnums.allocation:
         const allocationJson = item.allocationJson || {};
@@ -176,7 +177,10 @@ const SkuShop = (
       case ERPEnums.outStock:
         return {
           title: '出库任务明细',
-          otherData: [item.brandName || '任意品牌'],
+          otherData: [
+            item.brandName || '任意品牌',
+            skuClassName,
+          ],
           type: '出库申请',
         };
       case ERPEnums.inStock:
