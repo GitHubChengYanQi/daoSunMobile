@@ -85,7 +85,7 @@ const MyAudit = (
     default:
       break;
   }
-  console.log(screens);
+
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [screen, setScreen] = useState({});
@@ -294,7 +294,7 @@ const MyAudit = (
     </div>
 
     <ProcessList
-      noProgress={['audit', 'complete', 'audited'].includes(key)}
+      noProgress={['audit', 'complete', 'audited'].includes(key) && !createUser}
       manual
       ReceiptDom={ReceiptDom}
       listRef={listRef}
