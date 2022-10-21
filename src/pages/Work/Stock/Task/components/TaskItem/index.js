@@ -73,7 +73,7 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={classNames(style.status, ['50', '49'].includes(task.status) && style.error)}>
+          <div className={classNames(style.status, ['50', '49'].includes(task.status+'') && style.error)}>
             {statusName}
           </div>
         </div>
