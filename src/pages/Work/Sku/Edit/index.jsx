@@ -232,9 +232,9 @@ const Edit = () => {
                 ref={skuFiles}
                 files={isArray(detail.filedResults)}
                 onChange={async (medias) => {
-                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,filedResults:medias})
-                  })
+                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({ ...detail, filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
+                  });
                 }} />;
               break;
             case 'images':
@@ -248,9 +248,9 @@ const Edit = () => {
                   url: item.thumbUrl || item.url,
                 }))}
                 onChange={(medias) => {
-                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,imgResults:medias})
-                  })
+                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({ ...detail, imgResults: medias, images: medias.map(item => item.mediaId).toString() });
+                  });
                 }} />;
               break;
             case 'drawing':
@@ -265,9 +265,13 @@ const Edit = () => {
                 ref={skuDrawings}
                 files={isArray(detail.drawingResults)}
                 onChange={(medias) => {
-                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,drawingResults:medias})
-                  })
+                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({
+                      ...detail,
+                      drawingResults: medias,
+                      drawing: medias.map(item => item.mediaId).toString(),
+                    });
+                  });
                 }} />;
               break;
             default:
@@ -311,7 +315,7 @@ const Edit = () => {
       value={JSON.parse(detail.materialId || '[]')[0]}
       onClose={() => setVisible('')}
       onChange={(option) => {
-        detailChange({ materialId: [option.value],materialResultList:[{name:option.label}] });
+        detailChange({ materialId: [option.value], materialResultList: [{ name: option.label }] });
         setVisible('');
       }}
     />
@@ -348,9 +352,7 @@ const Edit = () => {
 
     <BottomButton
       onClick={() => {
-        edit({
-          data: detail,
-        });
+        edit({ data: detail });
       }}
       only
       text='保存'
