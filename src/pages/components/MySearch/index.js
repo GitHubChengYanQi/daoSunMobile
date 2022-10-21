@@ -42,42 +42,44 @@ const MySearch = (
   return <div style={searchStyle} className={ToolUtil.classNames(style.searchDiv, className)}>
     <div
       className={classNames(style.search, historyType && style.disabledSearch)}
-      onClick={(e) => {
+    >
+      <div style={{flexGrow:1}} onClick={(e) => {
         if (e.target.className === 'adm-input-clear' || ['path', 'rect'].includes(e.target.tagName)) {
           return;
         }
         historyType && setHistoryVisible(true);
-      }}
-    >
-      <SearchBar
-        style={searchBarStyle}
-        icon={<div onClick={() => {
-          searchIconClick();
-        }}>
-          {searchIcon}
-        </div>}
-        clearable
-        onSearch={search}
-        value={value}
-        className={style.searchBar}
-        placeholder={placeholder || '请输入搜索内容'}
-        onChange={(value) => {
-          onChange(value);
-        }}
-        onClear={() => {
-          onChange('');
-          onClear();
-        }}
-        onFocus={() => {
-          setVisible(true);
-          onFocus();
-        }}
-        onBlur={() => {
-          setTimeout(() => {
-            setVisible(false);
-          }, 0);
-        }}
-      />
+      }}>
+        <SearchBar
+          style={searchBarStyle}
+          icon={<div onClick={() => {
+            searchIconClick();
+          }}>
+            {searchIcon}
+          </div>}
+          clearable
+          onSearch={search}
+          value={value}
+          className={style.searchBar}
+          placeholder={placeholder || '请输入搜索内容'}
+          onChange={(value) => {
+            onChange(value);
+          }}
+          onClear={() => {
+            onChange('');
+            onClear();
+          }}
+          onFocus={() => {
+            setVisible(true);
+            onFocus();
+          }}
+          onBlur={() => {
+            setTimeout(() => {
+              setVisible(false);
+            }, 0);
+          }}
+        />
+      </div>
+
 
       {
         !historyType && (visible || value)
