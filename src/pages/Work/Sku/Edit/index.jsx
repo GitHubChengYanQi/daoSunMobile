@@ -82,13 +82,8 @@ const Edit = () => {
 
   const { loading: editEnclosureLoading, run: editEnclosureRun } = useRequest(editEnclosure, {
     manual: true,
-    onSuccess: () => {
-      refresh();
-    },
     onError: () => {
-      Message.errorToast('修改失败!', () => {
-        refresh();
-      });
+      Message.errorToast('修改失败!');
     },
   });
 
@@ -124,8 +119,8 @@ const Edit = () => {
   };
 
 
-  const editAction = (newData = {}) => {
-    editEnclosureRun({
+  const editAction = async (newData = {}) => {
+    return await editEnclosureRun({
       data: {
         skuId: detail.skuId,
         images: detail.images,
@@ -172,7 +167,7 @@ const Edit = () => {
             case 'weight':
               extra = <span onClick={() => {
                 setVisible('weight');
-              }}>{detail.weight || <span style={{color:'#ccc'}}>请输入重量</span>}&nbsp;&nbsp;kg</span>;
+              }}>{detail.weight || <span style={{ color: '#ccc' }}>请输入重量</span>}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
               extra = <span className={styles.disabled}>
@@ -203,20 +198,20 @@ const Edit = () => {
               break;
             case 'skuSize':
               return <div key={index}>
-                <MyCard  extraClassName={styles.extra} title='长' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='长' extra={<div onClick={() => {
                   setVisible('length');
                 }}>
-                  {skuSize[0] || <span style={{color:'#ccc'}}>请输入长度</span>}&nbsp;&nbsp;cm
+                  {skuSize[0] || <span style={{ color: '#ccc' }}>请输入长度</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard  extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
                   setVisible('width');
                 }}>
-                  {skuSize[1] || <span style={{color:'#ccc'}}>请输入宽度</span>}&nbsp;&nbsp;cm
+                  {skuSize[1] || <span style={{ color: '#ccc' }}>请输入宽度</span>}&nbsp;&nbsp;cm
                 </div>} />
-                <MyCard  extraClassName={styles.extra} title='高' extra={<div onClick={() => {
+                <MyCard extraClassName={styles.extra} title='高' extra={<div onClick={() => {
                   setVisible('height');
                 }}>
-                  {skuSize[2] || <span style={{color:'#ccc'}}>请输入高度</span>}&nbsp;&nbsp;cm
+                  {skuSize[2] || <span style={{ color: '#ccc' }}>请输入高度</span>}&nbsp;&nbsp;cm
                 </div>} />
               </div>;
             case 'fileId':
@@ -230,8 +225,10 @@ const Edit = () => {
                 uploadId='skuFiles'
                 ref={skuFiles}
                 files={isArray(detail.filedResults)}
-                onChange={(medias) => {
-                  editAction({ fileId: medias.map(item => item.mediaId).toString() });
+                onChange={async (medias) => {
+                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,filedResults:medias})
+                  })
                 }} />;
               break;
             case 'images':
@@ -245,7 +242,9 @@ const Edit = () => {
                   url: item.thumbUrl || item.url,
                 }))}
                 onChange={(medias) => {
-                  editAction({ images: medias.map(item => item.mediaId).toString() });
+                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,imgResults:medias})
+                  })
                 }} />;
               break;
             case 'drawing':
@@ -260,7 +259,9 @@ const Edit = () => {
                 ref={skuDrawings}
                 files={isArray(detail.drawingResults)}
                 onChange={(medias) => {
-                  editAction({ drawing: medias.map(item => item.mediaId).toString() });
+                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(()=>{
+                    setDetail({...detail,drawingResults:medias})
+                  })
                 }} />;
               break;
             default:
