@@ -190,14 +190,13 @@ export const back = (
       }
       Message.warningDialog({
         getContainer,
-        closeOnMaskClick:true,
         only: false,
         content: title || '是否退出当前页面？',
         onConfirm: () => {
           onOk();
           history.goBack();
         },
-        onClose: () => {
+        onCancel: () => {
           winHistory.replaceState({ key }, title, url);
           winHistory.pushState({ title: key }, title, url);
         },
