@@ -79,7 +79,7 @@ const TaskItem = (
       extra={MyDate.Show(createTime)}
       bodyClassName={style.body}
     >
-      <div className={style.theme}>{task.theme || '-'}</div>
+      <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
       <div className={style.user}>
         <div style={{ width: otherData ? '50%' : '100%' }}>
           <MyEllipsis width='100%'>{userLabel || '执行人'}：{users}</MyEllipsis>

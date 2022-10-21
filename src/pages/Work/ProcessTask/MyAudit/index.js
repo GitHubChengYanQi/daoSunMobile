@@ -49,7 +49,7 @@ const MyAudit = (
     tabs = [
       { title: '执行中', key: 'actioning' },
       { title: '已完成', key: 'complete' },
-      { title: '被撤销', key: 'revoke' },
+      { title: '已撤销', key: 'revoke' },
     ];
   } else if (!createUser) {
     defaultParams.queryType = 1;
@@ -71,20 +71,21 @@ const MyAudit = (
     { title: createUser ? '任务状态' : '申请人', key: createUser ? 'status' : 'createUser' },
     { title: '提交日期', key: 'createTime' },
   ];
+  const [screenDatas, setScreenDatas] = useState(defaultScreenDatas);
+
+  const screens = screenDatas.map(item => item);
 
   switch (params.type) {
     case ReceiptsEnums.instockOrder:
-      defaultScreenDatas.push({ title: '供应商', key: 'customerId' });
+      screens.push({ title: '供应商', key: 'customerId' });
       break;
     case ReceiptsEnums.outstockOrder:
-      defaultScreenDatas.push({ title: '领料人', key: 'pickUserId' });
+      screens.push({ title: '领料人', key: 'pickUserId' });
       break;
     default:
       break;
   }
-
-  const [screenDatas, setScreenDatas] = useState(defaultScreenDatas);
-
+  console.log(screens);
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
   const [screen, setScreen] = useState({});
@@ -93,8 +94,8 @@ const MyAudit = (
 
   const listRef = useRef();
 
-  const submit = (data = {}, newSort = {}) => {
-    const newParmas = { ...params, ...data };
+  const submit = (data = {}, newSort = {}, reset) => {
+    const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
     setParams(newParmas);
     paramsChange(newParmas);
     listRef.current.submit(newParmas, { ...sort, ...newSort });
@@ -106,33 +107,35 @@ const MyAudit = (
     };
   });
 
-  const clear = () => {
-    if (defaultParams.type) {
-      let typeName = '';
-      switch (defaultParams.type) {
-        case ReceiptsEnums.error:
-          typeName = '异常';
-          break;
-        case ReceiptsEnums.outstockOrder:
-          typeName = '出库';
-          break;
-        case ReceiptsEnums.instockOrder:
-          typeName = '入库';
-          break;
-        case ReceiptsEnums.maintenance:
-          typeName = '养护';
-          break;
-        case ReceiptsEnums.stocktaking:
-          typeName = '盘点';
-          break;
-        case ReceiptsEnums.allocation:
-          typeName = '调拨';
-          break;
-        default:
-          break;
-      }
-      setScreen({ typeName });
+  const resetScreen = () => {
+    let typeName = '';
+    switch (defaultParams.type) {
+      case ReceiptsEnums.error:
+        typeName = '异常';
+        break;
+      case ReceiptsEnums.outstockOrder:
+        typeName = '出库';
+        break;
+      case ReceiptsEnums.instockOrder:
+        typeName = '入库';
+        break;
+      case ReceiptsEnums.maintenance:
+        typeName = '养护';
+        break;
+      case ReceiptsEnums.stocktaking:
+        typeName = '盘点';
+        break;
+      case ReceiptsEnums.allocation:
+        typeName = '调拨';
+        break;
+      default:
+        break;
     }
+    setScreen({ typeName });
+  };
+
+  const clear = () => {
+    resetScreen();
     setParams(defaultParams);
     paramsChange(defaultParams);
     setScreenDatas(defaultScreenDatas);
@@ -183,32 +186,33 @@ const MyAudit = (
         switch (key) {
           case 'audit':
             setScreenDatas(defaultScreenDatas);
-            submit({ queryType: 1 });
+            submit({ queryType: 1 }, {}, true);
             break;
           case 'audited':
             setScreenDatas([{ title: '审批状态', key: 'status' }, ...defaultScreenDatas]);
-            submit({ queryType: 2 });
+            submit({ queryType: 2 }, {}, true);
             break;
           case 'send':
             setScreenDatas([{ title: '审批状态', key: 'status' }, ...defaultScreenDatas]);
-            submit({ queryType: 3 });
+            submit({ queryType: 3 }, {}, true);
             break;
 
           case 'actioning':
             setScreenDatas(defaultScreenDatas);
-            submit({ status: '2' });
+            submit({ status: '2' }, {}, true);
             break;
           case 'complete':
             setScreenDatas(defaultScreenDatas);
-            submit({ status: '5' });
+            submit({ status: '5' }, {}, true);
             break;
           case 'revoke':
             setScreenDatas(defaultScreenDatas);
-            submit({ status: '6' });
+            submit({ status: '6' }, {}, true);
             break;
           default:
             break;
         }
+        resetScreen();
         setKey(key);
       }} activeKey={key}>
         {
@@ -222,7 +226,7 @@ const MyAudit = (
     <div className={style.screent}>
       <div className={style.dropDown}>
         {
-          screenDatas.map((item) => {
+          screens.map((item) => {
             let title = '';
             switch (item.key) {
               case 'type':
@@ -303,18 +307,6 @@ const MyAudit = (
       visible={screenKey === 'type'}
       onClose={() => setScreenkey('')}
       onChange={({ key, title }) => {
-        const newScreenDatas = screenDatas.filter(item => !['pickUserId', 'customerId'].includes(item.key));
-        switch (key) {
-          case ReceiptsEnums.outstockOrder:
-            setScreenDatas([...newScreenDatas, { title: '领料人', key: 'pickUserId' }]);
-            break;
-          case ReceiptsEnums.instockOrder:
-            setScreenDatas([...newScreenDatas, { title: '供应商', key: 'customerId' }]);
-            break;
-          default:
-            setScreenDatas(newScreenDatas);
-            break;
-        }
         submit({ type: key });
         setScreen({ ...screen, typeName: key ? title : '' });
         setScreenkey('');
@@ -383,7 +375,7 @@ const MyAudit = (
         { label: '全部', value: 'all' },
         { label: '审批中', value: '1' },
         { label: '执行中', value: '2' },
-        { label: '审批通过', value: '3' },
+        // { label: '审批通过', value: '3' },
         { label: '审批驳回', value: '4' },
         { label: '已完成', value: '5' },
         { label: '任务撤回', value: '6' },
