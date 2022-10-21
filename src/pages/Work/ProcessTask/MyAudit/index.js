@@ -42,7 +42,7 @@ const MyAudit = (
     skuId: taskSkuId,
   };
 
-  let tabs;
+  let tabs = [];
 
   if (task) {
     defaultParams.status = '2';
@@ -51,7 +51,7 @@ const MyAudit = (
       { title: '已完成', key: 'complete' },
       { title: '被撤销', key: 'revoke' },
     ];
-  } else {
+  } else if (!createUser) {
     defaultParams.queryType = 1;
     tabs = [
       { title: '待审批', key: 'audit' },
