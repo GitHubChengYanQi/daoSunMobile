@@ -1,189 +1,245 @@
-.orderItem {
-  background-color: #fff;
-  margin-bottom: 8px;
-  padding-bottom: 20px;
-  border-radius: 6px;
+.card {
+  color: #000;
+  margin-bottom: 0;
 
-  .title {
-    padding: 12px;
-    font-size: 14px;
-    align-items: center;
-    font-weight: bold;
-    color: #333333;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-
-    .status {
-      padding: 10px 0;
-      font-weight: normal;
-      color: #555555;
-      width: 130px;
-      text-align: right;
-    }
-
-    .coding {
-      color: #000000;
-      flex-grow: 1;
-    }
-
-    .button {
-      padding: 0;
-      font-size: 14px;
-      --border-radius: 2px;
-      width: 72px;
-      height: 30px;
-      line-height: 28px;
-    }
-
-    .createTime {
-      color: #555555;
-      flex-grow: 1;
-    }
-
-    .money {
-      color: #000000;
-
-      span {
-        font-weight: bold;
-      }
-    }
+  .extra {
+    font-size: 12px;
+    color: #a7a7a9;
   }
 
-  .content {
-    display: flex;
+  .body {
+    padding: 0;
 
-    .orderData {
-      flex-grow: 1;
-
-      .statusName {
-        z-index: 1;
-        flex-grow: 1;
-        padding: 0 4px;
-        min-height: 100%;
-        display: flex;
-        align-items: center;
-        color: #fff;
-        font-size: 12px;
-
-        div {
-          min-width: 48px;
-          text-align: center;
-        }
-      }
-
-      .dateShow {
-        display: flex;
-        background: linear-gradient(90deg, #E1EBF6 0%, rgba(225,235,246,0.20) 36%, rgba(225,235,246,0.00) 100%);
-        height: 24px;
-        line-height: 24px;
-        position: relative;
-
-        .svg {
-          position: absolute;
-          top: -2px;
-          left: -3px;
-        }
-
-        .show {
-          padding: 0 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          .showNumber {
-            display: flex;
-            flex-direction: column;
-            padding-left: 4px;
-            font-size: 12px;
-
-            .number {
-              font-size: 14px;
-              margin: 0 4px;
-              color: var(--adm-color-primary);
-            }
-          }
-
-          svg {
-            font-size: 14px;
-            color: var(--body--background--color);
-          }
-        }
-      }
-
-      .taskContent {
-        display: flex;
-        align-items: center;
-
-        .skus {
-          flex-grow: 1;
-          padding-top: 4px;
-
-          .skuItem {
-            display: flex;
-            align-items: center;
-
-            .sku {
-              flex-grow: 1;
-              padding: 4px 12px;
-              align-items: center;
-            }
-          }
-
-        }
-      }
-
+    .theme, .user,.process {
+      padding-top: 8px;
+      color: #a7a7a9;
     }
 
-    .timeBar {
-      line-height: 100%;
-      position: relative;
-      border: solid 1px #FA8F2B;
+    .user {
       display: flex;
-      flex-direction: column;
-      padding: 2px 0;
-      margin: 8px 12px 0 4px;
-
-      .scale {
-        width: 8px;
-        background-color: #FA8F2B;
-        flex-grow: 1;
-        margin: 2px 1px;
-        height: 2px;
-      }
-
-      .over {
-        opacity: 0.3;
-      }
-    }
-
-  }
-
-  .progress {
-    border-top: solid 1px #F5F5F5;
-    margin: 6px 12px 0;
-    padding-top: 8px;
-
-    .origin {
-      padding-bottom: 8px;
+      font-size: 12px;
     }
   }
-
 }
 
-.taskData {
+
+.header {
   display: flex;
   align-items: center;
-  padding: 12px;
-  font-size: 12px;
+  line-height: 16px;
 
-  .user {
-    flex-grow: 1;
+  .title {
+    font-size: 14px;
+  }
 
-    svg, span {
-      color: #898787;
-    }
+  .status {
+    border: solid 1px #599745;
+    color: #599745;
+    padding: 2px 4px;
+    font-size: 12px;
+    line-height: 12px;
+    margin-left: 12px;
+    border-radius: 2px;
+  }
+
+  .error {
+    border: solid 1px var(--adm-color-danger);
+    color: var(--adm-color-danger);
   }
 }
 
+.space {
+  margin: 0 12px;
+  height: 1px;
+  background-color: #f3f3f3;
+}
 
+//.orderItem {
+//  background-color: #fff;
+//  margin-bottom: 8px;
+//  padding-bottom: 20px;
+//  border-radius: 6px;
+//
+//  .title {
+//    padding: 12px;
+//    font-size: 14px;
+//    align-items: center;
+//    font-weight: bold;
+//    color: #333333;
+//    text-overflow: ellipsis;
+//    overflow: hidden;
+//    white-space: nowrap;
+//
+//    .status {
+//      padding: 10px 0;
+//      font-weight: normal;
+//      color: #555555;
+//      width: 130px;
+//      text-align: right;
+//    }
+//
+//    .coding {
+//      color: #000000;
+//      flex-grow: 1;
+//    }
+//
+//    .button {
+//      padding: 0;
+//      font-size: 14px;
+//      --border-radius: 2px;
+//      width: 72px;
+//      height: 30px;
+//      line-height: 28px;
+//    }
+//
+//    .createTime {
+//      color: #555555;
+//      flex-grow: 1;
+//    }
+//
+//    .money {
+//      color: #000000;
+//
+//      span {
+//        font-weight: bold;
+//      }
+//    }
+//  }
+//
+//  .content {
+//    display: flex;
+//
+//    .orderData {
+//      flex-grow: 1;
+//
+//      .statusName {
+//        z-index: 1;
+//        flex-grow: 1;
+//        padding: 0 4px;
+//        min-height: 100%;
+//        display: flex;
+//        align-items: center;
+//        color: #fff;
+//        font-size: 12px;
+//
+//        div {
+//          min-width: 48px;
+//          text-align: center;
+//        }
+//      }
+//
+//      .dateShow {
+//        display: flex;
+//        background: linear-gradient(90deg, #E1EBF6 0%, rgba(225,235,246,0.20) 36%, rgba(225,235,246,0.00) 100%);
+//        height: 24px;
+//        line-height: 24px;
+//        position: relative;
+//
+//        .svg {
+//          position: absolute;
+//          top: -2px;
+//          left: -3px;
+//        }
+//
+//        .show {
+//          padding: 0 12px;
+//          display: flex;
+//          align-items: center;
+//          justify-content: center;
+//
+//          .showNumber {
+//            display: flex;
+//            flex-direction: column;
+//            padding-left: 4px;
+//            font-size: 12px;
+//
+//            .number {
+//              font-size: 14px;
+//              margin: 0 4px;
+//              color: var(--adm-color-primary);
+//            }
+//          }
+//
+//          svg {
+//            font-size: 14px;
+//            color: var(--body--background--color);
+//          }
+//        }
+//      }
+//
+//      .taskContent {
+//        display: flex;
+//        align-items: center;
+//
+//        .skus {
+//          flex-grow: 1;
+//          padding-top: 4px;
+//
+//          .skuItem {
+//            display: flex;
+//            align-items: center;
+//
+//            .sku {
+//              flex-grow: 1;
+//              padding: 4px 12px;
+//              align-items: center;
+//            }
+//          }
+//
+//        }
+//      }
+//
+//    }
+//
+//    .timeBar {
+//      line-height: 100%;
+//      position: relative;
+//      border: solid 1px #FA8F2B;
+//      display: flex;
+//      flex-direction: column;
+//      padding: 2px 0;
+//      margin: 8px 12px 0 4px;
+//
+//      .scale {
+//        width: 8px;
+//        background-color: #FA8F2B;
+//        flex-grow: 1;
+//        margin: 2px 1px;
+//        height: 2px;
+//      }
+//
+//      .over {
+//        opacity: 0.3;
+//      }
+//    }
+//
+//  }
+//
+//  .progress {
+//    border-top: solid 1px #F5F5F5;
+//    margin: 6px 12px 0;
+//    padding-top: 8px;
+//
+//    .origin {
+//      padding-bottom: 8px;
+//    }
+//  }
+//
+//}
+//
+//.taskData {
+//  display: flex;
+//  align-items: center;
+//  padding: 12px;
+//  font-size: 12px;
+//
+//  .user {
+//    flex-grow: 1;
+//
+//    svg, span {
+//      color: #898787;
+//    }
+//  }
+//}
+//
+//

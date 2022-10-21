@@ -8,6 +8,7 @@ const ForwardItem = (
     item,
     onClick = () => {
     },
+    noProgress,
   },
 ) => {
 
@@ -33,6 +34,8 @@ const ForwardItem = (
   const percent = parseInt((complete / myDetails) * 100);
 
   return <TaskItem
+    task={item}
+    noProgress={noProgress}
     percent={percent}
     statusName={receipts.statusName || '进行中'}
     action={![99, 50].includes(receipts.status)}
@@ -46,7 +49,7 @@ const ForwardItem = (
     skuSize={1}
     positionSize={1}
     onClick={() => onClick(item)}
-    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+    users={ToolUtil.isArray(item.processUsers)}
   />;
 };
 

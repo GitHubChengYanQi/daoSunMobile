@@ -1,9 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import style from '../../../StocktakingTask/components/StocktakingItem/index.less';
 import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
-import { UserOutline } from 'antd-mobile-icons';
-import { Space } from 'antd-mobile';
 
 const OutStockItem = (
   {
@@ -12,6 +9,7 @@ const OutStockItem = (
     pick,
     onClick = () => {
     },
+    noProgress,
   }) => {
 
   const receipts = item.receipts || {};
@@ -24,7 +22,11 @@ const OutStockItem = (
   const percent = parseInt((receipts.receivedCount / receipts.numberCount) * 100);
 
   return <TaskItem
-    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+    task={item}
+    noProgress={noProgress}
+    otherData={<>领料人：{receipts?.userResult?.name}</>}
+    otherUserLabel='领料人'
+    users={ToolUtil.isArray(item.processUsers)}
     statusName={receipts.statusName}
     action={![99, 50].includes(receipts.status)}
     complete={[99, 50].includes(receipts.status)}

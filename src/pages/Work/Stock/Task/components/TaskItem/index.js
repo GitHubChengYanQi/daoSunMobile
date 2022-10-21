@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
+import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
@@ -10,6 +10,10 @@ import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
 import receipts from '../../../../../../assets/receiptsTask.png';
 import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
+import MyCard from '../../../../../components/MyCard';
+import { UserName } from '../../../../../components/User';
+import { Avatar } from 'antd';
+import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -30,10 +34,12 @@ const TaskItem = (
     noProgress,
     statusName,
     action,
-    users,
+    users = [],
     userLabel,
+    otherData,
     origin = {},
     complete,
+    task = {},
   },
 ) => {
   const originRet = isArray(origin?.parent)[0]?.ret;
@@ -53,12 +59,58 @@ const TaskItem = (
 
   let img;
   if (action) {
-   img = receipts;
-  }else if (complete){
-    img = receiptsOk
-  }else {
-    img = receiptsNo
+    img = receipts;
+  } else if (complete) {
+    img = receiptsOk;
+  } else {
+    img = receiptsNo;
   }
+
+  return <>
+    <MyCard
+      onClick={onClick}
+      className={style.card}
+      titleBom={
+        <div className={style.header}>
+          <div className={style.title}>{taskName}</div>
+          <div className={classNames(style.status, ['50', '49'].includes(task.status) && style.error)}>
+            {statusName}
+          </div>
+        </div>
+      }
+      extraClassName={style.extra}
+      extra={MyDate.Show(createTime)}
+      bodyClassName={style.body}
+    >
+      <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
+      <div className={style.user}>
+        <div style={{ width: otherData ? '50%' : '100%' }}>
+          <MyEllipsis width='100%'>{userLabel || '执行人'}：
+            {isArray(users).length === 0 && '无'}
+            {
+              isArray(users).map((item, index) => {
+                return <Avatar
+                  size={18}
+                  key={index}
+                  style={{marginRight:4}}
+                  src={item.avatar || ''}
+                >
+                  {item.name ? item?.name.substring(0, 1) : ''}
+                </Avatar>;
+              })
+            }</MyEllipsis>
+        </div>
+        {otherData &&
+        <div style={{ textAlign: 'right', width: '50%' }}>
+          <MyEllipsis width='100%'>{otherData}</MyEllipsis>
+        </div>}
+      </div>
+      <div className={style.process} hidden={noProgress}>
+        <MyProgress percent={percent} />
+      </div>
+    </MyCard>
+    <div className={style.space} />
+  </>;
 
   return <div key={index} className={style.orderItem} style={{ padding: 0 }} onClick={onClick}>
     <div className={style.title}>

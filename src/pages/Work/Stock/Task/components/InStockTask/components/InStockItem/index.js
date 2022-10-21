@@ -8,6 +8,7 @@ const InStockItem = (
     index,
     onClick = () => {
     },
+    noProgress
   }) => {
 
   const receipts = item.receipts || {};
@@ -15,6 +16,8 @@ const InStockItem = (
   const percent = parseInt((receipts.inStockNum / receipts.applyNum) * 100);
 
   return <TaskItem
+    task={item}
+    noProgress={noProgress}
     statusName={receipts.statusName || '进行中'}
     percent={percent}
     action={![99, 50].includes(receipts.status)}
@@ -30,7 +33,7 @@ const InStockItem = (
     origin={isObject(item.themeAndOrigin)}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
-    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+    users={ToolUtil.isArray(item.processUsers)}
   />;
 };
 

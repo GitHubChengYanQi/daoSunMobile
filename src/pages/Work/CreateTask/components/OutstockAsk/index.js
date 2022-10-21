@@ -14,6 +14,8 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
+import MyCard from '../../../../components/MyCard';
+import { Input } from 'antd-mobile';
 
 const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
@@ -78,7 +80,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
       title: '出库申请',
       type: '出库',
       otherData: [item.brandName || '任意品牌'],
-      disabled: !params.userId || normalSku.length === 0,
+      disabled: !params.userId || normalSku.length === 0 || !params.theme,
     };
   };
 
@@ -92,6 +94,12 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         skuList={skuList}
         countNumber={countNumber}
         dataChange={dataChange}
+      />
+
+      <MyCard titleBom={<Title className={style.title}>主题 <span>*</span></Title>} extra={<Input
+        className={style.theme}
+        placeholder='请输入'
+        onChange={(theme) => setParams({ ...params, theme })} />}
       />
       <User
         title='领料负责人'
@@ -135,6 +143,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
             note: params.remark,
             userIds: ToolUtil.isArray(params.userIds).toString(),
             userId: params.userId,
+            theme: params.theme,
           },
         });
       }}

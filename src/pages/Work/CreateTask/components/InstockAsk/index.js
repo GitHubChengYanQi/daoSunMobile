@@ -12,6 +12,10 @@ import OtherData from '../OtherData';
 import { ReceiptsEnums } from '../../../../Receipts';
 import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
+import MyCard from '../../../../components/MyCard';
+import { Input } from 'antd-mobile';
+import Customers from '../../../ProcessTask/MyAudit/components/Customers';
+import LinkButton from '../../../../components/LinkButton';
 
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
@@ -20,6 +24,8 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
   const [params, setParams] = useState(defaultParams || {});
+
+  const [visible, setVisible] = useState(false);
 
   const history = useHistory();
 
@@ -80,7 +86,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       }).join('、'),
       careful: '注意事项',
       buttonHidden: judge,
-      disabled: (judge ? false : normalSku.length === 0),
+      disabled: (judge ? false : normalSku.length === 0 || !params.theme || !params.customerId),
     };
   };
 
@@ -93,6 +99,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
           if (positionItem.number > 0) {
             listParams.push({
               ...item,
+              customerId: params.customerId,
               storehousePositionsId: positionItem.id,
               number: positionItem.number,
             });
@@ -100,12 +107,13 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
           return null;
         });
       } else {
-        listParams.push({ ...item, storehousePositionsId: item.positionId });
+        listParams.push({ ...item, customerId: params.customerId, storehousePositionsId: item.positionId });
       }
       return null;
     });
     inStock({
       data: {
+        customerId:params.customerId,
         shopCardType: createType,
         directInStock,
         module: 'createInstock',
@@ -131,6 +139,18 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     <MyNavBar title={createTypeData().title} />
     {content()}
 
+    <MyCard titleBom={<Title className={style.title}>主题 <span>*</span></Title>} extra={<Input
+      className={style.theme}
+      placeholder='请输入'
+      onChange={(theme) => setParams({ ...params, theme })} />}
+    />
+
+    <MyCard
+      titleBom={<Title className={style.title}>供应商 <span>*</span></Title>}
+      extra={<LinkButton
+        onClick={() => setVisible(true)}>{params.customerId ? params.customerName : '请选择供应商'}</LinkButton>}
+    />
+
     <OtherData
       createType={createType}
       careful={<Title>注意事项</Title>}
@@ -153,6 +173,17 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     />}
 
     {(instockLoading) && <MyLoading />}
+
+    <Customers
+      onClose={() => setVisible(false)}
+      zIndex={1001}
+      value={params.customerId}
+      visible={visible}
+      onChange={(customer) => {
+        setParams({ ...params, customerId: customer?.value, customerName: customer?.label });
+        setVisible(false);
+      }}
+    />
 
   </div>;
 };
