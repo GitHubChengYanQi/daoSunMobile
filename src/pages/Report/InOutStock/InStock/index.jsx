@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from '../index.less';
 import MySearch from '../../../components/MySearch';
 import MyCard from '../../../components/MyCard';
@@ -6,9 +6,23 @@ import { Space } from 'antd-mobile';
 import Icon from '../../../components/Icon';
 import { useHistory, useLocation } from 'react-router-dom';
 import MyFloatingBubble from '../../../components/FloatingBubble';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import MyList from '../../../components/MyList';
+import { isObject } from '../../../components/ToolUtil';
+
+export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
 
 const InStock = () => {
   const history = useHistory();
+
+  const [list, setList] = useState([]);
+
+  const loading = false;
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
 
   return <>
     <div className={style.total}>
@@ -35,51 +49,53 @@ const InStock = () => {
 
     <MySearch placeholder='请输入供应商相关信息' style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }} />
 
-    {
-      [1, 2].map((item, index) => {
-        return <MyCard
-          onClick={() => {
-            history.push({
-              pathname: '/Report/InOutStock/InStock/InStockDetail',
-              query: {
-                customerId: 1,
-              },
-            });
-          }}
-          key={index}
-          className={style.card}
-          headerClassName={style.cardHeader}
-          titleBom={<Space align='center'>
-            <div className={style.yuan} />
-            辽宁辽工智能装备制造有限公司
-          </Space>}
-        >
-          <div className={style.info}>
-            <div>
-              <div className={style.numberTitle}>到货数量</div>
-              <div className={style.cardNum}>
-                <span>65</span>类
-                <span style={{ marginLeft: 4 }}>880</span>件
+    <MyList api={InStockDataList} data={list} getData={setList}>
+      {
+        list.map((item, index) => {
+          return <MyCard
+            onClick={() => {
+              history.push({
+                pathname: '/Report/InOutStock/InStock/InStockDetail',
+                query: {
+                  customerId: 1,
+                },
+              });
+            }}
+            key={index}
+            className={style.card}
+            headerClassName={style.cardHeader}
+            titleBom={<Space align='center'>
+              <div className={style.yuan} />
+              {isObject(item.customerResult).customerName}
+            </Space>}
+          >
+            <div className={style.info}>
+              <div>
+                <div className={style.numberTitle}>到货数量</div>
+                <div className={style.cardNum}>
+                  <span style={{ padding: '0 4px' }}>{item.logSkuCount}</span>类
+                  <span style={{ marginLeft: 4, padding: '0 4px' }}>{item.logNumberCount}</span>件
+                </div>
+              </div>
+              <div>
+                <div className={style.numberTitle}>入库数量</div>
+                <div className={style.cardNum}>
+                  <span className='numberBlue'>{item.detailSkuCount}</span>类
+                  <span style={{ marginLeft: 4 }} className='numberBlue'>{item.detailNumberCount}</span>件
+                </div>
+              </div>
+              <div>
+                <div className={style.numberTitle}>退货数量</div>
+                <div className={style.cardNum}>
+                  <span className='numberRed'>{item.errorSkuCount}</span>类
+                  <span style={{ marginLeft: 4 }} className='numberRed'>{item.errorNumberCount}</span>件
+                </div>
               </div>
             </div>
-            <div>
-              <div className={style.numberTitle}>入库数量</div>
-              <div className={style.cardNum}>
-                <span className='numberBlue'>65</span>类
-                <span style={{ marginLeft: 4 }} className='numberBlue'>880</span>件
-              </div>
-            </div>
-            <div>
-              <div className={style.numberTitle}>退货数量</div>
-              <div className={style.cardNum}>
-                <span className='numberRed'>65</span>类
-                <span style={{ marginLeft: 4 }} className='numberRed'>880</span>件
-              </div>
-            </div>
-          </div>
-        </MyCard>;
-      })
-    }
+          </MyCard>;
+        })
+      }
+    </MyList>
 
     <MyFloatingBubble><Icon type='icon-download-2-fill' /></MyFloatingBubble>
   </>;
