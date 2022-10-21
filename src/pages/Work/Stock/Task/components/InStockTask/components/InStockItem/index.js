@@ -33,7 +33,7 @@ const InStockItem = (
     origin={isObject(item.themeAndOrigin)}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
-    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers) : ToolUtil.isObject(item.user)}
   />;
 };
 
