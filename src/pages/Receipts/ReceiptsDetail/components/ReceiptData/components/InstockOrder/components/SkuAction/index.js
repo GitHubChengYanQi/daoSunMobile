@@ -342,6 +342,7 @@ const SkuAction = (
                   };
                 }),
                 customerId: order.customerId,
+                customerName:order.customerResult?.customerName,
                 files: isArray(order.url).map((item, index) => ({
                   mediaId: order.mediaIds[index],
                   url: item,
