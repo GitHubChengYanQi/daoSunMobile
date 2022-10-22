@@ -12,6 +12,11 @@ import LinkButton from '../../../../components/LinkButton';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import Icon from '../../../../components/Icon';
 import MyFloatingBubble from '../../../../components/FloatingBubble';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
+import MyEmpty from '../../../../components/MyEmpty';
+
+export const instockDetailView = { url: '/statisticalView/instockDetailView', method: 'POST' };
 
 const InStockDetail = () => {
 
@@ -19,13 +24,23 @@ const InStockDetail = () => {
 
   console.log(query);
 
+  const { loading, data } = useRequest({ ...instockDetailView, data: { customerId: query.customerId } });
+
   const [date, setDate] = useState([]);
 
   const history = useHistory();
 
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  if (!data) {
+    return <MyEmpty />;
+  }
+
   return <>
     <MyNavBar title='入库统计详情' />
-    <div style={{margin:'1px 0'}}>
+    <div style={{ margin: '1px 0' }}>
       <MySearch placeholder='搜索' />
     </div>
     <MyCard
@@ -83,19 +98,19 @@ const InStockDetail = () => {
       </div>
     </div>
 
-      {
-        [1, 2].map((item, index) => {
-          return <div key={index} className={style.skuItem}>
-            <SkuItem
-              title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'
-              describe='丹东汉克'
-              otherData={[
-                <><span className='numberBlue'>入库</span> ×50 &nbsp;&nbsp; <span className='numberRed'>退货</span>×30</>,
-              ]}
-            />
-          </div>;
-        })
-      }
+    {
+      [1, 2].map((item, index) => {
+        return <div key={index} className={style.skuItem}>
+          <SkuItem
+            title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'
+            describe='丹东汉克'
+            otherData={[
+              <><span className='numberBlue'>入库</span> ×50 &nbsp;&nbsp; <span className='numberRed'>退货</span>×30</>,
+            ]}
+          />
+        </div>;
+      })
+    }
   </>;
 };
 

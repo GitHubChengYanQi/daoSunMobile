@@ -10,19 +10,28 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import MyList from '../../../components/MyList';
 import { isObject } from '../../../components/ToolUtil';
+import { message } from 'antd';
 
 export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
+export const InStockExport = { url: '/viewExcel/export', method: 'GET' };
 
 const InStock = () => {
+
   const history = useHistory();
 
   const [list, setList] = useState([]);
 
-  const loading = false;
+  const { loading: exportLoading, run: exportRun } = useRequest(InStockExport, {
+    manual: true,
+    onSuccess: () => {
+      message.success('导出成功！请注意查收');
+    },
+    onError: () => message.error('导出失败！请联系管理员'),
+  });
 
-  if (loading) {
-    return <MyLoading skeleton />;
-  }
+  // if (loading) {
+  //   return <MyLoading skeleton />;
+  // }
 
   return <>
     <div className={style.total}>
@@ -57,7 +66,7 @@ const InStock = () => {
               history.push({
                 pathname: '/Report/InOutStock/InStock/InStockDetail',
                 query: {
-                  customerId: 1,
+                  customerId: item.customerId,
                 },
               });
             }}
@@ -66,7 +75,7 @@ const InStock = () => {
             headerClassName={style.cardHeader}
             titleBom={<Space align='center'>
               <div className={style.yuan} />
-              {isObject(item.customerResult).customerName}
+              {item.customerName}
             </Space>}
           >
             <div className={style.info}>
@@ -97,7 +106,11 @@ const InStock = () => {
       }
     </MyList>
 
-    <MyFloatingBubble><Icon type='icon-download-2-fill' /></MyFloatingBubble>
+    {exportLoading && <MyLoading />}
+
+    <MyFloatingBubble><Icon type='icon-download-2-fill' onClick={() => {
+      exportRun();
+    }} /></MyFloatingBubble>
   </>;
 };
 
