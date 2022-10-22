@@ -11,7 +11,11 @@ import moment from 'moment';
 import LinkButton from '../../../../components/LinkButton';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import Icon from '../../../../components/Icon';
-import MyFloatingBubble from '../../../../components/FloatingBubble';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
+import { isArray } from '../../../../components/ToolUtil';
+
+export const outstockDetailView = { url: '/statisticalView/totalResults', method: 'POST' };
 
 const OutStockDetail = () => {
 
@@ -22,6 +26,12 @@ const OutStockDetail = () => {
   const [date, setDate] = useState([]);
 
   const history = useHistory();
+
+  const { loading, data, run } = useRequest({ ...outstockDetailView, data: { customerId } });
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
 
   return <>
     <MyNavBar title='出库统计详情' />
@@ -34,7 +44,11 @@ const OutStockDetail = () => {
       extra={<StartEndDate
         max={new Date()}
         value={date}
-        onChange={setDate}
+        onChange={(date = []) => {
+          // viewRun({ data: { beginTime: date[0], endTime: date[1], customerId } });
+          run({ data: { beginTime: date[0], endTime: date[1], customerId } });
+          setDate(date);
+        }}
         render={date.length > 0 ?
           <LinkButton>
             <Space align='center'>
@@ -69,7 +83,7 @@ const OutStockDetail = () => {
     </div>
 
       {
-        [1, 2].map((item, index) => {
+        isArray(data).map((item, index) => {
           return <div key={index} className={style.skuItem}>
             <SkuItem
               title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'

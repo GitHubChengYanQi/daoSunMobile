@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import MyNavBar from '../../../../../components/MyNavBar';
 import MySearch from '../../../../../components/MySearch';
 import MyCard from '../../../../../components/MyCard';
@@ -14,21 +14,60 @@ import TaskItem from '../../../../../Work/Stock/Task/components/TaskItem';
 import MyAntPopup from '../../../../../components/MyAntPopup';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
+import { useLocation } from 'react-router-dom';
+import { ReceiptsEnums } from '../../../../../Receipts';
+import { useRequest } from '../../../../../../util/Request';
+import { instockDetailView } from '../../../InStock/InStockDetail';
+import { InStockViewTotail } from '../../../InStock';
 
 const OutStockTask = () => {
+
+  const { query } = useLocation();
+
+  const pickUserId = query.userId;
+  const userName = query.userName;
+
+  const defaultParams = { type: ReceiptsEnums.outstockOrder, pickUserId };
+
+  const listRef = useRef();
 
   const [date, setDate] = useState([]);
 
   const [visible, setVisible] = useState(false);
 
+  const [search, setSearch] = useState('');
+
+  // const { loading, data } = useRequest({ ...instockDetailView, data: { customerId } });
+
+  const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
+    ...InStockViewTotail,
+    data: { customerId },
+  });
+
+  useEffect(() => {
+    listRef.current?.submit(defaultParams);
+  }, []);
+
   return <>
     <MyNavBar title='出库任务明细' />
     <div style={{ margin: '1px 0' }}>
-      <MySearch placeholder='搜索' />
+      <MySearch
+        placeholder='搜索'
+        onChange={setSearch}
+        value={search}
+        onSearch={(skuName) => {
+          listRef.current?.submit({
+            ...defaultParams,
+            startTime: date[0] || null,
+            endTime: date[1] || null,
+            skuName,
+          });
+        }}
+      />
     </div>
     <MyCard
       className={style.customerCard}
-      titleBom='程彦祺'
+      titleBom={userName}
       extra={<StartEndDate
         max={new Date()}
         value={date}
