@@ -15,14 +15,14 @@ import MyFloatingBubble from '../../../../components/FloatingBubble';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
+import { isArray } from '../../../../components/ToolUtil';
+import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const instockDetailView = { url: '/statisticalView/instockDetailView', method: 'POST' };
 
 const InStockDetail = () => {
 
   const { query } = useLocation();
-
-  console.log(query);
 
   const { loading, data } = useRequest({ ...instockDetailView, data: { customerId: query.customerId } });
 
@@ -99,13 +99,13 @@ const InStockDetail = () => {
     </div>
 
     {
-      [1, 2].map((item, index) => {
+      isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
           <SkuItem
-            title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'
-            describe='丹东汉克'
+            title={SkuResultSkuJsons({ skuResult: item.skuResult })}
+            describe={item.brandResult?.brandName || '无品牌'}
             otherData={[
-              <><span className='numberBlue'>入库</span> ×50 &nbsp;&nbsp; <span className='numberRed'>退货</span>×30</>,
+              <><span className='numberBlue'>入库</span> ×{item.logNum || 0} &nbsp;&nbsp; <span className='numberRed'>退货</span>×{item.errorNum || 0}</>,
             ]}
           />
         </div>;
