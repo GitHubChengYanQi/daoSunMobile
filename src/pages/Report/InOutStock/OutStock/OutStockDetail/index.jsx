@@ -86,7 +86,7 @@ const OutStockDetail = () => {
           });
         }}>
           <div>任务数</div>
-          <div className='numberBlue'>1558</div>
+          <div className='numberBlue'>{view?.orderCount || 0}</div>
         </div>
       </div>
     </div>
