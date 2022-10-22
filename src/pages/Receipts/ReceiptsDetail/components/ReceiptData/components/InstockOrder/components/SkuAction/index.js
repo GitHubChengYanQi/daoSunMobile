@@ -327,6 +327,7 @@ const SkuAction = (
               pathname: '/Work/CreateTask',
               query: {
                 createType: ERPEnums.inStock,
+                submitType: 'resubmit',
               },
               state: {
                 skus: data.map(item => {
@@ -340,6 +341,7 @@ const SkuAction = (
                     skuResult: item.skuResult,
                   };
                 }),
+                customerId: order.customerId,
                 files: isArray(order.url).map((item, index) => ({
                   mediaId: order.mediaIds[index],
                   url: item,
