@@ -1,0 +1,136 @@
+.header {
+  border-radius: 4px;
+  background-color: #fff;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+
+  > div {
+    width: calc(50% - 0.5px);
+    display: inline-block;
+  }
+
+  .space {
+    flex-grow: 0;
+    background-color: #F5F5F5;
+    padding: 14px 0;
+    height: 30px;
+    width: 1px;
+  }
+
+  .time {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .placeholder {
+      color: #999999;
+    }
+  }
+
+  .tabs {
+    .inOutStockTabs {
+      :global {
+
+        .adm-tabs-tab-wrapper {
+          padding: 0 12px
+        }
+
+        .adm-tabs-tab-line {
+          background-color: var(--adm-color-primary);
+        }
+
+        .adm-tabs-tab {
+          font-size: 16px;
+          padding: 14px 0;
+          color: #000;
+        }
+
+        .adm-tabs-header {
+          border: none;
+        }
+
+        .adm-tabs-tab-active {
+          color: var(--adm-color-primary);
+          font-weight: normal;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
+
+.total {
+  border-radius: 4px;
+  background-color: #fff;
+  margin-top: 8px;
+  padding: 12px;
+
+  .number {
+    span {
+      font-size: 20px;
+      margin-left: 18px;
+      font-weight: bold;
+    }
+  }
+
+  .otherNUmber {
+    display: flex;
+    align-items: center;
+    margin-top: 22px;
+
+    > div {
+      flex-grow: 1;
+      border-left: solid #F5F5F5 3px;
+      padding-left: 12px;
+
+      .num {
+        margin-top: 12px;
+      }
+
+      span {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.yuan {
+  width: 10px;
+  height: 10px;
+  border-radius: 50px;
+  background: var(--adm-color-primary);
+}
+
+.card {
+  border-radius: 4px;
+  margin-bottom: 8px;
+
+  .cardHeader {
+    border-bottom: solid 1px #F5F5F5;
+    padding-bottom: 8px;
+  }
+
+  .info {
+    display: flex;
+
+    > div {
+      flex-grow: 1;
+      font-size: 12px;
+
+      .numberTitle {
+        color: #8D8D8D;
+      }
+
+      .cardNum {
+        margin-top: 8px;
+
+        span {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+}
