@@ -44,8 +44,8 @@ const ActionButtons = (
   actions = actions.filter(item => {
     if (item.action === 'revoke') {
       return createUser === userInfo.id;
-    }else {
-      return permissions
+    } else {
+      return permissions;
     }
   });
 
@@ -61,6 +61,9 @@ const ActionButtons = (
     switch (action) {
       case 'revoke':
         setRevoke(true);
+        break;
+      case 'resubmit':
+        onClick('revokeAndAsk');
         break;
       default:
         onClick(action);
@@ -79,9 +82,14 @@ const ActionButtons = (
       case 2:
         return <>
           <div className={style.buttons}>
-            <Button disabled={actions[1].disabled} className={style.reject} color='primary' fill='outline' onClick={() => {
-              actionClick(actions[1].action);
-            }}>
+            <Button
+              disabled={actions[1].disabled}
+              className={style.reject}
+              color='primary'
+              fill='outline'
+              onClick={() => {
+                actionClick(actions[1].action);
+              }}>
               {actions[1].name}
             </Button>
             <Button disabled={actions[0].disabled} className={style.ok} color='primary' onClick={() => {
@@ -101,24 +109,36 @@ const ActionButtons = (
               <MoreOutline />
             </div>
             <div className={style.buttons}>
-              <Button className={style.reject} color='primary' fill='outline' onClick={() => {
-
-              }}>
-                驳回
+              <Button
+                disabled={actions[1].disabled}
+                className={style.reject}
+                color='primary'
+                fill='outline'
+                onClick={() => {
+                  actionClick(actions[1].action);
+                }}>
+                {actions[1].name}
               </Button>
-              <Button color='primary' className={style.ok} onClick={() => {
-
+              <Button disabled={actions[0].disabled} className={style.ok} color='primary' onClick={() => {
+                actionClick(actions[0].action);
               }}>
-                同意
+                {actions[0].name}
               </Button>
             </div>
           </div>
 
-          <MyActionSheet onAction={() => setVisible(false)} visible={visible} actions={[
-            { text: '转审', key: 'outStock', disabled: true },
-            { text: '加签', key: 'inStock', disabled: true },
-            { text: '退回', key: 'allocation', disabled: true },
-          ]} onClose={() => setVisible(false)} />
+          <MyActionSheet
+            onAction={(action) => {
+              actionClick(action.key);
+              setVisible(false);
+            }}
+            visible={visible}
+            actions={actions.filter((item, index) => index > 1).map(item => ({
+              text: item.name,
+              key: item.action,
+              disabled: item.disabled,
+            }))}
+            onClose={() => setVisible(false)} />
         </>;
     }
   };
