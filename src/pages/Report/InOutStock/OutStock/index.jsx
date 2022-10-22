@@ -69,7 +69,7 @@ const OutStock = (
                 pathname: '/Report/InOutStock/OutStock/OutStockDetail',
                 query: {
                   userId: item.userId,
-                  uerName:item.userResult?.name
+                  userName:item.userResult?.name
                 },
               });
             }}
@@ -77,7 +77,7 @@ const OutStock = (
             headerClassName={style.cardHeader}
             titleBom={<Space align='center'>
               <div className={style.yuan} />
-              程彦祺
+              {item.userResult?.name}
             </Space>}
           >
             <div className={style.info}>

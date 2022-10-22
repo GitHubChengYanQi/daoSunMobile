@@ -15,6 +15,7 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import { isArray } from '../../../../components/ToolUtil';
 import { OutStockDataView } from '../index';
+import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 export const outstockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
 
@@ -79,7 +80,8 @@ const OutStockDetail = () => {
           history.push({
             pathname: '/Report/InOutStock/OutStock/OutStockDetail/OutStockTask',
             query: {
-              userId: 1,
+              userId,
+              userName,
             },
           });
         }}>
@@ -93,10 +95,15 @@ const OutStockDetail = () => {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
           <SkuItem
-            title='黑色内扣冷却管/lqg-700/ 1/2*700mm黑色...'
-            describe='丹东汉克'
+            skuResult={item.skuResult}
+            title={SkuResultSkuJsons({ skuResult: item.skuResult })}
+            describe={item.brandResult?.brandName || '无品牌'}
             otherData={[
-              <><span className='numberBlue'>领取</span> ×50 &nbsp;&nbsp; <span>出库</span>×30</>,
+              <>
+                <span className='numberBlue'>领取</span> ×{item.pickNumCount || 0}
+                &nbsp;&nbsp;
+                <span>出库</span>×{item.outNumCount || 0}
+              </>,
             ]}
           />
         </div>;

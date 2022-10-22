@@ -20,6 +20,7 @@ import { outstockDetailView } from '../index';
 import { MyLoading } from '../../../../../components/MyLoading';
 import { isArray } from '../../../../../components/ToolUtil';
 import { OutStockDataView } from '../../index';
+import ProcessList from '../../../../../Work/ProcessTask/ProcessList';
 
 const OutStockTask = () => {
 
@@ -105,23 +106,20 @@ const OutStockTask = () => {
       </div>
     </div>
 
-    {
-      [1, 2].map((item, index) => {
-        return <TaskItem noProgress createTime={new Date()} key={index} taskName='xxx的出库申请' statusName='进行中' />;
-      })
-    }
+    <ProcessList noProgress manual listRef={listRef} />
 
     <MyAntPopup visible={visible} onClose={() => setVisible(false)} title='物料明细'>
       {
         loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
           return <div key={index} className={style.skuItem}>
             <SkuItem
+              skuResult={item.skuResult}
               className={style.sku}
               otherData={[
-                '丹东汉克',
+                item.brandResult?.brandName || '无品牌',
               ]}
             />
-            <ShopNumber show value={1} />
+            <ShopNumber show value={(item.pickNumCount || 0) + (item.outNumCount || 0)} />
           </div>;
         })
       }
