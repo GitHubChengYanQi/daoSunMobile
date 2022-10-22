@@ -11,7 +11,6 @@ import moment from 'moment';
 import LinkButton from '../../../../components/LinkButton';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import Icon from '../../../../components/Icon';
-import MyFloatingBubble from '../../../../components/FloatingBubble';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';

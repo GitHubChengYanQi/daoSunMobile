@@ -39,7 +39,7 @@ const InStockTask = () => {
 
   const [search, setSearch] = useState('');
 
-  const { loading, data } = useRequest({ ...instockDetailView, data: { customerId } });
+  const { loading, data,run } = useRequest({ ...instockDetailView, data: { customerId } });
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
     ...InStockViewTotail,
@@ -76,6 +76,7 @@ const InStockTask = () => {
         value={date}
         onChange={(date) => {
           viewRun({ data: { beginTime: date[0], endTime: date[1], customerId } });
+          run({ data: { beginTime: date[0], endTime: date[1], customerId } });
           listRef.current?.submit({ ...defaultParams, startTime: date[0], endTime: date[1] });
           setDate(date);
         }}

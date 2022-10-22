@@ -8,7 +8,6 @@ import { Space } from 'antd-mobile';
 import moment from 'moment';
 import { DownOutline, RightOutline } from 'antd-mobile-icons';
 import style from '../index.less';
-import MyFloatingBubble from '../../../../../components/FloatingBubble';
 import Icon from '../../../../../components/Icon';
 import TaskItem from '../../../../../Work/Stock/Task/components/TaskItem';
 import MyAntPopup from '../../../../../components/MyAntPopup';
@@ -17,8 +16,10 @@ import ShopNumber from '../../../../../Work/AddShop/components/ShopNumber';
 import { useLocation } from 'react-router-dom';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import { useRequest } from '../../../../../../util/Request';
-import { instockDetailView } from '../../../InStock/InStockDetail';
-import { InStockViewTotail } from '../../../InStock';
+import { outstockDetailView } from '../index';
+import { MyLoading } from '../../../../../components/MyLoading';
+import { isArray } from '../../../../../components/ToolUtil';
+import { OutStockDataView } from '../../index';
 
 const OutStockTask = () => {
 
@@ -37,11 +38,11 @@ const OutStockTask = () => {
 
   const [search, setSearch] = useState('');
 
-  // const { loading, data } = useRequest({ ...instockDetailView, data: { customerId } });
+  const { loading, data ,run} = useRequest({ ...outstockDetailView, data: { userId:pickUserId } });
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
-    ...InStockViewTotail,
-    data: { customerId },
+    ...OutStockDataView,
+    data: { userId:pickUserId },
   });
 
   useEffect(() => {
@@ -71,7 +72,12 @@ const OutStockTask = () => {
       extra={<StartEndDate
         max={new Date()}
         value={date}
-        onChange={setDate}
+        onChange={(date) => {
+          viewRun({ data: { beginTime: date[0], endTime: date[1], userId:pickUserId } });
+          run({ data: { beginTime: date[0], endTime: date[1], userId:pickUserId } });
+          listRef.current?.submit({ ...defaultParams, startTime: date[0], endTime: date[1],pickUserId });
+          setDate(date);
+        }}
         render={date.length > 0 ?
           <LinkButton>
             <Space align='center'>
@@ -90,8 +96,8 @@ const OutStockTask = () => {
         <div>
           <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
           出库总数
-          <span className='numberBlue'>216</span>类
-          <span className='numberBlue'>10342</span>件
+          <span className='numberBlue'>{view?.outSkuCount || 0}</span>类
+          <span className='numberBlue'>{view?.outNumCount || 0}</span>件
         </div>
         <div className={style.taskTotal}>
           <RightOutline style={{ fontSize: 12 }} />
@@ -107,7 +113,7 @@ const OutStockTask = () => {
 
     <MyAntPopup visible={visible} onClose={() => setVisible(false)} title='物料明细'>
       {
-        [1, 2].map((item, index) => {
+        loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
           return <div key={index} className={style.skuItem}>
             <SkuItem
               className={style.sku}
@@ -120,6 +126,8 @@ const OutStockTask = () => {
         })
       }
     </MyAntPopup>
+
+    {viewtLoading && <MyLoading />}
   </>;
 };
 
