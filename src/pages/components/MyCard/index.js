@@ -16,6 +16,7 @@ const MyCard = (
     className,
     noHeader,
     hidden,
+    titleClassName,
     extraClassName,
     onClick = () => {
     },
@@ -24,10 +25,14 @@ const MyCard = (
 ) => {
 
 
-  return <div style={cardStyle} onClick={onClick} hidden={hidden}
-              className={ToolUtil.classNames(className, style.card)}>
+  return <div
+    style={cardStyle}
+    onClick={onClick}
+    hidden={hidden}
+    className={ToolUtil.classNames(className, style.card)}
+  >
     <div style={headerStyle} hidden={noHeader} className={ToolUtil.classNames(headerClassName, style.header)}>
-      <div className={style.title}>{titleBom || <Title>{title}</Title>}</div>
+      <div className={style.title}>{titleBom || <Title className={titleClassName}>{title}</Title>}</div>
       <div className={extraClassName}>
         {extra}
       </div>

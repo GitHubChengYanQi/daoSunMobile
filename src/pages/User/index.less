@@ -10,67 +10,108 @@
     .customerName {
       flex-grow: 1;
       font-size: 18px;
-      color: #808080;
       font-weight: bold;
-    }
-
-    .outLogin {
-      height: 24px;
+      color: #3D3D3D;
     }
   }
 
   .userInfo {
-    padding: 12px 0;
+    //padding: 12px 0;
 
     .name {
-      font-weight: bold;
-      font-size: 18px;
-      padding-bottom: 8px;
+      font-size: 16px;
+      line-height: 16px;
+      color: #000000;
     }
 
     .describe {
-      color: #c5c3c3;
-      padding-bottom: 8px;
+      padding: 8px 0;
+      font-size: 14px;
+      line-height: 14px;
+      color: #808080;
     }
 
     .dept {
       padding: 12px 0;
-      border-top: solid 1px #f5f5f5;
+      border-top: solid 1px #D4D4D4;
       color: #808080;
       display: flex;
       align-items: center;
+
+      .outLogin {
+        font-size: 14px;
+        font-weight: normal;
+        line-height: 14px;
+        color: #808080;
+      }
     }
   }
 }
 
 .dynamic {
+  border-radius: 8px 8px 0 0;
   margin-top: 12px;
 
-  .dynamicHeader {
-    padding-bottom: 12px;
+  .dynamicTitle {
+    color: #000;
   }
 
   .dynamicItem {
     padding: 8px 0;
     border-bottom: solid 1px var(--body--background--color);
 
-    .time {
-      opacity: .5;
+    .header {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+
+      .title {
+        flex-grow: 1;
+      }
+
+      .time {
+        opacity: .5;
+        color: #A9A9A9;
+      }
+    }
+  }
+
+  .date {
+    font-size: 12px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    background: #F5F5F5;
+    color: var(--adm-color-primary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    svg {
+      font-size: 8px;
     }
   }
 }
 
 
 .actions {
+  border-radius: 8px;
+  background: #FFFFFF;
   margin: 12px 0;
   display: flex;
-  align-content: center;
-  gap: 12px;
+  align-items: center;
 
-  div {
-    padding: 12px;
-    background-color: #fff;
-    flex-grow: 1;
+  > div {
+    border-left: 1px dashed #E1EBF6;;
+    padding: 12px 0;
+    width: 25%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    > div {
+      margin-top: 8px;
+    }
   }
 
   .loginOut {
