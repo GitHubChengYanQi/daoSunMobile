@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import style from '../index.less';
 import MySearch from '../../../components/MySearch';
 import MyCard from '../../../components/MyCard';
@@ -10,16 +10,29 @@ import MyList from '../../../components/MyList';
 
 export const OutStockDataList = { url: '/statisticalView/outstockView', method: 'POST' };
 
-const OutStock = () => {
+const OutStock = (
+  {
+    date = [],
+  },
+) => {
 
   const history = useHistory();
 
+  const listRef = useRef();
+
   const [list, setList] = useState([]);
+
+  useEffect(() => {
+    if (date.length > 0) {
+      // viewRun({ data: { beginTime: date[0], endTime: date[1] } });
+      listRef.current.submit({ beginTime: date[0], endTime: date[1] });
+    }
+  }, [date]);
 
   return <>
     <div className={style.total}>
       <div className={style.number}>
-        <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
+        <Icon type='icon-rukuzongshu' style={{ marginRight: 8, fontSize: 18 }} />
         出库总数
         <span className='numberBlue'>216</span>类
         <span className='numberBlue'>10342</span>件
@@ -28,7 +41,7 @@ const OutStock = () => {
 
     <MySearch placeholder='搜索' style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }} />
 
-    <MyList api={OutStockDataList} data={list} getData={setList}>
+    <MyList ref={listRef} api={OutStockDataList} data={list} getData={setList}>
       {
         list.map((item, index) => {
           return <MyCard

@@ -16,6 +16,11 @@ import ProcessList from '../../../../../Work/ProcessTask/ProcessList';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import { useLocation } from 'react-router-dom';
 import MyEllipsis from '../../../../../components/MyEllipsis';
+import { useRequest } from '../../../../../../util/Request';
+import { InStockViewTotail } from '../../index';
+import { MyLoading } from '../../../../../components/MyLoading';
+import { isArray } from '../../../../../components/ToolUtil';
+import { instockDetailView } from '../index';
 
 const InStockTask = () => {
 
@@ -33,6 +38,13 @@ const InStockTask = () => {
   const [visible, setVisible] = useState(false);
 
   const [search, setSearch] = useState('');
+
+  const { loading, data } = useRequest({ ...instockDetailView, data: { customerId } });
+
+  const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
+    ...InStockViewTotail,
+    data: { customerId },
+  });
 
   useEffect(() => {
     listRef.current?.submit(defaultParams);
@@ -63,6 +75,7 @@ const InStockTask = () => {
         max={new Date()}
         value={date}
         onChange={(date) => {
+          viewRun({ data: { beginTime: date[0], endTime: date[1], customerId } });
           listRef.current?.submit({ ...defaultParams, startTime: date[0], endTime: date[1] });
           setDate(date);
         }}
@@ -84,8 +97,8 @@ const InStockTask = () => {
         <div>
           <Icon type='icon-rukuzongshu' style={{ marginRight: 8, fontSize: 18 }} />
           入库总数
-          <span className='numberBlue'>216</span>类
-          <span className='numberBlue'>10342</span>件
+          <span className='numberBlue'>{view?.detailSkuCount || 0}</span>类
+          <span className='numberBlue'>{view?.detailNumberCount || 0}</span>件
         </div>
         <div className={style.taskTotal}>
           <RightOutline style={{ fontSize: 12 }} />
@@ -93,23 +106,26 @@ const InStockTask = () => {
       </div>
     </div>
 
-    <ProcessList manual listRef={listRef} />
+    <ProcessList noProgress manual listRef={listRef} />
 
     <MyAntPopup visible={visible} onClose={() => setVisible(false)} title='物料明细'>
       {
-        [1, 2].map((item, index) => {
+        loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
           return <div key={index} className={style.skuItem}>
             <SkuItem
+              skuResult={item.skuResult}
               className={style.sku}
               otherData={[
-                '丹东汉克',
+                item.brandResult?.brandName || '无品牌',
               ]}
             />
-            <ShopNumber show value={1} />
+            <ShopNumber show value={(item.logNum || 0) + (item.errorNum || 0)} />
           </div>;
         })
       }
     </MyAntPopup>
+
+    {viewtLoading && <MyLoading />}
   </>;
 };
 

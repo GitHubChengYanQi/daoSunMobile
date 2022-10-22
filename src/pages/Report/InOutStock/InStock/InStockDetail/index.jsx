@@ -79,7 +79,7 @@ const InStockDetail = () => {
     <div className={style.total}>
       <div className={style.number}>
         <div>
-          <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
+          <Icon type='icon-rukuzongshu' style={{ marginRight: 8, fontSize: 18 }} />
           入库总数
           <span className='numberBlue'>{view?.detailSkuCount || 0}</span>类
           <span className='numberBlue'>{view?.detailNumberCount || 0}</span>件
@@ -89,12 +89,12 @@ const InStockDetail = () => {
             pathname: '/Report/InOutStock/InStock/InStockDetail/InStockTask',
             query: {
               customerId,
-              customerName
+              customerName,
             },
           });
         }}>
           <div>任务数</div>
-          <div className='numberBlue'>1558</div>
+          <div className='numberBlue'>{view?.orderCount || 0}</div>
         </div>
       </div>
       <div className={style.otherNUmber}>
