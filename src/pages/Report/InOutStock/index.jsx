@@ -23,6 +23,7 @@ const InOutStock = () => {
       <div className={style.space} />
       <div className={style.time}>
         <StartEndDate
+          precision='day'
           max={new Date()}
           value={date}
           onChange={setDate}
@@ -38,7 +39,7 @@ const InOutStock = () => {
       </div>
     </div>
     {
-      key === 'inStock' ? <InStock /> : <OutStock />
+      key === 'inStock' ? <InStock date={date} /> : <OutStock date={date} />
     }
   </>;
 };

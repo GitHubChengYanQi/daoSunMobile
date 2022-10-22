@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "32452434",
+      "name": "入库总数",
+      "font_class": "rukuzongshu",
+      "unicode": "e6da",
+      "unicode_decimal": 59098
+    },
+    {
+      "icon_id": "32399219",
+      "name": "未执行",
+      "font_class": "weizhihang",
+      "unicode": "e6d9",
+      "unicode_decimal": 59097
+    },
+    {
       "icon_id": "32227410",
       "name": "下载",
       "font_class": "download-2-fill",

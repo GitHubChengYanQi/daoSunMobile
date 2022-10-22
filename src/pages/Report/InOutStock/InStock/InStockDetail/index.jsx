@@ -17,6 +17,8 @@ import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
 import { isArray } from '../../../../components/ToolUtil';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { InStockViewTotail } from '../index';
+import MyEllipsis from '../../../../components/MyEllipsis';
 
 export const instockDetailView = { url: '/statisticalView/instockDetailView', method: 'POST' };
 
@@ -24,13 +26,21 @@ const InStockDetail = () => {
 
   const { query } = useLocation();
 
-  const { loading, data } = useRequest({ ...instockDetailView, data: { customerId: query.customerId } });
+  const customerId = query.customerId;
+  const customerName = query.customerName;
+
+  const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
+    ...InStockViewTotail,
+    data: { customerId },
+  });
+
+  const { loading, data, run } = useRequest({ ...instockDetailView, data: { customerId } });
 
   const [date, setDate] = useState([]);
 
   const history = useHistory();
 
-  if (loading) {
+  if (loading || viewtLoading) {
     return <MyLoading skeleton />;
   }
 
@@ -45,11 +55,16 @@ const InStockDetail = () => {
     </div>
     <MyCard
       className={style.customerCard}
-      titleBom='辽宁辽工智能装备制造有限...'
+      titleBom={<MyEllipsis>{customerName}</MyEllipsis>}
       extra={<StartEndDate
+        precision='day'
         max={new Date()}
         value={date}
-        onChange={setDate}
+        onChange={(date = []) => {
+          viewRun({ data: { beginTime: date[0], endTime: date[1], customerId } });
+          run({ data: { beginTime: date[0], endTime: date[1], customerId } });
+          setDate(date);
+        }}
         render={date.length > 0 ?
           <LinkButton>
             <Space align='center'>
@@ -64,15 +79,17 @@ const InStockDetail = () => {
     <div className={style.total}>
       <div className={style.number}>
         <div>
+          <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
           入库总数
-          <span className='numberBlue'>216</span>类
-          <span className='numberBlue'>10342</span>件
+          <span className='numberBlue'>{view?.detailSkuCount || 0}</span>类
+          <span className='numberBlue'>{view?.detailNumberCount || 0}</span>件
         </div>
         <div className={style.taskTotal} onClick={() => {
           history.push({
             pathname: '/Report/InOutStock/InStock/InStockDetail/InStockTask',
             query: {
-              customerId: 1,
+              customerId,
+              customerName
             },
           });
         }}>
@@ -84,15 +101,15 @@ const InStockDetail = () => {
         <div>
           <div>收货总数</div>
           <div className={style.num}>
-            <span className='numberBlue'>216</span>类
-            <span style={{ marginLeft: 12 }} className='numberBlue'>10342</span>件
+            <span className='numberBlue'>{view?.logSkuCount || 0}</span>类
+            <span style={{ marginLeft: 12 }} className='numberBlue'>{view?.logNumberCount || 0}</span>件
           </div>
         </div>
         <div>
           <div>退货总数</div>
           <div className={style.num}>
-            <span className='numberRed'>216</span>类
-            <span style={{ marginLeft: 12 }} className='numberRed'>10342</span>件
+            <span className='numberRed'>{view?.errorSkuCount || 0}</span>类
+            <span style={{ marginLeft: 12 }} className='numberRed'>{view?.errorNumberCount || 0}</span>件
           </div>
         </div>
       </div>
@@ -102,10 +119,13 @@ const InStockDetail = () => {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
           <SkuItem
+            skuResult={item.skuResult}
             title={SkuResultSkuJsons({ skuResult: item.skuResult })}
             describe={item.brandResult?.brandName || '无品牌'}
             otherData={[
-              <><span className='numberBlue'>入库</span> ×{item.logNum || 0} &nbsp;&nbsp; <span className='numberRed'>退货</span>×{item.errorNum || 0}</>,
+              <>
+                <span className='numberBlue'>入库</span> ×{item.logNum || 0} &nbsp;&nbsp;
+                <span className='numberRed'>退货</span>×{item.errorNum || 0}</>,
             ]}
           />
         </div>;

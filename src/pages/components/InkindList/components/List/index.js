@@ -49,6 +49,7 @@ const List = (
       searchBarStyle={{ '--border-radius': '0' }}
       style={{ boxShadow: over && '0 4px 5px 0 rgb(0 0 0 / 10%)' }}
       extraIcon={<Popover.Menu
+        getContainer={null}
         onVisibleChange={setVisible}
         visible={visible}
         className={style.actions}
@@ -60,9 +61,9 @@ const List = (
         }}
         trigger='click'
       >
-        <div className={style.statusType}>
+        <Button className={style.statusType}>
           {status} {visible ? <UpOutline /> : <DownOutline />}
-        </div>
+        </Button>
       </Popover.Menu>}
       className={style.search}
       value={searchValue}

@@ -18,8 +18,11 @@ const OutStock = () => {
 
   return <>
     <div className={style.total}>
-      <div className={style.number}>出库总数 <span className='numberBlue'>216</span>类 <span
-        className='numberBlue'>10342</span>件
+      <div className={style.number}>
+        <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
+        出库总数
+        <span className='numberBlue'>216</span>类
+        <span className='numberBlue'>10342</span>件
       </div>
     </div>
 

@@ -49,6 +49,7 @@ const OutStockDetail = () => {
     <div className={style.total}>
       <div className={style.number}>
         <div>
+          <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
           出库总数
           <span className='numberBlue'>216</span>类
           <span className='numberBlue'>10342</span>件
