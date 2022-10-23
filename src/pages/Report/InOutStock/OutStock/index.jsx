@@ -9,9 +9,11 @@ import { useHistory } from 'react-router-dom';
 import MyList from '../../../components/MyList';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
+import { message } from 'antd';
 
 export const OutStockDataList = { url: '/statisticalView/outstockView', method: 'POST' };
 export const OutStockDataView = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
+export const OutStockExport = { url: '/viewExcel/export', method: 'GET' };
 
 const OutStock = (
   {
@@ -26,6 +28,14 @@ const OutStock = (
   const [list, setList] = useState([]);
 
   const [search, setSearch] = useState('');
+
+  const { loading: exportLoading, run: exportRun } = useRequest(OutStockExport, {
+    manual: true,
+    onSuccess: () => {
+      message.success('导出成功！请注意查收');
+    },
+    onError: () => message.error('导出失败！请联系管理员'),
+  });
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({ ...OutStockDataView, data: {} });
 
@@ -69,7 +79,7 @@ const OutStock = (
                 pathname: '/Report/InOutStock/OutStock/OutStockDetail',
                 query: {
                   userId: item.userId,
-                  userName:item.userResult?.name
+                  userName: item.userResult?.name,
                 },
               });
             }}
@@ -101,9 +111,11 @@ const OutStock = (
       }
     </MyList>
 
-    {(viewtLoading) && <MyLoading />}
+    {(viewtLoading || exportLoading) && <MyLoading />}
 
-    <MyFloatingBubble><Icon type='icon-download-2-fill' /></MyFloatingBubble>
+    <MyFloatingBubble><Icon type='icon-download-2-fill' onClick={() => {
+      exportRun();
+    }} /></MyFloatingBubble>
   </>;
 };
 
