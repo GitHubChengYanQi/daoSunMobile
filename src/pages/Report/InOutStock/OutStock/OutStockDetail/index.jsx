@@ -16,6 +16,7 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { isArray } from '../../../../components/ToolUtil';
 import { OutStockDataView } from '../index';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyEmpty from '../../../../components/MyEmpty';
 
 export const outstockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
 
@@ -90,7 +91,7 @@ const OutStockDetail = () => {
         </div>
       </div>
     </div>
-
+    {isArray(data).length === 0 && <MyEmpty />}
     {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>

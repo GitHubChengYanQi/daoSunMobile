@@ -6,6 +6,7 @@ import moment from 'moment';
 import { RightOutline } from 'antd-mobile-icons';
 import InStock from './InStock';
 import OutStock from './OutStock';
+import MyEllipsis from '../../components/MyEllipsis';
 
 const InOutStock = () => {
 
@@ -28,8 +29,10 @@ const InOutStock = () => {
           value={date}
           onChange={setDate}
           render={date.length > 0 ?
-            <Space align='center'>
-              {moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')}
+            <Space align='center' style={{lineHeight:12}}>
+              <MyEllipsis width={'100%'} style={{fontSize:12}}>
+                {moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')}
+              </MyEllipsis>
               <RightOutline style={{ fontSize: 12 }} />
             </Space> :
             <Space align='center' className={style.placeholder}>

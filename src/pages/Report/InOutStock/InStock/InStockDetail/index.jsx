@@ -113,7 +113,7 @@ const InStockDetail = () => {
         </div>
       </div>
     </div>
-
+    {isArray(data).length === 0 && <MyEmpty />}
     {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
