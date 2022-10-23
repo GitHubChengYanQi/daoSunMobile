@@ -9,7 +9,6 @@ import MyFloatingBubble from '../../../components/FloatingBubble';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import MyList from '../../../components/MyList';
-import { isObject } from '../../../components/ToolUtil';
 import { message } from 'antd';
 
 export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
