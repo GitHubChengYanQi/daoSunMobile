@@ -13,7 +13,7 @@ import { message } from 'antd';
 
 export const OutStockDataList = { url: '/statisticalView/outstockView', method: 'POST' };
 export const OutStockDataView = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
-export const OutStockExport = { url: '/viewExcel/export', method: 'GET' };
+export const OutStockExport = { url: '/viewExcel/outStockExport', method: 'GET' };
 
 const OutStock = (
   {
