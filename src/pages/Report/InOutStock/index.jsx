@@ -29,8 +29,8 @@ const InOutStock = () => {
           value={date}
           onChange={setDate}
           render={date.length > 0 ?
-            <Space align='center' style={{lineHeight:12}}>
-              <MyEllipsis width={'100%'} style={{fontSize:12}}>
+            <Space align='center'>
+              <MyEllipsis width={'100%'} style={{fontSize:12,lineHeight:12}}>
                 {moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')}
               </MyEllipsis>
               <RightOutline style={{ fontSize: 12 }} />
