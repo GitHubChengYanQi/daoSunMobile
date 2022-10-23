@@ -11,6 +11,9 @@ import receipts from '../../../../../../assets/receiptsTask.png';
 import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
+import { UserName } from '../../../../../components/User';
+import { Avatar } from 'antd';
+import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -31,12 +34,12 @@ const TaskItem = (
     noProgress,
     statusName,
     action,
-    users,
+    users = [],
     userLabel,
     otherData,
     origin = {},
     complete,
-    task={},
+    task = {},
   },
 ) => {
   const originRet = isArray(origin?.parent)[0]?.ret;
@@ -70,7 +73,7 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={classNames(style.status,['50','49'].includes(task.status) && style.error)}>
+          <div className={classNames(style.status, ['50', '49'].includes(task.status+'') && style.error)}>
             {statusName}
           </div>
         </div>
@@ -79,10 +82,23 @@ const TaskItem = (
       extra={MyDate.Show(createTime)}
       bodyClassName={style.body}
     >
-      <div className={style.theme}>第三机械0127采购合同入库</div>
+      <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
       <div className={style.user}>
         <div style={{ width: otherData ? '50%' : '100%' }}>
-          <MyEllipsis width='100%'>{userLabel || '执行人'}：{users}</MyEllipsis>
+          <MyEllipsis width='100%'>{userLabel || '执行人'}：
+            {isArray(users).length === 0 && '无'}
+            {
+              isArray(users).map((item, index) => {
+                return <Avatar
+                  size={18}
+                  key={index}
+                  style={{marginRight:4}}
+                  src={item.avatar || ''}
+                >
+                  {item.name ? item?.name.substring(0, 1) : ''}
+                </Avatar>;
+              })
+            }</MyEllipsis>
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>

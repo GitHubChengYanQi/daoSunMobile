@@ -21,6 +21,9 @@ const TaskTypes = (
 
   const allTypes = [
     { label: '全部', value: 'all' },
+  ];
+
+  const erpTypes = [
     { label: '入库', value: ReceiptsEnums.instockOrder },
     { label: '出库', value: ReceiptsEnums.outstockOrder },
     { label: '异常', value: ReceiptsEnums.error },
@@ -31,9 +34,9 @@ const TaskTypes = (
 
   const [activeKey, setActiveKey] = useState('all');
 
-  const [types, setTypes] = useState(allTypes);
+  const [types, setTypes] = useState([...allTypes, ...erpTypes]);
 
-  const [type,setType] = useState({ key:value });
+  const [type, setType] = useState({ key: value });
 
   const sideBars = [
     { title: '全部', key: 'all' },
@@ -49,7 +52,7 @@ const TaskTypes = (
       title='任务类型'
       visible={visible}
       leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
-      rightText={<LinkButton onClick={()=>{
+      rightText={<LinkButton onClick={() => {
         onChange(type);
       }}>确定</LinkButton>}
     >
@@ -59,16 +62,12 @@ const TaskTypes = (
           onChange={key => {
             switch (key) {
               case 'all':
-                setTypes(allTypes);
+                setTypes([...allTypes, ...erpTypes]);
                 break;
               case 'erp':
                 setTypes([
-                  { label: '入库', value: ReceiptsEnums.instockOrder },
-                  { label: '出库', value: ReceiptsEnums.outstockOrder },
-                  { label: '异常', value: ReceiptsEnums.error },
-                  { label: '盘点', value: ReceiptsEnums.stocktaking },
-                  { label: '养护', value: ReceiptsEnums.maintenance },
-                  { label: '调拨', value: ReceiptsEnums.allocation },
+                  { label: '全部', value: 'all' },
+                  ...erpTypes,
                 ]);
                 break;
               default:
@@ -93,9 +92,9 @@ const TaskTypes = (
               const checked = (type.key ? type.key === item.value : item.value === 'all');
               return <div
                 key={index}
-                className={classNames(checked && style.checked,style.check)}
+                className={classNames(checked && style.checked, style.check)}
                 onClick={() => {
-                  setType({ key:item.value === 'all' ? null : item.value ,title:item.label});
+                  setType({ key: item.value === 'all' ? null : item.value, title: item.label });
                 }}
               >
                 {item.label}

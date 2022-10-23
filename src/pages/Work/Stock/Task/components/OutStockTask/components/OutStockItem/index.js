@@ -26,7 +26,7 @@ const OutStockItem = (
     noProgress={noProgress}
     otherData={<>领料人：{receipts?.userResult?.name}</>}
     otherUserLabel='领料人'
-    users={ToolUtil.isArray(item.processUsers).length > 0 ? ToolUtil.isArray(item.processUsers).map(item => item.name).toString() : ToolUtil.isObject(item.user).name}
+    users={ToolUtil.isArray(item.processUsers)}
     statusName={receipts.statusName}
     action={![99, 50].includes(receipts.status)}
     complete={[99, 50].includes(receipts.status)}
