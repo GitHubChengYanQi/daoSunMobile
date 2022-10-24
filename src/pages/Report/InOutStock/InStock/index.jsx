@@ -12,7 +12,7 @@ import MyList from '../../../components/MyList';
 import { message } from 'antd';
 
 export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
-export const InStockExport = { url: '/viewExcel/export', method: 'GET' };
+export const InStockExport = { url: '/viewExcel/export', method: 'POST' };
 export const InStockViewTotail = { url: '/statisticalView/viewTotail', method: 'POST' };
 
 const InStock = (
@@ -124,7 +124,7 @@ const InStock = (
     {(exportLoading || viewtLoading) && <MyLoading />}
 
     <MyFloatingBubble><Icon type='icon-download-2-fill' onClick={() => {
-      exportRun();
+      exportRun({ data: { beginTime: date[0], endTime: date[1] } });
     }} /></MyFloatingBubble>
   </>;
 };

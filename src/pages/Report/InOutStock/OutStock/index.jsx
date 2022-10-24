@@ -13,7 +13,7 @@ import { message } from 'antd';
 
 export const OutStockDataList = { url: '/statisticalView/outstockView', method: 'POST' };
 export const OutStockDataView = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
-export const OutStockExport = { url: '/viewExcel/outStockExport', method: 'GET' };
+export const OutStockExport = { url: '/viewExcel/outStockExport', method: 'POST' };
 
 const OutStock = (
   {
@@ -114,7 +114,7 @@ const OutStock = (
     {(viewtLoading || exportLoading) && <MyLoading />}
 
     <MyFloatingBubble><Icon type='icon-download-2-fill' onClick={() => {
-      exportRun();
+      exportRun({ data: { beginTime: date[0], endTime: date[1] } });
     }} /></MyFloatingBubble>
   </>;
 };
