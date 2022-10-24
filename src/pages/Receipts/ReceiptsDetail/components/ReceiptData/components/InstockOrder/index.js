@@ -106,6 +106,17 @@ const InstockOrder = (
     </MyCard>
 
     <MyCard
+      hidden={type !== ReceiptsEnums.instockOrder}
+      title='供应商'
+      extra={data.customerResult?.customerNmae || '无'}
+    />
+
+    <MyCard
+      title='主题'
+      extra={taskDetail.theme || '无'}
+    />
+
+    <MyCard
       hidden={type !== ReceiptsEnums.outstockOrder}
       title='领料负责人'
       extra={<UserName user={data.userResult} />}

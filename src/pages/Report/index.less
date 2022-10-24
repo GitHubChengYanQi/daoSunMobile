@@ -1,22 +1,39 @@
 
 .report {
-  .orderHeader {
-    background-color: #fff;
-    padding: 12px;
+  .tabs {
+    --title-font-size: 14px;
+    background-image: url("../../assets/reportBg.png");
+    background-size: 100% 153px;
+    background-repeat: no-repeat;
+
+    :global {
+
+      .adm-tabs-tab-wrapper {
+        padding: 0 6px;
+      }
+
+      .adm-tabs-tab-line {
+        background-color: #fff;
+      }
+
+      .adm-tabs-tab {
+        color: #fff;
+      }
+
+      .adm-tabs-header {
+        border: none;
+      }
+
+      .adm-tabs-tab-active {
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+      }
+    }
   }
 
-  .orderCard {
-    background-color: var(--body--background--color);
-    padding: 12px 0;
-  }
-
-  .orderBody {
-    padding: 0 !important;
-    background-color: var(--body--background--color);
-  }
-
-  .taskBody {
-    padding: 8px 0 0 0 !important;
+  .card {
+    border-radius: 4px;
   }
 }
 

@@ -46,34 +46,6 @@ const Stock = (
       history.push(url);
     }
   }}>
-    <div className={style.flexGap}>
-      <div>
-        全部库存
-      </div>
-      <div className={style.row} style={{padding:8}}>
-        <span className='numberBlue' style={{ fontSize: 16 }}>{getData('skuNumber').number}</span>类
-        <span className='numberBlue' style={{ fontSize: 16 }}>{getData('stockCount').number}</span> 件
-      </div>
-      <div className={style.row}>
-        <span style={{ backgroundColor: '#257BDE' }} className={style.dian} />
-        <div>
-          正常 <span className='numberBlue'>{getData('normal').typeNum}</span>类
-          <span className='numberBlue'>{getData('normal').number}</span> 件
-          ({normalPercent}%)
-        </div>
-      </div>
-      <div className={style.row}>
-        <span style={{ backgroundColor: '#FA5151' }} className={style.dian} />
-        <div>
-          异常 <span className='numberBlue'>{getData('error').typeNum}</span>类
-          <span className='numberBlue'>{getData('error').number}</span> 件
-          ({100 - normalPercent}%)
-        </div>
-      </div>
-      <div hidden={!action} className={style.row}>
-        <LinkButton onClick={viewError}>查看异常件</LinkButton>
-      </div>
-    </div>
     <Canvas pixelRatio={window.devicePixelRatio} width={150} height={150}>
       <Chart
         scale={{
@@ -101,6 +73,34 @@ const Stock = (
         />
       </Chart>
     </Canvas>
+    <div className={style.flexGap}>
+      <div>
+        库存总数
+      </div>
+      <div className={style.row} style={{padding:8}}>
+        <span className='numberBlue' style={{ fontSize: 16 }}>{getData('skuNumber').number}</span>类
+        <span className='numberBlue' style={{ fontSize: 16 }}>{getData('stockCount').number}</span> 件
+      </div>
+      <div className={style.row}>
+        <span style={{ backgroundColor: '#257BDE' }} className={style.dian} />
+        <div>
+          正常 <span className='numberBlue'>{getData('normal').typeNum}</span>类
+          <span className='numberBlue'>{getData('normal').number}</span> 件
+          ({normalPercent}%)
+        </div>
+      </div>
+      <div className={style.row}>
+        <span style={{ backgroundColor: '#FA5151' }} className={style.dian} />
+        <div>
+          异常 <span className='numberBlue'>{getData('error').typeNum}</span>类
+          <span className='numberBlue'>{getData('error').number}</span> 件
+          ({100 - normalPercent}%)
+        </div>
+      </div>
+      <div hidden={!action} className={style.row}>
+        <LinkButton onClick={viewError}>查看异常件</LinkButton>
+      </div>
+    </div>
   </div>;
 
 };
