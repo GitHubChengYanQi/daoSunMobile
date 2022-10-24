@@ -61,11 +61,8 @@ const OutStock = (
       placeholder='搜索'
       style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }}
       onChange={setSearch}
-      onClear={() => {
-        listRef.current.submit({ beginTime: date[0], endTime: date[1], skuName: '' });
-      }}
       onSearch={(value) => {
-        listRef.current.submit({ beginTime: date[0], endTime: date[1], skuName: value });
+        listRef.current.submit({ beginTime: date[0], endTime: date[1], userName: value });
       }}
     />
 

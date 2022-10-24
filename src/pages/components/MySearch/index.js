@@ -65,6 +65,7 @@ const MySearch = (
           onChange(value);
         }}
         onClear={() => {
+          onSearch('');
           onChange('');
           onClear();
         }}

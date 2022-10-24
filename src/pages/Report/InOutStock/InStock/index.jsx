@@ -27,6 +27,8 @@ const InStock = (
 
   const [list, setList] = useState([]);
 
+  const [search, setSearch] = useState('');
+
   const { loading: exportLoading, run: exportRun } = useRequest(InStockExport, {
     manual: true,
     onSuccess: () => {
@@ -47,7 +49,7 @@ const InStock = (
   return <>
     <div className={style.total}>
       <div className={style.number}>
-        <Icon type='icon-rukuzongshu' style={{marginRight:8,fontSize:18}} />
+        <Icon type='icon-rukuzongshu' style={{ marginRight: 8, fontSize: 18 }} />
         入库总数
         <span className='numberBlue'>{view?.detailSkuCount || 0}</span>类
         <span className='numberBlue'>{view?.detailNumberCount || 0}</span>件
@@ -70,7 +72,15 @@ const InStock = (
       </div>
     </div>
 
-    <MySearch placeholder='请输入供应商相关信息' style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }} />
+    <MySearch
+      value={search}
+      placeholder='搜索'
+      style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }}
+      onChange={setSearch}
+      onSearch={(value) => {
+        listRef.current.submit({ beginTime: date[0], endTime: date[1], customerName: value });
+      }}
+    />
 
     <MyList ref={listRef} api={InStockDataList} data={list} getData={setList}>
       {

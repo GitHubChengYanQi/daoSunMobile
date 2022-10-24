@@ -13,7 +13,7 @@ import SkuItem from '../../../../Work/Sku/SkuItem';
 import Icon from '../../../../components/Icon';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { OutStockDataView } from '../index';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../../components/MyEmpty';
@@ -27,6 +27,11 @@ const OutStockDetail = () => {
   const userId = query.userId;
   const userName = query.userName;
 
+
+  const [defaultData, setDefaultData] = useState([]);
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+
   const [date, setDate] = useState([]);
 
   const history = useHistory();
@@ -36,7 +41,13 @@ const OutStockDetail = () => {
     data: { userId },
   });
 
-  const { loading, data, run } = useRequest({ ...outstockDetailView, data: { userId } });
+  const { loading, run } = useRequest({ ...outstockDetailView, data: { userId } }, {
+    onSuccess: (res) => {
+      setSearch('');
+      setData(res);
+      setDefaultData(res);
+    },
+  });
 
   if (loading || viewtLoading) {
     return <MyLoading skeleton />;
@@ -45,7 +56,18 @@ const OutStockDetail = () => {
   return <>
     <MyNavBar title='出库统计详情' />
     <div style={{ margin: '1px 0' }}>
-      <MySearch placeholder='搜索' />
+      <MySearch
+        placeholder='搜索'
+        value={search}
+        onChange={setSearch}
+        onSearch={(value) => {
+          const newData = defaultData.filter(item => {
+            const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
+            return ToolUtil.queryString(value, sku);
+          });
+          setData(newData);
+        }}
+      />
     </div>
     <MyCard
       className={style.customerCard}
