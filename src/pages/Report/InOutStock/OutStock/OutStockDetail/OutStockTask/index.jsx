@@ -21,6 +21,7 @@ import { MyLoading } from '../../../../../components/MyLoading';
 import { isArray } from '../../../../../components/ToolUtil';
 import { OutStockDataView } from '../../index';
 import ProcessList from '../../../../../Work/ProcessTask/ProcessList';
+import MyEmpty from '../../../../../components/MyEmpty';
 
 const OutStockTask = () => {
 
@@ -109,21 +110,24 @@ const OutStockTask = () => {
     <ProcessList noProgress manual listRef={listRef} />
 
     <MyAntPopup visible={visible} onClose={() => setVisible(false)} title='物料明细'>
-      {
-        loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
-          return <div key={index} className={style.skuItem}>
-            <SkuItem
-              extraWidth='24px'
-              skuResult={item.skuResult}
-              className={style.sku}
-              otherData={[
-                item.brandResult?.brandName || '无品牌',
-              ]}
-            />
-            <ShopNumber show value={(item.pickNumCount || 0) + (item.outNumCount || 0)} />
-          </div>;
-        })
-      }
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+        {!loading && isArray(data).length === 0 && <MyEmpty />}
+        {
+          loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
+            return <div key={index} className={style.skuItem}>
+              <SkuItem
+                extraWidth='80px'
+                skuResult={item.skuResult}
+                className={style.sku}
+                otherData={[
+                  item.brandResult?.brandName || '无品牌',
+                ]}
+              />
+              <ShopNumber show value={(item.pickNumCount || 0) + (item.outNumCount || 0)} />
+            </div>;
+          })
+        }
+      </div>
     </MyAntPopup>
 
     {viewtLoading && <MyLoading />}
