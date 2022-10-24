@@ -14,7 +14,7 @@ import Icon from '../../../../components/Icon';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { InStockViewTotail } from '../index';
 import MyEllipsis from '../../../../components/MyEllipsis';
@@ -25,6 +25,10 @@ const InStockDetail = () => {
 
   const { query } = useLocation();
 
+  const [defaultData, setDefaultData] = useState([]);
+  const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
+
   const customerId = query.customerId;
   const customerName = query.customerName;
 
@@ -33,7 +37,13 @@ const InStockDetail = () => {
     data: { customerId },
   });
 
-  const { loading, data, run } = useRequest({ ...instockDetailView, data: { customerId } });
+  const { loading, run } = useRequest({ ...instockDetailView, data: { customerId } }, {
+    onSuccess: (res) => {
+      setData(res);
+      setSearch('');
+      setDefaultData(res);
+    },
+  });
 
   const [date, setDate] = useState([]);
 
@@ -50,7 +60,18 @@ const InStockDetail = () => {
   return <>
     <MyNavBar title='入库统计详情' />
     <div style={{ margin: '1px 0' }}>
-      <MySearch placeholder='搜索' />
+      <MySearch
+        placeholder='搜索'
+        value={search}
+        onChange={setSearch}
+        onSearch={(value) => {
+          const newData = defaultData.filter(item => {
+            const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
+            return ToolUtil.queryString(value, sku);
+          });
+          setData(newData);
+        }}
+      />
     </div>
     <MyCard
       className={style.customerCard}

@@ -43,7 +43,7 @@ const MySearch = (
     <div
       className={classNames(style.search, historyType && style.disabledSearch)}
     >
-      <div style={{flexGrow:1}} onClick={(e) => {
+      <div style={{ flexGrow: 1 }} onClick={(e) => {
         if (e.target.className === 'adm-input-clear' || ['path', 'rect'].includes(e.target.tagName)) {
           return;
         }
@@ -65,6 +65,7 @@ const MySearch = (
             onChange(value);
           }}
           onClear={() => {
+            onSearch('');
             onChange('');
             onClear();
           }}

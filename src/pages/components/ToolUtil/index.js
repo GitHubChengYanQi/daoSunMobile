@@ -142,6 +142,7 @@ export const timeDifference = (tmpTime) => {
   if (tmpTimeDifference < 0) {//时间超出，不能计算
     return '刚刚';
   }
+  // 大于两小时显示时间 昨天 前天
   const DifferebceDay = tmpTimeDifference / day;//进行天取整
   const DifferebceHour = tmpTimeDifference / hour;//进行小时取整
   const DifferebceMinute = tmpTimeDifference / minute;//进行分钟取整
