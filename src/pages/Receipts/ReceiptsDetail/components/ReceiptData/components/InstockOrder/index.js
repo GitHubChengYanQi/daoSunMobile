@@ -108,7 +108,7 @@ const InstockOrder = (
     <MyCard
       hidden={type !== ReceiptsEnums.instockOrder}
       title='供应商'
-      extra={data.customerResult?.customerNmae || '无'}
+      extra={data.customerResult?.customerName || '无'}
     />
 
     <MyCard
