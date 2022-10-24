@@ -114,6 +114,7 @@ const InStockTask = () => {
         loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
           return <div key={index} className={style.skuItem}>
             <SkuItem
+              extraWidth='24px'
               skuResult={item.skuResult}
               className={style.sku}
               otherData={[

@@ -94,15 +94,15 @@ const OutStock = (
               <div>
                 <div className={style.numberTitle}>领料数量</div>
                 <div className={style.cardNum}>
-                  <span className='numberBlue'>{item.pickSkuCount || 0}</span>类
-                  <span style={{ marginLeft: 4 }} className='numberBlue'>{item.pickNumCount || 0}</span>件
+                  <span className='numberBlue'>{item.outSkuCount || 0}</span>类
+                  <span style={{ marginLeft: 4 }} className='numberBlue'>{item.outNumCount || 0}</span>件
                 </div>
               </div>
               <div>
                 <div className={style.numberTitle}>出库数量</div>
                 <div className={style.cardNum}>
-                  <span className='numberBlue'>{item.outSkuCount || 0}</span>类
-                  <span style={{ marginLeft: 4 }} className='numberBlue'>{item.outNumCount || 0}</span>件
+                  <span className='numberBlue'>{item.pickSkuCount || 0}</span>类
+                  <span style={{ marginLeft: 4 }} className='numberBlue'>{item.pickNumCount || 0}</span>件
                 </div>
               </div>
             </div>

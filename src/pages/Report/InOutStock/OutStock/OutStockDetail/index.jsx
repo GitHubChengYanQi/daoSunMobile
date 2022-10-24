@@ -96,14 +96,15 @@ const OutStockDetail = () => {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
           <SkuItem
+            extraWidth='24px'
             skuResult={item.skuResult}
             title={SkuResultSkuJsons({ skuResult: item.skuResult })}
             describe={item.brandResult?.brandName || '无品牌'}
             otherData={[
               <>
-                <span className='numberBlue'>领取</span> ×{item.pickNumCount || 0}
+                <span className='numberBlue'>领取</span> ×{item.outNumCount || 0}
                 &nbsp;&nbsp;
-                <span>出库</span>×{item.outNumCount || 0}
+                <span>出库</span>×{item.pickNumCount || 0}
               </>,
             ]}
           />

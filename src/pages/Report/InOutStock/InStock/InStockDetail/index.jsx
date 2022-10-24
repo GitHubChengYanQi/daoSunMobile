@@ -118,6 +118,7 @@ const InStockDetail = () => {
       isArray(data).map((item, index) => {
         return <div key={index} className={style.skuItem}>
           <SkuItem
+            extraWidth='24px'
             skuResult={item.skuResult}
             title={SkuResultSkuJsons({ skuResult: item.skuResult })}
             describe={item.brandResult?.brandName || '无品牌'}
