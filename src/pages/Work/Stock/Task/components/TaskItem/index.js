@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
+import { classNames, isArray, isObject, timeDifference, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
@@ -11,9 +11,7 @@ import receipts from '../../../../../../assets/receiptsTask.png';
 import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
-import { UserName } from '../../../../../components/User';
 import { Avatar } from 'antd';
-import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -79,7 +77,7 @@ const TaskItem = (
         </div>
       }
       extraClassName={style.extra}
-      extra={MyDate.Show(createTime)}
+      extra={timeDifference(createTime)}
       bodyClassName={style.body}
     >
       <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
