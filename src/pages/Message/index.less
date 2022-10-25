@@ -1,6 +1,7 @@
 .item {
-  padding: 12px;
+  //padding: 12px;
   background-color: #fff;
+  margin-bottom: 1px;
 }
 
 .border {
@@ -12,9 +13,34 @@
 .flexCenter {
   display: flex;
   align-items: center;
+}
+
+.title {
+  color: #3D3D3D;
+  margin-bottom: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  border-bottom: solid 1px #F5F5F5;
+  padding: 12px 12px 8px 0;
+  margin-left: 12px;
+
+  .titleBadge {
+    flex-grow: 1;
+
+    .badge {
+      :global {
+        .adm-badge-dot {
+          min-width: 6px;
+          width: 6px;
+          height: 6px;
+        }
+      }
+    }
+  }
 
   .fontColor {
-    color: #8D8D8D;
+    color: #9A9A9A;
     font-size: 12px;
   }
 
@@ -27,63 +53,25 @@
   .avatar {
     padding-right: 8px;
   }
+}
 
-  .content {
-    flex-grow: 1;
-
-    .title {
-      color: #3D3D3D;
-      margin-bottom: 4px;
-      display: flex;
-
-      .titleBadge {
-        flex-grow: 1;
-
-        .badge {
-          :global {
-            .adm-badge-dot {
-              min-width:6px;
-              width: 6px;
-              height: 6px;
-            }
-          }
-        }
-      }
-    }
-
-    .describe {
-
-    }
-  }
-
+.content {
+  padding: 8px 12px;
 }
 
 .screen {
-  padding: 12px;
   display: flex;
   align-items: center;
   background-color: #fff;
-  margin-bottom: 1px;
+  margin: 1px 0;
   position: sticky;
   top: 0;
   z-index: 1;
+  padding-right: 14px;
 
 
-  .status {
+  .tabs {
     flex-grow: 1;
-
-    .default {
-      background-color: #F1F1F1;
-    }
-
-    .checked {
-      background-color: var(--adm-color-primary);
-      color: #fff;
-    }
-
-    button {
-      margin-right: 12px;
-    }
   }
 }
 
