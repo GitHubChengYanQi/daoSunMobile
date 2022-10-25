@@ -2,15 +2,16 @@ import React, { useRef, useState } from 'react';
 import MyList from '../components/MyList';
 import { useHistory } from 'react-router-dom';
 import { ToolUtil } from '../components/ToolUtil';
-import { DeleteOutline, RightOutline, ScanningOutline } from 'antd-mobile-icons';
+import { DeleteOutline, RightOutline } from 'antd-mobile-icons';
 import style from './index.less';
-import { Avatar, Badge, Button, Popover, SwipeAction } from 'antd-mobile';
+import { Avatar, Badge, Button, Popover, SwipeAction, Tabs } from 'antd-mobile';
 import { useRequest } from '../../util/Request';
 import KeepAlive from '../../components/KeepAlive';
 import { AlignLeftOutlined, PushpinOutlined } from '@ant-design/icons';
 import { Message as MyMessage } from '../components/Message';
 import { MyLoading } from '../components/MyLoading';
 import MyNavBar from '../components/MyNavBar';
+import MySearch from '../components/MySearch';
 
 export const messageList = { url: '/message/list', method: 'POST' };
 export const messageEdit = { url: '/message/edit', method: 'POST' };
@@ -85,18 +86,21 @@ const MessageList = () => {
       setScrollTop(event.target.scrollTop);
     }}
   >
+    <MyNavBar title='消息列表' noDom />
+    <MySearch placeholder='搜索' />
     <div className={style.screen}>
-      <div className={style.status}>
-        <Button
-          className={params.view !== null ? style.default : style.checked}
-          onClick={() => submit({ view: null })}>全部</Button>
-        <Button
-          className={params.view !== 1 ? style.default : style.checked}
-          onClick={() => submit({ view: 1 })}>已读</Button>
-        <Button
-          className={params.view !== 0 ? style.default : style.checked}
-          onClick={() => submit({ view: 0 })}>未读</Button>
-      </div>
+      <Tabs
+        className={style.tabs}
+        stretch={false}
+        activeKey={params.view || '99'}
+        onChange={(key) => {
+          submit({ view: key === '99' ? null : key });
+        }}
+      >
+        <Tabs.Tab title='全部' key='99' />
+        <Tabs.Tab title='已读' key='1' />
+        <Tabs.Tab title='未读' key='0' />
+      </Tabs>
       <Popover.Menu
         actions={actions}
         placement='bottom-start'
@@ -162,26 +166,28 @@ const MessageList = () => {
                 }
               }}
             >
-              <div className={ToolUtil.classNames(style.item, style.flexCenter, item.sort !== 0 && style.top)}
-                   key={index} onClick={() => {
-                messageChange({ view: 1 }, item, index);
-                switch (item.source) {
-                  case 'instockOrder':
-                  case 'instock':
-                    break;
-                  case 'outstockOrder':
-                    break;
-                  case 'productionTask':
-                    break;
-                  case 'selfPick':
-                    break;
-                  case 'processTask':
-                    history.push(`Receipts/ReceiptsDetail?id=${item.sourceId}`);
-                    break;
-                  default:
-                    break;
-                }
-              }}>
+              <div
+                className={ToolUtil.classNames(style.item, style.flexCenter, item.sort !== 0 && style.top)}
+                key={index}
+                onClick={() => {
+                  messageChange({ view: 1 }, item, index);
+                  switch (item.source) {
+                    case 'instockOrder':
+                    case 'instock':
+                      break;
+                    case 'outstockOrder':
+                      break;
+                    case 'productionTask':
+                      break;
+                    case 'selfPick':
+                      break;
+                    case 'processTask':
+                      history.push(`Receipts/ReceiptsDetail?id=${item.sourceId}`);
+                      break;
+                    default:
+                      break;
+                  }
+                }}>
                 <div className={style.avatar}>
                   <Avatar
                     src={ToolUtil.isObject(item.user).avatar}
