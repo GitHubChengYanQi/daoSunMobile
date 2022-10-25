@@ -1,5 +1,4 @@
 .item {
-  //padding: 12px;
   background-color: #fff;
   margin-bottom: 1px;
 }
@@ -17,7 +16,6 @@
 
 .title {
   color: #3D3D3D;
-  margin-bottom: 4px;
   display: flex;
   gap: 8px;
   align-items: center;
@@ -72,6 +70,12 @@
 
   .tabs {
     flex-grow: 1;
+
+    :global {
+      .adm-tabs-header {
+        border: none;
+      }
+    }
   }
 }
 
