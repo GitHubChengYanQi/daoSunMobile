@@ -100,6 +100,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
       />
 
       <MyCard titleBom={<Title className={style.title}>主题 <span>*</span></Title>} extra={<Input
+        value={params.theme}
         className={style.theme}
         placeholder='请输入'
         onChange={(theme) => setParams({ ...params, theme })} />}
