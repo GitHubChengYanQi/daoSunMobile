@@ -97,7 +97,7 @@ const TaskItem = (
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>
-          <MyEllipsis width='100%'>{otherData}</MyEllipsis>
+         {otherData}
         </div>}
       </div>
       <div className={style.process} hidden={noProgress}>
