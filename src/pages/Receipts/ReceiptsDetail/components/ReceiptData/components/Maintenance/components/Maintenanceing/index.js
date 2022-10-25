@@ -16,7 +16,7 @@ import MyTextArea from '../../../../../../../../components/MyTextArea';
 import Careful from '../../../../../../../../Work/CreateTask/components/Careful';
 import { ReceiptsEnums } from '../../../../../../../index';
 import MyCard from '../../../../../../../../components/MyCard';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../../components/ToolUtil';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 
@@ -90,6 +90,8 @@ const Maintenanceing = (
     }));
     maintenanceLogRun({
       data: {
+        noticeIds: isArray(params.noticeIds).toString(),
+        remake:params.remake,
         maintenanceId,
         enclosure: ToolUtil.isArray(params.files).map(item => item.mediaId),
         maintenanceLogDetailParams,
