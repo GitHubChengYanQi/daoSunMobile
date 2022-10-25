@@ -12,6 +12,8 @@ export const postRevoke = { url: '/audit/revoke', method: 'POST' };
 
 const ActionButtons = (
   {
+    taskDetail = {},
+    statusName,
     createUser,
     permissions,
     actions = [],
@@ -31,7 +33,7 @@ const ActionButtons = (
 
   const { loading, run } = useRequest(postRevoke, {
     manual: true,
-    onSuccess: () => Message.successToast('撤回成功！', () => {
+    onSuccess: () => Message.successToast('撤销成功！', () => {
       if (openNote === 'revokeAndAsk') {
         onClick('revokeAndAsk');
       }
@@ -66,12 +68,12 @@ const ActionButtons = (
   };
 
   useEffect(() => {
-    if (actions.length > 0) {
+    if (!(taskDetail.status !== 0 || (actions.length === 0 && createUser !== userInfo.id))) {
       afertShow();
     }
-  }, [actions.length]);
+  }, [taskDetail.status, actions.length]);
 
-  if (actions.length === 0) {
+  if (taskDetail.status !== 0 || (actions.length === 0 && createUser !== userInfo.id)) {
     return <></>;
   }
 
@@ -84,11 +86,15 @@ const ActionButtons = (
         <MoreOutline />
       </div>
       <div className={style.buttons}>
-        {actions.length === 1 ?
-          <Button disabled={actions[0].disabled} className={style.only} color='primary' onClick={() => {
-            actionClick(actions[0].action);
-          }}>
-            {actions[0].name}
+        {actions.length <= 1 ?
+          <Button
+            disabled={actions[0] ? actions[0].disabled : true}
+            className={style.only}
+            color='primary'
+            onClick={() => {
+              actionClick(actions[0]?.action);
+            }}>
+            {actions[0]?.name || statusName}
           </Button>
           :
           <>
@@ -134,14 +140,14 @@ const ActionButtons = (
       }}
       visible={revoke}
       actions={[
-        { text: '撤回', key: 'revoke' },
+        { text: '撤销', key: 'revoke' },
         { text: '撤销并重新发起', key: 'revokeAndAsk' },
       ]} onClose={() => setRevoke(false)} />
 
     <Dialog
       visible={openNote}
-      title='请输入撤回原因'
-      content={<TextArea value={note} rows={3} placeholder='请输入撤回原因' onChange={setNote} />}
+      title='请输入撤销原因'
+      content={<TextArea value={note} rows={3} placeholder='请输入撤销原因' onChange={setNote} />}
       actions={[[
         { text: '确定', key: 'ok' },
         { text: '取消', key: 'cancal' },

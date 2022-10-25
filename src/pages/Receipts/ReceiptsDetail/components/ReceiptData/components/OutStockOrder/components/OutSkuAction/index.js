@@ -11,7 +11,6 @@ import OutStockShop from '../OutStockShop';
 import OutSkuItem from './compoennts/OutSkuItem';
 import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
-import BottomButton from '../../../../../../../../components/BottomButton';
 import { useModel } from 'umi';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 import MyPicking from './compoennts/MyPicking';
@@ -28,6 +27,7 @@ import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/S
 import { ERPEnums } from '../../../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../../../ActionButtons';
 import { useHistory } from 'react-router-dom';
+import { OutStockRevoke } from '../../../../../Bottom/components/Revoke';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
@@ -35,7 +35,7 @@ export const outDetailList = { url: '/productionPickListsDetail/noPageList', met
 const OutSkuAction = (
   {
     taskDetail,
-    permissions,
+    actionNode,
     nodeActions = [],
     logIds = [],
     order = {},
@@ -272,13 +272,15 @@ const OutSkuAction = (
       refresh={refresh}
     />}
 
-    <ActionButtons
+    {actionNode && <ActionButtons
+      taskDetail={taskDetail}
+      statusName={order.statusName}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
       logIds={logIds}
       createUser={taskDetail.createUser}
-      permissions={permissions}
+      permissions={true}
       actions={nodeActions.filter((item) => item.action === 'outStock' ? userInfo.id === order.userId : true)}
       onClick={(value) => {
         switch (value) {
@@ -286,41 +288,13 @@ const OutSkuAction = (
             setPicking(true);
             break;
           case 'revokeAndAsk':
-            history.push({
-              pathname: '/Work/CreateTask',
-              query: {
-                createType: ERPEnums.outStock,
-              },
-              state: {
-                skus: data.map(item => {
-                  return {
-                    brandId: item.brandId,
-                    brandName: isObject(item.brandResult).brandName,
-                    customerId: item.brandId,
-                    customerName: isObject(item.customerResult).customerName,
-                    number: item.number,
-                    skuId: item.skuId,
-                    skuResult: item.skuResult,
-                  };
-                }),
-                files: isArray(order.enclosureUrl).map((item, index) => ({
-                  mediaId: order.enclosure[index],
-                  url: item,
-                })),
-                mediaIds: order.enclosure && order.enclosure.split(','),
-                noticeIds: order.remarks && order.remarks.split(','),
-                remark: order.note,
-                userId: order.userId,
-                userName: isObject(order.userResult).name,
-                userAvatar: isObject(order.userResult).avatar,
-              },
-            });
+            OutStockRevoke(taskDetail);
             break;
           default:
             break;
         }
       }}
-    />
+    />}
 
     <MyAntPopup
       title='领料'

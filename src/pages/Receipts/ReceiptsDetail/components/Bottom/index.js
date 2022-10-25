@@ -7,7 +7,15 @@ import ActionButtons from '../ActionButtons';
 import { useRequest } from '../../../../../util/Request';
 import { Message } from '../../../../components/Message';
 import { MyLoading } from '../../../../components/MyLoading';
-import { InStockRevoke } from './components/Revoke';
+import {
+  AllocationRevoke,
+  InStockRevoke,
+  MaintenanceRevoke,
+  OutStockRevoke,
+  StocktakingRevoke,
+} from './components/Revoke';
+import { ToolUtil } from '../../../../components/ToolUtil';
+import { ReceiptsEnums } from '../../../index';
 
 const Bottom = (
   {
@@ -39,7 +47,12 @@ const Bottom = (
 
   const actions = [];
   const logIds = [];
+  let auditNode = false;
   currentNode.forEach((item) => {
+    if (item.stepType === 'audit' && !auditNode) {
+      auditNode = true;
+    }
+
     if (!version) {
       const logResult = item.logResult || {};
       logIds.push(logResult.logId);
@@ -63,9 +76,6 @@ const Bottom = (
         taskId: detail.processTaskId,
         logIds,
         status,
-        userIds: userIds.toString(),
-        photoId: mediaIds.toString(),
-        note,
       },
     });
   };
@@ -76,20 +86,33 @@ const Bottom = (
 
   const revoke = () => {
     switch (detail.type) {
-      case 11:
-        InStockRevoke({ order, data });
+      case ReceiptsEnums.instockOrder:
+        InStockRevoke(detail);
+        break;
+      case ReceiptsEnums.outstockOrder:
+        OutStockRevoke(detail);
+        break;
+      case ReceiptsEnums.allocation:
+        AllocationRevoke(detail);
+        break;
+      case ReceiptsEnums.stocktaking:
+        StocktakingRevoke(detail);
+        break;
+      case ReceiptsEnums.maintenance:
+        MaintenanceRevoke(detail);
         break;
       default:
         break;
     }
   };
 
-  return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
+  return <div hidden={!auditNode} className={style.bottom}>
     <ActionButtons
+      taskDetail={detail}
       refresh={refresh}
       taskId={detail.processTaskId}
       logIds={logIds}
-      createUser={detail.createUser}
+      createUser={detail.type === ReceiptsEnums.error ? null : detail.createUser}
       permissions={detail.permissions}
       onClick={(action) => {
         switch (action) {

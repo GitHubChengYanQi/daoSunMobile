@@ -28,6 +28,7 @@ export const instockHandle = { url: '/instockHandle/listByInstockOrderId', metho
 
 const SkuAction = (
   {
+    actionNode,
     taskId,
     logIds = [],
     handleResults = [],
@@ -41,6 +42,7 @@ const SkuAction = (
     },
     afertShow = () => {
     },
+    taskDetail,
     order,
   },
 ) => {
@@ -310,7 +312,9 @@ const SkuAction = (
       </div>
     </MyAntPopup>
 
-    <ActionButtons
+    {actionNode && <ActionButtons
+      taskDetail={taskDetail}
+      statusName={order.statusName}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
@@ -321,13 +325,13 @@ const SkuAction = (
       onClick={(value) => {
         switch (value) {
           case 'revokeAndAsk':
-            InStockRevoke({ order, data });
+            InStockRevoke(taskDetail);
             break;
           default:
             break;
         }
       }}
-    />
+    />}
 
     {action && <InstockShop
       errorShopRef={errorShopRef}

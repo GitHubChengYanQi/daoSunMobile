@@ -20,7 +20,6 @@ const ReceiptData = (
     permissions,
     addComments = () => {
     },
-    actionButton,
   }) => {
 
   const [bottomButton, setBottomButton] = useState(false);
@@ -32,15 +31,21 @@ const ReceiptData = (
 
   const actions = [];
   const logIds = [];
+  let actionNode = false;
   currentNode.forEach((item) => {
+
+    if (item.stepType === 'status' && !actionNode) {
+      actionNode = true;
+    }
+
     if (data.version) {
-      const logResult = item.logResult || {};
-      logIds.push(logResult.logId);
-    } else {
       const logResults = item.logResults || [];
       logResults.map(item => {
         logIds.push(item.logId);
       });
+    } else {
+      const logResult = item.logResult || {};
+      logIds.push(logResult.logId);
     }
 
     if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
@@ -62,6 +67,7 @@ const ReceiptData = (
       case ReceiptsEnums.instockOrder:
       case ReceiptsEnums.outstockOrder:
         return <InstockOrder
+          actionNode={actionNode}
           logIds={logIds}
           taskId={data.processTaskId}
           afertShow={() => setBottomButton(true)}
@@ -76,15 +82,18 @@ const ReceiptData = (
         />;
       case ReceiptsEnums.error:
         return <InstockError
+          actionNode={actionNode}
           afertShow={() => setBottomButton(true)}
           loading={loading}
           permissions={permissions}
           data={data.receipts}
           getAction={getAction}
           refresh={refreshOrder}
+          taskDetail={data}
         />;
       case ReceiptsEnums.stocktaking:
         return <Stocktaking
+          actionNode={actionNode}
           afertShow={() => setBottomButton(true)}
           loading={loading}
           permissions={permissions}
@@ -94,9 +103,11 @@ const ReceiptData = (
           nodeActions={actions}
           logIds={logIds}
           taskId={data.processTaskId}
+          taskDetail={data}
         />;
       case ReceiptsEnums.maintenance:
         return <Maintenance
+          actionNode={actionNode}
           nodeActions={actions}
           logIds={logIds}
           taskId={data.processTaskId}
@@ -106,9 +117,11 @@ const ReceiptData = (
           refresh={refreshOrder}
           permissions={permissions}
           receipts={data.receipts}
+          taskDetail={data}
         />;
       case ReceiptsEnums.allocation:
         return <Allocation
+          actionNode={actionNode}
           nodeActions={actions}
           logIds={logIds}
           taskId={data.processTaskId}
@@ -118,6 +131,7 @@ const ReceiptData = (
           permissions={permissions}
           getAction={getAction}
           data={data.receipts}
+          taskDetail={data}
           refresh={refreshOrder}
           createUser={data.createUser}
         />;
@@ -137,7 +151,7 @@ const ReceiptData = (
       createUser={data.user}
     />
     <CommentsList detail={data} addComments={addComments} taskId={data.processTaskId} />
-    <div hidden={!actionButton && !bottomButton} style={{ height: 60, marginTop: 3 }} />
+    <div hidden={!bottomButton} style={{ height: 60, marginTop: 3 }} />
   </div>;
 };
 

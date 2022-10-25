@@ -143,7 +143,6 @@ export const ReceiptsDetailContent = () => {
     switch (key) {
       case 'data':
         return <ReceiptData
-          actionButton={!hidden && !loading}
           success={success}
           permissions={detail.permissions}
           data={detail}
