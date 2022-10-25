@@ -326,6 +326,7 @@ const SkuShop = (
           color='primary'
           className={style.submit}
           onClick={() => {
+            setSkus([]);
             switch (type) {
               case ERPEnums.allocation:
                 history.push({
