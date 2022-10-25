@@ -1,9 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { ReceiptsEnums } from '../../../index';
 import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
 import Process from '../../../../Work/PurchaseAsk/components/Process';
-import Comments from '../../../components/Comments';
 import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
@@ -138,7 +137,7 @@ const ReceiptData = (
       createUser={data.user}
     />
     <CommentsList detail={data} addComments={addComments} taskId={data.processTaskId} />
-    <div hidden={!actionButton || !bottomButton} style={{ height: 60, marginTop: 3 }} />
+    <div hidden={!actionButton && !bottomButton} style={{ height: 60, marginTop: 3 }} />
   </div>;
 };
 

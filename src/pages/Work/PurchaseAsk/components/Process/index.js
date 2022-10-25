@@ -553,7 +553,7 @@ const Process = (
         } else {
           const actionStatuses = step.auditRule.actionStatuses || [];
           title = <span>
-            {actionStatuses.map(item => item.actionName || '执行动作').join('、')} · {nodeStatusName('action', stepStatus, actioning)}
+            {step.stepsName || actionStatuses.map(item => item.actionName || '执行动作').join('、')} · {nodeStatusName('action', stepStatus, actioning)}
           </span>;
         }
         return <div>

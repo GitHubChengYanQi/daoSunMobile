@@ -41,13 +41,7 @@ const ActionButtons = (
     onError: () => refresh(),
   });
 
-  actions = actions.filter(item => {
-    if (item.action === 'revoke') {
-      return createUser === userInfo.id;
-    } else {
-      return permissions;
-    }
-  });
+  actions = permissions ? actions : [];
 
   const [visible, setVisible] = useState();
 
@@ -71,17 +65,33 @@ const ActionButtons = (
     }
   };
 
-  const buttons = () => {
-    switch (actions.length) {
-      case 1:
-        return <Button disabled={actions[0].disabled} className={style.only} color='primary' onClick={() => {
-          actionClick(actions[0].action);
-        }}>
-          {actions[0].name}
-        </Button>;
-      case 2:
-        return <>
-          <div className={style.buttons}>
+  useEffect(() => {
+    if (actions.length > 0) {
+      afertShow();
+    }
+  }, [actions.length]);
+
+  if (actions.length === 0) {
+    return <></>;
+  }
+
+  return <div className={style.actionBottom}>
+    <div className={style.actions}>
+      <div className={style.all} onClick={() => {
+        setVisible(true);
+      }}>
+        <div>更多</div>
+        <MoreOutline />
+      </div>
+      <div className={style.buttons}>
+        {actions.length === 1 ?
+          <Button disabled={actions[0].disabled} className={style.only} color='primary' onClick={() => {
+            actionClick(actions[0].action);
+          }}>
+            {actions[0].name}
+          </Button>
+          :
+          <>
             <Button
               disabled={actions[1].disabled}
               className={style.reject}
@@ -97,65 +107,26 @@ const ActionButtons = (
             }}>
               {actions[0].name}
             </Button>
-          </div>
-        </>;
-      default:
-        return <>
-          <div className={style.actions}>
-            <div className={style.all} onClick={() => {
-              setVisible(true);
-            }}>
-              <div>更多</div>
-              <MoreOutline />
-            </div>
-            <div className={style.buttons}>
-              <Button
-                disabled={actions[1].disabled}
-                className={style.reject}
-                color='primary'
-                fill='outline'
-                onClick={() => {
-                  actionClick(actions[1].action);
-                }}>
-                {actions[1].name}
-              </Button>
-              <Button disabled={actions[0].disabled} className={style.ok} color='primary' onClick={() => {
-                actionClick(actions[0].action);
-              }}>
-                {actions[0].name}
-              </Button>
-            </div>
-          </div>
+          </>
+        }
+      </div>
+    </div>
 
-          <MyActionSheet
-            onAction={(action) => {
-              actionClick(action.key);
-              setVisible(false);
-            }}
-            visible={visible}
-            actions={actions.filter((item, index) => index > 1).map(item => ({
-              text: item.name,
-              key: item.action,
-              disabled: item.disabled,
-            }))}
-            onClose={() => setVisible(false)} />
-        </>;
-    }
-  };
-
-  useEffect(() => {
-    if (actions.length > 0) {
-      afertShow();
-    }
-  }, [actions.length]);
-
-  if (actions.length === 0) {
-    return <></>;
-  }
-
-  return <div className={style.actionBottom}>
-    {buttons()}
-
+    <MyActionSheet
+      onAction={(action) => {
+        actionClick(action.key);
+        setVisible(false);
+      }}
+      visible={visible}
+      actions={[
+        { text: '再次提交', key: 'resubmit', disabled: createUser !== userInfo.id },
+        { text: '撤销', key: 'revoke', disabled: createUser !== userInfo.id },
+        ...actions.filter((item, index) => index > 1).map(item => ({
+          text: item.name,
+          key: item.action,
+          disabled: item.disabled,
+        }))]}
+      onClose={() => setVisible(false)} />
     <MyActionSheet
       onAction={(action) => {
         setOpenNote(action.key);

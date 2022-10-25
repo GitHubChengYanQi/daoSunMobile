@@ -3,6 +3,10 @@ import style from './index.less';
 import { MoreOutline } from 'antd-mobile-icons';
 import Audit from '../../../components/Audit';
 import MyActionSheet from '../../../../components/MyActionSheet';
+import ActionButtons from '../ActionButtons';
+import { useRequest } from '../../../../../util/Request';
+import { Message } from '../../../../components/Message';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const Bottom = (
   {
@@ -13,42 +17,87 @@ const Bottom = (
     },
   }) => {
 
-  const [visible, setVisible] = useState();
-
-  const [params, setParams] = useState({});
-
-  const [loading, setLoading] = useState();
+  // 执行审批接口
+  const { loading: auditLoading, run: processLogRun } = useRequest(
+    {
+      url: '/audit/v1.1/post',
+      method: 'POST',
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        Message.successToast('审批完成!', () => {
+          refresh();
+        });
+      },
+      onError: () => {
+        refresh();
+      },
+    },
+  );
 
   const actions = [];
-  currentNode.map((item) => {
+  const logIds = [];
+  currentNode.forEach((item) => {
+    if (!version) {
+      const logResult = item.logResult || {};
+      logIds.push(logResult.logId);
+    } else {
+      const logResults = item.logResults || [];
+      logResults.map(item => {
+        logIds.push(item.logId);
+      });
+    }
+
     if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
       return item.auditRule.actionStatuses.map((item) => {
         return actions.push({ action: item.action, id: item.actionId });
       });
     }
-    return null;
   });
+
+  const audit = (status) => {
+    processLogRun({
+      data: {
+        taskId: detail.processTaskId,
+        logIds,
+        status,
+        userIds: userIds.toString(),
+        photoId: mediaIds.toString(),
+        note,
+      },
+    });
+  };
 
   if (!detail.permissions) {
     return <></>;
   }
 
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
-    <div className={style.actions}>
-      <div className={style.all} onClick={() => {
-        setVisible(true);
-      }}>
-        <div>更多</div>
-        <MoreOutline />
-      </div>
-      <Audit version={version} loading={loading} {...params} id={detail.processTaskId} refresh={refresh} currentNode={currentNode} />
-    </div>
-
-    <MyActionSheet onAction={() => setVisible(false)} visible={visible} actions={[
-      { text: '转审', key: 'outStock', disabled: true },
-      { text: '加签', key: 'inStock', disabled: true },
-      { text: '退回', key: 'allocation', disabled: true },
-    ]} onClose={() => setVisible(false)} />
+    <ActionButtons
+      refresh={refresh}
+      taskId={detail.processTaskId}
+      logIds={logIds}
+      createUser={detail.createUser}
+      permissions={detail.permissions}
+      onClick={(action) => {
+        switch (action) {
+          case 'ok':
+            audit(1);
+            break;
+          case 'no':
+            audit(0);
+            break;
+          default:
+            break;
+        }
+      }}
+      actions={[
+        { name: '同意', action: 'ok' },
+        { name: '驳回', action: 'no' },
+      ]}
+    />
+    {auditLoading && <MyLoading />}
 
   </div>;
 };
