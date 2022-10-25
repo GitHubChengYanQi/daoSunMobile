@@ -106,7 +106,7 @@ const InstockOrder = (
     </MyCard>
 
     <MyCard
-      hidden={type !== ReceiptsEnums.instockOrder}
+      hidden={type !== ReceiptsEnums.instockOrder || !data.customerResult?.customerName}
       title='供应商'
       extra={data.customerResult?.customerName || '无'}
     />
