@@ -7,6 +7,7 @@ import ActionButtons from '../ActionButtons';
 import { useRequest } from '../../../../../util/Request';
 import { Message } from '../../../../components/Message';
 import { MyLoading } from '../../../../components/MyLoading';
+import { InStockRevoke } from './components/Revoke';
 
 const Bottom = (
   {
@@ -73,6 +74,16 @@ const Bottom = (
     return <></>;
   }
 
+  const revoke = () => {
+    switch (detail.type) {
+      case 11:
+        InStockRevoke({ order, data });
+        break;
+      default:
+        break;
+    }
+  };
+
   return <div hidden={currentNode.filter(item => item.stepType === 'audit').length === 0} className={style.bottom}>
     <ActionButtons
       refresh={refresh}
@@ -87,6 +98,9 @@ const Bottom = (
             break;
           case 'no':
             audit(0);
+            break;
+          case 'revokeAndAsk':
+            revoke();
             break;
           default:
             break;
