@@ -7,7 +7,9 @@ import MyCard from '../../../MyCard';
 import MyRemoveButton from '../../../MyRemoveButton';
 import { useRequest } from '../../../../../util/Request';
 import { SearchOutline } from 'antd-mobile-icons';
-import { ToolUtil } from '../../../ToolUtil';
+import { isQiyeWeixin, ToolUtil } from '../../../ToolUtil';
+import { LeftOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
 
 const historyList = { url: '/queryLog/list', method: 'POST' };
 const historyAdd = { url: '/queryLog/add', method: 'POST' };
@@ -23,7 +25,10 @@ const Search = (
     },
     searchRef,
   }) => {
+
   const [value, setValue] = useState(defaultValue);
+
+  const history = useHistory();
 
   const { data, refresh } = useRequest({
     ...historyList,
@@ -90,6 +95,9 @@ const Search = (
     <MyNavBar title='搜索' />
     <div className={style.searchDiv}>
       <div className={style.search}>
+        {isQiyeWeixin() && <LeftOutlined style={{ marginRight: 8 }} onClick={() => {
+          history.goBack();
+        }} />}
         <SearchBar
           ref={searchRef}
           clearable
@@ -98,7 +106,7 @@ const Search = (
             setValue(value);
             like(value);
           }}
-          onSearch={(value)=>{
+          onSearch={(value) => {
             onSearch(value);
             save(value);
           }}
@@ -122,8 +130,8 @@ const Search = (
             prefix={<SearchOutline />}
             key={index}
             onClick={() => {
-            onSearch(item.text);
-          }}>
+              onSearch(item.text);
+            }}>
             {item.text}
           </List.Item>;
         })
