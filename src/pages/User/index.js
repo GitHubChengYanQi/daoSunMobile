@@ -14,6 +14,11 @@ import MyEmpty from '../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { dynamicList } from '../Receipts/ReceiptsDetail/components/Dynamic';
 import MyNavBar from '../components/MyNavBar';
+import MyEllipsis from '../components/MyEllipsis';
+import StartEndDate from '../Work/Production/CreateTask/components/StartEndDate';
+import MyDatePicker from '../components/MyDatePicker';
+import moment from 'moment';
+import { DownFill } from 'antd-mobile-icons';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
@@ -24,6 +29,8 @@ const userDynamic = { url: '/dynamic/listByUser', method: 'POST' };
 const User = ({ userId }) => {
 
   const [userData, setUserData] = useState();
+
+  const [date, setDate] = useState(new Date());
 
   const history = useHistory();
 
@@ -94,27 +101,45 @@ const User = ({ userId }) => {
         <div className={style.userInfo}>
           <div className={style.name}>{userData.name}</div>
           <div className={style.describe}>
-            {userData.deptName}
-          </div>
-          <div className={style.describe}>
-            {userData.positionNames}
+            <MyEllipsis width='100%'>{userData.deptName} - {userData.positionNames}</MyEllipsis>
           </div>
           <div className={style.dept} hidden={userId}>
             <MyRemoveButton
-              className={style.outLogin}
               icon={<Icon type='icon-tuichudenglu' style={{ fontSize: 24 }} />}
               content='是否退出登录'
               onRemove={logOutRun}
-            >退出登录</MyRemoveButton>
+            >
+              <div className={style.outLogin}>退出登录</div>
+            </MyRemoveButton>
           </div>
         </div>
       </div>
 
+      <div hidden className={style.actions}>
+        <div style={{ border: 'none' }}>
+          <Icon type='icon-tuichudenglu' style={{ fontSize: 44 }} />
+          <div>操作手册</div>
+        </div>
+        <div>
+          <Icon type='icon-tuichudenglu' style={{ fontSize: 44 }} />
+          <div>操作说明</div>
+        </div>
+      </div>
+
       <MyCard
-        title='个人动态'
+        title='动态日志'
+        titleClassName={style.dynamicTitle}
         bodyClassName={style.dynamicContent}
         className={style.dynamic}
         headerClassName={style.dynamicHeader}
+        extra={<MyDatePicker
+          show={<div className={style.date}>
+            {moment(date).format('YYYY/MM/DD')}
+            <DownFill />
+          </div>}
+          value={date}
+          onChange={setDate}
+        />}
       >
         <MyList
           api={dynamicList}
@@ -125,8 +150,10 @@ const User = ({ userId }) => {
           {
             dynamicData.map((item, index) => {
               return <div key={index} className={style.dynamicItem}>
-                <div>{item.content}</div>
-                <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
+                <div className={style.header}>
+                  <div className={style.title}>{item.content}</div>
+                  <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
+                </div>
               </div>;
             })
           }

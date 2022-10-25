@@ -196,17 +196,19 @@ const MessageList = () => {
                 </div>
                 <div className={style.content}>
                   <div className={style.title}>
-                    <Badge style={{ '--right': '-10px', '--top': '4px' }} content={item.view === 0 ? Badge.dot : null}>
-                      {item.title}
-                    </Badge>
+                    <div className={style.titleBadge}>
+                      <Badge wrapperClassName={style.badge} style={{ '--right': '-10px', '--top': '4px' }} content={item.view === 0 ? Badge.dot : null}>
+                        {item.title}
+                      </Badge>
+                      <RightOutline style={{ marginLeft: 16 }} />
+                    </div>
+                    <div className={ToolUtil.classNames(style.flexCenter, style.fontColor, style.time)}>
+                      {ToolUtil.timeDifference(item.time)}
+                    </div>
                   </div>
                   <div className={style.fontColor}>
                     {item.content}
                   </div>
-                </div>
-                <div className={ToolUtil.classNames(style.flexCenter, style.fontColor, style.time)}>
-                  {ToolUtil.timeDifference(item.time)}
-                  <RightOutline style={{ marginLeft: 8 }} />
                 </div>
               </div>
               <div className={style.border} />
