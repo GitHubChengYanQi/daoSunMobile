@@ -6,9 +6,6 @@ import { classNames, isArray, isObject, timeDifference, ToolUtil, viewWidth } fr
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
-import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
-import receipts from '../../../../../../assets/receiptsTask.png';
-import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
 import { Avatar } from 'antd';
@@ -20,27 +17,20 @@ const TaskItem = (
     beginTime,
     endTime,
     coding,
-    positionSize = 0,
-    skuSize = 0,
     onClick = () => {
     },
-    skus = [],
     index,
     percent = 0,
     noSku,
     noPosition,
     noProgress,
     statusName,
-    action,
     users = [],
     userLabel,
     otherData,
-    origin = {},
-    complete,
     task = {},
   },
 ) => {
-  const originRet = isArray(origin?.parent)[0]?.ret;
   const scaleItems = Array(10).fill('');
 
   const getHour = (begin, end) => {
@@ -55,13 +45,20 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
-  let img;
-  if (action) {
-    img = receipts;
-  } else if (complete) {
-    img = receiptsOk;
-  } else {
-    img = receiptsNo;
+  let color = 'var(--adm-color-primary)';
+
+  switch (task.status) {
+    case 49:
+      color = '#9a9a9a';
+      break;
+    case 50:
+      color = 'var(--adm-color-danger)';
+      break;
+    case 99:
+      color = '#599745';
+      break;
+    default:
+      break;
   }
 
   return <>
@@ -71,7 +68,7 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={classNames(style.status, ['50', '49'].includes(task.status+'') && style.error)}>
+          <div style={{ border: `solid 1px ${color}`, color }} className={style.status}>
             {statusName}
           </div>
         </div>
@@ -90,7 +87,7 @@ const TaskItem = (
                 return <Avatar
                   size={18}
                   key={index}
-                  style={{marginRight:4}}
+                  style={{ marginRight: 4 }}
                   src={item.avatar || ''}
                 >
                   {item.name ? item?.name.substring(0, 1) : ''}
