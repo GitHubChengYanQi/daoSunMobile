@@ -145,6 +145,9 @@ const MessageList = () => {
             ];
             return <SwipeAction
               key={index}
+              style={{
+                '--background': 'transparent',
+              }}
               rightActions={rightActions}
               onAction={(action) => {
                 switch (action.key) {
@@ -167,7 +170,7 @@ const MessageList = () => {
               }}
             >
               <div
-                className={ToolUtil.classNames(style.item, style.flexCenter, item.sort !== 0 && style.top)}
+                className={ToolUtil.classNames(style.item, item.sort !== 0 && style.top)}
                 key={index}
                 onClick={() => {
                   messageChange({ view: 1 }, item, index);
@@ -188,27 +191,27 @@ const MessageList = () => {
                       break;
                   }
                 }}>
-                <div className={style.avatar}>
+                <div className={style.title}>
                   <Avatar
                     src={ToolUtil.isObject(item.user).avatar}
-                    style={{ '--border-radius': '50%', '--size': '44px' }}
+                    style={{ '--border-radius': '50%', '--size': '24px' }}
                   />
+                  <div className={style.titleBadge}>
+                    <Badge
+                      wrapperClassName={style.badge}
+                      style={{ '--right': '-10px', '--top': '4px' }}
+                      content={item.view === 0 ? Badge.dot : null}
+                    >
+                      {item.title}
+                    </Badge>
+                    <RightOutline style={{ marginLeft: 16,color:'#D8D8D8' }} />
+                  </div>
+                  <div className={ToolUtil.classNames(style.flexCenter, style.fontColor, style.time)}>
+                    {ToolUtil.timeDifference(item.time)}
+                  </div>
                 </div>
                 <div className={style.content}>
-                  <div className={style.title}>
-                    <div className={style.titleBadge}>
-                      <Badge wrapperClassName={style.badge} style={{ '--right': '-10px', '--top': '4px' }} content={item.view === 0 ? Badge.dot : null}>
-                        {item.title}
-                      </Badge>
-                      <RightOutline style={{ marginLeft: 16 }} />
-                    </div>
-                    <div className={ToolUtil.classNames(style.flexCenter, style.fontColor, style.time)}>
-                      {ToolUtil.timeDifference(item.time)}
-                    </div>
-                  </div>
-                  <div className={style.fontColor}>
-                    {item.content}
-                  </div>
+                  {item.content}
                 </div>
               </div>
               <div className={style.border} />
