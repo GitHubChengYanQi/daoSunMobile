@@ -91,7 +91,6 @@ const InSkuItem = (
             skuResult={skuResult}
             extraWidth='110px'
             otherData={[
-              ToolUtil.isObject(item.customerResult).customerName,
               ToolUtil.isObject(item.brandResult).brandName || '无品牌',
             ]}
           />
