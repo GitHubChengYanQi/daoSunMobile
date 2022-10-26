@@ -41,8 +41,6 @@ const Edit = () => {
   const skuFiles = useRef();
   const skuDrawings = useRef();
 
-  const { loading: meterialLoading, data: materialList } = useRequest(materialListSelect);
-
   const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
     manual: true,
     onSuccess: (res) => {
