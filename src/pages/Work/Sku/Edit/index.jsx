@@ -18,6 +18,7 @@ import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import { spuClassificationDetail } from '../SkuDetail';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { materialListSelect } from '../../ProcessTask/Create/components/Inventory/compoennts/AllCondition';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 
@@ -31,6 +32,8 @@ const Edit = () => {
 
   const [typeSetting, setTypeSetting] = useState([]);
 
+  const [materialList, setMaterialList] = useState([]);
+
   const history = useHistory();
 
   const skuFiles = useRef();
@@ -40,6 +43,13 @@ const Edit = () => {
     manual: true,
     onSuccess: (res) => {
       setTypeSetting(res && res.typeSetting && JSON.parse(res.typeSetting) || []);
+    },
+  });
+
+  const { loading:materialLoading } = useRequest(materialListSelect, {
+    // manual: true,
+    onSuccess: (res) => {
+      setMaterialList(res || []);
     },
   });
 
