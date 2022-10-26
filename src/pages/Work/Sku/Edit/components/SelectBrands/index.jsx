@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
-import { Selector } from 'antd-mobile';
 import MyAntPopup from '../../../../../components/MyAntPopup';
 import LinkButton from '../../../../../components/LinkButton';
-import { isObject, ToolUtil } from '../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../util/Request';
-import { supplyList } from '../../../../Sku/SkuList/components/SkuScreen/components/Url';
 import MySearch from '../../../../../components/MySearch';
 import { MyLoading } from '../../../../../components/MyLoading';
 import style from '../../../../Sku/SkuList/components/SkuScreen/index.less';
+import { brandList } from '../../../SkuList/components/SkuScreen/components/Url';
+import { classNames } from '../../../../../components/ToolUtil';
 
-const Customers = (
+const SelectBrands = (
   {
     zIndex,
     visible,
@@ -21,32 +20,24 @@ const Customers = (
   },
 ) => {
 
-  const [supply, setSupply] = useState([]);
+  const [options, setOptions] = useState([]);
 
   const [searchValue, setSearchValue] = useState();
 
-  const [customers, setCustomers] = useState(value ? [{ value }] : []);
+  const [brands, setBrands] = useState(value);
 
-  const { loading, run } = useRequest(supplyList, {
+  const { loading, run } = useRequest(brandList, {
     defaultParams: {
-      data: { supply: 1 },
       params: { limit: 10, page: 1 },
     },
     onSuccess: (res) => {
-      const newArray = Array.isArray(res) ? res.map(item => {
-        return {
-          label: item.customerName,
-          value: item.customerId,
-        };
-      }) : [];
-
-      setSupply(newArray);
+      setOptions(res || []);
     },
   });
 
   const like = (string) => {
     run({
-      data: { customerName: string,supply: 1 },
+      data: { brandName: string },
       params: { limit: 10, page: 1 },
     });
   };
@@ -56,16 +47,16 @@ const Customers = (
     <MyAntPopup
       onClose={onClose}
       zIndex={zIndex}
-      title='选择供应商'
+      title='选择品牌'
       visible={visible}
       leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
       rightText={<LinkButton onClick={() => {
-        onChange(customers[0]);
+        onChange(brands);
       }}>确定</LinkButton>}
     >
       <div style={{ padding: 24 }}>
         <MySearch
-          placeholder=' 请输入供应商信息'
+          placeholder='请输入品牌名称'
           className={style.searchBar}
           onSearch={(value) => {
             like(value);
@@ -74,24 +65,22 @@ const Customers = (
           value={searchValue}
           onClear={like}
         />
-        {loading ? <MyLoading skeleton /> : <Selector
-          columns={1}
-          style={{
-            '--border': 'solid transparent 1px',
-            '--checked-border': 'solid var(--adm-color-primary) 1px',
-            '--padding': '4px 15px',
-          }}
-          className={ToolUtil.classNames(style.supply, style.left)}
-          showCheckMark={false}
-          options={supply}
-          value={customers.map(item => item.value)}
-          onChange={(v, { items }) => {
-            setCustomers(items);
-          }}
-        />}
+        {loading ? <MyLoading skeleton /> : options.map((item, index) => {
+          const checked = brands.find(brandItem => brandItem.brandId === item.brandId);
+          return <div
+            key={index}
+            className={classNames(style.brandItem, checked && style.checked)}
+            onClick={() => {
+              setBrands(checked ? brands.filter(brandItem => brandItem.brandId !== item.brandId) : [...brands, item]);
+            }}
+          >
+            {item.brandName}
+          </div>;
+        })
+        }
       </div>
     </MyAntPopup>
   </>;
 };
 
-export default Customers;
+export default SelectBrands;
