@@ -22,6 +22,18 @@ export const announcementsListSelect = {
   rowKey: 'noticeId',
 };
 
+export const announcementsDelete = {
+  url: '/announcements/delete',
+  method: 'POST',
+  rowKey: 'noticeId',
+};
+
+export const announcementsEdit = {
+  url: '/announcements/edit',
+  method: 'POST',
+  rowKey: 'noticeId',
+};
+
 
 export const announcementsAdd = {
   url: '/announcements/add',
