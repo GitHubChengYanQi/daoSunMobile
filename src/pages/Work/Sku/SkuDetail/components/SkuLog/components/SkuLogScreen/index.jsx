@@ -76,7 +76,6 @@ const SkuLogScreen = (
             { label: '出库', value: ReceiptsEnums.outstockOrder },
             { label: '盘点', value: ReceiptsEnums.stocktaking },
             { label: '养护', value: ReceiptsEnums.maintenance },
-            { label: '调拨', value: ReceiptsEnums.allocation },
           ]}
           title={item.title}
           value={type}

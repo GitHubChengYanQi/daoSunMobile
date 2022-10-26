@@ -8,6 +8,7 @@ import LinkButton from '../../../../../components/LinkButton';
 import { history } from 'umi';
 import SkuLogScreen from './components/SkuLogScreen';
 import { ReceiptsEnums } from '../../../../../Receipts';
+import { MyDate } from '../../../../../components/MyDate';
 
 export const skuHandleRecord = { url: '/skuHandleRecord/list', method: 'POST' };
 
@@ -42,66 +43,68 @@ const SkuLog = ({ skuId }) => {
       setScreen(true);
     }}>筛选</LinkButton>} />
     <div className={styles.space} style={{ height: 1 }} />
-    <MyList
-      pullDisabled
-      response={(res) => {
-        setNumber(res.count);
-      }}
-      ref={ref}
-      onLoading={setLoading}
-      api={skuHandleRecord}
-      params={defaultParams}
-      data={data}
-      getData={setData}
-    >
-      {
-        data.map((item, index) => {
-          let typeName = '';
-          let balanceNumber;
+    <div style={{ overflow: 'auto', maxHeight: '70vh' }}>
+      <MyList
+        pullDisabled
+        response={(res) => {
+          setNumber(res.count);
+        }}
+        ref={ref}
+        onLoading={setLoading}
+        api={skuHandleRecord}
+        params={defaultParams}
+        data={data}
+        getData={setData}
+      >
+        {
+          data.map((item, index) => {
+            let typeName = '';
+            let balanceNumber;
 
-          switch (item.source) {
-            case ReceiptsEnums.instockOrder:
-              typeName = '入库';
-              balanceNumber = item.balanceNumber;
-              break;
-            case ReceiptsEnums.outstockOrder:
-              typeName = '出库';
-              balanceNumber = item.balanceNumber;
-              break;
-            case ReceiptsEnums.stocktaking:
-              typeName = '盘点';
-              break;
-            case ReceiptsEnums.maintenance:
-              typeName = '养护';
-              break;
-            case ReceiptsEnums.allocation:
-              typeName = '调拨';
-              break;
-            default:
-              break;
-          }
-          return <div key={index} className={styles.logItem}>
-            <div className={styles.flexCenter}>
-              <div className={classNames(styles.flexGrow)}>
-                <span className={styles.type}>· {typeName}</span> ×{item.operationNumber}
-                <span style={{ marginLeft: 8 }} hidden={!balanceNumber}>结余：{balanceNumber}</span>
+            switch (item.source) {
+              case ReceiptsEnums.instockOrder:
+                typeName = '入库';
+                balanceNumber = item.balanceNumber;
+                break;
+              case ReceiptsEnums.outstockOrder:
+                typeName = '出库';
+                balanceNumber = item.balanceNumber;
+                break;
+              case ReceiptsEnums.stocktaking:
+                typeName = '盘点';
+                break;
+              case ReceiptsEnums.maintenance:
+                typeName = '养护';
+                break;
+              case ReceiptsEnums.allocation:
+                typeName = '调拨';
+                break;
+              default:
+                break;
+            }
+            return <div key={index} className={styles.logItem}>
+              <div className={styles.flexCenter}>
+                <div className={classNames(styles.flexGrow)}>
+                  <span className={styles.type}>· {typeName}</span> ×{item.operationNumber}
+                  <span style={{ marginLeft: 8 }} hidden={!balanceNumber}>结余：{balanceNumber}</span>
+                </div>
+                <div>{item.brandResult?.brandName || '无品牌'}</div>
               </div>
-              <div>{item.brandResult?.brandName || '无品牌'}</div>
-            </div>
-            <div className={classNames(styles.flexCenter, styles.info)}>
-              <div className={classNames(styles.flexGrow)}>
-                {item.positionsResult?.name || '-'} / {item.positionsResult?.storehouseResult?.name || '-'}
+              <div className={classNames(styles.flexCenter, styles.info)}>
+                <div className={classNames(styles.flexGrow)}>
+                  {item.positionsResult?.name || '-'} / {item.positionsResult?.storehouseResult?.name || '-'}
+                </div>
+                <div>{item.user?.name || '-'}/{MyDate.Show(item.operationTime)}</div>
               </div>
-              <div>人/时间</div>
-            </div>
-            <div style={{ padding: '8px 0' }} onClick={() => {
-              history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
-            }}>来源：{item.theme}<RightOutline /></div>
-            <div className={styles.space} />
-          </div>;
-        })
-      }
-    </MyList>
+              <div style={{ padding: '8px 0' }} onClick={() => {
+                history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
+              }}>来源：{item.theme || '-'}<RightOutline /></div>
+              <div className={styles.space} />
+            </div>;
+          })
+        }
+      </MyList>
+    </div>
 
     <SkuLogScreen
       loading={loading}
