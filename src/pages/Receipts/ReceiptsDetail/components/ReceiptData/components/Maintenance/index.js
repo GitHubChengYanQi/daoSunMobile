@@ -212,6 +212,7 @@ const Maintenance = (
       }} />}
 
     {actionNode && <ActionButtons
+      taskDetail={taskDetail}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}

@@ -101,13 +101,15 @@ export const AllocationRevoke = (taskDetail) => {
 export const StocktakingRevoke = (taskDetail) => {
   const receipts = taskDetail.receipts;
 
+  const all = (isArray(receipts.taskList).length === 1 && isArray(receipts.taskList)[0].type === 'all');
   history.push({
     pathname: '/Work/CreateTask',
     query: {
       createType: ERPEnums.stocktaking,
     },
     state: {
-      skuList: isArray(receipts.taskList).map(item => {
+      all,
+      skuList: all ? [] : isArray(receipts.taskList).map(item => {
         return {
           ...item,
           filterText: isArray(item.condition).join('/'),
@@ -116,7 +118,7 @@ export const StocktakingRevoke = (taskDetail) => {
             skuClasses: isArray(item.classIds).map(item => ({ label: '', value: item })),
             brands: isArray(item.brandIds).map(item => ({ label: '', value: item })),
             positions: isArray(item.positionIds).map(item => ({ name: '', id: item })),
-            spuIds:item.spuId ? [item.spuId] : null,
+            spuIds: item.spuId ? [item.spuId] : null,
             // boms: isArray(item.classIds).map(item => ({ title: '', key: item })),
           } : undefined,
         };

@@ -226,6 +226,7 @@ const Stocktaking = (
     {loading && <MyLoading />}
 
     {actionNode && <ActionButtons
+      taskDetail={taskDetail}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
