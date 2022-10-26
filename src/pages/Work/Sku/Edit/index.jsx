@@ -32,8 +32,6 @@ const Edit = () => {
 
   const [typeSetting, setTypeSetting] = useState([]);
 
-  const [materialList, setMaterialList] = useState([]);
-
   const history = useHistory();
 
   const skuFiles = useRef();
@@ -46,12 +44,7 @@ const Edit = () => {
     },
   });
 
-  const { loading:materialLoading } = useRequest(materialListSelect, {
-    // manual: true,
-    onSuccess: (res) => {
-      setMaterialList(res || []);
-    },
-  });
+  const { loading: meterialLoading, data: materialList } = useRequest(materialListSelect);
 
   const { loading: editLoading, run: edit } = useRequest(skuEdit,
     {
