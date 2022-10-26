@@ -278,7 +278,7 @@ const OutSkuAction = (
       taskId={taskId}
       logIds={logIds}
       createUser={taskDetail.createUser}
-      permissions={permissions}
+      permissions
       actions={nodeActions.filter((item) => item.action === 'outStock' ? userInfo.id === order.userId : true)}
       onClick={(value) => {
         switch (value) {
