@@ -18,7 +18,6 @@ import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import { spuClassificationDetail } from '../SkuDetail';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
-import { materialListSelect } from '../../ProcessTask/Create/components/Inventory/compoennts/AllCondition';
 import SelectBrands from './components/SelectBrands';
 import MyEllipsis from '../../../components/MyEllipsis';
 import SkuDescribe from './components/SkuDescribe';
