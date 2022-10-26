@@ -11,8 +11,6 @@ import LinkButton from '../../../../../../components/LinkButton';
 import style from './index.less';
 import MyRemoveButton from '../../../../../../components/MyRemoveButton';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
-import { useHistory } from 'react-router-dom';
-
 export const getOne = { url: '/inventory/conditionGetOne', method: 'POST' };
 
 const SelectSkus = (
@@ -117,6 +115,7 @@ const SelectSkus = (
           const filterText = [];
           params.name && filterText.push(params.name);
           const skuClasses = ToolUtil.isArray(params.skuClasses);
+          const materials = ToolUtil.isArray(params.materials);
           const brands = ToolUtil.isArray(params.brands);
           const positions = ToolUtil.isArray(params.positions);
           const boms = ToolUtil.isArray(params.boms);
@@ -124,6 +123,10 @@ const SelectSkus = (
           const sku = await run({
             data: {
               spuIds: params.spuId && [params.spuId],
+              materialIds: materials.map(item => {
+                filterText.push(item.label);
+                return item.value;
+              }),
               classIds: skuClasses.map(item => {
                 filterText.push(item.label);
                 return item.value;

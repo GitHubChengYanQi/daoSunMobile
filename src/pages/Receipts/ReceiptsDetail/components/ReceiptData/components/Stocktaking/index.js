@@ -21,6 +21,7 @@ import { MyLoading } from '../../../../../../components/MyLoading';
 import MyProgress from '../../../../../../components/MyProgress';
 import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../ActionButtons';
+import { StocktakingRevoke } from '../../../Bottom/components/Revoke';
 
 export const inventoryAddPhoto = { url: '/inventoryDetail/addPhoto', method: 'POST' };
 export const temporaryLock = { url: '/inventoryDetail/temporaryLock', method: 'POST' };
@@ -45,9 +46,11 @@ export const nowInDateBetwen = (d1, d2) => {
 
 const Stocktaking = (
   {
+    actionNode,
     nodeActions,
     loading,
     permissions,
+    taskDetail,
     receipts = {},
     getAction = () => {
       return {};
@@ -130,7 +133,7 @@ const Stocktaking = (
                   <Divider style={{ margin: '0 24px' }} />
                   <div className={skuStyle.text} hidden={condition.length === 0}>
                     <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
-                    &nbsp;&nbsp;&nbsp;&nbsp;({item.realNumber})
+                    &nbsp;&nbsp;({item.realNumber})
                   </div>
                 </div>
 
@@ -222,7 +225,8 @@ const Stocktaking = (
 
     {loading && <MyLoading />}
 
-    <ActionButtons
+    {actionNode && <ActionButtons
+      taskDetail={taskDetail}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
@@ -246,39 +250,13 @@ const Stocktaking = (
             });
             break;
           case 'revokeAndAsk':
-            history.push({
-              pathname: '/Work/CreateTask',
-              query: {
-                createType: ERPEnums.stocktaking,
-              },
-              state: {
-                skuList: receipts.taskList,
-                beginTime: receipts.beginTime,
-                endTime: receipts.endTime,
-                method: receipts.method,
-                files: isArray(receipts.mediaUrls).map((item, index) => ({
-                  mediaId: receipts.enclosure && JSON.parse(receipts.enclosure)[index],
-                  url: item,
-                })),
-                participants: isArray(receipts.participantList).map(item => ({
-                  id: item.userId,
-                  name: item.name,
-                  avatar: item.avatar,
-                })),
-                mediaIds: receipts.enclosure && JSON.parse(receipts.enclosure),
-                noticeIds: receipts.notice && JSON.parse(receipts.notice),
-                remark: receipts.remark,
-                userId: receipts.userId,
-                userName: isObject(receipts.user).name,
-                avatar: isObject(receipts.user).avatar,
-              },
-            });
+            StocktakingRevoke(taskDetail);
             break;
           default:
             break;
         }
       }}
-    />
+    />}
 
   </>;
 
