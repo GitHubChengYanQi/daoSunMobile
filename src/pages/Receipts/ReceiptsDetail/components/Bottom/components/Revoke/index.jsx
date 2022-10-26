@@ -107,7 +107,20 @@ export const StocktakingRevoke = (taskDetail) => {
       createType: ERPEnums.stocktaking,
     },
     state: {
-      skuList: receipts.taskList,
+      skuList: isArray(receipts.taskList).map(item => {
+        return {
+          ...item,
+          filterText: isArray(item.condition).join('/'),
+          skuNum: item.realNumber,
+          params: (item.classIds || item.brandIds || item.positionIds || item.spuId) ? {
+            skuClasses: isArray(item.classIds).map(item => ({ label: '', value: item })),
+            brands: isArray(item.brandIds).map(item => ({ label: '', value: item })),
+            positions: isArray(item.positionIds).map(item => ({ name: '', id: item })),
+            spuIds:item.spuId ? [item.spuId] : null,
+            // boms: isArray(item.classIds).map(item => ({ title: '', key: item })),
+          } : undefined,
+        };
+      }),
       beginTime: receipts.beginTime,
       endTime: receipts.endTime,
       method: receipts.method,
