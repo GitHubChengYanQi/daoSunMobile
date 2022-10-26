@@ -133,7 +133,7 @@ const Stocktaking = (
                   <Divider style={{ margin: '0 24px' }} />
                   <div className={skuStyle.text} hidden={condition.length === 0}>
                     <MyEllipsis maxWidth='70vw' width='auto'>{condition.join('/')}</MyEllipsis>
-                    &nbsp;&nbsp;&nbsp;&nbsp;({item.realNumber})
+                    &nbsp;&nbsp;({item.realNumber})
                   </div>
                 </div>
 
