@@ -20,6 +20,8 @@ const SkuLog = ({ skuId }) => {
 
   const [loading, setLoading] = useState(false);
 
+  const [search, setSearch] = useState('');
+
   const [screen, setScreen] = useState();
   const [screening, setScreeing] = useState();
   const [params, setParams] = useState(defaultParams);
@@ -31,17 +33,26 @@ const SkuLog = ({ skuId }) => {
   const submit = (data = {}) => {
     const newParams = { ...params, ...data };
     setParams(newParams);
+    ref.current.submit(newParams);
   };
 
   const clear = () => {
     setParams(defaultParams);
+    ref.current.submit(defaultParams);
   };
 
   return <div style={{ height: open ? '90vh' : 'auto' }}>
-    <MySearch extraIcon={<LinkButton onClick={() => {
-      setOpen(true);
-      setScreen(true);
-    }}>筛选</LinkButton>} />
+    <MySearch
+      value={search}
+      onChange={setSearch}
+      onSearch={(value) => {
+        submit({ theme: value });
+      }}
+      extraIcon={<LinkButton onClick={() => {
+        setOpen(true);
+        setScreen(true);
+      }}>筛选</LinkButton>}
+    />
     <div className={styles.space} style={{ height: 1 }} />
     <div style={{ overflow: 'auto', maxHeight: '70vh' }}>
       <MyList

@@ -5,7 +5,7 @@ import Time from '../../../../../SkuList/components/SkuScreen/components/Time';
 import User from '../../../../../SkuList/components/SkuScreen/components/User';
 import State from '../../../../../SkuList/components/SkuScreen/components/State';
 import Brand from '../../../../../SkuList/components/SkuScreen/components/Brand';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../components/ToolUtil';
 import Screen from '../../../../../../../components/Screen';
 import styles from '../../index.less';
 import Position from '../Position';
@@ -25,18 +25,19 @@ const SkuLogScreen = (
 ) => {
 
   const searchtype = [
-    { key: 'type', title: '类型', open: true },
+    { key: 'types', title: '类型', open: true },
     { key: 'time', title: '时间', open: true },
-    { key: 'user', title: '操作人', open: true },
-    { key: 'brand', title: '品牌', open: true },
-    { key: 'position', title: '库位', open: true },
+    { key: 'userIds', title: '操作人', open: true },
+    { key: 'brandIds', title: '品牌', open: true },
+    { key: 'positionId', title: '库位', open: true },
   ];
 
-  const type = params.type;
-  const brandIds = ToolUtil.isArray(params.brandIds);
-  const storehousePositionsId = params.storehousePositionsId;
-  const time = params.startTime || params.endTime;
-  const createUser = params.createUser;
+  const types = isArray(params.types);
+  const brandIds = isArray(params.brandIds);
+  const positionId = params.positionId;
+  const startTime = params.startTime;
+  const endTime = params.endTime;
+  const userIds = isArray(params.userIds);
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -45,20 +46,20 @@ const SkuLogScreen = (
   const searchtypeScreened = (key) => {
     let screened = false;
     switch (key) {
-      case 'type':
-        screened = type;
+      case 'types':
+        screened = types.length > 0;
         break;
-      case 'brand':
+      case 'brandIds':
         screened = brandIds.length > 0;
         break;
-      case 'position':
-        screened = storehousePositionsId;
+      case 'positionId':
+        screened = positionId;
         break;
       case 'time':
-        screened = time;
+        screened = startTime && endTime;
         break;
-      case 'user':
-        screened = createUser;
+      case 'userIds':
+        screened = userIds.length > 0;
         break;
       default:
         break;
@@ -68,7 +69,7 @@ const SkuLogScreen = (
 
   const screenContent = (item) => {
     switch (item.key) {
-      case 'type':
+      case 'types':
         return <State
           multiple
           options={[
@@ -78,43 +79,44 @@ const SkuLogScreen = (
             { label: '养护', value: ReceiptsEnums.maintenance },
           ]}
           title={item.title}
-          value={type}
-          onChange={(type) => {
-            paramsOnChange({ ...params, type });
+          value={types}
+          onChange={(types) => {
+            paramsOnChange({ ...params, types });
           }}
         />;
-      case 'brand':
+      case 'brandIds':
         return <Brand
           overLength
           refresh
           title={item.title}
-          value={params.brandIds}
+          value={brandIds}
           onChange={(brandIds) => {
             paramsOnChange({ ...params, brandIds });
           }}
         />;
-      case 'position':
+      case 'positionId':
         return <Position
           title={item.title}
-          onChange={(storehousePositionsId) => {
-            paramsOnChange({ ...params, storehousePositionsId });
+          onChange={(positions) => {
+            paramsOnChange({ ...params, positionId: positions[0]?.id });
           }}
-          value={params.storehousePositionsId}
+          value={positionId ? [{id:positionId}] : []}
         />;
       case 'time':
         return <Time
           title={item.title}
-          value={params.startTime || params.endTime}
+          value={(startTime && endTime) ? [startTime, endTime] : []}
           onChange={(time) => {
-            paramsOnChange({ ...params, ...time });
+            paramsOnChange({ ...params, startTime: time[0], endTime: time[1] });
           }}
         />;
-      case 'user':
+      case 'userIds':
         return <User
+          multiple
           title={item.title}
-          value={params.createUser}
-          onChange={(createUser) => {
-            paramsOnChange({ ...params, createUser });
+          value={userIds}
+          onChange={(userIds) => {
+            paramsOnChange({ ...params, userIds });
           }}
         />;
       default:

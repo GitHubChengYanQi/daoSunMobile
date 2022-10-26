@@ -38,6 +38,7 @@ const Position = (
 
       <div className={style.list} style={{ paddingBottom: 60 }}>
         {loading ? <MyLoading skeleton /> : <CheckPosition
+          single
           value={value}
           onChange={onChange}
           data={data}
