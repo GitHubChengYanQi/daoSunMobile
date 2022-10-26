@@ -148,7 +148,6 @@ const OutSkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-
   const [showDetail, setShowDetail] = useState();
 
   const [seacrchValue, setSearchValue] = useState();
@@ -281,7 +280,7 @@ const OutSkuAction = (
       taskId={taskId}
       logIds={logIds}
       createUser={taskDetail.createUser}
-      permissions={true}
+      permissions
       actions={nodeActions.filter((item) => item.action === 'outStock' ? userInfo.id === order.userId : true)}
       onClick={(value) => {
         switch (value) {

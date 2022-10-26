@@ -24,6 +24,7 @@ const TaskItem = (
     noSku,
     noPosition,
     noProgress,
+    processRender,
     statusName,
     users = [],
     userLabel,
@@ -101,7 +102,7 @@ const TaskItem = (
         </div>}
       </div>
       <div className={style.process} hidden={noProgress}>
-        <MyProgress percent={percent} />
+        {processRender || <MyProgress percent={percent} />}
       </div>
     </MyCard>
     <div className={style.space} />
