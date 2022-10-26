@@ -30,6 +30,7 @@ const TaskItem = (
     noSku,
     noPosition,
     noProgress,
+    processRender,
     statusName,
     action,
     users = [],
@@ -71,7 +72,7 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={classNames(style.status, ['50', '49'].includes(task.status+'') && style.error)}>
+          <div className={classNames(style.status, ['50', '49'].includes(task.status + '') && style.error)}>
             {statusName}
           </div>
         </div>
@@ -85,17 +86,16 @@ const TaskItem = (
         <div style={{ width: otherData ? '50%' : '100%' }}>
           <MyEllipsis width='100%'>{userLabel || '执行人'}：
             {isArray(users).length === 0 && '无'}
-            {
-              isArray(users).map((item, index) => {
-                return <Avatar
-                  size={18}
-                  key={index}
-                  style={{marginRight:4}}
-                  src={item.avatar || ''}
-                >
-                  {item.name ? item?.name.substring(0, 1) : ''}
-                </Avatar>;
-              })
+            {isArray(users).map((item, index) => {
+              return <Avatar
+                size={18}
+                key={index}
+                style={{ marginRight: 4 }}
+                src={item.avatar || ''}
+              >
+                {item.name ? item?.name.substring(0, 1) : ''}
+              </Avatar>;
+            })
             }</MyEllipsis>
         </div>
         {otherData &&
@@ -104,7 +104,7 @@ const TaskItem = (
         </div>}
       </div>
       <div className={style.process} hidden={noProgress}>
-        <MyProgress percent={percent} />
+        {processRender || <MyProgress percent={percent} />}
       </div>
     </MyCard>
     <div className={style.space} />

@@ -148,7 +148,6 @@ const OutSkuAction = (
 
   const [allSku, { toggle }] = useBoolean();
 
-
   const [showDetail, setShowDetail] = useState();
 
   const [seacrchValue, setSearchValue] = useState();
