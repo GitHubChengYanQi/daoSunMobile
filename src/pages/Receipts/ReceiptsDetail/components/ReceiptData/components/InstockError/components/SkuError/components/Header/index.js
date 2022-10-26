@@ -250,12 +250,12 @@ const Header = (
       title='盘盈物所属料供应商'
       hidden={type === 'InstockError' || forward || !sku.confirm || inStockNumber <= 0}
       className={style.customerList}
-      extra={permissions && customers.length > 1 && <LinkButton
+      extra={customers.length > 1 ? (permissions && <LinkButton
         disabled={noCheckCustomers.length === 0}
         onClick={() => setVisible(true)}
       >
         <AddCircleOutline />
-      </LinkButton>}
+      </LinkButton>) : '请绑定供应商'}
     >
       {
         checkCustomers.map((item, index) => {
