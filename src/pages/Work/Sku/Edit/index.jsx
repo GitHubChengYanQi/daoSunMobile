@@ -18,6 +18,10 @@ import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import { spuClassificationDetail } from '../SkuDetail';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import { materialListSelect } from '../../ProcessTask/Create/components/Inventory/compoennts/AllCondition';
+import SelectBrands from './components/SelectBrands';
+import MyEllipsis from '../../../components/MyEllipsis';
+import SkuDescribe from './components/SkuDescribe';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
 export const materialListSelect = {
@@ -176,18 +180,26 @@ const Edit = () => {
               }}>{parseInt(detail.weight) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
-              extra = <span className={styles.disabled}>
-                {SkuResultSkuJsons({
-                  skuResult: detail,
-                  describe: true,
-                  emptyText: '无',
-                })}
-              </span>;
+              extra = <div onClick={() => setVisible('sku')}>
+                <MyEllipsis
+                  width={200}
+                >
+                  {SkuResultSkuJsons({
+                    skuResult: detail,
+                    describe: true,
+                    emptyText: '无',
+                  })}
+                </MyEllipsis>
+              </div>;
               break;
             case 'brandIds':
-              extra = <span className={styles.disabled}>
-                {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
-              </span>;
+              extra = <div onClick={() => setVisible('brand')}>
+                <MyEllipsis
+                  width={200}
+                >
+                  {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
+                </MyEllipsis>
+              </div>;
               break;
             case 'materialId':
               extra = <span onClick={() => {
@@ -347,6 +359,31 @@ const Edit = () => {
             break;
         }
         setVisible('');
+      }}
+    />
+
+    <SelectBrands
+      multiple
+      visible={visible === 'brand'}
+      value={isArray(detail.brandResults)}
+      onChange={(brandResults) => {
+        detailChange({ brandResults, brandIds: isArray(brandResults).map(item => item.brandId) });
+      }}
+      onClose={() => setVisible('')}
+    />
+
+    <SkuDescribe
+      visible={visible === 'sku'}
+      value={detail.sku}
+      onClose={() => setVisible('')}
+      onChange={(sku) => {
+        detailChange({
+          sku,
+          skuJsons: isArray(sku).map(item => ({
+            attribute: { attribute: item.label },
+            values: { attributeValues: item.value },
+          })),
+        });
       }}
     />
 
