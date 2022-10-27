@@ -91,7 +91,7 @@ const StocktaskingLog = ({ detail = {} }) => {
       {dataList()}
     </MyList>
 
-    <Popup visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
+    <Popup getContainer={null} visible={visible.anomalyId} onMaskClick={() => setVisible({})} destroyOnClose>
       <Error
         title='盘点记录'
         noDelete

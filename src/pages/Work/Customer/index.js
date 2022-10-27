@@ -64,7 +64,8 @@ const Customer = () => {
               <Button type='link' style={{ paddingTop: 16 }} icon={<FilterOutlined />} onClick={() => {
                 setScreening(true);
               }} />
-              <Popup
+               <Popup
+      getContainer={null}
                 visible={screening}
                 onMaskClick={() => {
                   setScreening(false);

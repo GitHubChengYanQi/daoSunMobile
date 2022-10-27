@@ -76,7 +76,7 @@ const ErrorLog = ({ orderId }) => {
 
       </MyCard>
 
-      <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
+      <Popup getContainer={null} onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
         <SkuError
           height='80vh'
           orderComplete

@@ -57,7 +57,8 @@ const Screen = (
   const mainElementRef = useRef(null);
 
   return <>
-    <Popup
+     <Popup
+      getContainer={null}
       forceRender
       afterShow={() => {
         const mainElement = mainElementRef.current;

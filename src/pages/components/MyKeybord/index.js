@@ -79,7 +79,8 @@ const MyKeybord = (
   }, [visible]);
 
   return <>
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       className={ToolUtil.classNames(style.popup, popupClassName)}
       onMaskClick={() => {

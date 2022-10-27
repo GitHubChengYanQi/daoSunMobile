@@ -49,6 +49,7 @@ const Business = () => {
                 setScreening(true);
               }} />
               <Popup
+                getContainer={null}
                 visible={screening}
                 onMaskClick={() => {
                   setScreening(false);

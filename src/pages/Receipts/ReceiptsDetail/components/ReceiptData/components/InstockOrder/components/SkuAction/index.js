@@ -264,7 +264,8 @@ const SkuAction = (
 
     </MyCard>
 
-    <Popup
+     <Popup
+      getContainer={null}
       onMaskClick={() => {
         if (refreshOrder) {
           setRefreshOrder(false);
