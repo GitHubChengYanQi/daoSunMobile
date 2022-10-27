@@ -326,7 +326,7 @@ const Edit = () => {
       value={JSON.parse(detail.materialId || '[]')[0]}
       onClose={() => setVisible('')}
       onChange={(option) => {
-        detailChange({ materialId: [option.value], materialResultList: [{ name: option.label }] });
+        detailChange({ materialId: [option.value],materialResultList:[{name:option.label}] });
         setVisible('');
       }}
     />

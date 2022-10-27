@@ -28,7 +28,9 @@ const MyAudit = (
     hiddenSearch,
     taskSkuId,
     extraIcon,
+    pickUserId,
     task,
+    defaultScreen = {},
   }, ref) => {
 
   const userRef = useRef();
@@ -40,6 +42,7 @@ const MyAudit = (
     type,
     createUser,
     skuId: taskSkuId,
+    pickUserId,
   };
 
   let tabs = [];
@@ -88,7 +91,7 @@ const MyAudit = (
 
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
-  const [screen, setScreen] = useState({});
+  const [screen, setScreen] = useState(defaultScreen);
 
   const [sort, setSort] = useState({});
 
@@ -131,7 +134,7 @@ const MyAudit = (
       default:
         break;
     }
-    setScreen({ typeName });
+    setScreen({ ...defaultScreen, typeName });
   };
 
   const clear = () => {

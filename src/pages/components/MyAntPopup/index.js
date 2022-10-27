@@ -29,8 +29,8 @@ const MyAntPopup = (
 
   return <>
     <Popup
-      style={{ '--z-index': zIndex }}
       getContainer={null}
+      style={{ '--z-index': zIndex }}
       afterShow={afterShow}
       afterClose={afterClose}
       visible={visible}
