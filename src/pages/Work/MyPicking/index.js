@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
-import MyList from '../../components/MyList';
-import OutStockItem from '../Stock/Task/components/OutStockTask/components/OutStockItem';
 import { ReceiptsEnums } from '../../Receipts';
-import { history, useModel } from 'umi';
-
-const list = { url: '/productionPickLists/selfPickTasks', method: 'POST' };
+import { useModel } from 'umi';
+import MyAudit from '../ProcessTask/MyAudit';
 
 const MyPicking = () => {
 
@@ -14,27 +11,15 @@ const MyPicking = () => {
   const state = initialState || {};
   const userInfo = state.userInfo || {};
 
-
-  const [data, setData] = useState([]);
-
   return <div className={style.myPicking}>
     <MyNavBar title='领料中心' />
-    <MyList
-      api={list}
-      data={data}
-      getData={setData}
-      params={{ auditType: 'audit', statusList: ['0'], type: ReceiptsEnums.outstockOrder, userId: userInfo.id }}
-    >
-      {
-        data.map((item, index) => {
-          return <div key={index} onClick={()=>{
-            history.push(`/Receipts/ReceiptsDetail?id=${item.processTaskId}`);
-          }}>
-            <OutStockItem pick item={item} index={index} />
-          </div>;
-        })
-      }
-    </MyList>
+
+    <MyAudit
+      task
+      type={ReceiptsEnums.outstockOrder}
+      pickUserId={userInfo.id}
+      defaultScreen={{userName:userInfo.name}}
+    />
   </div>;
 
 };
