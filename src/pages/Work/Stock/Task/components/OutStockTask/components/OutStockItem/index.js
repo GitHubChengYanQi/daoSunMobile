@@ -27,11 +27,11 @@ const OutStockItem = (
   const can = pick ? canPick : (canOperate === undefined ? canPick : canOperate);
 
   const received = receipts.receivedCount || 0;
-  const collectable = item.cartNumCount || 0;
+  const collectable = receipts.cartNumCount || 0;
 
   const successPercent = Number(((received / receipts.numberCount)).toFixed(2)) * 100;
   const percent = Number(((collectable / receipts.numberCount)).toFixed(2)) * 100;
-
+ 
   return <TaskItem
     task={item}
     action={can}
