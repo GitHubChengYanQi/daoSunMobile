@@ -15,6 +15,7 @@ const MyPicking = () => {
     <MyNavBar title='领料中心' />
 
     <MyAudit
+      noType
       task
       type={ReceiptsEnums.outstockOrder}
       pickUserId={userInfo.id}

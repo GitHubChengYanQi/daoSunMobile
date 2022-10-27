@@ -20,6 +20,7 @@ const MyAudit = (
     auditType,
     skuName,
     type,
+    noType,
     defaultType,
     paramsChange = () => {
     },
@@ -69,25 +70,32 @@ const MyAudit = (
 
   const [screenKey, setScreenkey] = useState();
 
-  const defaultScreenDatas = [
+  const defaultScreenDatas = noType ? [
+    { title: createUser ? '任务状态' : '申请人', key: createUser ? 'status' : 'createUser' },
+    { title: '提交日期', key: 'createTime' },
+  ] : [
     { title: '任务类型', key: 'type' },
     { title: createUser ? '任务状态' : '申请人', key: createUser ? 'status' : 'createUser' },
     { title: '提交日期', key: 'createTime' },
   ];
+
   const [screenDatas, setScreenDatas] = useState(defaultScreenDatas);
 
   const screens = screenDatas.map(item => item);
 
-  switch (params.type) {
-    case ReceiptsEnums.instockOrder:
-      screens.push({ title: '供应商', key: 'customerId' });
-      break;
-    case ReceiptsEnums.outstockOrder:
-      screens.push({ title: '领料人', key: 'pickUserId' });
-      break;
-    default:
-      break;
+  if (!noType){
+    switch (params.type) {
+      case ReceiptsEnums.instockOrder:
+        screens.push({ title: '供应商', key: 'customerId' });
+        break;
+      case ReceiptsEnums.outstockOrder:
+        screens.push({ title: '领料人', key: 'pickUserId' });
+        break;
+      default:
+        break;
+    }
   }
+
 
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
