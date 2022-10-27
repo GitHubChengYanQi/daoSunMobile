@@ -90,7 +90,7 @@ const InstockOrder = (
           data={details}
           permissions={permissions}
           actionId={getAction('outStock').id}
-          action={getAction('outStock').id}
+          action={getAction('outStock').id && permissions}
           pickListsId={data.pickListsId}
           refresh={refresh}
         />;
