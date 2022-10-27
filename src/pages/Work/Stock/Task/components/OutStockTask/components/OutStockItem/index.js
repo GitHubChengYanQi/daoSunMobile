@@ -34,12 +34,11 @@ const OutStockItem = (
 
   return <TaskItem
     task={item}
+    action={can}
     noProgress={noProgress}
     otherData={<>领料人：{receipts?.userResult?.name}</>}
     users={ToolUtil.isArray(item.processUsers)}
     statusName={receipts.statusName}
-    action={![99, 50].includes(receipts.status)}
-    complete={[99, 50].includes(receipts.status)}
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
