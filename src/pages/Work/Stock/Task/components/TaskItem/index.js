@@ -25,6 +25,7 @@ const TaskItem = (
     noPosition,
     noProgress,
     statusName,
+    action = true,
     users = [],
     userLabel,
     otherData,
@@ -45,7 +46,7 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
-  let color = 'var(--adm-color-primary)';
+  let color;
 
   switch (task.status) {
     case 49:
@@ -58,6 +59,7 @@ const TaskItem = (
       color = '#599745';
       break;
     default:
+      color = action ? 'var(--adm-color-primary)' : '#9a9a9a';
       break;
   }
 
@@ -97,7 +99,7 @@ const TaskItem = (
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>
-         {otherData}
+          {otherData}
         </div>}
       </div>
       <div className={style.process} hidden={noProgress}>
