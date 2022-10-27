@@ -43,8 +43,6 @@ const Edit = () => {
   const skuFiles = useRef();
   const skuDrawings = useRef();
 
-  const { loading: meterialLoading, data: materialList } = useRequest(materialListSelect);
-
   const { loading: skuFormLoading, run: getSkuForm } = useRequest(spuClassificationDetail, {
     manual: true,
     onSuccess: (res) => {
@@ -192,7 +190,6 @@ const Edit = () => {
                   })}
                 </MyEllipsis>
               </div>;
-              extra = <span className={styles.disabled}>
               break;
             case 'brandIds':
               extra = <div onClick={() => setVisible('brand')}>
