@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import React, { useEffect, useRef, useState } from 'react';
+import { history, useModel } from 'umi';
 import { Avatar } from 'antd-mobile';
 import style from './index.less';
 import { useRequest } from '../../util/Request';
@@ -18,7 +18,7 @@ import MyEllipsis from '../components/MyEllipsis';
 import StartEndDate from '../Work/Production/CreateTask/components/StartEndDate';
 import MyDatePicker from '../components/MyDatePicker';
 import moment from 'moment';
-import { DownFill } from 'antd-mobile-icons';
+import { DownFill, RightOutline } from 'antd-mobile-icons';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };
@@ -33,6 +33,8 @@ const User = ({ userId }) => {
   const [date, setDate] = useState(new Date());
 
   const history = useHistory();
+
+  const dynamicRef = useRef();
 
   const { loading, run } = useRequest(getUserInfo, {
     manual: true,
@@ -138,10 +140,14 @@ const User = ({ userId }) => {
             <DownFill />
           </div>}
           value={date}
-          onChange={setDate}
+          onChange={(date) => {
+            dynamicRef.current.submit({ userId: userId || userInfo.id, time: date });
+            setDate(date);
+          }}
         />}
       >
         <MyList
+          ref={dynamicRef}
           api={dynamicList}
           params={{ userId: userId || userInfo.id }}
           data={dynamicData}
@@ -149,10 +155,34 @@ const User = ({ userId }) => {
         >
           {
             dynamicData.map((item, index) => {
-              return <div key={index} className={style.dynamicItem}>
+              let content = '-';
+              switch (item.source) {
+                case 'processTask':
+                  content = '关联任务：' + item.taskResult?.theme || '-';
+                  break;
+                default:
+                  break;
+              }
+              return <div
+                key={index}
+                className={style.dynamicItem}
+                onClick={() => {
+                  switch (item.source) {
+                    case 'processTask':
+                      history.push(`/Receipts/ReceiptsDetail?id=${item.taskResult?.processTaskId}`);
+                      break;
+                    default:
+                      break;
+                  }
+                }}
+              >
                 <div className={style.header}>
-                  <div className={style.title}>{item.content}</div>
+                  <div className={style.title}><MyEllipsis width='100%'>{item.content || '-'}</MyEllipsis></div>
                   <div className={style.time}>{ToolUtil.timeDifference(item.createTime)}</div>
+                </div>
+                <div className={style.content}>
+                  <div>{content}</div>
+                  <RightOutline />
                 </div>
               </div>;
             })
