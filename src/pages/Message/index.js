@@ -213,7 +213,7 @@ const MessageList = () => {
                 <div className={style.theme} hidden={!item.processTaskResult?.theme}>
                   {item.processTaskResult?.theme}
                 </div>
-                <div className={style.content} hidden={!item.content}>
+                <div className={style.content} hidden={!item.content || item.type !== 2}>
                   {item.content}
                 </div>
               </div>
