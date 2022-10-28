@@ -9,6 +9,7 @@ import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
 import { Avatar } from 'antd';
+import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -82,26 +83,30 @@ const TaskItem = (
     >
       <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
       <div className={style.user}>
-        <div style={{ width: otherData ? '50%' : '100%' }}>
-          <MyEllipsis width='100%'>{userLabel || '执行人'}：
-            {isArray(users).length === 0 && '无'}
-            {
-              isArray(users).map((item, index) => {
-                return <Avatar
-                  size={18}
-                  key={index}
-                  style={{ marginRight: 4 }}
-                  src={item.avatar || ''}
-                >
+        {userLabel || '执行人'}：
+        {isArray(users).length === 0 && '无'}
+        {
+          isArray(users).filter((item, index) => index < 3).map((item, index) => {
+            return <span
+              className={style.userItem}
+              key={index}
+            >
+              <Avatar
+                size={18}
+                key={index}
+                style={{ marginRight: 4 }}
+                src={item.avatar || ''}
+              >
                   {item.name ? item?.name.substring(0, 1) : ''}
-                </Avatar>;
-              })
-            }</MyEllipsis>
-        </div>
-        {otherData &&
-        <div style={{ textAlign: 'right', width: '50%' }}>
-          {otherData}
-        </div>}
+                </Avatar>
+              {item.name}
+            </span>;
+          })
+        }
+        {isArray(users).length > 3 && '...'}
+      </div>
+      <div hidden={!otherData} className={style.otherData}>
+        <MyEllipsis width='100%'>{otherData}</MyEllipsis>
       </div>
       <div className={style.process} hidden={noProgress}>
         {processRender || <MyProgress percent={percent} />}
