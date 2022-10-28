@@ -158,7 +158,7 @@ const User = ({ userId }) => {
               let content = '-';
               switch (item.source) {
                 case 'processTask':
-                  content = '关联任务：' + item.taskResult?.theme || '-';
+                  content = '关联任务：' + (item.taskResult?.theme || '无');
                   break;
                 default:
                   break;
