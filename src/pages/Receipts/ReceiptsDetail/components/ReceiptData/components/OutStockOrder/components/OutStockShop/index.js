@@ -79,6 +79,7 @@ const OutStockShop = (
     >
       <div id='pickShop' className={style.actions}>
         <div className={style.action} onClick={() => {
+          listRefresh();
           setVisible(true);
         }}>
           <div className={style.actionButton}>

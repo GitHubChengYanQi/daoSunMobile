@@ -68,7 +68,7 @@ export const StockContent = connect(({ qrCode }) => ({ qrCode }))((
           stockDetail={stockDetail}
         />;
       case 'Message':
-        return <Task keyChange={setTaskKey} />;
+        return <Task stock />;
       case 'report':
         return <Report />;
       case 'dynamic':

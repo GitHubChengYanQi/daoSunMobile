@@ -1,6 +1,13 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
 import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
+import styles from '../../../../index.less';
+import MyProgress from '../../../../../../../components/MyProgress';
+import {
+  collectableColor,
+  notPreparedColor,
+  receivedColor,
+} from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/OutSkuAction/compoennts/MyPicking';
 
 const OutStockItem = (
   {
@@ -19,14 +26,17 @@ const OutStockItem = (
 
   const can = pick ? canPick : (canOperate === undefined ? canPick : canOperate);
 
-  const percent = parseInt((receipts.receivedCount / receipts.numberCount) * 100);
+  const received = receipts.receivedCount || 0;
+  const collectable = receipts.cartNumCount || 0;
 
+  const successPercent = Number(((received / receipts.numberCount)).toFixed(2)) * 100;
+  const percent = Number(((collectable / receipts.numberCount)).toFixed(2)) * 100;
+ 
   return <TaskItem
     task={item}
     action={can}
     noProgress={noProgress}
     otherData={<>领料人：{receipts?.userResult?.name}</>}
-    otherUserLabel='领料人'
     users={ToolUtil.isArray(item.processUsers)}
     statusName={receipts.statusName}
     percent={percent}
@@ -41,6 +51,13 @@ const OutStockItem = (
     positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
+    processRender={<MyProgress
+      className={styles.outProcess}
+      percent={percent + successPercent}
+      success={{ percent: successPercent, strokeColor: receivedColor }}
+      trailColor={notPreparedColor}
+      strokeColor={collectableColor}
+    />}
   />;
 };
 
