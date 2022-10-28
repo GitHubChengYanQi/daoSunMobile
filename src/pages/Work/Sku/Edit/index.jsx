@@ -18,8 +18,15 @@ import BottomButton from '../../../components/BottomButton';
 import { Message } from '../../../components/Message';
 import { spuClassificationDetail } from '../SkuDetail';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
+import SelectBrands from './components/SelectBrands';
+import MyEllipsis from '../../../components/MyEllipsis';
+import SkuDescribe from './components/SkuDescribe';
 
 export const editEnclosure = { url: '/sku/editEnclosure', method: 'POST' };
+export const materialListSelect = {
+  url: '/material/listSelect',
+  method: 'POST',
+};
 
 const Edit = () => {
 
@@ -42,6 +49,8 @@ const Edit = () => {
       setTypeSetting(res && res.typeSetting && JSON.parse(res.typeSetting) || []);
     },
   });
+
+  const { loading: meterialLoading, data: materialList } = useRequest(materialListSelect);
 
   const { loading: editLoading, run: edit } = useRequest(skuEdit,
     {
@@ -167,26 +176,34 @@ const Edit = () => {
             case 'weight':
               extra = <span onClick={() => {
                 setVisible('weight');
-              }}>{detail.weight || <span style={{ color: '#ccc' }}>请输入重量</span>}&nbsp;&nbsp;kg</span>;
+              }}>{parseInt(detail.weight) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;kg</span>;
               break;
             case 'sku':
-              extra = <span className={styles.disabled}>
-                {SkuResultSkuJsons({
-                  skuResult: detail,
-                  describe: true,
-                  emptyText: '无',
-                })}
-              </span>;
+              extra = <div onClick={() => setVisible('sku')}>
+                <MyEllipsis
+                  width={200}
+                >
+                  {SkuResultSkuJsons({
+                    skuResult: detail,
+                    describe: true,
+                    emptyText: '无',
+                  })}
+                </MyEllipsis>
+              </div>;
               break;
             case 'brandIds':
-              extra = <span className={styles.disabled}>
-                {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
-              </span>;
+              extra = <div onClick={() => setVisible('brand')}>
+                <MyEllipsis
+                  width={200}
+                >
+                  {isArray(detail.brandResults).map(item => item.brandName).join('、') || '-'}
+                </MyEllipsis>
+              </div>;
               break;
             case 'materialId':
-              extra = <span className={styles.disabled}>
-                {isArray(detail.materialResultList).map(item => item.name).join('、') || '-'}
-              </span>;
+              extra = <span onClick={() => {
+                setVisible('materialId');
+              }}>{isArray(detail.materialResultList).map(item => item.name).join('、') || '请选择'} <RightOutline /></span>;
               break;
             case 'remarks':
               content = <TextArea
@@ -201,17 +218,17 @@ const Edit = () => {
                 <MyCard extraClassName={styles.extra} title='长' extra={<div onClick={() => {
                   setVisible('length');
                 }}>
-                  {skuSize[0] || <span style={{ color: '#ccc' }}>请输入长度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[0]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
                 <MyCard extraClassName={styles.extra} title='宽' extra={<div onClick={() => {
                   setVisible('width');
                 }}>
-                  {skuSize[1] || <span style={{ color: '#ccc' }}>请输入宽度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[1]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
                 <MyCard extraClassName={styles.extra} title='高' extra={<div onClick={() => {
                   setVisible('height');
                 }}>
-                  {skuSize[2] || <span style={{ color: '#ccc' }}>请输入高度</span>}&nbsp;&nbsp;cm
+                  {parseInt(skuSize[2]) || <span style={{ color: '#ccc' }}>请输入</span>}&nbsp;&nbsp;cm
                 </div>} />
               </div>;
             case 'fileId':
@@ -226,9 +243,9 @@ const Edit = () => {
                 ref={skuFiles}
                 files={isArray(detail.filedResults)}
                 onChange={async (medias) => {
-                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,filedResults:medias})
-                  })
+                  editAction({ fileId: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({ ...detail, filedResults: medias, fileId: medias.map(item => item.mediaId).toString() });
+                  });
                 }} />;
               break;
             case 'images':
@@ -242,9 +259,9 @@ const Edit = () => {
                   url: item.thumbUrl || item.url,
                 }))}
                 onChange={(medias) => {
-                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,imgResults:medias})
-                  })
+                  editAction({ images: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({ ...detail, imgResults: medias, images: medias.map(item => item.mediaId).toString() });
+                  });
                 }} />;
               break;
             case 'drawing':
@@ -259,9 +276,13 @@ const Edit = () => {
                 ref={skuDrawings}
                 files={isArray(detail.drawingResults)}
                 onChange={(medias) => {
-                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(()=>{
-                    setDetail({...detail,drawingResults:medias})
-                  })
+                  editAction({ drawing: medias.map(item => item.mediaId).toString() }).then(() => {
+                    setDetail({
+                      ...detail,
+                      drawingResults: medias,
+                      drawing: medias.map(item => item.mediaId).toString(),
+                    });
+                  });
                 }} />;
               break;
             default:
@@ -299,6 +320,17 @@ const Edit = () => {
       }}
     />
 
+    <MyPicker
+      visible={visible === 'materialId'}
+      options={materialList || []}
+      value={JSON.parse(detail.materialId || '[]')[0]}
+      onClose={() => setVisible('')}
+      onChange={(option) => {
+        detailChange({ materialId: [option.value],materialResultList:[{name:option.label}] });
+        setVisible('');
+      }}
+    />
+
     <MyKeybord
       decimal={visible !== 'maintenancePeriod' && 2}
       visible={['maintenancePeriod', 'weight', 'length', 'width', 'height'].includes(visible)}
@@ -329,11 +361,34 @@ const Edit = () => {
       }}
     />
 
+    <SelectBrands
+      multiple
+      visible={visible === 'brand'}
+      value={isArray(detail.brandResults)}
+      onChange={(brandResults) => {
+        detailChange({ brandResults, brandIds: isArray(brandResults).map(item => item.brandId) });
+      }}
+      onClose={() => setVisible('')}
+    />
+
+    <SkuDescribe
+      visible={visible === 'sku'}
+      value={detail.sku}
+      onClose={() => setVisible('')}
+      onChange={(sku) => {
+        detailChange({
+          sku,
+          skuJsons: isArray(sku).map(item => ({
+            attribute: { attribute: item.label },
+            values: { attributeValues: item.value },
+          })),
+        });
+      }}
+    />
+
     <BottomButton
       onClick={() => {
-        edit({
-          data: detail,
-        });
+        edit({ data: detail });
       }}
       only
       text='保存'

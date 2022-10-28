@@ -10,13 +10,19 @@
   .body {
     padding: 0;
 
-    .theme, .user,.process {
+    .theme, .user, .process {
       padding-top: 8px;
       color: #a7a7a9;
     }
 
     .theme {
       color: rgba(0, 0, 0, 0.6);
+      display: flex;
+      align-items: center;
+
+      .themeValue {
+        flex-grow: 1;
+      }
     }
 
     .user {

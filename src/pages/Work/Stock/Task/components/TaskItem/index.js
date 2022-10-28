@@ -2,18 +2,13 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
+import { classNames, isArray, isObject, timeDifference, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
-import receiptsOk from '../../../../../../assets/receiptsTask-ok.png';
-import receipts from '../../../../../../assets/receiptsTask.png';
-import receiptsNo from '../../../../../../assets/receiptsTask-no.png';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import MyCard from '../../../../../components/MyCard';
-import { UserName } from '../../../../../components/User';
 import { Avatar } from 'antd';
-import { Space } from 'antd-mobile';
 
 const TaskItem = (
   {
@@ -22,27 +17,22 @@ const TaskItem = (
     beginTime,
     endTime,
     coding,
-    positionSize = 0,
-    skuSize = 0,
     onClick = () => {
     },
-    skus = [],
     index,
     percent = 0,
     noSku,
     noPosition,
     noProgress,
+    processRender,
     statusName,
-    action,
+    action = true,
     users = [],
     userLabel,
     otherData,
-    origin = {},
-    complete,
     task = {},
   },
 ) => {
-  const originRet = isArray(origin?.parent)[0]?.ret;
   const scaleItems = Array(10).fill('');
 
   const getHour = (begin, end) => {
@@ -57,13 +47,21 @@ const TaskItem = (
   const pastTimesPercent = overtime > 0 ? 100 : ((pastTimes > 0 && total > 0) ? parseInt((pastTimes / total) * 100) : 0);
   const overScale = scaleItems.length * (pastTimesPercent / 100);
 
-  let img;
-  if (action) {
-    img = receipts;
-  } else if (complete) {
-    img = receiptsOk;
-  } else {
-    img = receiptsNo;
+  let color;
+
+  switch (task.status) {
+    case 49:
+      color = '#9a9a9a';
+      break;
+    case 50:
+      color = 'var(--adm-color-danger)';
+      break;
+    case 99:
+      color = '#599745';
+      break;
+    default:
+      color = action ? 'var(--adm-color-primary)' : '#9a9a9a';
+      break;
   }
 
   return <>
@@ -73,13 +71,13 @@ const TaskItem = (
       titleBom={
         <div className={style.header}>
           <div className={style.title}>{taskName}</div>
-          <div className={classNames(style.status, ['50', '49'].includes(task.status) && style.error)}>
+          <div style={{ border: `solid 1px ${color}`, color }} className={style.status}>
             {statusName}
           </div>
         </div>
       }
       extraClassName={style.extra}
-      extra={MyDate.Show(createTime)}
+      extra={timeDifference(createTime)}
       bodyClassName={style.body}
     >
       <div hidden={!task.theme} className={style.theme}>{task.theme}</div>
@@ -87,26 +85,25 @@ const TaskItem = (
         <div style={{ width: otherData ? '50%' : '100%' }}>
           <MyEllipsis width='100%'>{userLabel || '执行人'}：
             {isArray(users).length === 0 && '无'}
-            {
-              isArray(users).map((item, index) => {
-                return <Avatar
-                  size={18}
-                  key={index}
-                  style={{marginRight:4}}
-                  src={item.avatar || ''}
-                >
-                  {item.name ? item?.name.substring(0, 1) : ''}
-                </Avatar>;
-              })
+            {isArray(users).map((item, index) => {
+              return <Avatar
+                size={18}
+                key={index}
+                style={{ marginRight: 4 }}
+                src={item.avatar || ''}
+              >
+                {item.name ? item?.name.substring(0, 1) : ''}
+              </Avatar>;
+            })
             }</MyEllipsis>
         </div>
         {otherData &&
         <div style={{ textAlign: 'right', width: '50%' }}>
-          <MyEllipsis width='100%'>{otherData}</MyEllipsis>
+          {otherData}
         </div>}
       </div>
       <div className={style.process} hidden={noProgress}>
-        <MyProgress percent={percent} />
+        {processRender || <MyProgress percent={percent} />}
       </div>
     </MyCard>
     <div className={style.space} />

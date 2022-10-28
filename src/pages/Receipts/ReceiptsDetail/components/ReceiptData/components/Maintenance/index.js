@@ -23,9 +23,12 @@ import Icon from '../../../../../../components/Icon';
 import MyProgress from '../../../../../../components/MyProgress';
 import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../ActionButtons';
+import { MaintenanceRevoke } from '../../../Bottom/components/Revoke';
 
 const Maintenance = (
   {
+    actionNode,
+    taskDetail,
     permissions,
     receipts,
     getAction = () => {
@@ -208,7 +211,8 @@ const Maintenance = (
         });
       }} />}
 
-    <ActionButtons
+    {actionNode && <ActionButtons
+      taskDetail={taskDetail}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
@@ -234,34 +238,13 @@ const Maintenance = (
             });
             break;
           case 'revokeAndAsk':
-            history.push({
-              pathname: '/Work/CreateTask',
-              query: {
-                createType: ERPEnums.curing,
-              },
-              state: {
-                skuList: receipts.selectParamResults,
-                startTime: receipts.startTime,
-                endTime: receipts.endTime,
-                nearMaintenance: receipts.nearMaintenance,
-                files: isArray(receipts.enclosureUrl).map((item, index) => ({
-                  mediaId: receipts.enclosure && receipts.enclosure.split(',')[index],
-                  url: item,
-                })),
-                mediaIds: receipts.enclosure && receipts.enclosure.split(','),
-                noticeIds: receipts.notice && receipts.notice.split(','),
-                remark: receipts.note,
-                userId: receipts.userId,
-                userName: isObject(receipts.userResult).name,
-                avatar: isObject(receipts.userResult).avatar,
-              },
-            });
+            MaintenanceRevoke(taskDetail);
             break;
           default:
             break;
         }
       }}
-    />
+    />}
 
   </>;
 };

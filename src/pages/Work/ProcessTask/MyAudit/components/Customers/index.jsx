@@ -56,7 +56,7 @@ const Customers = (
     <MyAntPopup
       onClose={onClose}
       zIndex={zIndex}
-      title=' 任务类型'
+      title='选择供应商'
       visible={visible}
       leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
       rightText={<LinkButton onClick={() => {

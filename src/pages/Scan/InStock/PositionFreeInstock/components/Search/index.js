@@ -168,7 +168,8 @@ const Search = ({ onChange, ...props }, ref) => {
   };
 
   return <div>
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       destroyOnClose
       onMaskClick={() => {

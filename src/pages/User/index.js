@@ -134,9 +134,9 @@ const User = ({ userId }) => {
         bodyClassName={style.dynamicContent}
         className={style.dynamic}
         headerClassName={style.dynamicHeader}
-        extra={<MyDatePicker
-          show={<div className={style.date}>
-            {moment(date).format('YYYY/MM/DD')}
+        extra={<StartEndDate precision='year'
+          render={<div className={style.date}>
+            {moment(date).format('YYYY/MM/DD')} - {moment(date).format('YYYY/MM/DD')}
             <DownFill />
           </div>}
           value={date}

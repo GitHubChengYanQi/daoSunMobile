@@ -34,7 +34,6 @@ const SkuError = (
     orderComplete = false,
   },
 ) => {
-
   const [complete, setComplete] = useState(orderComplete);
 
   const { initialState } = useModel('@@initialState');

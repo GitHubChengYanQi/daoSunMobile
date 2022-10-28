@@ -39,6 +39,10 @@ const Supply = ({ skuId }) => {
     return <MyLoading skeleton />;
   }
 
+  if (isArray(data).length === 0) {
+    return <></>;
+  }
+
   return <>
     <div className={styles.supply}>
       <div className={styles.title}>

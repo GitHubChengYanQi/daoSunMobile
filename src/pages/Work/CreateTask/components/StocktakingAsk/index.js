@@ -20,6 +20,7 @@ export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST'
 const StocktakingAsk = ({ createType, backTitle, defaultParams = {} }) => {
 
   const [params, setParams] = useState({ method: 'OpenDisc', ...defaultParams });
+  console.log(params.skuList);
 
   const history = useHistory();
 
@@ -82,12 +83,14 @@ const StocktakingAsk = ({ createType, backTitle, defaultParams = {} }) => {
         }
 
         const skuClasses = ToolUtil.isArray(params.skuClasses);
+        const materials = ToolUtil.isArray(params.materials);
         const brands = ToolUtil.isArray(params.brands);
         const positions = ToolUtil.isArray(params.positions);
         const boms = ToolUtil.isArray(params.boms);
         detailParams.push({
           spuIds: params.spuId && [params.spuId],
           spuId: params.spuId && params.spuId,
+          materialIds: materials.map(item => item.value),
           classIds: skuClasses.map(item => item.value),
           brandIds: brands.map(item => item.value),
           positionIds: positions.map(item => item.id),

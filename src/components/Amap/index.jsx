@@ -27,6 +27,7 @@ const Amap = ({title, value, onClose, onChange}) => {
         }}
         title={<>{value && value.address || (title || '定位') }</>} />
       <Popup
+        getContainer={null}
         visible={visible}
         bodyStyle={{ minHeight: '100vh' }}
       >

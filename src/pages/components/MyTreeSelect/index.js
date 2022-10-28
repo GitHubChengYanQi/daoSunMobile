@@ -112,7 +112,8 @@ const MyTreeSelect = (
         <>{branchText}</>
       }
 
-      <Popup
+       <Popup
+      getContainer={null}
         visible={visible}
       >
         <Card

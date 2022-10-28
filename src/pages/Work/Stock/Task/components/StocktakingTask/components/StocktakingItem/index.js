@@ -2,6 +2,7 @@ import React from 'react';
 import TaskItem from '../../../TaskItem';
 import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
 import { MyDate } from '../../../../../../../components/MyDate';
+import moment from 'moment';
 
 const StocktakingItem = (
   {
@@ -17,19 +18,18 @@ const StocktakingItem = (
 
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
+  const sameDay = moment(receipts.beginTime).isSame(receipts.endTime, 'day');
   return <>
     <TaskItem
       task={item}
       noProgress={noProgress}
-      otherData={MyDate.Show(receipts.beginTime)+' - '+MyDate.Show(receipts.endTime)}
+      otherData={MyDate.Show(receipts.beginTime) + ' - ' + (sameDay ? moment(receipts.endTime).format('HH:mm') : MyDate.Show(receipts.endTime))}
       percent={percent}
       coding={receipts.coding}
       endTime={receipts.endTime}
       createTime={item.createTime}
       taskName={item.taskName}
       statusName={receipts.statusName || '进行中'}
-      action={![99, 50].includes(receipts.status)}
-      complete={[99, 50].includes(receipts.status)}
       origin={isObject(item.themeAndOrigin)}
       index={index}
       skus={ToolUtil.isArray(receipts.stockResults)}

@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import MyCard from '../../../../../../components/MyCard';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
-import BottomButton from '../../../../../../components/BottomButton';
 import { useHistory } from 'react-router-dom';
 import { getEndData, getStartData, getStoreHouse, noDistribution } from './getData';
 import { UserName } from '../../../../../../components/User';
-import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import Detail from './components/Detail';
 import { MyLoading } from '../../../../../../components/MyLoading';
-import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../ActionButtons';
+import { AllocationRevoke } from '../../../Bottom/components/Revoke';
 
 const Allocation = (
   {
+    actionNode,
+    taskDetail,
     taskId,
     nodeActions = [],
     logIds,
@@ -137,7 +138,9 @@ const Allocation = (
     {loading && <MyLoading />}
 
 
-    <ActionButtons
+    {actionNode && <ActionButtons
+      statusName={data.statusName}
+      taskDetail={taskDetail}
       refresh={refresh}
       afertShow={afertShow}
       taskId={taskId}
@@ -151,31 +154,13 @@ const Allocation = (
             history.push(`/Work/Allocation/SelectStoreHouse?id=${data.allocationId}`);
             break;
           case 'revokeAndAsk':
-            history.push({
-              pathname: '/Work/CreateTask',
-              query: {
-                createType: ERPEnums.allocation,
-                askType: data.type,
-                allocationType: data.allocationType === 1 ? 'in' : 'out',
-                storeHouseId: data.storehouseId,
-                storeHouse: isObject(data.storehouseResult).name,
-              },
-              state: {
-                files: isArray(data.enclosureUrl).map((item, index) => ({
-                  mediaId: data.enclosure && data.enclosure.split(',')[index],
-                  url: item,
-                })),
-                mediaIds: data.enclosure && data.enclosure.split(','),
-                noticeIds: data.reason && data.reason.split(','),
-                remark: data.remark,
-              },
-            });
+            AllocationRevoke(taskDetail);
             break;
           default:
             break;
         }
       }}
-    />
+    />}
   </>;
 };
 

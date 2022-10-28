@@ -4,6 +4,7 @@ import { MyDate } from '../MyDate';
 import { Message } from '../Message';
 import { history } from 'umi';
 import { Dialog } from 'antd-mobile';
+import moment from 'moment';
 
 // 判断是否是企业微信或者微信开发者工具
 export const isQiyeWeixin = () => {
@@ -134,7 +135,6 @@ export const timeDifference = (tmpTime) => {
   const mm = 1000;//1000毫秒 代表1秒
   const minute = mm * 60;
   const hour = minute * 60;
-  const day = hour * 24;
   let ansTimeDifference = 0;//记录时间差
   const tmpTimeStamp = tmpTime ? Date.parse(tmpTime.replace(/-/gi, '/')) : new Date().getTime();//将 yyyy-mm-dd H:m:s 进行正则匹配
   const nowTime = new Date().getTime();//获取当前时间戳
@@ -142,13 +142,20 @@ export const timeDifference = (tmpTime) => {
   if (tmpTimeDifference < 0) {//时间超出，不能计算
     return '刚刚';
   }
-  const DifferebceDay = tmpTimeDifference / day;//进行天取整
+
+  const twoDayTime = new Date().setDate(moment().date() - 2);
+  const DifferebceDay = moment().date() - moment(tmpTime).date();
   const DifferebceHour = tmpTimeDifference / hour;//进行小时取整
   const DifferebceMinute = tmpTimeDifference / minute;//进行分钟取整
-  if (DifferebceDay > 2) {
-    return MyDate.Show(tmpTime); //大于一个月 直接返回时间
-  } else if (DifferebceDay >= 1) {
-    ansTimeDifference = parseInt(DifferebceDay) + '天前';
+
+  if (moment(tmpTime).isBefore(moment(twoDayTime), 'day')) {
+    ansTimeDifference = MyDate.Show(tmpTime);
+  } else if (DifferebceDay === 2) {
+    ansTimeDifference = '前天 ' + moment(tmpTime).format('HH:mm');
+  } else if (DifferebceDay === 1) {
+    ansTimeDifference = '昨天 ' + moment(tmpTime).format('HH:mm');
+  } else if (DifferebceHour >= 3) {
+    ansTimeDifference = moment(tmpTime).format('HH:mm');
   } else if (DifferebceHour >= 1) {
     ansTimeDifference = parseInt(DifferebceHour) + '小时前';
   } else if (DifferebceMinute >= 1) {

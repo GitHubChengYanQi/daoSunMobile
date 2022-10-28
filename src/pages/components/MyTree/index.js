@@ -25,7 +25,8 @@ const MyTree = (
       {children || '选择'}
     </div>
 
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       destroyOnClose
       onMaskClick={() => {
