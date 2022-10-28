@@ -210,7 +210,10 @@ const MessageList = () => {
                     {ToolUtil.timeDifference(item.time)}
                   </div>
                 </div>
-                <div className={style.content}>
+                <div className={style.theme} hidden={!item.processTaskResult?.theme}>
+                  {item.processTaskResult?.theme}
+                </div>
+                <div className={style.content} hidden={!item.content}>
                   {item.content}
                 </div>
               </div>
