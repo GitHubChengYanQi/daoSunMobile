@@ -30,7 +30,7 @@ const User = ({ userId }) => {
 
   const [userData, setUserData] = useState();
 
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState([]);
 
   const history = useHistory();
 
@@ -134,14 +134,21 @@ const User = ({ userId }) => {
         bodyClassName={style.dynamicContent}
         className={style.dynamic}
         headerClassName={style.dynamicHeader}
-        extra={<MyDatePicker
-          show={<div className={style.date}>
-            {moment(date).format('YYYY/MM/DD')}
+        extra={<StartEndDate
+          minWidth='auto'
+          precision='day'
+          max={new Date()}
+          render={<div className={style.date}>
+            {date.length === 2 ? <>{moment(date[0]).format('YYYY/MM/DD')} - {moment(date[1]).format('YYYY/MM/DD')}</> : '请选择时间'}
             <DownFill />
           </div>}
           value={date}
           onChange={(date) => {
-            dynamicRef.current.submit({ userId: userId || userInfo.id, time: date });
+            dynamicRef.current.submit({
+              userId: userId || userInfo.id,
+              startTime: date[0],
+              endTime: date[1],
+            });
             setDate(date);
           }}
         />}
@@ -158,7 +165,7 @@ const User = ({ userId }) => {
               let content = '-';
               switch (item.source) {
                 case 'processTask':
-                  content = '关联任务：' + item.taskResult?.theme || '-';
+                  content = '关联任务：' + (item.taskResult?.theme || '无');
                   break;
                 default:
                   break;
