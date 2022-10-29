@@ -7,8 +7,8 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://192.168.1.230'
   // :
   // 'https://192.168.0.220:8891'
-  'http://192.168.0.111'
-  // 'http://10.147.20.68:8881/'
+  // 'http://192.168.0.230'
+  'http://10.147.20.68:8881/'
   // 'https://api.hh.gf2025.com'
   :
   process.env.api;
