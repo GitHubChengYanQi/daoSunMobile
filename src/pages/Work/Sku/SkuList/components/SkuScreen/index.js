@@ -17,11 +17,11 @@ const SkuScreen = (
   {
     loading,
     screen,
-    overLengths,
+    overLengths={},
     refresh,
     skuNumber,
     params,
-    search,
+    search={},
     onClose,
     onChange,
     onClear,

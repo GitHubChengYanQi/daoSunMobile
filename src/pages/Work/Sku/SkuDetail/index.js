@@ -21,6 +21,7 @@ import Files from './components/Files';
 import Supply from './components/Supply';
 import Doms from './components/Doms';
 import { previewImage } from '../../../components/Upload/UploadFile';
+import SkuLog from './components/SkuLog';
 
 export const spuClassificationDetail = {
   url: '/spuClassification/detail',
@@ -123,7 +124,7 @@ const SkuDetail = ({ id }) => {
                   getContainer: () => document.getElementById('skuDetail'),
                   images,
                   defaultIndex: index,
-                })
+                });
               }
               previewImage(item.showUrl || item.url, images);
             }}>
@@ -262,7 +263,7 @@ const SkuDetail = ({ id }) => {
       title='操作记录'
       onClose={() => setVisible('')}
     >
-      <MyEmpty />
+      <SkuLog skuId={skuId} />
     </MyAntPopup>
 
   </div>;

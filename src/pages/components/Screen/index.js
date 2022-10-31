@@ -8,6 +8,7 @@ import MyEllipsis from '../MyEllipsis';
 const Screen = (
   {
     screen,
+    position,
     buttonTitle,
     onClose = () => {
     },
@@ -20,10 +21,14 @@ const Screen = (
     },
     SideBarDisabled = () => {
     },
+    afterClose = () => {
+    },
+    height,
+    className,
     fill,
     noNavBar,
+    noSpace,
   }) => {
-
 
   const [activeKey, setActiveKey] = useState();
 
@@ -57,7 +62,7 @@ const Screen = (
   const mainElementRef = useRef(null);
 
   return <>
-     <Popup
+    <Popup
       getContainer={null}
       forceRender
       afterShow={() => {
@@ -66,21 +71,26 @@ const Screen = (
         mainElement.addEventListener('scroll', handleScroll);
       }}
       afterClose={() => {
+        afterClose();
         const mainElement = mainElementRef.current;
         if (!mainElement) return;
         mainElement.removeEventListener('scroll', handleScroll);
       }}
-      className={ToolUtil.classNames(style.popup, ToolUtil.isQiyeWeixin() ? style.qywx : style.other)}
+      className={ToolUtil.classNames(style.popup, ToolUtil.isQiyeWeixin() ? style.qywx : style.other, className)}
       visible={screen}
       onMaskClick={() => {
         onClose();
       }}
-      position='top'
+      position={position || 'top'}
       bodyStyle={{ height: '40vh' }}
     >
       <div className={style.screenDiv} style={{ top: (noNavBar || ToolUtil.isQiyeWeixin()) ? 0 : 40 }}>
-        <div className={style.top} style={{ height: (noNavBar || ToolUtil.isQiyeWeixin()) ? 40 : 85 }} onClick={onClose} />
-        <div className={style.space} />
+        <div
+          className={style.top}
+          style={{ height: height || ((noNavBar || ToolUtil.isQiyeWeixin()) ? 40 : 85) }}
+          onClick={onClose}
+        />
+        <div hidden={noSpace} className={style.space} />
         <div className={style.content}>
           <SideBar
             className={style.sideBar}
