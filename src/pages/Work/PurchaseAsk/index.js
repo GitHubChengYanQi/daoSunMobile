@@ -1,36 +1,38 @@
-import React, { useRef } from 'react';
-import MyPopup from '../../components/MyPopup';
-import Screening from './components/Screening';
-import AskList from './components/AskList';
+import React, { useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
-import MySearchBar from '../../components/MySearchBar';
+import FormLayout from '../../components/FormLayout';
+import { ReceiptsEnums } from '../../Receipts';
+import MyCard from '../../components/MyCard';
+import { Input } from 'antd-mobile';
+import BottomButton from '../../components/BottomButton';
+import { isArray } from '../../components/ToolUtil';
+import styles from './index.less';
 
 const PurchaseAsk = () => {
 
-  const ref = useRef();
-
-  const listRef = useRef();
+  const [currentStep, setCurrentStep] = useState({});
 
   return <>
     <MyNavBar title='采购申请' />
-    <MySearchBar extra onExtra={() => {
-      ref.current.open();
-    }} />
-
-    <div style={{height:'85vh',overflow:'auto',marginTop:16}}>
-      <AskList ref={listRef} />
-    </div>
-
-    <MyPopup
-      component={Screening}
-      ref={ref}
-      title='筛选'
-      onSuccess={(value) => {
-        listRef.current.submit(value);
-        ref.current.close();
+    <FormLayout
+      value={currentStep.step}
+      onChange={setCurrentStep}
+      formType={ReceiptsEnums.purchaseOrder}
+      fieldRender={(item) => {
+        return <MyCard
+          title={item.filedName}
+          extra={<Input className={styles.input} placeholder='请输入' />}
+        />;
       }}
     />
 
+    <BottomButton
+      only
+      text={currentStep.step < isArray(currentStep.steps).length - 1 ? '下一步' : '保存'}
+      onClick={() => {
+        setCurrentStep({ ...currentStep, step: currentStep.step + 1 });
+      }}
+    />
   </>;
 };
 
