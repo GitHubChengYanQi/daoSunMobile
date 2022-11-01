@@ -19,6 +19,7 @@ const StocktakingItem = (
   const percent = parseInt((receipts.handle / receipts.total) * 100);
 
   const sameDay = moment(receipts.beginTime).isSame(receipts.endTime, 'day');
+
   return <>
     <TaskItem
       task={item}
@@ -38,7 +39,7 @@ const StocktakingItem = (
       beginTime={receipts.beginTime}
       onClick={() => onClick(item)}
       userLabel='负责人'
-      users={receipts.user ? [receipts.user] : []}
+      users={item.userResult ? [item.userResult] : []}
     />
   </>;
 };
