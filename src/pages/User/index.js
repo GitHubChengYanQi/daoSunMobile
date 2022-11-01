@@ -146,7 +146,7 @@ const User = ({ userId }) => {
           onChange={(date) => {
             dynamicRef.current.submit({
               userId: userId || userInfo.id,
-              startTime: date[0],
+              beginTime: date[0],
               endTime: date[1],
             });
             setDate(date);
