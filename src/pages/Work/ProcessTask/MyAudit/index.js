@@ -313,7 +313,7 @@ const MyAudit = (
     />
 
     <TaskTypes
-      zIndex={1001}
+      zIndex={1002}
       value={params.type}
       visible={screenKey === 'type'}
       onClose={() => setScreenkey('')}
@@ -326,7 +326,7 @@ const MyAudit = (
 
     <Customers
       onClose={() => setScreenkey('')}
-      zIndex={1001}
+      zIndex={1002}
       value={params.customerId}
       visible={screenKey === 'customerId'}
       onChange={(customer) => {
@@ -337,7 +337,7 @@ const MyAudit = (
     />
 
     <CheckUser
-      zIndex={1001}
+      zIndex={1002}
       ref={createUserRef}
       onClose={() => setScreenkey('')}
       value={params.createUser ? [{ id: params.createUser }] : []}
@@ -349,7 +349,7 @@ const MyAudit = (
     />
 
     <CheckUser
-      zIndex={1001}
+      zIndex={1002}
       ref={userRef}
       onClose={() => setScreenkey('')}
       value={params.pickUserId ? [{ id: params.pickUserId }] : []}
