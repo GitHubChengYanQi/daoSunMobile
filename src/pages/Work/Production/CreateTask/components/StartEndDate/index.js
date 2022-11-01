@@ -68,7 +68,7 @@ const StartEndDate = (
       value={value[0]}
       ref={clickRef}
       show
-      min={precision === 'day' ? startDate : getMinTime(startDate ? MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)) : min)}
+      min={precision === 'day' ? (startDate || min) : getMinTime(startDate ? MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)) : min)}
       precision={precision || 'minute'}
       onCancel={() => {
         setStartDate();
