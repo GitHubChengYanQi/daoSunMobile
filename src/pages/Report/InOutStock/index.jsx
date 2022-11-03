@@ -7,11 +7,20 @@ import { RightOutline } from 'antd-mobile-icons';
 import InStock from './InStock';
 import OutStock from './OutStock';
 import MyEllipsis from '../../components/MyEllipsis';
+import MySearch from '../../components/MySearch';
 
 const InOutStock = () => {
 
+  const [search, setSearch] = useState(true);
+
   const [key, setKey] = useState('inStock');
   const [date, setDate] = useState([]);
+
+  if (search) {
+    return <>
+      <MySearch placeholder='请输入相关字段' className={style.search} />
+    </>;
+  }
 
   return <>
     <div className={style.header}>
@@ -30,7 +39,7 @@ const InOutStock = () => {
           onChange={setDate}
           render={date.length > 0 ?
             <Space align='center'>
-              <MyEllipsis width={'100%'} style={{fontSize:12,lineHeight:'12px'}}>
+              <MyEllipsis width={'100%'} style={{ fontSize: 12, lineHeight: '12px' }}>
                 {moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')}
               </MyEllipsis>
               <RightOutline style={{ fontSize: 12 }} />
