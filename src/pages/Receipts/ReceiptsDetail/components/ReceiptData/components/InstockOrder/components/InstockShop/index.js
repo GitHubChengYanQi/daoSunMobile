@@ -138,7 +138,8 @@ const InstockShop = (
     </FloatingBubble>
 
 
-    <Popup
+     <Popup
+      getContainer={null}
       destroyOnClose
       onMaskClick={() => {
         if (refreshOrder) {

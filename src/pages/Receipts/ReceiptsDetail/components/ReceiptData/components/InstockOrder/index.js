@@ -12,6 +12,7 @@ import { useHistory } from 'react-router-dom';
 
 const InstockOrder = (
   {
+    actionNode,
     taskDetail = {},
     loading,
     data = {},
@@ -60,6 +61,7 @@ const InstockOrder = (
     switch (type) {
       case ReceiptsEnums.instockOrder:
         return <SkuAction
+          actionNode={actionNode}
           logIds={logIds}
           taskId={taskId}
           loading={loading}
@@ -73,9 +75,11 @@ const InstockOrder = (
           instockOrderId={data.instockOrderId}
           refresh={refresh}
           afertShow={afertShow}
+          taskDetail={taskDetail}
         />;
       case ReceiptsEnums.outstockOrder:
         return <OutSkuAction
+          actionNode={actionNode}
           logIds={logIds}
           afertShow={afertShow}
           nodeActions={actions.map(item => ({ ...item, name: item.action === 'outStock' ? '领料' : item.name }))}
@@ -86,7 +90,7 @@ const InstockOrder = (
           data={details}
           permissions={permissions}
           actionId={getAction('outStock').id}
-          action={getAction('outStock').id}
+          action={getAction('outStock').id && permissions}
           pickListsId={data.pickListsId}
           refresh={refresh}
         />;
@@ -108,7 +112,7 @@ const InstockOrder = (
     <MyCard
       hidden={type !== ReceiptsEnums.instockOrder}
       title='供应商'
-      extra={data.customerResult?.customerNmae || '无'}
+      extra={data.customerResult?.customerName || '无'}
     />
 
     <MyCard

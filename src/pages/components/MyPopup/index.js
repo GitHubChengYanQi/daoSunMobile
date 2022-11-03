@@ -39,7 +39,8 @@ const MyPopup = (
   }));
 
   return <>
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       destroyOnClose={destroyOnClose}
       onMaskClick={() => {

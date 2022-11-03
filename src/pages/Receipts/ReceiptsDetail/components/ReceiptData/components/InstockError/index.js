@@ -116,7 +116,7 @@ const InstockError = (
       {errorTypeData().receipts}
     </MyCard>
 
-    <Popup onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
+    <Popup getContainer={null} onMaskClick={() => setVisible(false)} destroyOnClose visible={visible}>
       <SkuError
         height='80vh'
         anomalyOrderId={data.orderId}

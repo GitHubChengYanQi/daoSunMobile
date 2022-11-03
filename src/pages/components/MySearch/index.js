@@ -42,7 +42,8 @@ const MySearch = (
   return <div style={searchStyle} className={ToolUtil.classNames(style.searchDiv, className)}>
     <div
       className={classNames(style.search, historyType && style.disabledSearch)}
-      onClick={(e) => {
+    >
+      <div style={{flexGrow:1}} onClick={(e) => {
         if (e.target.className === 'adm-input-clear' || ['path', 'rect'].includes(e.target.tagName)) {
           return;
         }

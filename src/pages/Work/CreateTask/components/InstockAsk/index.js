@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ToolUtil } from '../../../../components/ToolUtil';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
 import { instockOrderAdd } from '../../../Instock/Url';
 import { Message } from '../../../../components/Message';
@@ -20,6 +20,8 @@ import LinkButton from '../../../../components/LinkButton';
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
+
+  const { query } = useLocation();
 
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
@@ -113,7 +115,8 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     });
     inStock({
       data: {
-        customerId:params.customerId,
+        type: query.submitType,
+        customerId: params.customerId,
         shopCardType: createType,
         directInStock,
         module: 'createInstock',
@@ -136,10 +139,13 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   };
 
   return <div style={{ marginBottom: 60 }}>
+
     <MyNavBar title={createTypeData().title} />
+
     {content()}
 
     <MyCard titleBom={<Title className={style.title}>主题 <span>*</span></Title>} extra={<Input
+      value={params.theme}
       className={style.theme}
       placeholder='请输入'
       onChange={(theme) => setParams({ ...params, theme })} />}

@@ -33,7 +33,8 @@ export const Users = ({ onChange }) => {
       }}>
       {userIds.length > 0 ? userName.toString() : <span style={{ color: '#cccccc' }}>请选择质检人</span>}
     </Button>
-    <Popup
+     <Popup
+      getContainer={null}
       visible={usersVisabled}
       position='right'
       bodyStyle={{ minWidth: '60vw' }}

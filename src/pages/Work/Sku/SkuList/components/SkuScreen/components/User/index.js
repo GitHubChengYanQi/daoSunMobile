@@ -14,6 +14,7 @@ const User = (
   {
     value,
     title,
+    multiple,
     onChange = () => {
     },
     placeholder,
@@ -67,10 +68,11 @@ const User = (
         }}
         className={ToolUtil.classNames(style.supply)}
         showCheckMark={false}
+        multiple={multiple}
         options={ToolUtil.isArray(data).filter((item, index) => open ? index < 10 : index < 6)}
-        value={[value]}
+        value={multiple ? value : [value]}
         onChange={(v, extend) => {
-          onChange(v[0]);
+          onChange(multiple ? v : v[0]);
         }}
       />}
     </Card>

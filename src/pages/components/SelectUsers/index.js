@@ -29,7 +29,8 @@ const SelectUsers = ({ value, onChange, multiple }, ref) => {
   }));
 
   return <>
-    <Popup
+     <Popup
+      getContainer={null}
       visible={visible}
       position='bottom'
       bodyStyle={{ height: '100vh' }}

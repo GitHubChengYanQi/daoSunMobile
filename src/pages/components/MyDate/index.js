@@ -7,7 +7,7 @@ const Show = (date) => {
     return <></>;
   }
   const oneYear = moment(date).diff(new Date(), 'year') >= 1;
-  return moment(date).format(oneYear ? 'YYYY/MM/DD HH:mm' : 'MM/DD HH:mm');
+  return moment(date).format(oneYear ? 'YYYY年MM月DD日 HH:mm' : 'MM月DD日 HH:mm');
 };
 
 const formatDate = (date) => {

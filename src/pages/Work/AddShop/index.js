@@ -11,6 +11,7 @@ import MySearch from '../../components/MySearch';
 import MyNavBar from '../../components/MyNavBar';
 import { ERPEnums } from '../Stock/ERPEnums';
 import { useLocation } from 'react-router-dom';
+import KeepAlive from '../../../components/KeepAlive';
 
 export const SkuContent = (
   {
@@ -61,12 +62,12 @@ export const SkuContent = (
   </div>;
 };
 
-const AddShop = (
+export const AddShopContent = (
   {
     title = '入库申请',
     type = 'inStock',
     judge,
-  }
+  },
 ) => {
 
   const addSku = useRef();
@@ -85,6 +86,8 @@ const AddShop = (
 
   const [skuData, setSkuData] = useState([]);
 
+  const [scrollTop, setScrollTop] = useState(0);
+
   const shopSkuIds = skus.map(item => item.skuId);
 
   const newCheckSkus = skuData.filter(item => {
@@ -95,9 +98,17 @@ const AddShop = (
 
   const shopRef = useRef();
 
-  return <div className={style.skuInStock}>
+  return <div className={style.skuInStock} style={{
+    scrollMarginTop: scrollTop,
+  }}>
     <MyNavBar title={title} />
-    <div className={style.content}>
+    <div
+      id='content'
+      className={style.content}
+      onScroll={(event) => {
+        setScrollTop(event.target.scrollTop);
+      }}
+    >
       <MySearch
         historyType={type}
         value={searchValue}
@@ -170,6 +181,13 @@ const AddShop = (
     />
 
   </div>;
+};
+
+
+const AddShop = (props) => {
+  return <KeepAlive id='addShop' contentId='content'>
+    <AddShopContent {...props} />
+  </KeepAlive>;
 };
 
 export default AddShop;

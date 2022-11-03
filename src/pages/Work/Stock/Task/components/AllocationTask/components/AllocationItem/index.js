@@ -18,11 +18,9 @@ const AllocationItem = (
   return <TaskItem
     task={item}
     noProgress={noProgress}
-    users={ToolUtil.isObject(receipts.userResult).name || '未分配'}
+    users={receipts.userResult ? [] : [receipts.userResult]}
     percent={percent}
     statusName={receipts.statusName || '进行中'}
-    action={![99, 50].includes(receipts.status)}
-    complete={[99, 50].includes(receipts.status)}
     skus={receipts.detailResults}
     coding={receipts.coding}
     createTime={item.createTime}
