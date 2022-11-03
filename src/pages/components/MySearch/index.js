@@ -48,38 +48,38 @@ const MySearch = (
           return;
         }
         historyType && setHistoryVisible(true);
-      }}>
-        <SearchBar
-          style={searchBarStyle}
-          icon={<div onClick={() => {
-            searchIconClick();
-          }}>
-            {searchIcon}
-          </div>}
-          clearable
-          onSearch={search}
-          value={value}
-          className={style.searchBar}
-          placeholder={placeholder || '请输入搜索内容'}
-          onChange={(value) => {
-            onChange(value);
-          }}
-          onClear={() => {
-            onChange('');
-            onClear();
-          }}
-          onFocus={() => {
-            setVisible(true);
-            onFocus();
-          }}
-          onBlur={() => {
-            setTimeout(() => {
-              setVisible(false);
-            }, 0);
-          }}
-        />
-      </div>
-
+      }}
+    >
+      <SearchBar
+        style={searchBarStyle}
+        icon={<div onClick={() => {
+          searchIconClick();
+        }}>
+          {searchIcon}
+        </div>}
+        clearable
+        onSearch={search}
+        value={value}
+        className={style.searchBar}
+        placeholder={placeholder || '请输入搜索内容'}
+        onChange={(value) => {
+          onChange(value);
+        }}
+        onClear={() => {
+          onSearch('');
+          onChange('');
+          onClear();
+        }}
+        onFocus={() => {
+          setVisible(true);
+          onFocus();
+        }}
+        onBlur={() => {
+          setTimeout(() => {
+            setVisible(false);
+          }, 0);
+        }}
+      />
 
       {
         !historyType && (visible || value)

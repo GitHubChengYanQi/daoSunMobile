@@ -13,7 +13,7 @@ import { message } from 'antd';
 
 export const OutStockDataList = { url: '/statisticalView/outstockView', method: 'POST' };
 export const OutStockDataView = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
-export const OutStockExport = { url: '/viewExcel/outStockExport', method: 'GET' };
+export const OutStockExport = { url: '/viewExcel/outStockExport', method: 'POST' };
 
 const OutStock = (
   {
@@ -61,11 +61,8 @@ const OutStock = (
       placeholder='搜索'
       style={{ marginTop: 8, padding: '8px 12px', marginBottom: 4 }}
       onChange={setSearch}
-      onClear={() => {
-        listRef.current.submit({ beginTime: date[0], endTime: date[1], skuName: '' });
-      }}
       onSearch={(value) => {
-        listRef.current.submit({ beginTime: date[0], endTime: date[1], skuName: value });
+        listRef.current.submit({ beginTime: date[0], endTime: date[1], userName: value });
       }}
     />
 
@@ -114,7 +111,7 @@ const OutStock = (
     {(viewtLoading || exportLoading) && <MyLoading />}
 
     <MyFloatingBubble><Icon type='icon-download-2-fill' onClick={() => {
-      exportRun();
+      exportRun({ data: { beginTime: date[0], endTime: date[1] } });
     }} /></MyFloatingBubble>
   </>;
 };
