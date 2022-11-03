@@ -1,11 +1,13 @@
 import React from 'react';
 import style from './index.less';
 import { FloatingBubble } from 'antd-mobile';
+import { classNames } from '../ToolUtil';
 
 const MyFloatingBubble = (
   {
     icon,
     children,
+    className,
   },
 ) => {
 
@@ -20,7 +22,7 @@ const MyFloatingBubble = (
         '--edge-distance': '24px',
         '--size': '40px',
       }}
-      className={style.float}
+      className={classNames(className,style.float)}
     >
       {icon || children}
     </FloatingBubble>

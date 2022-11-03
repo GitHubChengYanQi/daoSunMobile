@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import MySearchBar from '../../../components/MySearchBar';
 import { skuList } from '../../../Scan/Url';
 import MyList from '../../../components/MyList';
 import Icon from '../../../components/Icon';
@@ -8,7 +7,10 @@ import Label from '../../../components/Label';
 import MyEllipsis from '../../../components/MyEllipsis';
 import LinkButton from '../../../components/LinkButton';
 import MyBottom from '../../../components/MyBottom';
-import MyPopup from '../../../components/MyPopup';
+import MySearch from '../../../components/MySearch';
+import styles from './index.less';
+import MyCheck from '../../../components/MyCheck';
+import SkuItem from '../SkuItem';
 
 const CheckSkus = (
   {
@@ -41,6 +43,7 @@ const CheckSkus = (
       setSkus([...skus, item]);
     }
   };
+  const [searchValue, setSearchValue] = useState();
 
   return <div style={{ backgroundColor: '#fff' }}>
     <MyBottom
@@ -54,71 +57,51 @@ const CheckSkus = (
         }}>选中并关闭</Button>
       </Space>}
     >
-      <div style={{ position: 'sticky', top: 0, zIndex: 99 }}>
-        <MySearchBar extra onSearch={(value) => {
-          ref.current.submit({ skuName: value });
-        }} />
+      <div className={styles.search}>
+        <MySearch
+          onChange={setSearchValue}
+          value={searchValue}
+          onSearch={(value) => {
+            ref.current.submit({ skuName: value });
+          }} />
       </div>
 
-      <MyList
-        ref={ref}
-        api={skuList}
-        data={data}
-        getData={(value) => {
-          setData(value.filter(item => item));
-        }}
-      >
-        {
-          data.map((item, index) => {
-            return <div key={index}>
-              <div style={{ display: 'flex' }}>
-                <div
-                  style={{ width: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                  onClick={() => {
-                    click(item);
-                  }}
-                >
-                  <Checkbox
-                    checked={checked(item.skuId)}
-                    icon={checked =>
-                      checked ? <Icon type='icon-duoxuanxuanzhong1' /> : <Icon type='icon-a-44-110' />
-                    }
-                  />
+      <div className={styles.list}>
+        <MyList
+          ref={ref}
+          api={skuList}
+          data={data}
+          getData={(value) => {
+            setData(value.filter(item => item));
+          }}
+        >
+          {
+            data.map((item, index) => {
+              return <div key={index}>
+                <div style={{ display: 'flex' }}>
+                  <div
+                    style={{ width: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    onClick={() => {
+                      click(item);
+                    }}
+                  >
+                    <MyCheck fontSize={24} checked={checked(item.skuId)} />
+                  </div>
+                  <div
+                    style={{ flexGrow: 1 }}
+                    onClick={() => {
+                      click(item);
+                    }}>
+                    <SkuItem extraWidth='60px' skuResult={item} />
+                  </div>
                 </div>
-                <div
-                  style={{ flexGrow: 1 }}
-                  onClick={() => {
-                    click(item);
-                  }}>
-                  <Space direction='vertical' style={{ maxWidth: '70vw' }}>
-                    <MyEllipsis>
-                      {item.standard} / {item.spuResult && item.spuResult.name}
-                    </MyEllipsis>
-                    <div style={{ display: 'flex' }}>
-                      <div style={{minWidth:115}}>
-                        <Label>型号 / 规格 :</Label>
-                      </div>
-                      <MyEllipsis width='50%'>
-                        {item.skuName} / {item.specifications || '无'}
-                      </MyEllipsis>
-                    </div>
-                    <div>
-                      <Label>当前库存量 :</Label>0
-                    </div>
-                  </Space>
-                </div>
-                <div style={{ width: 100, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <LinkButton onClick={() => {
-                    detailRef.current.open(item.skuId);
-                  }}>详情</LinkButton>
-                </div>
-              </div>
-              <Divider />
-            </div>;
-          })
-        }
+                <Divider />
+              </div>;
+            })
+          }
 
-      </MyList>
+        </MyList>
+      </div>
     </MyBottom>
 
   </div>;

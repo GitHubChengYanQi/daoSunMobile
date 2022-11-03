@@ -23,12 +23,14 @@ const MyAntPopup = (
     },
     onRight = () => {
     },
+    position,
   },
 ) => {
 
 
   return <>
     <Popup
+      position={position}
       getContainer={null}
       style={{ '--z-index': zIndex }}
       afterShow={afterShow}

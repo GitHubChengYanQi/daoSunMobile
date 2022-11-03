@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd-mobile';
 import {SkuResultSkuJsons} from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../../components/MyEmpty';
-import styles from '../../index.css';
+import styles from '../../index.less';
 
 const SkuList = ({ data }) => {
 

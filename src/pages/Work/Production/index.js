@@ -1,16 +1,18 @@
 import React, { useRef, useState } from 'react';
-import MySearchBar from '../../components/MySearchBar';
-import { Badge, CapsuleTabs, Card, Space } from 'antd-mobile';
-import styles from './index.css';
+import { Card, Space } from 'antd-mobile';
+import styles from './index.less';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
 import MyNavBar from '../../components/MyNavBar';
-import { ClockCircleOutline, QuestionCircleOutline } from 'antd-mobile-icons';
-import { history } from 'umi';
+import { AddOutline, ClockCircleOutline, QuestionCircleOutline } from 'antd-mobile-icons';
 import Label from '../../components/Label';
-import { ToolUtil } from '../../components/ToolUtil';
+import MySearch from '../../components/MySearch';
+import MyFloatingBubble from '../../components/FloatingBubble';
+import { useHistory } from 'react-router-dom';
 
 const Production = () => {
+
+  const history = useHistory();
 
   const [data, setData] = useState([]);
 
@@ -18,17 +20,7 @@ const Production = () => {
 
   return <div className={styles.mainDiv}>
     <MyNavBar title='生产工单列表' />
-    <div style={{ position: 'sticky', top: ToolUtil.isQiyeWeixin() ? 0 : 45, zIndex: 999 }}>
-      <MySearchBar extra onChange={(value) => {
-        ref.current.submit({ coding: value });
-      }} />
-      <CapsuleTabs defaultActiveKey='1' style={{ backgroundColor: '#fff' }}>
-        <CapsuleTabs.Tab title={<div>全部</div>} key='1' />
-        <CapsuleTabs.Tab title={<div>未开始</div>} key='2' />
-        <CapsuleTabs.Tab title={<div>执行中</div>} key='3' />
-        <CapsuleTabs.Tab title={<div>已结束</div>} key='4' />
-      </CapsuleTabs>
-    </div>
+    <MySearch />
     <MyList
       ref={ref}
       data={data}
@@ -43,28 +35,27 @@ const Production = () => {
               history.push(`/Work/Production/ProductionDetail?id=${item.productionPlanId}`);
             }}
             key={index}
-            title={<Space align='start' style={{ color: '#ffa52a' }}>
+            title={<Space align='start' style={{ color: '#ffa52a', fontSize: 16 }}>
               <QuestionCircleOutline />待处理
-              <Badge color='#3291f8' content={<span style={{ fontSize: 14 }}>计划工单</span>} />
             </Space>} className={styles.item}>
             <Space direction='vertical'>
               <div>
-                <Label>工单编号：</Label>{item.coding}
+                <Label className={styles.label}>工单编号</Label>：{item.coding}
               </div>
               <div>
-                <Label>工单主题：</Label>{item.theme}
+                <Label className={styles.label}>工单主题</Label>：{item.theme}
               </div>
               <div>
-                <Label>执行开始时间：</Label>{item.executionTime}
+                <Label className={styles.label}>开始时间</Label>：{item.executionTime}
               </div>
               <div>
-                <Label>执行结束时间：</Label> {item.endTime}
+                <Label className={styles.label}>结束时间</Label>： {item.endTime}
               </div>
               <div>
-                <Label>负责人：</Label>{item.userResult && item.userResult.name}
+                <Label className={styles.label}>负责人</Label>：{item.userResult && item.userResult.name}
               </div>
               <div>
-                <Label>备注：</Label>{item.remark}
+                <Label className={styles.label}>备注</Label>：{item.remark}
               </div>
               <Space>
                 <ClockCircleOutline />{item.createTime}
@@ -74,6 +65,12 @@ const Production = () => {
         })
       }
     </MyList>
+
+    <MyFloatingBubble>
+      <AddOutline style={{ color: 'var(--adm-color-primary)' }} onClick={() => {
+        history.push('/Work/Production/CreatePlan');
+      }} />
+    </MyFloatingBubble>
   </div>;
 };
 

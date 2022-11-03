@@ -4,6 +4,8 @@ import { Step } from 'antd-mobile/es/components/steps/step';
 import { MyLoading } from '../MyLoading';
 import { useRequest } from '../../../util/Request';
 import styles from './index.less';
+import BottomButton from '../BottomButton';
+import { isArray } from '../ToolUtil';
 
 export const formList = {
   url: '/formStyle/list',
@@ -13,18 +15,42 @@ export const formList = {
 
 const FormLayout = (
   {
-    value,
-    onChange = () => {
-    },
+    loading,
+    data = {},
     formType,
     fieldRender = () => {
       return <></>;
     },
+    onSave = () => {
+    },
   },
 ) => {
 
-  const [layout, setLayout] = useState({});
+  const [currentStep, setCurrentStep] = useState(0);
+
   const [steps, setSteps] = useState([]);
+
+  const [requiredFiled, setRequiredFiled] = useState([]);
+
+  const getRequireFiled = (data = []) => {
+    const requiredFiled = [];
+    isArray(data).map((item) => {
+      item.map(item => {
+        const data = item.data || [];
+        data.forEach(item => {
+          if (item.required) {
+            requiredFiled.push(item.key);
+          }
+        });
+      });
+    });
+    setRequiredFiled(requiredFiled);
+  };
+
+  const disabled = () => {
+    const requireds = requiredFiled.filter(item => !data[item]);
+    return requireds.length !== 0;
+  };
 
   const { loading: detailLoaidng } = useRequest({
     ...formList,
@@ -36,8 +62,7 @@ const FormLayout = (
         const mobile = typeSetting.mobile || {};
         const newSteps = mobile.steps || [];
         setSteps(newSteps);
-        setLayout({ width: mobile.width, gutter: mobile.gutter, widthUnit: mobile.widthUnit });
-        onChange({ step: 0, type: newSteps[0].type, steps: newSteps });
+        getRequireFiled(newSteps[0]?.data);
       }
     },
   });
@@ -48,7 +73,7 @@ const FormLayout = (
 
   return <>
     <div hidden={steps.length === 1} className={styles.formSteps}>
-      <Steps current={value} className={styles.steps}>
+      <Steps current={currentStep} className={styles.steps}>
         {
           steps.map((item, index) => {
             return <Step
@@ -62,7 +87,7 @@ const FormLayout = (
     {
       steps.map((setpItem, setpIndex) => {
         const data = setpItem.data || [];
-        const hidden = value !== setpIndex;
+        const hidden = currentStep !== setpIndex;
         return <div hidden={hidden} key={setpIndex}>
           {
             data.map((rows = [], rowIndex) => {
@@ -82,6 +107,26 @@ const FormLayout = (
         </div>;
       })
     }
+
+    <BottomButton
+      only
+      loading={loading}
+      disabled={disabled()}
+      text={currentStep < steps.length - 1 ? '下一步' : '保存'}
+      onClick={async () => {
+        if (currentStep === steps.length - 1) {
+          onSave(true);
+        } else if (steps[currentStep].type === 'add') {
+          if (await onSave(false)) {
+            getRequireFiled(steps[currentStep+1]?.data);
+            setCurrentStep(currentStep + 1);
+          }
+        } else {
+          getRequireFiled(steps[currentStep+1]?.data);
+          setCurrentStep(currentStep + 1);
+        }
+      }}
+    />
   </>;
 };
 

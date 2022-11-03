@@ -2,7 +2,7 @@ import React from 'react';
 import MyEmpty from '../../../../components/MyEmpty';
 import { Button, Card, List, ProgressBar, Space } from 'antd-mobile';
 import Label from '../../../../components/Label';
-import styles from '../../index.css';
+import styles from '../../index.less';
 import { history } from 'umi';
 import {SkuResultSkuJsons} from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 

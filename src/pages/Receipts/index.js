@@ -30,4 +30,7 @@ export const ReceiptsEnums = {
 
   // 采购单
   purchaseOrder: 'PURCHASEORDER',
+
+  // 生产计划
+  production: 'PRODUCTION',
 };

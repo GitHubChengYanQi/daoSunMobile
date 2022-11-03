@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, Divider, Space, Tabs } from 'antd-mobile';
 import { Avatar } from 'antd';
-import styles from '../../../../Production/index.css';
+import styles from '../../../../Production/index.less';
 import { DownFill } from 'antd-mobile-icons';
 import Label from '../../../../../components/Label';
 import MyEllipsis from '../../../../../components/MyEllipsis';
