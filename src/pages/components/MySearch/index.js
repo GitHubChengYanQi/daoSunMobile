@@ -80,47 +80,45 @@ const MySearch = (
             }, 0);
           }}
         />
-
-        {
-          !historyType && (visible || value)
-            ?
-            <LinkButton className={style.submit} onClick={() => {
-              search(value);
-            }}>搜索</LinkButton>
-            :
-            <div hidden={!extraIcon} className={style.icon}>
-              {extraIcon}
-            </div>
-        }
       </div>
-
-      <Popup
-        afterShow={() => {
-          if (searchRef.current) {
-            searchRef.current.focus();
-          }
-        }}
-        style={{
-          '--z-index': '1003',
-        }}
-        position='right'
-        destroyOnClose
-        visible={historyVisible}
-        onClose={() => setHistoryVisible(false)}
-      >
-        <Search
-          searchRef={searchRef}
-          defaultValue={value}
-          onChange={(value) => {
-            onSearch(value);
-            onChange(value);
-            setHistoryVisible(false);
-          }}
-          onClose={() => setHistoryVisible(false)}
-          historyType={historyType}
-        />
-      </Popup>
+      {
+        !historyType && (visible || value)
+          ?
+          <LinkButton className={style.submit} onClick={() => {
+            search(value);
+          }}>搜索</LinkButton>
+          :
+          <div hidden={!extraIcon} className={style.icon}>
+            {extraIcon}
+          </div>
+      }
     </div>
+    <Popup
+      afterShow={() => {
+        if (searchRef.current) {
+          searchRef.current.focus();
+        }
+      }}
+      style={{
+        '--z-index': '1003',
+      }}
+      position='right'
+      destroyOnClose
+      visible={historyVisible}
+      onClose={() => setHistoryVisible(false)}
+    >
+      <Search
+        searchRef={searchRef}
+        defaultValue={value}
+        onChange={(value) => {
+          onSearch(value);
+          onChange(value);
+          setHistoryVisible(false);
+        }}
+        onClose={() => setHistoryVisible(false)}
+        historyType={historyType}
+      />
+    </Popup>
   </div>;
 };
 
