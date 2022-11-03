@@ -43,83 +43,84 @@ const MySearch = (
     <div
       className={classNames(style.search, historyType && style.disabledSearch)}
     >
-      <div style={{flexGrow:1}} onClick={(e) => {
+      <div style={{ flexGrow: 1 }} onClick={(e) => {
         if (e.target.className === 'adm-input-clear' || ['path', 'rect'].includes(e.target.tagName)) {
           return;
         }
         historyType && setHistoryVisible(true);
       }}
-    >
-      <SearchBar
-        style={searchBarStyle}
-        icon={<div onClick={() => {
-          searchIconClick();
-        }}>
-          {searchIcon}
-        </div>}
-        clearable
-        onSearch={search}
-        value={value}
-        className={style.searchBar}
-        placeholder={placeholder || '请输入搜索内容'}
-        onChange={(value) => {
-          onChange(value);
-        }}
-        onClear={() => {
-          onSearch('');
-          onChange('');
-          onClear();
-        }}
-        onFocus={() => {
-          setVisible(true);
-          onFocus();
-        }}
-        onBlur={() => {
-          setTimeout(() => {
-            setVisible(false);
-          }, 0);
-        }}
-      />
+      >
+        <SearchBar
+          style={searchBarStyle}
+          icon={<div onClick={() => {
+            searchIconClick();
+          }}>
+            {searchIcon}
+          </div>}
+          clearable
+          onSearch={search}
+          value={value}
+          className={style.searchBar}
+          placeholder={placeholder || '请输入搜索内容'}
+          onChange={(value) => {
+            onChange(value);
+          }}
+          onClear={() => {
+            onSearch('');
+            onChange('');
+            onClear();
+          }}
+          onFocus={() => {
+            setVisible(true);
+            onFocus();
+          }}
+          onBlur={() => {
+            setTimeout(() => {
+              setVisible(false);
+            }, 0);
+          }}
+        />
 
-      {
-        !historyType && (visible || value)
-          ?
-          <LinkButton className={style.submit} onClick={() => {
-            search(value);
-          }}>搜索</LinkButton>
-          :
-          <div hidden={!extraIcon} className={style.icon}>
-            {extraIcon}
-          </div>
-      }
-    </div>
-
-    <Popup
-      afterShow={() => {
-        if (searchRef.current) {
-          searchRef.current.focus();
+        {
+          !historyType && (visible || value)
+            ?
+            <LinkButton className={style.submit} onClick={() => {
+              search(value);
+            }}>搜索</LinkButton>
+            :
+            <div hidden={!extraIcon} className={style.icon}>
+              {extraIcon}
+            </div>
         }
-      }}
-      style={{
-        '--z-index': '1003',
-      }}
-      position='right'
-      destroyOnClose
-      visible={historyVisible}
-      onClose={() => setHistoryVisible(false)}
-    >
-      <Search
-        searchRef={searchRef}
-        defaultValue={value}
-        onChange={(value) => {
-          onSearch(value);
-          onChange(value);
-          setHistoryVisible(false);
+      </div>
+
+      <Popup
+        afterShow={() => {
+          if (searchRef.current) {
+            searchRef.current.focus();
+          }
         }}
+        style={{
+          '--z-index': '1003',
+        }}
+        position='right'
+        destroyOnClose
+        visible={historyVisible}
         onClose={() => setHistoryVisible(false)}
-        historyType={historyType}
-      />
-    </Popup>
+      >
+        <Search
+          searchRef={searchRef}
+          defaultValue={value}
+          onChange={(value) => {
+            onSearch(value);
+            onChange(value);
+            setHistoryVisible(false);
+          }}
+          onClose={() => setHistoryVisible(false)}
+          historyType={historyType}
+        />
+      </Popup>
+    </div>
   </div>;
 };
 
