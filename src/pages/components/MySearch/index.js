@@ -15,6 +15,7 @@ const MySearch = (
     searchIcon = <SearchOutline />,
     extraIcon,
     className,
+    noSearchButton,
     onSearch = () => {
     },
     value,
@@ -82,7 +83,7 @@ const MySearch = (
         />
       </div>
       {
-        !historyType && (visible || value)
+        !historyType && (visible || value) && !noSearchButton
           ?
           <LinkButton className={style.submit} onClick={() => {
             search(value);

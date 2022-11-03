@@ -9,6 +9,7 @@ import { useRequest } from '../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { materialListSelect } from '../../../../../../ProcessTask/Create/components/Inventory/compoennts/AllCondition';
+import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 
 const Material = (
   {
@@ -93,11 +94,7 @@ const Material = (
       />
       {loading ? <MyLoading skeleton /> : <Selector
         columns={2}
-        style={{
-          '--border': 'solid transparent 1px',
-          '--checked-border': 'solid var(--adm-color-primary) 1px',
-          '--padding': '4px 15px',
-        }}
+        style={SelectorStyle}
         className={ToolUtil.classNames(style.supply)}
         showCheckMark={false}
         options={brands.filter((item, index) => open || index < 6)}

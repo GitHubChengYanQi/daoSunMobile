@@ -14,6 +14,7 @@ import { Message } from '../../../components/Message';
 import { ToolUtil } from '../../../components/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
 import MyPositions from '../../../components/MyPositions';
+import { SelectorStyle } from '../../../Report/InOutStock';
 
 export const taskList = { url: '/inventoryStock/list', method: 'POST' };
 export const detail = { url: '/inventory/detail', method: 'POST' };
@@ -124,10 +125,8 @@ const StartStockTaking = () => {
               <Selector
                 columns={3}
                 style={{
+                  ...SelectorStyle,
                   fontSize: 12,
-                  '--border': 'solid transparent 1px',
-                  '--checked-border': 'solid var(--adm-color-primary) 1px',
-                  '--padding': '4px 15px',
                 }}
                 showCheckMark={false}
                 options={[{ label: '进行中', value: 0 }, { label: '暂存中', value: 2 }, {

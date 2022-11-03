@@ -39,50 +39,50 @@
   align-items: center;
   background-color: #fff;
   border-bottom: 1px solid #f3f3f3;
+}
 
-  .dropDown {
+.dropDown {
+  flex-grow: 1;
+  margin-bottom: 1px;
+  padding: 10px 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+
+  .titleBox {
     flex-grow: 1;
-    margin-bottom: 1px;
-    padding: 10px 0;
-    z-index: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
+    color: #8d8d8d;
 
-    .titleBox {
-      flex-grow: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #8d8d8d;
+    svg {
+      font-size: 10px;
+      margin-left: 4px;
+    }
 
-      svg {
-        font-size: 10px;
-        margin-left: 4px;
-      }
-
-      .title {
-        font-size: 12px;
-        line-height: 12px;
-        display: inline-block;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        max-width: 70px;
-      }
+    .title {
+      font-size: 12px;
+      line-height: 12px;
+      display: inline-block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      max-width: 70px;
     }
   }
+}
 
-  .checked {
-    color: var(--adm-color-primary) !important;
-  }
+.checked {
+  color: var(--adm-color-primary) !important;
+}
 
-  .sort {
-    line-height: 12px;
-    font-size: 12px;
-    padding: 0 10px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    border-left: 1px solid #D8D8D8;
-  }
+.sort {
+  line-height: 12px;
+  font-size: 12px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-left: 1px solid #D8D8D8;
 }

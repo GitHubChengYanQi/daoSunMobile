@@ -8,6 +8,7 @@ import { supplyList } from '../../../../Sku/SkuList/components/SkuScreen/compone
 import MySearch from '../../../../../components/MySearch';
 import { MyLoading } from '../../../../../components/MyLoading';
 import style from '../../../../Sku/SkuList/components/SkuScreen/index.less';
+import { SelectorStyle } from '../../../../../Report/InOutStock';
 
 const Customers = (
   {
@@ -76,11 +77,7 @@ const Customers = (
         />
         {loading ? <MyLoading skeleton /> : <Selector
           columns={1}
-          style={{
-            '--border': 'solid transparent 1px',
-            '--checked-border': 'solid var(--adm-color-primary) 1px',
-            '--padding': '4px 15px',
-          }}
+          style={SelectorStyle}
           className={ToolUtil.classNames(style.supply, style.left)}
           showCheckMark={false}
           options={supply}

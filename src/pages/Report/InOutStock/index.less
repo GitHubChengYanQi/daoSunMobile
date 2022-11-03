@@ -10,6 +10,48 @@
   }
 }
 
+.searchContent {
+  margin-top: 8px;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+
+  .searchCard {
+    margin: 0;
+
+    .searchCardBody {
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--body--background--color);
+
+      .diyTime {
+        margin-top: 8px;
+        border: solid 1px var(--body--background--color);
+        padding: 4px;
+      }
+
+    }
+  }
+
+  .buttons {
+    text-align: center;
+
+    button {
+      width: 40%;
+      margin: 24px 16px;
+    }
+  }
+}
+
+.selector {
+  :global {
+    .adm-selector-item {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
+
 .header {
   border-radius: 4px;
   background-color: #fff;
@@ -73,39 +115,96 @@
   }
 }
 
-.total {
+.dimension {
   border-radius: 4px;
   background-color: #fff;
   margin-top: 8px;
   padding: 12px;
 
-  .number {
-    span {
-      font-size: 20px;
-      margin-left: 18px;
-      font-weight: bold;
+  button {
+    font-size: 12px;
+  }
+
+  .detail {
+    border-top-left-radius: 50px;
+    border-bottom-left-radius: 50px;
+  }
+
+  .sku {
+    border-left: none;
+    border-right: none;
+  }
+
+  .supply {
+    border-top-right-radius: 50px;
+    border-bottom-right-radius: 50px;
+  }
+}
+
+.listSearch {
+  margin: 1px 0;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+
+  .searchBar {
+
+    input {
+      font-size: 12px;
+    }
+
+    :global {
+      .adm-search-bar {
+        --height: 24px !important;
+      }
     }
   }
 
-  .otherNUmber {
-    display: flex;
-    align-items: center;
-    margin-top: 22px;
+  > div {
+    flex-grow: 1;
+  }
+}
 
-    > div {
-      flex-grow: 1;
-      border-left: solid #F5F5F5 3px;
-      padding-left: 12px;
+.skuItem {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  padding: 12px;
 
-      .num {
-        margin-top: 12px;
-      }
+  .check {
+    margin-right: 12px;
+    text-align: center;
+  }
 
-      span {
-        font-size: 16px;
-        font-weight: bold;
-      }
-    }
+  .sku {
+    flex-grow: 1;
+  }
+
+  .action {
+    color: #9A9A9A;
+    text-align: right;
+  }
+}
+
+.skuSpace {
+  height: 1px;
+  background-color: #F5F5F5;
+}
+
+.bottomAction {
+  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3);
+  z-index: 1;
+  width: 100%;
+  position: fixed;
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  margin: 0 -12px;
+
+  .radio {
+    flex-grow: 1;
+    gap: 8px;
   }
 }
 
