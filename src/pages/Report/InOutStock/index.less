@@ -26,7 +26,7 @@
       .diyTime {
         margin-top: 8px;
         border: solid 1px var(--body--background--color);
-        padding: 4px;
+        padding: 4px 8px;
       }
 
     }
@@ -116,28 +116,16 @@
 }
 
 .dimension {
-  border-radius: 4px;
+  border-radius: 3px 3px 0 0;
   background-color: #fff;
   margin-top: 8px;
+  margin-bottom: 1px;
   padding: 12px;
+  display: flex;
+  align-items: center;
 
-  button {
-    font-size: 12px;
-  }
-
-  .detail {
-    border-top-left-radius: 50px;
-    border-bottom-left-radius: 50px;
-  }
-
-  .sku {
-    border-left: none;
-    border-right: none;
-  }
-
-  .supply {
-    border-top-right-radius: 50px;
-    border-bottom-right-radius: 50px;
+  .timeShow {
+    flex-grow: 1;
   }
 }
 
@@ -165,10 +153,18 @@
   }
 }
 
+.supply {
+  background-color: #fff;
+  margin-bottom: 3px;
+}
+
+.skuList {
+  background-color: #fff;
+}
+
 .skuItem {
   display: flex;
   align-items: center;
-  background-color: #fff;
   padding: 12px;
 
   .check {
@@ -186,13 +182,52 @@
   }
 }
 
+.otherContent {
+  padding: 0 12px 8px;
+}
+
+.skuSupply {
+  border: solid 1px var(--body--background--color);
+  margin-bottom: 4px;
+
+  .skuSupplyHead {
+    border-bottom: solid 1px #F5F5F5;
+  }
+
+  .skuSupplyContent, .skuSupplyHead {
+    padding: 8px;
+    display: flex;
+    align-items: center;
+
+    .skuSupplyLabel {
+      text-align: left;
+      width: 40%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .skuSupplyNumber {
+      text-align: right;
+      width: 20%;
+    }
+  }
+}
+
+.list {
+  //border-radius: 3px;
+  padding-bottom: 28px;
+  overflow: hidden;
+}
+
 .skuSpace {
   height: 1px;
   background-color: #F5F5F5;
+  margin: 0 12px;
 }
 
 .bottomAction {
-  box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
   z-index: 1;
   width: 100%;
   position: fixed;

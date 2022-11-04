@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import style from './index.less';
 import { Button, Selector, Space, Tabs } from 'antd-mobile';
-import StartEndDate from '../../Work/Production/CreateTask/components/StartEndDate';
-import moment from 'moment';
-import { RightOutline } from 'antd-mobile-icons';
-import MyEllipsis from '../../components/MyEllipsis';
-import MySearch from '../../components/MySearch';
 import MyCard from '../../components/MyCard';
 import SearchTime from './components/SearchTime';
 import { useRequest } from '../../../util/Request';
@@ -13,6 +8,7 @@ import { spuClassListSelect } from '../../Work/Instock/Url';
 import { MyLoading } from '../../components/MyLoading';
 import { isArray } from '../../components/ToolUtil';
 import DataChar from './DataChar';
+import MySearch from '../../components/MySearch';
 
 export const SelectorStyle = {
   '--border': 'solid transparent 1px',
@@ -23,13 +19,12 @@ export const SelectorStyle = {
 
 const InOutStock = () => {
 
-  const [search, setSearch] = useState(false);
+  const [search, setSearch] = useState(true);
 
   const inStockSearch = {
     type: 'inStock',
     dimension: 'detail',
     status: ['arrival', 'in', 'stop'],
-    statusName: '已到货,已入库,终止入库',
     show: ['sku'],
   };
 
@@ -37,7 +32,6 @@ const InOutStock = () => {
     type: 'outStock',
     dimension: 'detail',
     status: ['out'],
-    statusName: '已出库',
     show: ['sku'],
   };
 
@@ -50,6 +44,25 @@ const InOutStock = () => {
 
   const { loading: skuClassLoading, data: skuClass } = useRequest(spuClassListSelect);
 
+  const shows = [
+    { label: '物料', value: 'sku', disabled: true },
+    {
+      label: '供应商',
+      value: 'supply',
+      disabled: ['outStock'].includes(searchParams.type) || ['detail', 'supply'].includes(searchParams.dimension),
+    },
+    {
+      label: '品牌',
+      value: 'brand',
+      disabled: ['outStock'].includes(searchParams.type) || ['detail'].includes(searchParams.dimension),
+    },
+    {
+      label: '领料人',
+      value: 'userId',
+      disabled: ['inStock'].includes(searchParams.type) || ['detail', 'userId'].includes(searchParams.dimension),
+    },
+  ];
+
   if (search) {
     return <>
       <MySearch placeholder='请输入相关字段' className={style.search} noSearchButton />
@@ -60,8 +73,11 @@ const InOutStock = () => {
           className={style.searchCard}
           bodyClassName={style.searchCardBody}
         >
-          <SearchTime timeType={searchParams.timeType} value={searchParams.time}
-                      onChange={(time, timeType) => setSearchParams({ ...searchParams, time, timeType })} />
+          <SearchTime
+            timeType={searchParams.timeType}
+            value={searchParams.time}
+            onChange={(time, timeType) => setSearchParams({ ...searchParams, time, timeType })}
+          />
         </MyCard>
         <MyCard
           title={<>类型 <span className='red'> *</span></>}
@@ -78,7 +94,7 @@ const InOutStock = () => {
               { label: '出库', value: 'outStock' },
             ]}
             onChange={(v) => {
-              setSearchParams(v[0] === 'inStock' ? inStockSearch : outStockSearch);
+              setSearchParams({ ...searchParams, ...(v[0] === 'inStock' ? inStockSearch : outStockSearch) });
             }}
           />
         </MyCard>
@@ -134,24 +150,7 @@ const InOutStock = () => {
             style={SelectorStyle}
             value={searchParams.show}
             showCheckMark={false}
-            options={[
-              { label: '物料', value: 'sku', disabled: true },
-              {
-                label: '供应商',
-                value: 'supply',
-                disabled: ['outStock'].includes(searchParams.type) || ['detail', 'supply'].includes(searchParams.dimension),
-              },
-              {
-                label: '品牌',
-                value: 'brand',
-                disabled: ['outStock'].includes(searchParams.type) || ['detail'].includes(searchParams.dimension),
-              },
-              {
-                label: '领料人',
-                value: 'userId',
-                disabled: ['inStock'].includes(searchParams.type) || ['detail', 'userId'].includes(searchParams.dimension),
-              },
-            ]}
+            options={shows}
             multiple
             onChange={(v) => {
               setSearchParams({ ...searchParams, show: v });
@@ -169,11 +168,10 @@ const InOutStock = () => {
                 showCheckMark={false}
                 multiple
                 options={isArray(skuClass)}
-                onChange={(v,{items}) => {
+                onChange={(v) => {
                   setSearchParams({
                     ...searchParams,
                     skuClass: v,
-                    skuClassName: items.map(item => item.label).join(','),
                   });
                 }}
               />
@@ -181,10 +179,15 @@ const InOutStock = () => {
         </MyCard>
 
         <div className={style.buttons}>
-          <Button onClick={() => searchParams(inStockSearch)}>重置</Button>
+          <Button onClick={() => setSearchParams({
+            ...inStockSearch,
+            time: [],
+            timeType: null,
+            skuClass: [],
+          })}>重置</Button>
           <Button
             color='primary'
-            disabled={!(searchParams.time && searchParams.type && searchParams.dimension && isArray(searchParams.status).length > 0)}
+            disabled={!(searchParams.timeType && searchParams.type && searchParams.dimension && isArray(searchParams.status).length > 0)}
             onClick={() => {
               setDate(searchParams.time);
               setSearch(false);
@@ -196,23 +199,9 @@ const InOutStock = () => {
   }
 
   return <>
-    <div className={style.header}>
-      <div className={style.tabs}>
-        <Tabs className={style.inOutStockTabs} activeKey={searchParams.type}
-              onChange={(key) => setSearchParams(key === 'inStock' ? inStockSearch : outStockSearch)}>
-          <Tabs.Tab title='入库' key='inStock' />
-          <Tabs.Tab title='出库' key='outStock' />
-        </Tabs>
-      </div>
-      <div className={style.space} />
-      <div className={style.time} onClick={() => setSearch(true)}>
-        <MyEllipsis width={'100%'} style={{ fontSize: 12, lineHeight: '12px', textAlign: 'right' }}>
-          {date.length > 0 ? (moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')) : '至今'}
-        </MyEllipsis>
-        <RightOutline style={{ fontSize: 12 }} />
-      </div>
-    </div>
+    <MySearch placeholder='请输入相关字段' className={style.search} noSearchButton />
     <DataChar
+      shows={shows}
       skuClass={skuClass}
       date={date}
       searchParams={searchParams}

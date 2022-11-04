@@ -14,6 +14,14 @@ import SkuItem from '../../../Work/Sku/SkuItem';
 import MyRadio from '../../../components/MyRadio';
 import MyAntPopup from '../../../components/MyAntPopup';
 import { SelectorStyle } from '../index';
+import { MyDate } from '../../../components/MyDate';
+import moment from 'moment';
+import ShowBrand from './components/ShowBrand';
+import ShowSupply from './components/ShowSupply';
+import ShowUser from './components/ShowUser';
+import MyPicker from '../../../components/MyPicker';
+import { getDate } from '../components/SearchTime';
+import StartEndDate from '../../../Work/Production/CreateTask/components/StartEndDate';
 
 export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
 export const InStockExport = { url: '/viewExcel/export', method: 'POST' };
@@ -21,7 +29,6 @@ export const InStockViewTotail = { url: '/statisticalView/viewTotail', method: '
 
 const DataChar = (
   {
-    skuClass,
     searchParams = {},
     setSearchParams = () => {
     },
@@ -31,28 +38,16 @@ const DataChar = (
   },
 ) => {
 
-  const history = useHistory();
+  const dataRef = useRef();
 
-  const listRef = useRef();
-
-  const [list, setList] = useState([]);
-
-  const [search, setSearch] = useState('');
-
-  const [searchValue, setSearchValue] = useState('');
+  const inStock = searchParams.type === 'inStock';
 
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
 
-  const [screenKey, setScreenkey] = useState();
+  const [showId, setShowId] = useState();
 
   const [visible, setVisible] = useState('');
-
-  const screens = [
-    { title: '状态', key: 'status' },
-    { title: '物料分类', key: 'skuClass' },
-    { title: '更多', key: 'all' },
-  ];
 
   const { loading: exportLoading, run: exportRun } = useRequest(InStockExport, {
     manual: true,
@@ -71,89 +66,107 @@ const DataChar = (
     }
   }, [date]);
 
-  return <>
-    <div className={style.dimension}>
-      <Button
-        className={style.detail}
-        color={searchParams.dimension === 'detail' ? 'primary' : 'default'}
-        onClick={() => setSearchParams({ ...searchParams, dimension: 'detail', show: ['sku'] })}
-      >明细</Button>
-      <Button
-        className={style.sku}
-        color={searchParams.dimension === 'sku' ? 'primary' : 'default'}
-        onClick={() => setSearchParams({ ...searchParams, dimension: 'sku', show: ['sku'] })}
-      >物料</Button>
-      <Button
-        className={style.supply}
-        color={searchParams.dimension === 'supply' ? 'primary' : 'default'}
-        onClick={() => setSearchParams({ ...searchParams, dimension: 'supply', show: ['sku'] })}
-      >供应商</Button>
-    </div>
+  const list = () => {
 
-    <div className={style.listSearch}>
-      <MySearch
-        value={searchValue}
-        className={style.searchBar}
-        placeholder='搜索'
-        style={{ padding: '8px 12px' }}
-        onChange={setSearchValue}
-        onSearch={(value) => {
-          listRef.current.submit({ beginTime: date[0], endTime: date[1], customerName: value });
-        }}
-      />
-      <div className={drowStyle.dropDown} style={{gap:8}}>
-        {
-          screens.map((item) => {
-            let title = '';
-            switch (item.key) {
-              case 'skuClass':
-                title = searchParams.skuClassName;
-                break;
-              case 'status':
-                title = searchParams.statusName;
-                break;
-              default:
-                break;
-            }
-            const check = title || screenKey === item.key;
-            return <div
-              className={classNames(drowStyle.titleBox, check && drowStyle.checked)}
-              key={item.key}
-              onClick={() => {
-                switch (item.key) {
-                  case 'skuClass':
-                  case 'status':
-                    setVisible(item.key);
-                    break;
-                  default:
-                    openSearch();
-                    break;
-                }
-                setScreenkey(item.key);
-              }}>
-              <div className={drowStyle.title}>{title || item.title}</div>
-              {screenKey === item.key ? <UpOutline /> : <DownOutline />}
-            </div>;
-          })
-        }
-      </div>
-    </div>
-
-    {
-      [1, 2, 3].map((item, index) => {
-        return <div key={index}>
+    if (['supply', 'userId'].includes(searchParams.dimension)) {
+      return [1, 2, 3].map((item, index) => {
+        const show = showId === item;
+        return <div key={index} className={style.supply}>
           <div className={style.skuItem}>
             <div className={style.check}><MyCheck fontSize={18} /></div>
-            <SkuItem className={style.sku} />
-            <div>
-              <div className={style.action}>已入库</div>
-              × 1000
-            </div>
+            <div className={style.sku}>{inStock ? '辽宁辽工智能装备制造有限公司' : '高东阳（生产制造部-操作工）'}</div>
+            <DownOutline onClick={() => setShowId(show ? '' : item)} />
           </div>
-          <div className={style.skuSpace} />
+          <div hidden={!show}>
+            {
+              [1, 2, 3].map((item, index) => {
+                return <div key={index}>
+                  <div className={style.skuItem} style={{ paddingTop: index === 0 && 0 }}>
+                    <SkuItem
+                      extraWidth='140px'
+                      title='黑色内扣冷却管'
+                      describe='lqg-700/ 1/2*700mm黑色内螺纹'
+                      className={style.sku}
+                    />
+                    <div>
+                      <div hidden={!inStock} className={style.action}>已入库</div>
+                      × 1000
+                    </div>
+                  </div>
+                  <ShowBrand brands={[1, 2]} hidden={!isArray(searchParams.show).includes('brand')} />
+                  <div className={style.skuSpace} />
+                </div>;
+              })
+            }
+          </div>
         </div>;
-      })
+      });
     }
+    return [1, 2, 3].map((item, index) => {
+      let other = '';
+      if (inStock) {
+        switch (searchParams.dimension) {
+          case 'sku':
+            other = <Space>
+              <div>到货 ×1000</div>
+              <div>终止入库 ×5000</div>
+            </Space>;
+            break;
+          case 'detail':
+            other = MyDate.Show(new Date());
+            break;
+          case 'userId':
+            break;
+          default:
+            break;
+        }
+      }
+      return <div key={index} className={style.skuList}>
+        <div className={style.skuItem}>
+          <div className={style.check}><MyCheck fontSize={18} /></div>
+          <SkuItem
+            extraWidth='170px'
+            title='黑色内扣冷却管'
+            describe='lqg-700/ 1/2*700mm黑色内螺纹'
+            className={style.sku}
+            otherData={[other]}
+          />
+          <div>
+            <div hidden={!inStock} className={style.action}>已入库</div>
+            × 1000
+          </div>
+        </div>
+        <ShowSupply
+          supplys={[1, 2]}
+          hidden={!isArray(searchParams.show).includes('supply')}
+          searchParams={searchParams}
+        />
+        <ShowBrand
+          brands={[1, 2]}
+          hidden={!isArray(searchParams.show).includes('brand') || isArray(searchParams.show).includes('supply')}
+        />
+        <ShowUser
+          hidden={!isArray(searchParams.show).includes('userId')}
+          users={[1, 2]}
+        />
+        <div className={style.skuSpace} />
+      </div>;
+    });
+  };
+
+  return <>
+    <div className={style.dimension}>
+      <Space className={style.timeShow} align='end' onClick={() => setVisible('time')}>
+        {searchParams.timeType === 'diy' ? (moment(date[0]).format('YYYY/MM/DD') + ' - ' + moment(date[1]).format('YYYY/MM/DD')) : searchParams.timeType}
+        <DownOutline />
+      </Space>
+
+      <Space className={style.screen} onClick={openSearch} align='end'>筛选<DownOutline /></Space>
+    </div>
+
+    <div className={style.list}>
+      {list()}
+    </div>
 
     <div className={style.bottomAction} style={{ bottom: 70 }}>
       <Space className={style.radio}>
@@ -174,57 +187,45 @@ const DataChar = (
       </Button>
     </div>
 
-    {(exportLoading || viewtLoading) && <MyLoading />}
-
-    <MyAntPopup
-      title='选择状态'
-      visible={visible === 'status'}
+    <MyPicker
       onClose={() => setVisible('')}
-    >
-      <div style={{ padding: 12 }}>
-        <Selector
-          columns={3}
-          style={SelectorStyle}
-          value={searchParams.status}
-          showCheckMark={false}
-          multiple
-          options={[
-            { label: '已到货', value: 'arrival' },
-            { label: '已入库', value: 'in' },
-            { label: '终止入库', value: 'stop' },
-            { label: '已出库', value: 'out' },
-          ]}
-          onChange={(v, { items }) => {
-            setSearchParams({ ...searchParams, status: v, statusName: items.map(item => item.label).join(',') });
-          }}
-        />
-      </div>
-    </MyAntPopup>
-
-    <MyAntPopup
-      title='选择分类'
-      visible={visible === 'skuClass'}
-      onClose={() => {
-        setScreenkey('');
+      visible={visible === 'time'}
+      value={searchParams.timeType}
+      options={[
+        { label: '近7天', value: '近7天' },
+        { label: '近30天', value: '近30天' },
+        { label: '近三月', value: '近三月' },
+        { label: '近半年', value: '近半年' },
+        { label: '近一年', value: '近一年' },
+        { label: '至今', value: '至今' },
+        { label: '自定义', value: 'diy' },
+      ]}
+      onChange={(option) => {
         setVisible('');
+        if (option.value === 'diy') {
+          dataRef.current.open();
+          return;
+        }
+        setSearchParams({ ...searchParams, time: getDate(option.value), timeType: option.value });
       }}
-    >
-      <div style={{ padding: 12 }}>
-        <Selector
-          columns={3}
-          className={style.selector}
-          style={SelectorStyle}
-          value={searchParams.skuClass}
-          showCheckMark={false}
-          multiple
-          options={isArray(skuClass)}
-          onChange={(v, { items }) => {
-            setSearchParams({ ...searchParams, skuClass: v , skuClassName: items.map(item => item.label).join(',') });
-          }}
-        />
-      </div>
-    </MyAntPopup>
+    />
 
+    <StartEndDate
+      render
+      minWidth='100%'
+      value={searchParams.time}
+      max={new Date()}
+      onChange={(time) => {
+        setSearchParams({
+          ...searchParams,
+          time: [moment(time[0]).format('YYYY/MM/DD 00:00:00'), moment(time[1]).format('YYYY/MM/DD 23:59:59')],
+          timeType: 'diy',
+        });
+      }}
+      dataRef={dataRef}
+    />
+
+    {(exportLoading || viewtLoading) && <MyLoading />}
 
   </>;
 };
