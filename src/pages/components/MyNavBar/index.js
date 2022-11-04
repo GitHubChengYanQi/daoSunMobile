@@ -13,7 +13,7 @@ const MyNavBar = ({ title, noDom }) => {
   const state = initialState || {};
   useEffect(() => {
     setTimeout(() => {
-      document.title = state.systemName ? `${title}-${state.systemName}` : title;
+      document.title = state.systemName;
     }, 0);
   }, [location.pathname, title]);
 

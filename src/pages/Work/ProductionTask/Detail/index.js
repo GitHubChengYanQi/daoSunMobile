@@ -4,7 +4,7 @@ import { productionTaskDetail } from '../../Production/components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import { Card,  List, Space, Tabs } from 'antd-mobile';
-import styles from '../../Production/index.css';
+import styles from '../../Production/index.less';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
 import MyFloatingPanel from '../../../components/MyFloatingPanel';

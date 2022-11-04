@@ -5,7 +5,7 @@ import { history, useLocation } from 'umi';
 import { orderList } from './Url';
 import MyNavBar from '../../components/MyNavBar';
 import Label from '../../components/Label';
-import styles from '../Production/index.css';
+import styles from '../Production/index.less';
 import MyEmpty from '../../components/MyEmpty';
 
 const Order = () => {
