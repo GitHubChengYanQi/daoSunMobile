@@ -28,13 +28,13 @@ const ShowSupply = (
             return <div key={index} className={style.skuSupplyContent}>
               <div className={style.skuSupplyLabel}>辽工智能</div>
               <div className={style.skuSupplyNumber}>× 20000</div>
-              <div className={style.skuSupplyNumber}>× 20000</div>
+              <div className={style.skuSupplyNumber}><span className='red'>×5000</span></div>
               <div className={style.skuSupplyNumber}>× 20000</div>
             </div>;
           }) : <div className={style.skuSupplyContent}>
             <div className={style.skuSupplyLabel}>数量</div>
             <div className={style.skuSupplyNumber}>× 20000</div>
-            <div className={style.skuSupplyNumber}>× 20000</div>
+            <div className={style.skuSupplyNumber}><span className='red'>×5000</span></div>
             <div className={style.skuSupplyNumber}>× 20000</div>
           </div>
         }

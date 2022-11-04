@@ -109,7 +109,7 @@ const DataChar = (
           case 'sku':
             other = <Space>
               <div>到货 ×1000</div>
-              <div>终止入库 ×5000</div>
+              <div>终止入库 <span className='red'>×5000</span></div>
             </Space>;
             break;
           case 'detail':
