@@ -1,7 +1,37 @@
 
 .item {
-  margin: 16px 8px;
+  background-color: #fff;
+  //margin: 0 12px 3px;
+  margin-bottom: 1px;
+  padding: 12px;
   box-shadow: rgba(24, 69, 181, 0.1) 0 3px 6px;
+
+  .title {
+    display: flex;
+    align-items: center;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom: solid 1px var(--body--background--color);
+
+    .time {
+      color: #9d9b9b;
+      font-size: 12px;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+
+      .statusName {
+        padding: 2px 4px;
+        font-size: 12px;
+        line-height: 12px;
+        margin-left: 12px;
+        border-radius: 2px;
+      }
+    }
+  }
 
   .label {
     width: 60px;
@@ -9,11 +39,63 @@
   }
 }
 
+.tabs {
+  background-color: #fff;
+  margin: 1px 0;
 
-.mainDiv {
+  :global {
 
+    .adm-tabs-tab {
+      width: 100%;
+      text-align: center;
+      font-size: 16px;
+    }
+  }
 }
 
-.mainDiv :global .adm-capsule-tabs-tab {
-  font-size: 14px;
+.card {
+  padding-bottom: 0;
+
+  .cardBody {
+    padding-bottom: 0;
+  }
+}
+
+.bodyCard {
+  display: flex;
+  align-items: center;
+  border: solid 1px var(--body--background--color);
+  padding: 8px;
+}
+
+.process {
+  padding: 8px 0;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  border-top:  1px solid var(--body--background--color);
+
+  button {
+    padding: 8px !important;
+    flex-grow: 1;
+    border: none;
+  }
+
+  .dispatch {
+    border-left: 1px solid var(--body--background--color);
+  }
+}
+
+.skuItem {
+  padding: 12px;
+  background-color: #fff;
+  border-bottom: solid 1px #D8D8D8;
+  display: flex;
+  align-items: center;
+
+  .sku {
+    flex-grow: 1;
+  }
 }

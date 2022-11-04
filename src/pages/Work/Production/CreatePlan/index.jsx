@@ -45,6 +45,8 @@ const CreatePlan = () => {
         await run({
           data: {
             ...data,
+            executionTime: data.time[0],
+            endTime: data.time[1],
             orderDetailParams: isArray(data.orderDetailParams).map(item => ({
               ...item,
               purchaseNumber: item.purchaseNumber || 1,

@@ -1,14 +1,15 @@
 import React, { useRef, useState } from 'react';
-import { Card, Space } from 'antd-mobile';
+import { Space, Tabs } from 'antd-mobile';
 import styles from './index.less';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
 import MyNavBar from '../../components/MyNavBar';
-import { AddOutline, ClockCircleOutline, QuestionCircleOutline } from 'antd-mobile-icons';
+import { AddOutline } from 'antd-mobile-icons';
 import Label from '../../components/Label';
 import MySearch from '../../components/MySearch';
 import MyFloatingBubble from '../../components/FloatingBubble';
 import { useHistory } from 'react-router-dom';
+import { MyDate } from '../../components/MyDate';
 
 const Production = () => {
 
@@ -19,8 +20,15 @@ const Production = () => {
   const ref = useRef();
 
   return <div className={styles.mainDiv}>
-    <MyNavBar title='生产工单列表' />
+    <MyNavBar title='生产计划列表' />
     <MySearch />
+
+    <Tabs className={styles.tabs}>
+      <Tabs.Tab title='全部' key='1' />
+      <Tabs.Tab title='未开始' key='2' />
+      <Tabs.Tab title='执行中' key='3' />
+      <Tabs.Tab title='已结束' key='4' />
+    </Tabs>
     <MyList
       ref={ref}
       data={data}
@@ -30,21 +38,23 @@ const Production = () => {
       }}>
       {
         data.map((item, index) => {
-          return <Card
+          return <div
             onClick={() => {
               history.push(`/Work/Production/ProductionDetail?id=${item.productionPlanId}`);
             }}
             key={index}
-            title={<Space align='start' style={{ color: '#ffa52a', fontSize: 16 }}>
-              <QuestionCircleOutline />待处理
-            </Space>} className={styles.item}>
+            className={styles.item}
+          >
+            <div className={styles.title}>
+              <div className={styles.status}>
+                {item.theme} / {item.coding}
+                <div style={{ border: `solid 1px #599745`, color: '#599745' }} className={styles.statusName}>
+                  待处理
+                </div>
+              </div>
+              <div className={styles.time}>{MyDate.Show(item.createTime)}</div>
+            </div>
             <Space direction='vertical'>
-              <div>
-                <Label className={styles.label}>工单编号</Label>：{item.coding}
-              </div>
-              <div>
-                <Label className={styles.label}>工单主题</Label>：{item.theme}
-              </div>
               <div>
                 <Label className={styles.label}>开始时间</Label>：{item.executionTime}
               </div>
@@ -57,11 +67,8 @@ const Production = () => {
               <div>
                 <Label className={styles.label}>备注</Label>：{item.remark}
               </div>
-              <Space>
-                <ClockCircleOutline />{item.createTime}
-              </Space>
             </Space>
-          </Card>;
+          </div>;
         })
       }
     </MyList>

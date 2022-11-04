@@ -33,4 +33,7 @@ export const ReceiptsEnums = {
 
   // 生产计划
   production: 'PRODUCTION',
+
+  // 生产任务
+  productionTask: 'PRODUCTIONTASK',
 };
