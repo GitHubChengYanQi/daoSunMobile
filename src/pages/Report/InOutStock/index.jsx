@@ -37,8 +37,6 @@ const InOutStock = () => {
 
   const [searchParams, setSearchParams] = useState(inStockSearch);
 
-  console.log(searchParams);
-
   const [date, setDate] = useState([]);
 
 

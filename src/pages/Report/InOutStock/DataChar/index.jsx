@@ -22,10 +22,12 @@ import ShowUser from './components/ShowUser';
 import MyPicker from '../../../components/MyPicker';
 import { getDate } from '../components/SearchTime';
 import StartEndDate from '../../../Work/Production/CreateTask/components/StartEndDate';
+import MyList from '../../../components/MyList';
 
-export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
 export const InStockExport = { url: '/viewExcel/export', method: 'POST' };
 export const InStockViewTotail = { url: '/statisticalView/viewTotail', method: 'POST' };
+
+export const outUserList = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
 
 const DataChar = (
   {
@@ -42,6 +44,8 @@ const DataChar = (
 
   const inStock = searchParams.type === 'inStock';
 
+  const [data, setData] = useState([]);
+  console.log(data);
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
 
@@ -57,50 +61,62 @@ const DataChar = (
     onError: () => message.error('导出失败！请联系管理员'),
   });
 
-  const { loading: viewtLoading, data: view, run: viewRun } = useRequest({ ...InStockViewTotail, data: {} });
-
-  useEffect(() => {
-    if (date.length > 0) {
-      // viewRun({ data: { beginTime: date[0], endTime: date[1] } });
-      // listRef.current.submit({ beginTime: date[0], endTime: date[1] });
+  const getListInfo = (item = {}) => {
+    switch (searchParams.dimension) {
+      case 'supply':
+        return {};
+      case 'userId':
+        return {
+          key: item.userResult?.userId,
+          skus: item.skuAndNumbers,
+          api: outUserList,
+          params: { viewMode: 'pickUser' },
+        };
+      default:
+        break;
     }
-  }, [date]);
-
+  };
   const list = () => {
 
     if (['supply', 'userId'].includes(searchParams.dimension)) {
-      return [1, 2, 3].map((item, index) => {
-        const show = showId === item;
-        return <div key={index} className={style.supply}>
-          <div className={style.skuItem}>
-            <div className={style.check}><MyCheck fontSize={18} /></div>
-            <div className={style.sku}>{inStock ? '辽宁辽工智能装备制造有限公司' : '高东阳（生产制造部-操作工）'}</div>
-            <DownOutline onClick={() => setShowId(show ? '' : item)} />
-          </div>
-          <div hidden={!show}>
-            {
-              [1, 2, 3].map((item, index) => {
-                return <div key={index}>
-                  <div className={style.skuItem} style={{ paddingTop: index === 0 && 0 }}>
-                    <SkuItem
-                      extraWidth='140px'
-                      title='黑色内扣冷却管'
-                      describe='lqg-700/ 1/2*700mm黑色内螺纹'
-                      className={style.sku}
-                    />
-                    <div>
-                      <div hidden={!inStock} className={style.action}>已入库</div>
-                      × 1000
-                    </div>
-                  </div>
-                  <ShowBrand brands={[1, 2]} hidden={!isArray(searchParams.show).includes('brand')} />
-                  <div className={style.skuSpace} />
-                </div>;
-              })
-            }
-          </div>
-        </div>;
-      });
+
+      return <MyList api={getListInfo().api} getData={setData} data={data} params={getListInfo().params}>
+        {
+          data.map((item, index) => {
+            const key = getListInfo(item).key;
+            const show = showId === key;
+            const skuItems = isArray(getListInfo(item).skus);
+            return <div key={index} className={style.supply}>
+              <div className={style.skuItem}>
+                <div className={style.check}><MyCheck fontSize={18} /></div>
+                <div className={style.sku}>{inStock ? '辽宁辽工智能装备制造有限公司' : item.userResult?.name || '-'}</div>
+                {skuItems.length > 0 && <DownOutline onClick={() => setShowId(show ? '' : key)} />}
+              </div>
+              <div hidden={!show}>
+                {
+                  skuItems.map((item, index) => {
+                    return <div key={index}>
+                      <div className={style.skuItem} style={{ paddingTop: index === 0 && 0 }}>
+                        <SkuItem
+                          extraWidth='140px'
+                          skuResult={item.skuResult}
+                          className={style.sku}
+                        />
+                        <div>
+                          <div hidden={!inStock} className={style.action}>已入库</div>
+                          × {item.number}
+                        </div>
+                      </div>
+                      <ShowBrand brands={[1, 2]} hidden={!isArray(searchParams.show).includes('brand')} />
+                      <div className={style.skuSpace} />
+                    </div>;
+                  })
+                }
+              </div>
+            </div>;
+          })
+        }
+      </MyList>;
     }
     return [1, 2, 3].map((item, index) => {
       let other = '';
@@ -225,7 +241,7 @@ const DataChar = (
       dataRef={dataRef}
     />
 
-    {(exportLoading || viewtLoading) && <MyLoading />}
+    {(exportLoading) && <MyLoading />}
 
   </>;
 };
