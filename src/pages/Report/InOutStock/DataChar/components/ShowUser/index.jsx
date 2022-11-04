@@ -19,8 +19,8 @@ const ShowUser = (
         className={style.skuSupply}
       >
         <div style={{padding:8}}>
-          高东阳（生产制造部-操作工）
-          <span style={{float:'right'}}>×3000</span>
+          {item.userResult?.name}
+          <span style={{float:'right'}}>× {item.number || 0}</span>
         </div>
       </div>;
     })}

@@ -61,11 +61,19 @@ const DataChar = (
     onError: () => message.error('导出失败！请联系管理员'),
   });
 
-  const getListInfo = (item = {}) => {
-    switch (searchParams.dimension) {
-      case 'supply':
-        return {};
-      case 'userId':
+  const getListInfo = (type, item = {}) => {
+    switch (type) {
+      case 'outSku':
+        let number = 0;
+        isArray(item.userAndNumbers).forEach(item => number += item.number);
+        return {
+          number,
+          skuResult: item.skuResult,
+          list: item.userAndNumbers,
+          api: outUserList,
+          params: { viewMode: 'sku' },
+        };
+      case 'outUser':
         return {
           key: item.userResult?.userId,
           skus: item.skuAndNumbers,
@@ -73,19 +81,32 @@ const DataChar = (
           params: { viewMode: 'pickUser' },
         };
       default:
-        break;
+        return {};
     }
   };
   const list = () => {
 
     if (['supply', 'userId'].includes(searchParams.dimension)) {
 
-      return <MyList api={getListInfo().api} getData={setData} data={data} params={getListInfo().params}>
+      let type = '';
+      if (searchParams.dimension === 'supply') {
+
+      } else {
+        type = 'outUser';
+      }
+
+      return <MyList
+        topBottom='140px'
+        api={getListInfo(type).api}
+        getData={setData}
+        data={data}
+        params={getListInfo(type).params}
+      >
         {
           data.map((item, index) => {
-            const key = getListInfo(item).key;
+            const key = getListInfo(type, item).key;
             const show = showId === key;
-            const skuItems = isArray(getListInfo(item).skus);
+            const skuItems = isArray(getListInfo(type, item).skus);
             return <div key={index} className={style.supply}>
               <div className={style.skuItem}>
                 <div className={style.check}><MyCheck fontSize={18} /></div>
@@ -118,56 +139,69 @@ const DataChar = (
         }
       </MyList>;
     }
-    return [1, 2, 3].map((item, index) => {
-      let other = '';
-      if (inStock) {
-        switch (searchParams.dimension) {
-          case 'sku':
-            other = <Space>
-              <div>到货 ×1000</div>
-              <div>终止入库 <span className='red'>×5000</span></div>
-            </Space>;
-            break;
-          case 'detail':
-            other = MyDate.Show(new Date());
-            break;
-          case 'userId':
-            break;
-          default:
-            break;
-        }
+    let type = '';
+    if (!inStock && searchParams.dimension === 'sku') {
+      type = 'outSku';
+    }
+    return <MyList
+      topBottom='140px'
+      api={getListInfo(type).api}
+      getData={setData}
+      data={data}
+      params={getListInfo(type).params}
+    >
+      {
+        data.map((item, index) => {
+          let other = '';
+          if (inStock) {
+            switch (searchParams.dimension) {
+              case 'sku':
+                other = <Space>
+                  <div>到货 ×1000</div>
+                  <div>终止入库 <span className='red'>×5000</span></div>
+                </Space>;
+                break;
+              case 'detail':
+                other = MyDate.Show(new Date());
+                break;
+              case 'userId':
+                break;
+              default:
+                break;
+            }
+          }
+          return <div key={index} className={style.skuList}>
+            <div className={style.skuItem}>
+              <div className={style.check}><MyCheck fontSize={18} /></div>
+              <SkuItem
+                extraWidth='170px'
+                skuResult={getListInfo(type, item).skuResult}
+                className={style.sku}
+                otherData={[other]}
+              />
+              <div>
+                <div hidden={!inStock} className={style.action}>已入库</div>
+                × {getListInfo(type, item).number}
+              </div>
+            </div>
+            <ShowSupply
+              supplys={[1, 2]}
+              hidden={!isArray(searchParams.show).includes('supply')}
+              searchParams={searchParams}
+            />
+            <ShowBrand
+              brands={[1, 2]}
+              hidden={!isArray(searchParams.show).includes('brand') || isArray(searchParams.show).includes('supply')}
+            />
+            <ShowUser
+              hidden={!isArray(searchParams.show).includes('userId')}
+              users={getListInfo(type, item).list}
+            />
+            <div className={style.skuSpace} />
+          </div>;
+        })
       }
-      return <div key={index} className={style.skuList}>
-        <div className={style.skuItem}>
-          <div className={style.check}><MyCheck fontSize={18} /></div>
-          <SkuItem
-            extraWidth='170px'
-            title='黑色内扣冷却管'
-            describe='lqg-700/ 1/2*700mm黑色内螺纹'
-            className={style.sku}
-            otherData={[other]}
-          />
-          <div>
-            <div hidden={!inStock} className={style.action}>已入库</div>
-            × 1000
-          </div>
-        </div>
-        <ShowSupply
-          supplys={[1, 2]}
-          hidden={!isArray(searchParams.show).includes('supply')}
-          searchParams={searchParams}
-        />
-        <ShowBrand
-          brands={[1, 2]}
-          hidden={!isArray(searchParams.show).includes('brand') || isArray(searchParams.show).includes('supply')}
-        />
-        <ShowUser
-          hidden={!isArray(searchParams.show).includes('userId')}
-          users={[1, 2]}
-        />
-        <div className={style.skuSpace} />
-      </div>;
-    });
+    </MyList>;
   };
 
   return <>
