@@ -4,6 +4,7 @@ import { CalendarOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
+import moment from 'moment';
 
 export const getMinTime = (time) => {
   if (!time) {
@@ -81,7 +82,8 @@ const StartEndDate = (
       }}
       onChange={(date) => {
         if (startDate) {
-          onChange([startDate, date]);
+          const endDate = precision === 'day' ? moment(date).format('YYYY/MM/DD 23:59:59') : date;
+          onChange([startDate, endDate]);
           setStartDate();
         } else {
           setStartDate(date);
