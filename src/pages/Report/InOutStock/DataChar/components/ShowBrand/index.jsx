@@ -19,16 +19,16 @@ const ShowBrand = (
         className={style.skuSupply}
       >
         <div className={style.skuSupplyHead}>
-          <div className={style.skuSupplyLabel}>辽工智能</div>
+          <div className={style.skuSupplyLabel}>{item.brandName || '无品牌'}</div>
           <div className={style.skuSupplyNumber}>到货</div>
           <div className={style.skuSupplyNumber}>终止入库</div>
           <div className={style.skuSupplyNumber}>已入库</div>
         </div>
         <div className={style.skuSupplyContent}>
           <div className={style.skuSupplyLabel}>数量</div>
-          <div className={style.skuSupplyNumber}>× 20000</div>
-          <div className={style.skuSupplyNumber}><span className='red'>×5000</span></div>
-          <div className={style.skuSupplyNumber}>× 20000</div>
+          <div className={style.skuSupplyNumber}>× 0</div>
+          <div className={style.skuSupplyNumber}><span className='red'>×0</span></div>
+          <div className={style.skuSupplyNumber}>× 0</div>
         </div>
       </div>;
     })}

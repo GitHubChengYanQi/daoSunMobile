@@ -26,6 +26,7 @@ import MyList from '../../../components/MyList';
 
 export const InStockExport = { url: '/viewExcel/export', method: 'POST' };
 export const InStockViewTotail = { url: '/statisticalView/viewTotail', method: 'POST' };
+export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
 
 export const outUserList = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
 
@@ -45,9 +46,11 @@ const DataChar = (
   const inStock = searchParams.type === 'inStock';
 
   const [data, setData] = useState([]);
-  console.log(data);
+
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
+
+  const [ids, setIds] = useState([]);
 
   const [showId, setShowId] = useState();
 
@@ -69,9 +72,16 @@ const DataChar = (
         return {
           number,
           skuResult: item.skuResult,
-          list: item.userAndNumbers,
           api: outUserList,
           params: { viewMode: 'sku' },
+        };
+      case 'inSku':
+        return {
+          number: isArray(item.instockLists)[0]?.number,
+          skuResult: isArray(item.instockLists)[0]?.skuResult,
+          // list: item.userAndNumbers,
+          api: InStockDataList,
+          // params: { viewMode: 'sku' },
         };
       case 'outUser':
         return {
@@ -79,6 +89,13 @@ const DataChar = (
           skus: item.skuAndNumbers,
           api: outUserList,
           params: { viewMode: 'pickUser' },
+        };
+      case 'inSupply':
+        return {
+          key: item.customerId,
+          skus: item.instockLists,
+          api: InStockDataList,
+          // params: { viewMode: 'pickUser' },
         };
       default:
         return {};
@@ -90,7 +107,7 @@ const DataChar = (
 
       let type = '';
       if (searchParams.dimension === 'supply') {
-
+        type = 'inSupply';
       } else {
         type = 'outUser';
       }
@@ -107,10 +124,16 @@ const DataChar = (
             const key = getListInfo(type, item).key;
             const show = showId === key;
             const skuItems = isArray(getListInfo(type, item).skus);
+            const checked = ids.includes(index);
             return <div key={index} className={style.supply}>
               <div className={style.skuItem}>
-                <div className={style.check}><MyCheck fontSize={18} /></div>
-                <div className={style.sku}>{inStock ? '辽宁辽工智能装备制造有限公司' : item.userResult?.name || '-'}</div>
+                <div
+                  className={style.check}
+                  onClick={() => setIds(checked ? ids.filter(item => item !== index) : [...ids, index])}
+                >
+                  <MyCheck checked={checked} fontSize={18} />
+                </div>
+                <div className={style.sku}>{inStock ? item.customerName : item.userResult?.name || '-'}</div>
                 {skuItems.length > 0 && <DownOutline onClick={() => setShowId(show ? '' : key)} />}
               </div>
               <div hidden={!show}>
@@ -128,7 +151,10 @@ const DataChar = (
                           × {item.number}
                         </div>
                       </div>
-                      <ShowBrand brands={[1, 2]} hidden={!isArray(searchParams.show).includes('brand')} />
+                      <ShowBrand
+                        brands={[item.brandResult]}
+                        hidden={!isArray(searchParams.show).includes('brand')}
+                      />
                       <div className={style.skuSpace} />
                     </div>;
                   })
@@ -140,8 +166,14 @@ const DataChar = (
       </MyList>;
     }
     let type = '';
-    if (!inStock && searchParams.dimension === 'sku') {
+    if (
+      !inStock
+      // &&
+      // searchParams.dimension === 'sku'
+    ) {
       type = 'outSku';
+    } else {
+      type = 'inSku';
     }
     return <MyList
       topBottom='140px'
@@ -157,8 +189,8 @@ const DataChar = (
             switch (searchParams.dimension) {
               case 'sku':
                 other = <Space>
-                  <div>到货 ×1000</div>
-                  <div>终止入库 <span className='red'>×5000</span></div>
+                  <div>到货 ×0</div>
+                  <div>终止入库 <span className='red'>×0</span></div>
                 </Space>;
                 break;
               case 'detail':
@@ -170,9 +202,13 @@ const DataChar = (
                 break;
             }
           }
+          const checked = ids.includes(index);
           return <div key={index} className={style.skuList}>
             <div className={style.skuItem}>
-              <div className={style.check}><MyCheck fontSize={18} /></div>
+              <div
+                className={style.check}
+                onClick={() => setIds(checked ? ids.filter(item => item !== index) : [...ids, index])}
+              ><MyCheck checked={checked} fontSize={18} /></div>
               <SkuItem
                 extraWidth='170px'
                 skuResult={getListInfo(type, item).skuResult}
@@ -185,17 +221,20 @@ const DataChar = (
               </div>
             </div>
             <ShowSupply
-              supplys={[1, 2]}
+              supplys={[{
+                customerName: item.customerName,
+                brands: [isArray(item.instockLists)[0]?.brandResult],
+              }]}
               hidden={!isArray(searchParams.show).includes('supply')}
               searchParams={searchParams}
             />
             <ShowBrand
-              brands={[1, 2]}
+              brands={[isArray(item.instockLists)[0]?.brandResult]}
               hidden={!isArray(searchParams.show).includes('brand') || isArray(searchParams.show).includes('supply')}
             />
             <ShowUser
               hidden={!isArray(searchParams.show).includes('userId')}
-              users={getListInfo(type, item).list}
+              users={isArray(item.userAndNumbers)}
             />
             <div className={style.skuSpace} />
           </div>;
