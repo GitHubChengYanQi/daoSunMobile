@@ -12,7 +12,7 @@ const MyBottom = ({ children, leftActuions, buttons,noBottom }) => {
       position: 'sticky',
       bottom: 0,
       zIndex: 999,
-      boxShadow: 'rgb(24, 69, 181,0.1) 0px 0px 10px',
+      boxShadow: 'rgb(0, 0, 0,0.1) 0px -4px 10px',
       backgroundColor: '#fff',
       padding: 8,
     }}>

@@ -1,87 +1,135 @@
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
-import { Button, Form, TextArea } from 'antd-mobile';
-import SelectUser from './components/SelectUser';
+import { Input, TextArea } from 'antd-mobile';
 import StartEndDate from './components/StartEndDate';
-import Users from './components/Users';
-import Number from '../../../components/Number';
-import MyCoding from '../../../components/MyCoding';
 import { useRequest } from '../../../../util/Request';
-import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
+import FormLayout from '../../../components/FormLayout';
+import { ReceiptsEnums } from '../../../Receipts';
+import styles from '../../PurchaseAsk/index.less';
+import User from '../../CreateTask/components/User';
+import ShopNumber from '../../AddShop/components/ShopNumber';
+import MyCard from '../../../components/MyCard';
+import Title from '../../../components/Title';
 
 const CreateTask = (props) => {
 
   const params = props.location.query;
 
-  const { loading, run } = useRequest(
-    { url: '/productionTask/add', method: 'POST' },
-    {
-      manual: true,
-      onSuccess: () => {
-        Message.dialogSuccess({
-          title: '分派任务成功!',
-          leftText: '返回工单',
-          rightText: '继续分派任务',
-        });
-      },
-    });
+  const { loading, run } = useRequest({ url: '/productionTask/add', method: 'POST' }, { manual: true });
 
-  const ref = useRef();
-
-  if (loading) {
-    return <MyLoading />;
-  }
+  const [data, setData] = useState({ shipName: params.shipName });
 
   return <>
-    <MyNavBar title='分派任务' />
-
-    <Form
-      ref={ref}
-      onFinish={(value) => {
-        run({
+    <MyNavBar title='创建生产任务' />
+    <FormLayout
+      data={data}
+      loading={loading}
+      onSave={async (complete) => {
+        let success;
+        await run({
           data: {
             workOrderId: params.id,
-            ...value,
-            productionTime: value.date && value.date[0],
-            endTime: value.date && value.date[1],
-            userId: value.userId && value.userId.id,
-            userIdList: value.userIdList && value.userIdList.map((item) => {
+            ...data,
+            productionTime: data.date && data.date[0],
+            endTime: data.date && data.date[1],
+            userId: data.userId && data.userId.id,
+            userIdList: data.userIdList && data.userIdList.map((item) => {
               return item.id;
             }),
           },
+        }).then(() => {
+          success = true;
+          if (complete) {
+            Message.dialogSuccess({
+              title: '分派任务成功!',
+              leftText: '返回工单',
+              rightText: '继续分派任务',
+            });
+          }
+        }).catch(() => {
+          Message.errorToast('保存失败！');
+          success = false;
         });
+        return success;
       }}
-    >
-      <Form.Item name='coding' label='生产编码'>
-        <MyCoding module={99} />
-      </Form.Item>
-      <Form.Item label='工序'>
-        {params.shipName}
-      </Form.Item>
-      <Form.Item name='userId' label='负责人'>
-        <SelectUser />
-      </Form.Item>
-      <Form.Item name='date' label='执行时间'>
-        <StartEndDate min={new Date()} />
-      </Form.Item>
-      <Form.Item name='userIdList' label='成员'>
-        <Users />
-      </Form.Item>
-      <Form.Item name='number' label='生产数量' rules={[{ required: true, message: '请输入生产数量！' }]}>
-        <Number noBorder placeholder='请输入生产数量' max={params.max} />
-      </Form.Item>
-      <Form.Item name='remake' label='备注'>
-        <TextArea placeholder='请输入生产备注' />
-      </Form.Item>
-    </Form>
-
-    <Button onClick={() => {
-      ref.current.submit();
-    }} style={{ position: 'sticky', bottom: 0 }} block type='submit' color='primary' size='large'>
-      提交
-    </Button>
+      formType={ReceiptsEnums.production}
+      fieldRender={(item) => {
+        const required = item.required;
+        let extra;
+        let content;
+        switch (item.key) {
+          case 'coding':
+            extra = <Input
+              value={data[item.key]}
+              className={styles.input}
+              placeholder='请输入编码'
+              onChange={(value) => setData({ ...data, [item.key]: value })}
+            />;
+            break;
+          case 'shipName':
+            extra = data[item.key];
+            break;
+          case 'date':
+            extra = <StartEndDate
+              min={new Date()}
+              value={data[item.key]}
+              onChange={(value) => setData({ ...data, [item.key]: value })}
+            />;
+            break;
+          case 'userId':
+            return <User
+              noRequired={!required}
+              value={data.userId ? [{
+                id: data.userId,
+                name: data.userName,
+                avatar: data.avatar,
+              }] : []}
+              onChange={(users) => {
+                const { id, name, avatar } = users[0] || {};
+                setData({ ...data, userId: id, userName: name, avatar });
+              }}
+              title={item.filedName}
+            />;
+          case 'remake':
+            content = <TextArea
+              rows={3}
+              autoSize
+              style={{ '--font-size': '14px' }}
+              placeholder='请输入备注'
+              value={data[item.key]}
+              onChange={(value) => setData({ ...data, [item.key]: value })}
+            />;
+            break;
+          case 'userIdList':
+            return <User
+              noRequired={!required}
+              multiple
+              title={item.filedName}
+              value={data[item.key]}
+              onChange={(userIdList) => {
+                setData({ ...data, [item.key]: userIdList });
+              }}
+            />;
+          case 'number':
+            extra = <ShopNumber
+              value={data[item.key] || 0}
+              max={params.max}
+              onChange={(value) => setData({ ...data, [item.key]: value })}
+            />;
+            break;
+          default:
+            break;
+        }
+        return <MyCard
+          titleBom={required && <Title className={styles.title}>{item.filedName}<span>*</span></Title>}
+          title={item.filedName}
+          extra={extra}
+        >
+          {content}
+        </MyCard>;
+      }}
+    />
   </>;
 };
-
 export default CreateTask;

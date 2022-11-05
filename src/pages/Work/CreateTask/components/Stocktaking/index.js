@@ -47,7 +47,8 @@ const Stocktaking = (
       value={value.participants}
       onChange={(users) => {
         onChange({ ...value, participants: users });
-      }} />
+      }}
+    />
 
     <MyCard
       title='明盘'

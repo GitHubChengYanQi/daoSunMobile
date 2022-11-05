@@ -26,4 +26,14 @@ export const ReceiptsEnums = {
 
   // 调拨单
   allocation: 'ALLOCATION',
+
+
+  // 采购单
+  purchaseOrder: 'PURCHASEORDER',
+
+  // 生产计划
+  production: 'PRODUCTION',
+
+  // 生产任务
+  productionTask: 'PROASK',
 };

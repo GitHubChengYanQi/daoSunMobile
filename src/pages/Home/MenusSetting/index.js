@@ -244,9 +244,8 @@ const MenusSetting = (props) => {
           const subMenus = item.subMenus || [];
           const otherMenus = [];
           switch (item.id) {
-            case 'REPAIR':
-              otherMenus.push({ name: '工单管理', code: 'Repair' });
-              otherMenus.push({ name: '创建报修', code: 'CreateRepair' });
+            case 'other':
+              otherMenus.push({ name: '采购申请', code: 'purchase_ask' });
               break;
             default:
               break;

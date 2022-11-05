@@ -5,7 +5,7 @@ import { productionTaskList, productionTaskReceive } from '../Production/compone
 import { CapsuleTabs, Card, Dialog, Space, Tabs, Toast } from 'antd-mobile';
 import { history } from 'umi';
 import { QuestionCircleOutline } from 'antd-mobile-icons';
-import styles from '../Production/index.css';
+import styles from '../Production/index.less';
 import Label from '../../components/Label';
 import MyNavBar from '../../components/MyNavBar';
 import LinkButton from '../../components/LinkButton';
