@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Divider, Selector } from 'antd-mobile';
 import style from '../../index.less';
+import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 
 const SkuClass = (
   {
@@ -23,11 +24,7 @@ const SkuClass = (
         columns={3}
         // multiple
         className={style.skuClass}
-        style={{
-          '--border': 'solid transparent 1px',
-          '--checked-border': 'solid var(--adm-color-primary) 1px',
-          '--padding': '4px 15px',
-        }}
+        style={SelectorStyle}
         showCheckMark={false}
         options={options}
         value={value}

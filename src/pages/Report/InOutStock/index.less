@@ -1,3 +1,57 @@
+.search {
+  padding: 0;
+  background: transparent;
+
+  :global {
+    .adm-search-bar-input-box {
+      background-color: #fff !important;
+      border-radius: 3px !important;
+    }
+  }
+}
+
+.searchContent {
+  margin-top: 8px;
+  background-color: #fff;
+  border-radius: 3px;
+  overflow: hidden;
+
+  .searchCard {
+    margin: 0;
+
+    .searchCardBody {
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--body--background--color);
+
+      .diyTime {
+        margin-top: 8px;
+        border: solid 1px var(--body--background--color);
+        padding: 4px 8px;
+      }
+
+    }
+  }
+
+  .buttons {
+    text-align: center;
+
+    button {
+      width: 40%;
+      margin: 24px 16px;
+    }
+  }
+}
+
+.selector {
+  :global {
+    .adm-selector-item {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+  }
+}
+
 .header {
   border-radius: 4px;
   background-color: #fff;
@@ -61,39 +115,132 @@
   }
 }
 
-.total {
-  border-radius: 4px;
+.dimension {
+  border-radius: 3px 3px 0 0;
   background-color: #fff;
   margin-top: 8px;
+  margin-bottom: 1px;
   padding: 12px;
+  display: flex;
+  align-items: center;
 
-  .number {
-    span {
-      font-size: 20px;
-      margin-left: 18px;
-      font-weight: bold;
+  .timeShow {
+    flex-grow: 1;
+  }
+}
+
+.listSearch {
+  margin: 1px 0;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+
+  .searchBar {
+
+    input {
+      font-size: 12px;
+    }
+
+    :global {
+      .adm-search-bar {
+        --height: 24px !important;
+      }
     }
   }
 
-  .otherNUmber {
+  > div {
+    flex-grow: 1;
+  }
+}
+
+.supply {
+  background-color: #fff;
+  margin-bottom: 3px;
+}
+
+.skuList {
+  background-color: #fff;
+}
+
+.skuItem {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+
+  .check {
+    margin-right: 12px;
+    text-align: center;
+  }
+
+  .sku {
+    flex-grow: 1;
+  }
+
+  .action {
+    color: #9A9A9A;
+    text-align: right;
+  }
+}
+
+.otherContent {
+  padding: 0 12px 8px;
+}
+
+.skuSupply {
+  border: solid 1px var(--body--background--color);
+  margin-bottom: 4px;
+
+  .skuSupplyHead {
+    border-bottom: solid 1px #F5F5F5;
+  }
+
+  .skuSupplyContent, .skuSupplyHead {
+    padding: 8px;
     display: flex;
     align-items: center;
-    margin-top: 22px;
 
-    > div {
-      flex-grow: 1;
-      border-left: solid #F5F5F5 3px;
-      padding-left: 12px;
-
-      .num {
-        margin-top: 12px;
-      }
-
-      span {
-        font-size: 16px;
-        font-weight: bold;
-      }
+    .skuSupplyLabel {
+      text-align: left;
+      width: 40%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
+
+    .skuSupplyNumber {
+      color: #9A9A9A;
+      text-align: right;
+      width: 20%;
+    }
+  }
+}
+
+.list {
+  //border-radius: 3px;
+  padding-bottom: 28px;
+  overflow: hidden;
+}
+
+.skuSpace {
+  height: 1px;
+  background-color: #F5F5F5;
+  margin: 0 12px;
+}
+
+.bottomAction {
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  width: 100%;
+  position: fixed;
+  background-color: #fff;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  margin: 0 -12px;
+
+  .radio {
+    flex-grow: 1;
+    gap: 8px;
   }
 }
 

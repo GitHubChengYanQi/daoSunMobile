@@ -106,7 +106,7 @@ const InStockDetail = () => {
         </div>
         <div className={style.taskTotal} onClick={() => {
           history.push({
-            pathname: '/Report/InOutStock/InStock/InStockDetail/InStockTask',
+            pathname: '/Report/InOutStock/DataChar/InStockDetail/InStockTask',
             query: {
               customerId,
               customerName,

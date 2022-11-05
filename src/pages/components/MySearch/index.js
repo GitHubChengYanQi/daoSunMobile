@@ -15,6 +15,7 @@ const MySearch = (
     searchIcon = <SearchOutline />,
     extraIcon,
     className,
+    noSearchButton,
     onSearch = () => {
     },
     value,
@@ -48,7 +49,8 @@ const MySearch = (
           return;
         }
         historyType && setHistoryVisible(true);
-      }}>
+      }}
+      >
         <SearchBar
           style={searchBarStyle}
           icon={<div onClick={() => {
@@ -80,10 +82,8 @@ const MySearch = (
           }}
         />
       </div>
-
-
       {
-        !historyType && (visible || value)
+        !historyType && (visible || value) && !noSearchButton
           ?
           <LinkButton className={style.submit} onClick={() => {
             search(value);
@@ -94,7 +94,6 @@ const MySearch = (
           </div>
       }
     </div>
-
     <Popup
       afterShow={() => {
         if (searchRef.current) {

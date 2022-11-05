@@ -9,6 +9,7 @@ import { Dropdown, Selector } from 'antd-mobile';
 import MaintenanceAction
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Maintenance/components/MaintenanceAction';
 import style from '../../Inventory/StartStockTaking/index.less';
+import { SelectorStyle } from '../../../Report/InOutStock';
 
 export const curingList = { url: '/maintenanceDetail/list', method: 'POST' };
 
@@ -74,9 +75,7 @@ const StartMaintenance = () => {
                 columns={3}
                 style={{
                   fontSize: 12,
-                  '--border': 'solid transparent 1px',
-                  '--checked-border': 'solid var(--adm-color-primary) 1px',
-                  '--padding': '4px 15px',
+                  ...SelectorStyle
                 }}
                 showCheckMark={false}
                 options={[{ label: '进行中', value: 0 }, { label: '已完成', value: 99 }]}

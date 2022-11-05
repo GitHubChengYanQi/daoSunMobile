@@ -8,6 +8,7 @@ const MyRadio = (
     onChange = () => {
     },
     children,
+    value,
   },
 ) => {
 
@@ -18,7 +19,7 @@ const MyRadio = (
         return <Icon type={checked ? 'icon-a-danxuanxuanzhong' : 'icon-danxuanweixuanzhong'} />;
       }}
       checked={checked}
-      key='children'
+      value={value || 'children'}
       style={{
         '--icon-size': '14px',
         '--font-size': '14px',
