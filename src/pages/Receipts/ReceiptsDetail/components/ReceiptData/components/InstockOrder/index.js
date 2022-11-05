@@ -99,6 +99,20 @@ const InstockOrder = (
     }
   };
 
+  const getOutType = (type) => {
+    switch (type) {
+      case 'task':
+        return '生产任务';
+      case 'loss':
+        return '生产损耗';
+      case 'service':
+        return '三包服务';
+      case 'pick':
+        return '备品备料';
+      default:
+        return '-';
+    }
+  };
 
   return <>
     {action()}
@@ -124,6 +138,12 @@ const InstockOrder = (
       hidden={type !== ReceiptsEnums.outstockOrder}
       title='领料负责人'
       extra={<UserName user={data.userResult} />}
+    />
+
+    <MyCard
+      hidden={type !== ReceiptsEnums.outstockOrder}
+      title='出库类型'
+      extra={getOutType(data.type)}
     />
 
     <MyCard title='注意事项'>
