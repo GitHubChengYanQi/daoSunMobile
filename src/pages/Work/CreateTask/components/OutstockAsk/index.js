@@ -16,6 +16,7 @@ import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import MyCard from '../../../../components/MyCard';
 import { Input } from 'antd-mobile';
+import MySelector from '../../../../components/MySelector';
 
 const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
@@ -71,7 +72,12 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
 
   useEffect(() => {
-    setParams({ userId: userInfo.id, userName: userInfo.name, userAvatar: userInfo.avatar, ...defaultParams });
+    setParams({
+      type: 'task',
+      userId: userInfo.id,
+      userName: userInfo.name,
+      userAvatar: userInfo.avatar, ...defaultParams,
+    });
     dataChange(skus);
   }, []);
 
@@ -83,7 +89,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         item.brandName || '任意品牌',
         item?.skuResult?.spuResult?.spuClassificationResult?.name,
       ],
-      disabled: !params.userId || normalSku.length === 0 || !params.theme,
+      disabled: !params.userId || normalSku.length === 0 || !params.theme || !params.type,
     };
   };
 
@@ -116,7 +122,19 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
           const { id, name, avatar } = users[0] || {};
           setParams({ ...params, userId: id, userName: name, userAvatar: avatar });
         }} />
-
+      <MyCard titleBom={<Title className={style.title}>出库类型 <span>*</span></Title>}>
+        <MySelector
+          columns={2}
+          value={params.type}
+          onChange={(type) => setParams({ ...params, type })}
+          options={[
+            { label: '生产任务', value: 'task' },
+            { label: '生产损耗', value: 'loss' },
+            { label: '三包服务', value: 'service' },
+            { label: '备品备料', value: 'pick' },
+          ]}
+        />
+      </MyCard>
     </>;
   };
 
@@ -148,6 +166,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
             userIds: ToolUtil.isArray(params.userIds).toString(),
             userId: params.userId,
             theme: params.theme,
+            type: params.type,
           },
         });
       }}
