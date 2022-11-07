@@ -182,6 +182,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
     />
 
     <MyPicker
+      onClose={() => setTypeVisible(false)}
       visible={typeVisible}
       value={params.type}
       onChange={(option) => {
