@@ -47,7 +47,7 @@ const Production = () => {
           >
             <div className={styles.title}>
               <div className={styles.status}>
-                {item.theme} / {item.coding}
+                <div className={styles.theme}>{item.theme} / {item.coding}</div>
                 <div style={{ border: `solid 1px #599745`, color: '#599745' }} className={styles.statusName}>
                   待处理
                 </div>
