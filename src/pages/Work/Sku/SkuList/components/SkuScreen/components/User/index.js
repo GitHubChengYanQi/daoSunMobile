@@ -9,6 +9,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../../../components/MySearch';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { UserIdSelect } from '../../../../../../Quality/Url';
+import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 
 const User = (
   {
@@ -61,11 +62,7 @@ const User = (
       />
       {loading ? <MyLoading skeleton /> : <Selector
         columns={2}
-        style={{
-          '--border': 'solid transparent 1px',
-          '--checked-border': 'solid var(--adm-color-primary) 1px',
-          '--padding': '4px 15px',
-        }}
+        style={SelectorStyle}
         className={ToolUtil.classNames(style.supply)}
         showCheckMark={false}
         multiple={multiple}

@@ -53,7 +53,7 @@ const CreateTask = (props) => {
         });
         return success;
       }}
-      formType={ReceiptsEnums.production}
+      formType={ReceiptsEnums.productionTask}
       fieldRender={(item) => {
         const required = item.required;
         let extra;

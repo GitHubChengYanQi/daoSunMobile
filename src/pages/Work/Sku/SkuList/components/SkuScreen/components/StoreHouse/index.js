@@ -9,6 +9,7 @@ import { useRequest } from '../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import { ToolUtil } from '../../../../../../../components/ToolUtil';
 import { storeHouseSelect } from '../../../../../../Quality/Url';
+import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 
 const StoreHouse = (
   {
@@ -76,11 +77,7 @@ const StoreHouse = (
       />
       {loading ? <MyLoading skeleton /> : <Selector
         columns={1}
-        style={{
-          '--border': 'solid transparent 1px',
-          '--checked-border': 'solid var(--adm-color-primary) 1px',
-          '--padding': '4px 15px',
-        }}
+        style={SelectorStyle}
         className={ToolUtil.classNames(style.supply, style.left)}
         showCheckMark={false}
         options={supply.filter((item, index) => open || index < 3)}

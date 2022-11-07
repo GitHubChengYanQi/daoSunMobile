@@ -15,6 +15,7 @@ const MySearch = (
     searchIcon = <SearchOutline />,
     extraIcon,
     className,
+    noSearchButton,
     onSearch = () => {
     },
     value,
@@ -43,12 +44,13 @@ const MySearch = (
     <div
       className={classNames(style.search, historyType && style.disabledSearch)}
     >
-      <div style={{flexGrow:1}} onClick={(e) => {
+      <div style={{ flexGrow: 1 }} onClick={(e) => {
         if (e.target.className === 'adm-input-clear' || ['path', 'rect'].includes(e.target.tagName)) {
           return;
         }
         historyType && setHistoryVisible(true);
-      }}>
+      }}
+      >
         <SearchBar
           style={searchBarStyle}
           icon={<div onClick={() => {
@@ -65,6 +67,7 @@ const MySearch = (
             onChange(value);
           }}
           onClear={() => {
+            onSearch('');
             onChange('');
             onClear();
           }}
@@ -79,10 +82,8 @@ const MySearch = (
           }}
         />
       </div>
-
-
       {
-        !historyType && (visible || value)
+        !historyType && (visible || value) && !noSearchButton
           ?
           <LinkButton className={style.submit} onClick={() => {
             search(value);
@@ -93,7 +94,6 @@ const MySearch = (
           </div>
       }
     </div>
-
     <Popup
       afterShow={() => {
         if (searchRef.current) {
