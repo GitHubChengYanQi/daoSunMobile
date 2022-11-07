@@ -3,18 +3,20 @@ import { useRequest } from '../../../../util/Request';
 import { productionTaskDetail } from '../../Production/components/Url';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
-import { Card,  List, Space, Tabs } from 'antd-mobile';
+import { Space, Tabs } from 'antd-mobile';
 import styles from '../../Production/index.less';
 import Label from '../../../components/Label';
 import MyNavBar from '../../../components/MyNavBar';
-import MyFloatingPanel from '../../../components/MyFloatingPanel';
 import BottomButton from '../../../components/BottomButton';
-import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
-import MyEllipsis from '../../../components/MyEllipsis';
 import ReportWork from './components/ReportWork';
 import Pick from '../../Production/Pick';
 import { history } from 'umi';
-import { ToolUtil } from '../../../components/ToolUtil';
+import MyCard from '../../../components/MyCard';
+import { MyDate } from '../../../components/MyDate';
+import style from '../../Production/ProductionDetail/index.less';
+import { Avatar } from 'antd';
+import Icon from '../../../components/Icon';
+import SkuItem from '../../Sku/SkuItem';
 
 const Detail = (props) => {
 
@@ -95,51 +97,6 @@ const Detail = (props) => {
     }
   };
 
-  const backgroundDom = () => {
-
-    return <Card
-      title={<div><Label>工序：</Label>{shipSetpResult.shipSetpName}</div>}
-      className={styles.mainDiv}
-      style={{ backgroundColor: '#fff' }}>
-      <Space direction='vertical'>
-        <div>
-          <Label>任务编码：</Label>{data.coding}
-        </div>
-        <div>
-          <Label>任务状态：</Label>{status(data.status)}
-        </div>
-        <div>
-          <Label>执行数量：</Label> {data.number}
-        </div>
-        <div>
-          <Label>标准作业指导：</Label>{shipSetpResult.sopResult && shipSetpResult.sopResult.name}
-        </div>
-        <div>
-          <Label>执行时间：</Label>{data.productionTime}
-        </div>
-        <div>
-          <Label>结束时间：</Label>{data.endTime}
-        </div>
-        <div>
-          <Label>负责人：</Label>{data.userResult && data.userResult.name}
-        </div>
-        <div>
-          <Label>成员：</Label>{data.userResults && data.userResults.map((item) => {
-          return item.name;
-        }).join(',')}
-        </div>
-        <div>
-          <Label>分派人：</Label>{data.createUserResult && data.createUserResult.name}
-        </div>
-        <div>
-          <Label>分派时间：</Label>{data.createTime}
-        </div>
-        <div>
-          <Label>备注：</Label>{data.remark}
-        </div>
-      </Space>
-    </Card>;
-  };
 
   const module = () => {
     switch (key) {
@@ -148,30 +105,30 @@ const Detail = (props) => {
           ?
           <MyEmpty />
           :
-          <List>
+          <div className={styles.skus}>
             {
               setpSetDetails.map((item, index) => {
                 const skuResult = item.skuResult || {};
-                return <List.Item key={index}>
-                  <MyEllipsis>{SkuResultSkuJsons({ skuResult })}</MyEllipsis>
-                  <div style={{ display: 'flex', fontSize: '4vw' }}>
-                    <Label>描述：</Label>
-                    <MyEllipsis width='80%'>
-                      {SkuResultSkuJsons({ skuResult,describe:true })}</MyEllipsis>
-                  </div>
-                  <div style={{ display: 'flex' }}>
-                    <div style={{ flexGrow: 1, color: 'green' }}>
-                      <Label>已报工：</Label>{item.jobBookNumber}
-                    </div>
-                    <div style={{ flexGrow: 1, color: 'var(--adm-color-primary)' }}>
-                      <Label>生产数：</Label>{item.num * data.number}
-                    </div>
+                return <div key={index} className={styles.skuItem}
+                            style={{ border: index === setpSetDetails.length - 1 && 'none' }}>
+                  <SkuItem
+                    skuResult={skuResult}
+                    otherData={[
+                      <div style={{ display: 'flex' }}>
+                        <div style={{ flexGrow: 1, color: 'green' }}>
+                          <Label>已报工：</Label>{item.jobBookNumber}
+                        </div>
+                        <div style={{ flexGrow: 1, color: 'var(--adm-color-primary)', marginLeft: 16 }}>
+                          <Label>生产数：</Label>{item.num * data.number}
+                        </div>
 
-                  </div>
-                </List.Item>;
+                      </div>,
+                    ]}
+                  />
+                </div>;
               })
             }
-          </List>;
+          </div>;
       case 'in':
         return <Pick module='task' id={params.id} />;
       case 'use':
@@ -201,42 +158,89 @@ const Detail = (props) => {
           }}
         />;
       default:
-        return '确认';
+        return <></>;
     }
   };
 
   return <div>
     <MyNavBar title='任务详情' />
-    <div>
-      <MyFloatingPanel
-        backgroundColor
-        maxHeight={window.innerHeight - (ToolUtil.isQiyeWeixin() ? 52 : 97)}
-        backgroundDom={backgroundDom()}
-      >
-        <Tabs
-          activeKey={key}
-          style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-          onChange={(key) => {
-            switch (key) {
-              case 'out':
-                setDisabled(data.status === 99);
-                break;
-              case 'in':
-                break;
-              default:
-                break;
-            }
-            setKey(key);
-          }}
-        >
-          <Tabs.Tab title='产出明细' key='out' />
-          <Tabs.Tab title='投入明细' key='in' />
-          <Tabs.Tab title='领用明细' key='use' />
-        </Tabs>
-        <div style={{ backgroundColor: '#eee' }}>
-          {module()}
+    <div className={style.header}>
+      <Avatar className={style.avatar} src={data.createUserResult?.avatar} size={60}>
+        {(data.createUserResult?.name || '').substring(0, 1)}
+      </Avatar>
+      <div className={style.data}>
+        <div className={style.line}>
+          <div className={style.name}>
+            {shipSetpResult.shipSetpName}
+          </div>
+          <span>
+          <Icon type='icon-dian' /> {status(data.status)}
+        </span>
         </div>
-      </MyFloatingPanel>
+        <div className={style.line}>
+          <div>
+            {data.coding}
+          </div>
+          <span className={style.time}>{MyDate.Show(data.createTime)}</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <Tabs
+        activeKey={key}
+        style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
+        onChange={(key) => {
+          switch (key) {
+            case 'out':
+              setDisabled(data.status === 99);
+              break;
+            case 'in':
+              break;
+            default:
+              break;
+          }
+          setKey(key);
+        }}
+      >
+        <Tabs.Tab title='产出明细' key='out' />
+        <Tabs.Tab title='投入明细' key='in' />
+        <Tabs.Tab title='领用明细' key='use' />
+      </Tabs>
+      <div style={{ backgroundColor: '#eee' }}>
+        {module()}
+      </div>
+
+      <MyCard
+        title='执行数量'
+        extra={data.number}
+      />
+
+      <MyCard
+        title='标准作业指导'
+        extra={shipSetpResult.sopResult && shipSetpResult.sopResult.name}
+      />
+
+      <MyCard
+        title='执行时间'
+        extra={MyDate.Show(data.productionTime) + ' - ' + MyDate.Show(data.endTime)}
+      />
+
+      <MyCard
+        title='负责人'
+        extra={data.userResult && data.userResult.name}
+      />
+
+      <MyCard
+        title='成员'
+        extra={data.userResults && data.userResults.map((item) => {
+          return item.name;
+        }).join(',')}
+      />
+
+      <MyCard
+        title='备注'
+        extra={data.remark}
+      />
     </div>
 
     {bottomBotton()}
