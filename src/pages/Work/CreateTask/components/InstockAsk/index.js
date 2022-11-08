@@ -91,7 +91,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       }).join('、'),
       careful: '注意事项',
       buttonHidden: judge,
-      disabled: (judge ? false : normalSku.length === 0 || !params.theme || !params.customerId),
+      disabled: (judge ? false : normalSku.length === 0 || !params.theme || !params.customerId || !params.instockType),
     };
   };
 
@@ -142,7 +142,18 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   };
 
   const typeFormat = (type) => {
-    return '111';
+    switch (type) {
+      case 'purchase':
+        return '采购入库';
+      case 'production':
+        return '生产入库';
+      case 'productionBack':
+        return '生产退库';
+      case 'customerBack':
+        return '客户退货';
+      default:
+        return '请选择';
+    }
   };
 
   return <div style={{ marginBottom: 60 }}>
@@ -213,10 +224,10 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         setParams({ ...params, instockType: option.value });
       }}
       options={[
-        { label: '生产任务', value: 'task' },
-        { label: '生产损耗', value: 'loss' },
-        { label: '三包服务', value: 'service' },
-        { label: '备品备料', value: 'pick' },
+        { label: '采购入库', value: 'purchase' },
+        { label: '生产入库', value: 'production' },
+        { label: '生产退库', value: 'productionBack' },
+        { label: '客户退货', value: 'customerBack' },
       ]}
     />
 

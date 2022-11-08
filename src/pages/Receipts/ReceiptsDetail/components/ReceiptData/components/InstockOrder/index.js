@@ -114,6 +114,21 @@ const InstockOrder = (
     }
   };
 
+  const getInType = (type) => {
+    switch (type) {
+      case 'purchase':
+        return '采购入库';
+      case 'production':
+        return '生产入库';
+      case 'productionBack':
+        return '生产退库';
+      case 'customerBack':
+        return '客户退货';
+      default:
+        return '-';
+    }
+  };
+
   return <>
     {action()}
 
@@ -141,9 +156,8 @@ const InstockOrder = (
     />
 
     <MyCard
-      hidden={type !== ReceiptsEnums.outstockOrder}
-      title='出库类型'
-      extra={getOutType(data.type)}
+      title={type === ReceiptsEnums.outstockOrder ? '出库类型' : '入库类型'}
+      extra={type === ReceiptsEnums.outstockOrder ? getOutType(data.type) : getInType(data.instockType) }
     />
 
     <MyCard title='注意事项'>
