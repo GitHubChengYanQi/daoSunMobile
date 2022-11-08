@@ -174,7 +174,7 @@ const Detail = (props) => {
             {shipSetpResult.shipSetpName}
           </div>
           <span>
-          <Icon type='icon-dian' /> {status(data.status)}
+          <div style={{display:'flex',alignItems:'center'}}><Icon type='icon-dian' /> {status(data.status)}</div>
         </span>
         </div>
         <div className={style.line}>

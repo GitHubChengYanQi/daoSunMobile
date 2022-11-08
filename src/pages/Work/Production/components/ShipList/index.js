@@ -27,6 +27,8 @@ const ShipList = ({ data }) => {
         const productionStation = setpSetResult.productionStation || {};
         const setpSetDetails = setpSetResult.setpSetDetails || [];
 
+        const number = item.count - (item.toDoNum + item.toDoNum);
+
         return <div key={index}>
           <MyCard
             key={index}
@@ -52,7 +54,7 @@ const ShipList = ({ data }) => {
                   {item.count}
                 </div>
               </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1,color: '#f38403' }}>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
                   进行中
                 </div>
@@ -75,15 +77,19 @@ const ShipList = ({ data }) => {
             <div className={styles.buttons}>
               <LinkButton
                 onClick={() => {
-                  setVisible(setpSetDetails.map(skuItem=>({...skuItem,num:parseInt(skuItem.num) * parseInt(item.count)})));
+                  setVisible(setpSetDetails.map(skuItem => ({
+                    ...skuItem,
+                    num: parseInt(skuItem.num) * parseInt(item.count),
+                  })));
                 }}
               >
                 查看产出物料
               </LinkButton>
               <LinkButton
+                disabled={number <= 0}
                 className={styles.dispatch}
                 onClick={() => {
-                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${item.count}&shipName=${shipSetpResult.shipSetpName}`);
+                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${number}&shipName=${shipSetpResult.shipSetpName}`);
                 }}
               >
                 指派任务
