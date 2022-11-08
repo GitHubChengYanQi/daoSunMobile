@@ -16,6 +16,7 @@ import Title from '../../../../components/Title';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import MyCard from '../../../../components/MyCard';
 import { Input } from 'antd-mobile';
+import MyPicker from '../../../../components/MyPicker';
 
 const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
@@ -25,6 +26,8 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
   const [data, setData] = useState([]);
 
   const [params, setParams] = useState({});
+
+  const [typeVisible, setTypeVisible] = useState();
 
   const history = useHistory();
 
@@ -71,7 +74,12 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
 
   useEffect(() => {
-    setParams({ userId: userInfo.id, userName: userInfo.name, userAvatar: userInfo.avatar, ...defaultParams });
+    setParams({
+      type: 'task',
+      userId: userInfo.id,
+      userName: userInfo.name,
+      userAvatar: userInfo.avatar, ...defaultParams,
+    });
     dataChange(skus);
   }, []);
 
@@ -83,8 +91,23 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         item.brandName || '任意品牌',
         item?.skuResult?.spuResult?.spuClassificationResult?.name,
       ],
-      disabled: !params.userId || normalSku.length === 0 || !params.theme,
+      disabled: !params.userId || normalSku.length === 0 || !params.theme || !params.type,
     };
+  };
+
+  const typeFormat = (type) => {
+    switch (type) {
+      case 'task':
+        return '生产任务';
+      case 'loss':
+        return '生产损耗';
+      case 'service':
+        return '三包服务';
+      case 'pick':
+        return '备品备料';
+      default:
+        return '请选择';
+    }
   };
 
 
@@ -116,7 +139,11 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
           const { id, name, avatar } = users[0] || {};
           setParams({ ...params, userId: id, userName: name, userAvatar: avatar });
         }} />
-
+      <MyCard titleBom={<Title className={style.title}>出库类型 <span>*</span></Title>} extra={<div onClick={() => {
+        setTypeVisible(true);
+      }}>
+        {typeFormat(params.type)}
+      </div>} />
     </>;
   };
 
@@ -148,9 +175,26 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
             userIds: ToolUtil.isArray(params.userIds).toString(),
             userId: params.userId,
             theme: params.theme,
+            type: params.type,
           },
         });
       }}
+    />
+
+    <MyPicker
+      onClose={() => setTypeVisible(false)}
+      visible={typeVisible}
+      value={params.type}
+      onChange={(option) => {
+        setTypeVisible(false);
+        setParams({ ...params, type: option.value });
+      }}
+      options={[
+        { label: '生产任务', value: 'task' },
+        { label: '生产损耗', value: 'loss' },
+        { label: '三包服务', value: 'service' },
+        { label: '备品备料', value: 'pick' },
+      ]}
     />
 
     {
