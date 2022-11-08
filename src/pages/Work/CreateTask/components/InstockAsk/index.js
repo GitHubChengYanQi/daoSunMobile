@@ -16,6 +16,7 @@ import MyCard from '../../../../components/MyCard';
 import { Input } from 'antd-mobile';
 import Customers from '../../../ProcessTask/MyAudit/components/Customers';
 import LinkButton from '../../../../components/LinkButton';
+import MyPicker from '../../../../components/MyPicker';
 
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
@@ -28,6 +29,8 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   const [params, setParams] = useState(defaultParams || {});
 
   const [visible, setVisible] = useState(false);
+
+  const [typeVisible, setTypeVisible] = useState(false);
 
   const history = useHistory();
 
@@ -138,6 +141,10 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     />;
   };
 
+  const typeFormat = (type) => {
+    return '111';
+  };
+
   return <div style={{ marginBottom: 60 }}>
 
     <MyNavBar title={createTypeData().title} />
@@ -156,6 +163,12 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       extra={<LinkButton
         onClick={() => setVisible(true)}>{params.customerId ? params.customerName : '请选择供应商'}</LinkButton>}
     />
+
+    <MyCard titleBom={<Title className={style.title}>入库类型 <span>*</span></Title>} extra={<div onClick={() => {
+      setTypeVisible(true);
+    }}>
+      {typeFormat(params.instockType)}
+    </div>} />
 
     <OtherData
       createType={createType}
@@ -189,6 +202,22 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         setParams({ ...params, customerId: customer?.value, customerName: customer?.label });
         setVisible(false);
       }}
+    />
+
+    <MyPicker
+      onClose={() => setTypeVisible(false)}
+      visible={typeVisible}
+      value={params.instockType}
+      onChange={(option) => {
+        setTypeVisible(false);
+        setParams({ ...params, instockType: option.value });
+      }}
+      options={[
+        { label: '生产任务', value: 'task' },
+        { label: '生产损耗', value: 'loss' },
+        { label: '三包服务', value: 'service' },
+        { label: '备品备料', value: 'pick' },
+      ]}
     />
 
   </div>;
