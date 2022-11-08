@@ -66,11 +66,11 @@ const ProductionTask = () => {
   const status = (state) => {
     switch (state) {
       case 0:
-        return <Space style={{ color: '#ffa52a' }}><QuestionCircleOutline />待领取</Space>;
+        return <div style={{ color: '#ffa52a' }}>待领取</div>;
       case 98:
-        return <Space style={{ color: 'blue' }}><QuestionCircleOutline />执行中</Space>;
+        return <div style={{ color: 'blue' }}>执行中</div>;
       case 99:
-        return <Space style={{ color: 'green' }}><QuestionCircleOutline />已完成</Space>;
+        return <div style={{ color: 'green' }}>已完成</div>;
       default:
         return '';
     }
