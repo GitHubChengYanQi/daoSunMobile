@@ -33,7 +33,7 @@ const CreateTask = (props) => {
             ...data,
             productionTime: data.date && data.date[0],
             endTime: data.date && data.date[1],
-            userId: data.userId && data.userId.id,
+            userId: data.userId,
             userIdList: data.userIdList && data.userIdList.map((item) => {
               return item.id;
             }),
