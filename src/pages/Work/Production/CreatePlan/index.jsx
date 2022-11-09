@@ -36,7 +36,7 @@ const CreatePlan = () => {
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
   return <>
-    <MyNavBar title='创建生产计划' />
+    <MyNavBar title='创建计划' />
     <FormLayout
       data={data}
       loading={loading}
@@ -56,7 +56,7 @@ const CreatePlan = () => {
           success = true;
           if (complete) {
             Message.successDialog({
-              content: '创建生产计划成功！',
+              content: '创建计划成功！',
               only: true,
               onConfirm: () => history.goBack(),
             });

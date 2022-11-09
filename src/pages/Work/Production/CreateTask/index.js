@@ -21,7 +21,7 @@ const CreateTask = (props) => {
   const [data, setData] = useState({ shipName: params.shipName });
 
   return <>
-    <MyNavBar title='创建生产任务' />
+    <MyNavBar title='申请出库' />
     <FormLayout
       data={data}
       loading={loading}
@@ -42,9 +42,9 @@ const CreateTask = (props) => {
           success = true;
           if (complete) {
             Message.dialogSuccess({
-              title: '分派任务成功!',
-              leftText: '返回工单',
-              rightText: '继续分派任务',
+              title: '申请出库成功!',
+              leftText: '返回',
+              rightText: '继续申请出库',
             });
           }
         }).catch(() => {

@@ -20,7 +20,7 @@ const Production = () => {
   const ref = useRef();
 
   return <div className={styles.mainDiv}>
-    <MyNavBar title='生产计划列表' />
+    <MyNavBar title='计划列表' />
     <MySearch />
 
     <Tabs className={styles.tabs}>
