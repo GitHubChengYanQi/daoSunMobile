@@ -130,41 +130,19 @@ const CreatePlan = () => {
                       className={styles.sku}
                       skuResult={item}
                     />
-                    <div className={styles.skuInfo}>
-                      <div>
-                        数量
-                        <ShopNumber
-                          min={1}
-                          value={item.purchaseNumber || 1}
-                          onChange={(purchaseNumber) => {
-                            const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
-                              if (skuIndex === index) {
-                                return { ...skuItem, purchaseNumber };
-                              }
-                              return skuItem;
-                            });
-                            setData({ ...data, orderDetailParams });
-                          }}
-                        />
-                      </div>
-                      <div>
-                        交货期(天)
-                        <ShopNumber
-                          min={1}
-                          value={item.deliveryDate || 1}
-                          onChange={(deliveryDate) => {
-                            const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
-                              if (skuIndex === index) {
-                                return { ...skuItem, deliveryDate };
-                              }
-                              return skuItem;
-                            });
-                            setData({ ...data, orderDetailParams });
-                          }}
-                        />
-                      </div>
-
-                    </div>
+                    <ShopNumber
+                      min={1}
+                      value={item.purchaseNumber || 1}
+                      onChange={(purchaseNumber) => {
+                        const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
+                          if (skuIndex === index) {
+                            return { ...skuItem, purchaseNumber };
+                          }
+                          return skuItem;
+                        });
+                        setData({ ...data, orderDetailParams });
+                      }}
+                    />
                     <MyRemoveButton style={{ width: 30, textAlign: 'right', marginRight: -12 }} onRemove={() => {
                       const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
                       setData({ ...data, orderDetailParams });
