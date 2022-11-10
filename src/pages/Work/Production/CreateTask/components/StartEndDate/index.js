@@ -35,6 +35,7 @@ const StartEndDate = (
     minWidth,
     render,
     dataRef,
+    hidden,
   }) => {
 
   let clickRef = dataRef;
@@ -46,6 +47,7 @@ const StartEndDate = (
 
   return <>
     <div
+      hidden={hidden}
       style={{ display: 'inline-block', minWidth: minWidth || 100, textAlign: textAlign || 'right' }}
       className={className}
       onClick={() => {
