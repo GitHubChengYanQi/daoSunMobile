@@ -194,6 +194,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         { label: '生产损耗', value: 'PRODUCTION_LOSS' },
         { label: '三包服务', value: 'THREE_GUARANTEES' },
         { label: '备品备料', value: 'RESERVE_PICK' },
+        { label: '报损出库', value: 'LOSS_REPORTING' },
       ]}
     />
 
