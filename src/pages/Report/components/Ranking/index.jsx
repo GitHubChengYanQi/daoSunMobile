@@ -79,6 +79,36 @@ const Ranking = (
     getData(type);
   }, [modal, date[0], date[1]]);
 
+  const getOutType = (type) => {
+    switch (type) {
+      case 'task':
+        return '生产任务';
+      case 'loss':
+        return '生产损耗';
+      case 'service':
+        return '三包服务';
+      case 'pick':
+        return '备品备料';
+      default:
+        return '-';
+    }
+  };
+
+  const getInType = (type) => {
+    switch (type) {
+      case 'purchase':
+        return '采购入库';
+      case 'production':
+        return '生产入库';
+      case 'productionBack':
+        return '生产退库';
+      case 'customerBack':
+        return '客户退货';
+      default:
+        return '-';
+    }
+  };
+
   if (instockLogViewLoading || instockDetailBySpuClassLoading || instockViewLoading) {
     return <MyLoading skeleton />;
   }
@@ -128,8 +158,8 @@ const Ranking = (
             break;
           case 'outStockType':
           case 'TYPE':
-            leftText = '物料采购';
-            rightText = '16 类 122 件';
+            leftText = getInType(item.type);
+            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
             break;
           case 'outStockHouse':
           case 'STOREHOUSE':

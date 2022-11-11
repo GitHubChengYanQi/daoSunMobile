@@ -99,6 +99,35 @@ const InstockOrder = (
     }
   };
 
+  const getOutType = (type) => {
+    switch (type) {
+      case 'task':
+        return '生产任务';
+      case 'loss':
+        return '生产损耗';
+      case 'service':
+        return '三包服务';
+      case 'pick':
+        return '备品备料';
+      default:
+        return '-';
+    }
+  };
+
+  const getInType = (type) => {
+    switch (type) {
+      case 'purchase':
+        return '采购入库';
+      case 'production':
+        return '生产入库';
+      case 'productionBack':
+        return '生产退库';
+      case 'customerBack':
+        return '客户退货';
+      default:
+        return '-';
+    }
+  };
 
   return <>
     {action()}
@@ -124,6 +153,11 @@ const InstockOrder = (
       hidden={type !== ReceiptsEnums.outstockOrder}
       title='领料负责人'
       extra={<UserName user={data.userResult} />}
+    />
+
+    <MyCard
+      title={type === ReceiptsEnums.outstockOrder ? '出库类型' : '入库类型'}
+      extra={type === ReceiptsEnums.outstockOrder ? getOutType(data.type) : getInType(data.instockType) }
     />
 
     <MyCard title='注意事项'>
