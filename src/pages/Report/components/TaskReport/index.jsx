@@ -5,7 +5,7 @@ import Canvas from '@antv/f2-react';
 import { Chart, Interval } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';
 
-const outStockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
+const outStockoederView = { url: '/statisticalView/outStockoederView', method: 'POST' };
 
 const TaskReport = (
   {
@@ -17,7 +17,7 @@ const TaskReport = (
 
   const [type, setType] = useState('ORDER_TYPE');
 
-  const { loading: outLoading, run: outRun } = useRequest(outStockDetailView, {
+  const { loading: outLoading, run: outRun } = useRequest(outStockoederView, {
     manual: true,
     onSuccess: (res) => {
       console.log(res);
@@ -29,7 +29,7 @@ const TaskReport = (
       case 'inStock':
         break;
       case 'outStock':
-        outRun({data:{type}});
+        outRun({data:{searchType:type}});
         break;
       default:
         break;
