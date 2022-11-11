@@ -20,8 +20,8 @@ const OutStockReport = () => {
       title='申请数排行'
       modal='outAskNumber'
       buttons={[
-        { title: '任务排行', key: 'outAskNumberTask' },
-        { title: '物料排行', key: 'outAskNumberSku' },
+        { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
+        { title: '物料排行', key: 'ORDER_BY_DETAIL' },
       ]} />
     <div style={{ height: 8 }} />
     <WorkContrast module='outStock' />

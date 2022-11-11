@@ -8,10 +8,13 @@ import Icon from '../../../components/Icon';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { UserName } from '../../../components/User';
+import { getInType } from '../../../Work/CreateTask/components/InstockAsk';
 
 export const instockOrderCountViewByUser = { url: '/statisticalView/instockOrderCountViewByUser', method: 'POST' };
 export const instockDetailBySpuClass = { url: '/statisticalView/instockDetailBySpuClass', method: 'POST' };
-export const instockView = { url: '/statisticalView/instockView', method: 'POST' };
+export const instockDetailByCustomer = { url: '/statisticalView/instockDetailByCustomer', method: 'POST' };
+
+export const outStockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
 
 const Ranking = (
   {
@@ -32,7 +35,17 @@ const Ranking = (
   } = useRequest(instockOrderCountViewByUser, {
     manual: true,
     onSuccess: (res) => {
-      setList(isArray(res).sort((a, b) => (b.orderCount || b.inNumCount) - (a.orderCount || a.inNumCount)));
+      setList(isArray(res).sort((a, b) => (b.orderCount || b.inNumCount || 0) - (a.orderCount || a.inNumCount || 0)));
+    },
+  });
+
+  const {
+    loading: outStockDetailViewLoading,
+    run: outStockDetailViewrRun,
+  } = useRequest(outStockDetailView, {
+    manual: true,
+    onSuccess: (res) => {
+      setList(isArray(res).sort((a, b) => (b.outNumCount || b.orderCount || 0) - (a.outNumCount || a.orderCount || 0)));
     },
   });
 
@@ -43,17 +56,17 @@ const Ranking = (
     manual: true,
     onSuccess: (res) => {
       // console.log(res);
-      setList(isArray(res).sort((a, b) => (b.inNumCount) - (a.inNumCount)));
+      setList(isArray(res).sort((a, b) => (b.inNumCount || 0) - (a.inNumCount || 0)));
     },
   });
 
   const {
-    loading: instockViewLoading,
-    run: instockViewRun,
-  } = useRequest(instockView, {
+    loading: instockDetailByCustomerLoading,
+    run: instockDetailByCustomerRun,
+  } = useRequest(instockDetailByCustomer, {
     manual: true,
     onSuccess: (res) => {
-      setList(isArray(res).sort((a, b) => (b.logNumberCount) - (a.logNumberCount)));
+      setList(isArray(res));
     },
   });
 
@@ -65,10 +78,14 @@ const Ranking = (
         instockOrderCountViewByUserRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       case 'supply':
-        instockViewRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        instockDetailByCustomerRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       case 'inStockNumber':
         instockDetailBySpuClassRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        break;
+
+      case 'outAskNumber':
+        outStockDetailViewrRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       default:
         break;
@@ -79,37 +96,7 @@ const Ranking = (
     getData(type);
   }, [modal, date[0], date[1]]);
 
-  const getOutType = (type) => {
-    switch (type) {
-      case 'task':
-        return '生产任务';
-      case 'loss':
-        return '生产损耗';
-      case 'service':
-        return '三包服务';
-      case 'pick':
-        return '备品备料';
-      default:
-        return '-';
-    }
-  };
-
-  const getInType = (type) => {
-    switch (type) {
-      case 'purchase':
-        return '采购入库';
-      case 'production':
-        return '生产入库';
-      case 'productionBack':
-        return '生产退库';
-      case 'customerBack':
-        return '客户退货';
-      default:
-        return '-';
-    }
-  };
-
-  if (instockLogViewLoading || instockDetailBySpuClassLoading || instockViewLoading) {
+  if (instockLogViewLoading || instockDetailBySpuClassLoading || instockDetailByCustomerLoading || outStockDetailViewLoading) {
     return <MyLoading skeleton />;
   }
 
@@ -134,22 +121,20 @@ const Ranking = (
         let leftText = '';
         let rightText = '';
         switch (type) {
-          case 'outAskNumberTask':
           case 'ORDER_BY_CREATE_USER':
             leftText = <UserName user={item.userResult} />;
             rightText = `${item.orderCount || 0} 次`;
             break;
-          case 'outAskNumberSku':
           case 'ORDER_BY_DETAIL':
             leftText = <UserName user={item.userResult} />;
-            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
+            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
           case 'useClass':
           case 'useNumber':
-          case 'supplyClass':
-          case 'supplyNumber':
-            leftText = item.customerName;
-            rightText = `${item.logSkuCount || 0} 类 ${item.logNumberCount || 0} 件`;
+          case 'SKU_COUNT':
+          case 'NUM_COUNT':
+            leftText = item.customerName || '无供应商';
+            rightText = `${item.inSkuCount || 0} 类 ${item.logNumberCount || 0} 件`;
             break;
           case 'outStockClass':
           case 'SPU_CLASS':
@@ -158,13 +143,13 @@ const Ranking = (
             break;
           case 'outStockType':
           case 'TYPE':
-            leftText = getInType(item.type);
+            leftText = getInType(item.type) || '无类型';
             rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
             break;
           case 'outStockHouse':
           case 'STOREHOUSE':
-            leftText = '南坡大库';
-            rightText = '16 类 122 件';
+            leftText = item.storehouseName || '无仓库';
+            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
             break;
           case 'outStockUser':
             leftText = '张三（生产制造部-装配工）';

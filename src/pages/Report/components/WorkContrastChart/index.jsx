@@ -5,36 +5,39 @@ import styles from '../../InStockReport/index.less';
 
 const WorkContrastChart = (
     {
+      label,
       data = [],
       type,
       total,
       getData,
       setType,
       numberText,
+      numberType,
       countText,
+      countType,
     },
   ) => {
 
     return <>
       <div className={styles.workContrasChart}>
-        <div className={styles.workContrasChartLabel}>{type === 'ORDER_BY_DETAIL' ? '件' : '次'}</div>
+        <div className={styles.workContrasChartLabel}>{label}</div>
         <div className={styles.workContrastType}>
-          <div style={{paddingRight:12}}>总计 {total}</div>
+          <div style={{ paddingRight: 12 }}>总计 {total}</div>
           <div
             onClick={() => {
-              getData('ORDER_BY_CREATE_USER');
-              setType('ORDER_BY_CREATE_USER');
+              getData(countType);
+              setType(countType);
             }}
-            className={type === 'ORDER_BY_CREATE_USER' ? styles.workContrastTypeChecked : ''}
+            className={type === countType ? styles.workContrastTypeChecked : ''}
           >
             {countText}
           </div>
           <div
             onClick={() => {
-              getData('ORDER_BY_DETAIL');
-              setType('ORDER_BY_DETAIL');
+              getData(numberType);
+              setType(numberType);
             }}
-            className={type === 'ORDER_BY_DETAIL' ? styles.workContrastTypeChecked : ''}
+            className={type === numberType ? styles.workContrastTypeChecked : ''}
           >
             {numberText}
           </div>

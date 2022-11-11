@@ -81,19 +81,19 @@ const TaskReport = (
     {
       title: '已完成',
       color: '#257BDE',
-      numberText: `${complete} (${Math.round((complete / statusDescribeTotal) * 100)}%)`,
+      numberText: `${complete} (${Math.round((complete / statusDescribeTotal) * 100) || 0}%)`,
       number: complete,
     },
     {
       title: '执行中',
       color: '#FA8F2B',
-      numberText: `${ing} (${Math.round((ing / statusDescribeTotal) * 100)}%)`,
+      numberText: `${ing} (${Math.round((ing / statusDescribeTotal) * 100) || 0}%)`,
       number: ing,
     },
     {
       title: '已撤销',
       color: '#D8D8D8',
-      numberText: `${revoke} (${Math.round((revoke / statusDescribeTotal) * 100)}%)`,
+      numberText: `${revoke} (${Math.round((revoke / statusDescribeTotal) * 100) || 0}%)`,
       number: revoke,
     },
   ];

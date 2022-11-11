@@ -9,35 +9,49 @@ const errorBySpuClass = { url: '/statisticalView/errorBySpuClass', method: 'POST
 
 const InStockError = ({ date = [] }) => {
 
-  const { loading, data: list = {}, run } = useRequest(errorBySpuClass, {
+  const { loading, data: list = [], run } = useRequest(errorBySpuClass, {
     manual: true,
   });
 
-  // console.log(list);
   useEffect(() => {
     run({ data: { beginTime: date[0], endTime: date[1] } });
   }, [date[0], date[1]]);
 
+  const getTypeData = (type) => {
+    return list.find(item => item.type === type) || {};
+  };
+
+  const PURCHASE_INSTOCK_NUM = getTypeData('PURCHASE_INSTOCK').errorNumCount || 0;
+  const PRODUCTION_INSTOCK_NUM = getTypeData('PRODUCTION_INSTOCK').errorNumCount || 0;
+  const PRODUCTION_RETURN_NUM = getTypeData('PRODUCTION_RETURN').errorNumCount || 0;
+  const CUSTOMER_RETURN_NUM = getTypeData('CUSTOMER_RETURN').errorNumCount || 0;
+  const total = PURCHASE_INSTOCK_NUM + PRODUCTION_INSTOCK_NUM + PRODUCTION_RETURN_NUM + CUSTOMER_RETURN_NUM;
+
+  const PURCHASE_INSTOCK_SKU = getTypeData('PURCHASE_INSTOCK').errorSkuCount || 0;
+  const PRODUCTION_INSTOCK_SKU = getTypeData('PRODUCTION_INSTOCK').errorSkuCount || 0;
+  const PRODUCTION_RETURN_SKU = getTypeData('PRODUCTION_RETURN').errorSkuCount || 0;
+  const CUSTOMER_RETURN_SKU = getTypeData('CUSTOMER_RETURN').errorSkuCount || 0;
+  const totalSku = PURCHASE_INSTOCK_SKU + PRODUCTION_INSTOCK_SKU + PRODUCTION_RETURN_SKU + CUSTOMER_RETURN_SKU;
 
   const data = [
     {
       name: '1',
-      percent: 10,
+      percent: PURCHASE_INSTOCK_NUM,
       a: '1',
     },
     {
       name: '2',
-      percent: 20,
+      percent: PRODUCTION_INSTOCK_NUM,
       a: '1',
     },
     {
       name: '3',
-      percent: 30,
+      percent: PRODUCTION_RETURN_NUM,
       a: '1',
     },
     {
       name: '4',
-      percent: 30,
+      percent: CUSTOMER_RETURN_NUM,
       a: '1',
     },
   ];
@@ -69,29 +83,49 @@ const InStockError = ({ date = [] }) => {
       <div className={styles.inStockErrorDescribe}>
         <div>
           <span className={styles.inStockErrorTotalLabel}>总计</span>
-          <span className='numberBlue' style={{ fontSize: 16 }}>160</span>类
-          <span className='numberBlue' style={{ fontSize: 16 }}>160</span>件
+          <span className='numberBlue' style={{ fontSize: 16 }}>{totalSku}</span>类
+          <span className='numberBlue' style={{ fontSize: 16 }}>{total}</span>件
         </div>
         <div className={styles.inStockErrorChartTypes}>
           <div className={styles.inStockErrorChartType}>
             <span style={{ backgroundColor: '#257BDE' }} className={styles.dian} />
             物料采购
-            <span>120 类  88 件 (25%)</span>
+            <span>
+              {PURCHASE_INSTOCK_NUM} 类
+              &nbsp;
+              {PURCHASE_INSTOCK_SKU} 件
+              ({Math.round((PURCHASE_INSTOCK_NUM / total) * 100) || 0}%)
+            </span>
           </div>
           <div className={styles.inStockErrorChartType}>
             <span style={{ backgroundColor: '#2EAF5D' }} className={styles.dian} />
             生产完工
-            <span>120 类  88 件 (25%)</span>
+            <span>
+              {PRODUCTION_INSTOCK_NUM} 类
+              &nbsp;
+              {PRODUCTION_INSTOCK_SKU} 件
+              ({Math.round((PRODUCTION_INSTOCK_NUM / total) * 100) || 0}%)
+            </span>
           </div>
           <div className={styles.inStockErrorChartType}>
             <span style={{ backgroundColor: '#FA8F2B' }} className={styles.dian} />
             生产退料
-            <span>120 类  88 件 (25%)</span>
+            <span>
+              {PRODUCTION_RETURN_NUM} 类
+              &nbsp;
+              {PRODUCTION_RETURN_SKU} 件
+              ({Math.round((PRODUCTION_RETURN_NUM / total) * 100) || 0}%)
+            </span>
           </div>
           <div className={styles.inStockErrorChartType}>
             <span style={{ backgroundColor: '#FF3131' }} className={styles.dian} />
             客户退货
-            <span>120 类  88 件 (25%)</span>
+            <span>
+              {CUSTOMER_RETURN_NUM} 类
+              &nbsp;
+              {CUSTOMER_RETURN_SKU} 件
+              ({Math.round((CUSTOMER_RETURN_NUM / total) * 100) || 0}%)
+            </span>
           </div>
         </div>
       </div>

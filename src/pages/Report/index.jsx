@@ -8,7 +8,7 @@ import OutStockReport from './OutStockReport';
 
 const Report = () => {
 
-  const [key, setKey] = useState('inStock');
+  const [key, setKey] = useState('outStock');
 
   return <div className={style.report}>
     <MyNavBar noDom title='数据统计' />

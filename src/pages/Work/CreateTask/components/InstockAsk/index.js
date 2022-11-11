@@ -18,6 +18,21 @@ import Customers from '../../../ProcessTask/MyAudit/components/Customers';
 import LinkButton from '../../../../components/LinkButton';
 import MyPicker from '../../../../components/MyPicker';
 
+export const getInType = (type) => {
+  switch (type) {
+    case 'PURCHASE_INSTOCK':
+      return '采购入库';
+    case 'PRODUCTION_INSTOCK':
+      return '生产入库';
+    case 'PRODUCTION_RETURN':
+      return '生产退库';
+    case 'CUSTOMER_RETURN':
+      return '客户退货';
+    default:
+      return '';
+  }
+};
+
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
@@ -141,21 +156,6 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     />;
   };
 
-  const typeFormat = (type) => {
-    switch (type) {
-      case 'purchase':
-        return '采购入库';
-      case 'production':
-        return '生产入库';
-      case 'productionBack':
-        return '生产退库';
-      case 'customerBack':
-        return '客户退货';
-      default:
-        return '请选择';
-    }
-  };
-
   return <div style={{ marginBottom: 60 }}>
 
     <MyNavBar title={createTypeData().title} />
@@ -178,7 +178,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     <MyCard titleBom={<Title className={style.title}>入库类型 <span>*</span></Title>} extra={<div onClick={() => {
       setTypeVisible(true);
     }}>
-      {typeFormat(params.instockType)}
+      {getInType(params.instockType) || '请选择'}
     </div>} />
 
     <OtherData

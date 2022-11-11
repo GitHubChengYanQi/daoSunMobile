@@ -18,6 +18,23 @@ import MyCard from '../../../../components/MyCard';
 import { Input } from 'antd-mobile';
 import MyPicker from '../../../../components/MyPicker';
 
+export const getOutType = (type) => {
+  switch (type) {
+    case 'PRODUCTION_TASK':
+      return '生产任务';
+    case 'PRODUCTION_LOSS':
+      return '生产损耗';
+    case 'THREE_GUARANTEES':
+      return '三包服务';
+    case 'RESERVE_PICK':
+      return '备品备料';
+    case 'LOSS_REPORTING':
+      return '报损出库';
+    default:
+      return '';
+  }
+};
+
 const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -95,22 +112,6 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
     };
   };
 
-  const typeFormat = (type) => {
-    switch (type) {
-      case 'task':
-        return '生产任务';
-      case 'loss':
-        return '生产损耗';
-      case 'service':
-        return '三包服务';
-      case 'pick':
-        return '备品备料';
-      default:
-        return '请选择';
-    }
-  };
-
-
   const content = () => {
     return <>
       <Skus
@@ -142,7 +143,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
       <MyCard titleBom={<Title className={style.title}>出库类型 <span>*</span></Title>} extra={<div onClick={() => {
         setTypeVisible(true);
       }}>
-        {typeFormat(params.type)}
+        {getOutType(params.type) || '请选择'}
       </div>} />
     </>;
   };
