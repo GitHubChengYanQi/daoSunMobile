@@ -25,6 +25,8 @@ const ShipList = ({ data }) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
 
+        const number = (item.cardNumber || 0) - (item.toDoNum || 0);
+
         return <div key={index}>
           <MyCard
             key={index}
@@ -55,7 +57,7 @@ const ShipList = ({ data }) => {
                 disabled={number <= 0}
                 className={styles.dispatch}
                 onClick={() => {
-                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${(item.cardNumber || 0) - (item.toDoNum || 0)}&shipName=${shipSetpResult.shipSetpName}`);
+                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${number}&shipName=${shipSetpResult.shipSetpName}`);
                 }}
               >
                 申请出库
