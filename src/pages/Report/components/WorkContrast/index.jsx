@@ -46,7 +46,6 @@ const WorkContrast = (
   } = useRequest(outStockLogView, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
       let total = 0;
       setList(isArray(res).map(item => {
         total += item.orderCount || item.inNumCount || 0;

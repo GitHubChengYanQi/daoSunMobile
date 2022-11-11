@@ -8,6 +8,7 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 
 const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
+const outstockCountViewByMonth = { url: '/statisticalView/outstockCountViewByMonth', method: 'POST' };
 
 const Summary = (
   {
@@ -19,6 +20,27 @@ const Summary = (
   const [detail, setDetail] = useState({});
 
   const { loading: inStockLoading, run: inStockRun } = useRequest(inStockCountViewByMonth, {
+    manual: true,
+    onSuccess: (res) => {
+      setDetail({
+        ...res,
+        inStocksNumber: Object.keys(isObject(res?.numberByMonth)).map(item => ({
+          'month': item,
+          'number': res.numberByMonth[item],
+          'name': '已入库',
+          sort: parseInt(item.replace('-', '')),
+        })).sort((a, b) => a.sort - b.sort),
+        errorsNumber: Object.keys(isObject(res?.errorNumberByMonth)).map(item => ({
+          'month': item,
+          'number': res.errorNumberByMonth[item],
+          'name': '拒绝入库',
+          sort: parseInt(item.replace('-', '')),
+        })).sort((a, b) => a.sort - b.sort),
+      });
+    },
+  });
+
+  const { loading: outStockLoading, run: outStockRun } = useRequest(outstockCountViewByMonth, {
     manual: true,
     onSuccess: (res) => {
       setDetail({
