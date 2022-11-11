@@ -1,22 +1,60 @@
-import React, { useState } from 'react';
-import { classNames } from '../../../components/ToolUtil';
+import React, { useEffect, useState } from 'react';
+import { classNames, isArray } from '../../../components/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import WorkContrastChart from '../WorkContrastChart';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+import { instockOrderCountViewByUser } from '../Ranking';
+import { RightOutline } from 'antd-mobile-icons';
 
 const WorkContrast = (
   {
     module,
+    date = [],
   },
 ) => {
 
-  const [type, setType] = useState('total');
+  const [type, setType] = useState('ORDER_BY_CREATE_USER');
 
-  const data = [
-    { genre: '张三', sold: 275 },
-    { genre: '李四', sold: 115 },
-    { genre: '王二麻子', sold: 120 },
-    { genre: '小淘气', sold: 350 },
-  ];
+  const [total, setTotal] = useState(0);
+
+  const [list, setList] = useState([]);
+
+  const {
+    loading: instockLogViewLoading,
+    run: instockOrderCountViewByUserRun,
+  } = useRequest(instockOrderCountViewByUser, {
+    manual: true,
+    onSuccess: (res) => {
+      let total = 0;
+      setList(isArray(res).map(item => {
+        total += item.orderCount || item.inNumCount || 0;
+        return {
+          userName: item.userResult?.name,
+          number: item.orderCount || item.inNumCount || 0,
+        };
+      }));
+      setTotal(total);
+    },
+  });
+
+  const getData = (searchType) => {
+    switch (module) {
+      case 'inStock':
+        instockOrderCountViewByUserRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    getData(type);
+  }, [module, date[0], date[1]]);
+
+  if (instockLogViewLoading) {
+    return <MyLoading skeleton />;
+  }
 
 
   let countText = '';
@@ -39,22 +77,17 @@ const WorkContrast = (
   return <div className={classNames(styles.card, styles.workContrast)}>
     <div className={styles.workContrastHeader}>
       <div className={styles.workContrastHeaderLabel}>工作量对比</div>
-      <div className={styles.workContrastType}>
-        <div
-          onClick={() => setType('total')}
-          className={type === 'total' ? styles.workContrastTypeChecked : ''}
-        >
-          {countText}
-        </div>
-        <div
-          onClick={() => setType('number')}
-          className={type === 'number' ? styles.workContrastTypeChecked : ''}
-        >
-          {numberText}
-        </div>
-      </div>
+      <RightOutline />
     </div>
-    <WorkContrastChart data={data} />
+    <WorkContrastChart
+      getData={getData}
+      countText={countText}
+      numberText={numberText}
+      setType={setType}
+      data={list}
+      type={type}
+      total={total}
+    />
   </div>;
 };
 

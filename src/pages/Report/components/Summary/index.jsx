@@ -1,9 +1,13 @@
-import React from 'react';
-import { classNames, isArray, ToolUtil } from '../../../components/ToolUtil';
+import React, { useEffect, useState } from 'react';
+import { classNames, isArray, isObject, ToolUtil } from '../../../components/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import Canvas from '@antv/f2-react';
 import { Axis, Chart, Interval, Line, TextGuide, Tooltip } from '@antv/f2';
+import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
+
+const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
 
 const Summary = (
   {
@@ -12,37 +16,63 @@ const Summary = (
   },
 ) => {
 
+  const [detail, setDetail] = useState({});
+
+  const { loading: inStockLoading, run: inStockRun } = useRequest(inStockCountViewByMonth, {
+    manual: true,
+    onSuccess: (res) => {
+      setDetail({
+        ...res,
+        inStocksNumber: Object.keys(isObject(res?.numberByMonth)).map(item => ({
+          'month': item,
+          'number': res.numberByMonth[item],
+          'name': '已入库',
+          sort: parseInt(item.replace('-', '')),
+        })).sort((a, b) => a.sort - b.sort),
+        errorsNumber: Object.keys(isObject(res?.errorNumberByMonth)).map(item => ({
+          'month': item,
+          'number': res.errorNumberByMonth[item],
+          'name': '拒绝入库',
+          sort: parseInt(item.replace('-', '')),
+        })).sort((a, b) => a.sort - b.sort),
+      });
+    },
+  });
+
+  useEffect(() => {
+    switch (module) {
+      case 'inStock':
+        inStockRun({ data: {} });
+        break;
+      default:
+        break;
+    }
+  }, []);
+
   const data1 = new Array(12).fill('').map((item, index) => ({
     'month': '2022/' + (index + 1),
     'number': parseInt(Math.random() * 10),
     'name': '1',
   }));
 
-  const data2 = new Array(12).fill('').map((item, index) => ({
-    'month': '2022/' + (index + 1),
-    'number': parseInt(Math.random() * 10),
-    'name': '2',
-  }));
-
   let title = '';
   let describe = <></>;
   let charData = [];
   let report = <></>;
-
   switch (module) {
     case 'inStock':
-      charData = [...data1, ...data2];
+      charData = [...isArray(detail.inStocksNumber), ...isArray(detail.errorsNumber)];
       title = '物料入库汇总';
       describe = <div>
         <div className={styles.summaryTotalLabel}>
           <span>已入库</span>
-          <span><span className='numberBlue'>216</span>类</span>
-          <span><span className='numberBlue'>10324</span>件</span>
+          <span><span className='numberBlue'>{detail.inSkuCount}</span>类</span>
+          <span><span className='numberBlue'>{detail.inNumCount}</span>件</span>
         </div>
         <div className={styles.summaryTotalLabel}>
           <span>拒绝入库</span>
-          <span><span className='numberRed'>216</span>类</span>
-          <span><span className='numberRed'>10324</span>件</span>
+          <span><span className='numberRed'>{detail.errorSkuCount}</span>类</span>
+          <span><span className='numberRed'>{detail.errorNumCount}</span>件</span>
         </div>
       </div>;
       report = <div className={styles.summaryAllCount}>
@@ -51,8 +81,8 @@ const Summary = (
             已入库
           </div>
           <div className={styles.summaryCountNumber}>
-            <span className='numberBlue' style={{ paddingLeft: 0 }}>216</span>类
-            <span className='numberBlue'>216</span>件
+            <span className='numberBlue' style={{ paddingLeft: 0 }}>{detail.inSkuCount}</span>类
+            <span className='numberBlue'>{detail.inNumCount}</span>件
           </div>
         </div>
         <div className={styles.summarySpace} />
@@ -61,8 +91,8 @@ const Summary = (
             拒绝入库
           </div>
           <div className={styles.summaryCountNumber}>
-            <span className='numberRed' style={{ paddingLeft: 0 }}>216</span>类
-            <span className='numberRed'>216</span>件
+            <span className='numberRed' style={{ paddingLeft: 0 }}>{detail.errorSkuCount}</span>类
+            <span className='numberRed'>{detail.errorNumCount}</span>件
           </div>
         </div>
       </div>;
@@ -95,6 +125,10 @@ const Summary = (
       break;
   }
 
+  if (inStockLoading) {
+    return <MyLoading skeleton />;
+  }
+
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
@@ -113,14 +147,15 @@ const Summary = (
         {describe}
       </div>
 
-      <Canvas pixelRatio={window.devicePixelRatio} height={120}>
+      <Canvas pixelRatio={window.devicePixelRatio} height={140}>
         <Chart data={ToolUtil.isArray(charData)}>
           <Axis
             field='month'
             tickCount={12}
             style={{
               label: {
-                rotate: -0.7,
+                align: 'end',
+                rotate: -0.5,
               },
             }}
           />

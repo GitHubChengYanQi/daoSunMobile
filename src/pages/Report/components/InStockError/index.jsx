@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styles from '../../InStockReport/index.less';
 import { classNames } from '../../../components/ToolUtil';
 import { Chart, Interval } from '@antv/f2';
 import Canvas from '@antv/f2-react';
+import { useRequest } from '../../../../util/Request';
 
-const InStockError = () => {
+const errorBySpuClass = { url: '/statisticalView/errorBySpuClass', method: 'POST' };
+
+const InStockError = ({ date = [] }) => {
+
+  const { loading, data: list = {}, run } = useRequest(errorBySpuClass, {
+    manual: true,
+  });
+
+  // console.log(list);
+  useEffect(() => {
+    run({ data: { beginTime: date[0], endTime: date[1] } });
+  }, [date[0], date[1]]);
+
 
   const data = [
     {

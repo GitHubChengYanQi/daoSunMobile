@@ -7,6 +7,7 @@ import SupplyReport from '../components/SupplyReport';
 import Ranking from '../components/Ranking';
 import Summary from '../components/Summary';
 import InStockError from '../components/InStockError';
+import { isArray } from '../../components/ToolUtil';
 
 const InStockReport = () => {
 
@@ -15,19 +16,21 @@ const InStockReport = () => {
   return <>
     <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
     <div style={{ height: 8 }} />
-    <TaskReport module='inStock' size={140} gap={10} />
+    <TaskReport module='inStock' size={140} gap={10} date={isArray(searchParams.time)} />
     <div className={styles.space} />
     <Ranking
+      date={isArray(searchParams.time)}
       title='申请数排行'
       modal='inAskNumber'
       buttons={[
-        { title: '任务排行', key: 'inAskNumberTask' },
-        { title: '物料排行', key: 'inAskNumberSku' },
-      ]} />
+        { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
+        { title: '物料排行', key: 'ORDER_BY_DETAIL' },
+      ]}
+    />
     <div style={{ height: 8 }} />
     <WorkContrast module='inStock' />
     <div style={{ height: 8 }} />
-    <SupplyReport />
+    <SupplyReport date={searchParams.time} />
     <div className={styles.space} />
     <Ranking
       title='供应量排行'
@@ -43,12 +46,12 @@ const InStockReport = () => {
       title='入库数量排行'
       modal='inStockNumber'
       buttons={[
-        { title: '分类排行', key: 'inStockClass' },
-        { title: '类型排行', key: 'inStockType' },
-        { title: '仓库排行', key: 'inStockHouse' },
+        { title: '分类排行', key: 'SPU_CLASS' },
+        { title: '类型排行', key: 'TYPE' },
+        { title: '仓库排行', key: 'STOREHOUSE' },
       ]} />
     <div style={{ height: 8 }} />
-    <InStockError />
+    <InStockError date={searchParams.time} />
   </>;
 };
 

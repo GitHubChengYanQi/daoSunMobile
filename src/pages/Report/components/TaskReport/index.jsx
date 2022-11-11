@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../InStockReport/index.less';
-import { classNames } from '../../../components/ToolUtil';
+import { classNames, isArray } from '../../../components/ToolUtil';
 import Canvas from '@antv/f2-react';
-import { Chart, Interval } from '@antv/f2';
+import { Chart, Interval, Tooltip } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';
+import { MyLoading } from '../../../components/MyLoading';
 
-const outStockoederView = { url: '/statisticalView/outStockoederView', method: 'POST' };
+const outStockOrderView = { url: '/statisticalView/outStockOrderView', method: 'POST' };
+const inStockOrderView = { url: '/statisticalView/instockOrderView', method: 'POST' };
 
 const TaskReport = (
   {
     size,
     module,
     gap,
+    date = [],
   },
 ) => {
 
@@ -19,84 +22,114 @@ const TaskReport = (
 
   const [typeTotal, setTypeTotal] = useState([]);
 
-  const currentTotal = (type) => {
+  const currentTotal = (type, noTypes) => {
+    if (noTypes) {
+      let number = 0;
+      typeTotal.forEach(item => {
+        if (!noTypes.includes(item.type)) {
+          number += item.number;
+        }
+      });
+      return number || 0;
+    }
     const currentTotal = typeTotal.find(item => item.type === type) || {};
     return currentTotal.number || 0;
   };
 
-  const { loading: outLoading, run: outRun } = useRequest(outStockoederView, {
+  const { loading: outLoading, run: outRun } = useRequest(outStockOrderView, {
     manual: true,
     onSuccess: (res) => {
-      setTypeTotal(isArray(res).map(item => ({ type: item.type, number: item.orderCount })));
+      const newTypeTotal = isArray(res).map(item => ({ type: item.type || item.status, number: item.orderCount }));
+      setTypeTotal(newTypeTotal);
     },
   });
 
-  useEffect(() => {
+  const { loading: inLoading, run: inRun } = useRequest(inStockOrderView, {
+    manual: true,
+    onSuccess: (res) => {
+      const newTypeTotal = isArray(res).map(item => ({ type: item.type || item.status, number: item.orderCount }));
+      setTypeTotal(newTypeTotal);
+    },
+  });
+
+  const getData = (searchType) => {
     switch (module) {
       case 'inStock':
+        inRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       case 'outStock':
-        outRun({ data: { searchType: type } });
+        outRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       default:
         break;
     }
-  }, [module]);
+  };
 
-  const data = type === 'ORDER_TYPE' ? [
+  useEffect(() => {
+    getData(type);
+  }, [module, date[0], date[1]]);
+
+  let typeDescribe = [];
+  let typeDescribeTotal = 0;
+
+  const complete = currentTotal(99);
+  const ing = currentTotal(0) + currentTotal(null, [0, 49, 50, 99]);
+  const revoke = currentTotal(49);
+  const statusDescribeTotal = complete + ing + revoke;
+
+  const statusDescribe = [
     {
-      'name': '1',
-      'number': 4002,
-      'typeNum': 12,
+      title: '已完成',
+      color: '#257BDE',
+      numberText: `${complete} (${Math.round((complete / statusDescribeTotal) * 100)}%)`,
+      number: complete,
     },
     {
-      'name': '2',
-      'number': 1012,
-      'typeNum': 8,
+      title: '执行中',
+      color: '#FA8F2B',
+      numberText: `${ing} (${Math.round((ing / statusDescribeTotal) * 100)}%)`,
+      number: ing,
     },
     {
-      'name': '3',
-      'number': 1012,
-      'typeNum': 8,
-    },
-    {
-      'name': '4',
-      'number': 1012,
-      'typeNum': 8,
-    },
-  ] : [
-    {
-      'name': '1',
-      'number': 4002,
-      'typeNum': 12,
-    },
-    {
-      'name': '2',
-      'number': 1012,
-      'typeNum': 8,
-    },
-    {
-      'name': '3',
-      'number': 1012,
-      'typeNum': 8,
+      title: '已撤销',
+      color: '#D8D8D8',
+      numberText: `${revoke} (${Math.round((revoke / statusDescribeTotal) * 100)}%)`,
+      number: revoke,
     },
   ];
 
-  let typeDescribe = [];
-  let statusDescribe = [];
-
   switch (module) {
     case 'inStock':
+      const PURCHASE_INSTOCK = currentTotal('PURCHASE_INSTOCK');
+      const PRODUCTION_INSTOCK = currentTotal('PRODUCTION_INSTOCK');
+      const PRODUCTION_RETURN = currentTotal('PRODUCTION_RETURN');
+      const CUSTOMER_RETURN = currentTotal('CUSTOMER_RETURN');
+      typeDescribeTotal = PURCHASE_INSTOCK + PRODUCTION_INSTOCK + PRODUCTION_RETURN + CUSTOMER_RETURN;
       typeDescribe = [
-        { title: '物料采购', color: '#257BDE', number: '120 (25%)' },
-        { title: '生产完工', color: '#2EAF5D', number: '120 (25%)' },
-        { title: '生产退料', color: '#FA8F2B', number: '120 (25%)' },
-        { title: '客户退货', color: '#FF3131', number: '120 (25%)' },
-      ];
-      statusDescribe = [
-        { title: '已完成', color: '#257BDE', number: '120 (25%)' },
-        { title: '执行中', color: '#FA8F2B', number: '120 (25%)' },
-        { title: '已撤销', color: '#D8D8D8', number: '120 (25%)' },
+        {
+          title: '物料采购',
+          color: '#257BDE',
+          numberText: `${PURCHASE_INSTOCK} (${Math.round((PURCHASE_INSTOCK / typeDescribeTotal) * 100) || 0}%)`,
+          number: PURCHASE_INSTOCK,
+        },
+        {
+          title: '生产完工',
+          color: '#2EAF5D',
+          numberText: `${PRODUCTION_INSTOCK} (${Math.round((PRODUCTION_INSTOCK / typeDescribeTotal) * 100) || 0}%)`,
+          number: PRODUCTION_INSTOCK,
+        },
+        {
+          title: '生产退料',
+          color: '#FA8F2B',
+          numberText: `${PRODUCTION_RETURN} (${Math.round((PRODUCTION_RETURN / typeDescribeTotal) * 100) || 0}%)`,
+          number: PRODUCTION_RETURN,
+        },
+        {
+          title: '客户退货',
+          color: '#FF3131',
+          numberText: `${CUSTOMER_RETURN} (${Math.round((CUSTOMER_RETURN / typeDescribeTotal) * 100) || 0}%)`,
+          number: CUSTOMER_RETURN,
+        },
       ];
       break;
     case 'outStock':
@@ -105,21 +138,52 @@ const TaskReport = (
       const THREE_GUARANTEES = currentTotal('THREE_GUARANTEES');
       const LOSS_REPORTING = currentTotal('LOSS_REPORTING');
       const RESERVE_PICK = currentTotal('RESERVE_PICK');
+      typeDescribeTotal = PRODUCTION_TASK + PRODUCTION_LOSS + THREE_GUARANTEES + LOSS_REPORTING + RESERVE_PICK;
       typeDescribe = [
-        { title: '生产任务', color: '#257BDE', number: `${PRODUCTION_TASK} (25%)` },
-        { title: '三包服务', color: '#D8D8D8', number: `${THREE_GUARANTEES} (25%)` },
-        { title: '备品备件', color: '#2EAF5D', number: `${RESERVE_PICK} (25%)` },
-        { title: '生产损耗', color: '#FA8F2B', number: `${PRODUCTION_LOSS} (25%)` },
-        { title: '报损出库', color: '#FF3131', number: `${LOSS_REPORTING} (25%)` },
-      ];
-      statusDescribe = [
-        { title: '已完成', color: '#257BDE', number: '120 (25%)' },
-        { title: '执行中', color: '#FA8F2B', number: '120 (25%)' },
-        { title: '已撤销', color: '#D8D8D8', number: '120 (25%)' },
+        {
+          title: '生产任务',
+          color: '#257BDE',
+          numberText: `${PRODUCTION_TASK} (${Math.round((PRODUCTION_TASK / typeDescribeTotal) * 100) || 0}%)`,
+          number: PRODUCTION_TASK,
+        },
+        {
+          title: '三包服务',
+          color: '#D8D8D8',
+          numberText: `${THREE_GUARANTEES} (${Math.round((THREE_GUARANTEES / typeDescribeTotal) * 100) || 0}%)`,
+          number: THREE_GUARANTEES,
+        },
+        {
+          title: '备品备件',
+          color: '#2EAF5D',
+          numberText: `${RESERVE_PICK} (${Math.round((RESERVE_PICK / typeDescribeTotal) * 100) || 0}%)`,
+          number: RESERVE_PICK,
+        },
+        {
+          title: '生产损耗',
+          color: '#FA8F2B',
+          numberText: `${PRODUCTION_LOSS} (${Math.round((PRODUCTION_LOSS / typeDescribeTotal) * 100) || 0}%)`,
+          number: PRODUCTION_LOSS,
+        },
+        {
+          title: '报损出库',
+          color: '#FF3131',
+          numberText: `${LOSS_REPORTING} (${Math.round((LOSS_REPORTING / typeDescribeTotal) * 100) || 0}%)`,
+          number: LOSS_REPORTING,
+        },
       ];
       break;
     default:
       break;
+  }
+
+  const data = type === 'ORDER_TYPE' ? typeDescribe : statusDescribe;
+
+  let total = 0;
+
+  data.forEach(item => total += item.number);
+
+  if (outLoading || inLoading) {
+    return <MyLoading skeleton />;
   }
 
   return <div className={classNames(styles.card, styles.taskReport)}>
@@ -127,13 +191,19 @@ const TaskReport = (
       <div className={styles.taskReportLabel}>任务统计</div>
       <div className={styles.taskReportType}>
         <div
-          onClick={() => setType('ORDER_TYPE')}
+          onClick={() => {
+            getData('ORDER_TYPE');
+            setType('ORDER_TYPE');
+          }}
           className={type === 'ORDER_TYPE' ? styles.taskReportTypeChecked : ''}
         >
           类型
         </div>
         <div
-          onClick={() => setType('ORDER_STATUS')}
+          onClick={() => {
+            getData('ORDER_STATUS');
+            setType('ORDER_STATUS');
+          }}
           className={type === 'ORDER_STATUS' ? styles.taskReportTypeChecked : ''}
         >
           状态
@@ -158,8 +228,8 @@ const TaskReport = (
               y='number'
               adjust='stack'
               color={{
-                field: 'name',
-                range: type === 'ORDER_TYPE' ? ['#257BDE', '#2EAF5D', '#FA8F2B', '#FF3131'] : ['#257BDE', '#FA8F2B', '#D8D8D8'],
+                field: 'title',
+                range: data.map(item => item.color),
               }}
             />
           </Chart>
@@ -168,7 +238,7 @@ const TaskReport = (
       <div className={styles.taskReportDescribe}>
         <div>
           <span className={styles.taskReportTotalLabel}>总计</span>
-          <span className='numberBlue' style={{ fontSize: 16 }}>160</span>
+          <span className='numberBlue' style={{ fontSize: 16 }}>{total}</span>
         </div>
         <div className={styles.taskRepoetChartTypes} style={{ gap }}>
           {
@@ -176,7 +246,7 @@ const TaskReport = (
               return <div className={styles.taskRepoetChartType} key={index}>
                 <span style={{ backgroundColor: item.color }} className={styles.dian} />
                 {item.title}
-                <span>{item.number}</span>
+                <span>{item.numberText}</span>
               </div>;
             })
           }

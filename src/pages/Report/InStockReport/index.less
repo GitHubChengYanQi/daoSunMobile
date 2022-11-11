@@ -149,9 +149,9 @@
 
 .workContrast {
   .workContrastHeader {
-    padding: 12px 12px 0;
+    padding: 12px;
     display: flex;
-    //align-items: center;
+    align-items: center;
     border-bottom: 1px solid #F5F5F5;
 
     .workContrastHeaderLabel {
@@ -159,20 +159,31 @@
       font-weight: bold;
       font-size: 16px;
     }
+  }
+
+  .workContrasChart {
+    font-size: 12px;
+    padding: 0 12px 0 24px;
+    margin-top: 8px;
+    display: flex;
+
+    .workContrasChartLabel {
+      flex-grow: 1;
+    }
 
     .workContrastType {
       display: flex;
       align-items: center;
       gap: 8px;
 
-      div {
-        padding: 0 8px 10px;
+      > div {
+        padding: 0 4px 2px;
       }
 
       .workContrastTypeChecked {
-        padding-bottom: 8px;
+        padding-bottom: 1px;
         color: var(--adm-color-primary);
-        border-bottom: solid 2px var(--adm-color-primary);
+        border-bottom: solid 1px var(--adm-color-primary);
       }
     }
   }
@@ -225,6 +236,7 @@
 .summary {
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+  padding-bottom: 8px;
 
   .summaryHeader {
     padding: 12px;
@@ -243,7 +255,7 @@
     margin-top: 12px;
     display: flex;
     align-items: flex-end;
-    padding: 0 24px;
+    padding: 0 12px 0 40px;
     font-size: 12px;
 
     .summaryTotalUnit {
@@ -258,7 +270,6 @@
       }
     }
   }
-
   .summaryAllCount {
     display: flex;
     align-items: center;
