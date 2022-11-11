@@ -37,7 +37,7 @@ const ShipList = ({ data }) => {
             <div className={styles.bodyCard}>
               <Space direction='vertical' align='center' style={{ flexGrow: 1 }}>
                 <div>
-                  任务总数
+                  计划总数
                 </div>
                 <div>
                   {item.cardNumber}
