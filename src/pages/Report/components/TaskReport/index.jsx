@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../InStockReport/index.less';
 import { classNames } from '../../../components/ToolUtil';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval } from '@antv/f2';
+import { useRequest } from '../../../../util/Request';
+
+const outStockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
 
 const TaskReport = (
   {
@@ -12,9 +15,28 @@ const TaskReport = (
   },
 ) => {
 
-  const [type, setType] = useState('type');
+  const [type, setType] = useState('ORDER_TYPE');
 
-  const data = type === 'type' ? [
+  const { loading: outLoading, run: outRun } = useRequest(outStockDetailView, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res);
+    },
+  });
+
+  useEffect(() => {
+    switch (module) {
+      case 'inStock':
+        break;
+      case 'outStock':
+        outRun({data:{type}});
+        break;
+      default:
+        break;
+    }
+  }, [module]);
+
+  const data = type === 'ORDER_TYPE' ? [
     {
       'name': '1',
       'number': 4002,
@@ -93,14 +115,14 @@ const TaskReport = (
       <div className={styles.taskReportLabel}>任务统计</div>
       <div className={styles.taskReportType}>
         <div
-          onClick={() => setType('type')}
-          className={type === 'type' ? styles.taskReportTypeChecked : ''}
+          onClick={() => setType('ORDER_TYPE')}
+          className={type === 'ORDER_TYPE' ? styles.taskReportTypeChecked : ''}
         >
           类型
         </div>
         <div
-          onClick={() => setType('status')}
-          className={type === 'status' ? styles.taskReportTypeChecked : ''}
+          onClick={() => setType('ORDER_STATUS')}
+          className={type === 'ORDER_STATUS' ? styles.taskReportTypeChecked : ''}
         >
           状态
         </div>
@@ -125,7 +147,7 @@ const TaskReport = (
               adjust='stack'
               color={{
                 field: 'name',
-                range: type === 'type' ? ['#257BDE', '#2EAF5D', '#FA8F2B', '#FF3131'] : ['#257BDE', '#FA8F2B', '#D8D8D8'],
+                range: type === 'ORDER_TYPE' ? ['#257BDE', '#2EAF5D', '#FA8F2B', '#FF3131'] : ['#257BDE', '#FA8F2B', '#D8D8D8'],
               }}
             />
           </Chart>
@@ -136,9 +158,9 @@ const TaskReport = (
           <span className={styles.taskReportTotalLabel}>总计</span>
           <span className='numberBlue' style={{ fontSize: 16 }}>160</span>
         </div>
-        <div className={styles.taskRepoetChartTypes} style={{gap}}>
+        <div className={styles.taskRepoetChartTypes} style={{ gap }}>
           {
-            (type === 'type' ? typeDescribe : statusDescribe).map((item, index) => {
+            (type === 'ORDER_TYPE' ? typeDescribe : statusDescribe).map((item, index) => {
               return <div className={styles.taskRepoetChartType} key={index}>
                 <span style={{ backgroundColor: item.color }} className={styles.dian} />
                 {item.title}

@@ -12,11 +12,10 @@ const WorkContrast = (
   const [type, setType] = useState('total');
 
   const data = [
-    { genre: 'Sports', sold: 275 },
-    { genre: 'Strategy', sold: 115 },
-    { genre: 'Action', sold: 120 },
-    { genre: 'Shooter', sold: 350 },
-    { genre: 'Other', sold: 150 },
+    { genre: '张三', sold: 275 },
+    { genre: '李四', sold: 115 },
+    { genre: '王二麻子', sold: 120 },
+    { genre: '小淘气', sold: 350 },
   ];
 
 

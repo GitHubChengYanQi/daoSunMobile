@@ -8,7 +8,6 @@ import Ranking from '../components/Ranking';
 import Summary from '../components/Summary';
 import InStockError from '../components/InStockError';
 
-
 const InStockReport = () => {
 
   const [searchParams, setSearchParams] = useState({});
