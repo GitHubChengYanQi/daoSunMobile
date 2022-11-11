@@ -224,10 +224,10 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         setParams({ ...params, instockType: option.value });
       }}
       options={[
-        { label: '采购入库', value: 'purchase' },
-        { label: '生产入库', value: 'production' },
-        { label: '生产退库', value: 'productionBack' },
-        { label: '客户退货', value: 'customerBack' },
+        { label: '采购入库', value: 'PURCHASE_INSTOCK' },
+        { label: '生产入库', value: 'PRODUCTION_INSTOCK' },
+        { label: '生产退库', value: 'PRODUCTION_RETURN' },
+        { label: '客户退货', value: 'CUSTOMER_RETURN' },
       ]}
     />
 

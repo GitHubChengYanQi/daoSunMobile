@@ -190,10 +190,10 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         setParams({ ...params, type: option.value });
       }}
       options={[
-        { label: '生产任务', value: 'task' },
-        { label: '生产损耗', value: 'loss' },
-        { label: '三包服务', value: 'service' },
-        { label: '备品备料', value: 'pick' },
+        { label: '生产任务', value: 'PRODUCTION_TASK' },
+        { label: '生产损耗', value: 'PRODUCTION_LOSS' },
+        { label: '三包服务', value: 'THREE_GUARANTEES' },
+        { label: '备品备料', value: 'RESERVE_PICK' },
       ]}
     />
 
