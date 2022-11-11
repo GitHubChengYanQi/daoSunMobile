@@ -17,10 +17,17 @@ const TaskReport = (
 
   const [type, setType] = useState('ORDER_TYPE');
 
+  const [typeTotal, setTypeTotal] = useState([]);
+
+  const currentTotal = (type) => {
+    const currentTotal = typeTotal.find(item => item.type === type) || {};
+    return currentTotal.number || 0;
+  };
+
   const { loading: outLoading, run: outRun } = useRequest(outStockoederView, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
+      setTypeTotal(isArray(res).map(item => ({ type: item.type, number: item.orderCount })));
     },
   });
 
@@ -29,7 +36,7 @@ const TaskReport = (
       case 'inStock':
         break;
       case 'outStock':
-        outRun({data:{searchType:type}});
+        outRun({ data: { searchType: type } });
         break;
       default:
         break;
@@ -93,12 +100,17 @@ const TaskReport = (
       ];
       break;
     case 'outStock':
+      const PRODUCTION_TASK = currentTotal('PRODUCTION_TASK');
+      const PRODUCTION_LOSS = currentTotal('PRODUCTION_LOSS');
+      const THREE_GUARANTEES = currentTotal('THREE_GUARANTEES');
+      const LOSS_REPORTING = currentTotal('LOSS_REPORTING');
+      const RESERVE_PICK = currentTotal('RESERVE_PICK');
       typeDescribe = [
-        { title: '生产任务', color: '#257BDE', number: '120 (25%)' },
-        { title: '三包服务', color: '#D8D8D8', number: '120 (25%)' },
-        { title: '备品备件', color: '#2EAF5D', number: '120 (25%)' },
-        { title: '生产损耗', color: '#FA8F2B', number: '120 (25%)' },
-        { title: '报损出库', color: '#FF3131', number: '120 (25%)' },
+        { title: '生产任务', color: '#257BDE', number: `${PRODUCTION_TASK} (25%)` },
+        { title: '三包服务', color: '#D8D8D8', number: `${THREE_GUARANTEES} (25%)` },
+        { title: '备品备件', color: '#2EAF5D', number: `${RESERVE_PICK} (25%)` },
+        { title: '生产损耗', color: '#FA8F2B', number: `${PRODUCTION_LOSS} (25%)` },
+        { title: '报损出库', color: '#FF3131', number: `${LOSS_REPORTING} (25%)` },
       ];
       statusDescribe = [
         { title: '已完成', color: '#257BDE', number: '120 (25%)' },
