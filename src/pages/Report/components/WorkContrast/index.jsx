@@ -16,7 +16,33 @@ const WorkContrast = (
   },
 ) => {
 
-  const [type, setType] = useState('ORDER_BY_CREATE_USER');
+
+  let countText = '';
+  let numberText = '';
+  let countType = '';
+  let numberType = '';
+  let label = '';
+
+  switch (module) {
+    case 'inStock':
+      countText = '入库次数';
+      countType = 'ORDER_BY_CREATE_USER';
+      numberText = '入库数量';
+      numberType = 'ORDER_BY_DETAIL';
+      label = type === 'ORDER_BY_DETAIL' ? '件' : '次'
+      break;
+    case 'outStock':
+      countText = '出库次数';
+      countType = 'ORDER_LOG';
+      numberText = '出库数量';
+      numberType = 'ORDER_LOG_DETAIL';
+      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次'
+      break;
+    default:
+      break;
+  }
+
+  const [type, setType] = useState(countType);
 
   const [total, setTotal] = useState(0);
 
@@ -48,10 +74,10 @@ const WorkContrast = (
     onSuccess: (res) => {
       let total = 0;
       setList(isArray(res).map(item => {
-        total += item.orderCount || item.inNumCount || 0;
+        total += item.orderCount || item.outNumCount || 0;
         return {
           userName: item.userResult?.name,
-          number: item.orderCount || item.inNumCount || 0,
+          number: item.orderCount || item.outNumCount || 0,
         };
       }));
       setTotal(total);
@@ -77,32 +103,6 @@ const WorkContrast = (
 
   if (instockLogViewLoading || outStockLogViewLoading) {
     return <MyLoading skeleton />;
-  }
-
-
-  let countText = '';
-  let numberText = '';
-  let countType = '';
-  let numberType = '';
-  let label = '';
-
-  switch (module) {
-    case 'inStock':
-      countText = '入库次数';
-      countType = 'ORDER_BY_CREATE_USER';
-      numberText = '入库数量';
-      numberType = 'ORDER_BY_DETAIL';
-      label = type === 'ORDER_BY_DETAIL' ? '件' : '次'
-      break;
-    case 'outStock':
-      countText = '出库次数';
-      countType = 'ORDER_LOG';
-      numberText = '出库数量';
-      numberType = 'ORDER_LOG_DETAIL';
-      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次'
-      break;
-    default:
-      break;
   }
 
 
