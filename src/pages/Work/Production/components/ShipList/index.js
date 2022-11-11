@@ -24,10 +24,6 @@ const ShipList = ({ data }) => {
       data.map((item, index) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
-        const productionStation = setpSetResult.productionStation || {};
-        const setpSetDetails = setpSetResult.setpSetDetails || [];
-
-        const number = item.count - (item.toDoNum + item.toDoNum);
 
         return <div key={index}>
           <MyCard
@@ -59,7 +55,7 @@ const ShipList = ({ data }) => {
                 disabled={number <= 0}
                 className={styles.dispatch}
                 onClick={() => {
-                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${number}&shipName=${shipSetpResult.shipSetpName}`);
+                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${(item.cardNumber || 0) - (item.toDoNum || 0)}&shipName=${shipSetpResult.shipSetpName}`);
                 }}
               >
                 申请出库
