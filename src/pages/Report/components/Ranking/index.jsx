@@ -36,6 +36,7 @@ const Ranking = (
   const history = useHistory();
 
   const [list, setList] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const {
     loading: instockLogViewLoading,
@@ -51,8 +52,10 @@ const Ranking = (
     loading: outStockDetailViewLoading,
     run: outStockDetailViewrRun,
   } = useRequest(outStockDetailView, {
+    response: true,
     manual: true,
     onSuccess: (res) => {
+      console.log(res);
       setList(isArray(res).sort((a, b) => (b.outNumCount || b.orderCount || 0) - (a.outNumCount || a.orderCount || 0)));
     },
   });
@@ -149,7 +152,7 @@ const Ranking = (
       <div onClick={() => {
         history.push({
           pathname: '/Report/ReportDetail',
-          search:`type=${modal}`,
+          search: `type=${modal}`,
         });
       }}>
         <span hidden={!askNumber}>共 <span className='numberBlue'>{list.length}</span>人 </span>

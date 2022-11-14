@@ -2,7 +2,8 @@ import React, { useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MySearch from '../../components/MySearch';
 import style from '../../Work/ProcessTask/index.less';
-import { Tabs } from 'antd-mobile';
+import styles from './index.less';
+import { Button, Space, Tabs } from 'antd-mobile';
 import moment from 'moment';
 import { classNames, isObject } from '../../components/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
@@ -10,6 +11,8 @@ import MyNavBar from '../../components/MyNavBar';
 import StartEndDate from '../../Work/Production/CreateTask/components/StartEndDate';
 import CheckUser from '../../components/CheckUser';
 import SkuClass from '../../Work/ProcessTask/MyAudit/components/SkuClass';
+import MyRadio from '../../components/MyRadio';
+import OutAsk from './components/OutAsk';
 
 const ReportDetail = () => {
 
@@ -29,6 +32,9 @@ const ReportDetail = () => {
 
   const [screen, setScreen] = useState({});
 
+  const [checkAll, setCheckAll] = useState(false);
+  const [currentAll, setCurrentAll] = useState(false);
+
   const submit = (data = {}, reset) => {
     const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
     setParams(newParmas);
@@ -37,6 +43,7 @@ const ReportDetail = () => {
 
   let title = '';
   let tabs = [];
+  let content = <></>;
 
   switch (query.type) {
     case 'outAskNumber':
@@ -59,6 +66,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      content = <OutAsk />;
       break;
   }
 
@@ -68,7 +76,7 @@ const ReportDetail = () => {
     <MyNavBar title={title} />
     <MySearch placeholder='搜索' />
     <div className={style.space} />
-    <div hidden={tabs.length <= 1} className={style.tabs}>
+    <div hidden={tabs.length <= 1} className={styles.tabs}>
       <Tabs onChange={(key) => {
         const tabItem = tabs.find(item => item.key === key);
         setScreens(tabItem.screens);
@@ -83,7 +91,10 @@ const ReportDetail = () => {
       </Tabs>
     </div>
 
-    <div className={style.screent}>
+    <div
+      style={{ borderBottom: ' 1px solid var(--body--background--color)' }}
+      className={style.screent}
+    >
       <div className={style.dropDown}>
         {
           screens.map((item) => {
@@ -129,6 +140,25 @@ const ReportDetail = () => {
           })
         }
       </div>
+    </div>
+    {content}
+    <div className={styles.bottomAction}>
+      <Space className={styles.radio}>
+        <MyRadio checked={currentAll} onChange={() => {
+          setCheckAll(false);
+          setCurrentAll(true);
+        }}>本页全选</MyRadio>
+        <MyRadio checked={checkAll} onChange={() => {
+          setCurrentAll(false);
+          setCheckAll(true);
+        }}>全部全选</MyRadio>
+      </Space>
+
+      <Button color='primary' onClick={() => {
+        // exportRun({ data: { beginTime: date[0], endTime: date[1] } });
+      }}>
+        导出
+      </Button>
     </div>
 
     <StartEndDate
