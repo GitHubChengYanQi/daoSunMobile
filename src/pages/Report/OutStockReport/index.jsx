@@ -19,6 +19,7 @@ const OutStockReport = () => {
     <Ranking
       title='申请数排行'
       modal='outAskNumber'
+      askNumber
       buttons={[
         { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
         { title: '物料排行', key: 'ORDER_BY_DETAIL' },
@@ -32,20 +33,21 @@ const OutStockReport = () => {
       title='出库数量排行'
       modal='outStockNumber'
       buttons={[
-        { title: '分类排行', key: 'outStockClass' },
-        { title: '类型排行', key: 'outStockType' },
-        { title: '仓库排行', key: 'outStockHouse' },
-        { title: '领料人排行', key: 'outStockUser' },
+        { title: '分类排行', key: 'SPU_CLASS' },
+        { title: '类型排行', key: 'TYPE' },
+        { title: '仓库排行', key: 'STOREHOUSE' },
+        { title: '领料人排行', key: 'PICK_USER' },
       ]} />
     <div style={{ height: 8 }} />
     <Ranking
       noIcon
       fontSize={16}
       title='使用量排行'
+      useNumber
       modal='useNumber'
       buttons={[
-        { title: '种类排行', key: 'useClass' },
-        { title: '数量排行', key: 'useNumber' },
+        { title: '种类排行', key: 'SKU_COUNT' },
+        { title: '数量排行', key: 'NUM_COUNT' },
       ]} />
   </>;
 };

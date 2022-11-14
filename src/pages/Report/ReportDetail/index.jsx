@@ -1,0 +1,175 @@
+import React, { useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import MySearch from '../../components/MySearch';
+import style from '../../Work/ProcessTask/index.less';
+import { Tabs } from 'antd-mobile';
+import moment from 'moment';
+import { classNames, isObject } from '../../components/ToolUtil';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
+import MyNavBar from '../../components/MyNavBar';
+import StartEndDate from '../../Work/Production/CreateTask/components/StartEndDate';
+import CheckUser from '../../components/CheckUser';
+import SkuClass from '../../Work/ProcessTask/MyAudit/components/SkuClass';
+
+const ReportDetail = () => {
+
+  const { query = {} } = useLocation();
+
+  const userRef = useRef();
+  const createUserRef = useRef();
+  const dataRef = useRef();
+
+  const defaultParams = {};
+
+  const [params, setParams] = useState(defaultParams);
+
+  const [key, setKey] = useState();
+
+  const [screenKey, setScreenkey] = useState();
+
+  const [screen, setScreen] = useState({});
+
+  const submit = (data = {}, reset) => {
+    const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
+    setParams(newParmas);
+    // listRef.current.submit(newParmas, { ...sort, ...newSort });
+  };
+
+  let title = '';
+  let tabs = [];
+
+  switch (query.type) {
+    case 'outAskNumber':
+      title = '出库申请排行';
+      tabs = [
+        {
+          title: '任务次数',
+          key: 'taskNumber',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '领料人', key: 'pickUserId' },
+          ],
+        },
+        {
+          title: '物料数量',
+          key: 'skuNumber',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'skuClass' },
+          ],
+        },
+      ];
+      break;
+  }
+
+  const [screens, setScreens] = useState(tabs[0].screens);
+
+  return <>
+    <MyNavBar title={title} />
+    <MySearch placeholder='搜索' />
+    <div className={style.space} />
+    <div hidden={tabs.length <= 1} className={style.tabs}>
+      <Tabs onChange={(key) => {
+        const tabItem = tabs.find(item => item.key === key);
+        setScreens(tabItem.screens);
+        setKey(key);
+        submit({ searchType: key }, true);
+      }} activeKey={key}>
+        {
+          tabs.map(item => {
+            return <Tabs.Tab {...item} />;
+          })
+        }
+      </Tabs>
+    </div>
+
+    <div className={style.screent}>
+      <div className={style.dropDown}>
+        {
+          screens.map((item) => {
+            let title = '';
+            switch (item.key) {
+              case 'pickUserId':
+                title = screen.userName;
+                break;
+              case 'createTime':
+                title = params.beginTime ? moment(params.beginTime).format('MM/DD') + '-' + moment(params.endTime).format('MM/DD') : '';
+                break;
+              case 'customerId':
+                title = screen.customerName;
+                break;
+              case 'skuClass':
+                title = screen.skuClassName;
+                break;
+            }
+            const check = title || screenKey === item.key;
+            return <div
+              style={{ width: `${parseInt(100 / screens.length)}%` }}
+              className={classNames(style.titleBox, check && style.checked)}
+              key={item.key}
+              onClick={() => {
+                switch (item.key) {
+                  case 'createUser':
+                    createUserRef.current.open();
+                    break;
+                  case 'pickUserId':
+                    userRef.current.open();
+                    break;
+                  case 'createTime':
+                    dataRef.current.open();
+                    break;
+                  default:
+                    break;
+                }
+                setScreenkey(item.key);
+              }}>
+              <div className={style.title} style={{ minWidth: '80%', textAlign: 'center' }}>{title || item.title}</div>
+              {screenKey === item.key ? <UpOutline /> : <DownOutline />}
+            </div>;
+          })
+        }
+      </div>
+    </div>
+
+    <StartEndDate
+      render
+      onClose={() => setScreenkey('')}
+      precision='day'
+      minWidth='100%'
+      textAlign='left'
+      value={params.beginTime ? [params.beginTime, params.endTime] : []}
+      max={new Date()}
+      onChange={(creatTime) => {
+        submit({ beginTime: creatTime[0], endTime: creatTime[1] });
+        setScreenkey('');
+      }}
+      dataRef={dataRef}
+    />
+
+    <CheckUser
+      zIndex={1002}
+      ref={userRef}
+      onClose={() => setScreenkey('')}
+      value={params.pickUserId ? [{ id: params.pickUserId }] : []}
+      onChange={(users) => {
+        submit({ pickUserId: isObject(users[0]).id });
+        setScreen({ ...screen, userName: isObject(users[0]).name });
+        setScreenkey('');
+      }}
+    />
+
+    <SkuClass
+      onClose={() => setScreenkey('')}
+      zIndex={1002}
+      value={params.skuClassId}
+      visible={screenKey === 'skuClass'}
+      onChange={(skuClass = []) => {
+        submit({ skuClassId: skuClass[0]?.value });
+        setScreen({ ...screen, skuClassName: skuClass[0]?.label });
+        setScreenkey('');
+      }}
+    />
+  </>;
+};
+
+export default ReportDetail;

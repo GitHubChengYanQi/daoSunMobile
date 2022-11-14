@@ -19,6 +19,7 @@ const InStockReport = () => {
     <TaskReport module='inStock' size={140} gap={10} date={isArray(searchParams.time)} />
     <div className={styles.space} />
     <Ranking
+      askNumber
       date={isArray(searchParams.time)}
       title='申请数排行'
       modal='inAskNumber'
@@ -33,6 +34,7 @@ const InStockReport = () => {
     <SupplyReport date={searchParams.time} />
     <div className={styles.space} />
     <Ranking
+      useNumber
       title='供应量排行'
       modal='supply'
       buttons={[

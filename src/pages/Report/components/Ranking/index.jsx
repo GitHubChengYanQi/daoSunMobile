@@ -9,12 +9,16 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { UserName } from '../../../components/User';
 import { getInType } from '../../../Work/CreateTask/components/InstockAsk';
+import { getOutType } from '../../../Work/CreateTask/components/OutstockAsk';
+import { useHistory } from 'react-router-dom';
 
 export const instockOrderCountViewByUser = { url: '/statisticalView/instockOrderCountViewByUser', method: 'POST' };
 export const instockDetailBySpuClass = { url: '/statisticalView/instockDetailBySpuClass', method: 'POST' };
 export const instockDetailByCustomer = { url: '/statisticalView/instockDetailByCustomer', method: 'POST' };
 
 export const outStockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
+export const outStockDetailBySpuClass = { url: '/statisticalView/outStockDetailBySpuClass', method: 'POST' };
+export const outstockDetailByCustomer = { url: '/statisticalView/outstockDetailByCustomer', method: 'POST' };
 
 const Ranking = (
   {
@@ -24,8 +28,12 @@ const Ranking = (
     modal,
     buttons = [],
     noIcon,
+    askNumber,
+    useNumber,
   },
 ) => {
+
+  const history = useHistory();
 
   const [list, setList] = useState([]);
 
@@ -55,7 +63,6 @@ const Ranking = (
   } = useRequest(instockDetailBySpuClass, {
     manual: true,
     onSuccess: (res) => {
-      // console.log(res);
       setList(isArray(res).sort((a, b) => (b.inNumCount || 0) - (a.inNumCount || 0)));
     },
   });
@@ -67,6 +74,26 @@ const Ranking = (
     manual: true,
     onSuccess: (res) => {
       setList(isArray(res));
+    },
+  });
+
+  const {
+    loading: outStockDetailBySpuClassLoading,
+    run: outStockDetailBySpuClassRun,
+  } = useRequest(outStockDetailBySpuClass, {
+    manual: true,
+    onSuccess: (res) => {
+      setList(isArray(res).sort((a, b) => (b.outNumCount || 0) - (a.outNumCount || 0)));
+    },
+  });
+
+  const {
+    loading: outstockDetailByCustomerLoading,
+    run: outstockDetailByCustomerRun,
+  } = useRequest(outstockDetailByCustomer, {
+    manual: true,
+    onSuccess: (res) => {
+      setList(isArray(res).sort((a, b) => (b.outNumCount || 0) - (a.outNumCount || 0)));
     },
   });
 
@@ -87,6 +114,12 @@ const Ranking = (
       case 'outAskNumber':
         outStockDetailViewrRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
+      case 'outStockNumber':
+        outStockDetailBySpuClassRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        break;
+      case 'useNumber':
+        outstockDetailByCustomerRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        break;
       default:
         break;
     }
@@ -96,7 +129,14 @@ const Ranking = (
     getData(type);
   }, [modal, date[0], date[1]]);
 
-  if (instockLogViewLoading || instockDetailBySpuClassLoading || instockDetailByCustomerLoading || outStockDetailViewLoading) {
+  if (
+    instockLogViewLoading ||
+    instockDetailBySpuClassLoading ||
+    instockDetailByCustomerLoading ||
+    outStockDetailViewLoading ||
+    outStockDetailBySpuClassLoading ||
+    outstockDetailByCustomerLoading
+  ) {
     return <MyLoading skeleton />;
   }
 
@@ -106,9 +146,14 @@ const Ranking = (
         <Icon hidden={noIcon} type='icon-rukuzongshu' />
         {title}
       </div>
-      <div>
-        <span hidden={modal !== 'inAskNumber'}>共 <span className='numberBlue'>{list.length}</span>人 </span>
-        <span hidden={modal !== 'useNumber'}>共 <span className='numberBlue'>108</span>家 </span>
+      <div onClick={() => {
+        history.push({
+          pathname: '/Report/ReportDetail',
+          search:`type=${modal}`,
+        });
+      }}>
+        <span hidden={!askNumber}>共 <span className='numberBlue'>{list.length}</span>人 </span>
+        <span hidden={!useNumber}>共 <span className='numberBlue'>108</span>家 </span>
         <RightOutline />
       </div>
     </div>
@@ -125,35 +170,27 @@ const Ranking = (
             leftText = <UserName user={item.userResult} />;
             rightText = `${item.orderCount || 0} 次`;
             break;
+          case 'PICK_USER':
           case 'ORDER_BY_DETAIL':
             leftText = <UserName user={item.userResult} />;
             rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
-          case 'useClass':
-          case 'useNumber':
           case 'SKU_COUNT':
           case 'NUM_COUNT':
             leftText = item.customerName || '无供应商';
-            rightText = `${item.inSkuCount || 0} 类 ${item.logNumberCount || 0} 件`;
+            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
-          case 'outStockClass':
           case 'SPU_CLASS':
-            leftText = item.spuClassName;
-            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
+            leftText = item.spuClassName || '无分类';
+            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
-          case 'outStockType':
           case 'TYPE':
-            leftText = getInType(item.type) || '无类型';
-            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
+            leftText = getInType(item.type) || getOutType(item.type) || '无类型';
+            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
-          case 'outStockHouse':
           case 'STOREHOUSE':
             leftText = item.storehouseName || '无仓库';
-            rightText = `${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`;
-            break;
-          case 'outStockUser':
-            leftText = '张三（生产制造部-装配工）';
-            rightText = '16 类 122 件';
+            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
           default:
             break;

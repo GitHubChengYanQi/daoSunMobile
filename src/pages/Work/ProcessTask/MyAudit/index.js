@@ -1,5 +1,5 @@
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
-import { classNames, isArray, isObject, ToolUtil } from '../../../components/ToolUtil';
+import { classNames, isObject } from '../../../components/ToolUtil';
 import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
 import style from '../index.less';
@@ -83,7 +83,7 @@ const MyAudit = (
 
   const screens = screenDatas.map(item => item);
 
-  if (!noType){
+  if (!noType) {
     switch (params.type) {
       case ReceiptsEnums.instockOrder:
         screens.push({ title: '供应商', key: 'customerId' });
