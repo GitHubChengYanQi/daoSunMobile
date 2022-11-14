@@ -55,8 +55,8 @@ const Ranking = (
     response: true,
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
-      setList(isArray(res).sort((a, b) => (b.outNumCount || b.orderCount || 0) - (a.outNumCount || a.orderCount || 0)));
+      setTotal(res.count);
+      setList(isArray(res.data));
     },
   });
 
@@ -155,8 +155,8 @@ const Ranking = (
           search: `type=${modal}`,
         });
       }}>
-        <span hidden={!askNumber}>共 <span className='numberBlue'>{list.length}</span>人 </span>
-        <span hidden={!useNumber}>共 <span className='numberBlue'>108</span>家 </span>
+        <span hidden={!askNumber}>共 <span className='numberBlue'>{total}</span>人 </span>
+        <span hidden={!useNumber}>共 <span className='numberBlue'>{total}</span>家 </span>
         <RightOutline />
       </div>
     </div>

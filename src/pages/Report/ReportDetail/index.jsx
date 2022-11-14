@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import MySearch from '../../components/MySearch';
 import style from '../../Work/ProcessTask/index.less';
@@ -22,6 +22,8 @@ const ReportDetail = () => {
   const createUserRef = useRef();
   const dataRef = useRef();
 
+  const listRef = useRef();
+
   const defaultParams = {};
 
   const [params, setParams] = useState(defaultParams);
@@ -37,8 +39,11 @@ const ReportDetail = () => {
 
   const submit = (data = {}, reset) => {
     const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
+    if (reset){
+      setScreen({});
+    }
     setParams(newParmas);
-    // listRef.current.submit(newParmas, { ...sort, ...newSort });
+    listRef.current.submit(newParmas);
   };
 
   let title = '';
@@ -51,7 +56,7 @@ const ReportDetail = () => {
       tabs = [
         {
           title: '任务次数',
-          key: 'taskNumber',
+          key: 'ORDER_BY_CREATE_USER',
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '领料人', key: 'pickUserId' },
@@ -59,18 +64,22 @@ const ReportDetail = () => {
         },
         {
           title: '物料数量',
-          key: 'skuNumber',
+          key: 'ORDER_BY_DETAIL',
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '物料分类', key: 'skuClass' },
           ],
         },
       ];
-      content = <OutAsk />;
+      content = <OutAsk listRef={listRef} params={params} />;
       break;
   }
 
   const [screens, setScreens] = useState(tabs[0].screens);
+
+  useEffect(() => {
+    submit({ searchType: tabs[0].key });
+  }, []);
 
   return <>
     <MyNavBar title={title} />

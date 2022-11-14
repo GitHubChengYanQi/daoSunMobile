@@ -27,6 +27,17 @@ const OutStockReport = () => {
     <div style={{ height: 8 }} />
     <WorkContrast module='outStock' />
     <div style={{ height: 8 }} />
+    <Ranking
+      noIcon
+      fontSize={16}
+      title='使用量排行'
+      useNumber
+      modal='useNumber'
+      buttons={[
+        { title: '种类排行', key: 'SKU_COUNT' },
+        { title: '数量排行', key: 'NUM_COUNT' },
+      ]} />
+    <div style={{ height: 8 }} />
     <Summary date={searchParams.time} module='outStock' />
     <div className={styles.space} />
     <Ranking
@@ -37,17 +48,6 @@ const OutStockReport = () => {
         { title: '类型排行', key: 'TYPE' },
         { title: '仓库排行', key: 'STOREHOUSE' },
         { title: '领料人排行', key: 'PICK_USER' },
-      ]} />
-    <div style={{ height: 8 }} />
-    <Ranking
-      noIcon
-      fontSize={16}
-      title='使用量排行'
-      useNumber
-      modal='useNumber'
-      buttons={[
-        { title: '种类排行', key: 'SKU_COUNT' },
-        { title: '数量排行', key: 'NUM_COUNT' },
       ]} />
   </>;
 };

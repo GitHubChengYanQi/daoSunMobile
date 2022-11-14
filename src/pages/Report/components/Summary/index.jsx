@@ -43,7 +43,6 @@ const Summary = (
   const { loading: outStockLoading, run: outStockRun } = useRequest(outstockCountViewByMonth, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
       setDetail({
         ...res,
         inStocksNumber: Object.keys(isObject(res?.numberByMonth)).map(item => ({
