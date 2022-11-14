@@ -18,6 +18,8 @@ import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import MyRemoveButton from '../../../components/MyRemoveButton';
 import { useHistory } from 'react-router-dom';
+import LinkButton from '../../../components/LinkButton';
+import { AddOutline } from 'antd-mobile-icons';
 
 export const createProductionPlan = {
   url: '/productionPlan/add',
@@ -34,6 +36,8 @@ const CreatePlan = () => {
   const [visible, setVisible] = useState(false);
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
+
+  const [] = useState([]);
 
   return <>
     <MyNavBar title='创建计划' />
@@ -120,43 +124,57 @@ const CreatePlan = () => {
             />;
             break;
           case 'orderDetailParams':
-            content = <>
+            return <>
               {
-                isArray(data.orderDetailParams).map((item, index) => {
-                  return <div key={index} className={styles.skuItem}>
-                    <SkuItem
-                      noView
-                      extraWidth='200px'
-                      className={styles.sku}
-                      skuResult={item}
-                    />
-                    <ShopNumber
-                      min={1}
-                      value={item.purchaseNumber || 1}
-                      onChange={(purchaseNumber) => {
-                        const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
-                          if (skuIndex === index) {
-                            return { ...skuItem, purchaseNumber };
-                          }
-                          return skuItem;
-                        });
-                        setData({ ...data, orderDetailParams });
-                      }}
-                    />
-                    <MyRemoveButton style={{ width: 30, textAlign: 'right', marginRight: -12 }} onRemove={() => {
-                      const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
-                      setData({ ...data, orderDetailParams });
-                    }} />
-                  </div>;
+                [1, 2].map((itemm, index) => {
+                  return <MyCard
+                    key={index}
+                    titleBom={required && <Title className={styles.title}>{item.filedName}<span>*</span></Title>}
+                    title={`合同${index + 1}`}
+                  >
+                    {
+                      isArray(data.orderDetailParams).map((item, index) => {
+                        return <div key={index} className={styles.skuItem}>
+                          <SkuItem
+                            noView
+                            extraWidth='200px'
+                            className={styles.sku}
+                            skuResult={item}
+                          />
+                          <ShopNumber
+                            min={1}
+                            value={item.purchaseNumber || 1}
+                            onChange={(purchaseNumber) => {
+                              const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
+                                if (skuIndex === index) {
+                                  return { ...skuItem, purchaseNumber };
+                                }
+                                return skuItem;
+                              });
+                              setData({ ...data, orderDetailParams });
+                            }}
+                          />
+                          <MyRemoveButton style={{ width: 30, textAlign: 'right', marginRight: -12 }} onRemove={() => {
+                            const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
+                            setData({ ...data, orderDetailParams });
+                          }} />
+                        </div>;
+                      })
+                    }
+                    <Divider style={{ margin: 0 }}>
+                      <AddButton onClick={() => {
+                        setVisible({});
+                      }} />
+                    </Divider>
+                  </MyCard>;
                 })
               }
-              <Divider style={{ margin: 0 }}>
-                <AddButton onClick={() => {
+              <Divider>
+                <LinkButton onClick={() => {
                   setVisible({});
-                }} />
+                }}><AddOutline />增加合同</LinkButton>
               </Divider>
             </>;
-            break;
           default:
             break;
         }
