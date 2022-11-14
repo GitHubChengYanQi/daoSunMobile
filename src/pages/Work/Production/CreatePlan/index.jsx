@@ -20,6 +20,7 @@ import MyRemoveButton from '../../../components/MyRemoveButton';
 import { useHistory } from 'react-router-dom';
 import LinkButton from '../../../components/LinkButton';
 import { AddOutline } from 'antd-mobile-icons';
+import CheckSpu from '../../Sku/CheckSpu';
 
 export const createProductionPlan = {
   url: '/productionPlan/add',
@@ -37,7 +38,17 @@ const CreatePlan = () => {
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
-  const [] = useState([]);
+  const [contracts, setContracts] = useState([]);
+
+  const contractsChange = (data = {}, key) => {
+    const newContracts = contracts.map((item, index) => {
+      if (index === key) {
+        return { ...item, ...data };
+      }
+      return item;
+    });
+    setContracts(newContracts);
+  };
 
   return <>
     <MyNavBar title='创建计划' />
@@ -126,52 +137,58 @@ const CreatePlan = () => {
           case 'orderDetailParams':
             return <>
               {
-                [1, 2].map((itemm, index) => {
+                contracts.map((item, index) => {
                   return <MyCard
                     key={index}
-                    titleBom={required && <Title className={styles.title}>{item.filedName}<span>*</span></Title>}
-                    title={`合同${index + 1}`}
+                    title={<Space align='center'>
+                      <span>合同{index + 1}</span>
+                      编码：<Input placeholder='请输入合同编码' onChange={(value) => contractsChange({ coding: value }, index)} />
+                    </Space>}
                   >
-                    {
-                      isArray(data.orderDetailParams).map((item, index) => {
-                        return <div key={index} className={styles.skuItem}>
-                          <SkuItem
-                            noView
-                            extraWidth='200px'
-                            className={styles.sku}
-                            skuResult={item}
-                          />
-                          <ShopNumber
-                            min={1}
-                            value={item.purchaseNumber || 1}
-                            onChange={(purchaseNumber) => {
-                              const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
-                                if (skuIndex === index) {
-                                  return { ...skuItem, purchaseNumber };
-                                }
-                                return skuItem;
-                              });
-                              setData({ ...data, orderDetailParams });
-                            }}
-                          />
-                          <MyRemoveButton style={{ width: 30, textAlign: 'right', marginRight: -12 }} onRemove={() => {
-                            const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
-                            setData({ ...data, orderDetailParams });
-                          }} />
-                        </div>;
-                      })
-                    }
-                    <Divider style={{ margin: 0 }}>
-                      <AddButton onClick={() => {
-                        setVisible({});
-                      }} />
-                    </Divider>
+                    {item.coding && <div>
+                      {
+                        isArray(data.orderDetailParams).map((item, index) => {
+                          return <div key={index} className={styles.skuItem}>
+                            <SkuItem
+                              noView
+                              extraWidth='200px'
+                              className={styles.sku}
+                              skuResult={item}
+                            />
+                            <ShopNumber
+                              min={1}
+                              value={item.purchaseNumber || 1}
+                              onChange={(purchaseNumber) => {
+                                const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
+                                  if (skuIndex === index) {
+                                    return { ...skuItem, purchaseNumber };
+                                  }
+                                  return skuItem;
+                                });
+                                setData({ ...data, orderDetailParams });
+                              }}
+                            />
+                            <MyRemoveButton
+                              style={{ width: 30, textAlign: 'right', marginRight: -12 }}
+                              onRemove={() => {
+                                const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
+                                setData({ ...data, orderDetailParams });
+                              }} />
+                          </div>;
+                        })
+                      }
+                      <Divider>
+                        <LinkButton onClick={() => {
+                          setVisible({});
+                        }}><AddOutline />增加产品</LinkButton>
+                      </Divider>
+                    </div>}
                   </MyCard>;
                 })
               }
               <Divider>
                 <LinkButton onClick={() => {
-                  setVisible({});
+                  setContracts([...contracts, {}]);
                 }}><AddOutline />增加合同</LinkButton>
               </Divider>
             </>;
@@ -189,14 +206,8 @@ const CreatePlan = () => {
     />
 
 
-    <MyAntPopup position='right' onClose={() => setVisible(false)} visible={visible} title='选择物料'>
-      <CheckSkus
-        value={data.orderDetailParams || []}
-        onChange={(skus = []) => {
-          setData({ ...data, orderDetailParams: skus });
-          setVisible(false);
-        }}
-      />
+    <MyAntPopup onClose={() => setVisible(false)} visible={visible} title='选择物料'>
+      <CheckSpu />
     </MyAntPopup>
   </>;
 };
