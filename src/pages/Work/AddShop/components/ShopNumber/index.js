@@ -13,22 +13,24 @@ const ShopNumber = (
     min = 1,
     max = 999999999,
     className,
+    number,
+    placeholder,
   },
 ) => {
 
   const [visible, setVisible] = useState();
 
   return <>
-    <div style={{backgroundColor:!show && "#fff"}} className={ToolUtil.classNames(style.shopNumber)}>
+    <div style={{ backgroundColor: !show && '#fff' }} className={ToolUtil.classNames(style.shopNumber)}>
       <div
-        className={ToolUtil.classNames(style.number,className)}
+        className={ToolUtil.classNames(style.number, className)}
         style={{ border: show && 'none', padding: show && 0, textAlign }}
         onClick={() => {
           if (!show) {
             setVisible(true);
           }
         }}>
-        × {value}
+        {!number ? <>× {value}</> : (value || <span style={{color:'#cccccc'}}>{placeholder}</span>)}
       </div>
     </div>
 
