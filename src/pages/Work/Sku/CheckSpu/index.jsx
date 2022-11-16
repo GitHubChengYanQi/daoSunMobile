@@ -140,6 +140,16 @@ const CheckSpu = (
       setCheckConfig(check);
       newCheckConfig = check;
       change(newConfigList[0].id);
+    } else if (newConfigList.length > 0) {
+      const sku = newConfigList.find(item => {
+        if (Object.keys(item).length - 1 !== newCheckConfig.length) {
+          return false;
+        }
+        return newCheckConfig.find(checkedItem => {
+          return item[`s${checkedItem.k}`] === checkedItem.v;
+        });
+      });
+      change(sku?.id);
     } else {
       change(null);
     }
