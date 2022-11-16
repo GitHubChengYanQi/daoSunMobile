@@ -55,6 +55,7 @@ const Note = (
       </div>
       <div className={style.comments}>
         <MyTextArea
+          getContainer={document.body}
           maxLength={50}
           className={style.textarea}
           value={note}
