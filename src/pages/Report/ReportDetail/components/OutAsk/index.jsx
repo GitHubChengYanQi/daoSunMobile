@@ -6,6 +6,8 @@ import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
 import { DownOutline, RightOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
+import SkuItem from '../../../../Work/Sku/SkuItem';
+import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 
 const OutAsk = (
   {
@@ -23,6 +25,8 @@ const OutAsk = (
 
       const open = openList.find(item => item === index) !== undefined;
 
+      const skuAndNumbers = isArray(item.skuAndNumbers);
+
       return <div key={index} className={styles.listItem}>
         <div className={styles.header}>
           <MyCheck fontSize={17} />
@@ -37,6 +41,16 @@ const OutAsk = (
           <div onClick={() => {
             setOpenList(open ? openList.filter(item => item !== index) : [...openList, index]);
           }}>{open ? <DownOutline /> : <RightOutline />}</div>
+        </div>
+        <div className={styles.content} hidden={!open}>
+          {
+            skuAndNumbers.map((item, index) => {
+              return <div key={index} className={styles.skuItem}>
+                <SkuItem skuResult={item.skuResult} className={styles.sku} extraWidth='124px' />
+                <ShopNumber show value={item.number} />
+              </div>;
+            })
+          }
         </div>
         <div className={styles.space} />
       </div>;

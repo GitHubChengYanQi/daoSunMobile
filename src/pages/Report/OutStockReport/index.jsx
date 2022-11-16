@@ -23,7 +23,8 @@ const OutStockReport = () => {
       buttons={[
         { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
         { title: '物料排行', key: 'ORDER_BY_DETAIL' },
-      ]} />
+      ]}
+    />
     <div style={{ height: 8 }} />
     <WorkContrast module='outStock' />
     <div style={{ height: 8 }} />
@@ -48,7 +49,8 @@ const OutStockReport = () => {
         { title: '类型排行', key: 'TYPE' },
         { title: '仓库排行', key: 'STOREHOUSE' },
         { title: '领料人排行', key: 'PICK_USER' },
-      ]} />
+      ]}
+    />
   </>;
 };
 
