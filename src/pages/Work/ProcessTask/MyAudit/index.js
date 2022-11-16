@@ -326,11 +326,11 @@ const MyAudit = (
     <Customers
       onClose={() => setScreenkey('')}
       zIndex={1002}
-      value={params.customerId}
+      value={params.customerId ? [{ customerId: params.customerId, customerName: screen.customerName }] : []}
       visible={screenKey === 'customerId'}
       onChange={(customer) => {
-        submit({ customerId: customer?.value });
-        setScreen({ ...screen, customerName: customer?.label });
+        submit({ customerId: customer?.customerId });
+        setScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
     />

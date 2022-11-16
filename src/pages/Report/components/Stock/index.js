@@ -23,7 +23,7 @@ const Stock = (
   const { loading, data: stockData } = useRequest(stockCensus);
 
   const data = ToolUtil.isArray(stockData).filter(item => !['skuNumber', 'stockCount'].includes(item.name));
-  console.log(data);
+
   if (loading) {
     return <MyLoading skeleton />;
   }

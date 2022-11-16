@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import { Selector } from 'antd-mobile';
+import React, { useEffect, useState } from 'react';
+import { CheckList, Selector } from 'antd-mobile';
 import MyAntPopup from '../../../../../components/MyAntPopup';
 import LinkButton from '../../../../../components/LinkButton';
-import { isObject, ToolUtil } from '../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../components/ToolUtil';
 import { useRequest } from '../../../../../../util/Request';
 import { supplyList } from '../../../../Sku/SkuList/components/SkuScreen/components/Url';
 import MySearch from '../../../../../components/MySearch';
 import { MyLoading } from '../../../../../components/MyLoading';
 import style from '../../../../Sku/SkuList/components/SkuScreen/index.less';
 import { SelectorStyle } from '../../../../../Report/InOutStock';
+import MyEmpty from '../../../../../components/MyEmpty';
 
 const Customers = (
   {
     zIndex,
     visible,
-    value,
+    value = [],
+    multiple,
     onClose = () => {
     },
     onChange = () => {
@@ -26,7 +28,7 @@ const Customers = (
 
   const [searchValue, setSearchValue] = useState();
 
-  const [customers, setCustomers] = useState(value ? [{ value }] : []);
+  const [customers, setCustomers] = useState([]);
 
   const { loading, run } = useRequest(supplyList, {
     defaultParams: {
@@ -34,28 +36,27 @@ const Customers = (
       params: { limit: 10, page: 1 },
     },
     onSuccess: (res) => {
-      const newArray = Array.isArray(res) ? res.map(item => {
-        return {
-          label: item.customerName,
-          value: item.customerId,
-        };
-      }) : [];
-
-      setSupply(newArray);
+      setSupply(isArray(res));
     },
   });
 
   const like = (string) => {
     run({
-      data: { customerName: string,supply: 1 },
+      data: { customerName: string, supply: 1 },
       params: { limit: 10, page: 1 },
     });
   };
 
+  useEffect(() => {
+    if (visible) {
+      setCustomers(value);
+    }
+  }, [visible]);
+
 
   return <>
     <MyAntPopup
-      onClose={onClose}
+      onClose={() => onClose()}
       zIndex={zIndex}
       title='选择供应商'
       visible={visible}
@@ -64,7 +65,7 @@ const Customers = (
         onChange(customers[0]);
       }}>确定</LinkButton>}
     >
-      <div style={{ padding: 24 }}>
+      <div style={{ padding: 12 }}>
         <MySearch
           placeholder=' 请输入供应商信息'
           className={style.searchBar}
@@ -75,17 +76,35 @@ const Customers = (
           value={searchValue}
           onClear={like}
         />
-        {loading ? <MyLoading skeleton /> : <Selector
-          columns={1}
-          style={SelectorStyle}
-          className={ToolUtil.classNames(style.supply, style.left)}
-          showCheckMark={false}
-          options={supply}
-          value={customers.map(item => item.value)}
-          onChange={(v, { items }) => {
-            setCustomers(items);
+        {supply.length === 0 && <MyEmpty />}
+        {loading ? <MyLoading skeleton /> : <CheckList
+          style={{
+            '--border-inner': 'solid 1px #f5f5f5',
+            '--border-top': 'solid 1px #f5f5f5',
+            '--border-bottom': 'solid 1px #f5f5f5',
           }}
-        />}
+          className={style.list}
+          value={customers.map(item => item.customerId)}
+        >
+          {
+            supply.map((item, index) => {
+              const checked = customers.find(customer => customer.customerId === item.customerId);
+              return <CheckList.Item
+                key={index}
+                value={item.customerId}
+                onClick={() => {
+                  if (multiple) {
+                    setCustomers(checked ? customers.filter(customer => customer.customerId !== item.customerId) : [...customers, item]);
+                  } else {
+                    setCustomers(checked ? [] : [item]);
+                  }
+                }}
+              >
+                {item.customerName}
+              </CheckList.Item>;
+            })
+          }
+        </CheckList>}
       </div>
     </MyAntPopup>
   </>;

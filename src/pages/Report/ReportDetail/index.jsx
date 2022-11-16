@@ -13,6 +13,7 @@ import CheckUser from '../../components/CheckUser';
 import SkuClass from '../../Work/ProcessTask/MyAudit/components/SkuClass';
 import MyRadio from '../../components/MyRadio';
 import OutAsk from './components/OutAsk';
+import Customers from '../../Work/ProcessTask/MyAudit/components/Customers';
 
 const ReportDetail = () => {
 
@@ -39,11 +40,11 @@ const ReportDetail = () => {
 
   const submit = (data = {}, reset) => {
     const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
-    if (reset){
+    if (reset) {
       setScreen({});
     }
     setParams(newParmas);
-    listRef.current.submit(newParmas);
+    listRef.current?.submit(newParmas);
   };
 
   let title = '';
@@ -73,12 +74,34 @@ const ReportDetail = () => {
       ];
       content = <OutAsk listRef={listRef} params={params} />;
       break;
+    case 'inAskNumber':
+      title = '入库申请排行';
+      tabs = [
+        {
+          title: '申请次数',
+          key: 'ORDER_BY_CREATE_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        },
+        {
+          title: '物料数量',
+          key: 'ORDER_BY_DETAIL',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'skuClass' },
+          ],
+        },
+      ];
+      // content = <OutAsk listRef={listRef} params={params} />;
+      break;
   }
 
-  const [screens, setScreens] = useState(tabs[0].screens);
+  const [screens, setScreens] = useState(tabs[0]?.screens || []);
 
   useEffect(() => {
-    submit({ searchType: tabs[0].key });
+    submit({ searchType: tabs[0]?.key });
   }, []);
 
   return <>
@@ -200,11 +223,23 @@ const ReportDetail = () => {
     <SkuClass
       onClose={() => setScreenkey('')}
       zIndex={1002}
-      value={params.skuClassId}
+      value={params.skuClassId ? [{ value: params.skuClassId, label: screen.skuClassName }] : []}
       visible={screenKey === 'skuClass'}
       onChange={(skuClass = []) => {
         submit({ skuClassId: skuClass[0]?.value });
         setScreen({ ...screen, skuClassName: skuClass[0]?.label });
+        setScreenkey('');
+      }}
+    />
+
+    <Customers
+      onClose={() => setScreenkey('')}
+      zIndex={1002}
+      value={params.customerId ? [{ customerId: params.customerId, customerName: screen.customerName }] : []}
+      visible={screenKey === 'customerId'}
+      onChange={(customer) => {
+        submit({ customerId: customer?.customerId });
+        setScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
     />
