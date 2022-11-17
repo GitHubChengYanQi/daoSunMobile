@@ -14,6 +14,7 @@ import SkuClass from '../../Work/ProcessTask/MyAudit/components/SkuClass';
 import MyRadio from '../../components/MyRadio';
 import OutAsk from './components/OutAsk';
 import Customers from '../../Work/ProcessTask/MyAudit/components/Customers';
+import MyActionSheet from '../../components/MyActionSheet';
 
 const ReportDetail = () => {
 
@@ -28,6 +29,8 @@ const ReportDetail = () => {
   const defaultParams = {};
 
   const [params, setParams] = useState(defaultParams);
+
+  const [exportVisible, setExportVisible] = useState(false);
 
   const [key, setKey] = useState();
 
@@ -187,6 +190,7 @@ const ReportDetail = () => {
       </Space>
 
       <Button color='primary' onClick={() => {
+        setExportVisible(true);
         // exportRun({ data: { beginTime: date[0], endTime: date[1] } });
       }}>
         导出
@@ -242,6 +246,16 @@ const ReportDetail = () => {
         setScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
+    />
+
+
+    <MyActionSheet
+      visible={exportVisible}
+      actions={[{ key: 'excel', text: '导出Excel' }, { key: 'pdf', text: '导出PDF' }]}
+      onAction={(action) => {
+        console.log(action);
+      }}
+      onClose={() => setExportVisible(false)}
     />
   </>;
 };
