@@ -15,6 +15,8 @@ import MyRadio from '../../components/MyRadio';
 import OutAsk from './components/OutAsk';
 import Customers from '../../Work/ProcessTask/MyAudit/components/Customers';
 import MyActionSheet from '../../components/MyActionSheet';
+import InAsk from './components/InAsk';
+import MyPicker from '../../components/MyPicker';
 
 const ReportDetail = () => {
 
@@ -97,7 +99,22 @@ const ReportDetail = () => {
           ],
         },
       ];
-      // content = <OutAsk listRef={listRef} params={params} />;
+      content = <InAsk listRef={listRef} params={params} />;
+      break;
+    case 'inStock':
+      title = '工作明细';
+      tabs = [
+        {
+          title: '申请次数',
+          key: 'ORDER_BY_CREATE_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '数量排行', key: 'ranking' },
+          ],
+        },
+      ];
+      // content = <InAsk listRef={listRef} params={params} />;
       break;
   }
 
@@ -146,6 +163,9 @@ const ReportDetail = () => {
                 break;
               case 'skuClass':
                 title = screen.skuClassName;
+                break;
+              case 'ranking':
+                title = screen.ranking;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -246,6 +266,21 @@ const ReportDetail = () => {
         setScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
+    />
+
+    <MyPicker
+      visible={screenKey === 'ranking'}
+      value={params.ranking}
+      onChange={(option) => {
+        submit({ ranking: option.value });
+        setScreen({ ...screen, ranking: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '计算次数', value: 'count' },
+        { label: '计算件数', value: 'number' },
+      ]}
+      onClose={() => setScreenkey('')}
     />
 
 

@@ -6,6 +6,7 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { instockOrderCountViewByUser } from '../Ranking';
 import { RightOutline } from 'antd-mobile-icons';
+import { useHistory } from 'react-router-dom';
 
 const outStockLogView = { url: '/statisticalView/outStockLogView', method: 'POST' };
 
@@ -16,6 +17,7 @@ const WorkContrast = (
   },
 ) => {
 
+  const history = useHistory();
 
   let countText = '';
   let numberText = '';
@@ -29,14 +31,14 @@ const WorkContrast = (
       countType = 'ORDER_BY_CREATE_USER';
       numberText = '入库数量';
       numberType = 'ORDER_BY_DETAIL';
-      label = type === 'ORDER_BY_DETAIL' ? '件' : '次'
+      label = type === 'ORDER_BY_DETAIL' ? '件' : '次';
       break;
     case 'outStock':
       countText = '出库次数';
       countType = 'ORDER_LOG';
       numberText = '出库数量';
       numberType = 'ORDER_LOG_DETAIL';
-      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次'
+      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次';
       break;
     default:
       break;
@@ -105,11 +107,15 @@ const WorkContrast = (
     return <MyLoading skeleton />;
   }
 
-
   return <div className={classNames(styles.card, styles.workContrast)}>
     <div className={styles.workContrastHeader}>
       <div className={styles.workContrastHeaderLabel}>工作量对比</div>
-      <RightOutline />
+      <RightOutline onClick={() => {
+        history.push({
+          pathname: '/Report/ReportDetail',
+          search: `type=${module}`,
+        });
+      }} />
     </div>
     <WorkContrastChart
       label={label}

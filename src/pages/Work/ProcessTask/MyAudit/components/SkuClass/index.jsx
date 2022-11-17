@@ -35,7 +35,7 @@ const SkuClass = (
     <MyAntPopup
       onClose={onClose}
       zIndex={zIndex}
-      title='选择供应商'
+      title='选择分类'
       visible={visible}
       leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
       rightText={<LinkButton onClick={() => {

@@ -15,6 +15,7 @@ const TaskReport = (
     module,
     gap,
     date = [],
+    title,
   },
 ) => {
 
@@ -59,6 +60,9 @@ const TaskReport = (
         break;
       case 'outStock':
         outRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        break;
+      case 'comprehensive':
+
         break;
       default:
         break;
@@ -172,6 +176,53 @@ const TaskReport = (
         },
       ];
       break;
+    case 'comprehensive':
+      const inStockNumber = 1;
+      const outStockNumber = 2;
+      const stocktaskingNumber = 3;
+      const maintenanceNumber = 4;
+      const allocatiuonNumber = 5;
+      typeDescribeTotal = inStockNumber + outStockNumber + stocktaskingNumber + maintenanceNumber + allocatiuonNumber;
+      typeDescribe = [
+        {
+          title: '入库',
+          color: '#257BDE',
+          numberText: `${inStockNumber} (${Math.round((inStockNumber / typeDescribeTotal) * 100) || 0}%)`,
+          number: inStockNumber,
+        },
+        {
+          title: '出库',
+          color: '#2EAF5D',
+          numberText: `${outStockNumber} (${Math.round((outStockNumber / typeDescribeTotal) * 100) || 0}%)`,
+          number: outStockNumber,
+        },
+        {
+          title: '盘点',
+          color: '#82B3EA',
+          numberText: `${stocktaskingNumber} (${Math.round((stocktaskingNumber / typeDescribeTotal) * 100) || 0}%)`,
+          number: stocktaskingNumber,
+        },
+        {
+          title: '养护',
+          color: '#FA8F2B',
+          numberText: `${maintenanceNumber} (${Math.round((maintenanceNumber / typeDescribeTotal) * 100) || 0}%)`,
+          number: maintenanceNumber,
+        },
+        {
+          title: '调拨',
+          color: '#FF3131',
+          numberText: `${allocatiuonNumber} (${Math.round((allocatiuonNumber / typeDescribeTotal) * 100) || 0}%)`,
+          number: allocatiuonNumber,
+        },
+      ];
+
+      statusDescribe.push( {
+        title: '已超期',
+        color: '#FF3131',
+        numberText: `${1} (${Math.round((1 / 1) * 100) || 0}%)`,
+        number: 1,
+      })
+      break;
     default:
       break;
   }
@@ -188,7 +239,7 @@ const TaskReport = (
 
   return <div className={classNames(styles.card, styles.taskReport)}>
     <div className={styles.taskReportHeader}>
-      <div className={styles.taskReportLabel}>任务统计</div>
+      <div className={styles.taskReportLabel}>{title || '任务统计'}</div>
       <div className={styles.taskReportType}>
         <div
           onClick={() => {

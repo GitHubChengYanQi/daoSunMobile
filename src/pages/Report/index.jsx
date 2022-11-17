@@ -5,6 +5,7 @@ import MyNavBar from '../components/MyNavBar';
 import InOutStock from './InOutStock';
 import InStockReport from './InStockReport';
 import OutStockReport from './OutStockReport';
+import Comprehensive from './Comprehensive';
 
 const Report = () => {
 
@@ -32,10 +33,8 @@ const Report = () => {
       <Tabs.Tab title='调拨' key='allocation' destroyOnClose>
         <InOutStock />
       </Tabs.Tab>
-      <Tabs.Tab title='综合' key='all' destroyOnClose>
-        <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>
-          库存统计
-        </div>
+      <Tabs.Tab title='综合' key='comprehensive' destroyOnClose>
+        <Comprehensive />
       </Tabs.Tab>
     </Tabs>
   </div>;

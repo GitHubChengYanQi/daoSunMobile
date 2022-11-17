@@ -11,6 +11,7 @@ import { UserName } from '../../../components/User';
 import { getInType } from '../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../Work/CreateTask/components/OutstockAsk';
 import { useHistory } from 'react-router-dom';
+import MyEmpty from '../../../components/MyEmpty';
 
 export const instockOrderCountViewByUser = { url: '/statisticalView/instockOrderCountViewByUser', method: 'POST' };
 export const instockDetailBySpuClass = { url: '/statisticalView/instockDetailBySpuClass', method: 'POST' };
@@ -42,9 +43,11 @@ const Ranking = (
     loading: instockLogViewLoading,
     run: instockOrderCountViewByUserRun,
   } = useRequest(instockOrderCountViewByUser, {
+    response: true,
     manual: true,
     onSuccess: (res) => {
-      setList(isArray(res).sort((a, b) => (b.orderCount || b.inNumCount || 0) - (a.orderCount || a.inNumCount || 0)));
+      setTotal(res.count);
+      setList(isArray(res.data));
     },
   });
 
@@ -160,7 +163,7 @@ const Ranking = (
         <RightOutline />
       </div>
     </div>
-
+    {list.length === 0 && <MyEmpty />}
     {
       list.map((item, index) => {
         if (index > 2) {

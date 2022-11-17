@@ -30,12 +30,12 @@ const SupplyReport = (
         供应量统计
       </div>
       <div>
-        共 <span className='numberBlue'>{data.customerCount || 0}</span>家供货商 <RightOutline />
+        共 <span className='numberBlue'>{data.customerCount || 0}</span>家 <RightOutline />
       </div>
     </div>
     <div className={styles.supplyContent}>
       <div className={styles.supplyContentItem}>
-        <div className={styles.supplyContentLabel}>送货</div>
+        <div className={styles.supplyContentLabel}>到货</div>
         <div className={styles.supplyContentValue}>
           <span>{data.detailSkuCount || 0}</span>类
           <span>{data.detailNumberCount || 0}</span>件
