@@ -16,7 +16,16 @@ const InStockReport = () => {
   return <>
     <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
     <div style={{ height: 8 }} />
-    <TaskReport module='inStock' size={140} gap={10} date={isArray(searchParams.time)} />
+    <TaskReport
+      module='inStock'
+      size={140}
+      gap={10}
+      date={isArray(searchParams.time)}
+      searchTypes={[
+        {text:'类型', type:'ORDER_TYPE'},
+        {text:'状态', type:'ORDER_STATUS'}
+      ]}
+    />
     <div className={styles.space} />
     <Ranking
       askNumber

@@ -5,6 +5,7 @@ import { classNames } from '../../../components/ToolUtil';
 import Icon from '../../../components/Icon';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
+import { useHistory } from 'react-router-dom';
 
 const viewTotail = { url: '/statisticalView/viewTotail', method: 'POST' };
 
@@ -13,6 +14,8 @@ const SupplyReport = (
     date = [],
   },
 ) => {
+
+  const history = useHistory();
 
   const { loading, data = {}, run } = useRequest(viewTotail, { manual: true });
 
@@ -29,7 +32,12 @@ const SupplyReport = (
       <div className={styles.supplyHeaderLabel}>
         供应量统计
       </div>
-      <div>
+      <div  onClick={() => {
+        history.push({
+          pathname: '/Report/ReportDetail',
+          search: `type=supply`,
+        });
+      }}>
         共 <span className='numberBlue'>{data.customerCount || 0}</span>家 <RightOutline />
       </div>
     </div>

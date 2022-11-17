@@ -14,7 +14,15 @@ const OutStockReport = () => {
   return <>
     <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
     <div style={{ height: 8 }} />
-    <TaskReport module='outStock' size={140} date={searchParams.time} />
+    <TaskReport
+      module='outStock'
+      size={140}
+      date={searchParams.time}
+      searchTypes={[
+        { text: '类型', type: 'ORDER_TYPE' },
+        { text: '状态', type: 'ORDER_STATUS' },
+      ]}
+    />
     <div className={styles.space} />
     <Ranking
       title='申请数排行'

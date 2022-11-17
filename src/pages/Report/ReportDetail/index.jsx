@@ -110,7 +110,23 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '物料分类', key: 'skuClass' },
-            { title: '数量排行', key: 'ranking' },
+            { title: '数量排行', key: 'numberRanking' },
+          ],
+        },
+      ];
+      // content = <InAsk listRef={listRef} params={params} />;
+      break;
+    case 'supply':
+      title = '供应明细';
+      tabs = [
+        {
+          title: '申请次数',
+          key: 'ORDER_BY_CREATE_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '入库件数', key: 'inStockRanking' },
           ],
         },
       ];
@@ -121,7 +137,7 @@ const ReportDetail = () => {
   const [screens, setScreens] = useState(tabs[0]?.screens || []);
 
   useEffect(() => {
-    submit({ searchType: tabs[0]?.key });
+    submit({ searchType: tabs.length > 1 ? tabs[0].key : undefined });
   }, []);
 
   return <>
@@ -164,8 +180,8 @@ const ReportDetail = () => {
               case 'skuClass':
                 title = screen.skuClassName;
                 break;
-              case 'ranking':
-                title = screen.ranking;
+              case 'numberRanking':
+                title = screen.numberRanking;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -269,11 +285,11 @@ const ReportDetail = () => {
     />
 
     <MyPicker
-      visible={screenKey === 'ranking'}
-      value={params.ranking}
+      visible={screenKey === 'numberRanking'}
+      value={params.numberRanking}
       onChange={(option) => {
-        submit({ ranking: option.value });
-        setScreen({ ...screen, ranking: option.label });
+        submit({ numberRanking: option.value });
+        setScreen({ ...screen, numberRanking: option.label });
         setScreenkey('');
       }}
       options={[

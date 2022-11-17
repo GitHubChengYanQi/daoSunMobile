@@ -1,6 +1,5 @@
 import React from 'react';
 import TaskReport from '../components/TaskReport';
-import StockReport from '../components/StockReport';
 import styles from '../InStockReport/index.less';
 import Ranking from '../components/Ranking';
 import Inventory from '../components/Inventory';
@@ -9,7 +8,16 @@ const Comprehensive = () => {
 
 
   return <>
-    <StockReport />
+    <TaskReport
+      title='库存统计'
+      module='stockReport'
+      size={100}
+      gap={6}
+      searchTypes={[
+        { text: '状态', type: 'ORDER_STATUS' },
+        { text: '分类', type: 'ORDER_TYPE' },
+      ]}
+    />
     <div className={styles.space} />
     <Ranking
       title='库存数量排行'
@@ -29,6 +37,10 @@ const Comprehensive = () => {
       module='comprehensive'
       size={100}
       gap={6}
+      searchTypes={[
+        { text: '类型', type: 'ORDER_TYPE' },
+        { text: '状态', type: 'ORDER_STATUS' },
+      ]}
     />
   </>;
 };

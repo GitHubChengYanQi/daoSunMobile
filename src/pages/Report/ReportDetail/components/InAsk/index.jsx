@@ -3,7 +3,7 @@ import { isArray } from '../../../../components/ToolUtil';
 import { instockOrderCountViewByUser } from '../../../components/Ranking';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
-import { DownOutline, RightOutline } from 'antd-mobile-icons';
+import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
@@ -51,7 +51,7 @@ const InAsk = (
             } else {
               run({ data: { userId: item.userResult?.userId } });
             }
-          }}>{show ? <DownOutline /> : <RightOutline />}</div>
+          }}>{!show ? <DownOutline /> : <UpOutline />}</div>
         </div>
         <div className={styles.content} hidden={params.searchType !== 'ORDER_BY_CREATE_USER' || !show}>
           {

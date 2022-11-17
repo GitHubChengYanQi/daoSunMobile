@@ -9,6 +9,7 @@ import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
 const outStockLogView = { url: '/statisticalView/outStockLogView', method: 'POST' };
+const instockLogView = { url: '/statisticalView/instockLogView', method: 'POST' };
 
 const WorkContrast = (
   {
@@ -19,30 +20,8 @@ const WorkContrast = (
 
   const history = useHistory();
 
-  let countText = '';
-  let numberText = '';
-  let countType = '';
-  let numberType = '';
-  let label = '';
-
-  switch (module) {
-    case 'inStock':
-      countText = '入库次数';
-      countType = 'ORDER_BY_CREATE_USER';
-      numberText = '入库数量';
-      numberType = 'ORDER_BY_DETAIL';
-      label = type === 'ORDER_BY_DETAIL' ? '件' : '次';
-      break;
-    case 'outStock':
-      countText = '出库次数';
-      countType = 'ORDER_LOG';
-      numberText = '出库数量';
-      numberType = 'ORDER_LOG_DETAIL';
-      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次';
-      break;
-    default:
-      break;
-  }
+  const countType = 'ORDER_LOG';
+  const numberType = 'ORDER_LOG_DETAIL';
 
   const [type, setType] = useState(countType);
 
@@ -50,12 +29,32 @@ const WorkContrast = (
 
   const [list, setList] = useState([]);
 
+
+  let countText = '';
+  let numberText = '';
+  let label = '';
+
+  switch (module) {
+    case 'inStock':
+      countText = '入库次数';
+      numberText = '入库数量';
+      label = type === 'ORDER_BY_DETAIL' ? '件' : '次';
+      break;
+    case 'outStock':
+      countText = '出库次数';
+      numberText = '出库数量';
+      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次';
+      break;
+    default:
+      break;
+  }
   const {
     loading: instockLogViewLoading,
-    run: instockOrderCountViewByUserRun,
-  } = useRequest(instockOrderCountViewByUser, {
+    run: instockLogViewRun,
+  } = useRequest(instockLogView, {
     manual: true,
     onSuccess: (res) => {
+      console.log(res);
       let total = 0;
       setList(isArray(res).map(item => {
         total += item.orderCount || item.inNumCount || 0;
@@ -89,7 +88,7 @@ const WorkContrast = (
   const getData = (searchType) => {
     switch (module) {
       case 'inStock':
-        instockOrderCountViewByUserRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
+        instockLogViewRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
       case 'outStock':
         outStockLogViewRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
