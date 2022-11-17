@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { Dialog, List, Space, Toast } from 'antd-mobile';
-import MyEllipsis from '../../../../../components/MyEllipsis';
-import SkuResult_skuJsons, { SkuResultSkuJsons } from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import Label from '../../../../../components/Label';
 import Number from '../../../../../components/Number';
 import { useRequest } from '../../../../../../util/Request';
 import { productionJobBookingAdd } from '../../../../Production/components/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
 import LinkButton from '../../../../../components/LinkButton';
-import { history } from 'umi';
+import SkuItem from '../../../../Sku/SkuItem';
+import { useHistory } from 'react-router-dom';
 
 const ReportWork = (
   {
@@ -16,10 +15,12 @@ const ReportWork = (
     visible,
     setVisible = (() => {
     }),
-    skuData=[],
+    skuData = [],
     onSuccess = () => {
     },
   }) => {
+
+  const history = useHistory();
 
   const { loading, run } = useRequest(productionJobBookingAdd, {
     manual: true,
@@ -82,19 +83,21 @@ const ReportWork = (
           outSkus.map((item, index) => {
             const skuResult = item.skuResult || {};
             return <List.Item key={index}>
-              <MyEllipsis>{SkuResultSkuJsons({ skuResult })}</MyEllipsis>
-              <div style={{ display: 'flex', fontSize: '4vw' }}>
-                <Label>描述：</Label>
-                <MyEllipsis width='80%'>{SkuResultSkuJsons({skuResult,describe:true})})}</MyEllipsis>
-              </div>
+              <SkuItem skuResult={skuResult} />
               {
                 item.myQualityId
                   ?
                   <div style={{ padding: '8px 0' }}>
                     <LinkButton onClick={() => {
-                      history.push(
-                        `/Work/Quality/QualityTask?productionTaskId=${productionTaskId}&skuId=${item.skuId}&qualityId=${item.myQualityId}&module=production`
-                      )
+                      history.push({
+                        pathname: '/Work/Quality/QualityTask',
+                        query: {
+                          productionTaskId,
+                          skuId: item.skuId,
+                          qualityId: item.myQualityId,
+                          module: 'production',
+                        },
+                      });
                     }}>请点击进行自检</LinkButton>
                   </div>
                   :

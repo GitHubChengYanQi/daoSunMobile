@@ -210,14 +210,14 @@ const MessageList = () => {
                     {ToolUtil.timeDifference(item.time)}
                   </div>
                 </div>
-                <div className={style.theme} hidden={!item.processTaskResult?.theme}>
-                  {item.processTaskResult?.theme}
+                <div className={style.theme}>
+                  {item.processTaskResult?.theme || '暂无主题'}
                 </div>
                 <div className={style.content} hidden={!item.content || item.type !== 2}>
                   {item.content}
                 </div>
               </div>
-              <div className={style.border} />
+              {/*<div className={style.border} />*/}
             </SwipeAction>;
           })
         }

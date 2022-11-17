@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MyEmpty from '../../../../components/MyEmpty';
-import { Button, Card, List, ProgressBar, Space } from 'antd-mobile';
-import Label from '../../../../components/Label';
-import styles from '../../index.css';
+import { Space } from 'antd-mobile';
+import styles from '../../index.less';
 import { history } from 'umi';
-import {SkuResultSkuJsons} from '../../../../Scan/Sku/components/SkuResult_skuJsons';
+import MyCard from '../../../../components/MyCard';
+import MyProgress from '../../../../components/MyProgress';
+import LinkButton from '../../../../components/LinkButton';
+import MyAntPopup from '../../../../components/MyAntPopup';
+import SkuItem from '../../../Sku/SkuItem';
+import ShopNumber from '../../../AddShop/components/ShopNumber';
+import { isArray } from '../../../../components/ToolUtil';
 
 const ShipList = ({ data }) => {
+
+  const [visible, setVisible] = useState();
 
   if (!Array.isArray(data) || data.length === 0) {
     return <MyEmpty />;
@@ -17,26 +24,20 @@ const ShipList = ({ data }) => {
       data.map((item, index) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
-        const productionStation = setpSetResult.productionStation || {};
-        const setpSetDetails = setpSetResult.setpSetDetails || [];
 
-        return <div style={{ margin: 8 }} key={index}>
-          <Card
-            style={{ borderRadius: 0 }}
+        const number = (item.cardNumber || 0) - (item.toDoNum || 0);
+
+        return <div key={index}>
+          <MyCard
             key={index}
-            title={<Space direction='vertical'>
-              <div>
-                <Label>工序名称：</Label>{shipSetpResult.shipSetpName}
-              </div>
-              <div>
-                <Label>工位：</Label>{productionStation.name}
-              </div>
-            </Space>}
+            className={styles.card}
+            bodyClassName={styles.cardBody}
+            title={shipSetpResult.shipSetpName}
           >
-            <div style={{ display: 'flex' }}>
+            <div className={styles.bodyCard}>
               <Space direction='vertical' align='center' style={{ flexGrow: 1 }}>
                 <div>
-                  卡片数
+                  计划总数
                 </div>
                 <div>
                   {item.cardNumber}
@@ -44,58 +45,45 @@ const ShipList = ({ data }) => {
               </Space>
               <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
-                  子卡片数
-                </div>
-                <div>
-                  {item.count}
-                </div>
-              </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'green' }}>
-                <div>
-                  进行中
+                  已申请
                 </div>
                 <div>
                   {item.toDoNum}
                 </div>
               </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'blue' }}>
-                <div>
-                  已完成
-                </div>
-                <div>
-                  {item.completeNum}
-                </div>
-              </Space>
             </div>
-          </Card>
-          <List style={{backgroundColor:'#fff'}} header={<>产出物料</>}>
-            {
-              setpSetDetails.map((skuItem,index) => {
-                return <List.Item key={index} extra={' × '+(parseInt(skuItem.num) * parseInt(item.count))}>
-                  {SkuResultSkuJsons({skuResult:skuItem.skuResult})}
-                </List.Item>;
-              })
-            }
-          </List>
-
-          <ProgressBar percent={(item.completeNum / item.count) * 100} />
-          <Button
-            onClick={() => {
-              history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${item.count}&shipName=${shipSetpResult.shipSetpName}`);
-            }}
-            style={{
-              width: '100%',
-              color: 'var(--adm-color-primary)',
-              '--border-radius': '10px',
-              borderTopLeftRadius: 0,
-              borderTopRightRadius: 0,
-            }}
-          >
-            指派任务
-          </Button>
+            <div className={styles.buttons}>
+              <LinkButton
+                disabled={number <= 0}
+                className={styles.dispatch}
+                onClick={() => {
+                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${number}&shipName=${shipSetpResult.shipSetpName}`);
+                }}
+              >
+                申请出库
+              </LinkButton>
+            </div>
+          </MyCard>
         </div>;
       })
     }
+
+    <MyAntPopup
+      onClose={() => setVisible('')}
+      title='产出物料'
+      visible={visible}
+    >
+      <div style={{ maxHeight: '80vh', overflow: 'auto' }}>
+        {
+          isArray(visible).map((skuItem, index) => {
+            return <div key={index} className={styles.skuItem}>
+              <SkuItem extraWidth='80px' className={styles.sku} skuResult={skuItem.skuResult} />
+              <ShopNumber show value={skuItem.num} />
+            </div>;
+          })
+        }
+      </div>
+    </MyAntPopup>
 
   </div>;
 };

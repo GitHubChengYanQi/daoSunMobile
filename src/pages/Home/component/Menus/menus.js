@@ -26,6 +26,7 @@ export const menus = [
   { code: 'freeOutStock', icon: 'icon-gengduo', url: '/Scan/OutStock/FreeOutstock' },
   { code: 'inventory', icon: 'icon-pandian1', url: `/Work/Stock/Task?type=${ReceiptsEnums.stocktaking}` },
   { code: 'productionPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
+  { code: 'outPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
   { code: 'productionTask', icon: 'icon-gengduo', url: '/Work/ProductionTask' },
   { code: 'pickLists', icon: 'icon-gengduo', url: '/Work/Production/PickLists' },
   { code: 'myCart', icon: 'icon-wodelingliao1', url: '/Work/MyPicking' },

@@ -20,6 +20,7 @@ const MyList = (
     params: paramsData,
     response = () => {
     },
+    topBottom,
     sorter: defaultSorter,
     noEmpty,
     manual,
@@ -168,7 +169,7 @@ const MyList = (
       axis='xy'
       magnetic='x'
       style={{
-        '--initial-position-bottom': '84px',
+        '--initial-position-bottom': topBottom || '84px',
         '--initial-position-right': '24px',
         '--edge-distance': '24px',
         '--size': '40px',

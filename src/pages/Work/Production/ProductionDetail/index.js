@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { productionPlanDetail } from '../components/Url';
 import { useRequest } from '../../../../util/Request';
-import { Card, Space, Tabs } from 'antd-mobile';
+import { Tabs } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
-import MyFloatingPanel from '../../../components/MyFloatingPanel';
-import Label from '../../../components/Label';
 import SkuList from '../components/SkuList';
 import ShipList from '../components/ShipList';
-import { ToolUtil } from '../../../components/ToolUtil';
+import style from './index.less';
+import { Avatar } from 'antd';
+import Icon from '../../../components/Icon';
+import { MyDate } from '../../../components/MyDate';
 
 const ProductionDetail = (props) => {
+
   const params = props.location.query;
 
   const { loading, data, run } = useRequest(productionPlanDetail, { manual: true });
@@ -33,34 +35,6 @@ const ProductionDetail = (props) => {
     return <MyEmpty />;
   }
 
-  const backgroundDom = () => {
-
-    return <Card
-      title={<div><Label>工单主题：</Label>{data.theme}</div>}
-      style={{ backgroundColor: '#fff', }}>
-      <Space direction='vertical'>
-        <div>
-          <Label>工单编号：</Label>{data.coding}
-        </div>
-        <div>
-          <Label>执行开始时间：</Label>{data.executionTime}
-        </div>
-        <div>
-          <Label>执行结束时间：</Label> {data.endTime}
-        </div>
-        <div>
-          <Label>负责人：</Label>{data.userResult && data.userResult.name}
-        </div>
-        <div>
-          <Label>备注：</Label>{data.remark}
-        </div>
-        <Space>
-          <Label>创建时间：</Label>{data.createTime}
-        </Space>
-      </Space>
-    </Card>;
-  };
-
   const module = () => {
     switch (key) {
       case 'sku':
@@ -72,23 +46,41 @@ const ProductionDetail = (props) => {
     }
   };
 
+  const user = data.userResult || {};
+
   return <div>
-    <MyNavBar title='工单详情' />
-    <MyFloatingPanel
-      maxHeight={window.innerHeight - (ToolUtil.isQiyeWeixin() ? 52 : 97)}
-      backgroundDom={backgroundDom()}>
-      <Tabs
-        activeKey={key}
-        style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-        onChange={setKey}
-      >
-        <Tabs.Tab title='生产工序' key='ship' />
-        <Tabs.Tab title='生产信息' key='sku' />
-      </Tabs>
-      <div style={{ backgroundColor: '#eee' }}>
-        {module()}
+    <MyNavBar title='计划详情' />
+    <div className={style.header}>
+      <Avatar className={style.avatar} src={user.avatar} size={60}>
+        {user.name && user.name.substring(0, 1)}
+      </Avatar>
+      <div className={style.data}>
+        <div className={style.line}>
+          <div className={style.name}>
+            {data.theme} / {data.coding}
+          </div>
+          <span>
+          <Icon type='icon-dian' /> 处理中
+        </span>
+        </div>
+        <div className={style.line}>
+          {MyDate.Show(data.executionTime)} - {MyDate.Show(data.endTime)}
+        </div>
       </div>
-    </MyFloatingPanel>
+    </div>
+
+
+    <Tabs
+      activeKey={key}
+      style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
+      onChange={setKey}
+    >
+      <Tabs.Tab title='工序信息' key='ship' />
+      <Tabs.Tab title='投料BOM' key='sku' />
+    </Tabs>
+    <div>
+      {module()}
+    </div>
   </div>;
 };
 

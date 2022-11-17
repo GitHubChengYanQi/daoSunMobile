@@ -4,7 +4,7 @@ import Data from '../../Work/Allocation/SelectStoreHouse/components/Data';
 
 const Show = (date) => {
   if (!date) {
-    return <></>;
+    return '-';
   }
   const oneYear = moment(date).diff(new Date(), 'year') >= 1;
   return moment(date).format(oneYear ? 'YYYY年MM月DD日 HH:mm' : 'MM月DD日 HH:mm');
