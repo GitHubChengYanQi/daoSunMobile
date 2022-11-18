@@ -17,6 +17,7 @@ import Customers from '../../Work/ProcessTask/MyAudit/components/Customers';
 import MyActionSheet from '../../components/MyActionSheet';
 import InAsk from './components/InAsk';
 import MyPicker from '../../components/MyPicker';
+import InStockWorkDetail from './components/InStockWorkDetail';
 
 const ReportDetail = () => {
 
@@ -38,8 +39,6 @@ const ReportDetail = () => {
 
   const [screenKey, setScreenkey] = useState();
 
-  const [screen, setScreen] = useState({});
-
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
 
@@ -55,6 +54,7 @@ const ReportDetail = () => {
   let title = '';
   let tabs = [];
   let content = <></>;
+  let defaultScreen = {};
 
   switch (query.type) {
     case 'outAskNumber':
@@ -105,8 +105,8 @@ const ReportDetail = () => {
       title = '工作明细';
       tabs = [
         {
-          title: '申请次数',
-          key: 'ORDER_BY_CREATE_USER',
+          title: '次数',
+          key: 'ORDER_LOG',
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '物料分类', key: 'skuClass' },
@@ -114,7 +114,8 @@ const ReportDetail = () => {
           ],
         },
       ];
-      // content = <InAsk listRef={listRef} params={params} />;
+      defaultScreen = {numberRanking:'计算次数'}
+      content = <InStockWorkDetail listRef={listRef} params={params} />;
       break;
     case 'supply':
       title = '供应明细';
@@ -136,8 +137,10 @@ const ReportDetail = () => {
 
   const [screens, setScreens] = useState(tabs[0]?.screens || []);
 
+  const [screen, setScreen] = useState({});
+
   useEffect(() => {
-    submit({ searchType: tabs.length > 1 ? tabs[0].key : undefined });
+    submit({ searchType: tabs[0].key });
   }, []);
 
   return <>
@@ -286,15 +289,15 @@ const ReportDetail = () => {
 
     <MyPicker
       visible={screenKey === 'numberRanking'}
-      value={params.numberRanking}
+      value={params.searchType}
       onChange={(option) => {
-        submit({ numberRanking: option.value });
+        submit({ searchType: option.value });
         setScreen({ ...screen, numberRanking: option.label });
         setScreenkey('');
       }}
       options={[
-        { label: '计算次数', value: 'count' },
-        { label: '计算件数', value: 'number' },
+        { label: '计算次数', value: 'ORDER_LOG' },
+        { label: '计算件数', value: 'ORDER_LOG_DETAIL' },
       ]}
       onClose={() => setScreenkey('')}
     />

@@ -9,7 +9,7 @@ import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
 const outStockLogView = { url: '/statisticalView/outStockLogView', method: 'POST' };
-const instockLogView = { url: '/statisticalView/instockLogView', method: 'POST' };
+export const instockLogView = { url: '/statisticalView/instockLogView', method: 'POST' };
 
 const WorkContrast = (
   {
@@ -32,18 +32,15 @@ const WorkContrast = (
 
   let countText = '';
   let numberText = '';
-  let label = '';
 
   switch (module) {
     case 'inStock':
       countText = '入库次数';
       numberText = '入库数量';
-      label = type === 'ORDER_BY_DETAIL' ? '件' : '次';
       break;
     case 'outStock':
       countText = '出库次数';
       numberText = '出库数量';
-      label = type === 'ORDER_LOG_DETAIL' ? '件' : '次';
       break;
     default:
       break;
@@ -52,11 +49,11 @@ const WorkContrast = (
     loading: instockLogViewLoading,
     run: instockLogViewRun,
   } = useRequest(instockLogView, {
+    response: true,
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
       let total = 0;
-      setList(isArray(res).map(item => {
+      setList(isArray(res.data).map(item => {
         total += item.orderCount || item.inNumCount || 0;
         return {
           userName: item.userResult?.name,
@@ -117,7 +114,7 @@ const WorkContrast = (
       }} />
     </div>
     <WorkContrastChart
-      label={label}
+      label={type === 'ORDER_BY_DETAIL' ? '件' : '次'}
       countType={countType}
       numberType={numberType}
       getData={getData}
