@@ -79,7 +79,6 @@ const Ranking = (
   } = useRequest(instockDetailByCustomer, {
     manual: true,
     onSuccess: (res) => {
-      console.log(res);
       setList(isArray(res));
     },
   });

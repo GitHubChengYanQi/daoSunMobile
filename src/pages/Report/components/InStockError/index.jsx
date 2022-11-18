@@ -4,10 +4,15 @@ import { classNames } from '../../../components/ToolUtil';
 import { Chart, Interval } from '@antv/f2';
 import Canvas from '@antv/f2-react';
 import { useRequest } from '../../../../util/Request';
+import { RightOutline } from 'antd-mobile-icons';
+import { useHistory } from 'react-router-dom';
+import { MyLoading } from '../../../components/MyLoading';
 
 const errorBySpuClass = { url: '/statisticalView/errorBySpuClass', method: 'POST' };
 
 const InStockError = ({ date = [] }) => {
+
+  const history = useHistory();
 
   const { loading, data: list = [], run } = useRequest(errorBySpuClass, {
     manual: true,
@@ -56,9 +61,19 @@ const InStockError = ({ date = [] }) => {
     },
   ];
 
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
   return <div className={classNames(styles.card, styles.inStockError)}>
-    <div>
+    <div className={styles.inStockErrorHeard} onClick={() => {
+      history.push({
+        pathname: '/Report/ReportDetail',
+        search: `type=inStockError`,
+      });
+    }}>
       <div className={styles.title}>异常入库数占比</div>
+      <div><RightOutline /></div>
     </div>
 
     <div className={styles.inStockErrorChart}>

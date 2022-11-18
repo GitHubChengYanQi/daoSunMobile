@@ -8,8 +8,8 @@ import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { useHistory } from 'react-router-dom';
 
-const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
-const outstockCountViewByMonth = { url: '/statisticalView/outstockCountViewByMonth', method: 'POST' };
+export const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
+export const outstockCountViewByMonth = { url: '/statisticalView/outstockCountViewByMonth', method: 'POST' };
 
 const Summary = (
   {
@@ -69,7 +69,7 @@ const Summary = (
       case 'inStockSummary':
         inStockRun({ data: {} });
         break;
-      case 'outStock':
+      case 'outStockSummary':
         outStockRun({ data: {} });
         break;
       default:
@@ -125,7 +125,7 @@ const Summary = (
         </div>
       </div>;
       break;
-    case 'outStock':
+    case 'outStockSummary':
       charData = data1;
       title = '物料出库汇总';
       describe = <div>

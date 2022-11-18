@@ -1,3 +1,7 @@
+.grey {
+  color: #9A9A9A;
+}
+
 .bottomAction {
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.3);
   z-index: 1;
@@ -31,37 +35,117 @@
 
 .listItem {
   margin-bottom: 3px;
+  background-color: #fff;
 
   .header {
     display: flex;
     align-items: center;
-    background-color: #fff;
     padding: 12px;
     gap: 8px;
 
     .label {
       flex-grow: 1;
+      line-height: 14px;
+      font-size: 14px;
+      height: 14px;
     }
   }
 
   .content {
-    background-color: #fff;
 
-    .skuItem {
-      display: flex;
-      align-items: center;
+    .taskItem {
       border-top: solid 1px var(--body--background--color);
       padding: 8px 12px;
 
-      .sku {
-        flex-grow: 1;
+      .taskHeader {
+        display: flex;
+        align-items: center;
+
+        .title {
+          flex-grow: 1;
+        }
+
+        .time {
+          font-size: 12px;
+          color: #8d8d8d;
+        }
       }
 
+      .taskContent {
+        margin-top: 4px;
+        font-size: 12px;
+        color: #8d8d8d;
+      }
+
+    }
+
+    .supplyContent {
+      border-top: solid 1px var(--body--background--color);
+      padding: 12px 24px;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+
+      .supplyContentItem {
+        flex-grow: 1;
+
+        .supplyContentLabel {
+          color: #8D8D8D;
+          padding-bottom: 4px;
+        }
+
+        .supplyContentValue {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        span {
+          font-size: 18px;
+        }
+      }
     }
   }
 
   .space {
     height: 1px;
     background-color: var(--body--background--color);
+  }
+}
+
+.skuItem {
+  display: flex;
+  align-items: center;
+  border-top: solid 1px var(--body--background--color);
+  padding: 8px 12px;
+  gap: 8px;
+
+  .sku {
+    flex-grow: 1;
+  }
+
+  .number {
+    color: #9A9A9A;
+
+    span {
+      color: #000000;
+      margin-right: 8px;
+    }
+
+    .error {
+      color: var(--adm-color-danger);
+    }
+  }
+
+}
+
+.customerItem {
+  border-top: #F5F5F5 solid 1px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+
+  .title {
+    flex-grow: 1;
   }
 }

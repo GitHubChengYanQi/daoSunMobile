@@ -33,6 +33,14 @@ export const getInType = (type) => {
   }
 };
 
+export const InType = [
+  { label: '采购入库', value: 'PURCHASE_INSTOCK' },
+  { label: '生产入库', value: 'PRODUCTION_INSTOCK' },
+  { label: '生产退库', value: 'PRODUCTION_RETURN' },
+  { label: '客户退货', value: 'CUSTOMER_RETURN' },
+];
+
+
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
@@ -223,12 +231,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         setTypeVisible(false);
         setParams({ ...params, instockType: option.value });
       }}
-      options={[
-        { label: '采购入库', value: 'PURCHASE_INSTOCK' },
-        { label: '生产入库', value: 'PRODUCTION_INSTOCK' },
-        { label: '生产退库', value: 'PRODUCTION_RETURN' },
-        { label: '客户退货', value: 'CUSTOMER_RETURN' },
-      ]}
+      options={InType}
     />
 
   </div>;

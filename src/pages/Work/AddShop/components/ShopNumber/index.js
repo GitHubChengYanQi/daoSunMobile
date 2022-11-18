@@ -6,7 +6,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 const ShopNumber = (
   {
     textAlign = 'center',
-    value,
+    value = 0,
     onChange = () => {
     },
     show,
@@ -19,9 +19,9 @@ const ShopNumber = (
   const [visible, setVisible] = useState();
 
   return <>
-    <div style={{backgroundColor:!show && "#fff"}} className={ToolUtil.classNames(style.shopNumber)}>
+    <div style={{ backgroundColor: !show && '#fff' }} className={ToolUtil.classNames(style.shopNumber)}>
       <div
-        className={ToolUtil.classNames(style.number,className)}
+        className={ToolUtil.classNames(style.number, className)}
         style={{ border: show && 'none', padding: show && 0, textAlign }}
         onClick={() => {
           if (!show) {

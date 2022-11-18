@@ -47,7 +47,7 @@ const OutStockReport = () => {
         { title: '数量排行', key: 'NUM_COUNT' },
       ]} />
     <div style={{ height: 8 }} />
-    <Summary date={searchParams.time} module='outStock' />
+    <Summary date={searchParams.time} module='outStockSummary' />
     <div className={styles.space} />
     <Ranking
       title='出库数量排行'

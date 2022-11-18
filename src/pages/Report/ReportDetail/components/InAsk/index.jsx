@@ -9,6 +9,7 @@ import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
+import { MyDate } from '../../../../components/MyDate';
 
 const instockDetail = { url: '/statisticalView/instockDetail', method: 'POST' };
 
@@ -55,10 +56,15 @@ const InAsk = (
         </div>
         <div className={styles.content} hidden={params.searchType !== 'ORDER_BY_CREATE_USER' || !show}>
           {
-            loading ? <MyLoading skeleton /> : isArray(data).map((item, index) => {
-              return <div key={index} className={styles.skuItem}>
-                <SkuItem skuResult={item.skuResult} className={styles.sku} extraWidth='124px' />
-                <ShopNumber show value={item.number} />
+            loading ? <MyLoading skeleton /> : [1, 2, 3].map((item, index) => {
+              return <div key={index} className={styles.taskItem}>
+                <div className={styles.taskHeader}>
+                  <div className={styles.title}>第三机械22-1021A</div>
+                  <div className={styles.time}>{MyDate.Show(new Date())}</div>
+                </div>
+                <div className={styles.taskContent}>
+                  执行人：梁彦欣
+                </div>
               </div>;
             })
           }

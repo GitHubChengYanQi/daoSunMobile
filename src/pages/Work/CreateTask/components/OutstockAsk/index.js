@@ -35,6 +35,14 @@ export const getOutType = (type) => {
   }
 };
 
+export const OutType = [
+  { label: '生产任务', value: 'PRODUCTION_TASK' },
+  { label: '生产损耗', value: 'PRODUCTION_LOSS' },
+  { label: '三包服务', value: 'THREE_GUARANTEES' },
+  { label: '备品备料', value: 'RESERVE_PICK' },
+  { label: '报损出库', value: 'LOSS_REPORTING' },
+];
+
 const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -190,13 +198,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
         setTypeVisible(false);
         setParams({ ...params, type: option.value });
       }}
-      options={[
-        { label: '生产任务', value: 'PRODUCTION_TASK' },
-        { label: '生产损耗', value: 'PRODUCTION_LOSS' },
-        { label: '三包服务', value: 'THREE_GUARANTEES' },
-        { label: '备品备料', value: 'RESERVE_PICK' },
-        { label: '报损出库', value: 'LOSS_REPORTING' },
-      ]}
+      options={OutType}
     />
 
     {
