@@ -135,6 +135,58 @@ const ReportDetail = () => {
       defaultScreen = { inStockRanking: '入库类数' };
       content = <MyEmpty height={200} />;
       break;
+    case 'inStockSummary':
+      title = '入库汇总';
+      tabs = [
+        {
+          title: '入库类数',
+          key: 'SKU_COUNT',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '任务类型', key: 'inStockRanking' },
+          ],
+        },
+      ];
+      defaultScreen = { inStockRanking: '入库类数' };
+      content = <MyEmpty height={200} />;
+      break;
+    case 'inStockNumber':
+      title = '物料入库排行';
+      tabs = [
+        {
+          title: '物料分类',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'inStockStatus' },
+            { title: '任务类型', key: 'inStockRanking' },
+            { title: '仓库', key: 'stockHouse' },
+          ],
+        }, {
+          title: '任务类型',
+          key: 'TYPE',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '仓库', key: 'stockHouse' },
+          ],
+        }, {
+          title: '入库仓库',
+          key: 'STOREHOUSE',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '任务类型', key: 'inStockRanking' },
+          ],
+        },
+      ];
+      defaultScreen = { inStockRanking: '入库类数' };
+      content = <MyEmpty height={200} />;
+      break;
     default:
       content = <MyEmpty height={200} />;
       break;

@@ -66,7 +66,7 @@ const Summary = (
 
   useEffect(() => {
     switch (module) {
-      case 'inStock':
+      case 'inStockSummary':
         inStockRun({ data: {} });
         break;
       case 'outStock':
@@ -88,7 +88,7 @@ const Summary = (
   let charData = [];
   let report = <></>;
   switch (module) {
-    case 'inStock':
+    case 'inStockSummary':
       charData = [...isArray(detail.inStocksNumber), ...isArray(detail.errorsNumber)];
       title = '物料入库汇总';
       describe = <div>

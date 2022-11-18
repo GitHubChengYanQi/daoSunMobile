@@ -51,7 +51,7 @@ const InStockReport = () => {
         { title: '数量排行', key: 'NUM_COUNT' },
       ]} />
     <div style={{ height: 8 }} />
-    <Summary date={searchParams.time} module='inStock' />
+    <Summary date={searchParams.time} module='inStockSummary' />
     <div className={styles.space} />
     <Ranking
       title='入库数量排行'

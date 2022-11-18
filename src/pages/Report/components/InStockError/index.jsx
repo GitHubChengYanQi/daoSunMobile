@@ -57,7 +57,9 @@ const InStockError = ({ date = [] }) => {
   ];
 
   return <div className={classNames(styles.card, styles.inStockError)}>
-    <div className={styles.title}>异常入库数占比</div>
+    <div>
+      <div className={styles.title}>异常入库数占比</div>
+    </div>
 
     <div className={styles.inStockErrorChart}>
       <Canvas pixelRatio={window.devicePixelRatio} width={150} height={150}>
