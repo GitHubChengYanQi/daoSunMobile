@@ -26,7 +26,7 @@ const OutStockReport = () => {
     <div className={styles.space} />
     <Ranking
       title='申请数排行'
-      modal='outAskNumber'
+      module='outAskNumber'
       askNumber
       buttons={[
         { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
@@ -41,7 +41,7 @@ const OutStockReport = () => {
       fontSize={16}
       title='使用量排行'
       useNumber
-      modal='useNumber'
+      module='useNumber'
       buttons={[
         { title: '种类排行', key: 'SKU_COUNT' },
         { title: '数量排行', key: 'NUM_COUNT' },
@@ -51,7 +51,7 @@ const OutStockReport = () => {
     <div className={styles.space} />
     <Ranking
       title='出库数量排行'
-      modal='outStockNumber'
+      module='outStockNumber'
       buttons={[
         { title: '分类排行', key: 'SPU_CLASS' },
         { title: '类型排行', key: 'TYPE' },

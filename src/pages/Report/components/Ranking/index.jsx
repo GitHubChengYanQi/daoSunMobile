@@ -12,7 +12,6 @@ import { getInType } from '../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../Work/CreateTask/components/OutstockAsk';
 import { useHistory } from 'react-router-dom';
 import MyEmpty from '../../../components/MyEmpty';
-
 export const instockOrderCountViewByUser = { url: '/statisticalView/instockOrderCountViewByUser', method: 'POST' };
 export const instockDetailBySpuClass = { url: '/statisticalView/instockDetailBySpuClass', method: 'POST' };
 export const instockDetailByCustomer = { url: '/statisticalView/instockDetailByCustomer', method: 'POST' };
@@ -26,11 +25,12 @@ const Ranking = (
     date = [],
     fontSize,
     title,
-    modal,
+    module,
     buttons = [],
     noIcon,
     askNumber,
     useNumber,
+    noExtra,
   },
 ) => {
 
@@ -79,6 +79,7 @@ const Ranking = (
   } = useRequest(instockDetailByCustomer, {
     manual: true,
     onSuccess: (res) => {
+      console.log(res);
       setList(isArray(res));
     },
   });
@@ -106,7 +107,7 @@ const Ranking = (
   const [type, setType] = useState(buttons[0].key);
 
   const getData = (searchType) => {
-    switch (modal) {
+    switch (module) {
       case 'inAskNumber':
         instockOrderCountViewByUserRun({ data: { searchType, beginTime: date[0], endTime: date[1] } });
         break;
@@ -133,7 +134,7 @@ const Ranking = (
 
   useEffect(() => {
     getData(type);
-  }, [modal, date[0], date[1]]);
+  }, [module, date[0], date[1]]);
 
   if (
     instockLogViewLoading ||
@@ -152,10 +153,10 @@ const Ranking = (
         <Icon hidden={noIcon} type='icon-rukuzongshu' />
         {title}
       </div>
-      <div onClick={() => {
+      <div hidden={noExtra} onClick={() => {
         history.push({
           pathname: '/Report/ReportDetail',
-          search: `type=${modal}`,
+          search: `type=${module}`,
         });
       }}>
         <span hidden={!askNumber}>共 <span className='numberBlue'>{total}</span>人 </span>

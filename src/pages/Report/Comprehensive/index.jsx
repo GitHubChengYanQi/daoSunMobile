@@ -21,7 +21,7 @@ const Comprehensive = () => {
     <div className={styles.space} />
     <Ranking
       title='库存数量排行'
-      modal='stockNumber'
+      module='stockNumber'
       buttons={[
         { title: '分类排行', key: '0' },
         { title: '仓库排行', key: '1' },

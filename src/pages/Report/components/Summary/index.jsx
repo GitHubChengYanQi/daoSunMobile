@@ -6,6 +6,7 @@ import Canvas from '@antv/f2-react';
 import { Axis, Chart, Interval, Line, TextGuide, Tooltip } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
+import { useHistory } from 'react-router-dom';
 
 const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
 const outstockCountViewByMonth = { url: '/statisticalView/outstockCountViewByMonth', method: 'POST' };
@@ -16,6 +17,8 @@ const Summary = (
     module,
   },
 ) => {
+
+  const history = useHistory();
 
   const [detail, setDetail] = useState({});
 
@@ -159,7 +162,10 @@ const Summary = (
       <div className={styles.summaryHeaderLabel}>
         {title}
       </div>
-      <div>
+      <div onClick={() => history.push({
+        pathname: '/Report/ReportDetail',
+        search: `type=${module}`,
+      })}>
         <RightOutline />
       </div>
     </div>

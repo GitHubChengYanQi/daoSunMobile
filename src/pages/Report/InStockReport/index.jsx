@@ -31,7 +31,7 @@ const InStockReport = () => {
       askNumber
       date={isArray(searchParams.time)}
       title='申请数排行'
-      modal='inAskNumber'
+      module='inAskNumber'
       buttons={[
         { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
         { title: '物料排行', key: 'ORDER_BY_DETAIL' },
@@ -43,9 +43,9 @@ const InStockReport = () => {
     <SupplyReport date={searchParams.time} />
     <div className={styles.space} />
     <Ranking
-      useNumber
+      noExtra
       title='供应量排行'
-      modal='supply'
+      module='supply'
       buttons={[
         { title: '种类排行', key: 'SKU_COUNT' },
         { title: '数量排行', key: 'NUM_COUNT' },
@@ -55,7 +55,7 @@ const InStockReport = () => {
     <div className={styles.space} />
     <Ranking
       title='入库数量排行'
-      modal='inStockNumber'
+      module='inStockNumber'
       buttons={[
         { title: '分类排行', key: 'SPU_CLASS' },
         { title: '类型排行', key: 'TYPE' },

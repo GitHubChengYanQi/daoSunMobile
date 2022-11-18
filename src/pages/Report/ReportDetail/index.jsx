@@ -18,6 +18,7 @@ import MyActionSheet from '../../components/MyActionSheet';
 import InAsk from './components/InAsk';
 import MyPicker from '../../components/MyPicker';
 import InStockWorkDetail from './components/InStockWorkDetail';
+import MyEmpty from '../../components/MyEmpty';
 
 const ReportDetail = () => {
 
@@ -53,7 +54,7 @@ const ReportDetail = () => {
 
   let title = '';
   let tabs = [];
-  let content = <></>;
+  let content;
   let defaultScreen = {};
 
   switch (query.type) {
@@ -114,15 +115,15 @@ const ReportDetail = () => {
           ],
         },
       ];
-      defaultScreen = {numberRanking:'计算次数'}
+      defaultScreen = { numberRanking: '计算次数' };
       content = <InStockWorkDetail listRef={listRef} params={params} />;
       break;
     case 'supply':
       title = '供应明细';
       tabs = [
         {
-          title: '申请次数',
-          key: 'ORDER_BY_CREATE_USER',
+          title: '入库类数',
+          key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '状态', key: 'inStockStatus' },
@@ -131,17 +132,25 @@ const ReportDetail = () => {
           ],
         },
       ];
-      // content = <InAsk listRef={listRef} params={params} />;
+      defaultScreen = { inStockRanking: '入库类数' };
+      content = <MyEmpty height={200} />;
+      break;
+    default:
+      content = <MyEmpty height={200} />;
       break;
   }
 
   const [screens, setScreens] = useState(tabs[0]?.screens || []);
 
-  const [screen, setScreen] = useState({});
+  const [screen, setScreen] = useState(defaultScreen);
 
   useEffect(() => {
-    submit({ searchType: tabs[0].key });
+    submit({ searchType: tabs[0]?.key });
   }, []);
+
+  if (!query.type) {
+    return <MyEmpty />;
+  }
 
   return <>
     <MyNavBar title={title} />
@@ -163,7 +172,7 @@ const ReportDetail = () => {
     </div>
 
     <div
-      style={{ borderBottom: ' 1px solid var(--body--background--color)' }}
+      style={{ borderBottom: '1px solid var(--body--background--color)' }}
       className={style.screent}
     >
       <div className={style.dropDown}>
@@ -185,6 +194,12 @@ const ReportDetail = () => {
                 break;
               case 'numberRanking':
                 title = screen.numberRanking;
+                break;
+              case 'inStockStatus':
+                title = screen.inStockStatus;
+                break;
+              case 'inStockRanking':
+                title = screen.inStockRanking;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -298,6 +313,38 @@ const ReportDetail = () => {
       options={[
         { label: '计算次数', value: 'ORDER_LOG' },
         { label: '计算件数', value: 'ORDER_LOG_DETAIL' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
+    <MyPicker
+      visible={screenKey === 'inStockRanking'}
+      value={params.searchType}
+      onChange={(option) => {
+        submit({ searchType: option.value });
+        setScreen({ ...screen, inStockRanking: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '入库类数', value: 'SKU_COUNT' },
+        { label: '入库件数', value: 'NUM_COUNT' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
+    <MyPicker
+      visible={screenKey === 'inStockStatus'}
+      value={params.inStockStatus}
+      onChange={(option) => {
+        submit({ inStockStatus: option.value });
+        setScreen({ ...screen, inStockStatus: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '全部', value: '全部' },
+        { label: '送货', value: '送货' },
+        { label: '已入库', value: '已入库' },
+        { label: '拒绝入库', value: '拒绝入库' },
       ]}
       onClose={() => setScreenkey('')}
     />
