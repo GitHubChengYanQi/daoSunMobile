@@ -77,7 +77,7 @@ const Summary = (
     }
   }, []);
 
-  const data1 = new Array(12).fill('').map((item, index) => ({
+  const data = new Array(12).fill('').map((item, index) => ({
     'month': '2022/' + (index + 1),
     'number': parseInt(Math.random() * 10),
     'name': '1',
@@ -126,7 +126,7 @@ const Summary = (
       </div>;
       break;
     case 'outStockSummary':
-      charData = data1;
+      charData = data;
       title = '物料出库汇总';
       describe = <div>
         <div className={styles.summaryTotalLabel}>

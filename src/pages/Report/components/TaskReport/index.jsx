@@ -50,7 +50,10 @@ const TaskReport = (
   const { loading: inLoading, run: inRun } = useRequest(inStockOrderView, {
     manual: true,
     onSuccess: (res) => {
-      const newTypeTotal = isArray(res).map(item => ({ type: item.type || item.status, number: item.orderCount }));
+      const newTypeTotal = isArray(res).map(item => ({
+        type: type === 'ORDER_STATUS' ? item.status : item.type,
+        number: item.orderCount,
+      }));
       setTypeTotal(newTypeTotal);
     },
   });
