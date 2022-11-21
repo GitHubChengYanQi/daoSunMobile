@@ -106,7 +106,7 @@ const MyList = (
   // }
 
   if (!loading && (!data || data.length === 0) && !noEmpty) {
-    return <MyEmpty height='100%' />;
+    return <MyEmpty height={200} />;
   }
 
   const statusRecord = {

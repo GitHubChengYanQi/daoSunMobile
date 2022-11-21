@@ -1,0 +1,65 @@
+import React, { useState } from 'react';
+import DateSelect from '../components/DateSelect';
+import TaskReport from '../components/TaskReport';
+import styles from './index.less';
+import WorkContrast from '../components/WorkContrast';
+import Ranking from '../components/Ranking';
+import Summary from '../components/Summary';
+
+
+const OutStockReport = () => {
+
+  const [searchParams, setSearchParams] = useState({});
+
+  return <>
+    <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
+    <div style={{ height: 8 }} />
+    <TaskReport
+      module='outStock'
+      size={140}
+      date={searchParams.time}
+      searchTypes={[
+        { text: '类型', type: 'ORDER_TYPE' },
+        { text: '状态', type: 'ORDER_STATUS' },
+      ]}
+    />
+    <div className={styles.space} />
+    <Ranking
+      title='申请数排行'
+      module='outAskNumber'
+      askNumber
+      buttons={[
+        { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
+        { title: '物料排行', key: 'ORDER_BY_DETAIL' },
+      ]}
+    />
+    <div style={{ height: 8 }} />
+    <WorkContrast module='outStock' />
+    <div style={{ height: 8 }} />
+    <Ranking
+      noIcon
+      fontSize={16}
+      title='使用量排行'
+      useNumber
+      module='useNumber'
+      buttons={[
+        { title: '种类排行', key: 'SKU_COUNT' },
+        { title: '数量排行', key: 'NUM_COUNT' },
+      ]} />
+    <div style={{ height: 8 }} />
+    <Summary date={searchParams.time} module='outStockSummary' />
+    <div className={styles.space} />
+    <Ranking
+      title='出库数量排行'
+      module='outStockNumber'
+      buttons={[
+        { title: '分类排行', key: 'SPU_CLASS' },
+        { title: '类型排行', key: 'TYPE' },
+        { title: '仓库排行', key: 'STOREHOUSE' },
+        { title: '领料人排行', key: 'PICK_USER' },
+      ]}
+    />
+  </>;
+};
+
+export default OutStockReport;

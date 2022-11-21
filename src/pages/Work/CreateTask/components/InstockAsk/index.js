@@ -16,6 +16,30 @@ import MyCard from '../../../../components/MyCard';
 import { Input } from 'antd-mobile';
 import Customers from '../../../ProcessTask/MyAudit/components/Customers';
 import LinkButton from '../../../../components/LinkButton';
+import MyPicker from '../../../../components/MyPicker';
+
+export const getInType = (type) => {
+  switch (type) {
+    case 'PURCHASE_INSTOCK':
+      return '采购入库';
+    case 'PRODUCTION_INSTOCK':
+      return '生产入库';
+    case 'PRODUCTION_RETURN':
+      return '生产退库';
+    case 'CUSTOMER_RETURN':
+      return '客户退货';
+    default:
+      return '';
+  }
+};
+
+export const InType = [
+  { label: '采购入库', value: 'PURCHASE_INSTOCK' },
+  { label: '生产入库', value: 'PRODUCTION_INSTOCK' },
+  { label: '生产退库', value: 'PRODUCTION_RETURN' },
+  { label: '客户退货', value: 'CUSTOMER_RETURN' },
+];
+
 
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
@@ -28,6 +52,8 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   const [params, setParams] = useState(defaultParams || {});
 
   const [visible, setVisible] = useState(false);
+
+  const [typeVisible, setTypeVisible] = useState(false);
 
   const history = useHistory();
 
@@ -88,7 +114,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       }).join('、'),
       careful: '注意事项',
       buttonHidden: judge,
-      disabled: (judge ? false : normalSku.length === 0 || !params.theme || !params.customerId),
+      disabled: (judge ? false : normalSku.length === 0 || !params.theme || !params.customerId || !params.instockType),
     };
   };
 
@@ -157,6 +183,12 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         onClick={() => setVisible(true)}>{params.customerId ? params.customerName : '请选择供应商'}</LinkButton>}
     />
 
+    <MyCard titleBom={<Title className={style.title}>入库类型 <span>*</span></Title>} extra={<div onClick={() => {
+      setTypeVisible(true);
+    }}>
+      {getInType(params.instockType) || '请选择'}
+    </div>} />
+
     <OtherData
       createType={createType}
       careful={<Title>注意事项</Title>}
@@ -189,6 +221,17 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
         setParams({ ...params, customerId: customer?.value, customerName: customer?.label });
         setVisible(false);
       }}
+    />
+
+    <MyPicker
+      onClose={() => setTypeVisible(false)}
+      visible={typeVisible}
+      value={params.instockType}
+      onChange={(option) => {
+        setTypeVisible(false);
+        setParams({ ...params, instockType: option.value });
+      }}
+      options={InType}
     />
 
   </div>;

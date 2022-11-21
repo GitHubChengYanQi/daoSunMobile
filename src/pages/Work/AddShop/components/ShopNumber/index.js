@@ -6,7 +6,7 @@ import { ToolUtil } from '../../../../components/ToolUtil';
 const ShopNumber = (
   {
     textAlign = 'center',
-    value,
+    value = 0,
     onChange = () => {
     },
     show,
