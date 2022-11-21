@@ -32,30 +32,40 @@ const ReceiptData = (
   const actions = [];
   const logIds = [];
   let actionNode = false;
-  currentNode.forEach((item) => {
 
-    if (item.stepType === 'status' && !actionNode) {
-      actionNode = true;
-    }
+  if (data.status === 0) {
+    currentNode.forEach((item) => {
 
-    if (data.version) {
-      const logResults = item.logResults || [];
-      logResults.map(item => {
-        logIds.push(item.logId);
-      });
-    } else {
-      const logResult = item.logResult || {};
-      logIds.push(logResult.logId);
-    }
+      if (item.stepType === 'status' && !actionNode) {
+        actionNode = true;
+      }
 
-    if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
-      item.auditRule.actionStatuses.map((item) => {
-        actions.push({ action: item.action, id: item.actionId, name: item.actionName });
-      });
-    }
-    return null;
-  });
+      if (data.version) {
+        const logResults = item.logResults || [];
+        logResults.map(item => {
+          logIds.push(item.logId);
+        });
+      } else {
+        const logResult = item.logResult || {};
+        logIds.push(logResult.logId);
+      }
+
+      if (item.auditRule && Array.isArray(item.auditRule.actionStatuses)) {
+        item.auditRule.actionStatuses.map((item) => {
+          actions.push({ action: item.action, id: item.actionId, name: item.actionName });
+        });
+      }
+      return null;
+    });
+  } else {
+    actionNode = true;
+  }
+
+
   const getAction = (action) => {
+    if (data.status !== 0) {
+      return {};
+    }
     const actionData = actions.filter(item => {
       return item.action === action;
     });

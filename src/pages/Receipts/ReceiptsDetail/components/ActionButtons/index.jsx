@@ -68,12 +68,12 @@ const ActionButtons = (
   };
 
   useEffect(() => {
-    if (!(taskDetail.status !== 0 || (actions.length === 0 && createUser !== userInfo.id))) {
+    if (!(actions.length === 0 && createUser !== userInfo.id)) {
       afertShow();
     }
   }, [taskDetail.status, actions.length]);
 
-  if (taskDetail.status !== 0 || (actions.length === 0 && createUser !== userInfo.id)) {
+  if (actions.length === 0 && createUser !== userInfo.id) {
     return <></>;
   }
 
@@ -126,7 +126,7 @@ const ActionButtons = (
       visible={visible}
       actions={[
         { text: '再次提交', key: 'resubmit', disabled: createUser !== userInfo.id },
-        { text: '撤销', key: 'revoke', disabled: createUser !== userInfo.id },
+        { text: '撤销', key: 'revoke', disabled: createUser !== userInfo.id || taskDetail.status !== 0 },
         ...actions.filter((item, index) => index > 1).map(item => ({
           text: item.name,
           key: item.action,

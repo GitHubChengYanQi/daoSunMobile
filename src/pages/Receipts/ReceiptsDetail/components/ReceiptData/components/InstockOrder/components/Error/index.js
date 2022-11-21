@@ -365,7 +365,7 @@ const Error = (
     transitionEnd = () => {
     },
   ) => {
-    const imgUrl =  ToolUtil.isArray(skuResult.imgResults)[0] || state.homeLogo;
+    const imgUrl =  ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', transitionEnd);
   };
 
