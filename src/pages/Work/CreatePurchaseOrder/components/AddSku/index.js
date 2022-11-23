@@ -117,13 +117,6 @@ const AddSku = (
             />
           </div>
           <div>
-            <Label className={styles.label}>交货期</Label>：
-            <ShopNumber
-              value={skuItem.deliveryDate || 0}
-              onChange={(deliveryDate) => dataChange({ deliveryDate }, skuIndex)}
-            />
-          </div>
-          <div>
             <Label className={styles.label}>备注</Label>：
             <Input
               value={skuItem.remark || ''}

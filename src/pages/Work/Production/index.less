@@ -1,10 +1,27 @@
 
 .item {
   background-color: #fff;
-  //margin: 0 12px 3px;
   margin-bottom: 1px;
-  padding: 12px;
+  padding: 12px 12px 0;
   box-shadow: rgba(24, 69, 181, 0.1) 0 3px 6px;
+
+  .headerClassName {
+    padding-bottom: 8px;
+    border-bottom: solid 1px var(--body--background--color);
+  }
+
+  .bodyClassName {
+    padding: 8px 0;
+
+    > div {
+      padding: 4px 0;
+    }
+  }
+
+  .extra {
+    color: #9d9b9b;
+    font-size: 12px;
+  }
 
   .title {
     display: flex;

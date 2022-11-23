@@ -79,7 +79,7 @@ const PaymentDetail = (
             </div>
             <div
               className={styles.flexCenter}
-              onClick={() => setOpen({ type: 'dateWay', value: item.payType, key: index })}
+              onClick={() => setOpen({ type: 'dateWay', value: item.dateWay, key: index })}
             >
               类型：{item.dateWayName || <LinkButton title='请选择' />}
             </div>
@@ -102,7 +102,7 @@ const PaymentDetail = (
                   const newPercentum = remaining > percentum ? percentum : remaining;
                   dataChange({
                     percentum: newPercentum,
-                    money: (money * (newPercentum / 100)).toFixed(2),
+                    money: Number((money * (newPercentum / 100)).toFixed(2)),
                   }, index);
                 }}
               />
@@ -123,7 +123,7 @@ const PaymentDetail = (
                   });
                   const remaining = money - moneys;
                   const newMoney = remaining > $ ? $ : remaining;
-                  dataChange({ money: newMoney, percentum: ((($) / money).toFixed(2)) * 100 }, index);
+                  dataChange({ money: newMoney, percentum: Number(((($) / money).toFixed(2)) * 100) }, index);
                 }}
               />
             </div>

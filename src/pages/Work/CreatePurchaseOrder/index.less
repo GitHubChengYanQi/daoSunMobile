@@ -35,13 +35,17 @@
 
 .extra {
   height: 19px;
+  min-width: 100px;
+  text-align: right;
 
-  div {
+  > div {
     max-width: 50vw;
-    display: inline-block;
+    text-align: right;
+    min-height: 19px;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    justify-content: flex-end;
   }
 }
 
@@ -74,6 +78,15 @@
 .flexCenter {
   display: flex !important;
   gap: 8px;
+  align-items: center;
+}
+
+.date {
+  text-align: right;
+}
+
+.selectInput {
+  display: flex;
   align-items: center;
 }
 

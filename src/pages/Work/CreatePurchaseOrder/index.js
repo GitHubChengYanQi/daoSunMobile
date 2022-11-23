@@ -82,11 +82,11 @@ export const templateGetLabel = {
 
 const CreatePurchaseOrder = () => {
 
-  const history = useHistory()
+  const history = useHistory();
 
   const file = useRef();
 
-  const [data, setData] = useState({ payPlan: 3, payPlanName: '按动作分期付款', currency:'人民币' });
+  const [data, setData] = useState({ payPlan: 3, payPlanName: '按动作分期付款', currency: '人民币' });
   console.log('data=>', data);
   const [visible, setVisible] = useState('');
 
@@ -258,6 +258,7 @@ const CreatePurchaseOrder = () => {
         switch (item.key) {
           case 'date':
             extra = <MyDatePicker
+              style={{ textAlign: 'right' }}
               value={data[item.key]}
               onChange={(value) => setData({ ...data, [item.key]: value })}
             />;
@@ -478,6 +479,7 @@ const CreatePurchaseOrder = () => {
             break;
           case 'deliveryDate':
             extra = <MyDatePicker
+              style={{ textAlign: 'right' }}
               precision='second'
               value={data[item.key]}
               onChange={(value) => setData({
@@ -660,7 +662,11 @@ const CreatePurchaseOrder = () => {
         };
       })}
       onChange={(option) => {
-        setData({ ...data, partyAPhone: option.value, partyAPhoneName: option.label });
+        if (visible === 'partyAPhone') {
+          setData({ ...data, partyAPhone: option.value, partyAPhoneName: option.label });
+        } else {
+          setData({ ...data, partyBPhone: option.value, partyBPhoneName: option.label });
+        }
       }}
     />
 
@@ -823,7 +829,7 @@ const CreatePurchaseOrder = () => {
     />
 
     {
-      (templateLoading || taxLoading || customerLoading || contactsLoading || selfEnterpriseLoading) &&
+      (orderAddLoading || templateLoading || taxLoading || customerLoading || contactsLoading || selfEnterpriseLoading) &&
       <MyLoading />
     }
   </>;

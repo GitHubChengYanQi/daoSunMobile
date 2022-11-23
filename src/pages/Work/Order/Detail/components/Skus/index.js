@@ -1,48 +1,43 @@
 import React from 'react';
 import MyEmpty from '../../../../../components/MyEmpty';
-import { Card, Space } from 'antd-mobile';
-import MyEllipsis from '../../../../../components/MyEllipsis';
-import {SkuResultSkuJsons} from '../../../../../Scan/Sku/components/SkuResult_skuJsons';
+import { Space } from 'antd-mobile';
+import styles from './index.less';
 import Label from '../../../../../components/Label';
+import SkuItem from '../../../../Sku/SkuItem';
+import { isArray } from '../../../../../components/ToolUtil';
 
-const Skus = ({ skus,data }) => {
+const Skus = ({ skus, data }) => {
 
-  if (!Array.isArray(skus)) {
+  if (isArray(skus).length === 0) {
     return <MyEmpty />;
   }
 
   return <>
     {
       skus.map((item, index) => {
-        return <Card
-          headerStyle={{display:'block'}}
-          key={index}
-          title={<div>
-            <MyEllipsis>
-              {SkuResultSkuJsons({skuResult:item.skuResult})} </MyEllipsis>
-          </div>}
-          style={{ margin: 8 }}>
-          <Space direction='vertical'>
-            <div style={{display:'flex'}}>
-              <div style={{flexGrow:1}}>
-                <Label>数量：</Label>{item.purchaseNumber}
+        return <div key={index} className={styles.skuItem}>
+          <SkuItem skuResult={item.skuResult} />
+          <Space direction='vertical' style={{width:'100%',marginTop:8}}>
+            <div style={{ display: 'flex' }}>
+              <div style={{ flexGrow: 1 }}>
+                <Label className={styles.label}>数量</Label>：{item.purchaseNumber}
               </div>
-              <div style={{flexGrow:1}}>
-                <Label>单价：</Label>{item.onePrice} / {data.currency}
+              <div style={{ flexGrow: 1 }}>
+                <Label className={styles.label}>单价</Label>：{item.onePrice} {data.currency}
               </div>
             </div>
             <div>
-              <Label>品牌：</Label>{item.brandResult && item.brandResult.brandName}
+              <Label className={styles.label}>品牌</Label>：{item.brandResult && item.brandResult.brandName}
             </div>
             <div>
-              <Label>供应商：</Label>{item.customerResult && item.customerResult.customerName}
+              <Label className={styles.label}>供应商</Label>：{item.customerResult && item.customerResult.customerName}
             </div>
             <div>
-              <Label>交货期：</Label>{item.deliveryDate}天
+              <Label className={styles.label}>交货期</Label>：{item.deliveryDate || 0}天
             </div>
           </Space>
 
-        </Card>;
+        </div>;
       })
     }
   </>;

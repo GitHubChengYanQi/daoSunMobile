@@ -80,11 +80,10 @@ const LabelResults = (
               };
             });
 
-            extra = <Space align='center'>
+            content = <div className={styles.selectInput}>
               <Input
                 defaultValue={defaultVal.name}
                 value={value}
-                className={styles.input}
                 placeholder={`请输入${item.filedName || ''}`}
                 onChange={(value) => {
                   valuesChange(item.name, value);
@@ -93,7 +92,7 @@ const LabelResults = (
               {options.length > 0 && <DownOutline onClick={() => {
                 setOpen({ key: item.name, value, options });
               }} />}
-            </Space>;
+            </div>;
             break;
           case 'number':
             extra = <ShopNumber value={value || 0} number onChange={(value) => {
