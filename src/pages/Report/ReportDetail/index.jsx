@@ -434,9 +434,9 @@ const ReportDetail = () => {
       zIndex={1002}
       value={params.skuClassId ? [{ value: params.skuClassId, label: screen.skuClassName }] : []}
       visible={screenKey === 'skuClass'}
-      onChange={(skuClass = []) => {
-        submit({ skuClassId: skuClass[0]?.value });
-        setScreen({ ...screen, skuClassName: skuClass[0]?.label });
+      onChange={(skuClass) => {
+        submit({ skuClassId: skuClass?.value });
+        setScreen({ ...screen, skuClassName: skuClass?.label });
         setScreenkey('');
       }}
     />

@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import AskAdd from '../../Work/PurchaseAsk/AskAdd';
+import AskAdd from '../../Work/CreatePurchaseOrder/AskAdd';
 import Errors from '../../Work/Instock/Errors';
 import MyEmpty from '../../components/MyEmpty';
 import { ReceiptsEnums } from '../index';

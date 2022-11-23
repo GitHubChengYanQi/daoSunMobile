@@ -31,6 +31,12 @@ export const isArray = (array) => {
   return Array.isArray(array) ? array : [];
 };
 
+// 集合去重
+export const ArrayDuplicate = (array, key) => {
+  const res = new Map();
+  return (Array.isArray(array) ? array : []).filter((a) => !res.has(a[key]) && res.set(a[key], 1));
+};
+
 // base64解压返回JSON对象
 export const unzip = (base64) => {
   const strData = atob(base64);

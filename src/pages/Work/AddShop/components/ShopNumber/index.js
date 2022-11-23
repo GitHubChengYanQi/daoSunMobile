@@ -15,6 +15,8 @@ const ShopNumber = (
     className,
     number,
     placeholder,
+    getContainer,
+    decimal,
   },
 ) => {
 
@@ -35,6 +37,8 @@ const ShopNumber = (
     </div>
 
     <MyKeybord
+      decimal={decimal}
+      getContainer={getContainer}
       visible={visible}
       setVisible={setVisible}
       value={value}

@@ -1,37 +1,38 @@
 import React from 'react';
-import { spuClassListSelect } from '../../../../Instock/Url';
+import { brandList } from '../../../../Sku/SkuList/components/SkuScreen/components/Url';
 import MyCheckList from '../../../../../components/MyCheckList';
 
-const SkuClass = (
+
+const Brands = (
   {
     zIndex,
     visible,
     value = [],
+    multiple,
     onClose = () => {
     },
     onChange = () => {
     },
-    multiple,
+    data = {},
   },
 ) => {
 
   return <>
     <MyCheckList
-      noSearch
-      noPage
-      searchPlaceholder='请输入分类信息'
-      api={spuClassListSelect}
+      api={brandList}
       multiple={multiple}
-      label='label'
-      listKey='value'
+      searchLabel='brandName'
+      label='brandName'
+      listKey='brandId'
       onClose={onClose}
       onChange={onChange}
       value={value}
       visible={visible}
-      title='选择分类'
+      data={data}
+      title='选择品牌'
       zIndex={zIndex}
     />
   </>;
 };
 
-export default SkuClass;
+export default Brands;

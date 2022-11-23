@@ -6,7 +6,7 @@ import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
-import styles from '../../PurchaseAsk/index.less';
+import styles from '../../CreatePurchaseOrder/index.less';
 import User from '../../CreateTask/components/User';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import MyCard from '../../../components/MyCard';

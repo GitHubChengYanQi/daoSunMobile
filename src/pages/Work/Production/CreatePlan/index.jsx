@@ -5,7 +5,7 @@ import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
-import styles from '../../PurchaseAsk/index.less';
+import styles from '../../CreatePurchaseOrder/index.less';
 import { Divider, Input, Space, TextArea } from 'antd-mobile';
 import StartEndDate from '../CreateTask/components/StartEndDate';
 import User from '../../CreateTask/components/User';

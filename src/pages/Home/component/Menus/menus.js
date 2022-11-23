@@ -30,7 +30,7 @@ export const menus = [
   { code: 'productionTask', icon: 'icon-gengduo', url: '/Work/ProductionTask' },
   { code: 'pickLists', icon: 'icon-gengduo', url: '/Work/Production/PickLists' },
   { code: 'myCart', icon: 'icon-wodelingliao1', url: '/Work/MyPicking' },
-  { code: 'purchase_ask', icon: 'icon-caigoushenqingguanli', url: '/Work/purchaseAsk' },
+  { code: 'createPurchaseOrder', icon: 'icon-caigoushenqingguanli', url: '/Work/createPurchaseOrder' },
   { code: 'procurementOrder', icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' },
   { code: 'Repair', icon: 'icon-gongdanguanli2', url: '/Repair' },
   { code: 'CreateRepair', icon: 'icon-chuangjianbaoxiu2', url: '/CreateRepair' },
