@@ -17,6 +17,7 @@ import { Input } from 'antd-mobile';
 import Customers from '../../../ProcessTask/MyAudit/components/Customers';
 import LinkButton from '../../../../components/LinkButton';
 import MyPicker from '../../../../components/MyPicker';
+import * as PropTypes from 'prop-types';
 
 export const getInType = (type) => {
   switch (type) {
@@ -39,6 +40,7 @@ export const InType = [
   { label: '生产退库', value: 'PRODUCTION_RETURN' },
   { label: '客户退货', value: 'CUSTOMER_RETURN' },
 ];
+
 
 
 const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
@@ -141,6 +143,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       }
       return null;
     });
+
     inStock({
       data: {
         type: query.submitType,
@@ -182,8 +185,8 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
     <MyCard
       titleBom={<Title className={style.title}>供应商 <span>*</span></Title>}
-      extra={<LinkButton
-        onClick={() => setVisible(true)}>{params.customerId ? params.customerName : '请选择供应商'}</LinkButton>}
+      extra={<LinkButton1595672388652019714
+        onClick={() => setVisible(true)}>{params.customerId ? params.customerName : '请选择供应商'}</LinkButton1595672388652019714>}
     />
 
     <MyCard titleBom={<Title className={style.title}>入库类型 <span>*</span></Title>} extra={<div onClick={() => {

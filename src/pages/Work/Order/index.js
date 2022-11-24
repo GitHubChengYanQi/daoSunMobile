@@ -47,7 +47,7 @@ const Order = () => {
             onClick={() => {
               history.push(`/Work/Order/Detail?id=${item.orderId}`);
             }}
-            titleBom={item.coding}
+            titleBom={(item.theme || '无主题') + ' / ' + item.coding}
             extraClassName={styles.extra}
             extra={MyDate.Show(item.createTime)}
           >

@@ -75,7 +75,7 @@ const ConfirmArrival = () => {
           pathname: '/Work/CreateTask',
           query: {
             createType: ERPEnums.inStock,
-            submitType: 'resubmit',
+            submitType: 'purchaseOrder',
           },
           state: {
             skus: skus.filter(item => item.number).map(item => ({
@@ -86,10 +86,10 @@ const ConfirmArrival = () => {
               number: item.number,
               skuId: item.skuId,
               skuResult: item.skuResult,
-              sourId: item.detailId,
+              orderDetailId: item.detailId,
             })),
             numberStatus: 'disabled',
-            sourId: query.id,
+            orderId: query.id,
           },
         });
       }}

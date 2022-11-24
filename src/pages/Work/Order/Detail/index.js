@@ -60,6 +60,9 @@ const Detail = (props) => {
           <Label className={styles.label}>采购单号</Label>：{data.coding}
         </div>
         <div>
+          <Label className={styles.label}>采购主题</Label>：{data.theme}
+        </div>
+        <div>
           <Label className={styles.label}>币种</Label>：{data.currency}
         </div>
         <div>
