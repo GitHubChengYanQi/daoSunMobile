@@ -14,7 +14,10 @@ const ConfirmArrival = () => {
 
   const { state, query } = useLocation();
 
-  const [skus, setSkus] = useState(isArray(state?.skus));
+  const [skus, setSkus] = useState(isArray(state?.skus).map(item => ({
+    ...item,
+    number: (item.purchaseNumber || 0) - (item.arrivalNumber || 0) > 0 ? (item.purchaseNumber || 0) - (item.arrivalNumber || 0) : 0,
+  })));
 
   const skuChange = (param, key) => {
     const newSkus = skus.map((item, index) => {
@@ -52,7 +55,7 @@ const ConfirmArrival = () => {
             <div style={{ textAlign: 'center' }}>
               <span style={{ paddingBottom: 8, display: 'block' }}>到货数</span>
               <ShopNumber
-                max={item.purchaseNumber}
+                min={0}
                 value={item.number || 0}
                 onChange={(number) => {
                   skuChange({ number }, index);

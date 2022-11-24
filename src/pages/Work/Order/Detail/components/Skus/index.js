@@ -5,6 +5,7 @@ import styles from './index.less';
 import Label from '../../../../../components/Label';
 import SkuItem from '../../../../Sku/SkuItem';
 import { isArray } from '../../../../../components/ToolUtil';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 
 const Skus = ({ skus, data }) => {
 
@@ -17,14 +18,17 @@ const Skus = ({ skus, data }) => {
       skus.map((item, index) => {
         return <div key={index} className={styles.skuItem}>
           <SkuItem skuResult={item.skuResult} />
-          <Space direction='vertical' style={{width:'100%',marginTop:8}}>
+          <Space direction='vertical' style={{ width: '100%', marginTop: 8 }}>
             <div style={{ display: 'flex' }}>
-              <div style={{ flexGrow: 1 }}>
-                <Label className={styles.label}>数量</Label>：{item.purchaseNumber}
+              <div style={{ flexGrow: 1,display: 'flex' }}>
+                <Label className={styles.label}>数量</Label>：<ShopNumber value={item.purchaseNumber} show />
               </div>
               <div style={{ flexGrow: 1 }}>
                 <Label className={styles.label}>单价</Label>：{item.onePrice} {data.currency}
               </div>
+            </div>
+            <div style={{ display: 'flex' }}>
+              <Label className={styles.label}>已到货</Label>：<ShopNumber value={item.arrivalNumber} show />
             </div>
             <div>
               <Label className={styles.label}>品牌</Label>：{item.brandResult && item.brandResult.brandName}

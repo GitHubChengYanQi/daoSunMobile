@@ -3,7 +3,7 @@ import MyNavBar from '../../components/MyNavBar';
 import FormLayout from '../../components/FormLayout';
 import { ReceiptsEnums } from '../../Receipts';
 import MyCard from '../../components/MyCard';
-import { Divider, Input, Space, TextArea } from 'antd-mobile';
+import { Divider, Input, Space, Stepper, TextArea } from 'antd-mobile';
 import styles from './index.less';
 import Title from '../../components/Title';
 import MyDatePicker from '../../components/MyDatePicker';
@@ -398,8 +398,9 @@ const CreatePurchaseOrder = () => {
             break;
           case 'floatingAmount':
             extra = <ShopNumber
+              number
               decimal={2}
-              min={null}
+              min={-999999}
               value={data[item.key]}
               getContainer={document.body}
               onChange={(value) => setData({
@@ -411,7 +412,9 @@ const CreatePurchaseOrder = () => {
             break;
           case 'totalAmount':
             extra = <ShopNumber
+              number
               decimal={2}
+              min={0}
               value={data[item.key]}
               getContainer={document.body}
               onChange={(value) => setData({
