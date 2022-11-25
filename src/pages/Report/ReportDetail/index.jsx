@@ -61,7 +61,8 @@ const ReportDetail = () => {
 
   let title = '';
   let tabs = [];
-  let content;
+  let Content;
+  let contentProps = {};
   let defaultScreen = {};
 
   switch (query.type) {
@@ -85,7 +86,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      content = <InAsk listRef={listRef} params={params} />;
+      Content = InAsk;
       break;
     case 'inStock':
     case 'outStock':
@@ -102,7 +103,7 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { numberRanking: '计算次数' };
-      content = <InStockWorkDetail listRef={listRef} params={params} />;
+      Content = InStockWorkDetail;
       break;
     case 'supply':
       title = '供应明细';
@@ -119,7 +120,7 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <Supply listRef={listRef} params={params} />;
+      Content = Supply;
       break;
     case 'inStockSummary':
       title = '入库汇总';
@@ -135,7 +136,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      content = <InStockSummary listRef={listRef} params={params} />;
+      Content = InStockSummary;
       break;
     case 'inStockNumber':
       title = '物料入库排行';
@@ -170,7 +171,7 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockNumber listRef={listRef} params={params} />;
+      Content = InStockNumber;
       break;
     case 'inStockError':
       title = '异常入库明细';
@@ -188,7 +189,8 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockError listRef={listRef} params={params} />;
+      Content = InStockError;
+      contentProps = { height: 200 };
       break;
 
     case 'outAskNumber':
@@ -211,7 +213,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      content = <OutAsk listRef={listRef} params={params} />;
+      Content = OutAsk;
       break;
     case 'outStockSummary':
       title = '出库汇总';
@@ -226,7 +228,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      content = <InStockSummary listRef={listRef} params={params} />;
+      Content = InStockSummary;
       break;
     case 'useNumber':
       title = '供应商用料明细';
@@ -240,7 +242,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      content = <OutStockUseNumber listRef={listRef} params={params} />;
+      Content = OutStockUseNumber;
       break;
     case 'outStockNumber':
       title = '物料出库排行';
@@ -275,10 +277,10 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockNumber listRef={listRef} params={params} />;
+      Content = InStockNumber;
       break;
     default:
-      content = <MyEmpty height={200} />;
+      Content = MyEmpty;
       break;
   }
 
@@ -381,7 +383,9 @@ const ReportDetail = () => {
         }
       </div>
     </div>
-    {content}
+
+    <Content listRef={listRef} params={params} {...contentProps} />
+
     <div className={styles.bottomAction}>
       <Space className={styles.radio}>
         <MyRadio checked={currentAll} onChange={() => {
