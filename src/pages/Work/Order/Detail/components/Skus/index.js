@@ -20,14 +20,14 @@ const Skus = ({ skus, data }) => {
           <SkuItem skuResult={item.skuResult} />
           <Space direction='vertical' style={{ width: '100%', marginTop: 8 }}>
             <div style={{ display: 'flex' }}>
-              <div style={{ flexGrow: 1,display: 'flex' }}>
+              <div style={{ flexGrow: 1, display: 'flex' }}>
                 <Label className={styles.label}>数量</Label>：<ShopNumber value={item.purchaseNumber} show />
               </div>
               <div style={{ flexGrow: 1 }}>
                 <Label className={styles.label}>单价</Label>：{item.onePrice} {data.currency}
               </div>
             </div>
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' }} hidden={data.type !== 1}>
               <Label className={styles.label}>已到货</Label>：<ShopNumber value={item.arrivalNumber} show />
             </div>
             <div>

@@ -18,19 +18,29 @@ const Order = () => {
 
   const [data, setData] = useState([]);
 
-  useEffect(() => {
-    ref.current && ref.current.submit({ type: query && query.type });
-  }, []);
-
   if (!query.type) {
     return <MyEmpty height='100%' />;
   }
 
+  let infoData = {};
+
+  switch (query.type) {
+    case '1':
+      infoData = {
+        title: '采购单列表',
+      };
+      break;
+    case '2':
+      infoData = {
+        title: '销售单列表',
+      };
+      break;
+  }
+
   return <>
-    <div style={{ position: 'sticky', top: 0 }}>
-      <MyNavBar title='采购单列表' />
-    </div>
+    <MyNavBar title={infoData.title} />
     <MyList
+      params={{ type: query.type }}
       ref={ref}
       api={orderList}
       data={data}

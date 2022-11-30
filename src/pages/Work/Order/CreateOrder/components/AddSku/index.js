@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
-import { AddButton } from '../../../../components/MyButton';
-import CheckSkus from '../../../Sku/CheckSkus';
-import MyAntPopup from '../../../../components/MyAntPopup';
-import SkuItem from '../../../Sku/SkuItem';
+import { AddButton } from '../../../../../components/MyButton';
+import CheckSkus from '../../../../Sku/CheckSkus';
+import MyAntPopup from '../../../../../components/MyAntPopup';
+import SkuItem from '../../../../Sku/SkuItem';
 import styles from './index.less';
-import Label from '../../../../components/Label';
-import LinkButton from '../../../../components/LinkButton';
-import ShopNumber from '../../../AddShop/components/ShopNumber';
+import Label from '../../../../../components/Label';
+import LinkButton from '../../../../../components/LinkButton';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import { Input } from 'antd-mobile';
-import Brands from '../../../ProcessTask/MyAudit/components/Brands';
-import MyPicker from '../../../../components/MyPicker';
-import { useRequest } from '../../../../../util/Request';
-import { MyLoading } from '../../../../components/MyLoading';
+import Brands from '../../../../ProcessTask/MyAudit/components/Brands';
+import MyPicker from '../../../../../components/MyPicker';
+import { useRequest } from '../../../../../../util/Request';
+import { MyLoading } from '../../../../../components/MyLoading';
+import { MathCalc } from '../../../../../components/ToolUtil';
 
 export const unitListSelect = { url: '/unit/listSelect', method: 'POST' };
 export const orderDetailRecord = { url: '/orderDetail/record', method: 'POST' };
@@ -88,31 +89,34 @@ const AddSku = (
             </div>
           </div>
           <div>
-            <Label className={styles.label}>采购数量</Label>：
+            <Label className={styles.label}>数量</Label>：
             <ShopNumber
+              min={1}
               value={skuItem.purchaseNumber}
               onChange={(purchaseNumber) => dataChange({
                 purchaseNumber,
-                totalPrice: (skuItem.onePrice || 0) * (purchaseNumber || 0),
+                totalPrice: MathCalc(skuItem.onePrice,purchaseNumber,'cheng'),
               }, skuIndex)}
             />
           </div>
           <div>
             <Label className={styles.label}>单价</Label>：
             <ShopNumber
+              min={0}
               decimal={2}
               value={skuItem.onePrice}
               onChange={(onePrice) => dataChange({
                 onePrice,
-                totalPrice: (skuItem.purchaseNumber || 0) * (onePrice || 0),
+                totalPrice: MathCalc(skuItem.purchaseNumber,onePrice,'cheng'),
               }, skuIndex)}
             />
             <Label style={{ marginLeft: 24 }} className={styles.label}>总价</Label>：
             <ShopNumber
+              min={0}
               value={skuItem.totalPrice}
               onChange={(totalPrice) => dataChange({
                 totalPrice,
-                onePrice: totalPrice / (skuItem.purchaseNumber || 0),
+                onePrice: MathCalc(totalPrice,skuItem.purchaseNumber,'chu'),
               }, skuIndex)}
             />
           </div>

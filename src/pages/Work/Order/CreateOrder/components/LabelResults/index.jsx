@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import MyCard from '../../../../components/MyCard';
+import MyCard from '../../../../../components/MyCard';
 import { Input, Space, TextArea } from 'antd-mobile';
 import styles from '../../index.less';
-import ShopNumber from '../../../AddShop/components/ShopNumber';
-import MyDatePicker from '../../../../components/MyDatePicker';
-import UploadFile from '../../../../components/Upload/UploadFile';
-import MyEllipsis from '../../../../components/MyEllipsis';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
+import MyDatePicker from '../../../../../components/MyDatePicker';
+import UploadFile from '../../../../../components/Upload/UploadFile';
+import MyEllipsis from '../../../../../components/MyEllipsis';
 import { DownOutline } from 'antd-mobile-icons';
-import MyPicker from '../../../../components/MyPicker';
+import MyPicker from '../../../../../components/MyPicker';
 
 const LabelResults = (
   {

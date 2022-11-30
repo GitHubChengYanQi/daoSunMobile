@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Loading } from 'antd-mobile';
-import { useRequest } from '../../../../../util/Request';
-import MyPicker from '../../../../components/MyPicker';
-import LinkButton from '../../../../components/LinkButton';
+import { useRequest } from '../../../../../../util/Request';
+import MyPicker from '../../../../../components/MyPicker';
+import LinkButton from '../../../../../components/LinkButton';
 
 const Currency = (
   {

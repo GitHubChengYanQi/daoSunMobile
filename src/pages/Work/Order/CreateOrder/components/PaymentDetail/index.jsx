@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { AddButton } from '../../../../components/MyButton';
+import { AddButton } from '../../../../../components/MyButton';
 import styles from './index.less';
-import LinkButton from '../../../../components/LinkButton';
-import ShopNumber from '../../../AddShop/components/ShopNumber';
+import LinkButton from '../../../../../components/LinkButton';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import { Input } from 'antd-mobile';
-import MyCard from '../../../../components/MyCard';
-import MyDatePicker from '../../../../components/MyDatePicker';
-import MyPicker from '../../../../components/MyPicker';
-import { Message } from '../../../../components/Message';
-import MyRemoveButton from '../../../../components/MyRemoveButton';
+import MyCard from '../../../../../components/MyCard';
+import MyDatePicker from '../../../../../components/MyDatePicker';
+import MyPicker from '../../../../../components/MyPicker';
+import { Message } from '../../../../../components/Message';
+import MyRemoveButton from '../../../../../components/MyRemoveButton';
+import { MathCalc } from '../../../../../components/ToolUtil';
 
 const PaymentDetail = (
   {
@@ -28,10 +29,10 @@ const PaymentDetail = (
     const newData = value.map((item, index) => {
       if (index === key) {
         const newItem = { ...item, ...param };
-        percentum += newItem.percentum;
+        percentum = MathCalc(newItem.percentum, percentum, 'jia');
         return newItem;
       }
-      percentum += item.percentum;
+      percentum = MathCalc(item.percentum, percentum, 'jia');
       return item;
     });
     onChange(newData);
@@ -95,14 +96,14 @@ const PaymentDetail = (
                   let percentums = 0;
                   value.forEach((item, valueIndex) => {
                     if (valueIndex !== index) {
-                      percentums += (item.percentum || 0);
+                      percentums = MathCalc(item.percentum, percentums, 'jia');
                     }
                   });
-                  const remaining = 100 - percentums;
+                  const remaining = MathCalc(100, percentums, 'jian');
                   const newPercentum = remaining > percentum ? percentum : remaining;
                   dataChange({
                     percentum: newPercentum,
-                    money: Number((money * (newPercentum / 100)).toFixed(2)),
+                    money: Number(MathCalc(money, MathCalc(newPercentum, 100, 'chu'), 'cheng').toFixed(2)),
                   }, index);
                 }}
               />
@@ -118,12 +119,15 @@ const PaymentDetail = (
                   let moneys = 0;
                   value.forEach((item, valueIndex) => {
                     if (valueIndex !== index) {
-                      moneys += (item.money || 0);
+                      moneys = MathCalc(item.money, moneys, 'jia');
                     }
                   });
-                  const remaining = money - moneys;
+                  const remaining = MathCalc(money, moneys, 'jian');
                   const newMoney = remaining > $ ? $ : remaining;
-                  dataChange({ money: newMoney, percentum: Number(((($) / money).toFixed(2)) * 100) }, index);
+                  dataChange({
+                    money: newMoney,
+                    percentum: Number(MathCalc(((MathCalc(($),money,'chu')).toFixed(2)), 100, 'cheng')),
+                  }, index);
                 }}
               />
             </div>

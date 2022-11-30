@@ -1,30 +1,31 @@
 import React, { useRef, useState } from 'react';
-import MyNavBar from '../../components/MyNavBar';
-import FormLayout from '../../components/FormLayout';
-import { ReceiptsEnums } from '../../Receipts';
-import MyCard from '../../components/MyCard';
+import MyNavBar from '../../../components/MyNavBar';
+import FormLayout from '../../../components/FormLayout';
+import { ReceiptsEnums } from '../../../Receipts';
+import MyCard from '../../../components/MyCard';
 import { Divider, Input, Space, Stepper, TextArea } from 'antd-mobile';
 import styles from './index.less';
-import Title from '../../components/Title';
-import MyDatePicker from '../../components/MyDatePicker';
+import Title from '../../../components/Title';
+import MyDatePicker from '../../../components/MyDatePicker';
 import Currency from './components/Currency';
-import Customers from '../ProcessTask/MyAudit/components/Customers';
-import LinkButton from '../../components/LinkButton';
-import { useRequest } from '../../../util/Request';
-import MyPicker from '../../components/MyPicker';
-import { ArrayDuplicate, isArray } from '../../components/ToolUtil';
+import Customers from '../../ProcessTask/MyAudit/components/Customers';
+import LinkButton from '../../../components/LinkButton';
+import { useRequest } from '../../../../util/Request';
+import MyPicker from '../../../components/MyPicker';
+import { ArrayDuplicate, isArray, MathCalc } from '../../../components/ToolUtil';
 import AddSku from './components/AddSku';
-import { MyLoading } from '../../components/MyLoading';
-import ShopNumber from '../AddShop/components/ShopNumber';
-import { request } from '../../../util/Service';
+import { MyLoading } from '../../../components/MyLoading';
+import ShopNumber from '../../AddShop/components/ShopNumber';
+import { request } from '../../../../util/Service';
 import PaymentDetail from './components/PaymentDetail';
 import moment from 'moment';
 import { PaperClipOutlined } from '@ant-design/icons';
-import UploadFile from '../../components/Upload/UploadFile';
-import MyCheckList from '../../components/MyCheckList';
+import UploadFile from '../../../components/Upload/UploadFile';
+import MyCheckList from '../../../components/MyCheckList';
 import LabelResults from './components/LabelResults';
-import { Message } from '../../components/Message';
-import { useHistory } from 'react-router-dom';
+import { Message } from '../../../components/Message';
+import { useHistory, useLocation } from 'react-router-dom';
+import MyEmpty from '../../../components/MyEmpty';
 
 export const orderAdd = {
   url: '/order/v1.1/add',
@@ -39,6 +40,12 @@ export const selfEnterpriseDetail = {
 
 export const customerDetail = {
   url: '/customer/detail',
+  method: 'POST',
+  rowKey: 'customerId',
+};
+
+export const supplierDetail = {
+  url: '/supplier/detail',
   method: 'POST',
   rowKey: 'customerId',
 };
@@ -80,14 +87,24 @@ export const templateGetLabel = {
 };
 
 
-const CreatePurchaseOrder = () => {
+const CreateOrder = () => {
+
+  const { query } = useLocation();
 
   const history = useHistory();
 
   const file = useRef();
 
-  const [data, setData] = useState({ payPlan: 3, payPlanName: '按动作分期付款', currency: '人民币' });
-  console.log('data=>', data);
+  // value: params.module === 'PO' ? userInfo.customerId : null,
+  //   selfEnterprise: params.module === 'PO',
+  //   supply: params.module === 'PO' ? null : 0,
+
+  const [data, setData] = useState({
+    payPlan: 3,
+    payPlanName: '按动作分期付款',
+    currency: '人民币',
+  });
+
   const [visible, setVisible] = useState('');
 
   const [aContactsData, setAContactsData] = useState({});
@@ -120,8 +137,49 @@ const CreatePurchaseOrder = () => {
   } = useRequest(selfEnterpriseDetail, {
     onSuccess: async (res) => {
       let info = {
-        buyerId: res.customerId,
-        buyerName: res.customerName,
+        [query.type === 'PO' ? 'buyerId' : 'sellerId']: res.customerId,
+        [query.type === 'PO' ? 'buyerName' : 'sellerName']: res.customerName,
+        [query.type === 'PO' ? 'partyAAdressId' : 'partyBAdressId']: res.defaultAddress,
+        [query.type === 'PO' ? 'partyAAdressName' : 'partyBAdressName']: res.address?.detailLocation || res.address?.location,
+        [query.type === 'PO' ? 'partyAContactsId' : 'partyBContactsId']: res.defaultContacts,
+        [query.type === 'PO' ? 'partyAContactsName' : 'partyBContactsName']: res.contact?.contactsName,
+        [query.type === 'PO' ? 'partyABankId' : 'partyBBankId']: res.invoiceResult?.bankId,
+        [query.type === 'PO' ? 'partyABankName' : 'partyBBankName']: res.invoiceResult?.bankResult?.bankName,
+        [query.type === 'PO' ? 'partyABankAccount' : 'partyBBankAccount']: res.invoiceResult?.invoiceId,
+        [query.type === 'PO' ? 'partyABankAccountName' : 'partyBBankAccountName']: res.invoiceResult?.bankAccount,
+        [query.type === 'PO' ? 'partyABankNo' : 'partyBBankNo']: res.invoiceResult?.bankNo,
+      };
+
+      if (res.defaultContacts) {
+        const contact = await contactsRun({ data: { contactsId: res.defaultContacts } });
+        if (query.type === 'PO') {
+          setAContactsData(contact);
+          info = {
+            ...info,
+            partyAPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+            partyAPhoneName: isArray(contact?.phoneParams)[0]?.phone,
+          };
+        } else {
+          setBContactsData(contact);
+          info = {
+            ...info,
+            partyBPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+            partyBPhoneName: isArray(contact?.phoneParams)[0]?.phone,
+          };
+        }
+      }
+      setData({ ...data, ...info });
+    },
+  });
+
+  const {
+    loading: customerLoading,
+    data: customerData = {},
+    run: customerRun,
+  } = useRequest(customerDetail, {
+    manual: true,
+    onSuccess: async (res) => {
+      let info = {
         partyAAdressId: res.defaultAddress,
         partyAAdressName: res.address?.detailLocation || res.address?.location,
         partyAContactsId: res.defaultContacts,
@@ -138,19 +196,19 @@ const CreatePurchaseOrder = () => {
         setAContactsData(contact);
         info = {
           ...info,
-          partyAPhone: contact?.phoneParams[0]?.phoneId,
-          partyAPhoneName: contact?.phoneParams[0]?.phone,
+          partyAPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+          partyAPhoneName: isArray(contact?.phoneParams)[0]?.phone,
         };
+        setData({ ...data, ...info });
       }
-      setData({ ...data, ...info });
     },
   });
 
   const {
-    loading: customerLoading,
-    data: customerData = {},
-    run: customerRun,
-  } = useRequest(customerDetail, {
+    loading: supplyLoading,
+    data: supplyData = {},
+    run: supplyRun,
+  } = useRequest(supplierDetail, {
     manual: true,
     onSuccess: async (res) => {
       let info = {
@@ -170,16 +228,46 @@ const CreatePurchaseOrder = () => {
         setBContactsData(contact);
         info = {
           ...info,
-          partyBPhone: contact?.phoneParams[0]?.phoneId,
-          partyBPhoneName: contact?.phoneParams[0]?.phone,
+          partyBPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+          partyBPhoneName: isArray(contact?.phoneParams)[0]?.phone,
         };
         setData({ ...data, ...info });
       }
     },
   });
 
+  if (!query.type) {
+    return <MyEmpty />;
+  }
+
+  const module = () => {
+    switch (query.type) {
+      case 'SO':
+        return {
+          type: 2,
+          title: '创建销售单',
+          addCustomer: '创建客户',
+          supply: 0,
+          formType: ReceiptsEnums.saleOrder,
+        };
+      case 'PO':
+        return {
+          type: 1,
+          title: '创建采购单',
+          addCustomer: '创建供应商',
+          supply: 1,
+          formType: ReceiptsEnums.purchaseOrder,
+        };
+      default:
+        return {};
+    }
+  };
+
+  const aData = (query.type === 'PO' ? selfEnterpriseData : customerData);
+  const bData = (query.type === 'SO' ? selfEnterpriseData : supplyData);
+
   return <>
-    <MyNavBar title='创建采购单' />
+    <MyNavBar title={module().title} />
     <FormLayout
       data={data}
       onSave={async (complete) => {
@@ -187,7 +275,7 @@ const CreatePurchaseOrder = () => {
         if (value.paymentDetail) {
           let percentum = 0;
           value.paymentDetail.map((item) => {
-            return percentum += item.percentum;
+            return percentum = MathCalc(percentum, item.percentum, 'jia');
           });
           if (percentum !== 100) {
             Message.warningDialog({
@@ -211,7 +299,7 @@ const CreatePurchaseOrder = () => {
 
         value = {
           ...value,
-          type: 1,
+          type: module().type,
           paymentParam: {
             money: value.money,
             detailParams: value.paymentDetail,
@@ -251,7 +339,7 @@ const CreatePurchaseOrder = () => {
         });
         return success;
       }}
-      formType={ReceiptsEnums.purchaseOrder}
+      formType={module().formType}
       fieldRender={(item) => {
         let extra;
         let content;
@@ -309,19 +397,19 @@ const CreatePurchaseOrder = () => {
             </div>;
             break;
           case 'partyALegalPerson':
-            extra = selfEnterpriseData.legal || '暂无';
+            extra = aData.legal || '暂无';
             break;
           case 'partyABankNo':
             extra = data.partyABankNo || '暂无';
             break;
           case 'partyACompanyPhone':
-            extra = selfEnterpriseData.telephone || '暂无';
+            extra = aData.telephone || '暂无';
             break;
           case 'partyAFax':
-            extra = selfEnterpriseData.fax || '暂无';
+            extra = aData.fax || '暂无';
             break;
           case 'partyAZipCode':
-            extra = selfEnterpriseData.zipCode || '暂无';
+            extra = aData.zipCode || '暂无';
             break;
           case 'sellerId':
             extra = <div onClick={() => setVisible('sellerId')}>
@@ -354,28 +442,28 @@ const CreatePurchaseOrder = () => {
             </div>;
             break;
           case 'partyBLegalPerson':
-            extra = customerData.legal || '暂无';
+            extra = bData.legal || '暂无';
             break;
           case 'partyBBankNo':
             extra = data.partyBBankNo || '暂无';
             break;
           case 'partyBCompanyPhone':
-            extra = customerData.telephone || '暂无';
+            extra = bData.telephone || '暂无';
             break;
           case 'partyBFax':
-            extra = customerData.fax || '暂无';
+            extra = bData.fax || '暂无';
             break;
           case 'partyBZipCode':
-            extra = customerData.zipCode || '暂无';
+            extra = bData.zipCode || '暂无';
             break;
           case 'detailParams':
             content = <AddSku
-              customerId={data.sellerId}
+              customerId={query.type === 'PO' ? data.sellerId : data.buyerId}
               onChange={(skus) => {
                 let money = 0;
                 skus.map((item) => {
                   if (item && item.totalPrice) {
-                    money += item.totalPrice;
+                    money = MathCalc(money, item.totalPrice, 'jia');
                   }
                   return null;
                 });
@@ -406,7 +494,7 @@ const CreatePurchaseOrder = () => {
               onChange={(value) => setData({
                 ...data,
                 [item.key]: value,
-                totalAmount: (data.money || 0) + (value || 0),
+                totalAmount: MathCalc(data.money, value, 'jia'),
               })}
             />;
             break;
@@ -420,12 +508,12 @@ const CreatePurchaseOrder = () => {
               onChange={(value) => setData({
                 ...data,
                 [item.key]: value,
-                floatingAmount: (value || 0) - (data.money || 0),
+                floatingAmount: MathCalc(value,data.money,'jian'),
                 paymentDetail: isArray(data.paymentDetail).map((item) => {
                   if (item) {
                     return {
                       ...item,
-                      money: (((item.percentum || 0) / 100) * (value || 0)).toFixed(2),
+                      money: MathCalc(MathCalc(item.percentum,100,'chu'),value,'cheng'),
                     };
                   }
                   return item;
@@ -594,7 +682,7 @@ const CreatePurchaseOrder = () => {
       onClose={() => setVisible('')}
       value={data[visible]}
       visible={['partyAAdressId', 'partyBAdressId', 'adressId'].includes(visible)}
-      options={isArray((['partyAAdressId', 'adressId'].includes(visible) ? selfEnterpriseData : customerData)?.adressParams).map((item) => {
+      options={isArray((['partyAAdressId', 'adressId'].includes(visible) ? aData : bData)?.adressParams).map((item) => {
         return {
           label: item.detailLocation || item.location,
           value: item.adressId,
@@ -615,7 +703,7 @@ const CreatePurchaseOrder = () => {
       onClose={() => setVisible('')}
       value={data[visible]}
       visible={['partyAContactsId', 'partyBContactsId', 'userId'].includes(visible)}
-      options={isArray((['partyAContactsId', 'userId'].includes(visible) ? selfEnterpriseData : customerData)?.contactsParams).map((item) => {
+      options={isArray((['partyAContactsId', 'userId'].includes(visible) ? aData : bData)?.contactsParams).map((item) => {
         return {
           label: item.contactsName,
           value: item.contactsId,
@@ -637,16 +725,16 @@ const CreatePurchaseOrder = () => {
           infoContact = {
             partyAContactsId: option.value,
             partyAContactsName: option.label,
-            partyAPhone: contact?.phoneParams[0]?.phoneId,
-            partyAPhoneName: contact?.phoneParams[0]?.phone,
+            partyAPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+            partyAPhoneName: isArray(contact?.phoneParams)[0]?.phone,
           };
         } else {
           setBContactsData(contact);
           infoContact = {
             partyBContactsId: option.value,
             partyBContactsName: option.label,
-            partyBPhone: contact?.phoneParams[0]?.phoneId,
-            partyBPhoneName: contact?.phoneParams[0]?.phone,
+            partyBPhone: isArray(contact?.phoneParams)[0]?.phoneId,
+            partyBPhoneName: isArray(contact?.phoneParams)[0]?.phone,
           };
         }
 
@@ -674,7 +762,7 @@ const CreatePurchaseOrder = () => {
     />
 
     <MyPicker
-      options={ArrayDuplicate((visible === 'partyABankId' ? selfEnterpriseData : customerData).invoiceResults, 'bankId').map(item => ({
+      options={ArrayDuplicate((visible === 'partyABankId' ? aData : bData).invoiceResults, 'bankId').map(item => ({
         value: item.bankId,
         label: item.bankResult?.bankName,
       }))}
@@ -691,7 +779,7 @@ const CreatePurchaseOrder = () => {
     />
 
     <MyPicker
-      options={isArray((visible === 'partyABankAccount' ? selfEnterpriseData : customerData).invoiceResults)
+      options={isArray((visible === 'partyABankAccount' ? aData : bData).invoiceResults)
         .filter(item => item.bankId === (visible === 'partyABankAccount' ? data.partyABankId : data.partyBBankId))
         .map((item) => {
           return {
@@ -787,7 +875,7 @@ const CreatePurchaseOrder = () => {
     />
 
     <Customers
-      data={visible === 'buyerId' ? { status: 99 } : { supply: 1 }}
+      data={visible === 'buyerId' ? (query.type === 'PO' ? { status: 99 } : { supply: 0 }) : (query.type === 'SO' ? { status: 99 } : { supply: 1 })}
       onClose={() => setVisible('')}
       zIndex={1002}
       value={visible === 'buyerId' ?
@@ -802,13 +890,21 @@ const CreatePurchaseOrder = () => {
           if (!customer.customerId) {
             return;
           }
-          selfEnterpriseRun({ data: { customerId: customer.customerId } });
+          if (query.type === 'PO') {
+            selfEnterpriseRun({ data: { customerId: customer.customerId } });
+          } else {
+            customerRun({ data: { customerId: customer.customerId } });
+          }
         } else {
           setData({ ...data, sellerName: customer.customerName, sellerId: customer.customerId });
           if (!customer.customerId) {
             return;
           }
-          customerRun({ data: { customerId: customer.customerId } });
+          if (query.type === 'SO') {
+            selfEnterpriseRun({ data: { customerId: customer.customerId } });
+          } else {
+            supplyRun({ data: { customerId: customer.customerId } });
+          }
         }
       }}
     />
@@ -832,10 +928,10 @@ const CreatePurchaseOrder = () => {
     />
 
     {
-      (orderAddLoading || templateLoading || taxLoading || customerLoading || contactsLoading || selfEnterpriseLoading) &&
+      (orderAddLoading || templateLoading || taxLoading || supplyLoading || customerLoading || contactsLoading || selfEnterpriseLoading) &&
       <MyLoading />
     }
   </>;
 };
 
-export default CreatePurchaseOrder;
+export default CreateOrder;

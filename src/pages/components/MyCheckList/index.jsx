@@ -88,7 +88,7 @@ const MyCheckList = (
           value={searchValue}
           onClear={like}
         />}
-        {list.length === 0 && <MyEmpty />}
+        {!loading && list.length === 0 && <MyEmpty />}
         {loading ? <MyLoading skeleton /> : <CheckList
           style={{
             '--border-inner': 'solid 1px #f5f5f5',

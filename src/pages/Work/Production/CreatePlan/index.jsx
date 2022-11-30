@@ -5,8 +5,8 @@ import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
-import styles from '../../CreatePurchaseOrder/index.less';
-import { Divider, Input, Space, TextArea } from 'antd-mobile';
+import styles from '../../Order/CreateOrder/index.less';
+import { Input, Space, TextArea } from 'antd-mobile';
 import StartEndDate from '../CreateTask/components/StartEndDate';
 import User from '../../CreateTask/components/User';
 import SkuItem from '../../Sku/SkuItem';
@@ -14,9 +14,7 @@ import ShopNumber from '../../AddShop/components/ShopNumber';
 import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import MyRemoveButton from '../../../components/MyRemoveButton';
-import { useHistory } from 'react-router-dom';
-import LinkButton from '../../../components/LinkButton';
-import { AddOutline } from 'antd-mobile-icons';
+import { useHistory, useLocation } from 'react-router-dom';
 import CheckSpu from '../../Sku/CheckSpu';
 import { AddButton } from '../../../components/MyButton';
 
@@ -30,14 +28,18 @@ const CreatePlan = () => {
 
   const history = useHistory();
 
+  const { query = {}, state = {} } = useLocation();
+
+  const haveDetail = { ...query }.hasOwnProperty('detail');
+
   const [data, setData] = useState({});
 
   const [visible, setVisible] = useState(false);
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
-  const [contracts, setContracts] = useState([{}]);
-
+  const [contracts, setContracts] = useState(state.contracts || [{}]);
+  console.log(contracts);
   const [cardCoding, setCardCoding] = useState({});
 
   const contractsChange = (data = {}, key) => {

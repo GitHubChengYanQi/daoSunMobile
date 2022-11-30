@@ -51,8 +51,27 @@ const Detail = (props) => {
     }
   };
 
+  let infoData = {};
+
+  switch (data.type) {
+    case 1:
+      infoData = {
+        title: '采购单详情',
+        buttonText: '确认到货',
+        disabled: isArray(data.detailResults).length === 0,
+      };
+      break;
+    case 2:
+      infoData = {
+        title: '销售单详情',
+        buttonText: '创建出库计划',
+        disabled: isArray(data.detailResults).length === 0 || !data.contractId,
+      };
+      break;
+  }
+
   return <>
-    <MyNavBar title='采购单详情' />
+    <MyNavBar title={infoData.title} />
 
     <MyCard title='基本信息'>
       <Space direction='vertical'>
@@ -80,7 +99,8 @@ const Detail = (props) => {
         </div>
         <MySpace>
           <div><Label className={styles.label}>地址</Label>：</div>
-          <MyEllipsis width='calc(100vw - 135px)'>{data.aadress?.detailLocation || data.aadress?.location || '无'}</MyEllipsis>
+          <MyEllipsis
+            width='calc(100vw - 135px)'>{data.aadress?.detailLocation || data.aadress?.location || '无'}</MyEllipsis>
         </MySpace>
         <div>
           <Label className={styles.label}>联系人</Label>：{data.acontacts?.contactsName || '无'}
@@ -97,7 +117,8 @@ const Detail = (props) => {
         </div>
         <MySpace>
           <div><Label className={styles.label}>地址</Label>：</div>
-          <MyEllipsis width='calc(100vw - 135px)'>{data.badress?.detailLocation || data.badress?.location || '无'}</MyEllipsis>
+          <MyEllipsis
+            width='calc(100vw - 135px)'>{data.badress?.detailLocation || data.badress?.location || '无'}</MyEllipsis>
         </MySpace>
         <div>
           <Label className={styles.label}>联系人</Label>：{data.bcontacts?.contactsName || '无'}
@@ -125,16 +146,38 @@ const Detail = (props) => {
 
     <BottomButton
       only
-      text='确认到货'
-      disabled={isArray(data.detailResults).length === 0}
+      text={infoData.buttonText}
+      disabled={infoData.disabled}
       onClick={() => {
-        history.push({
-          pathname: '/Work/Order/ConfirmArrival',
-          search: `id=${id}`,
-          state: {
-            skus: data.detailResults,
-          },
-        });
+        switch (data.type) {
+          case 1:
+            history.push({
+              pathname: '/Work/Order/ConfirmArrival',
+              search: `id=${id}`,
+              state: {
+                skus: data.detailResults,
+              },
+            });
+            break;
+          case 2:
+            history.push({
+              pathname: '/Work/Production/CreatePlan',
+              search: 'detail',
+              state: {
+                contracts: [
+                  {
+                    coding: data.contract?.coding,
+                    details: isArray(data.detailResults).map(item => ({
+                      ...(item.skuResult || {}),
+                      purchaseNumber: item.purchaseNumber,
+                    })),
+                  },
+                  {},
+                ],
+              },
+            });
+            break;
+        }
       }}
     />
   </>;
