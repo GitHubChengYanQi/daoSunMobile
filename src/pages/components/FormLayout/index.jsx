@@ -118,11 +118,16 @@ const FormLayout = (
     </div>
 
     <BottomButton
-      only
-      loading={loading}
-      disabled={disabled()}
-      text={currentStep < steps.length - 1 ? '下一步' : '保存'}
-      onClick={async () => {
+      leftText='上一步'
+      leftDisabled={currentStep === 0}
+      leftOnClick={() => {
+        getRequireFiled(steps[currentStep - 1]?.data);
+        setCurrentStep(currentStep - 1);
+      }}
+      rightLoading={loading}
+      rightDisabled={disabled()}
+      rightText={currentStep < steps.length - 1 ? '下一步' : '保存'}
+      rightOnClick={async () => {
         if (currentStep === steps.length - 1) {
           onSave(true);
         } else if (steps[currentStep].type === 'add') {
