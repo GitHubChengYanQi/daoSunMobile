@@ -9,3 +9,9 @@ export const invoiceAdd = {
   method: 'POST',
   rowKey: 'invoiceBillId'
 };
+
+export const orderList = {
+  url: '/order/list',
+  method: 'POST',
+  rowKey:'orderId'
+};

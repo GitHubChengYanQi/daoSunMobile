@@ -3,34 +3,32 @@ import MyNavBar from '../../../components/MyNavBar';
 import FormLayout from '../../../components/FormLayout';
 import { Message } from '../../../components/Message';
 import { ReceiptsEnums } from '../../../Receipts';
-import { Input, Space } from 'antd-mobile';
+import { Input, Space, TextArea } from 'antd-mobile';
 import styles from '../../Order/CreateOrder/index.less';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
 import { useRequest } from '../../../../util/Request';
-import { invoiceAdd, orderList } from '../url';
+import { paymentAdd } from '../url';
 import LinkButton from '../../../components/LinkButton';
-import { PaperClipOutlined } from '@ant-design/icons';
-import UploadFile from '../../../components/Upload/UploadFile';
-import MyDatePicker from '../../../components/MyDatePicker';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import { useHistory } from 'react-router-dom';
 import MyCheckList from '../../../components/MyCheckList';
+import { orderList } from '../../Invoice/url';
 
-const CreateInvoice = () => {
+const CreatePayment = () => {
 
   const [data, setData] = useState({});
 
   const [open, setOpen] = useState();
 
-  const { loading, run } = useRequest(invoiceAdd, { manual: true });
+  const { loading, run } = useRequest(paymentAdd, { manual: true });
 
   const file = useRef();
 
   const history = useHistory();
 
   return <>
-    <MyNavBar title='创建发票' />
+    <MyNavBar title='创建付款信息' />
     <FormLayout
       data={data}
       loading={loading}
@@ -40,7 +38,7 @@ const CreateInvoice = () => {
           success = true;
           if (complete) {
             Message.successDialog({
-              content: '创建发票成功！',
+              content: '创建付款信息成功！',
               only: true,
               onConfirm: () => history.goBack(),
             });
@@ -51,13 +49,13 @@ const CreateInvoice = () => {
         });
         return success;
       }}
-      formType={ReceiptsEnums.invoice}
+      formType={ReceiptsEnums.payment}
       fieldRender={(item) => {
         const required = item.required;
         let extra;
         let content;
         switch (item.key) {
-          case 'money':
+          case 'paymentAmount':
             extra = <Space align='center'>
               <ShopNumber
                 number
@@ -72,36 +70,14 @@ const CreateInvoice = () => {
               />人民币
             </Space>;
             break;
-          case 'enclosureId':
-            extra = !data[item.key] && <LinkButton onClick={() => {
-              file.current.addFile();
-            }}>
-              <PaperClipOutlined />
-            </LinkButton>;
-            content = <UploadFile
-              file
-              uploadId='enclosureId'
-              ref={file}
-              files={data[item.key] ? [{ mediaId: data[item.key], filedName: data.filedName, url: data.filedUrl }] : []}
-              onChange={(medias = []) => {
-                setData({
-                  ...data,
-                  [item.key]: medias[0]?.mediaId,
-                  filedName: medias[0]?.filedName,
-                  filedUrl: medias[0]?.url,
-                });
-              }} />;
-            break;
-          case 'InvoiceDate':
-            extra = <MyDatePicker
-              precision='second'
-              style={{ textAlign: 'right' }}
-              value={data[item.key]}
-              onChange={(value) => setData({ ...data, [item.key]: value })}
-            />;
+          case 'remark':
+            content = <TextArea placeholder={`请输入${item.filedName}`} onChange={(value) => setData({
+              ...data,
+              [item.key]: value,
+            })} />;
             break;
           case 'orderId':
-            extra = <div onClick={() => setOpen('buyerId')}>
+            extra = <div onClick={() => setOpen(true)}>
               {data[item.key] ? data.orderName : <LinkButton title={`请选择${item.filedName || ''}`} />}
             </div>;
             break;
@@ -141,4 +117,4 @@ const CreateInvoice = () => {
   </>;
 };
 
-export default CreateInvoice;
+export default CreatePayment;

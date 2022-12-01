@@ -33,13 +33,16 @@ const Invoice = () => {
             headerClassName={styles.headerClassName}
             bodyClassName={styles.bodyClassName}
             extraClassName={styles.extra}
-            extra={MyDate.Show(item.invoiceDate)}
+            extra={MyDate.Show(item.createTime)}
           >
             <div>
               <Label className={styles.label}>名称</Label>：{item.name}
             </div>
             <div>
               <Label className={styles.label}>金额</Label>：{item.money} 人民币
+            </div>
+            <div>
+              <Label className={styles.label}>发票日期</Label>：{item.invoiceDate}
             </div>
           </MyCard>;
         })
