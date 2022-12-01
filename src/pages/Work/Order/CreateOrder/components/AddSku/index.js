@@ -13,6 +13,7 @@ import MyPicker from '../../../../../components/MyPicker';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
 import { MathCalc } from '../../../../../components/ToolUtil';
+import MyRemoveButton from '../../../../../components/MyRemoveButton';
 
 export const unitListSelect = { url: '/unit/listSelect', method: 'POST' };
 export const orderDetailRecord = { url: '/orderDetail/record', method: 'POST' };
@@ -64,11 +65,16 @@ const AddSku = (
     {
       data.map((skuItem, skuIndex) => {
         return <div key={skuIndex} className={styles.skuItem}>
-          <div style={{ display: 'block', padding: 0 }}>
+          <div style={{ padding: 0 }}>
             <SkuItem
+              extraWidth='60px'
+              className={styles.sku}
               noView
               skuResult={skuItem.skuResult}
             />
+            <MyRemoveButton onRemove={() => {
+              change(data.filter((item, index) => index !== skuIndex));
+            }} />
           </div>
           <div>
             <Label className={styles.label}>品牌</Label>：
@@ -91,32 +97,32 @@ const AddSku = (
           <div>
             <Label className={styles.label}>数量</Label>：
             <ShopNumber
-              min={1}
+              min={0.01}
               value={skuItem.purchaseNumber}
               onChange={(purchaseNumber) => dataChange({
                 purchaseNumber,
-                totalPrice: MathCalc(skuItem.onePrice,purchaseNumber,'cheng'),
+                totalPrice: MathCalc(skuItem.onePrice, purchaseNumber, 'cheng'),
               }, skuIndex)}
             />
           </div>
           <div>
             <Label className={styles.label}>单价</Label>：
             <ShopNumber
-              min={0}
+              min={0.01}
               decimal={2}
               value={skuItem.onePrice}
               onChange={(onePrice) => dataChange({
                 onePrice,
-                totalPrice: MathCalc(skuItem.purchaseNumber,onePrice,'cheng'),
+                totalPrice: MathCalc(skuItem.purchaseNumber, onePrice, 'cheng'),
               }, skuIndex)}
             />
             <Label style={{ marginLeft: 24 }} className={styles.label}>总价</Label>：
             <ShopNumber
-              min={0}
+              min={0.01}
               value={skuItem.totalPrice}
               onChange={(totalPrice) => dataChange({
                 totalPrice,
-                onePrice: MathCalc(totalPrice,skuItem.purchaseNumber,'chu'),
+                onePrice: MathCalc(totalPrice, skuItem.purchaseNumber, 'chu'),
               }, skuIndex)}
             />
           </div>

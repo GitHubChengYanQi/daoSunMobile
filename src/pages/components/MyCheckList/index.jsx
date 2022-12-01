@@ -39,7 +39,7 @@ const MyCheckList = (
   const [searchValue, setSearchValue] = useState();
 
   const [checkList, setCheckList] = useState([]);
-  console.log(checkList);
+
   const { loading, run } = useRequest(api, {
     manual: true,
     defaultParams: {

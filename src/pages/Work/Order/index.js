@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import MyList from '../../components/MyList';
-import { Card, Space } from 'antd-mobile';
 import { history, useLocation } from 'umi';
 import { orderList } from './Url';
 import MyNavBar from '../../components/MyNavBar';

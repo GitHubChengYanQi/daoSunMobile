@@ -502,7 +502,7 @@ const CreateOrder = () => {
             extra = <ShopNumber
               number
               decimal={2}
-              min={0}
+              min={0.01}
               value={data[item.key]}
               getContainer={document.body}
               onChange={(value) => setData({
