@@ -27,7 +27,7 @@ const StoreHousePositions = (props) => {
 
   const extra = (item) => {
     return <Space>
-      {!ToolUtil.isQiyeWeixin() && <LinkButton onClick={() => {
+      <LinkButton onClick={() => {
         getCode({
           params: {
             id: item.key,
@@ -35,7 +35,7 @@ const StoreHousePositions = (props) => {
         });
       }}>
         打印二维码
-      </LinkButton>}
+      </LinkButton>
       <LinkButton onClick={() => {
         history.push(`/Work/Stock?storehousePositionsId=${item.key}`);
       }}>
