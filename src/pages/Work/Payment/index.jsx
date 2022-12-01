@@ -70,6 +70,9 @@ const Payment = () => {
               bodyClassName={styles.bodyClassName}
               extraClassName={styles.extra}
               extra={MyDate.Show(item.createTime)}
+              onClick={()=>{
+                history.push({ pathname: '/Work/Payment/PaymentDetail', search: `recordId=${item.recordId}` });
+              }}
             >
               <div>
                 <Label className={styles.label}>金额</Label>：{item.paymentAmount} 人民币

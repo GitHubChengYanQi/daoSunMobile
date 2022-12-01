@@ -155,6 +155,8 @@ const Detail = (props) => {
               pathname: '/Work/Order/ConfirmArrival',
               search: `id=${id}`,
               state: {
+                customerId: data.bcustomer?.customerId,
+                customerName: data.bcustomer?.customerName,
                 skus: data.detailResults,
               },
             });

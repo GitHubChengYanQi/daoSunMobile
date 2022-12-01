@@ -34,6 +34,9 @@ const Invoice = () => {
             bodyClassName={styles.bodyClassName}
             extraClassName={styles.extra}
             extra={MyDate.Show(item.createTime)}
+            onClick={() => {
+              history.push({ pathname: '/Work/Invoice/InvoiceDetail', search: `invoiceBillId=${item.invoiceBillId}` });
+            }}
           >
             <div>
               <Label className={styles.label}>名称</Label>：{item.name}

@@ -81,6 +81,9 @@ const ConfirmArrival = () => {
             submitType: 'purchaseOrder',
           },
           state: {
+            instockType: 'PURCHASE_INSTOCK',
+            customerId: state.customerId,
+            customerName: state.customerName,
             skus: skus.filter(item => item.number).map(item => ({
               brandId: item.brandId,
               brandName: item.brandResult?.brandName,
