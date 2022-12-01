@@ -151,7 +151,7 @@ const Detail = (props) => {
       onClick={() => {
         switch (data.type) {
           case 1:
-            history.push({
+            history.replace({
               pathname: '/Work/Order/ConfirmArrival',
               search: `id=${id}`,
               state: {

@@ -32,7 +32,7 @@ const ConfirmArrival = () => {
 
   useEffect(() => {
     if (skus.length === 0) {
-      history.push(`/Work/Order/Detail?id=${query.id}`);
+      history.replace(`/Work/Order/Detail?id=${query.id}`);
     }
   }, []);
 
