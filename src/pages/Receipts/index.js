@@ -39,4 +39,9 @@ export const ReceiptsEnums = {
 
   // 生产任务
   productionTask: 'PROASK',
+
+  // 发票
+  invoice: 'INVOICE',
+  // 付款
+  payment: 'PAYMENT',
 };

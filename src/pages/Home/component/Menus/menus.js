@@ -94,4 +94,6 @@ export const menus = [
   { code: 'OutStockConfirm',icon:'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
   { code: 'mailList',icon:'icon-lianxiren2', url: '/Work/MailList' },
   { code: 'preProduction', url: '/Work/Production/PreProduction' },
+  { code: 'invoice', url: '/Work/Invoice' },
+  { code: 'payment', url: '/Work/Payment' },
 ];
