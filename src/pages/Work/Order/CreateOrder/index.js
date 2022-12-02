@@ -485,18 +485,15 @@ const CreateOrder = () => {
             extra = data[item.key] || 0;
             break;
           case 'floatingAmount':
-            extra = <ShopNumber
-              number
-              decimal={2}
-              min={-999999}
+            extra = <Stepper
+              className={styles.stepper}
+              digits={2}
               value={data[item.key]}
-              getContainer={document.body}
               onChange={(value) => setData({
                 ...data,
                 [item.key]: value,
                 totalAmount: MathCalc(data.money, value, 'jia'),
-              })}
-            />;
+              })} />;
             break;
           case 'totalAmount':
             extra = <ShopNumber
