@@ -19,12 +19,12 @@ const InvoiceDetail = () => {
 
   return <>
     <MyNavBar title='发票详情' />
-    <MyCard title='关联订单' extra={data.coding} />
-    <MyCard title='供应商' extra={data.coding} />
+    <MyCard title='关联订单' extra={data.orderResult?.coding} />
+    <MyCard title='供应商' extra={data.orderResult?.bcustomer?.customerName} />
     <MyCard title='名称' extra={data.name} />
     <MyCard title='金额' extra={data.money + ' 人民币'} />
-    <MyCard title='附件'>
-      <UploadFile files={[]} show file />
+    <MyCard title='附件' bodyStyle={{ padding: 0 }}>
+      <UploadFile files={!data.enclosureId ? [] : [data.mediaUrlResult]} show file />
     </MyCard>
     <MyCard title='发票日期' extra={data.invoiceDate} />
     <MyCard title='创建时间' extra={data.createTime} />

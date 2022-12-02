@@ -47,8 +47,6 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const { query, state } = useLocation();
 
-  console.log(state?.sourId);
-
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
   const [params, setParams] = useState(defaultParams || {});

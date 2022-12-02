@@ -18,8 +18,8 @@ const PaymentDetail = () => {
 
   return <>
     <MyNavBar title='付款详情' />
-    <MyCard title='关联订单' extra={data.coding} />
-    <MyCard title='供应商' extra={data.coding} />
+    <MyCard title='关联订单' extra={data.orderResult?.coding} />
+    <MyCard title='供应商' extra={data.orderResult?.bcustomer?.customerName} />
     <MyCard title='金额' extra={data.paymentAmount + ' 人民币'} />
     <MyCard title='备注' extra={data.remark} />
     <MyCard title='创建时间' extra={data.createTime} />
