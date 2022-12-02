@@ -55,7 +55,8 @@ const Plan = (
     const skuResult = skuItem.skuResult || {};
     const disabled = !skuResult.processResult;
     const skuChecked = skuKeys.includes(skuItem.skuId);
-    const skuDisabled = details.filter(item => !item.contractId).length === details.length || disabled;
+    const skuDisabled = details.filter(item => !(item.orderResult?.contractId)).length === details.length || disabled;
+
     return <div key={skuIndex} className={styles.order}>
       <MyCard
         headerClassName={styles.header}
@@ -94,7 +95,7 @@ const Plan = (
           details.map((rowItem, rowIndex) => {
             const order = rowItem.orderResult || {};
             const checked = checkedSkus.map(item => item.detailId).includes(rowItem.detailId);
-            const detailDisabled = !skuResult.contractId || disabled;
+            const detailDisabled = !order.contractId || disabled;
             return <div
               key={rowIndex}
               className={styles.detailItem}
@@ -120,7 +121,7 @@ const Plan = (
                 <div className={styles.infoItem}><Label className={styles.label}>客户</Label>：{order.acustomer?.customerName}</div>
               </div>
               <div style={{ textAlign: 'center' }}>
-                {!skuResult.contractId && <div className={styles.red}>无合同</div>}
+                {!order.contractId && <div className={styles.red}>无合同</div>}
                 × {rowItem.purchaseNumber}
               </div>
             </div>;
