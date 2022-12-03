@@ -8,6 +8,7 @@ import styles from '../Production/index.less';
 import MyEmpty from '../../components/MyEmpty';
 import MyCard from '../../components/MyCard';
 import { MyDate } from '../../components/MyDate';
+import MySearch from '../../components/MySearch';
 
 const Order = () => {
 
@@ -16,6 +17,8 @@ const Order = () => {
   const { query } = useLocation();
 
   const [data, setData] = useState([]);
+
+  const [searchValue, setSearchValue] = useState();
 
   if (!query.type) {
     return <MyEmpty height='100%' />;
@@ -38,6 +41,14 @@ const Order = () => {
 
   return <>
     <MyNavBar title={infoData.title} />
+    <MySearch
+      value={searchValue}
+      onChange={setSearchValue}
+      onSearch={(theme) => {
+        ref.current.submit({ theme });
+      }}
+    />
+    <div className={styles.space} />
     <MyList
       params={{ type: query.type }}
       ref={ref}
