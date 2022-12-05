@@ -89,8 +89,9 @@ export const menus = [
   }, {
     code: 'allocation',
     icon: 'icon-kujiantiaobo',
-    url:  `/Work/Stock/Task?type=${ReceiptsEnums.allocation}`,
+    url: `/Work/Stock/Task?type=${ReceiptsEnums.allocation}`,
   },
-  { code: 'OutStockConfirm',icon:'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
-  { code: 'mailList',icon:'icon-lianxiren2', url: '/Work/MailList' },
+  { code: 'OutStockConfirm', icon: 'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
+  { code: 'mailList', icon: 'icon-lianxiren2', url: '/Work/MailList' },
+  { code: 'StockForewarn', url: '/Work/StockForewarn' },
 ];
