@@ -40,7 +40,7 @@ const SkuItem = (
   const history = useHistory();
 
   const view = () => {
-    if (noView || document.getElementsByTagName('body').item(0).classList.contains('adm-overflow-hidden')) {
+    if (!skuResult.skuId || noView || document.getElementsByTagName('body').item(0).classList.contains('adm-overflow-hidden')) {
       return;
     }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
@@ -63,7 +63,7 @@ const SkuItem = (
         </div>
       </div>
       <div
-        onClick={()=>view()}
+        onClick={() => view()}
         className={style.sku}
         style={{
           height: imgSize,

@@ -1,10 +1,10 @@
 import React from 'react';
 import { ToolUtil } from '../ToolUtil';
-import style from './index.less'
+import styles from './index.less';
 
-const Label = ({children,className}) => {
+const Label = ({ children, className,style }) => {
 
-  return <span className={ToolUtil.classNames(className,style.label)}>{children}</span>;
+  return <span style={style} className={ToolUtil.classNames(className, styles.label)}>{children}</span>;
 };
 
 export default Label;

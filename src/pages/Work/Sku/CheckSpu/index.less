@@ -1,0 +1,49 @@
+.sku {
+  padding-bottom: 16px;
+}
+
+.skuContent {
+  max-height: 50vh;
+  overflow: auto;
+}
+
+.item {
+  border-top: solid 1px #f7f8f9;
+  padding: 8px 0;
+
+  .label {
+    padding-bottom: 8px;
+  }
+
+  .values {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    .value {
+      padding: 8px;
+      background-color: #f7f8fa;
+    }
+
+    .checked {
+      color: var(--adm-color-primary);
+      background-color: var(--body--background--color);
+    }
+
+    .disabled {
+      color: #c8c9cc;
+      background-color: #f7f8fa;
+    }
+  }
+}
+
+.add {
+  padding: 16px;
+
+  button {
+    height: 40px;
+    border-radius: 50px;
+    width: 100%;
+  }
+}

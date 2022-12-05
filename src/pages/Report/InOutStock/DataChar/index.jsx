@@ -280,15 +280,7 @@ const DataChar = (
       onClose={() => setVisible('')}
       visible={visible === 'time'}
       value={searchParams.timeType}
-      options={[
-        { label: '近7天', value: '近7天' },
-        { label: '近30天', value: '近30天' },
-        { label: '近三月', value: '近三月' },
-        { label: '近半年', value: '近半年' },
-        { label: '近一年', value: '近一年' },
-        { label: '至今', value: '至今' },
-        { label: '自定义', value: 'diy' },
-      ]}
+      options={[]}
       onChange={(option) => {
         setVisible('');
         if (option.value === 'diy') {

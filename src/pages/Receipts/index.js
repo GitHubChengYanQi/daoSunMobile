@@ -31,9 +31,17 @@ export const ReceiptsEnums = {
   // 采购单
   purchaseOrder: 'PURCHASEORDER',
 
+  // 销售单
+  saleOrder: 'SALEORDER',
+
   // 生产计划
   production: 'PRODUCTION',
 
   // 生产任务
   productionTask: 'PROASK',
+
+  // 发票
+  invoice: 'INVOICE',
+  // 付款
+  payment: 'PAYMENT',
 };

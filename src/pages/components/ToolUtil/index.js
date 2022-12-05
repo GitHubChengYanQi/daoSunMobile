@@ -3,7 +3,6 @@ import { getLastMeasureIndex } from '../MentionsNote/LastMention';
 import { MyDate } from '../MyDate';
 import { Message } from '../Message';
 import { history } from 'umi';
-import { Dialog } from 'antd-mobile';
 import moment from 'moment';
 
 // 判断是否是企业微信或者微信开发者工具
@@ -29,6 +28,12 @@ export const isObject = (object) => {
 // 返回空集合
 export const isArray = (array) => {
   return Array.isArray(array) ? array : [];
+};
+
+// 集合去重
+export const ArrayDuplicate = (array, key) => {
+  const res = new Map();
+  return (Array.isArray(array) ? array : []).filter((a) => !res.has(a[key]) && res.set(a[key], 1));
 };
 
 // base64解压返回JSON对象
@@ -215,6 +220,66 @@ export const back = (
 // 最大显示宽度
 export const viewWidth = () => {
   return window.innerWidth > 640 ? 640 : window.innerWidth;
+};
+
+const decNum = (a) => {/*获取小数位数*/
+  var r = 0;
+  if (a !== null && a !== undefined) {
+    a = a.toString();
+    if (a.indexOf('.') !== -1) r = a.split('.')[1].length;
+  }
+  return r;
+};
+
+const int = (a) => {/*去除小数点并转成数值*/
+  if (a !== null && a !== undefined) {
+    if (Number(a) === 0) {
+      return parseInt('0');
+    } else {
+      return parseInt(a.toString().replace('.', ''));
+    }
+  } else {
+    return parseInt('0');
+  }
+};
+
+// 数学四则运算
+export const MathCalc = (a, b, type) => {//加减乘除
+  let r;
+  let da = decNum(a);
+  let db = decNum(b);
+  let dsum = da + db;
+  let dmin = Math.min(da, db);
+  let dmax = Math.max(da, db);
+  dsum += dmax - dmin;
+  dsum = Math.pow(10, dsum);
+  dmax = Math.pow(10, dmax);
+  a = int(a);
+  b = int(b);
+  if (da > db) {
+    b *= Math.pow(10, da - db);
+  } else {
+    a *= Math.pow(10, db - da);
+  }
+
+  switch (type) {
+    case 'jia':
+      r = (a + b) / dmax;
+      break;
+    case 'jian':
+      r = (a - b) / dmax;
+      break;
+    case 'cheng':
+      r = (a * b) / dsum;
+      break;
+    case 'chu':
+      if (b === 0) {
+        break;
+      }
+      r = a / b;
+      break;
+  }
+  return Number(r.toFixed(2));
 };
 
 export const ToolUtil = {

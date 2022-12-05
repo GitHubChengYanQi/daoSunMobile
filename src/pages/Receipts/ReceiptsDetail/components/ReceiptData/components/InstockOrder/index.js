@@ -9,6 +9,8 @@ import MyCard from '../../../../../../components/MyCard';
 import { UserName } from '../../../../../../components/User';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';
+import { getInType } from '../../../../../../Work/CreateTask/components/InstockAsk';
+import { getOutType } from '../../../../../../Work/CreateTask/components/OutstockAsk';
 
 const InstockOrder = (
   {
@@ -99,7 +101,6 @@ const InstockOrder = (
     }
   };
 
-
   return <>
     {action()}
 
@@ -124,6 +125,11 @@ const InstockOrder = (
       hidden={type !== ReceiptsEnums.outstockOrder}
       title='领料负责人'
       extra={<UserName user={data.userResult} />}
+    />
+
+    <MyCard
+      title={type === ReceiptsEnums.outstockOrder ? '出库类型' : '入库类型'}
+      extra={(type === ReceiptsEnums.outstockOrder ? getOutType(data.type) : getInType(data.instockType)) || '-'}
     />
 
     <MyCard title='注意事项'>

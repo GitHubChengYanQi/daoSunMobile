@@ -26,6 +26,7 @@ const StartEndDate = (
     value = [],
     onChange = () => {
     },
+    placeholder,
     onClose = () => {
     },
     min,
@@ -36,6 +37,7 @@ const StartEndDate = (
     minWidth,
     render,
     dataRef,
+    hidden,
   }) => {
 
   let clickRef = dataRef;
@@ -47,6 +49,7 @@ const StartEndDate = (
 
   return <>
     <div
+      hidden={hidden}
       style={{ display: 'inline-block', minWidth: minWidth || 100, textAlign: textAlign || 'right' }}
       className={className}
       onClick={() => {
@@ -55,7 +58,7 @@ const StartEndDate = (
     >
       {render || <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
-        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
+        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : (placeholder || '请选择时间')}
       </Space>}
     </div>
     <MyDatePicker

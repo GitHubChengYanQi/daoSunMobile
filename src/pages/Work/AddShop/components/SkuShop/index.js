@@ -38,7 +38,7 @@ const SkuShop = (
     shopRef,
   },
 ) => {
-
+  console.log(skus);
   const [visible, setVisible] = useState();
 
   const [allocationView, setAllocationView] = useState();

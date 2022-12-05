@@ -24,6 +24,7 @@ const MyKeybord = (
     },
     onBack = () => {
     },
+    getContainer,
   },
 ) => {
 
@@ -80,7 +81,7 @@ const MyKeybord = (
 
   return <>
      <Popup
-      getContainer={null}
+      getContainer={getContainer || null}
       visible={visible}
       className={ToolUtil.classNames(style.popup, popupClassName)}
       onMaskClick={() => {

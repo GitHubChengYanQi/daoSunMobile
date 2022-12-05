@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { FloatingBubble, InfiniteScroll, PullToRefresh } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';
@@ -106,7 +106,7 @@ const MyList = (
   // }
 
   if (!loading && (!data || data.length === 0) && !noEmpty) {
-    return <MyEmpty height='100%' />;
+    return <MyEmpty height={200} />;
   }
 
   const statusRecord = {
