@@ -10,6 +10,7 @@ import MySearch from '../../components/MySearch';
 import MyFloatingBubble from '../../components/FloatingBubble';
 import { useHistory } from 'react-router-dom';
 import { MyDate } from '../../components/MyDate';
+import BottomButton from '../../components/BottomButton';
 
 const Production = () => {
 
@@ -20,7 +21,7 @@ const Production = () => {
   const ref = useRef();
 
   return <div className={styles.mainDiv}>
-    <MyNavBar title='计划列表' />
+    <MyNavBar title='生产计划列表' />
     <MySearch />
 
     <Tabs className={styles.tabs}>
@@ -73,11 +74,14 @@ const Production = () => {
       }
     </MyList>
 
-    <MyFloatingBubble>
-      <AddOutline style={{ color: 'var(--adm-color-primary)' }} onClick={() => {
+
+    <BottomButton
+      only
+      onClick={() => {
         history.push('/Work/Production/CreatePlan');
-      }} />
-    </MyFloatingBubble>
+      }}
+      text='创建计划'
+    />
   </div>;
 };
 
