@@ -48,7 +48,7 @@ const FormLayout = (
   };
 
   const disabled = () => {
-    const requireds = requiredFiled.filter(item => !data[item]);
+    const requireds = requiredFiled.filter(item => typeof data[item] !== 'number' && !data[item] && fieldRender({ key: item }) !== false);
     return requireds.length !== 0;
   };
 

@@ -110,6 +110,8 @@ const CreateOrder = () => {
   const [aContactsData, setAContactsData] = useState({});
   const [bContactsData, setBContactsData] = useState({});
 
+  const [orderId, setOrderId] = useState();
+
   const { loading: orderAddLoading, run: orderAddRun } = useRequest(orderAdd, { manual: true });
 
   const { loading: taxLoading, data: taxData } = useRequest(taxRateListSelect);
@@ -299,6 +301,7 @@ const CreateOrder = () => {
 
         value = {
           ...value,
+          orderId,
           type: module().type,
           paymentParam: {
             money: value.money,
@@ -324,7 +327,8 @@ const CreateOrder = () => {
         let success;
         await orderAddRun({
           data: value,
-        }).then(() => {
+        }).then((res) => {
+          setOrderId(res.orderId);
           success = true;
           if (complete) {
             Message.successDialog({
@@ -505,12 +509,12 @@ const CreateOrder = () => {
               onChange={(value) => setData({
                 ...data,
                 [item.key]: value,
-                floatingAmount: MathCalc(value,data.money,'jian'),
+                floatingAmount: MathCalc(value, data.money, 'jian'),
                 paymentDetail: isArray(data.paymentDetail).map((item) => {
                   if (item) {
                     return {
                       ...item,
-                      money: MathCalc(MathCalc(item.percentum,100,'chu'),value,'cheng'),
+                      money: MathCalc(MathCalc(item.percentum, 100, 'chu'), value, 'cheng'),
                     };
                   }
                   return item;
@@ -586,7 +590,7 @@ const CreateOrder = () => {
             break;
           case 'fileId':
             if (data.generateContract !== 2) {
-              return;
+              return false;
             }
             extra = !data[item.key] && <LinkButton onClick={() => {
               file.current.addFile();
@@ -609,7 +613,7 @@ const CreateOrder = () => {
             break;
           case 'templateId':
             if (data.generateContract !== 1) {
-              return;
+              return false;
             }
             extra = <div onClick={() => setVisible('templateId')}>
               {data[item.key] !== undefined ? data.templateName : <LinkButton title={`请选择${item.filedName || ''}`} />}
@@ -617,7 +621,7 @@ const CreateOrder = () => {
             break;
           case 'contractCoding':
             if (data.generateContract !== 1) {
-              return;
+              return false;
             }
             extra = <Input
               value={data[item.key] || ''}
@@ -630,7 +634,7 @@ const CreateOrder = () => {
             break;
           case 'labelResults':
             if (data.generateContract !== 1) {
-              return;
+              return false;
             }
             return <div hidden={isArray(templateGetLabeData).length === 0 && !templateGetLabelLoading
             }>
