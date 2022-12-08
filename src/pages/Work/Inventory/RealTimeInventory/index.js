@@ -9,7 +9,6 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
 import { ClockCircleOutline } from 'antd-mobile-icons';
-import MyCard from '../../../components/MyCard';
 import MyList from '../../../components/MyList';
 import { MyDate } from '../../../components/MyDate';
 import MyPositions from '../../../components/MyPositions';
@@ -17,10 +16,13 @@ import { ScanIcon } from '../../../components/Icon';
 import ListScreent from '../../Sku/SkuList/components/ListScreent';
 import Title from '../../../components/Title';
 import StocktakScreen from './components/StocktakScreen';
+import KeepAlive from '../../../../components/KeepAlive';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
-const RealTimeInventory = (props) => {
+const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) => {
+
+  const [scrollTop, setScrollTop] = useState(0);
 
   const [positionVisible, setPositionVisible] = useState();
 
@@ -76,7 +78,11 @@ const RealTimeInventory = (props) => {
     ref.current.submit();
   };
 
-  return <>
+  return <div
+    id='content'
+    onScroll={(event) => {
+      setScrollTop(event.target.scrollTop);
+    }}>
     <MyNavBar title='即时盘点' />
 
     <div onClick={() => {
@@ -108,7 +114,8 @@ const RealTimeInventory = (props) => {
     />
     <div className={style.inventoryLog}>
       <div ref={listRef}>
-        <MyList ref={ref} api={inventoryPageList} getData={setData} data={data} response={(res) => setNumber(res.count)}>
+        <MyList ref={ref} api={inventoryPageList} getData={setData} data={data}
+                response={(res) => setNumber(res.count)}>
           <div className={style.logs}>
             {
               data.map((item, index) => {
@@ -174,8 +181,16 @@ const RealTimeInventory = (props) => {
         submit(params);
       }} />
     {qrCode.loading && <MyLoading />}
-  </>;
+  </div>;
 
+});
+
+
+const RealTimeInventory = () => {
+  return <KeepAlive id='message' contentId='content'>
+    <MyNavBar title='消息' noDom />
+    <RealTimeInventoryContent />
+  </KeepAlive>;
 };
 
-export default connect(({ qrCode }) => ({ qrCode }))(RealTimeInventory);
+export default RealTimeInventory;
