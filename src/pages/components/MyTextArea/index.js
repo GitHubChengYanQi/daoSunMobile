@@ -18,6 +18,7 @@ const MyTextArea = (
     onFocus = () => {
 
     },
+    getContainer,
     maxLength,
   },
 ) => {
@@ -162,6 +163,8 @@ const MyTextArea = (
     <div className={style.count} hidden={!maxLength}>{value.length} / {maxLength}</div>
 
     <CheckUser
+      getContainer={getContainer}
+      zIndex={1003}
       afterShow={() => {
         const textArea = document.getElementById(id);
         textArea.blur();

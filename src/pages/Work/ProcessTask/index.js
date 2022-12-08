@@ -13,7 +13,7 @@ export const Tasks = () => {
 
   const { query } = useLocation();
 
-  const [key, setKey] = useState(query.key || 'audit');
+  const [key, setKey] = useState(query.key || 'create');
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};

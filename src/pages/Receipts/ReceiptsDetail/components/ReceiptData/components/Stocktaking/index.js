@@ -3,15 +3,13 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider, ErrorBlock, Space } from 'antd-mobile';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
-import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../components/ToolUtil';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import { MyDate } from '../../../../../../components/MyDate';
-import BottomButton from '../../../../../../components/BottomButton';
-import TaskItem from '../../../../../../Work/Stock/Task/components/TaskItem';
 import { useHistory } from 'react-router-dom';
 import { UserName } from '../../../../../../components/User';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
@@ -19,7 +17,6 @@ import Icon from '../../../../../../components/Icon';
 import { useModel } from 'umi';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import MyProgress from '../../../../../../components/MyProgress';
-import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../ActionButtons';
 import { StocktakingRevoke } from '../../../Bottom/components/Revoke';
 

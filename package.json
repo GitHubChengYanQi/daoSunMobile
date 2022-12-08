@@ -9,8 +9,7 @@
     "buildHunHe": "cross-env UMI_ENV=hunhe umi build",
     "buildHunHeBate": "cross-env UMI_ENV=hunhe.bate umi build",
     "test": "umi test",
-    "lint": "eslint {src,mock,tests}/**/*.{js,jsx} --fix",
-    "precommit": "lint-staged"
+    "lint": "eslint {src,mock,tests}/**/*.{js,jsx} --fix"
   },
   "dependencies": {
     "@ant-design/icons": "^4.6.4",

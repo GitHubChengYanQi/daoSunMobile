@@ -5,19 +5,18 @@ import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
-import styles from '../../PurchaseAsk/index.less';
-import { Divider, Input, Space, TextArea } from 'antd-mobile';
+import styles from '../../Order/CreateOrder/index.less';
+import { Input, Space, TextArea } from 'antd-mobile';
 import StartEndDate from '../CreateTask/components/StartEndDate';
 import User from '../../CreateTask/components/User';
-import { AddButton } from '../../../components/MyButton';
-import MyAntPopup from '../../../components/MyAntPopup';
-import CheckSkus from '../../Sku/CheckSkus';
 import SkuItem from '../../Sku/SkuItem';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import MyRemoveButton from '../../../components/MyRemoveButton';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+import CheckSpu from '../../Sku/CheckSpu';
+import { AddButton } from '../../../components/MyButton';
 
 export const createProductionPlan = {
   url: '/productionPlan/add',
@@ -29,28 +28,64 @@ const CreatePlan = () => {
 
   const history = useHistory();
 
+  const { query = {}, state = {} } = useLocation();
+
+  const haveDetail = { ...query }.hasOwnProperty('detail');
+
   const [data, setData] = useState({});
 
   const [visible, setVisible] = useState(false);
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
+  const [contracts, setContracts] = useState(state.contracts || [{}]);
+  console.log(contracts);
+  const [cardCoding, setCardCoding] = useState({});
+
+  const contractsChange = (data = {}, key) => {
+    const newContracts = contracts.map((item, index) => {
+      if (index === key) {
+        return { ...item, ...data };
+      }
+      return item;
+    });
+    if (data.coding && !contracts[key + 1]) {
+      setContracts([...newContracts, {}]);
+    } else {
+      setContracts(newContracts);
+    }
+  };
+
   return <>
     <MyNavBar title='创建计划' />
     <FormLayout
-      data={data}
+      data={{
+        ...data,
+        cardCoding: cardCoding.fixedCoding && cardCoding.total && cardCoding.startNum,
+        orderDetailParams: contracts,
+      }}
       loading={loading}
       onSave={async (complete) => {
+
+        const orderDetailParams = [];
+        contracts.forEach(contractsItem => {
+          const details = contractsItem.details || [];
+          details.forEach(item => {
+            orderDetailParams.push({
+              contractCoding: contractsItem.coding, ...item,
+              purchaseNumber: item.purchaseNumber || 1,
+            });
+          });
+        });
+
         let success;
         await run({
           data: {
             ...data,
+            cardCoding,
             executionTime: data.time && data.time[0],
             endTime: data.time && data.time[1],
-            orderDetailParams: isArray(data.orderDetailParams).map(item => ({
-              ...item,
-              purchaseNumber: item.purchaseNumber || 1,
-            })),
+            orderDetailParams,
           },
         }).then(() => {
           success = true;
@@ -77,7 +112,7 @@ const CreatePlan = () => {
             extra = <Input
               value={data[item.key]}
               className={styles.input}
-              placeholder='请输入编码'
+              placeholder={`请输入${item.filedName}`}
               onChange={(value) => setData({ ...data, [item.key]: value })}
             />;
             break;
@@ -85,12 +120,13 @@ const CreatePlan = () => {
             extra = <Input
               value={data[item.key]}
               className={styles.input}
-              placeholder='请输入主题'
+              placeholder={`请输入${item.filedName}`}
               onChange={(value) => setData({ ...data, [item.key]: value })}
             />;
             break;
           case 'time':
             extra = <StartEndDate
+              placeholder={`请选择${item.filedName}`}
               value={data[item.key]}
               onChange={(value) => setData({ ...data, [item.key]: value })}
             />;
@@ -114,49 +150,106 @@ const CreatePlan = () => {
               rows={3}
               autoSize
               style={{ '--font-size': '14px' }}
-              placeholder='请输入备注'
+              placeholder={`请输入${item.filedName}`}
               value={data[item.key]}
               onChange={(value) => setData({ ...data, [item.key]: value })}
             />;
             break;
+          case 'cardCoding':
+            content = <Space>
+              <Input
+                value={cardCoding.fixedCoding || ''}
+                className={styles.coding}
+                placeholder='固定编号'
+                onChange={(value) => {
+                  setCardCoding({ ...cardCoding, fixedCoding: value });
+                }}
+              />
+              <ShopNumber
+                value={cardCoding.total}
+                number
+                placeholder='流水号位数'
+                onChange={(value) => {
+                  setCardCoding({ ...cardCoding, total: value });
+                }} />
+              <ShopNumber
+                number
+                value={cardCoding.startNum}
+                placeholder='起始值'
+                onChange={(value) => {
+                  setCardCoding({ ...cardCoding, startNum: value });
+                }} />
+            </Space>;
+            break;
           case 'orderDetailParams':
-            content = <>
+            return <MyCard
+              titleBom={required && <Title className={styles.title}>{item.filedName}<span>*</span></Title>}
+              title={item.filedName}
+              bodyClassName={styles.contractContent}
+            >
               {
-                isArray(data.orderDetailParams).map((item, index) => {
-                  return <div key={index} className={styles.skuItem}>
-                    <SkuItem
-                      noView
-                      extraWidth='200px'
-                      className={styles.sku}
-                      skuResult={item}
-                    />
-                    <ShopNumber
-                      min={1}
-                      value={item.purchaseNumber || 1}
-                      onChange={(purchaseNumber) => {
-                        const orderDetailParams = isArray(data.orderDetailParams).map((skuItem, skuIndex) => {
-                          if (skuIndex === index) {
-                            return { ...skuItem, purchaseNumber };
-                          }
-                          return skuItem;
-                        });
-                        setData({ ...data, orderDetailParams });
-                      }}
-                    />
-                    <MyRemoveButton style={{ width: 30, textAlign: 'right', marginRight: -12 }} onRemove={() => {
-                      const orderDetailParams = isArray(data.orderDetailParams).filter((skuItem, skuIndex) => skuIndex !== index);
-                      setData({ ...data, orderDetailParams });
-                    }} />
-                  </div>;
+                contracts.map((item, index) => {
+                  const details = item.details || [];
+                  return <MyCard
+                    className={styles.contract}
+                    key={index}
+                    headerClassName={styles.contractHeader}
+                    titleBom={`合同${index + 1}`}
+                    bodyClassName={styles.contractBody}
+                    extra={<Input
+                      className={styles.input}
+                      value={item.coding || ''}
+                      placeholder='请输入合同编码'
+                      onChange={(value) => {
+                        contractsChange({ coding: value }, index);
+                      }} />}
+                  >
+                    {item.coding && <div>
+                      {
+                        details.map((detailItem, detailIndex) => {
+                          return <div key={detailIndex} className={styles.skuItem}>
+                            <SkuItem
+                              noView
+                              extraWidth='140px'
+                              className={styles.sku}
+                              skuResult={detailItem}
+                            />
+                            <ShopNumber
+                              min={1}
+                              value={detailItem.purchaseNumber || 1}
+                              onChange={(purchaseNumber) => {
+                                const details = isArray(contracts[index]?.details);
+                                contractsChange({
+                                  details: details.map((item, index) => {
+                                    if (index === detailIndex) {
+                                      return { ...item, purchaseNumber };
+                                    }
+                                    return item;
+                                  }),
+                                }, index);
+                              }}
+                            />
+                            <MyRemoveButton
+                              style={{ width: 30, textAlign: 'right', marginRight: -12 }}
+                              onRemove={() => {
+                                const details = isArray(contracts[index]?.details);
+                                contractsChange({
+                                  details: details.filter((skuItem, skuIndex) => skuIndex !== detailIndex),
+                                }, index);
+                              }} />
+                          </div>;
+                        })
+                      }
+                      <div style={{ textAlign: 'center', paddingTop: 8 }}>
+                        <AddButton onClick={() => {
+                          setVisible({ index });
+                        }} />
+                      </div>
+                    </div>}
+                  </MyCard>;
                 })
               }
-              <Divider style={{ margin: 0 }}>
-                <AddButton onClick={() => {
-                  setVisible({});
-                }} />
-              </Divider>
-            </>;
-            break;
+            </MyCard>;
           default:
             break;
         }
@@ -171,15 +264,16 @@ const CreatePlan = () => {
     />
 
 
-    <MyAntPopup position='right' onClose={() => setVisible(false)} visible={visible} title='选择物料'>
-      <CheckSkus
-        value={data.orderDetailParams || []}
-        onChange={(skus = []) => {
-          setData({ ...data, orderDetailParams: skus });
-          setVisible(false);
-        }}
-      />
-    </MyAntPopup>
+    <CheckSpu
+      open={visible}
+      close={() => setVisible(false)}
+      onChange={(sku) => {
+        const details = isArray(contracts[visible?.index]?.details);
+        contractsChange({ details: [...details, sku] }, visible?.index);
+        setVisible(false);
+      }}
+    />
+
   </>;
 };
 

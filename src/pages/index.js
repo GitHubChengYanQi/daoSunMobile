@@ -17,9 +17,9 @@ export const messageCount = { url: '/message/getViewCount', method: 'GET' };
 
 const Index = (props) => {
 
-  const routes = props.qrCode && props.qrCode.route;
+  const currentTab = localStorage.getItem('currentTab');
 
-  const [module, setModule] = useState(routes || '/Home');
+  const [module, setModule] = useState(currentTab || '/Home');
 
   const { data: messageTotal } = useRequest(messageCount, {
     pollingInterval: 30000,
@@ -60,7 +60,7 @@ const Index = (props) => {
         safeArea
         activeKey={module}
         onChange={(value) => {
-          route(value);
+          localStorage.setItem('currentTab',value);
           setModule(value);
         }}>
         <TabBar.Item

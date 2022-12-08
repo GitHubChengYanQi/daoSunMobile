@@ -117,7 +117,7 @@ const Careful = (
               onChange(checked ? value.filter(id => id !== item.value) : [...value, item.value]);
             }}
             onTouchMove={() => {
-              console.log(3);
+
             }}
           >
             {item.label}

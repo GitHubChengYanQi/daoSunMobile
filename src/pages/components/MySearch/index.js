@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Popup, SearchBar } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
 import { SearchOutline } from 'antd-mobile-icons';
 import { classNames, ToolUtil } from '../ToolUtil';
-import { useHistory, useLocation } from 'react-router-dom';
 import Search from './components/Search';
 
 const MySearch = (

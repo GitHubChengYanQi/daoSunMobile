@@ -62,20 +62,12 @@ body {
   --border-radius: 2px;
 }
 
-.adm-popup-body {
+.adm-popup-body,.adm-mask {
   max-width: 640px;
   left: 0;
   right: 0;
   margin: auto;
 }
-
-.adm-mask {
-  max-width: 640px;
-  left: 0;
-  right: 0;
-  margin: auto;
-}
-
 
 .adm-dialog {
   --z-index: 1004;
@@ -102,13 +94,14 @@ body {
   padding: 8px;
 }
 
-.adm-input {
+.adm-input, .adm-text-area {
   --font-size: 14px;
 }
 
 .adm-dialog-body .adm-dialog-footer .adm-dialog-action-row > .adm-dialog-button-bold {
   font-weight: normal;
 }
+
 
 
 

@@ -5,7 +5,13 @@ import add from '../../../../assets/add-file.png';
 import UpLoadImg from '../index';
 import { LoadingOutlined } from '@ant-design/icons';
 
-const UpLoadImgs = () => {
+const UpLoadImgs = (
+  {
+    maxCount,
+    onChange = () => {
+    },
+  },
+) => {
 
   const [imgs, setImgs] = useState([]);
 
@@ -38,11 +44,12 @@ const UpLoadImgs = () => {
 
     <UpLoadImg
       uploadLoading={setUploadLoading}
-      maxCount={5}
+      maxCount={maxCount || 5}
       type='picture'
       id='img'
       onChange={(url, mediaId) => {
         setImgs([...imgs, { mediaId, url }]);
+        onChange([...imgs, { mediaId, url }]);
       }}
       button
     />

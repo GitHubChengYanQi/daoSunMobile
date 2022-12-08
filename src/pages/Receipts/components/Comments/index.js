@@ -48,10 +48,10 @@ const Comments = (
     addComments,
   }));
 
-  return <>
+  return <div id='comments'>
     {all ? <Card title='评论' extra={<FormOutlined onClick={() => {
       setVisible(true);
-    }} />} /> :<div style={{ padding: 12, backgroundColor: '#fff' }}>
+    }} />} /> : <div style={{ padding: 12, backgroundColor: '#fff' }}>
       <Button
         fill='none'
         style={{ width: '100%', height: 40 }}
@@ -68,6 +68,7 @@ const Comments = (
       setVisible(false);
     }}>
       <Note
+        getContainer={document.getElementById('comments')}
         placeholder={placeholder}
         textAreaId='commetsTextArea'
         autoFocus
@@ -87,7 +88,7 @@ const Comments = (
     </Popup>
 
     {commentsLoading && <MyLoading />}
-  </>;
+  </div>;
 };
 
 export default React.forwardRef(Comments);
