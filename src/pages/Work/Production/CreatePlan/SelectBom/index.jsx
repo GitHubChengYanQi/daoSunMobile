@@ -111,6 +111,17 @@ const SelectBom = (
     }
   };
 
+  const updateBomVersions = (key, newItem) => {
+    const newBomVersions = bomVersions.map((item, bomIndex) => {
+      if (bomIndex === key) {
+        return { ...item, ...newItem };
+      } else {
+        return item;
+      }
+    });
+    setBomVersions(newBomVersions);
+  };
+
   useEffect(() => {
     ToolUtil.back({
       key: 'popup',
@@ -190,14 +201,7 @@ const SelectBom = (
 
               }}>添加</LinkButton> : <div>
                 <ShopNumber value={item.number} onChange={(number) => {
-                  const newBomVersions = bomVersions.map((item, bomIndex) => {
-                    if (bomIndex === index) {
-                      return { ...item, number };
-                    } else {
-                      return item;
-                    }
-                  });
-                  setBomVersions(newBomVersions);
+                  updateBomVersions(index,{number});
                 }} />
               </div>}
 
