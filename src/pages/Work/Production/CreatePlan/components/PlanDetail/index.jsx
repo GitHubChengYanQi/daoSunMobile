@@ -14,6 +14,7 @@ import BottomButton from '../../../../../components/BottomButton';
 import { FillinOutline, MinusCircleOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import { Message } from '../../../../../components/Message';
+import { isArray } from '../../../../../components/ToolUtil';
 
 const PlanDetail = (
   {
@@ -44,7 +45,7 @@ const PlanDetail = (
   };
 
 
-  const skuItems = (item, index) => {
+  const skuItems = (item, index, key) => {
     return <div key={index} className={styles.detailSkuItem}>
       <div className={styles.sku}>
         <SkuItem
@@ -57,6 +58,16 @@ const PlanDetail = (
       </div>
       <div className={styles.action}>
         <MyRemoveButton onRemove={() => {
+          if (contractType) {
+            const newValue = value.map((item, valueIndex) => {
+              if (valueIndex === key) {
+                return { ...item, details: item.details.filter((item, detailIndex) => detailIndex !== index) };
+              }
+              return item;
+            });
+            onChange(newValue);
+            return;
+          }
           onChange(value.filter((item, valueIndex) => valueIndex !== index));
         }} />
 
@@ -90,7 +101,12 @@ const PlanDetail = (
           if (contractType) {
             return <div key={index} className={styles.contractList}>
               <div className={styles.contractItem}>
-                <LinkButton color='danger'> <MinusCircleOutline /></LinkButton>
+                <MyRemoveButton
+                  icon={<MinusCircleOutline />}
+                  onRemove={() => {
+                    onChange(value.filter((item, valueIndex) => valueIndex !== index));
+                  }}
+                />
                 <div className={styles.info}>
                   <MyEllipsis maxWidth='70vw'>客户 / 合同：{item.customerName} / {item.contractCoding}</MyEllipsis>
                 </div>
@@ -100,8 +116,8 @@ const PlanDetail = (
                 }}><FillinOutline /></LinkButton>
               </div>
               {
-                [1, 2].map((item, index) => {
-                  return skuItems(item, index);
+                isArray(item.details).map((item, detailIndex) => {
+                  return skuItems(item, detailIndex, index);
                 })
               }
               <div className={styles.space} />
@@ -112,7 +128,7 @@ const PlanDetail = (
         })
       }
 
-      {value.length > 0 && <Divider>
+      {(!contractType || value.length > 0) && <Divider>
         <AddButton onClick={() => {
           setAddBoms(true);
         }} />
@@ -126,11 +142,29 @@ const PlanDetail = (
       onClose={() => setAddBoms(false)}
     >
       <SelectBom
-        value={value}
+        value={value.map((item, index) => ({ ...item, id: index }))}
         contractType={contractType}
         onClose={() => setAddBoms(false)}
         onSubmit={(skus) => {
-          onChange(skus);
+          if (contractType) {
+            const newValue = value.map((item, index) => {
+              let number = 0;
+              const details = skus.find(item => {
+                const detail = item.details.find(item => item.id === index);
+                if (detail) {
+                  number = detail.number;
+                }
+                return detail;
+              });
+              return {
+                ...item,
+                details: details ? [...isArray(item.details), { ...details, number }] : item.details,
+              };
+            });
+            onChange(newValue);
+          } else {
+            onChange(skus);
+          }
           setAddBoms(false);
         }}
       />
@@ -168,6 +202,7 @@ const PlanDetail = (
         text='修改合同'
         onClick={() => {
           updateValue(contract.key, contract);
+          setAddContracts(false);
         }}
         leftText='继续添加合同'
         rightText='添加物料清单'
@@ -179,8 +214,10 @@ const PlanDetail = (
           onChange([...value, contract]);
         }}
         rightOnClick={() => {
-          setAddContracts(false);
+          setContract({});
+          onChange([...value, contract]);
           setAddBoms(true);
+          setAddContracts(false);
         }}
       />
     </MyAntPopup>

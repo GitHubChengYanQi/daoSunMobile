@@ -22,12 +22,15 @@ import shopEmpty from '../../../../../assets/shopEmpty.png';
 
 const SkuShop = (
   {
+    update,
     onSubmit = () => {
     },
     buttonWidth = 60,
     noRequest,
     skus = [],
     onClear = () => {
+    },
+    onUpdate = () => {
     },
     emptyHidden,
     setSkus = () => {
@@ -289,7 +292,7 @@ const SkuShop = (
                 <div hidden={taskData().numberHidden}>
                   <ShopNumber
                     getContainer={document.body}
-                    show={taskData().show}
+                    show={taskData().show || update}
                     id={`stepper${index}`}
                     min={taskData().min}
                     value={taskData().judge ? taskData(item).number : item.number}
@@ -306,6 +309,10 @@ const SkuShop = (
                       skuChange(index, newNumber);
                     }}
                   />
+                </div>
+
+                <div hidden={!update}>
+                  <LinkButton onClick={() => onUpdate({ ...item, key: index })}>修改</LinkButton>
                 </div>
               </div>
             </div>;

@@ -10,9 +10,10 @@ import MyAntPopup from '../../../../components/MyAntPopup';
 import BottomButton from '../../../../components/BottomButton';
 import Label from '../../../../components/Label';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { useModel } from 'umi';
 import LinkButton from '../../../../components/LinkButton';
+import MyEllipsis from '../../../../components/MyEllipsis';
 
 export const partsList = {
   url: '/parts/list',
@@ -22,7 +23,7 @@ export const partsList = {
 
 const SelectBom = (
   {
-    value,
+    value = [],
     contractType,
     onClose = () => {
     },
@@ -43,7 +44,27 @@ const SelectBom = (
 
   const [bomVersions, setBomVersions] = useState([]);
 
-  const boms = bomVersions.filter(item => item.number > 0);
+  const boms = [];
+  bomVersions.forEach(item => {
+    if (contractType) {
+      const details = item.details || [];
+      let number = 0;
+      const newDetails = details.filter((item) => {
+        if (item.number > 0) {
+          number += item.number;
+          return true;
+        }
+        return false;
+      });
+      if (newDetails.length > 0) {
+        boms.push({ ...item, number, details: newDetails });
+      }
+    } else {
+      if (item.number > 0) {
+        boms.push(item);
+      }
+    }
+  });
 
   const addAfter = (boms) => {
     shopRef.current.jump(() => {
@@ -160,6 +181,11 @@ const SelectBom = (
     </div>
 
     <SkuShop
+      onUpdate={(item) => {
+        setBomVersions([item]);
+        setOpen({ ...item, update: true });
+      }}
+      update={contractType}
       onSubmit={onSubmit}
       buttonWidth={100}
       noRequest
@@ -184,27 +210,52 @@ const SelectBom = (
         />
         {
           bomVersions.map((item, index) => {
-            return <div key={index} className={styles.bomVersionItem}>
-              <div className={styles.bomVersionInfo}>
-                <div>
-                  <Label width={70}>备注</Label>：{item?.note}
+            return <div key={index}>
+              <div className={styles.bomVersionItem}>
+                <div className={styles.bomVersionInfo}>
+                  <div>
+                    <Label width={70}>备注</Label>：{item?.note}
+                  </div>
+                  <div>
+                    <Label width={70}>版本号</Label>：{item?.name}
+                  </div>
+                  <div>
+                    <Label width={70}>创建日期</Label>：{item?.createTime}
+                  </div>
                 </div>
-                <div>
-                  <Label width={70}>版本号</Label>：{item?.name}
-                </div>
-                <div>
-                  <Label width={70}>创建日期</Label>：{item?.createTime}
-                </div>
+
+                {contractType ? !item.add && <LinkButton onClick={() => {
+                  updateBomVersions(index, { add: true, details: value });
+                }}>添加</LinkButton> : <div>
+                  <ShopNumber value={item.number} onChange={(number) => {
+                    updateBomVersions(index, { number });
+                  }} />
+                </div>}
+
               </div>
 
-              {contractType ? <LinkButton onClick={() => {
-
-              }}>添加</LinkButton> : <div>
-                <ShopNumber value={item.number} onChange={(number) => {
-                  updateBomVersions(index,{number});
-                }} />
-              </div>}
-
+              <div hidden={!item.add}>
+                {
+                  isArray(item.details).map((detailItem, detailIndex) => {
+                    return <div key={detailIndex} className={styles.bomVersionItem}>
+                      <div className={styles.bomVersionInfo}>
+                        <MyEllipsis maxWidth='70vw'>客户 /
+                          合同：{detailItem.customerName} / {detailItem.contractCoding}</MyEllipsis>
+                      </div>
+                      <ShopNumber value={detailItem.number} onChange={(number) => {
+                        const details = item.details.map((item, key) => {
+                          if (detailIndex === key) {
+                            return { ...item, number };
+                          } else {
+                            return item;
+                          }
+                        });
+                        updateBomVersions(index, { details });
+                      }} />
+                    </div>;
+                  })
+                }
+              </div>
             </div>;
           })
         }
@@ -214,9 +265,19 @@ const SelectBom = (
           setOpen(false);
         }}
         rightDisabled={boms.length === 0}
-        rightText='添加'
+        rightText={open?.update ? '修改' : '添加'}
         rightOnClick={() => {
           setOpen(false);
+          if (open?.update) {
+            const newSkus = skus.map((item, index) => {
+              if (index === open?.key) {
+                return { ...item, ...boms[0] };
+              }
+              return item;
+            });
+            setSkus(newSkus);
+            return;
+          }
           addShopBall({
             skuResult: open.skuResult,
             boms,
