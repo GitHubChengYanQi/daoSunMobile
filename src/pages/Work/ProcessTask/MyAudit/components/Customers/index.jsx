@@ -1,93 +1,38 @@
-import React, { useState } from 'react';
-import { Selector } from 'antd-mobile';
-import MyAntPopup from '../../../../../components/MyAntPopup';
-import LinkButton from '../../../../../components/LinkButton';
-import { isObject, ToolUtil } from '../../../../../components/ToolUtil';
-import { useRequest } from '../../../../../../util/Request';
+import React from 'react';
 import { supplyList } from '../../../../Sku/SkuList/components/SkuScreen/components/Url';
-import MySearch from '../../../../../components/MySearch';
-import { MyLoading } from '../../../../../components/MyLoading';
-import style from '../../../../Sku/SkuList/components/SkuScreen/index.less';
-import { SelectorStyle } from '../../../../../Report/InOutStock';
+import MyCheckList from '../../../../../components/MyCheckList';
 
 const Customers = (
   {
     zIndex,
     visible,
-    value,
+    value = [],
+    multiple,
     onClose = () => {
     },
     onChange = () => {
     },
+    data = { supply: 1 },
   },
 ) => {
 
-  const [supply, setSupply] = useState([]);
-
-  const [searchValue, setSearchValue] = useState();
-
-  const [customers, setCustomers] = useState(value ? [{ value }] : []);
-
-  const { loading, run } = useRequest(supplyList, {
-    defaultParams: {
-      data: { supply: 1 },
-      params: { limit: 10, page: 1 },
-    },
-    onSuccess: (res) => {
-      const newArray = Array.isArray(res) ? res.map(item => {
-        return {
-          label: item.customerName,
-          value: item.customerId,
-        };
-      }) : [];
-
-      setSupply(newArray);
-    },
-  });
-
-  const like = (string) => {
-    run({
-      data: { customerName: string,supply: 1 },
-      params: { limit: 10, page: 1 },
-    });
-  };
-
 
   return <>
-    <MyAntPopup
+    <MyCheckList
+      searchPlaceholder='请输入供应商信息'
+      api={supplyList}
+      multiple={multiple}
+      searchLabel='customerName'
+      label='customerName'
+      listKey='customerId'
       onClose={onClose}
-      zIndex={zIndex}
-      title='选择供应商'
+      onChange={onChange}
+      value={value}
       visible={visible}
-      leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
-      rightText={<LinkButton onClick={() => {
-        onChange(customers[0]);
-      }}>确定</LinkButton>}
-    >
-      <div style={{ padding: 24 }}>
-        <MySearch
-          placeholder=' 请输入供应商信息'
-          className={style.searchBar}
-          onSearch={(value) => {
-            like(value);
-          }}
-          onChange={setSearchValue}
-          value={searchValue}
-          onClear={like}
-        />
-        {loading ? <MyLoading skeleton /> : <Selector
-          columns={1}
-          style={SelectorStyle}
-          className={ToolUtil.classNames(style.supply, style.left)}
-          showCheckMark={false}
-          options={supply}
-          value={customers.map(item => item.value)}
-          onChange={(v, { items }) => {
-            setCustomers(items);
-          }}
-        />}
-      </div>
-    </MyAntPopup>
+      data={data}
+      title='选择供应商'
+      zIndex={zIndex}
+    />
   </>;
 };
 

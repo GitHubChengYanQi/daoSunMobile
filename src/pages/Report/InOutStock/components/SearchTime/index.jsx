@@ -7,27 +7,6 @@ import moment from 'moment';
 
 export const getDate = (type) => {
   let newDate = [];
-  switch (type) {
-    case '近7天':
-      newDate = [moment().add(-7, 'd').format('YYYY/MM/DD 00:00:00'), moment().format('YYYY/MM/DD 23:59:59')];
-      break;
-    case '近30天':
-      newDate = [moment().add(-30, 'd').format('YYYY/MM/DD 00:00:00'), moment().format('YYYY/MM/DD 23:59:59')];
-      break;
-    case '近三月':
-      newDate = [moment().add(-3, 'M').format('YYYY/MM/DD 00:00:00'), moment().format('YYYY/MM/DD 23:59:59')];
-      break;
-    case '近半年':
-      newDate = [moment().add(-6, 'M').format('YYYY/MM/DD 00:00:00'), moment().format('YYYY/MM/DD 23:59:59')];
-      break;
-    case '近一年':
-      newDate = [moment().add(-1, 'y').format('YYYY/MM/DD 00:00:00'), moment().format('YYYY/MM/DD 23:59:59')];
-      break;
-    case '至今':
-      break;
-    default:
-      break;
-  }
   return newDate;
 };
 

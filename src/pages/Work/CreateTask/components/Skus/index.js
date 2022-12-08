@@ -12,6 +12,7 @@ import MyCard from '../../../../components/MyCard';
 
 const Skus = (
   {
+    disabled,
     skus,
     createTypeData = () => {
     },

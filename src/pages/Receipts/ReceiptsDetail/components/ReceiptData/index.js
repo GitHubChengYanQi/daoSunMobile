@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { ReceiptsEnums } from '../../../index';
 import MyEmpty from '../../../../components/MyEmpty';
 import InstockOrder from './components/InstockOrder';
-import Process from '../../../../Work/PurchaseAsk/components/Process';
+import Process from '../../../../Work/Order/CreateOrder/components/Process';
 import InstockError from './components/InstockError';
 import Stocktaking from './components/Stocktaking';
 import Maintenance from './components/Maintenance';
