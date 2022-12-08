@@ -23,6 +23,7 @@ const CheckUser = (
     afterShow = () => {
     },
     hiddenCurrentUser,
+    getContainer,
   },
   ref,
 ) => {
@@ -98,6 +99,7 @@ const CheckUser = (
   return <>
     {getUserLoading && <MyLoading />}
     <MyAntPopup
+      getContainer={getContainer}
       zIndex={zIndex}
       afterShow={afterShow}
       title='选择人员'
