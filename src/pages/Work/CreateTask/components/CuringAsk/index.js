@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
-import { Message } from '../../../../components/Message';
 import Curing from '../Curing';
 import MyNavBar from '../../../../components/MyNavBar';
 import BottomButton from '../../../../components/BottomButton';
@@ -20,7 +19,7 @@ export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: '
 const CuringAsk = ({ createType, backTitle, defaultParams }) => {
 
   const [params, setParams] = useState(defaultParams || {});
-  console.log(params);
+
   const history = useHistory();
 
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
@@ -55,7 +54,7 @@ const CuringAsk = ({ createType, backTitle, defaultParams }) => {
 
   const createTypeData = () => {
     const maintenanceDisabled = () => {
-      if (!(params.userId && params.startTime && params.endTime)) {
+      if (!(params.userId && params.startTime && params.endTime && params.type)) {
         return true;
       }
 

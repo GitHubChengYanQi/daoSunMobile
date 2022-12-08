@@ -12,6 +12,7 @@ import MyAntPopup from '../../../../components/MyAntPopup';
 import SkuItem from '../../../Sku/SkuItem';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
 import { ToolUtil } from '../../../../components/ToolUtil';
+import MyPicker from '../../../../components/MyPicker';
 
 const Curing = (
   {
@@ -30,6 +31,20 @@ const Curing = (
   const [typeVisible, setTypeVisible] = useState();
 
   const [visible, setVisible] = useState();
+
+  const typeFormat = (type) => {
+    switch (type) {
+      case 'check':
+        return '复检复调';
+      case 'time':
+        return '周期养护';
+      case 'current':
+        return '指定养护';
+      default:
+        return '请选择';
+    }
+  };
+
 
   return <>
     <MyCard
@@ -84,25 +99,27 @@ const Curing = (
       </div>}
     />
 
-    <MyCard
-      hidden
-      titleBom={<Title className={style.title}>养护类型 <span>*</span></Title>}
-      extra={<div onClick={() => {
-        setTypeVisible(true);
-      }}>
-        {value.typeName || '请选择'}<RightOutline />
-      </div>}
+    <MyCard titleBom={<Title className={style.title}>养护类型 <span>*</span></Title>} extra={<div onClick={() => {
+      setTypeVisible(true);
+    }}>
+      {typeFormat(value.type)}
+    </div>} />
+
+    <MyPicker
+      onClose={() => setTypeVisible(false)}
+      visible={typeVisible}
+      value={value.type}
+      onChange={(option) => {
+        setTypeVisible(false);
+        onChange({ ...value, type: option.value });
+      }}
+      options={[
+        { label: '复检复调', value: 'check' },
+        { label: '周期养护', value: 'time' },
+        { label: '指定养护', value: 'current' },
+      ]}
     />
 
-    <Picker
-      columns={[[{ label: '复检复调', value: 'check' }]]}
-      visible={typeVisible}
-      onClose={() => setTypeVisible(false)}
-      onConfirm={(val, options) => {
-        const item = options.items[0] || {};
-        onChange({ ...value, type: item.value, typeName: item.label });
-      }}
-    />
 
     <MyAntPopup title='任务预览' visible={visible} onClose={() => setVisible(false)}>
       <div style={{ maxHeight: '80vh', overflow: 'auto' }}>

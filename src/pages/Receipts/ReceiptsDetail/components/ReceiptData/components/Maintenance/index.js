@@ -4,11 +4,10 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider } from 'antd-mobile';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
-import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../components/ToolUtil';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import TaskItem from '../../../../../../Work/Stock/Task/components/TaskItem';
 import { MyDate } from '../../../../../../components/MyDate';
 import { UserName } from '../../../../../../components/User';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
@@ -21,7 +20,6 @@ import { nowInDateBetwen } from '../Stocktaking';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import Icon from '../../../../../../components/Icon';
 import MyProgress from '../../../../../../components/MyProgress';
-import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../ActionButtons';
 import { MaintenanceRevoke } from '../../../Bottom/components/Revoke';
 
@@ -63,6 +61,19 @@ const Maintenance = (
     const selectParamResults = receipts.selectParamResults || [];
     setData(selectParamResults);
   }, [receipts.detailResultsByPositions]);
+
+  const getType = (type) => {
+    switch (type) {
+      case 'check':
+        return '复检复调';
+      case 'time':
+        return '周期养护';
+      case 'current':
+        return '指定养护';
+      default:
+        return '-';
+    }
+  };
 
   return <>
     <MyCard
@@ -170,7 +181,7 @@ const Maintenance = (
       {MyDate.Show(receipts.startTime)} - {MyDate.Show(receipts.endTime)}
     </div>} />
 
-    <MyCard title='养护类型' extra={receipts.type === 'check' ? '复检复调' : '无'} />
+    <MyCard title='养护类型' extra={getType(receipts.type)} />
 
     <MyCard title='养护原因'>
       {ToolUtil.isArray(receipts.announcementsResults).length === 0 && <div>无</div>}
