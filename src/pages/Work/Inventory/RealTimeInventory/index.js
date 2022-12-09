@@ -9,7 +9,6 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
 import { ClockCircleOutline } from 'antd-mobile-icons';
-import MyCard from '../../../components/MyCard';
 import MyList from '../../../components/MyList';
 import { MyDate } from '../../../components/MyDate';
 import MyPositions from '../../../components/MyPositions';
