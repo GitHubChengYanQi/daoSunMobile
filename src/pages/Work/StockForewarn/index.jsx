@@ -85,10 +85,13 @@ const StockForewarn = () => {
               className={styles.sku}
               extraWidth='110px'
               otherData={[
-                <div style={{ color: '#9A9A9A' }}>库存下限：100&nbsp;&nbsp;库存上限：200</div>,
+                <div style={{ color: '#9A9A9A' }}>
+                  <span className={item.number < item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
+                  <span className={item.number > item.inventoryCeiling ? 'red' : ''}>库存上限：{item.inventoryCeiling}</span>
+                </div>,
               ]}
             />
-            <div className={styles.action}>
+            <div className={styles.action} hidden>
               <div>已采购</div>
               <LinkButton onClick={() => setVisible(true)}>来源明细</LinkButton>
             </div>
