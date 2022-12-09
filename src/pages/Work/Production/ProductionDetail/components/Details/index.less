@@ -1,0 +1,66 @@
+.card {
+  padding-bottom: 0;
+  margin: 0;
+}
+
+.header {
+  padding: 8px 0;
+  border-bottom: solid 1px #F5F5F5;
+}
+
+.search {
+  border-bottom: solid 1px #F5F5F5;
+}
+
+.ships {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 0;
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+
+  .flexGrow {
+    flex-grow: 1;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-top: solid 1px #F5F5F5;
+
+  .space {
+    height: 30px;
+    width: 1px;
+    background-color: var(--body--background--color);
+  }
+
+  button {
+    padding: 12px !important;
+    flex-grow: 1;
+  }
+}
+
+.item {
+  margin-bottom: 3px;
+}
+
+.tabs {
+  --title-font-size: 12px;
+  max-width: 70vw;
+
+  :global {
+    .adm-tabs-tab {
+      padding: 4px 0;
+    }
+
+    .adm-tabs-header {
+      border-bottom: none;
+    }
+  }
+}
