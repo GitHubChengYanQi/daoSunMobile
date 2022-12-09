@@ -1,18 +1,23 @@
 import React, { useRef, useState } from 'react';
-import { Space, Tabs } from 'antd-mobile';
+import { Space, Tabs,Tag } from 'antd-mobile';
 import styles from './index.less';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
 import MyNavBar from '../../components/MyNavBar';
-import { AddOutline } from 'antd-mobile-icons';
 import Label from '../../components/Label';
 import MySearch from '../../components/MySearch';
-import MyFloatingBubble from '../../components/FloatingBubble';
 import { useHistory } from 'react-router-dom';
-import { MyDate } from '../../components/MyDate';
 import BottomButton from '../../components/BottomButton';
+import MyProgress from '@/pages/components/MyProgress';
+import style from '@/pages/Work/ProcessTask/index.less';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
+import Icon from '@/pages/components/Icon';
+
+
 
 const Production = () => {
+
+  const percent = 50;
 
   const history = useHistory();
 
@@ -24,12 +29,20 @@ const Production = () => {
     <MyNavBar title='生产计划列表' />
     <MySearch />
 
-    <Tabs className={styles.tabs}>
-      <Tabs.Tab title='全部' key='1' />
-      <Tabs.Tab title='未开始' key='2' />
-      <Tabs.Tab title='执行中' key='3' />
-      <Tabs.Tab title='已结束' key='4' />
-    </Tabs>
+    <div className={styles.screent}>
+      <div className={styles.dropDown}>
+        <div className={styles.titleBox}>
+        <div className={styles.title}>执行中<DownOutline /></div>
+        <div className={styles.title}>产品<DownOutline /></div>
+        <div className={styles.title}>客户<DownOutline /></div>
+        <div className={styles.title}>执行人<DownOutline /></div>
+        <div className={styles.title}>执行日期<DownOutline /></div>
+        </div>
+        <div className={styles.sort}><Icon type='icon-paixubeifen' /></div>
+
+      </div>
+    </div>
+
     <MyList
       ref={ref}
       data={data}
@@ -48,27 +61,46 @@ const Production = () => {
           >
             <div className={styles.title}>
               <div className={styles.status}>
-                <div className={styles.theme}>{item.theme} / {item.coding}</div>
+                <div className={styles.theme}>关于俄罗斯t5电子等8台的生产计划</div>
+                    <Tag color='primary' fill='outline' className={styles.biao}>
+                      执行中
+                    </Tag>
                 <div hidden style={{ border: `solid 1px #599745`, color: '#599745' }} className={styles.statusName}>
                   待处理
                 </div>
               </div>
-              <div className={styles.time}>{MyDate.Show(item.createTime)}</div>
+              <div className={styles.time}>11月12日</div>
             </div>
-            <Space direction='vertical'>
-              <div>
-                <Label className={styles.label}>开始时间</Label>：{item.executionTime}
+            <Space direction='vertical' style={{width:'100%'}}>
+              <div style={{display:'flex'}}>
+                <div style={{display:'flex',flexGrow:1}}>
+                  <div className={styles.btext}>产品：</div>
+                  <div className={styles.btext2}>
+                  <div className={styles.btext}>
+                    T5一米数控车床/T510/500*1000
+                  </div>
+                    <div className={styles.btext}>
+                      T5一米数控车床/T510/500*1000
+                    </div>
+                    <div className={styles.btext}>
+                    T5一米数控车床/T510/500*1000
+                  </div>
+                  </div>
+                </div>
+                <div className={styles.btext2}>
+                <div className={styles.btext} style={{marginLeft:'auto'}}>×10</div>
+                <div className={styles.btext} style={{marginLeft:'auto'}}>×10</div>
+                <div className={styles.btext} style={{marginLeft:'auto'}}>×10</div>
+                </div>
               </div>
-              <div>
-                <Label className={styles.label}>结束时间</Label>： {item.endTime}
+              <div className={styles.btext}>执行时间： 2022年11月12日-2023年1月28日
               </div>
-              <div>
-                <Label className={styles.label}>负责人</Label>：{item.userResult && item.userResult.name}
-              </div>
-              <div>
-                <Label className={styles.label}>备注</Label>：{item.remark}
+              <div style={{display:'flex'}}>
+              <div className={styles.btext}>执行人：{item.userResult && item.userResult.name}</div>
+              <div className={styles.btext3}>申请人：{item.userResult && item.userResult.name}</div>
               </div>
             </Space>
+            <MyProgress className={styles.tiao}  percent={percent}/>
           </div>;
         })
       }

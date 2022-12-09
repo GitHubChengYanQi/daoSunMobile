@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { productionPlanDetail } from '../components/Url';
 import { useRequest } from '../../../../util/Request';
 import { Tabs } from 'antd-mobile';
-import { MyLoading } from '../../../components/MyLoading';
+import { MyLoading } from '@/pages/components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
 import SkuList from '../components/SkuList';
@@ -10,7 +10,7 @@ import ShipList from '../components/ShipList';
 import style from './index.less';
 import { Avatar } from 'antd';
 import Icon from '../../../components/Icon';
-import { MyDate } from '../../../components/MyDate';
+import { MyDate } from '@/pages/components/MyDate';
 
 const ProductionDetail = (props) => {
 
