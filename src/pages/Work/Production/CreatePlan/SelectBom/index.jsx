@@ -14,11 +14,19 @@ import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { useModel } from 'umi';
 import LinkButton from '../../../../components/LinkButton';
 import MyEllipsis from '../../../../components/MyEllipsis';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
 
 export const partsList = {
   url: '/parts/list',
   method: 'POST',
   rowKey: 'partsId',
+};
+
+
+export const bomsByskuId = {
+  url: '/parts/bomsByskuId',
+  method: 'GET',
 };
 
 const SelectBom = (
@@ -143,6 +151,9 @@ const SelectBom = (
     setBomVersions(newBomVersions);
   };
 
+
+  const { loading: bomsByskuIdLoading, run: bomsByskuIdRun } = useRequest(bomsByskuId, {manual: true});
+
   useEffect(() => {
     ToolUtil.back({
       key: 'popup',
@@ -167,8 +178,9 @@ const SelectBom = (
               <Button
                 color='primary'
                 fill='outline'
-                onClick={() => {
-                  setBomVersions([item]);
+                onClick={async () => {
+                  const boms = await bomsByskuIdRun({ params: { skuId: item.skuId } });
+                  setBomVersions(boms);
                   setOpen(item);
                 }}
               >
@@ -179,6 +191,8 @@ const SelectBom = (
         }
       </MyList>
     </div>
+
+    {bomsByskuIdLoading && <MyLoading />}
 
     <SkuShop
       onUpdate={(item) => {
