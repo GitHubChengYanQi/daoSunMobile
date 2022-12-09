@@ -271,10 +271,9 @@ const CreateOrder = () => {
   return <>
     <MyNavBar title={module().title} />
     <FormLayout
-      data={data}
-      onSave={async (complete) => {
+      required={(fileds = []) => {
         let value = data;
-        if (value.paymentDetail) {
+        if (fileds.find((item) => item === 'paymentDetail') && value.paymentDetail) {
           let percentum = 0;
           value.paymentDetail.map((item) => {
             return percentum = MathCalc(percentum, item.percentum, 'jia');
@@ -287,7 +286,7 @@ const CreateOrder = () => {
           }
         }
 
-        if (value.detailParams) {
+        if (fileds.find((item) => item === 'detailParams') && value.detailParams) {
           const detailParams = value.detailParams.filter((item) => {
             return item.skuId && item.brandId && item.purchaseNumber && item.onePrice;
           });
@@ -298,7 +297,11 @@ const CreateOrder = () => {
             return false;
           }
         }
-
+        return true;
+      }}
+      data={data}
+      onSave={async (complete) => {
+        let value = data;
         value = {
           ...value,
           orderId,
