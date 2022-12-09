@@ -182,32 +182,6 @@ const CreatePlan = () => {
                 });
               }} />;
             break;
-          case 'cardCoding':
-            content = <Space>
-              <Input
-                value={cardCoding.fixedCoding || ''}
-                className={styles.coding}
-                placeholder='固定编号'
-                onChange={(value) => {
-                  setCardCoding({ ...cardCoding, fixedCoding: value });
-                }}
-              />
-              <ShopNumber
-                value={cardCoding.total}
-                number
-                placeholder='流水号位数'
-                onChange={(value) => {
-                  setCardCoding({ ...cardCoding, total: value });
-                }} />
-              <ShopNumber
-                number
-                value={cardCoding.startNum}
-                placeholder='起始值'
-                onChange={(value) => {
-                  setCardCoding({ ...cardCoding, startNum: value });
-                }} />
-            </Space>;
-            break;
           case 'orderDetailParams':
             return <PlanDetail
               value={data[item.key]}
@@ -247,7 +221,7 @@ const CreatePlan = () => {
         { label: '合同订单', value: 'ContractOrder' },
       ]}
       onChange={(option) => {
-        setData({ ...data, type: option.value, typeName: option.label });
+        setData({ ...data, type: option.value, typeName: option.label, orderDetailParams: [] });
       }}
     />
 

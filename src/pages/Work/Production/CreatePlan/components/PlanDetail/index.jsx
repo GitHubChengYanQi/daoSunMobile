@@ -27,7 +27,7 @@ const PlanDetail = (
   },
 ) => {
 
-  const contractType = true || type === 'ContractOrder';
+  const contractType = type === 'ContractOrder';
 
   const [addBoms, setAddBoms] = useState(false);
   const [addContracts, setAddContracts] = useState(false);
