@@ -13,6 +13,8 @@ import CheckAllExport from '../../components/CheckAllExport';
 import SkuItem from '../Sku/SkuItem';
 import LinkButton from '../../components/LinkButton';
 
+const warningSku = { url: '/stockForewarn/warningSku', method: 'POST' };
+
 const StockForewarn = () => {
 
   const listRef = useRef();
@@ -26,7 +28,7 @@ const StockForewarn = () => {
   const [screen, setScreen] = useState({});
   const [screenKey, setScreenkey] = useState();
   const [params, setParams] = useState({});
-  const [list, setList] = useState([{}, {}]);
+  const [list, setList] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
 
@@ -69,7 +71,8 @@ const StockForewarn = () => {
     </div>
 
     <MyList
-      // getData={setList}
+      api={warningSku}
+      getData={setList}
       data={list}
       ref={listRef}
     >
@@ -82,7 +85,7 @@ const StockForewarn = () => {
               className={styles.sku}
               extraWidth='110px'
               otherData={[
-                <div style={{color:'#9A9A9A'}}>库存下限：100&nbsp;&nbsp;库存上限：200</div>
+                <div style={{ color: '#9A9A9A' }}>库存下限：100&nbsp;&nbsp;库存上限：200</div>,
               ]}
             />
             <div className={styles.action}>
