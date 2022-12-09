@@ -22,7 +22,7 @@ const StockForewarn = () => {
   const screens = [
     { key: 'skuClass', title: '物料分类' },
     { key: 'forewarnStatus', title: '预警状态' },
-    { key: 'purchaseStatus', title: '采购状态' },
+    // { key: 'purchaseStatus', title: '采购状态' },
   ];
 
   const [screen, setScreen] = useState({});
@@ -31,6 +31,8 @@ const StockForewarn = () => {
   const [list, setList] = useState([]);
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
+
+  const [ids, setIds] = useState([]);
 
   const [searchValue, setSearchValue] = useState('');
 
@@ -41,10 +43,10 @@ const StockForewarn = () => {
     listRef.current?.submit(newParmas);
   };
 
-  return <div style={{height:'calc(100% - 53px)',overflow:'auto'}}>
+  return <div style={{ height: 'calc(100% - 53px)', overflow: 'auto' }}>
     <MyNavBar title='库存预警' />
     <MySearch value={searchValue} onChange={setSearchValue} onSearch={(keyWords) => {
-      submit({keyWords});
+      submit({ keyWords });
     }} />
     <div className={styles.dropDown}>
       <div className={style.dropDown}>
@@ -82,17 +84,26 @@ const StockForewarn = () => {
     >
       {
         list.map((item, index) => {
-          return <div key={index} className={styles.skuItem}>
-            <MyCheck fontSize={17} />
+          const checked = ids.find(id => item.skuId === id);
+          return <div
+            key={index}
+            className={styles.skuItem}
+            onClick={() => {
+              setIds(checked ? ids.filter(id => id !== item.skuId) : [...ids, item.skuId]);
+            }}
+          >
+            <MyCheck fontSize={17} checked={checked} />
             <SkuItem
+              noView
               skuResult={item.skuResult}
               className={styles.sku}
               extraWidth='110px'
               otherData={[
                 <div style={{ color: '#9A9A9A' }}>
                   <span
-                    className={item.number < item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
-                  <span className={item.number > item.inventoryCeiling ? 'red' : ''}>库存上限：{item.inventoryCeiling}</span>
+                    className={item.number <= item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
+                  <span
+                    className={item.number >= item.inventoryCeiling ? 'red' : ''}>库存上限：{item.inventoryCeiling}</span>
                 </div>,
               ]}
             />
@@ -106,10 +117,18 @@ const StockForewarn = () => {
     </MyList>
 
     <CheckAllExport
-      onCheckAll={setCheckAll}
-      pageAll={currentAll}
-      onPageAll={setCurrentAll}
-      checkAll={checkAll}
+      onCheckAll={() => {
+        setIds(list.map(item => item.skuId));
+        setCheckAll(true);
+        setCurrentAll(false);
+      }}
+      pageAll={currentAll && list.length === ids.length}
+      onPageAll={() => {
+        setIds(list.map(item => item.skuId));
+        setCheckAll(false);
+        setCurrentAll(true);
+      }}
+      checkAll={checkAll && list.length === ids.length}
     />
 
     <SkuClass
