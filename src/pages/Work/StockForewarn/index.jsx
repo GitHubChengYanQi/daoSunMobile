@@ -21,7 +21,7 @@ const StockForewarn = () => {
 
   const screens = [
     { key: 'skuClass', title: '物料分类' },
-    { key: 'status', title: '预警状态' },
+    { key: 'forewarnStatus', title: '预警状态' },
     { key: 'purchaseStatus', title: '采购状态' },
   ];
 
@@ -32,6 +32,8 @@ const StockForewarn = () => {
   const [checkAll, setCheckAll] = useState(false);
   const [currentAll, setCurrentAll] = useState(false);
 
+  const [searchValue, setSearchValue] = useState('');
+
 
   const submit = (data = {}) => {
     const newParmas = { ...params, ...data };
@@ -39,9 +41,11 @@ const StockForewarn = () => {
     listRef.current?.submit(newParmas);
   };
 
-  return <>
+  return <div style={{height:'calc(100% - 53px)',overflow:'auto'}}>
     <MyNavBar title='库存预警' />
-    <MySearch />
+    <MySearch value={searchValue} onChange={setSearchValue} onSearch={(keyWords) => {
+      submit({keyWords});
+    }} />
     <div className={styles.dropDown}>
       <div className={style.dropDown}>
         {
@@ -51,8 +55,8 @@ const StockForewarn = () => {
               case 'skuClass':
                 title = screen.skuClassName;
                 break;
-              case 'status':
-                title = screen.status;
+              case 'forewarnStatus':
+                title = screen.forewarnStatus;
                 break;
               case 'purchaseStatus':
                 title = screen.purchaseStatus;
@@ -86,7 +90,8 @@ const StockForewarn = () => {
               extraWidth='110px'
               otherData={[
                 <div style={{ color: '#9A9A9A' }}>
-                  <span className={item.number < item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
+                  <span
+                    className={item.number < item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
                   <span className={item.number > item.inventoryCeiling ? 'red' : ''}>库存上限：{item.inventoryCeiling}</span>
                 </div>,
               ]}
@@ -110,27 +115,27 @@ const StockForewarn = () => {
     <SkuClass
       onClose={() => setScreenkey('')}
       zIndex={1002}
-      value={params.skuClassId ? [{ value: params.skuClassId, label: screen.skuClassName }] : []}
+      value={params.classId ? [{ value: params.classId, label: screen.skuClassName }] : []}
       visible={screenKey === 'skuClass'}
       onChange={(skuClass) => {
-        submit({ skuClassId: skuClass?.value });
+        submit({ classId: skuClass?.value });
         setScreen({ ...screen, skuClassName: skuClass?.label });
         setScreenkey('');
       }}
     />
 
     <MyPicker
-      visible={screenKey === 'status'}
-      value={params.status}
+      visible={screenKey === 'forewarnStatus'}
+      value={params.forewarnStatus}
       onChange={(option) => {
-        submit({ status: option.value });
-        setScreen({ ...screen, status: option.label });
+        submit({ forewarnStatus: option.value });
+        setScreen({ ...screen, forewarnStatus: option.label });
         setScreenkey('');
       }}
       options={[
-        { label: '全部', value: '全部' },
-        { label: '下限预警', value: '下限预警' },
-        { label: '上限预警', value: '上限预警' },
+        { label: '全部', value: 'all' },
+        { label: '下限预警', value: 'min' },
+        { label: '上限预警', value: 'max' },
       ]}
       onClose={() => setScreenkey('')}
     />
@@ -150,7 +155,7 @@ const StockForewarn = () => {
       ]}
       onClose={() => setScreenkey('')}
     />
-  </>;
+  </div>;
 };
 
 export default StockForewarn;
