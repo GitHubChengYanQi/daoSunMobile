@@ -23,6 +23,9 @@ const FormLayout = (
     },
     onSave = () => {
     },
+    required = () => {
+      return true;
+    },
   },
 ) => {
 
@@ -128,6 +131,18 @@ const FormLayout = (
       rightDisabled={disabled()}
       rightText={currentStep < steps.length - 1 ? '下一步' : '保存'}
       rightOnClick={async () => {
+        const currentFiled = [];
+        isArray(steps[currentStep]?.data).map((item) => {
+          item.map(item => {
+            const data = item.data || [];
+            data.forEach(item => {
+              currentFiled.push(item.key);
+            });
+          });
+        });
+        if (!required(currentFiled)) {
+          return;
+        }
         if (currentStep === steps.length - 1) {
           onSave(true);
         } else if (steps[currentStep].type === 'add') {
