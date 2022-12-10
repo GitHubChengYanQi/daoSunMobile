@@ -101,8 +101,10 @@ const StockForewarn = () => {
               otherData={[
                 <div style={{ color: '#9A9A9A' }}>
                   <span
+                    hidden={!item.inventoryFloor}
                     className={item.number <= item.inventoryFloor ? 'red' : ''}>库存下限：{item.inventoryFloor}</span>&nbsp;&nbsp;
                   <span
+                    hidden={!item.inventoryCeiling}
                     className={item.number >= item.inventoryCeiling ? 'red' : ''}>库存上限：{item.inventoryCeiling}</span>
                 </div>,
               ]}
