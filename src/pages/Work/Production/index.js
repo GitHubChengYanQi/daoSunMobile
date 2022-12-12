@@ -4,15 +4,19 @@ import styles from './index.less';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
 import MyNavBar from '../../components/MyNavBar';
-import Label from '../../components/Label';
 import MySearch from '../../components/MySearch';
 import { useHistory } from 'react-router-dom';
 import BottomButton from '../../components/BottomButton';
 import MyProgress from '@/pages/components/MyProgress';
-import style from '@/pages/Work/ProcessTask/index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import Icon from '@/pages/components/Icon';
 import { MyDate } from '../../components/MyDate';
+import style from '../ProcessTask/index.less';
+import moment from 'moment';
+import { classNames, isObject } from '../../components/ToolUtil';
+import MyPicker from '../../components/MyPicker';
+import Customers from '../ProcessTask/MyAudit/components/Customers';
+import StartEndDate from './CreateTask/components/StartEndDate';
+import CheckUser from '../../components/CheckUser';
 
 
 const Production = () => {
@@ -23,23 +27,83 @@ const Production = () => {
 
   const [data, setData] = useState([]);
 
+  const dataRef = useRef();
+  const userRef = useRef();
+
+  const screens = [
+    { title: '执行中', key: 'status' },
+    { title: '产品', key: 'spu' },
+    { title: '客户', key: 'customerId' },
+    { title: '执行人', key: 'userId' },
+    { title: '执行日期', key: 'createTime' },
+  ];
+
+  const [params, setParams] = useState({});
+
+  const [screen, setScreen] = useState({});
+
+  const [screenKey, setScreenkey] = useState();
+
   const ref = useRef();
+
+  const submit = (data = {}, reset) => {
+    const newParmas = reset ? { ...data } : { ...params, ...data };
+    if (reset) {
+      setScreen({});
+    }
+    setParams(newParmas);
+    ref.current?.submit(newParmas);
+  };
 
   return <div className={styles.mainDiv}>
     <MyNavBar title='生产计划列表' />
     <MySearch />
 
-    <div className={styles.screent}>
-      <div className={styles.dropDown}>
-        <div className={styles.titleBox}>
-          <div className={styles.title}>执行中<DownOutline /></div>
-          <div className={styles.title}>产品<DownOutline /></div>
-          <div className={styles.title}>客户<DownOutline /></div>
-          <div className={styles.title}>执行人<DownOutline /></div>
-          <div className={styles.title}>执行日期<DownOutline /></div>
-        </div>
-        <div className={styles.sort}><Icon type='icon-paixubeifen' /></div>
-
+    <div
+      style={{ borderBottom: '1px solid var(--body--background--color)' }}
+      className={style.screent}
+    >
+      <div className={style.dropDown} style={{ padding: '10px 8px', gap: 8 }}>
+        {
+          screens.map((item) => {
+            let title = '';
+            switch (item.key) {
+              case 'userId':
+                title = screen.userName;
+                break;
+              case 'createTime':
+                title = params.beginTime ? moment(params.beginTime).format('MM/DD') + '-' + moment(params.endTime).format('MM/DD') : '';
+                break;
+              case 'customerId':
+                title = screen.customerName;
+                break;
+              case 'status':
+                title = screen.status;
+                break;
+            }
+            const check = title || screenKey === item.key;
+            return <div
+              style={{ width: `${parseInt(100 / screens.length)}%` }}
+              className={classNames(style.titleBox, check && style.checked)}
+              key={item.key}
+              onClick={() => {
+                switch (item.key) {
+                  case 'userId':
+                    userRef.current.open();
+                    break;
+                  case 'createTime':
+                    dataRef.current.open();
+                    break;
+                  default:
+                    break;
+                }
+                setScreenkey(item.key);
+              }}>
+              <div className={style.title} style={{ minWidth: '80%', textAlign: 'center' }}>{title || item.title}</div>
+              {screenKey === item.key ? <UpOutline /> : <DownOutline />}
+            </div>;
+          })
+        }
       </div>
     </div>
 
@@ -103,6 +167,60 @@ const Production = () => {
       }
     </MyList>
 
+    <MyPicker
+      visible={screenKey === 'status'}
+      value={params.inStockStatus}
+      onChange={(option) => {
+        submit({ status: option.value });
+        setScreen({ ...screen, status: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '执行中', value: '执行中' },
+        { label: '完成', value: '完成' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
+    <Customers
+      data={{ supply: 0 }}
+      onClose={() => setScreenkey('')}
+      zIndex={1002}
+      value={params.customerId ? [{ customerId: params.customerId, customerName: screen.customerName }] : []}
+      visible={screenKey === 'customerId'}
+      onChange={(customer) => {
+        submit({ customerId: customer?.customerId });
+        setScreen({ ...screen, customerName: customer?.customerName });
+        setScreenkey('');
+      }}
+    />
+
+    <StartEndDate
+      render
+      onClose={() => setScreenkey('')}
+      precision='day'
+      minWidth='100%'
+      textAlign='left'
+      value={params.beginTime ? [params.beginTime, params.endTime] : []}
+      max={new Date()}
+      onChange={(creatTime) => {
+        submit({ beginTime: creatTime[0], endTime: creatTime[1] });
+        setScreenkey('');
+      }}
+      dataRef={dataRef}
+    />
+
+    <CheckUser
+      zIndex={1002}
+      ref={userRef}
+      onClose={() => setScreenkey('')}
+      value={params.userId ? [{ id: params.userId }] : []}
+      onChange={(users) => {
+        submit({ userId: isObject(users[0]).id });
+        setScreen({ ...screen, userName: isObject(users[0]).name });
+        setScreenkey('');
+      }}
+    />
 
     <BottomButton
       only

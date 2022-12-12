@@ -15,6 +15,7 @@ import { FillinOutline, MinusCircleOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import { Message } from '../../../../../components/Message';
 import { isArray } from '../../../../../components/ToolUtil';
+import { useHistory } from 'react-router-dom';
 
 const PlanDetail = (
   {
@@ -26,6 +27,8 @@ const PlanDetail = (
     type,
   },
 ) => {
+
+  const history = useHistory();
 
   const contractType = type === 'ContractOrder';
 
@@ -139,7 +142,7 @@ const PlanDetail = (
       title='物料清单选择'
       position='right'
       visible={addBoms}
-      onClose={() => setAddBoms(false)}
+      onClose={() => history.goBack()}
     >
       <SelectBom
         value={value.map((item, index) => ({ ...item, id: index }))}
@@ -165,7 +168,7 @@ const PlanDetail = (
           } else {
             onChange(skus);
           }
-          setAddBoms(false);
+          history.goBack();
         }}
       />
     </MyAntPopup>

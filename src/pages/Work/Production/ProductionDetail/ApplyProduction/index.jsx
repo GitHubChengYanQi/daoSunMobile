@@ -11,12 +11,17 @@ import LinkButton from '../../../../components/LinkButton';
 import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../../components/Upload/UploadFile';
 import { AddButton } from '../../../../components/MyButton';
+import BottomButton from '../../../../components/BottomButton';
+import MyAntPopup from '../../../../components/MyAntPopup';
+import Relation from './components/Relation';
 
 const ApplyProduction = () => {
 
   const [data, setData] = useState({});
 
   const file = useRef();
+
+  const [visible, setVisible] = useState(false);
 
   return <>
     <MyNavBar title='申请投产' />
@@ -59,9 +64,16 @@ const ApplyProduction = () => {
     <MyCard title='数量' extra={<ShopNumber />} />
 
     <MyCard title='关联产品编号'>
+      {
+        [1, 2, 3].map((item, index) => {
+          return <div key={index}>
+
+          </div>;
+        })
+      }
       <Divider>
         <AddButton onClick={() => {
-
+          setVisible(true);
         }} />
       </Divider>
     </MyCard>
@@ -87,12 +99,18 @@ const ApplyProduction = () => {
         onChange={(medias = []) => {
           setData({
             ...data,
-            [item.key]: medias[0]?.mediaId,
+            mediaId: medias[0]?.mediaId,
             filedName: medias[0]?.filedName,
             filedUrl: medias[0]?.url,
           });
         }} />
     </MyCard>
+
+    <MyAntPopup visible={visible} title='关联产品编号' onClose={() => setVisible(false)}>
+      <Relation onClose={() => setVisible(false)} />
+    </MyAntPopup>
+
+    <BottomButton />
   </>;
 };
 

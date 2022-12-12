@@ -40,51 +40,38 @@ const CreatePlan = () => {
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
-  const [contracts, setContracts] = useState(state.contracts || [{}]);
-
-  const [cardCoding, setCardCoding] = useState({});
-
-  const contractsChange = (data = {}, key) => {
-    const newContracts = contracts.map((item, index) => {
-      if (index === key) {
-        return { ...item, ...data };
-      }
-      return item;
-    });
-    if (data.coding && !contracts[key + 1]) {
-      setContracts([...newContracts, {}]);
-    } else {
-      setContracts(newContracts);
-    }
-  };
-
   return <>
     <MyNavBar title='创建计划' />
     <FormLayout
-      data={{
-        ...data,
-        cardCoding: cardCoding.fixedCoding && cardCoding.total && cardCoding.startNum,
-        orderDetailParams: contracts,
-      }}
+      data={data}
       loading={loading}
       onSave={async (complete) => {
-
         const orderDetailParams = [];
-        contracts.forEach(contractsItem => {
-          const details = contractsItem.details || [];
-          details.forEach(item => {
+        if (data.type === 'MarketingPresupposition') {
+          isArray(data.orderDetailParams).forEach(item => {
             orderDetailParams.push({
-              contractCoding: contractsItem.coding, ...item,
-              purchaseNumber: item.purchaseNumber || 1,
+              ...item,
+              purchaseNumber: item.number || 1,
             });
           });
-        });
+        } else {
+          isArray(data.orderDetailParams).forEach(item => {
+            const details = item.details || [];
+            details.forEach(detailItem => {
+              orderDetailParams.push({
+                ...detailItem,
+                contractCoding: item.contractCoding,
+                customerName: item.customerName,
+                purchaseNumber: item.number || 1,
+              });
+            });
+          });
+        }
 
         let success;
         await run({
           data: {
             ...data,
-            cardCoding,
             executionTime: data.time && data.time[0],
             endTime: data.time && data.time[1],
             orderDetailParams,
@@ -200,16 +187,6 @@ const CreatePlan = () => {
         >
           {content}
         </MyCard>;
-      }}
-    />
-
-    <CheckSpu
-      // open={visible}
-      close={() => setVisible(false)}
-      onChange={(sku) => {
-        const details = isArray(contracts[visible?.index]?.details);
-        contractsChange({ details: [...details, sku] }, visible?.index);
-        setVisible(false);
       }}
     />
 
