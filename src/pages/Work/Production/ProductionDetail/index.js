@@ -49,7 +49,7 @@ const ProductionDetail = (props) => {
   const user = data.userResult || {};
 
   return <div>
-    <MyNavBar title='工单详情' />
+    <MyNavBar title='计划详情' />
     <div className={style.header}>
       <Avatar className={style.avatar} src={user.avatar} size={60}>
         {user.name && user.name.substring(0, 1)}
@@ -75,8 +75,8 @@ const ProductionDetail = (props) => {
       style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
       onChange={setKey}
     >
-      <Tabs.Tab title='生产工序' key='ship' />
-      <Tabs.Tab title='生产信息' key='sku' />
+      <Tabs.Tab title='工序信息' key='ship' />
+      <Tabs.Tab title='投料BOM' key='sku' />
     </Tabs>
     <div>
       {module()}

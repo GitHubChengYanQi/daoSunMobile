@@ -1,15 +1,15 @@
 import React, { useRef } from 'react';
 import { Button, Form, Space, TextArea, Toast } from 'antd-mobile';
-import MyCoding from '../../../components/MyCoding';
-import MyAntPicker from '../../../components/MyAntPicker';
+import MyCoding from '../../../../components/MyCoding';
+import MyAntPicker from '../../../../components/MyAntPicker';
 import AddSku from '../components/AddSku';
-import MyNavBar from '../../../components/MyNavBar';
+import MyNavBar from '../../../../components/MyNavBar';
 import Process from '../components/Process';
-import { useRequest } from '../../../../util/Request';
+import { useRequest } from '../../../../../util/Request';
 import { purchaseAskAdd } from '../components/Url';
 import { history } from 'umi';
-import MyBottom from '../../../components/MyBottom';
-import { MyLoading } from '../../../components/MyLoading';
+import MyBottom from '../../../../components/MyBottom';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const AskAdd = () => {
 

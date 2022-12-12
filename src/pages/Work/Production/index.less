@@ -1,10 +1,59 @@
 
 .item {
   background-color: #fff;
-  //margin: 0 12px 3px;
   margin-bottom: 1px;
-  padding: 12px;
+  padding: 12px 12px 0;
   box-shadow: rgba(24, 69, 181, 0.1) 0 3px 6px;
+
+  position: relative;
+  overflow: hidden;
+
+  .errLogo {
+    color: var(--adm-color-danger);
+    background: url("../../../assets/error.png");
+  }
+
+  .logo {
+    position: absolute;
+    z-index: 1;
+    right: -15px;
+    bottom: -15px;
+    height: 70px;
+    width: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Impact, serif;
+    background-repeat: no-repeat;
+    background-position-y: 8px;
+    transform: rotate(-45deg);
+
+    span {
+      font-size: 20px;
+      transform: scale(0.5);
+      min-width: 140px;
+      display: block;
+      text-align: center
+    }
+  }
+
+  .headerClassName {
+    padding-bottom: 8px;
+    border-bottom: solid 1px var(--body--background--color);
+  }
+
+  .bodyClassName {
+    padding: 8px 0;
+
+    > div {
+      padding: 4px 0;
+    }
+  }
+
+  .extra {
+    color: #9d9b9b;
+    font-size: 12px;
+  }
 
   .title {
     display: flex;
@@ -71,7 +120,7 @@
 .bodyCard {
   display: flex;
   align-items: center;
-  border: solid 1px var(--body--background--color);
+  border-bottom: solid 1px var(--body--background--color);
   padding: 8px;
 }
 
@@ -82,7 +131,7 @@
 .buttons {
   display: flex;
   align-items: center;
-  border-top:  1px solid var(--body--background--color);
+  //border-top:  1px solid var(--body--background--color);
 
   button {
     padding: 8px !important;
@@ -91,8 +140,13 @@
   }
 
   .dispatch {
-    border-left: 1px solid var(--body--background--color);
+    //border-left: 1px solid var(--body--background--color);
   }
+}
+
+.skus {
+  background-color: #fff;
+  //padding: 12px;
 }
 
 .skuItem {
@@ -105,4 +159,18 @@
   .sku {
     flex-grow: 1;
   }
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+
+  .flexGrow {
+    flex-grow: 1;
+  }
+}
+
+.space {
+  height: 1px;
+  background-color: var(--body--background--color);
 }

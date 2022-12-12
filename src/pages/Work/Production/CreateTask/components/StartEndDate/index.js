@@ -4,6 +4,7 @@ import { CalendarOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
+import moment from 'moment';
 
 export const getMinTime = (time) => {
   if (!time) {
@@ -25,6 +26,7 @@ const StartEndDate = (
     value = [],
     onChange = () => {
     },
+    placeholder,
     onClose = () => {
     },
     min,
@@ -56,7 +58,7 @@ const StartEndDate = (
     >
       {render || <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
-        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : '请选择时间'}
+        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : (placeholder || '请选择时间')}
       </Space>}
     </div>
     <MyDatePicker
@@ -83,7 +85,8 @@ const StartEndDate = (
       }}
       onChange={(date) => {
         if (startDate) {
-          onChange([startDate, date]);
+          const endDate = precision === 'day' ? moment(date).format('YYYY/MM/DD 23:59:59') : date;
+          onChange([startDate, endDate]);
           setStartDate();
         } else {
           setStartDate(date);

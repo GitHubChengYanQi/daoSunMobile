@@ -23,6 +23,9 @@ const FormLayout = (
     },
     onSave = () => {
     },
+    required = () => {
+      return true;
+    },
   },
 ) => {
 
@@ -48,7 +51,7 @@ const FormLayout = (
   };
 
   const disabled = () => {
-    const requireds = requiredFiled.filter(item => !data[item]);
+    const requireds = requiredFiled.filter(item => typeof data[item] !== 'number' && !data[item] && fieldRender({ key: item }) !== false);
     return requireds.length !== 0;
   };
 
@@ -78,51 +81,77 @@ const FormLayout = (
           steps.map((item, index) => {
             return <Step
               key={index}
-              title={item.title || `步骤${index + 1}`}
+              title={<div onClick={() => {
+                if (index >= currentStep) {
+                  return;
+                }
+                getRequireFiled(steps[index]?.data);
+                setCurrentStep(index);
+              }}>{item.title || `步骤${index + 1}`}</div>}
             />;
           })
         }
       </Steps>
     </div>
-    {
-      steps.map((setpItem, setpIndex) => {
-        const data = setpItem.data || [];
-        const hidden = currentStep !== setpIndex;
-        return <div hidden={hidden} key={setpIndex}>
-          {
-            data.map((rows = [], rowIndex) => {
-              return rows.map((columnItem, columnIndex) => {
-                const data = columnItem.data || [];
-                return <div key={columnIndex}>
-                  {data.map((item, index) => {
-                    return <div key={index}>{fieldRender({
-                      ...item,
-                      required: hidden ? false : item.required,
-                    })}</div>;
-                  })}
-                </div>;
-              });
-            })
-          }
-        </div>;
-      })
-    }
+
+    <div style={{ marginBottom: 68 }}>
+      {
+        steps.map((setpItem, setpIndex) => {
+          const data = setpItem.data || [];
+          const hidden = currentStep !== setpIndex;
+          return <div hidden={hidden} key={setpIndex}>
+            {
+              data.map((rows = [], rowIndex) => {
+                return rows.map((columnItem, columnIndex) => {
+                  const data = columnItem.data || [];
+                  return <div key={columnIndex}>
+                    {data.map((item, index) => {
+                      return <div key={index}>{fieldRender({
+                        ...item,
+                        required: hidden ? false : item.required,
+                      })}</div>;
+                    })}
+                  </div>;
+                });
+              })
+            }
+          </div>;
+        })
+      }
+    </div>
 
     <BottomButton
-      only
-      loading={loading}
-      disabled={disabled()}
-      text={currentStep < steps.length - 1 ? '下一步' : '保存'}
-      onClick={async () => {
+      leftText='上一步'
+      leftDisabled={currentStep === 0}
+      leftOnClick={() => {
+        getRequireFiled(steps[currentStep - 1]?.data);
+        setCurrentStep(currentStep - 1);
+      }}
+      rightLoading={loading}
+      rightDisabled={disabled()}
+      rightText={currentStep < steps.length - 1 ? '下一步' : '保存'}
+      rightOnClick={async () => {
+        const currentFiled = [];
+        isArray(steps[currentStep]?.data).map((item) => {
+          item.map(item => {
+            const data = item.data || [];
+            data.forEach(item => {
+              currentFiled.push(item.key);
+            });
+          });
+        });
+        if (!required(currentFiled)) {
+          return;
+        }
         if (currentStep === steps.length - 1) {
           onSave(true);
         } else if (steps[currentStep].type === 'add') {
           if (await onSave(false)) {
-            getRequireFiled(steps[currentStep+1]?.data);
+            getRequireFiled(steps[currentStep + 1]?.data);
             setCurrentStep(currentStep + 1);
           }
         } else {
-          getRequireFiled(steps[currentStep+1]?.data);
+          getRequireFiled(steps[currentStep + 1]?.data);
           setCurrentStep(currentStep + 1);
         }
       }}

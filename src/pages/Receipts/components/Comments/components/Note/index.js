@@ -20,6 +20,7 @@ const Note = (
     },
     autoFocus,
     textAreaId,
+    getContainer,
     placeholder,
   },
 ) => {
@@ -35,7 +36,7 @@ const Note = (
 
   const addFileRef = useRef();
 
-  return <>
+  return <div>
     <div className={ToolUtil.classNames(style.content, className)}>
       <div className={style.imgs}>
         <UploadFile
@@ -55,6 +56,7 @@ const Note = (
       </div>
       <div className={style.comments}>
         <MyTextArea
+          getContainer={getContainer}
           maxLength={50}
           className={style.textarea}
           value={note}
@@ -85,7 +87,7 @@ const Note = (
         </div>
       </div>
     </div>
-  </>;
+  </div>;
 };
 
 export default Note;

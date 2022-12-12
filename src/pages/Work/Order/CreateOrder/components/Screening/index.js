@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Space } from 'antd-mobile';
-import MyPicker from '../../../../components/MyPicker';
-import { UserIdSelect } from '../../../Quality/Url';
-import MySelector from '../../../../components/MySelector';
+import MyPicker from '../../../../../components/MyPicker';
+import { UserIdSelect } from '../../../../Quality/Url';
+import MySelector from '../../../../../components/MySelector';
 
 const Screening = (
   {

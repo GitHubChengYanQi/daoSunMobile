@@ -45,7 +45,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const [data, setData] = useState([]);
 
-  const { query } = useLocation();
+  const { query, state } = useLocation();
 
   const [hiddenBottom, setHiddenBottom] = useState(false);
 
@@ -139,6 +139,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
       }
       return null;
     });
+
     inStock({
       data: {
         type: query.submitType,
@@ -154,6 +155,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
 
   const content = () => {
     return <Skus
+      show={state?.numberStatus === 'disabled'}
       skus={skus}
       createTypeData={createTypeData}
       setHiddenBottom={setHiddenBottom}
@@ -215,10 +217,10 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     <Customers
       onClose={() => setVisible(false)}
       zIndex={1001}
-      value={params.customerId}
+      value={params.customerId ? [{ customerId: params.customerId, customerName: params.customerName }] : []}
       visible={visible}
       onChange={(customer) => {
-        setParams({ ...params, customerId: customer?.value, customerName: customer?.label });
+        setParams({ ...params, customerId: customer?.customerId, customerName: customer?.customerName });
         setVisible(false);
       }}
     />

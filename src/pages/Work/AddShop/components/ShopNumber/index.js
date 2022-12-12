@@ -13,6 +13,10 @@ const ShopNumber = (
     min = 1,
     max = 999999999,
     className,
+    number,
+    placeholder,
+    getContainer,
+    decimal,
   },
 ) => {
 
@@ -28,11 +32,13 @@ const ShopNumber = (
             setVisible(true);
           }
         }}>
-        × {value}
+        {!number ? <>× {value}</> : (value || <span style={{color:'#cccccc'}}>{placeholder}</span>)}
       </div>
     </div>
 
     <MyKeybord
+      decimal={decimal}
+      getContainer={getContainer}
       visible={visible}
       setVisible={setVisible}
       value={value}

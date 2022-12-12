@@ -24,8 +24,8 @@ const ShipList = ({ data }) => {
       data.map((item, index) => {
         const setpSetResult = item.setpSetResult || {};
         const shipSetpResult = setpSetResult.shipSetpResult || {};
-        const productionStation = setpSetResult.productionStation || {};
-        const setpSetDetails = setpSetResult.setpSetDetails || [];
+
+        const number = (item.cardNumber || 0) - (item.toDoNum || 0);
 
         return <div key={index}>
           <MyCard
@@ -33,60 +33,34 @@ const ShipList = ({ data }) => {
             className={styles.card}
             bodyClassName={styles.cardBody}
             title={shipSetpResult.shipSetpName}
-            extra={`工位：${productionStation.name || '-'}`}
           >
             <div className={styles.bodyCard}>
               <Space direction='vertical' align='center' style={{ flexGrow: 1 }}>
                 <div>
-                  卡片数
+                  计划总数
                 </div>
                 <div>
                   {item.cardNumber}
                 </div>
               </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#9A9A9A' }}>
+              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: '#f38403' }}>
                 <div>
-                  子卡片数
-                </div>
-                <div>
-                  {item.count}
-                </div>
-              </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1,color: '#f38403' }}>
-                <div>
-                  进行中
+                  已申请
                 </div>
                 <div>
                   {item.toDoNum}
                 </div>
               </Space>
-              <Space direction='vertical' align='center' style={{ flexGrow: 1, color: 'green' }}>
-                <div>
-                  已完成
-                </div>
-                <div>
-                  {item.completeNum}
-                </div>
-              </Space>
-            </div>
-            <div className={styles.process}>
-              <MyProgress percent={(item.completeNum / item.count) * 100} />
             </div>
             <div className={styles.buttons}>
               <LinkButton
-                onClick={() => {
-                  setVisible(setpSetDetails.map(skuItem=>({...skuItem,num:parseInt(skuItem.num) * parseInt(item.count)})));
-                }}
-              >
-                查看产出物料
-              </LinkButton>
-              <LinkButton
+                disabled={number <= 0}
                 className={styles.dispatch}
                 onClick={() => {
-                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${item.count}&shipName=${shipSetpResult.shipSetpName}`);
+                  history.push(`/Work/Production/CreateTask?id=${item.workOrderId}&max=${number}&shipName=${shipSetpResult.shipSetpName}`);
                 }}
               >
-                指派任务
+                申请出库
               </LinkButton>
             </div>
           </MyCard>

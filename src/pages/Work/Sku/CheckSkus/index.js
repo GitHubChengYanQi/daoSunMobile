@@ -1,11 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { skuList } from '../../../Scan/Url';
 import MyList from '../../../components/MyList';
-import Icon from '../../../components/Icon';
-import { Button, Checkbox, Divider, Space } from 'antd-mobile';
-import Label from '../../../components/Label';
-import MyEllipsis from '../../../components/MyEllipsis';
-import LinkButton from '../../../components/LinkButton';
+import { Button, Divider, Space } from 'antd-mobile';
 import MyBottom from '../../../components/MyBottom';
 import MySearch from '../../../components/MySearch';
 import styles from './index.less';
@@ -22,8 +18,6 @@ const CheckSkus = (
   }) => {
 
   const ref = useRef();
-
-  const detailRef = useRef();
 
   const [data, setData] = useState([]);
 

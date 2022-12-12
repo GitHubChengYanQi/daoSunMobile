@@ -153,7 +153,8 @@ const SkuAction = (
 
   const addInstockShop = (formStatus, item, index, type) => {
     const skuResult = item.skuResult || {};
-    const imgUrl =  ToolUtil.isArray(skuResult.imgResults)[0] || state.homeLogo;
+    const imgUrl = ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
+
     addShop({
       data: {
         formStatus,
@@ -264,7 +265,7 @@ const SkuAction = (
 
     </MyCard>
 
-     <Popup
+    <Popup
       getContainer={null}
       onMaskClick={() => {
         if (refreshOrder) {

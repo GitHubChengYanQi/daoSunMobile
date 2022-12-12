@@ -36,7 +36,7 @@ const Pick = ({ module, id, ...props }) => {
 
   return <div>
     {!id && <div>
-      <MyNavBar title='工单详情' />
+      <MyNavBar title='计划详情' />
       <Card
         title={<div><Label>领料编码：</Label>{data.productionTaskResult && data.productionTaskResult.coding}</div>}
         style={{ backgroundColor: '#fff', margin: 8, marginBottom: 16 }}>

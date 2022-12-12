@@ -245,7 +245,7 @@ const MenusSetting = (props) => {
           const otherMenus = [];
           switch (item.id) {
             case 'other':
-              otherMenus.push({ name: '采购申请', code: 'purchase_ask' });
+              // otherMenus.push({ name: '采购申请', code: 'purchase_ask' });
               break;
             default:
               break;

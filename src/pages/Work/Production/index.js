@@ -20,7 +20,7 @@ const Production = () => {
   const ref = useRef();
 
   return <div className={styles.mainDiv}>
-    <MyNavBar title='生产计划列表' />
+    <MyNavBar title='计划列表' />
     <MySearch />
 
     <Tabs className={styles.tabs}>
@@ -48,7 +48,7 @@ const Production = () => {
             <div className={styles.title}>
               <div className={styles.status}>
                 <div className={styles.theme}>{item.theme} / {item.coding}</div>
-                <div style={{ border: `solid 1px #599745`, color: '#599745' }} className={styles.statusName}>
+                <div hidden style={{ border: `solid 1px #599745`, color: '#599745' }} className={styles.statusName}>
                   待处理
                 </div>
               </div>

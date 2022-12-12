@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import { FloatingBubble, InfiniteScroll, PullToRefresh } from 'antd-mobile';
 import { MyLoading } from '../MyLoading';

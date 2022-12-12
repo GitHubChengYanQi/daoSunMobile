@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { useRequest } from '../../../../../util/Request';
+import { useRequest } from '../../../../../../util/Request';
 import { Badge, Space, Steps } from 'antd-mobile';
 import { Avatar } from 'antd';
-import Icon from '../../../../components/Icon';
+import Icon from '../../../../../components/Icon';
 import { AuditOutlined, CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import style from './index.less';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../components/ToolUtil';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
-import { MyDate } from '../../../../components/MyDate';
-import MyCard from '../../../../components/MyCard';
-import UploadFile from '../../../../components/Upload/UploadFile';
-import { MyLoading } from '../../../../components/MyLoading';
+import { MyDate } from '../../../../../components/MyDate';
+import MyCard from '../../../../../components/MyCard';
+import UploadFile from '../../../../../components/Upload/UploadFile';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const Process = (
   {

@@ -1,9 +1,9 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
-import MyList from '../../../../components/MyList';
+import MyList from '../../../../../components/MyList';
 import { Card, Space } from 'antd-mobile';
 import { purchaseAskList } from '../Url';
 import { history } from 'umi';
-import BottomButton from '../../../../components/BottomButton';
+import BottomButton from '../../../../../components/BottomButton';
 
 const AskList = ({ ...props }, ref) => {
 

@@ -5,6 +5,8 @@ import { ToolUtil } from '../ToolUtil';
 
 const BottomButton = (
   {
+    leftLoading,
+    rightLoading,
     loading,
     color,
     leftText,
@@ -43,6 +45,7 @@ const BottomButton = (
       :
       <>
         <Button
+          loading={leftLoading}
           color='primary'
           fill='outline'
           disabled={leftDisabled}
@@ -53,6 +56,7 @@ const BottomButton = (
           {leftText || '取消'}
         </Button>
         <Button
+          loading={rightLoading}
           disabled={rightDisabled}
           className={style.right}
           color='primary'

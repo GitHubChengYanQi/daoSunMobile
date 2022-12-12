@@ -71,7 +71,7 @@ export const SkuContent = (
                   unitName={unit.unitName}
                   skuResult={item}
                   otherData={[
-                    positions.map((item) => {
+                    positions.length === 0 ? '未绑定库位' : positions.map((item) => {
                       return positionResult(item);
                     }).join(' / '),
                   ]}

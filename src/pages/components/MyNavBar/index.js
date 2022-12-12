@@ -11,9 +11,10 @@ const MyNavBar = ({ title, noDom }) => {
   const location = useLocation();
 
   const state = initialState || {};
+
   useEffect(() => {
     setTimeout(() => {
-      document.title = state.systemName;
+      document.title = state.systemName ? `${title}-${state.systemName}` : title;
     }, 0);
   }, [location.pathname, title]);
 

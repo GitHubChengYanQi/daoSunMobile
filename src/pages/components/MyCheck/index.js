@@ -24,16 +24,9 @@ const MyCheck = (
     onClick={() => {
       onChange(!checked);
     }}>
-    <Checkbox
-      style={{ '--font-size': `${fontSize}px`, '--icon-size': `${fontSize}px` }}
-      checked={checked}
-      icon={(checked) => {
-        return checked ? <Icon type='icon-duoxuanxuanzhong1' /> :
-          <Icon type='icon-a-44-110' style={{ color: 'var(--adm-color-primary)' }} />;
-      }}
-    >
-      {children}
-    </Checkbox>
+    {checked ? <Icon type='icon-duoxuanxuanzhong1' style={{ fontSize, marginRight: 8 }} /> :
+      <Icon type='icon-a-44-110' style={{ color: 'var(--adm-color-primary)', fontSize, marginRight: 8 }} />}
+    {children}
   </LinkButton>;
 };
 

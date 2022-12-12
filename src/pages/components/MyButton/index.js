@@ -21,6 +21,7 @@ export const AddButton = (
     width,
     height,
     className,
+    children
   }) => {
 
   return <Button
@@ -31,6 +32,6 @@ export const AddButton = (
     style={{ width, height }}
     className={ToolUtil.classNames(className,style.add)}
   >
-    <AddOutline />
+    <AddOutline />{children}
   </Button>;
 };

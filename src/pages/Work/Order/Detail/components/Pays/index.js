@@ -2,10 +2,12 @@ import React from 'react';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { Card, Space } from 'antd-mobile';
 import Label from '../../../../../components/Label';
+import styles from './index.less';
+import { isArray } from '../../../../../components/ToolUtil';
 
 const Pays = ({ pays, payment }) => {
 
-  if (!pays || !payment) {
+  if (isArray(pays).length === 0 || !payment) {
     return <MyEmpty />;
   }
 
@@ -52,24 +54,24 @@ const Pays = ({ pays, payment }) => {
                 ?
                 <Space direction='vertical'>
                   <div>
-                    <Label>日期：</Label>{item.payTime}
+                    <Label className={styles.label}>日期</Label>：{item.payTime}
                   </div>
                 </Space>
                 :
                 <Space direction='vertical'>
                   <div>
-                    <Label>付款类型：</Label>{payType(item.payType)}
+                    <Label className={styles.label}>付款类型</Label>：{payType(item.payType)}
                   </div>
                   <div>
-                    <Label>日期：</Label>{item.dateNumber}{dateWay(item.dateWay)}
+                    <Label className={styles.label}>日期</Label>：{item.dateNumber}{dateWay(item.dateWay)}
                   </div>
                 </Space>
             }
             <div>
-              <Label>百分比：</Label>{item.percentum}
+              <Label className={styles.label}>百分比</Label>：{item.percentum}%
             </div>
             <div>
-              <Label>付款金额：</Label>{item.money}
+              <Label className={styles.label}>付款金额</Label>：{item.money}
             </div>
           </Space>
         </Card>;

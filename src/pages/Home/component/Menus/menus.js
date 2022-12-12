@@ -1,5 +1,4 @@
 import { ReceiptsEnums } from '../../../Receipts';
-import { ERPEnums } from '../../../Work/Stock/ERPEnums';
 
 export const menus = [
   { code: 'purchase', icon: 'icon-caigouguanli', url: '' },
@@ -26,10 +25,12 @@ export const menus = [
   { code: 'freeOutStock', icon: 'icon-gengduo', url: '/Scan/OutStock/FreeOutstock' },
   { code: 'inventory', icon: 'icon-pandian1', url: `/Work/Stock/Task?type=${ReceiptsEnums.stocktaking}` },
   { code: 'productionPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
+  { code: 'outPlan', icon: 'icon-shengchanjihua', url: '/Work/Production' },
   { code: 'productionTask', icon: 'icon-gengduo', url: '/Work/ProductionTask' },
   { code: 'pickLists', icon: 'icon-gengduo', url: '/Work/Production/PickLists' },
   { code: 'myCart', icon: 'icon-wodelingliao1', url: '/Work/MyPicking' },
-  { code: 'purchase_ask', icon: 'icon-caigoushenqingguanli', url: '/Work/purchaseAsk' },
+  { code: 'createPurchaseOrder', icon: 'icon-caigoushenqingguanli', url: '/Work/Order/CreateOrder?type=PO' },
+  { code: 'createSaleOrder', icon: 'icon-caigoushenqingguanli', url: '/Work/Order/CreateOrder?type=SO' },
   { code: 'procurementOrder', icon: 'icon-caigoudanguanli', url: '/Work/Order?type=1' },
   { code: 'Repair', icon: 'icon-gongdanguanli2', url: '/Repair' },
   { code: 'CreateRepair', icon: 'icon-chuangjianbaoxiu2', url: '/CreateRepair' },
@@ -92,4 +93,7 @@ export const menus = [
   },
   { code: 'OutStockConfirm',icon:'icon-chukuqueren1', url: '/Work/OutStockConfirm' },
   { code: 'mailList',icon:'icon-lianxiren2', url: '/Work/MailList' },
+  { code: 'preProduction', url: '/Work/Production/PreProduction' },
+  { code: 'invoice', url: '/Work/Invoice' },
+  { code: 'payment', url: '/Work/Payment' },
 ];
