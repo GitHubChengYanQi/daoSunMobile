@@ -5,8 +5,6 @@ import { Tabs } from 'antd-mobile';
 import { MyLoading } from '@/pages/components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
-import SkuList from '../components/SkuList';
-import ShipList from '../components/ShipList';
 import style from './index.less';
 import { Avatar } from 'antd';
 import Icon from '../../../components/Icon';
@@ -67,7 +65,7 @@ const ProductionDetail = (props) => {
       style={{ position: 'sticky', top: 0, zIndex: 1, '--title-font-size': '14px' }}
     >
       <Tabs.Tab title='投产明细' key='details'>
-        <Details data={data.planDetailResults} />
+        <Details productionPlanId={data.productionPlanId} />
       </Tabs.Tab>
       <Tabs.Tab title='计划明细' key='planDetails'>
         <PlanDetails data={data} />

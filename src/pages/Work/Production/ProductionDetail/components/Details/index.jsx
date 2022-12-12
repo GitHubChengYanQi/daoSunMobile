@@ -9,53 +9,61 @@ import MyAntPopup from '../../../../../components/MyAntPopup';
 import { Tabs } from 'antd-mobile';
 import { Space } from 'antd';
 import { useHistory } from 'react-router-dom';
+import MyList from '../../../../../components/MyList';
 
-const Details = ({ data = [] }) => {
+export const workOrderList = { url: '/productionWorkOrder/list', method: 'POST' };
+
+const Details = ({ productionPlanId }) => {
 
   const [detail, setDetail] = useState();
+
+  const [data, setData] = useState([]);
 
   const history = useHistory();
 
   return <>
     <MySearch className={styles.search} />
-    {
-      data.map((item, index) => {
-        return <div key={index} className={styles.item}>
-          <MyCard
-            className={styles.card}
-            headerClassName={styles.header}
-            title={`部件${index + 1}`}
-            extra={<div>
-              <span>已投产：10</span>
-              <span style={{ paddingLeft: 12 }}>可投产：1</span>
-            </div>}
-          >
-            <div className={styles.flexCenter}>
-              <SkuItem imgSize={48} className={styles.flexGrow} skuResult={item.skuResult} />
-              <ShopNumber show value={item.planNumber} />
+    <MyList
+      api={workOrderList}
+      getData={setData}
+      data={data}
+      params={{ source: 'productionPlan', sourceId: productionPlanId }}
+    >
+      {
+        data.map((item, index) => {
+          return <div key={index} className={styles.item}>
+            <MyCard
+              className={styles.card}
+              headerClassName={styles.header}
+              title={`部件${index + 1}`}
+              extra={<div>
+                <span>已投产：{item.toDoNum}</span>
+                <span style={{ paddingLeft: 12 }}>可投产：{item.count - item.toDoNum}</span>
+              </div>}
+            >
+              <div className={styles.flexCenter}>
+                <SkuItem imgSize={48} className={styles.flexGrow} skuResult={item.skuResult} />
+                <ShopNumber show value={item.planNumber} />
+              </div>
+              <div className={styles.ships}>
+                <div key={index} className={styles.flexCenter}>
+                  <div className={styles.flexGrow}>工序：{item.setpSetResult.shipSetpResult.shipSetpName}</div>
+                  8/8
+                </div>
+              </div>
+            </MyCard>
+            <div className={styles.buttons}>
+              <LinkButton onClick={() => setDetail(item)}>生产详情</LinkButton>
+              <div className={styles.space} />
+              <LinkButton
+                onClick={() => history.push({
+                  pathname: '/Work/Production/ProductionDetail/ApplyProduction',
+                })}>申请投产</LinkButton>
             </div>
-            <div className={styles.ships}>
-              {
-                [1, 2].map((item, index) => {
-                  return <div key={index} className={styles.flexCenter}>
-                    <div className={styles.flexGrow}>工序：T5一米床身装配序</div>
-                    8/8
-                  </div>;
-                })
-              }
-            </div>
-          </MyCard>
-          <div className={styles.buttons}>
-            <LinkButton onClick={() => setDetail(item)}>生产详情</LinkButton>
-            <div className={styles.space} />
-            <LinkButton
-              onClick={() => history.push({
-                pathname: '/Work/Production/ProductionDetail/ApplyProduction',
-              })}>申请投产</LinkButton>
-          </div>
-        </div>;
-      })
-    }
+          </div>;
+        })
+      }
+    </MyList>
 
 
     <MyAntPopup
