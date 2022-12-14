@@ -8,11 +8,11 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { isArray } from '../../../../components/ToolUtil';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
+import { outStockLogView } from '../../../components/WorkContrast';
 
-export const instockLogs = { url: '/statisticalView/instockLogs', method: 'POST' };
-export const instockLogViewDetail = { url: '/statisticalView/instockLogViewDetail', method: 'POST' };
+const instockLogs = { url: '/statisticalView/instockLogs', method: 'POST' };
 
-const InStockWorkDetail = (
+const OutStockWorkDetail = (
   {
     listRef,
     params = {},
@@ -25,7 +25,7 @@ const InStockWorkDetail = (
 
   const { loading, data, run } = useRequest(instockLogs, { manual: true });
 
-  return <MyList api={instockLogViewDetail} data={list} getData={setList} ref={listRef} manual>
+  return <MyList api={outStockLogView} data={list} getData={setList} ref={listRef} manual>
     {list.map((item, index) => {
 
       const show = open === index;
@@ -66,4 +66,4 @@ const InStockWorkDetail = (
 };
 
 
-export default InStockWorkDetail;
+export default OutStockWorkDetail;

@@ -9,11 +9,14 @@ import Comprehensive from './Comprehensive';
 
 const Report = () => {
 
-  const [key, setKey] = useState('inStock');
+  const [key, setKey] = useState(localStorage.getItem('reportkey') || 'inStock');
 
   return <div className={style.report}>
     <MyNavBar noDom title='数据统计' />
-    <Tabs className={style.tabs} stretch={false} activeKey={key} onChange={setKey}>
+    <Tabs className={style.tabs} stretch={false} activeKey={key} onChange={(key) => {
+      localStorage.setItem('reportkey', key);
+      setKey(key);
+    }}>
       <Tabs.Tab title='入库' key='inStock' destroyOnClose>
         <InStockReport />
       </Tabs.Tab>

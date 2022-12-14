@@ -5,14 +5,13 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import MyEllipsis from '../../../../components/MyEllipsis';
-import { useRequest } from '../../../../../util/Request';
-import { instockDetailBySpuClass } from '../../../components/Ranking';
-import { isArray } from '../../../../components/ToolUtil';
+import { outStockDetailBySpuClass } from '../../../components/Ranking';
 import MyList from '../../../../components/MyList';
 import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
+import { UserName } from '../../../../components/User';
 
-const InStockNumber = (
+const OutStockNumber = (
   {
     listRef,
     params = {},
@@ -23,7 +22,7 @@ const InStockNumber = (
 
   const [open, setOpen] = useState();
 
-  return <MyList manual ref={listRef} api={instockDetailBySpuClass} data={list} getData={setList}>
+  return <MyList manual ref={listRef} api={outStockDetailBySpuClass} data={list} getData={setList}>
     {
       list.map((item, index) => {
         let title;
@@ -39,6 +38,10 @@ const InStockNumber = (
             break;
           case 'STOREHOUSE':
             title = item.storehouseName || '无仓库';
+            numberText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            break;
+          case 'PICK_USER':
+            title = <UserName user={item.userResult} />;
             numberText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
             break;
           default:
@@ -84,4 +87,4 @@ const InStockNumber = (
   </MyList>;
 };
 
-export default InStockNumber;
+export default OutStockNumber;

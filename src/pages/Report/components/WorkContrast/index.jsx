@@ -4,11 +4,10 @@ import styles from '../../InStockReport/index.less';
 import WorkContrastChart from '../WorkContrastChart';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { instockOrderCountViewByUser } from '../Ranking';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
-const outStockLogView = { url: '/statisticalView/outStockLogView', method: 'POST' };
+export const outStockLogView = { url: '/statisticalView/outStockLogView', method: 'POST' };
 export const instockLogView = { url: '/statisticalView/instockLogView', method: 'POST' };
 
 const WorkContrast = (

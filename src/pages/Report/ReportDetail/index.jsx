@@ -19,13 +19,16 @@ import InAsk from './components/InAsk';
 import MyPicker from '../../components/MyPicker';
 import InStockWorkDetail from './components/InStockWorkDetail';
 import MyEmpty from '../../components/MyEmpty';
-import Supply from './components/Supply';
 import InStockSummary from './components/InStockSummary';
 import InStockNumber from './components/InStockNumber';
 import InStockError from './components/InStockError';
 import { InType } from '../../Work/CreateTask/components/InstockAsk';
 import { OutType } from '../../Work/CreateTask/components/OutstockAsk';
 import OutStockUseNumber from './components/OutStockUseNumber';
+import InStockArrival from './components/InStockArrival';
+import OutStockSummary from './components/OutStockSummary';
+import OutStockNumber from './components/OutStockNumber';
+import OutStockWorkDetail from './components/OutStockWorkDetail';
 
 const ReportDetail = () => {
 
@@ -75,6 +78,7 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '供应商', key: 'customerId' },
+            { title: '任务类型', key: 'inStockType' },
           ],
         },
         {
@@ -83,14 +87,14 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '物料分类', key: 'skuClass' },
+            { title: '任务类型', key: 'inStockType' },
           ],
         },
       ];
       Content = InAsk;
       break;
-    case 'inStock':
-    case 'outStock':
-      title = '工作明细';
+    case 'inStockWork':
+      title = '入库工作明细';
       tabs = [
         {
           title: '次数',
@@ -102,10 +106,10 @@ const ReportDetail = () => {
           ],
         },
       ];
-      defaultScreen = { numberRanking: '计算次数' };
+      defaultScreen = { numberRanking: '次数排行' };
       Content = InStockWorkDetail;
       break;
-    case 'supply':
+    case 'inStockArrival':
       title = '供应明细';
       tabs = [
         {
@@ -113,14 +117,13 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
             { title: '入库件数', key: 'inStockRanking' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      Content = Supply;
+      Content = InStockArrival;
       break;
     case 'inStockSummary':
       title = '入库汇总';
@@ -130,7 +133,6 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
             { title: '任务类型', key: 'inStockType' },
           ],
@@ -146,7 +148,6 @@ const ReportDetail = () => {
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '任务类型', key: 'inStockType' },
             { title: '仓库', key: 'stockHouse' },
           ],
@@ -155,7 +156,6 @@ const ReportDetail = () => {
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
             { title: '仓库', key: 'stockHouse' },
           ],
@@ -164,7 +164,6 @@ const ReportDetail = () => {
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
             { title: '任务类型', key: 'inStockRanking' },
           ],
@@ -228,17 +227,18 @@ const ReportDetail = () => {
           ],
         },
       ];
-      Content = InStockSummary;
+      Content = OutStockSummary;
       break;
     case 'useNumber':
-      title = '供应商用料明细';
+      title = '出库用料明细';
       tabs = [
         {
-          title: '入库类数',
+          title: '出库类数',
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '物料分类', key: 'skuClass' },
+            { title: '任务类型', key: 'outStockType' },
           ],
         },
       ];
@@ -252,32 +252,57 @@ const ReportDetail = () => {
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '任务类型', key: 'inStockType' },
+            { title: '任务类型', key: 'outStockType' },
             { title: '仓库', key: 'stockHouse' },
+            { title: '领料人', key: 'userId' },
           ],
         }, {
           title: '任务类型',
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
             { title: '仓库', key: 'stockHouse' },
+            { title: '领料人', key: 'userId' },
           ],
         }, {
-          title: '入库仓库',
+          title: '出库仓库',
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '物料分类', key: 'skuClass' },
-            { title: '任务类型', key: 'inStockRanking' },
+            { title: '任务类型', key: 'outStockType' },
+            { title: '领料人', key: 'userId' },
+          ],
+        }, {
+          title: '领料人员',
+          key: 'PICK_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '任务类型', key: 'outStockType' },
+            { title: '仓库', key: 'stockHouse' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      Content = InStockNumber;
+      Content = OutStockNumber;
+      break;
+    case 'outStockWork':
+      title = '出库工作明细';
+      tabs = [
+        {
+          title: '次数',
+          key: 'ORDER_LOG',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '数量排行', key: 'numberRanking' },
+          ],
+        },
+      ];
+      defaultScreen = { numberRanking: '次数排行' };
+      Content = OutStockWorkDetail;
       break;
     default:
       Content = MyEmpty;
@@ -347,6 +372,9 @@ const ReportDetail = () => {
                 break;
               case 'inStockRanking':
                 title = screen.inStockRanking;
+                break;
+                case 'outStockRanking':
+                title = screen.outStockRanking;
                 break;
               case 'inStockType':
                 title = screen.inStockType;
@@ -466,8 +494,8 @@ const ReportDetail = () => {
         setScreenkey('');
       }}
       options={[
-        { label: '计算次数', value: 'ORDER_LOG' },
-        { label: '计算件数', value: 'ORDER_LOG_DETAIL' },
+        { label: '次数排行', value: 'ORDER_LOG' },
+        { label: '数量排行', value: 'ORDER_LOG_DETAIL' },
       ]}
       onClose={() => setScreenkey('')}
     />

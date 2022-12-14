@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { isArray } from '../../../../components/ToolUtil';
-import { instockOrderCountViewByUser } from '../../../components/Ranking';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
-import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
+import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
@@ -12,6 +11,13 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { MyDate } from '../../../../components/MyDate';
 
 const instockDetail = { url: '/statisticalView/instockDetail', method: 'POST' };
+
+const instockOrders = { url: '/statisticalView/instockOrders', method: 'POST' };
+
+export const instockOrderCountViewByUserDetail = {
+  url: '/statisticalView/instockOrderCountViewByUserDetail',
+  method: 'POST',
+};
 
 const InAsk = (
   {
@@ -26,7 +32,13 @@ const InAsk = (
 
   const { loading, data, run } = useRequest(instockDetail, { manual: true });
 
-  return <MyList api={instockOrderCountViewByUser} data={list} getData={setList} ref={listRef} manual>
+  const {
+    loading: instockOrdersLoading,
+    data: instockOrdersData,
+    run: instockOrdersRun,
+  } = useRequest(instockOrders, { manual: true });
+
+  return <MyList api={instockOrderCountViewByUserDetail} data={list} getData={setList} ref={listRef} manual>
     {list.map((item, index) => {
 
       const show = open === index;
