@@ -10,6 +10,7 @@ import { Tabs } from 'antd-mobile';
 import { Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 import MyList from '../../../../../components/MyList';
+import { isArray, ToolUtil } from '../../../../../components/ToolUtil';
 
 export const workOrderList = { url: '/productionWorkOrder/list', method: 'POST' };
 
@@ -18,27 +19,50 @@ const Details = ({ productionPlanId }) => {
   const [detail, setDetail] = useState();
 
   const [data, setData] = useState([]);
-
+  console.log(data);
   const history = useHistory();
 
   return <>
     <MySearch className={styles.search} />
     <MyList
       api={workOrderList}
-      getData={setData}
+      getData={(list = []) => {
+        const newData = [];
+        list.forEach(item => {
+          const newShipSetpIds = newData.map(item => item.shipSetpId);
+          const newShipSetpIndex = newShipSetpIds.indexOf(item.shipSetpId);
+          if (newShipSetpIndex !== -1) {
+            const newShipSetp = newData[newShipSetpIndex];
+            newData[newShipSetpIndex] = { ...newShipSetp, shipSetps: [...newShipSetp.shipSetps, item] };
+          } else {
+            newData.push({
+              ...item,
+              shipSetps: [item],
+            });
+          }
+        });
+        setData(newData);
+      }}
       data={data}
       params={{ source: 'productionPlan', sourceId: productionPlanId }}
     >
       {
         data.map((item, index) => {
+          const shipSetps = item.shipSetps || [];
+          let toDoNum = 0;
+          let completeNum = 0;
+          shipSetps.forEach(item => {
+            toDoNum += item.toDoNum;
+            completeNum += item.completeNum;
+          });
           return <div key={index} className={styles.item}>
             <MyCard
               className={styles.card}
               headerClassName={styles.header}
               title={`部件${index + 1}`}
               extra={<div>
-                <span>已投产：{item.toDoNum}</span>
-                <span style={{ paddingLeft: 12 }}>可投产：{item.count - item.toDoNum}</span>
+                <span>已投产：{completeNum}</span>
+                <span style={{ paddingLeft: 12 }}>可投产：{toDoNum}</span>
               </div>}
             >
               <div className={styles.flexCenter}>
@@ -46,10 +70,14 @@ const Details = ({ productionPlanId }) => {
                 <ShopNumber show value={item.planNumber} />
               </div>
               <div className={styles.ships}>
-                <div key={index} className={styles.flexCenter}>
-                  <div className={styles.flexGrow}>工序：{item.setpSetResult.shipSetpResult.shipSetpName}</div>
-                  8/8
-                </div>
+                {
+                  shipSetps.map((item, index) => {
+                    return <div key={index} className={styles.flexCenter}>
+                      <div className={styles.flexGrow}>工序：{item?.setpSetResult?.shipSetpResult?.shipSetpName}</div>
+                      {item.completeNum}/{item.cardNumber}
+                    </div>;
+                  })
+                }
               </div>
             </MyCard>
             <div className={styles.buttons}>

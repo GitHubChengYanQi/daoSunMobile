@@ -25,7 +25,7 @@ const Relation = (
       className={styles.card}
       headerClassName={styles.header}
       title='配套产品'
-      extra={<Tabs defaultActiveKey='1' className={styles.tabs}>
+      extra={<Tabs defaultActiveKey={1} className={styles.tabs}>
         {
           [1, 2, 3, 4, 5].map((item, index) => {
             return <Tabs.Tab title={`产品${index + 1}`} key={index} />;
