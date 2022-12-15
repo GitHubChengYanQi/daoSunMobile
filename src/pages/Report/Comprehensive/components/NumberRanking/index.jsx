@@ -35,7 +35,7 @@ const NumberRanking = () => {
       </div>
       <div style={{ paddingBottom: 12 }} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
-        search: 'type=inStockNumber',
+        search: 'type=stockRanking',
       })}>
         <RightOutline />
       </div>

@@ -11,8 +11,9 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import { MyDate } from '../../../../components/MyDate';
 import MyEllipsis from '../../../../components/MyEllipsis';
+import LinkButton from '../../../../components/LinkButton';
 
-const OutStockSummary = (
+const ErrorSkus = (
   {
     listRef,
     params = {},
@@ -31,12 +32,13 @@ const OutStockSummary = (
           className={styles.sku}
           extraWidth='174px'
         />
-        <div style={{ textAlign: 'right' }}>
+        <div style={{ textAlign: 'center' }}>
           <ShopNumber show value={item.number} />
+          <LinkButton>详情</LinkButton>
         </div>
       </div>
     </div>;
   })
 };
 
-export default OutStockSummary;
+export default ErrorSkus;

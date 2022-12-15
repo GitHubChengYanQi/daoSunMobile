@@ -3,9 +3,11 @@ import styles from '../../../InStockReport/index.less';
 import LinkButton from '../../../../components/LinkButton';
 import { classNames } from '../../../../components/ToolUtil';
 import { RightOutline } from 'antd-mobile-icons';
+import { useHistory } from 'react-router-dom';
 
 const StockStatistics = () => {
 
+  const history = useHistory();
 
   const status = [
     { num: 92, color: '#257BDE', text: '正常' },
@@ -16,14 +18,6 @@ const StockStatistics = () => {
     <div className={styles.card}>
       <div className={styles.header}>
         <div className={styles.title}>库存统计</div>
-        <div onClick={() => {
-          history.push({
-            pathname: '/Report/ReportDetail',
-            search: 'type=inStockArrival',
-          });
-        }}>
-          <RightOutline />
-        </div>
       </div>
       <div style={{ textAlign: 'right', padding: 8 }}>
         库存总数 <span className='numberBlue'>432</span>类 <span className='numberBlue'>15700</span>件
@@ -51,7 +45,12 @@ const StockStatistics = () => {
               </div>;
             })}
           </div>
-          <LinkButton style={{ fontSize: 12, minHeight: 24 }}>详情</LinkButton>
+          <LinkButton style={{ fontSize: 12, minHeight: 24 }} onClick={() => {
+            history.push({
+              pathname: '/Report/ReportDetail',
+              search: 'type=errorSkus',
+            });
+          }}>详情</LinkButton>
         </div>
       </div>
     </div>

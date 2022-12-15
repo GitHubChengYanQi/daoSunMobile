@@ -7,8 +7,11 @@ import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
 import styles from '../../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
+import { useHistory } from 'react-router-dom';
 
 const LackRanking = () => {
+
+  const history = useHistory();
 
   const [list, setList] = useState([]);
 
@@ -39,7 +42,7 @@ const LackRanking = () => {
         <div onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',
-            search: 'type=inStockArrival',
+            search: 'type=lackSkus',
           });
         }}>
           <RightOutline />

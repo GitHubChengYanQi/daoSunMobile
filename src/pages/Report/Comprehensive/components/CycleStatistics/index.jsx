@@ -3,9 +3,11 @@ import styles from '../../../InStockReport/index.less';
 import LinkButton from '../../../../components/LinkButton';
 import { classNames } from '../../../../components/ToolUtil';
 import { RightOutline } from 'antd-mobile-icons';
+import { useHistory } from 'react-router-dom';
 
 const CycleStatistics = () => {
 
+  const history = useHistory();
 
   const status = [
     { num: 92, color: '#257BDE', text: '1个月内' },
@@ -21,7 +23,7 @@ const CycleStatistics = () => {
         <div onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',
-            search: 'type=inStockArrival',
+            search: 'type=stockCycle',
           });
         }}>
           <RightOutline />
@@ -37,7 +39,7 @@ const CycleStatistics = () => {
             />;
           })}
         </div>
-        <div className={styles.flexCenter} style={{  columnGap: 16, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+        <div className={styles.flexCenter} style={{ columnGap: 16, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
           {status.map((item, index) => {
             return <div
               key={index}

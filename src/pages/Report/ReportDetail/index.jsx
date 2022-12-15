@@ -29,6 +29,11 @@ import InStockArrival from './components/InStockArrival';
 import OutStockSummary from './components/OutStockSummary';
 import OutStockNumber from './components/OutStockNumber';
 import OutStockWorkDetail from './components/OutStockWorkDetail';
+import ErrorSkus from './components/ErrorSkus';
+import SkuStock from './components/SkuStock';
+import StockCycle from './components/StockCycle';
+import LackSkus from './components/LackSkus';
+import ExecuteNumber from './components/ExecuteNumber';
 
 const ReportDetail = () => {
 
@@ -304,6 +309,124 @@ const ReportDetail = () => {
       defaultScreen = { numberRanking: '次数排行' };
       Content = OutStockWorkDetail;
       break;
+
+    case 'errorSkus':
+      title = '异常物料明细';
+      tabs = [
+        {
+          title: '异常物料明细',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'skuClass' },
+            { title: '仓库', key: 'stockHouse' },
+          ],
+        },
+      ];
+      Content = ErrorSkus;
+      break;
+    case 'stockRanking':
+      title = '物料库存排行';
+      tabs = [
+        {
+          title: '物料分类',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '状态', key: 'inStockStatus' },
+            { title: '仓库', key: 'stockHouse' },
+            { title: '材质', key: 'stockHouse' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '仓库排行',
+          key: 'TYPE',
+          screens: [
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '材质', key: 'stockHouse' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '材质排行',
+          key: 'mer',
+          screens: [
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '仓库', key: 'stockHouse' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '供应商排行',
+          key: 'STOREHOUSE',
+          screens: [
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'skuClass' },
+            { title: '仓库', key: 'stockHouse' },
+            { title: '材质', key: 'stockHouse' },
+          ],
+        },
+      ];
+      Content = SkuStock;
+      break;
+    case 'stockCycle':
+      title = '库存周期明细';
+      tabs = [
+        {
+          title: '库存周期明细',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'skuClass' },
+            { title: '材质', key: 'mer' },
+            { title: '仓库', key: 'stockHouse' },
+          ],
+        },
+      ];
+      Content = StockCycle;
+      break;
+    case 'lackSkus':
+      title = '缺欠明细';
+      tabs = [
+        {
+          title: '累计缺欠次数',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'skuClass' },
+          ],
+        },
+        {
+          title: '实时缺欠数量',
+          key: 'now',
+          screens: [
+            { title: '物料分类', key: 'skuClass' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        },
+      ];
+      Content = LackSkus;
+      break;
+    case 'executeNumber':
+      title = '执行数量排行';
+      tabs = [
+        {
+          title: '申请数量',
+          key: 'ask',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '类型', key: 'type' },
+            { title: '物料分类', key: 'skuClass' },
+          ],
+        },
+        {
+          title: '执行数量',
+          key: 'execute',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '类型', key: 'type' },
+            { title: '物料分类', key: 'skuClass' },
+          ],
+        },
+      ];
+      Content = ExecuteNumber;
+      break;
     default:
       Content = MyEmpty;
       break;
@@ -373,7 +496,7 @@ const ReportDetail = () => {
               case 'inStockRanking':
                 title = screen.inStockRanking;
                 break;
-                case 'outStockRanking':
+              case 'outStockRanking':
                 title = screen.outStockRanking;
                 break;
               case 'inStockType':
