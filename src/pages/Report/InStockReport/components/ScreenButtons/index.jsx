@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import styles from '../../index.less';
 import { Button } from 'antd-mobile';
 import moment from 'moment';
-import StartEndDate from '../../../../Work/Production/CreateTask/components/StartEndDate';
+import StartEndDate from '../../../../components/StartEndDate';
 
 const ScreenButtons = (
   {

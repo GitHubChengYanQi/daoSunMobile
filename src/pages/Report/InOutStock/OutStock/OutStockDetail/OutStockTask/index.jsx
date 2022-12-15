@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import MyNavBar from '../../../../../components/MyNavBar';
 import MySearch from '../../../../../components/MySearch';
 import MyCard from '../../../../../components/MyCard';
-import StartEndDate from '../../../../../Work/Production/CreateTask/components/StartEndDate';
 import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
 import moment from 'moment';
@@ -22,6 +21,7 @@ import { isArray } from '../../../../../components/ToolUtil';
 import { OutStockDataView } from '../../index';
 import ProcessList from '../../../../../Work/ProcessTask/ProcessList';
 import MyEmpty from '../../../../../components/MyEmpty';
+import StartEndDate from '../../../../../components/StartEndDate';
 
 const OutStockTask = () => {
 

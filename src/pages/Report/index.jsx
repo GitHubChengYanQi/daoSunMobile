@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import style from './index.less';
 import { Tabs } from 'antd-mobile';
 import MyNavBar from '../components/MyNavBar';

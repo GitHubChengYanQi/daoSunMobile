@@ -1,19 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import style from '../index.less';
-import MySearch from '../../../components/MySearch';
-import { Button, Selector, Space } from 'antd-mobile';
-import { useHistory } from 'react-router-dom';
+import { Button, Space } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
 import { message } from 'antd';
-import { classNames, isArray } from '../../../components/ToolUtil';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import drowStyle from '../../../Work/ProcessTask/index.less';
+import { DownOutline } from 'antd-mobile-icons';
 import MyCheck from '../../../components/MyCheck';
 import SkuItem from '../../../Work/Sku/SkuItem';
 import MyRadio from '../../../components/MyRadio';
-import MyAntPopup from '../../../components/MyAntPopup';
-import { SelectorStyle } from '../index';
 import { MyDate } from '../../../components/MyDate';
 import moment from 'moment';
 import ShowBrand from './components/ShowBrand';
@@ -21,11 +15,10 @@ import ShowSupply from './components/ShowSupply';
 import ShowUser from './components/ShowUser';
 import MyPicker from '../../../components/MyPicker';
 import { getDate } from '../components/SearchTime';
-import StartEndDate from '../../../Work/Production/CreateTask/components/StartEndDate';
 import MyList from '../../../components/MyList';
+import StartEndDate from '../../../components/StartEndDate';
 
 export const InStockExport = { url: '/viewExcel/export', method: 'POST' };
-export const InStockViewTotail = { url: '/statisticalView/viewTotail', method: 'POST' };
 export const InStockDataList = { url: '/statisticalView/instockView', method: 'POST' };
 
 export const outUserList = { url: '/statisticalView/outstockViewTotail', method: 'POST' };
