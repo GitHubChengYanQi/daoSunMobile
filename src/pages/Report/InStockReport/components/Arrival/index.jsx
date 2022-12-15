@@ -113,7 +113,8 @@ const defaultTime = [
 export const viewTotail = {
   url: '/statisticalView/viewTotail',
   method: 'POST',
-  data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
+  data:{},
+  // data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
 
 const Arrival = () => {
