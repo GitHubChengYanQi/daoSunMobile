@@ -8,8 +8,8 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { isArray } from '../../../../components/ToolUtil';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
-import { outStockLogView } from '../../../components/WorkContrast';
 
+export const outStockLogView = { url: '/statisticalView/outStockLogViewDetail', method: 'POST' };
 const instockLogs = { url: '/statisticalView/instockLogs', method: 'POST' };
 
 const OutStockWorkDetail = (

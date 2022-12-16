@@ -8,8 +8,17 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import { useHistory } from 'react-router-dom';
 import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
+import moment from 'moment';
 
-export const outstockCountViewByMonth = { url: '/statisticalView/outstockCountViewByMonth', method: 'POST' };
+const defaultTime = [
+  moment().month(moment().month()).startOf('month').format('YYYY/MM/DD 00:00:00'),
+  moment().month(moment().month()).endOf('month').format('YYYY/MM/DD 23:59:59'),
+];
+export const outstockCountViewByMonth = {
+  url: '/statisticalView/outstockCountViewByMonth',
+  method: 'POST',
+  data: { beginTime: defaultTime[0], endTime: defaultTime[1], frame: 7 },
+};
 
 const Summary = () => {
 
@@ -18,29 +27,18 @@ const Summary = () => {
   const [detail, setDetail] = useState();
 
   const { loading: outStockLoading, run: outStockRun } = useRequest(outstockCountViewByMonth, {
-    manual: true,
     onSuccess: (res) => {
       setDetail({
-        ...res,
-        inStocksNumber: Object.keys(isObject(res?.numberByMonth)).map(item => ({
-          'month': item,
-          'number': res.numberByMonth[item],
+        stocksNumber: res.map(item => ({
+          'month': item.monthOfYear,
+          'number': item.orderCount,
           'name': '已出库',
-          sort: parseInt(item.replace('-', '')),
-        })).sort((a, b) => a.sort - b.sort),
+        })),
       });
     },
   });
 
-  useEffect(() => {
-    outStockRun({ data: {} });
-  }, []);
-
-  const charData = [{
-    'month': 12,
-    'number': 2022,
-    'name': '已出库',
-  }] || isArray(detail?.inStocksNumber);
+  const charData = isArray(detail?.stocksNumber);
   const title = '出库汇总';
 
   if (!detail) {
@@ -68,7 +66,7 @@ const Summary = () => {
           { text: '本年', key: 'year' },
         ]}
         onChange={(value) => {
-          outStockRun({ data: { beginTime: value[0], endTime: value[1] } });
+          outStockRun({ data: { beginTime: value[0], endTime: value[1], frame: 1 } });
         }} />
     </div>
     <div>
@@ -80,7 +78,7 @@ const Summary = () => {
         </div>
       </div>
 
-      <Canvas pixelRatio={window.devicePixelRatio} height={140}>
+      <Canvas pixelRatio={window.devicePixelRatio} height={200}>
         <Chart data={ToolUtil.isArray(charData)}>
           <Axis
             field='month'
@@ -88,7 +86,7 @@ const Summary = () => {
             style={{
               label: {
                 align: 'end',
-                rotate: -0.5,
+                rotate: -0.4,
               },
             }}
           />
