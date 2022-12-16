@@ -181,7 +181,7 @@ const ReportDetail = () => {
       title = '异常入库明细';
       tabs = [
         {
-          title: '物料分类',
+          title: '异常入库明细',
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },

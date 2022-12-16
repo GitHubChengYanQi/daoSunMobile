@@ -15,7 +15,6 @@ import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
 import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { InStockViewTotail } from '../index';
 import MyEllipsis from '../../../../components/MyEllipsis';
 import StartEndDate from '../../../../components/StartEndDate';
 
@@ -33,7 +32,7 @@ const InStockDetail = () => {
   const customerName = query.customerName;
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
-    ...InStockViewTotail,
+    ...{},
     data: { customerId },
   });
 

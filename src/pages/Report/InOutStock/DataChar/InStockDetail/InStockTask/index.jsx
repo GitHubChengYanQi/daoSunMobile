@@ -16,7 +16,6 @@ import { ReceiptsEnums } from '../../../../../Receipts';
 import { useLocation } from 'react-router-dom';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../util/Request';
-import { InStockViewTotail } from '../../index';
 import { MyLoading } from '../../../../../components/MyLoading';
 import { isArray } from '../../../../../components/ToolUtil';
 import { instockDetailView } from '../index';
@@ -43,7 +42,7 @@ const InStockTask = () => {
   const { loading, data, run } = useRequest({ ...instockDetailView, data: { customerId } });
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
-    ...InStockViewTotail,
+    ...{},
     data: { customerId },
   });
 
