@@ -20,8 +20,6 @@ export const inStockOrderView = {
 
 const TaskStatistics = () => {
 
-  const [timeType, setTimeType] = useState();
-
   const [status, setStaus] = useState([]);
 
   const [types, setTypes] = useState([]);
