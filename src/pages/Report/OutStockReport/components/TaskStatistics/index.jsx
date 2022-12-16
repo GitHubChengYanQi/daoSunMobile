@@ -5,6 +5,7 @@ import styles from '../../../InStockReport/index.less';
 import moment from 'moment';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
+import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
 
 
 const defaultTime = [
@@ -110,38 +111,9 @@ const TaskStatistics = () => {
       <div className={styles.title}>任务统计</div>
     </div>
     <div className={classNames(styles.dateTotal, styles.flexCenter)}>
-      <div className={classNames(styles.screen, styles.flexGrow)}>
-        <Button
-          className={styles.leftButton}
-          color='primary'
-          fill={timeType === 'day' ? '' : 'outline'}
-          onClick={() => setTimeType('day')}
-        >
-          今天
-        </Button>
-        <Button
-          color='primary'
-          fill={timeType === 'week' ? '' : 'outline'}
-          onClick={() => setTimeType('week')}
-        >
-          本周
-        </Button>
-        <Button
-          color='primary'
-          fill={timeType === 'month' ? '' : 'outline'}
-          onClick={() => setTimeType('month')}
-        >
-          本月
-        </Button>
-        <Button
-          className={styles.rightButton}
-          color='primary'
-          fill={timeType === 'diy' ? '' : 'outline'}
-          onClick={() => setTimeType('diy')}
-        >
-          自定义
-        </Button>
-      </div>
+      <ScreenButtons onChange={(value) => {
+        inRun({ data: { beginTime: value[0], endTime: value[1] } });
+      }} />
       <div>
         总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
       </div>
