@@ -9,6 +9,7 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { useHistory } from 'react-router-dom';
 import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
 import moment from 'moment';
+import MyEmpty from '../../../../components/MyEmpty';
 
 const defaultTime = [
   moment().month(moment().month()).startOf('month').format('YYYY/MM/DD 00:00:00'),
@@ -40,7 +41,7 @@ const Summary = () => {
 
   const charData = isArray(detail?.stocksNumber);
   const title = '出库汇总';
-
+  console.log(charData);
   if (!detail) {
     if (outStockLoading) {
       return <MyLoading skeleton />;
@@ -78,7 +79,7 @@ const Summary = () => {
         </div>
       </div>
 
-      <Canvas pixelRatio={window.devicePixelRatio} height={200}>
+      {charData.length === 0 ? <MyEmpty /> : <Canvas pixelRatio={window.devicePixelRatio} height={200}>
         <Chart data={ToolUtil.isArray(charData)}>
           <Axis
             field='month'
@@ -100,7 +101,7 @@ const Summary = () => {
           }} />
           <Tooltip />
         </Chart>
-      </Canvas>
+      </Canvas>}
     </div>
     {outStockLoading && <MyLoading />}
   </div>;

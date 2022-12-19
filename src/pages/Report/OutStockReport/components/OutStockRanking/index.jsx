@@ -44,7 +44,7 @@ const OutStockRanking = () => {
   return <>
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>出库用排行料</div>
+        <div className={styles.title}>出库用料排行</div>
         <div onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',

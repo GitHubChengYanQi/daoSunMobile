@@ -8,6 +8,7 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import { useHistory } from 'react-router-dom';
 import ScreenButtons from '../ScreenButtons';
+import MyEmpty from '../../../../components/MyEmpty';
 
 export const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
 
@@ -38,7 +39,7 @@ const Summary = () => {
 
   const charData = isArray(detail?.inStocksNumber);
   const title = '入库汇总';
-
+  console.log(charData);
   if (!detail) {
     if (inStockLoading) {
       return <MyLoading skeleton />;
@@ -76,7 +77,7 @@ const Summary = () => {
         </div>
       </div>
 
-      <Canvas pixelRatio={window.devicePixelRatio} height={140}>
+      {charData.length === 0 ? <MyEmpty /> : <Canvas pixelRatio={window.devicePixelRatio} height={140}>
         <Chart data={ToolUtil.isArray(charData)}>
           <Axis
             field='month'
@@ -98,7 +99,7 @@ const Summary = () => {
           }} />
           <Tooltip />
         </Chart>
-      </Canvas>
+      </Canvas>}
     </div>
     {inStockLoading && <MyLoading />}
   </div>;
