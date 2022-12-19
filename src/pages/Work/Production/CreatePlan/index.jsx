@@ -192,9 +192,9 @@ const CreatePlan = () => {
 
     <MyPicker
       onClose={() => setVisible()}
-      visible={visible === 'type'}
+      visible={visible === 'type'} 
       options={[
-        { label: '营销预设', value: 'MarketingPresupposition' },
+        { label: '营销预投', value: 'MarketingPresupposition' },
         { label: '合同订单', value: 'ContractOrder' },
       ]}
       onChange={(option) => {
