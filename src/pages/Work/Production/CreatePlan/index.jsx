@@ -32,9 +32,9 @@ const CreatePlan = () => {
 
   const { state = {} } = useLocation();
 
-  const [data, setData] = useState({ type: 'MarketingPresupposition', typeName: '营销预设' });
+  const [data, setData] = useState({ type: 'MarketingPresupposition', typeName: '预投' });
 
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState('');
 
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
@@ -189,10 +189,10 @@ const CreatePlan = () => {
     />
 
     <MyPicker
-      onClose={() => setVisible()}
+      onClose={() => setVisible('')}
       visible={visible === 'type'}
       options={[
-        { label: '营销预投', value: 'MarketingPresupposition' },
+        { label: '预投', value: 'MarketingPresupposition' },
         { label: '合同订单', value: 'ContractOrder' },
       ]}
       onChange={(option) => {

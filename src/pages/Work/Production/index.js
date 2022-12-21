@@ -48,7 +48,7 @@ const Production = () => {
   const ref = useRef();
 
   const submit = (data = {}, reset) => {
-    const newParmas = reset ? { ...data } : { ...params, ...data };
+    const newParmas = reset ? data : { ...params, ...data };
     if (reset) {
       setScreen({});
     }
@@ -133,15 +133,18 @@ const Production = () => {
               </div>
               <div className={styles.time}>{MyDate.Show(item.createTime)}</div>
             </div>
-            <Space direction='vertical' style={{ width: '100%' }}>
-              <div><Label className={styles.label}>产品</Label>：无</div>
-              <div className={styles.btext}><Label className={styles.label}>执行时间</Label>：2022年11月12日-2023年1月28日
+            <div className={styles.row}>
+              <Label className={styles.label}>产品</Label>：无
+            </div>
+            <div className={styles.row}>
+              <Label className={styles.label}>执行时间</Label>：2022年11月12日-2023年1月28日
+            </div>
+            <div className={styles.row} style={{ display: 'flex' }}>
+              <div className={styles.btext}><Label className={styles.label}>执行人</Label>：{item.userResult?.name || '无'}
               </div>
-              <div style={{ display: 'flex' }}>
-                <div className={styles.btext}><Label className={styles.label}>执行人</Label>：{item.userResult?.name || '无'}</div>
-                <div className={styles.btext3}><Label className={styles.label}>申请人</Label>：{item.userResult?.name || '无'}</div>
+              <div className={styles.btext3}><Label className={styles.label}>申请人</Label>：{item.userResult?.name || '无'}
               </div>
-            </Space>
+            </div>
             <MyProgress className={styles.tiao} percent={percent} />
           </div>;
         })

@@ -91,8 +91,8 @@ const PlanDetail = (
   return <>
     <MyCard
       headerClassName={styles.header}
-      titleBom={required && <Title className={styles.title}>{filedName}<span>*</span></Title>}
-      title={filedName}
+      titleBom={required && <Title className={styles.title}>{contractType ? '合同' : filedName}<span>*</span></Title>}
+      title={contractType ? '合同' : filedName}
       bodyClassName={styles.contractContent}
       extra={contractType && <LinkButton onClick={() => {
         setContract({});
@@ -207,8 +207,8 @@ const PlanDetail = (
           updateValue(contract.key, contract);
           setAddContracts(false);
         }}
-        leftText='继续添加合同'
-        rightText='添加物料清单'
+        leftText='继续添加'
+        rightText='确认'
         leftDisabled={!(contract.contractCoding && contract.customerName)}
         rightDisabled={!(contract.contractCoding && contract.customerName)}
         leftOnClick={() => {
