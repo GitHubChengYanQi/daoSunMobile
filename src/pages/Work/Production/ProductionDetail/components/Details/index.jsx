@@ -10,8 +10,6 @@ import { Tabs } from 'antd-mobile';
 import { Space } from 'antd';
 import { useHistory } from 'react-router-dom';
 import MyList from '../../../../../components/MyList';
-import { isArray, ToolUtil } from '../../../../../components/ToolUtil';
-
 export const workOrderList = { url: '/productionWorkOrder/list', method: 'POST' };
 
 const Details = ({ productionPlanId }) => {
@@ -19,7 +17,7 @@ const Details = ({ productionPlanId }) => {
   const [detail, setDetail] = useState();
 
   const [data, setData] = useState([]);
-  console.log(data);
+
   const history = useHistory();
 
   return <>

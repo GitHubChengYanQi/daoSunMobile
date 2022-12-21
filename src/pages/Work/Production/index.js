@@ -17,6 +17,7 @@ import MyPicker from '../../components/MyPicker';
 import Customers from '../ProcessTask/MyAudit/components/Customers';
 import StartEndDate from './CreateTask/components/StartEndDate';
 import CheckUser from '../../components/CheckUser';
+import Label from '../../components/Label';
 
 
 const Production = () => {
@@ -133,32 +134,12 @@ const Production = () => {
               <div className={styles.time}>{MyDate.Show(item.createTime)}</div>
             </div>
             <Space direction='vertical' style={{ width: '100%' }}>
-              <div style={{ display: 'flex' }}>
-                <div style={{ display: 'flex', flexGrow: 1 }}>
-                  <div className={styles.btext}>产品：</div>
-                  <div className={styles.btext2}>
-                    <div className={styles.btext}>
-                      T5一米数控车床/T510/500*1000
-                    </div>
-                    <div className={styles.btext}>
-                      T5一米数控车床/T510/500*1000
-                    </div>
-                    <div className={styles.btext}>
-                      T5一米数控车床/T510/500*1000
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.btext2}>
-                  <div className={styles.btext} style={{ marginLeft: 'auto' }}>×10</div>
-                  <div className={styles.btext} style={{ marginLeft: 'auto' }}>×10</div>
-                  <div className={styles.btext} style={{ marginLeft: 'auto' }}>×10</div>
-                </div>
-              </div>
-              <div className={styles.btext}>执行时间： 2022年11月12日-2023年1月28日
+              <div><Label className={styles.label}>产品</Label>：无</div>
+              <div className={styles.btext}><Label className={styles.label}>执行时间</Label>：2022年11月12日-2023年1月28日
               </div>
               <div style={{ display: 'flex' }}>
-                <div className={styles.btext}>执行人：{item.userResult?.name || '无'}</div>
-                <div className={styles.btext3}>申请人：{item.userResult?.name || '无'}</div>
+                <div className={styles.btext}><Label className={styles.label}>执行人</Label>：{item.userResult?.name || '无'}</div>
+                <div className={styles.btext3}><Label className={styles.label}>申请人</Label>：{item.userResult?.name || '无'}</div>
               </div>
             </Space>
             <MyProgress className={styles.tiao} percent={percent} />
