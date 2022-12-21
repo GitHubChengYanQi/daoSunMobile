@@ -78,35 +78,36 @@ export const StockContent = connect(({ qrCode }) => ({ qrCode }))((
     }
   };
 
-  const contentBottom = () => {
-    switch (key) {
-      case 'stock':
-        const skus = stockDetail.skus || [];
-        return stockDetail.task && <SkuShop
-          shopRef={shopRef}
-          switchType
-          className={style.popup}
-          noClose
-          judge={stockDetail.judge}
-          bottom={70}
-          skus={skus}
-          onDelete={() => {
-            refresh();
-          }}
-          setSkus={(skus) => {
-            setStockDetail({ ...stockDetail, skus });
-          }}
-          taskTypeChange={(task) => {
-            setStockDetail({ ...stockDetail, task });
-          }}
-          type={stockDetail.task}
-        />;
-      case 'Message':
-        return <TaskBottom taskKey={taskKey} />;
-      default:
-        return <></>;
-    }
-  };
+  let contentBottom = <></>;
+  switch (key) {
+    case 'stock':
+      const skus = stockDetail.skus || [];
+      contentBottom = stockDetail.task ? <SkuShop
+        shopRef={shopRef}
+        switchType
+        className={style.popup}
+        noClose
+        judge={stockDetail.judge}
+        bottom={70}
+        skus={skus}
+        onDelete={() => {
+          refresh();
+        }}
+        setSkus={(skus) => {
+          setStockDetail({ ...stockDetail, skus });
+        }}
+        taskTypeChange={(task) => {
+          setStockDetail({ ...stockDetail, task });
+        }}
+        type={stockDetail.task}
+      /> : <></>;
+      break;
+    case 'Message':
+      contentBottom = <TaskBottom taskKey={taskKey} />;
+      break;
+    default:
+      break;
+  }
 
   return <div className={style.pageIndex} style={{
     scrollMarginTop: scrollTop,
@@ -122,7 +123,7 @@ export const StockContent = connect(({ qrCode }) => ({ qrCode }))((
       {content()}
     </div>
 
-    {contentBottom()}
+    {contentBottom}
 
     <MyTablBar
       className={style.tab}

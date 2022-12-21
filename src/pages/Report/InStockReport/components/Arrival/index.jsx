@@ -90,7 +90,7 @@ export const InStockArrivalChart = ({ data }) => {
         </div>
       </div>
       <div className={styles.total}>
-        <div className={styles.totalTitle}>拒绝入库</div>
+        <div className={styles.totalTitle}>未入库</div>
         <div>
           <span className='numberRed'>{data.errorSkuCount || 0}</span>类
           <span className='numberRed'>{data.errorNumberCount || 0}</span>件

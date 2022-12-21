@@ -120,7 +120,7 @@ const SkuList = (
       screen={screen}
       screenChange={setScreen}
       screenRef={screenRef}
-      numberTitle={<>合计：<span>{skuNumber}</span>类<span>{stockNumber}</span>件</>}
+      numberTitle={<>合计：<span> {skuNumber} </span>类<span> {stockNumber} </span>件</>}
     />
 
     <Tabs stretch={false} activeKey={spuClassId || 'all'} className={style.skuClass} onChange={(key) => {
