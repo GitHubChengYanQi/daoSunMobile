@@ -114,8 +114,8 @@ const TaskStatistics = () => {
       <ScreenButtons onChange={(value) => {
         inRun({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
-      <div>
-        总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
+      <div className={styles.action}>
+        总计 <span className='numberBlue'>160</span>
       </div>
     </div>
 

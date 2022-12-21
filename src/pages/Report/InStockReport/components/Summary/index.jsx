@@ -39,7 +39,7 @@ const Summary = () => {
 
   const charData = isArray(detail?.inStocksNumber);
   const title = '入库汇总';
-  console.log(charData);
+
   if (!detail) {
     if (inStockLoading) {
       return <MyLoading skeleton />;

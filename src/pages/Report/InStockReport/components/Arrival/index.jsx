@@ -60,7 +60,7 @@ export const InStockArrivalChart = ({ data }) => {
     <div>
       <Canvas pixelRatio={window.devicePixelRatio} width={100} height={100}>
         <Chart
-          data={[{ title: '已入库', number: data.logSkuCount || 0 }, { title: '拒绝入库', number: data.errorSkuCount || 0 }]}
+          data={[{ title: '已入库', number: data.logSkuCount || 0 }, { title: '未入库', number: data.errorSkuCount || 0 }]}
           coord={{
             type: 'polar',
             transposed: true,
@@ -88,18 +88,12 @@ export const InStockArrivalChart = ({ data }) => {
           <span className='numberBlue'>{data.logSkuCount || 0}</span>类
           <span className='numberBlue'>{data.logNumberCount || 0}</span>件
         </div>
-        <div>
-          合格率：{inStock}%
-        </div>
       </div>
       <div className={styles.total}>
         <div className={styles.totalTitle}>拒绝入库</div>
         <div>
           <span className='numberRed'>{data.errorSkuCount || 0}</span>类
           <span className='numberRed'>{data.errorNumberCount || 0}</span>件
-        </div>
-        <div>
-          拒收率：{errorInStock}%
         </div>
       </div>
     </div>
@@ -133,7 +127,7 @@ const Arrival = () => {
     <div className={styles.card}>
       <div className={styles.header}>
         <div className={styles.title}> 到货量统计</div>
-        <div onClick={() => {
+        <div  className={styles.action} onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',
             search: 'type=inStockArrival',

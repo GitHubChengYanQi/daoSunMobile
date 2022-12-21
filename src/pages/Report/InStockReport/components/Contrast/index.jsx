@@ -50,11 +50,11 @@ const Contrast = (
       <div className={styles.summaryHeaderLabel}>
         排行对比
       </div>
-      <div onClick={() => history.push({
+      <div className={styles.action} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
         search: 'type=inAskNumber',
       })}>
-        共 <span className='numberBlue' style={{ fontSize: 18 }}>{total}</span> 人
+        共 <span className='numberBlue'>{total}</span> 人
         <RightOutline />
       </div>
     </div>

@@ -41,7 +41,7 @@ const Summary = () => {
 
   const charData = isArray(detail?.stocksNumber);
   const title = '出库汇总';
-  console.log(charData);
+
   if (!detail) {
     if (outStockLoading) {
       return <MyLoading skeleton />;

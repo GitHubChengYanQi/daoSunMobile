@@ -54,7 +54,6 @@ const NumberRanking = () => {
       </div>
     </div>
     <div className={styles.rankingScreen}>
-      排行方式
       {
         types.map((item, index) => {
           return <Button

@@ -684,7 +684,7 @@ const ReportDetail = () => {
       visible={exportVisible}
       actions={[{ key: 'excel', text: '导出Excel' }, { key: 'pdf', text: '导出PDF' }]}
       onAction={(action) => {
-        console.log(action);
+
       }}
       onClose={() => setExportVisible(false)}
     />
