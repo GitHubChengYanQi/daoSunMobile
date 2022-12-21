@@ -47,7 +47,12 @@ const TaskStatistics = () => {
       setStaus([
         { number: ok, num: Math.round((ok / total) * 100) || 0, color: '#257BDE', text: '已完成' },
         { number: ing, num: Math.round((ing / total) * 100) || 0, color: '#FA8F2B', text: '执行中' },
-        { number: revoke, num: Math.round((revoke / total) * 100) || 0, color: '#D8D8D8', text: '已撤销' },
+        {
+          number: revoke,
+          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
+          color: '#D8D8D8',
+          text: '已撤销',
+        },
       ]);
 
 
@@ -76,7 +81,12 @@ const TaskStatistics = () => {
         { number: type1, num: Math.round((type1 / typeTotal) * 100) || 0, color: '#257BDE', text: '物料采购' },
         { number: type2, num: Math.round((type2 / typeTotal) * 100) || 0, color: '#2EAF5D', text: '生产完工' },
         { number: type3, num: Math.round((type3 / typeTotal) * 100) || 0, color: '#FA8F2B', text: '生产退料' },
-        { number: type4, num: Math.round((type4 / typeTotal) * 100) || 0, color: '#FF3131', text: '客户退货' },
+        {
+          number: type4,
+          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0),
+          color: '#FF3131',
+          text: '客户退货',
+        },
       ]);
     },
   });
@@ -95,7 +105,7 @@ const TaskStatistics = () => {
       <ScreenButtons onChange={(value) => {
         inRun({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
-      <div  className={styles.action}>
+      <div className={styles.action}>
         总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
       </div>
     </div>

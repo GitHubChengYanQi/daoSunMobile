@@ -31,7 +31,7 @@ const Summary = () => {
     onSuccess: (res) => {
       setDetail({
         stocksNumber: res.map(item => ({
-          'month': item.monthOfYear,
+          'month': item.monthOfYear ? item.monthOfYear.split(' ')[0] : '-',
           'number': item.orderCount,
           'name': '已出库',
         })),
