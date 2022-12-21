@@ -56,7 +56,7 @@ const Production = () => {
   };
 
   return <div className={styles.mainDiv}>
-    <MyNavBar title='生产计划列表' />
+    <MyNavBar title='出库计划列表' />
     <MySearch />
 
     <div

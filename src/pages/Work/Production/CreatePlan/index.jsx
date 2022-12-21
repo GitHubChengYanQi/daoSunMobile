@@ -6,14 +6,12 @@ import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
 import styles from '../../Order/CreateOrder/index.less';
-import { Input, Space, TextArea } from 'antd-mobile';
+import { Input, TextArea } from 'antd-mobile';
 import StartEndDate from '../CreateTask/components/StartEndDate';
 import User from '../../CreateTask/components/User';
-import ShopNumber from '../../AddShop/components/ShopNumber';
 import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import { useHistory, useLocation } from 'react-router-dom';
-import CheckSpu from '../../Sku/CheckSpu';
 import LinkButton from '../../../components/LinkButton';
 import MyPicker from '../../../components/MyPicker';
 import { PaperClipOutlined } from '@ant-design/icons';
@@ -41,7 +39,7 @@ const CreatePlan = () => {
   const { loading, run } = useRequest(createProductionPlan, { manual: true });
 
   return <>
-    <MyNavBar title='创建计划' />
+    <MyNavBar title='创建出库计划' />
     <FormLayout
       data={data}
       loading={loading}
@@ -192,7 +190,7 @@ const CreatePlan = () => {
 
     <MyPicker
       onClose={() => setVisible()}
-      visible={visible === 'type'} 
+      visible={visible === 'type'}
       options={[
         { label: '营销预投', value: 'MarketingPresupposition' },
         { label: '合同订单', value: 'ContractOrder' },
