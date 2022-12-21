@@ -26,6 +26,7 @@ import InStockError from './components/InStockError';
 import { InType } from '../../Work/CreateTask/components/InstockAsk';
 import { OutType } from '../../Work/CreateTask/components/OutstockAsk';
 import OutStockUseNumber from './components/OutStockUseNumber';
+import CheckAllExport from '../../components/CheckAllExport';
 
 const ReportDetail = () => {
 
@@ -382,25 +383,13 @@ const ReportDetail = () => {
       </div>
     </div>
     {content}
-    <div className={styles.bottomAction}>
-      <Space className={styles.radio}>
-        <MyRadio checked={currentAll} onChange={() => {
-          setCheckAll(false);
-          setCurrentAll(true);
-        }}>本页全选</MyRadio>
-        <MyRadio checked={checkAll} onChange={() => {
-          setCurrentAll(false);
-          setCheckAll(true);
-        }}>全部全选</MyRadio>
-      </Space>
-
-      <Button color='primary' onClick={() => {
-        setExportVisible(true);
-        // exportRun({ data: { beginTime: date[0], endTime: date[1] } });
-      }}>
-        导出
-      </Button>
-    </div>
+    <CheckAllExport
+      onCheckAll={setCheckAll}
+      pageAll={currentAll}
+      onPageAll={setCurrentAll}
+      checkAll={checkAll}
+      onExport={()=> setExportVisible(true)}
+    />
 
     <StartEndDate
       render
