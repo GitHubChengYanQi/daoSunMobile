@@ -1,8 +1,8 @@
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import { Message } from '../Message';
-import { ToolUtil } from '../ToolUtil';
+import { isArray, ToolUtil } from '../ToolUtil';
 import { MyLoading } from '../MyLoading';
 import IsDev from '../../../components/IsDev';
 import MyAntPopup from '../MyAntPopup';
@@ -42,8 +42,8 @@ const CheckUser = (
           id: item.userId,
           name: item.name,
           avatar: item.avatar,
-          dept: 'dept',
-          role: 'role',
+          dept: item.deptResult.fullName,
+          role: isArray(item.roleResults)[0]?.name,
         })), params);
       } else {
         Message.errorToast('系统无此用户，请先注册！');
