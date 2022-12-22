@@ -6,10 +6,32 @@ import InOutStock from './InOutStock';
 import InStockReport from './InStockReport';
 import OutStockReport from './OutStockReport';
 import Comprehensive from './Comprehensive';
+import { useRequest } from '../../util/Request';
+import { formList } from '../components/FormLayout';
+import { ReceiptsEnums } from '../Receipts';
+import { MyLoading } from '../components/MyLoading';
 
 const Report = () => {
 
+  const [layout, setLayout] = useState([]);
+
+  const { loading: detailLoaidng } = useRequest({
+    ...formList,
+    data: { formType: ReceiptsEnums.report },
+  }, {
+    onSuccess: (res) => {
+      if (res[0]?.typeSetting) {
+        const typeSetting = JSON.parse(res[0].typeSetting) || {};
+        setLayout(typeSetting);
+      }
+    },
+  });
+
   const [key, setKey] = useState(localStorage.getItem('reportkey') || 'inStock');
+
+  if (detailLoaidng) {
+    return <MyLoading skeleton />;
+  }
 
   return <div className={style.report}>
     <MyNavBar noDom title='数据统计' />
@@ -18,10 +40,10 @@ const Report = () => {
       setKey(key);
     }}>
       <Tabs.Tab title='入库' key='inStock' destroyOnClose>
-        <InStockReport />
+        <InStockReport layout={layout['inStock']} />
       </Tabs.Tab>
       <Tabs.Tab title='出库' key='outStock' destroyOnClose>
-        <OutStockReport />
+        <OutStockReport layout={layout['outStock']} />
       </Tabs.Tab>
       <Tabs.Tab title='盘点' key='stocktaking' destroyOnClose>
         <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>
