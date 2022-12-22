@@ -8,8 +8,9 @@ import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
+import Icon from '../../../../components/Icon';
 
-export const outStockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST', data: {} };
+export const outStockDetailView = { url: '/statisticalView/outStockLogView', method: 'POST', data: {} };
 
 const Contrast = (
   {},
@@ -25,12 +26,12 @@ const Contrast = (
     data: logData,
   } = useRequest(outStockDetailView, {
       onSuccess: (res) => {
-        setData([...isArray(res?.countOrderByUser?.records).map(item => {
+        setData([...isArray(res?.logViews?.records).map(item => {
           return { userName: item.userResult?.name || '无', number: item.orderCount, type: '次数' };
-        }), ...isArray(res?.sumOrderByUser?.records).map(item => {
+        }), ...isArray(res?.logDetailViews?.records).map(item => {
           return { userName: item.userResult?.name || '无', number: item.inNumCount, type: '件数' };
         })]);
-        setTotal(res?.countOrderByUser?.total > res?.countOrderByUser?.total ? res?.countOrderByUser?.total : res?.countOrderByUser?.total);
+        setTotal(res?.logViews?.total > res?.logDetailViews?.total ? res?.logViews?.total : res?.logDetailViews?.total);
       },
     },
   );
@@ -44,7 +45,8 @@ const Contrast = (
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
-        排行对比
+        <Icon type='icon-rukuzongshu' />
+        <div style={{ fontSize: 14 }}>排行对比</div>
       </div>
       <div className={styles.action} onClick={() => history.push({
         pathname: '/Report/ReportDetail',

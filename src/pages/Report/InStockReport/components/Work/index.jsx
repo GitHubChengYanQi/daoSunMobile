@@ -23,7 +23,7 @@ export const instockLogView = {
 };
 
 const Work = (
-  {},
+  {title},
 ) => {
 
   const history = useHistory();
@@ -55,7 +55,7 @@ const Work = (
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
-        工作量对比
+        {title}
       </div>
       <div  className={styles.action} onClick={() => history.push({
         pathname: '/Report/ReportDetail',

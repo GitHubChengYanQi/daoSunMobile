@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import { Button, Divider } from 'antd-mobile';
 import { classNames, isArray } from '../../../../components/ToolUtil';
-import styles from '../../../InStockReport/index.less';
-import moment from 'moment';
 import { useRequest } from '../../../../../util/Request';
+import moment from 'moment';
 import { MyLoading } from '../../../../components/MyLoading';
+import styles from '../../../InStockReport/index.less';
 import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
-
 
 const defaultTime = [
   moment().month(moment().month()).startOf('month').format('YYYY/MM/DD 00:00:00'),
   moment().month(moment().month()).endOf('month').format('YYYY/MM/DD 23:59:59'),
 ];
-export const outStockOrderView = {
-  url: '/statisticalView/outStockOrderView',
+export const inStockOrderView = {
+  url: '/statisticalView/instockOrderView',
   method: 'POST',
   data: {},
   // data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
-
 
 const TaskStatistics = ({ title }) => {
 
@@ -26,9 +24,8 @@ const TaskStatistics = ({ title }) => {
 
   const [types, setTypes] = useState([]);
 
-  const { loading: inLoading, data, run: inRun } = useRequest(outStockOrderView, {
+  const { loading, data, run } = useRequest(inStockOrderView, {
     onSuccess: (res) => {
-
       let ok = 0;
       let ing = 0;
       let revoke = 0;
@@ -52,54 +49,51 @@ const TaskStatistics = ({ title }) => {
         { number: ing, num: Math.round((ing / total) * 100) || 0, color: '#FA8F2B', text: '执行中' },
         {
           number: revoke,
-          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
+          num: Math.round((revoke / total) * 100) || 0,
           color: '#D8D8D8',
           text: '已撤销',
         },
+        {
+          number: revoke,
+          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0) - (Math.round((revoke / total) * 100) || 0),
+          color: '#FF3131',
+          text: '已超期',
+        },
       ]);
+
 
       let type1 = 0;
       let type2 = 0;
       let type3 = 0;
-      let type4 = 0;
-      let type5 = 0;
-      isArray(res.orderCountByType).forEach(item => {
+      isArray(res.orderCountByTyper).forEach(item => {
         switch (item.type) {
-          case 'PRODUCTION_TASK':
+          case 'PURCHASE_INSTOCK':
             type1 += item.orderCount;
             break;
-          case 'THREE_GUARANTEES':
+          case 'PRODUCTION_INSTOCK':
             type2 += item.orderCount;
             break;
-          case 'RESERVE_PICK':
+          case 'PRODUCTION_RETURN':
             type3 += item.orderCount;
-            break;
-          case 'PRODUCTION_LOSS':
-            type4 += item.orderCount;
-            break;
-          case 'LOSS_REPORTING':
-            type5 += item.orderCount;
             break;
         }
       });
-      const typeTotal = type1 + type2 + type3 + type4 + type5;
+      const typeTotal = type1 + type2 + type3;
       setTypes([
-        { number: type1, num: Math.round((type1 / typeTotal) * 100) || 0, color: '#257BDE', text: '生产任务' },
-        { number: type2, num: Math.round((type2 / typeTotal) * 100) || 0, color: '#2EAF5D', text: '三包服务' },
-        { number: type3, num: Math.round((type3 / typeTotal) * 100) || 0, color: '#FA8F2B', text: '备品配件' },
-        { number: type4, num: Math.round((type4 / typeTotal) * 100) || 0, color: '#FF3131', text: '生产损耗' },
+        { number: type1, num: Math.round((type1 / typeTotal) * 100) || 0, color: '#257BDE', text: '周期养护' },
+        { number: type2, num: Math.round((type2 / typeTotal) * 100) || 0, color: '#FA8F2B', text: '指定养护' },
         {
-          number: type5,
-          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0) - (Math.round((type4 / typeTotal) * 100) || 0),
+          number: type3,
+          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0),
           color: '#FF3131',
-          text: '报损出库',
+          text: '复检复调',
         },
       ]);
     },
   });
 
   if (!data) {
-    if (inLoading) {
+    if (loading) {
       return <MyLoading skeleton />;
     }
   }
@@ -110,10 +104,10 @@ const TaskStatistics = ({ title }) => {
     </div>
     <div className={classNames(styles.dateTotal, styles.flexCenter)}>
       <ScreenButtons onChange={(value) => {
-        inRun({ data: { beginTime: value[0], endTime: value[1] } });
+        run({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
       <div className={styles.action}>
-        总计 <span className='numberBlue'>160</span>
+        总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
       </div>
     </div>
 
@@ -131,11 +125,11 @@ const TaskStatistics = ({ title }) => {
       <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
         {status.map((item, index) => {
           return <div
-            className={styles.flexCenter}
             key={index}
+            className={styles.flexCenter}
           >
             <div style={{ backgroundColor: item.color }} className={styles.circle} />
-            {item.text}&nbsp;&nbsp;{item.number}({item.num}%)
+            {item.text}&nbsp;&nbsp;{item.number} ({item.num}%)
           </div>;
         })}
       </div>
@@ -159,12 +153,14 @@ const TaskStatistics = ({ title }) => {
             className={styles.flexCenter}
           >
             <div style={{ backgroundColor: item.color }} className={styles.circle} />
-            {item.text}&nbsp;&nbsp;{item.number}({item.num}%)
+            {item.text}&nbsp;&nbsp;{item.number} ({item.num}%)
           </div>;
         })}
       </div>
     </div>
     <div style={{ height: 8 }} />
+
+    {loading && <MyLoading />}
   </div>;
 };
 

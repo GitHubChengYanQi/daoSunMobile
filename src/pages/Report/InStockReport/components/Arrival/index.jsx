@@ -111,7 +111,7 @@ export const viewTotail = {
   // data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
 
-const Arrival = () => {
+const Arrival = ({title}) => {
 
   const history = useHistory();
 
@@ -126,7 +126,7 @@ const Arrival = () => {
   return <>
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}> 到货量统计</div>
+        <div className={styles.title}>{title}</div>
         <div  className={styles.action} onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',

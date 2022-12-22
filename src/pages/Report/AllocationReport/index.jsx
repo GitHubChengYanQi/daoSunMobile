@@ -1,15 +1,12 @@
 import React from 'react';
-import Summary from './components/Summary';
-import NumberRanking from './components/NumberRanking';
-import OutStockRanking from './components/OutStockRanking';
-import Work from './components/Work';
-import TaskStatistics from './components/TaskStatistics';
-import Contrast from './components/Contrast';
 import { isArray } from '../../components/ToolUtil';
 import styles from '../index.less';
+import TaskStatistics from './components/TaskStatistics';
+import Contrast from './components/Contrast';
+import Allocation from './components/Allocation';
+import StoreAllocation from './components/StoreAllocation';
 
-
-const OutStockReport = ({ layout }) => {
+const AllocationReport = ({ layout }) => {
 
   const table = isArray(layout?.steps)[0]?.data || [];
 
@@ -17,15 +14,14 @@ const OutStockReport = ({ layout }) => {
     const rows = item[0]?.data || [];
     const childrens = rows.map((item, index) => {
       switch (item.key) {
-        case 'OutStockRanking':
-          return <OutStockRanking title={item.filedName} key={index} />;
-        case 'Summary':
+        case 'Allocation':
           return <div key={index}>
-            <Summary title={item.filedName} />
-            <NumberRanking />
+            <Allocation title={item.filedName} />
           </div>;
-        case 'Work':
-          return <Work key={index} title={item.filedName} />;
+        case 'StoreAllocation':
+          return <div key={index}>
+            <StoreAllocation title={item.filedName} />
+          </div>;
         case 'TaskStatistics':
           return <div key={index}>
             <TaskStatistics title={item.filedName} />
@@ -40,7 +36,6 @@ const OutStockReport = ({ layout }) => {
       <div style={{ height: 8 }} />
     </div>;
   });
-
 };
 
-export default OutStockReport;
+export default AllocationReport;

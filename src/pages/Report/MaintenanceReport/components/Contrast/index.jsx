@@ -26,7 +26,7 @@ const Contrast = (
   const [total, setTotal] = useState(0);
 
   const {
-    loading: instockLogViewLoading,
+    loading,
     data: logData,
   } = useRequest(instockOrderCountViewByUser, {
       onSuccess: (res) => {
@@ -35,13 +35,13 @@ const Contrast = (
         }), ...isArray(res?.sumOrderByUser?.records).map(item => {
           return { userName: item.userResult?.name || '无', number: item.inNumCount, type: '件数' };
         })]);
-        setTotal(res?.countOrderByUser?.total > res?.sumOrderByUser?.total ? res?.countOrderByUser?.total : res?.sumOrderByUser?.total);
+        setTotal(res?.countOrderByUser?.total > res?.countOrderByUser?.total ? res?.countOrderByUser?.total : res?.countOrderByUser?.total);
       },
     },
   );
 
   if (!logData) {
-    if (instockLogViewLoading) {
+    if (loading) {
       return <MyLoading skeleton />;
     }
   }

@@ -9,7 +9,7 @@ import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
 import MyEmpty from '../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 
-const OutStockRanking = () => {
+const OutStockRanking = ({title}) => {
 
   const [list, setList] = useState([]);
   const [total, setTotal] = useState(0);
@@ -47,7 +47,7 @@ const OutStockRanking = () => {
   return <>
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>出库供应商排行</div>
+        <div className={styles.title}>{title}</div>
         <div className={styles.action} onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',

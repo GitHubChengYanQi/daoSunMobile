@@ -18,19 +18,22 @@ const InStockReport = ({ layout = {} }) => {
     const childrens = rows.map((item, index) => {
       switch (item.key) {
         case 'Arrival':
-          return <Arrival key={index} />;
-        case 'ArrivalRanking':
-          return <ArrivalRanking key={index} />;
+          return <div key={index}>
+            <Arrival title={item.filedName} />
+            <ArrivalRanking />
+          </div>;
         case 'Summary':
-          return <Summary key={index} />;
-        case 'NumberRanking':
-          return <NumberRanking key={index} />;
+          return <div key={index}>
+            <Summary title={item.filedName} />
+            <NumberRanking />
+          </div>;
         case 'Work':
-          return <Work key={index} />;
+          return <Work title={item.filedName} key={index} />;
         case 'TaskStatistics':
-          return <TaskStatistics key={index} />;
-        case 'Contrast':
-          return <Contrast key={index} />;
+          return <div key={index}>
+            <TaskStatistics title={item.filedName} />
+            <Contrast />
+          </div>;
       }
     });
     return <div key={index}>

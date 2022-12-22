@@ -12,7 +12,7 @@ import MyEmpty from '../../../../components/MyEmpty';
 
 export const inStockCountViewByMonth = { url: '/statisticalView/instockCountViewByMonth', method: 'POST' };
 
-const Summary = () => {
+const Summary = ({title}) => {
 
   const history = useHistory();
 
@@ -38,7 +38,6 @@ const Summary = () => {
   }, []);
 
   const charData = isArray(detail?.inStocksNumber);
-  const title = '入库汇总';
 
   if (!detail) {
     if (inStockLoading) {

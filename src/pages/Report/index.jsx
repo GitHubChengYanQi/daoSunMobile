@@ -10,6 +10,8 @@ import { useRequest } from '../../util/Request';
 import { formList } from '../components/FormLayout';
 import { ReceiptsEnums } from '../Receipts';
 import { MyLoading } from '../components/MyLoading';
+import MaintenanceReport from './MaintenanceReport';
+import AllocationReport from './AllocationReport';
 
 const Report = () => {
 
@@ -51,15 +53,13 @@ const Report = () => {
         </div>
       </Tabs.Tab>
       <Tabs.Tab title='养护' key='maintenance' destroyOnClose>
-        <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>
-          库存统计
-        </div>
+        <MaintenanceReport layout={layout['curring']} />
       </Tabs.Tab>
       <Tabs.Tab title='调拨' key='allocation' destroyOnClose>
-        <InOutStock />
+        <AllocationReport layout={layout['allocation']} />
       </Tabs.Tab>
       <Tabs.Tab title='综合' key='comprehensive' destroyOnClose>
-        <Comprehensive />
+        <Comprehensive layout={layout['comprehensive']} />
       </Tabs.Tab>
     </Tabs>
   </div>;

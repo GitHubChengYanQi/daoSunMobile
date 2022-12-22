@@ -18,7 +18,7 @@ export const inStockOrderView = {
   // data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
 
-const TaskStatistics = () => {
+const TaskStatistics = ({ title }) => {
 
   const [status, setStaus] = useState([]);
 
@@ -99,7 +99,7 @@ const TaskStatistics = () => {
 
   return <div className={styles.card}>
     <div className={styles.header}>
-      <div className={styles.title}>任务统计</div>
+      <div className={styles.title}>{title}</div>
     </div>
     <div className={classNames(styles.dateTotal, styles.flexCenter)}>
       <ScreenButtons onChange={(value) => {

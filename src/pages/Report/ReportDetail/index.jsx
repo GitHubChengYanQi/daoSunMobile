@@ -74,6 +74,7 @@ const ReportDetail = () => {
   let defaultScreen = {};
 
   switch (query.type) {
+    // 入库
     case 'inAskNumber':
       title = '入库申请排行';
       tabs = [
@@ -196,7 +197,7 @@ const ReportDetail = () => {
       Content = InStockError;
       contentProps = { height: 200 };
       break;
-
+    // 出库
     case 'outAskNumber':
       title = '出库申请排行';
       tabs = [
@@ -310,6 +311,7 @@ const ReportDetail = () => {
       Content = OutStockWorkDetail;
       break;
 
+    // 综合
     case 'errorSkus':
       title = '异常物料明细';
       tabs = [
