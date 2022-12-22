@@ -141,7 +141,7 @@ const SkuShop = (
   }, []);
 
   useEffect(() => {
-    if (type) {
+    if (type && !history.location.query.createType) {
       if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();
       }

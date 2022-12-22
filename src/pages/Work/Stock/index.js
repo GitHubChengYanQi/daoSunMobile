@@ -17,6 +17,7 @@ import TaskBottom from './Task/components/TaskBottom';
 import Report from '../../Report';
 import KeepAlive from '../../../components/KeepAlive';
 
+
 export const StockContent = connect(({ qrCode }) => ({ qrCode }))((
   props,
 ) => {
