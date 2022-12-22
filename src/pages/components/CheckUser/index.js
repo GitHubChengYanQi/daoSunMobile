@@ -38,7 +38,13 @@ const CheckUser = (
       console.log('users', res);
       const users = res || [];
       if (users.length > 0) {
-        onChange(users.map(item => ({ id: item.userId, name: item.name, avatar: item.avatar })), params);
+        onChange(users.map(item => ({
+          id: item.userId,
+          name: item.name,
+          avatar: item.avatar,
+          dept: 'dept',
+          role: 'role',
+        })), params);
       } else {
         Message.errorToast('系统无此用户，请先注册！');
       }

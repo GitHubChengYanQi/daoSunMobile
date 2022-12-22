@@ -55,7 +55,7 @@ const UserList = (
         if (checked(item.userId)) {
           checkUser.push({ name: item.name, id: item.userId });
         }
-        users.push({ name: item.name, id: item.userId, avatar: item.avatar });
+        users.push({ name: item.name, id: item.userId, avatar: item.avatar, dept: 'dept', role: 'role' });
       });
       const charCodeOfA = 'A'.charCodeAt(0);
       const groups = [];

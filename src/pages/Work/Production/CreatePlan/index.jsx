@@ -138,10 +138,12 @@ const CreatePlan = () => {
                 id: data.userId,
                 name: data.userName,
                 avatar: data.avatar,
+                dept: data.dept,
+                role: data.role,
               }] : []}
               onChange={(users) => {
-                const { id, name, avatar } = users[0] || {};
-                setData({ ...data, userId: id, userName: name, avatar });
+                const { id, name, avatar, dept, role } = users[0] || {};
+                setData({ ...data, userId: id, userName: name, avatar, dept, role });
               }}
               title={item.filedName}
             />;
