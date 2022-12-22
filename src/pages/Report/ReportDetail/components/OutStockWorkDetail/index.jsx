@@ -46,7 +46,7 @@ const OutStockWorkDetail = (
             if (show) {
               return;
             }
-            run({ data: { userId: item.userResult?.userId } });
+            // run({ data: { userId: item.userResult?.userId } });
           }}>{!show ? <DownOutline /> : <UpOutline />}</div>
         </div>
         <div className={styles.content} hidden={!(open === index)}>
