@@ -7,10 +7,6 @@ import TaskStatistics from './components/TaskStatistics';
 import Work from './components/Work';
 import Ranking from './components/Ranking';
 import { isArray } from '../../components/ToolUtil';
-import Arrival from '../InStockReport/components/Arrival';
-import ArrivalRanking from '../InStockReport/components/ArrivalRanking';
-import Summary from '../InStockReport/components/Summary';
-import Contrast from '../InStockReport/components/Contrast';
 import styles from '../index.less';
 
 const Comprehensive = ({ layout }) => {

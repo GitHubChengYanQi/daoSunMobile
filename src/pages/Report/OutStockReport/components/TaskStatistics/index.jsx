@@ -26,6 +26,8 @@ const TaskStatistics = ({ title }) => {
 
   const [types, setTypes] = useState([]);
 
+  const [total, setTotal] = useState(0);
+
   const { loading: inLoading, data, run: inRun } = useRequest(outStockOrderView, {
     onSuccess: (res) => {
 
@@ -57,7 +59,7 @@ const TaskStatistics = ({ title }) => {
           text: '已撤销',
         },
       ]);
-
+      setTotal(total);
       let type1 = 0;
       let type2 = 0;
       let type3 = 0;
@@ -113,7 +115,7 @@ const TaskStatistics = ({ title }) => {
         inRun({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
       <div className={styles.action}>
-        总计 <span className='numberBlue'>160</span>
+        总计 <span className='numberBlue'>{total}</span>
       </div>
     </div>
 

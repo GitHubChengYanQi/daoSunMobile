@@ -9,7 +9,7 @@ import styles from '../../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
-const LackRanking = () => {
+const LackRanking = ({title}) => {
 
   const history = useHistory();
 
@@ -29,6 +29,7 @@ const LackRanking = () => {
     { text: '实时缺欠数量', type: 'SKU_COUNT' },
     { text: '累计缺欠次数', type: 'NUM_COUNT' },
   ];
+
   const [type, setType] = useState(searchTypes[0].type);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ const LackRanking = () => {
   return <>
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>缺欠排行</div>
+        <div className={styles.title}>{title}</div>
         <div onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',

@@ -1,16 +1,9 @@
 import React, { useState } from 'react';
-import { isArray } from '../../../../components/ToolUtil';
-import { instockDetailByCustomer } from '../../../components/Ranking';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
-import { useRequest } from '../../../../../util/Request';
-import { MyLoading } from '../../../../components/MyLoading';
-import { MyDate } from '../../../../components/MyDate';
-import MyEllipsis from '../../../../components/MyEllipsis';
 import { instockLogs } from '../InStockWorkDetail';
 
 const InStockSummary = (

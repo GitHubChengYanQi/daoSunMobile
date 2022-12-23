@@ -9,12 +9,10 @@ import { Button } from 'antd-mobile';
 import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
 
 const Work = (
-  {},
+  { title },
 ) => {
 
   const history = useHistory();
-
-  const [timeType, setTimeType] = useState();
 
   const data = [
     { userName: '123', number: 111, type: '入库' },
@@ -28,19 +26,13 @@ const Work = (
     { text: '执行', type: 'SKU_COUNT' },
     { text: '发起', type: 'NUM_COUNT' },
   ];
+
   const [type, setType] = useState(searchTypes[0].type);
 
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
-        工作量对比
-      </div>
-      <div onClick={() => history.push({
-        pathname: '/Report/ReportDetail',
-        search: 'type=outStockWork',
-      })}>
-        共 <span className='numberBlue' style={{ fontSize: 18 }}>12</span> 人
-        <RightOutline />
+        {title}
       </div>
     </div>
     <div className={styles.rankingHeader}>
@@ -70,7 +62,7 @@ const Work = (
           <Legend
             marker='square'
             style={{
-              alignItems:'center',
+              alignItems: 'center',
             }}
             position='top' />
           <Axis field='userName' />
@@ -80,7 +72,7 @@ const Work = (
             y='number'
             color={{
               field: 'type',
-              range: ['#257BDE','#82B3EA','#2EAF5D','#FA8F2B','#FF3131',],
+              range: ['#257BDE', '#82B3EA', '#2EAF5D', '#FA8F2B', '#FF3131'],
             }}
             adjust={{
               type: 'dodge',

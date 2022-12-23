@@ -3,7 +3,7 @@ import { Button, Divider } from 'antd-mobile';
 import { classNames } from '../../../../components/ToolUtil';
 import styles from '../../../InStockReport/index.less';
 
-const TaskStatistics = () => {
+const TaskStatistics = ({title}) => {
 
   const [timeType, setTimeType] = useState();
 
@@ -27,7 +27,7 @@ const TaskStatistics = () => {
 
   return <div className={styles.card}>
     <div className={styles.header}>
-      <div className={styles.title}>任务统计</div>
+      <div className={styles.title}>{title}</div>
     </div>
     <div className={classNames(styles.dateTotal, styles.flexCenter)}>
       <div className={classNames(styles.screen, styles.flexGrow)}>

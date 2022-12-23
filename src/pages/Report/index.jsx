@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { Tabs } from 'antd-mobile';
 import MyNavBar from '../components/MyNavBar';
-import InOutStock from './InOutStock';
 import InStockReport from './InStockReport';
 import OutStockReport from './OutStockReport';
 import Comprehensive from './Comprehensive';

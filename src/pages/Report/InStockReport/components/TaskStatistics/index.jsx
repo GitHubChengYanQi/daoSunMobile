@@ -24,6 +24,8 @@ const TaskStatistics = ({ title }) => {
 
   const [types, setTypes] = useState([]);
 
+  const [total, setTotal] = useState(0);
+
   const { loading: inLoading, data, run: inRun } = useRequest(inStockOrderView, {
     onSuccess: (res) => {
       let ok = 0;
@@ -54,7 +56,7 @@ const TaskStatistics = ({ title }) => {
           text: '已撤销',
         },
       ]);
-
+      setTotal(total);
 
       let type1 = 0;
       let type2 = 0;
@@ -106,7 +108,7 @@ const TaskStatistics = ({ title }) => {
         inRun({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
       <div className={styles.action}>
-        总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
+        总计 <span style={{ fontSize: 18 }} className='numberBlue'>{total}</span>
       </div>
     </div>
 
@@ -145,11 +147,12 @@ const TaskStatistics = ({ title }) => {
           />;
         })}
       </div>
-      <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+      <div className={styles.flexCenter} style={{ columnGap: 16, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
         {types.map((item, index) => {
           return <div
             key={index}
             className={styles.flexCenter}
+            style={{ width: '45%' }}
           >
             <div style={{ backgroundColor: item.color }} className={styles.circle} />
             {item.text}&nbsp;&nbsp;{item.number} ({item.num}%)

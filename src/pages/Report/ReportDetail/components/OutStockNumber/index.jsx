@@ -10,6 +10,10 @@ import MyList from '../../../../components/MyList';
 import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
 import { UserName } from '../../../../components/User';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
+
+export const outBySkuClass = { url: '/statisticalView/outBySku', method: 'POST' };
 
 const OutStockNumber = (
   {
@@ -21,6 +25,18 @@ const OutStockNumber = (
   const [list, setList] = useState([]);
 
   const [open, setOpen] = useState();
+
+  const [skus, setSkus] = useState([]);
+
+  const {
+    loading: outBySkuClassLoading,
+    run: outBySkuClassRun,
+  } = useRequest(outBySkuClass, {
+    manual: true,
+    onSuccess: (res) => {
+      setSkus(res);
+    },
+  });
 
   return <MyList manual ref={listRef} api={outStockDetailBySpuClass} data={list} getData={setList}>
     {
@@ -58,22 +74,34 @@ const OutStockNumber = (
               if (show) {
                 return;
               }
-            }}>{numberText}{!show ? <DownOutline /> : <UpOutline />}</div>
+              switch (params.searchType) {
+                case 'SPU_CLASS':
+                  outBySkuClassRun({ data: { spuClassId: item.spuClassId } });
+                  break;
+                case 'TYPE':
+
+                  break;
+                case 'STOREHOUSE':
+
+                  break;
+                case 'PICK_USER':
+
+                  break;
+                default:
+                  break;
+              }
+            }}>{numberText}&nbsp;&nbsp;{!show ? <DownOutline /> : <UpOutline />}</div>
           </div>
           <div className={styles.content} hidden={!show}>
             {
-              [1, 2, 3].map((item, index) => {
+              outBySkuClassLoading ? <MyLoading skeleton /> : skus.map((item, index) => {
                 return <div key={index} className={styles.skuItem}>
                   <SkuItem
                     skuResult={item.skuResult}
                     className={styles.sku}
                     extraWidth='124px'
-                    otherData={[
-                      <span className={styles.number}>拒绝入库 <span className={styles.error}>×2000</span></span>,
-                    ]}
                   />
                   <div style={{ textAlign: 'right' }}>
-                    <div className={styles.grey}>已入库</div>
                     <ShopNumber show value={item.number} />
                   </div>
                 </div>;

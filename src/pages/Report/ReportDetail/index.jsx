@@ -34,6 +34,10 @@ import SkuStock from './components/SkuStock';
 import StockCycle from './components/StockCycle';
 import LackSkus from './components/LackSkus';
 import ExecuteNumber from './components/ExecuteNumber';
+import MyCheckList from '../../components/MyCheckList';
+import { spuClassListSelect } from '../../Work/Instock/Url';
+import { storeHouseSelect } from '../../Work/Quality/Url';
+import { materialListSelect } from '../../Work/Sku/Edit';
 
 const ReportDetail = () => {
 
@@ -74,6 +78,7 @@ const ReportDetail = () => {
   let defaultScreen = {};
 
   switch (query.type) {
+
     // 入库
     case 'inAskNumber':
       title = '入库申请排行';
@@ -92,7 +97,7 @@ const ReportDetail = () => {
           key: 'ORDER_BY_DETAIL',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'inStockType' },
           ],
         },
@@ -107,7 +112,7 @@ const ReportDetail = () => {
           key: 'ORDER_LOG',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '数量排行', key: 'numberRanking' },
           ],
         },
@@ -123,7 +128,7 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '入库件数', key: 'inStockRanking' },
           ],
         },
@@ -139,7 +144,7 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'inStockType' },
           ],
         },
@@ -155,22 +160,22 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '任务类型', key: 'inStockType' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         }, {
           title: '任务类型',
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         }, {
           title: '入库仓库',
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'inStockRanking' },
           ],
         },
@@ -186,10 +191,10 @@ const ReportDetail = () => {
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '类型', key: 'inStockRanking' },
             { title: '供应商', key: 'customerId' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
@@ -197,6 +202,7 @@ const ReportDetail = () => {
       Content = InStockError;
       contentProps = { height: 200 };
       break;
+
     // 出库
     case 'outAskNumber':
       title = '出库申请排行';
@@ -214,7 +220,7 @@ const ReportDetail = () => {
           key: 'ORDER_BY_DETAIL',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
           ],
         },
       ];
@@ -228,7 +234,7 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassIds' },
             { title: '任务类型', key: 'outStockType' },
           ],
         },
@@ -243,7 +249,7 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'outStockType' },
           ],
         },
@@ -259,7 +265,7 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '任务类型', key: 'outStockType' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
             { title: '领料人', key: 'userId' },
           ],
         }, {
@@ -267,8 +273,8 @@ const ReportDetail = () => {
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
             { title: '领料人', key: 'userId' },
           ],
         }, {
@@ -276,7 +282,7 @@ const ReportDetail = () => {
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'outStockType' },
             { title: '领料人', key: 'userId' },
           ],
@@ -285,9 +291,9 @@ const ReportDetail = () => {
           key: 'PICK_USER',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'outStockType' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
@@ -302,7 +308,7 @@ const ReportDetail = () => {
           key: 'ORDER_LOG',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '数量排行', key: 'numberRanking' },
           ],
         },
@@ -319,8 +325,8 @@ const ReportDetail = () => {
           title: '异常物料明细',
           key: 'SPU_CLASS',
           screens: [
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
@@ -333,37 +339,37 @@ const ReportDetail = () => {
           title: '物料分类',
           key: 'SPU_CLASS',
           screens: [
-            { title: '状态', key: 'inStockStatus' },
-            { title: '仓库', key: 'stockHouse' },
-            { title: '材质', key: 'stockHouse' },
+            { title: '状态', key: 'stockStatus' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '材质', key: 'material' },
             { title: '供应商', key: 'customerId' },
           ],
         }, {
           title: '仓库排行',
-          key: 'TYPE',
+          key: 'STOREHOUSE',
           screens: [
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '材质', key: 'stockHouse' },
+            { title: '状态', key: 'stockStatus' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '材质', key: 'material' },
             { title: '供应商', key: 'customerId' },
           ],
         }, {
           title: '材质排行',
-          key: 'mer',
+          key: 'MATERIAL',
           screens: [
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '状态', key: 'stockStatus' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
             { title: '供应商', key: 'customerId' },
           ],
         }, {
           title: '供应商排行',
-          key: 'STOREHOUSE',
+          key: 'CUSTOMER',
           screens: [
             { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
-            { title: '材质', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '材质', key: 'material' },
           ],
         },
       ];
@@ -376,9 +382,9 @@ const ReportDetail = () => {
           title: '库存周期明细',
           key: 'SPU_CLASS',
           screens: [
-            { title: '物料分类', key: 'skuClass' },
-            { title: '材质', key: 'mer' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '材质', key: 'material' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
@@ -391,14 +397,14 @@ const ReportDetail = () => {
           title: '累计缺欠次数',
           key: 'SPU_CLASS',
           screens: [
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
           ],
         },
         {
           title: '实时缺欠数量',
           key: 'now',
           screens: [
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '供应商', key: 'customerId' },
           ],
         },
@@ -414,7 +420,7 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '类型', key: 'type' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
           ],
         },
         {
@@ -423,12 +429,13 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '类型', key: 'type' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
           ],
         },
       ];
       Content = ExecuteNumber;
       break;
+
     default:
       Content = MyEmpty;
       break;
@@ -486,7 +493,7 @@ const ReportDetail = () => {
               case 'customerId':
                 title = screen.customerName;
                 break;
-              case 'skuClass':
+              case 'spuClassId':
                 title = screen.skuClassName;
                 break;
               case 'numberRanking':
@@ -505,7 +512,16 @@ const ReportDetail = () => {
                 title = screen.inStockType;
                 break;
               case 'outStockType':
-                title = screen.outStockType;
+                title = screen.type;
+                break;
+              case 'storehouseId':
+                title = screen.storehouseName;
+                break;
+              case 'material':
+                title = screen.materialName;
+                break;
+              case 'stockStatus':
+                title = screen.stockStatus;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -589,10 +605,10 @@ const ReportDetail = () => {
     <SkuClass
       onClose={() => setScreenkey('')}
       zIndex={1002}
-      value={params.skuClassId ? [{ value: params.skuClassId, label: screen.skuClassName }] : []}
-      visible={screenKey === 'skuClass'}
+      value={params.spuClassId ? [{ value: params.spuClassId, label: screen.skuClassName }] : []}
+      visible={screenKey === 'spuClassId'}
       onChange={(skuClass) => {
-        submit({ skuClassId: skuClass?.value });
+        submit({ spuClassId: skuClass?.value });
         setScreen({ ...screen, skuClassName: skuClass?.label });
         setScreenkey('');
       }}
@@ -608,6 +624,42 @@ const ReportDetail = () => {
         setScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
+    />
+
+    <MyCheckList
+      noSearch
+      noPage
+      searchPlaceholder='请输入仓库信息'
+      api={storeHouseSelect}
+      label='label'
+      listKey='value'
+      onClose={() => setScreenkey('')}
+      onChange={(store) => {
+        submit({ storehouseId: store?.value });
+        setScreen({ ...screen, storehouseName: store?.label });
+        setScreenkey('');
+      }}
+      value={params.storehouseId ? [{ value: params.storehouseId, label: screen.storehouseName }] : []}
+      visible={screenKey === 'storehouseId'}
+      title='选择仓库'
+    />
+
+    <MyCheckList
+      noSearch
+      noPage
+      searchPlaceholder='请输入材质信息'
+      api={materialListSelect}
+      label='label'
+      listKey='value'
+      onClose={() => setScreenkey('')}
+      onChange={(store) => {
+        submit({ materialId: store?.value });
+        setScreen({ ...screen, materialName: store?.label });
+        setScreenkey('');
+      }}
+      value={params.materialId ? [{ value: params.materialId, label: screen.materialName }] : []}
+      visible={screenKey === 'material'}
+      title='选择材质'
     />
 
     <MyPicker
@@ -654,10 +706,14 @@ const ReportDetail = () => {
 
     <MyPicker
       visible={screenKey === 'outStockType'}
-      value={params.outStockType}
+      value={params.type}
       onChange={(option) => {
-        submit({ outStockType: option.value });
-        setScreen({ ...screen, outStockType: option.label });
+        if (option.value === 'all') {
+          submit({ type: null });
+        } else {
+          submit({ type: option.value });
+        }
+        setScreen({ ...screen, type: option.label });
         setScreenkey('');
       }}
       options={[{ label: '全部', value: 'all' }, ...OutType]}
@@ -677,6 +733,22 @@ const ReportDetail = () => {
         { label: '送货', value: '送货' },
         { label: '已入库', value: '已入库' },
         { label: '拒绝入库', value: '拒绝入库' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
+    <MyPicker
+      visible={screenKey === 'stockStatus'}
+      value={params.stockStatus}
+      onChange={(option) => {
+        submit({ stockStatus: option.value });
+        setScreen({ ...screen, stockStatus: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '全部', value: '全部' },
+        { label: '正常', value: '正常' },
+        { label: '异常', value: '异常' },
       ]}
       onClose={() => setScreenkey('')}
     />
