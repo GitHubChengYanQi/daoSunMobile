@@ -59,7 +59,7 @@ const UserList = (
           name: item.name,
           id: item.userId,
           avatar: item.avatar,
-          dept: item.deptResult.fullName,
+          dept: item.deptResult?.fullName,
           role: isArray(item.roleResults)[0]?.name,
         });
       });

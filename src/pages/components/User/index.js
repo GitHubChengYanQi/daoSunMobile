@@ -13,7 +13,7 @@ export const UserName = ({ user = {}, size }) => {
     <Avatar src={user.avatar || ''} style={{ '--size': `${size || 35}px` }} />
     <div>
       <div>{user.name}</div>
-      <div style={{ fontSize: 12, color: 'rgb(148 148 148)' }}>{user.dept || user.deptResult.fullName} - {user.role || isArray(user.roleResults)[0]?.name}</div>
+      <div style={{ fontSize: 12, color: 'rgb(148 148 148)' }}>{user.dept || user.deptResult?.fullName} - {user.role || isArray(user.roleResults)[0]?.name}</div>
     </div>
   </span>;
 };
