@@ -23,6 +23,13 @@ export const taskUserView = {
   data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
 
+export const taskLogUserView = {
+  url: '/statisticalView/taskLogUserView',
+  method: 'POST',
+  // data: {},
+  data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
+};
+
 const Work = (
   { title },
 ) => {
@@ -34,7 +41,7 @@ const Work = (
     { text: '发起', type: 'ask' },
   ];
 
-  const [type, setType] = useState(searchTypes[1].type);
+  const [type, setType] = useState(searchTypes[0].type);
 
   const { loading: taskUserViewLoading, data: taskUserViewData, run: taskUserViewRun } = useRequest(taskUserView, {
     manual: true,
@@ -71,9 +78,46 @@ const Work = (
     },
   });
 
+  const { loading: taskLogUserViewLoading, data: taskLogUserViewData, run: taskLogUserViewRun } = useRequest(taskLogUserView, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res);
+      const newData = [];
+      isArray(res).forEach(item => {
+        let type = '';
+        switch (item.type) {
+          case 'INSTOCK':
+            type = '入库';
+            break;
+          case 'OUTSTOCK':
+            type = '出库';
+            break;
+          case 'Stocktaking':
+            type = '盘点';
+            break;
+          case 'MAINTENANCE':
+            type = '养护';
+            break;
+          case 'ALLOCATION':
+            type = '调拨';
+            break;
+        }
+        if (type) {
+          newData.push({
+            userName: item.userResult?.name || '无',
+            number: item.number,
+            type,
+          });
+        }
+      })
+      setData(newData);
+    },
+  });
+
   useEffect(() => {
     switch (type) {
       case 'ing':
+        taskLogUserViewRun({ data: { beginTime: defaultTime[0], endTime: defaultTime[1] } });
         break;
       case 'ask':
         taskUserViewRun({ data: { beginTime: defaultTime[0], endTime: defaultTime[1] } });
@@ -95,6 +139,7 @@ const Work = (
       <ScreenButtons onChange={(value) => {
         switch (type) {
           case 'ing':
+            taskLogUserViewRun({ data: { beginTime: value[0], endTime: value[1] } });
             break;
           case 'ask':
             taskUserViewRun({ data: { beginTime: value[0], endTime: value[1] } });
