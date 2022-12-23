@@ -41,7 +41,7 @@ const Work = (
     { text: '发起', type: 'ask' },
   ];
 
-  const [type, setType] = useState(searchTypes[0].type);
+  const [type, setType] = useState(searchTypes[1].type);
 
   const { loading: taskUserViewLoading, data: taskUserViewData, run: taskUserViewRun } = useRequest(taskUserView, {
     manual: true,
