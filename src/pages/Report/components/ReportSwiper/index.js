@@ -28,7 +28,7 @@ const ReportSwiper = (
     titleChange(userChart[0] && userChart[0].name);
   }, [userChart.length]);
 
-  return <>
+  return userChart.length > 0 && <>
     <Swiper loop autoplay onIndexChange={(index) => {
       const charts = (userChart);
       titleChange(charts[index].name);

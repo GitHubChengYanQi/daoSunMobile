@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import MyDatePicker from '../../../../../components/MyDatePicker';
+import MyDatePicker from '../MyDatePicker';
 import { CalendarOutline } from 'antd-mobile-icons';
-import { MyDate } from '../../../../../components/MyDate';
-import LinkButton from '../../../../../components/LinkButton';
+import { MyDate } from '../MyDate';
+import LinkButton from '../LinkButton';
 import { Space } from 'antd-mobile';
 import moment from 'moment';
 

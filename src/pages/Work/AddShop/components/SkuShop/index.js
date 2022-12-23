@@ -141,7 +141,7 @@ const SkuShop = (
   }, []);
 
   useEffect(() => {
-    if (type) {
+    if (type && !history.location.query.createType) {
       if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();
       }
@@ -151,7 +151,7 @@ const SkuShop = (
         },
       });
     }
-  }, [type]);
+  }, [type, history.location.query.createType]);
 
   const taskData = (item = {}) => {
     const skuClassName = item?.skuResult?.spuResult?.spuClassificationResult?.name;
@@ -216,8 +216,7 @@ const SkuShop = (
   }
 
   return <>
-     <Popup
-      getContainer={null}
+    <Popup
       getContainer={null}
       className={ToolUtil.classNames(style.popup, className)}
       visible={visible}
@@ -332,7 +331,6 @@ const SkuShop = (
           color='primary'
           className={style.submit}
           onClick={() => {
-            setSkus([]);
             switch (type) {
               case ERPEnums.allocation:
                 history.push({

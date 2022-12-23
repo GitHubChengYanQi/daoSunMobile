@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useRequest } from '../../../../../util/Request';
 import { isArray } from '../../../../components/ToolUtil';
 import { instockOrderCountViewByUser, outStockDetailView } from '../../../components/Ranking';
 import styles from '../../index.less';
@@ -8,7 +7,6 @@ import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
-import { MyLoading } from '../../../../components/MyLoading';
 import { MyDate } from '../../../../components/MyDate';
 
 const OutAsk = (

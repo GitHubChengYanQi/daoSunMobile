@@ -2,16 +2,17 @@ import cookie from 'js-cookie';
 import axios from 'axios';
 import { Message } from '../../pages/components/Message';
 
+console.log(process.env.ENV);
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
   // 'https://192.168.0.220:8891'
-  'http://192.168.0.111'
+  'http://192.168.0.100'
   // 'http://10.147.20.68:8881/'
   // 'https://api.hh.gf2025.com'
   :
-  process.env.api;
+  'http://172.16.1.181'
 
 const ajaxService = axios.create({
   baseURL: baseURI,

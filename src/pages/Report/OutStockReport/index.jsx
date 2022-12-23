@@ -1,65 +1,46 @@
-import React, { useState } from 'react';
-import DateSelect from '../components/DateSelect';
-import TaskReport from '../components/TaskReport';
-import styles from './index.less';
-import WorkContrast from '../components/WorkContrast';
-import Ranking from '../components/Ranking';
-import Summary from '../components/Summary';
+import React from 'react';
+import Summary from './components/Summary';
+import NumberRanking from './components/NumberRanking';
+import OutStockRanking from './components/OutStockRanking';
+import Work from './components/Work';
+import TaskStatistics from './components/TaskStatistics';
+import Contrast from './components/Contrast';
+import { isArray } from '../../components/ToolUtil';
+import styles from '../index.less';
 
 
-const OutStockReport = () => {
+const OutStockReport = ({ layout }) => {
 
-  const [searchParams, setSearchParams] = useState({});
+  const table = isArray(layout?.steps)[0]?.data || [];
 
-  return <>
-    <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
-    <div style={{ height: 8 }} />
-    <TaskReport
-      module='outStock'
-      size={140}
-      date={searchParams.time}
-      searchTypes={[
-        { text: '类型', type: 'ORDER_TYPE' },
-        { text: '状态', type: 'ORDER_STATUS' },
-      ]}
-    />
-    <div className={styles.space} />
-    <Ranking
-      title='申请数排行'
-      module='outAskNumber'
-      askNumber
-      buttons={[
-        { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
-        { title: '物料排行', key: 'ORDER_BY_DETAIL' },
-      ]}
-    />
-    <div style={{ height: 8 }} />
-    <WorkContrast module='outStock' />
-    <div style={{ height: 8 }} />
-    <Ranking
-      noIcon
-      fontSize={16}
-      title='使用量排行'
-      useNumber
-      module='useNumber'
-      buttons={[
-        { title: '种类排行', key: 'SKU_COUNT' },
-        { title: '数量排行', key: 'NUM_COUNT' },
-      ]} />
-    <div style={{ height: 8 }} />
-    <Summary date={searchParams.time} module='outStockSummary' />
-    <div className={styles.space} />
-    <Ranking
-      title='出库数量排行'
-      module='outStockNumber'
-      buttons={[
-        { title: '分类排行', key: 'SPU_CLASS' },
-        { title: '类型排行', key: 'TYPE' },
-        { title: '仓库排行', key: 'STOREHOUSE' },
-        { title: '领料人排行', key: 'PICK_USER' },
-      ]}
-    />
-  </>;
+  return table.map((item, index) => {
+    const rows = item[0]?.data || [];
+    const childrens = rows.map((item, index) => {
+      switch (item.key) {
+        case 'OutStockRanking':
+          return <OutStockRanking title={item.filedName} key={index} />;
+        case 'Summary':
+          return <div key={index}>
+            <Summary title={item.filedName} />
+            <NumberRanking />
+          </div>;
+        case 'Work':
+          return <Work key={index} title={item.filedName} />;
+        case 'TaskStatistics':
+          return <div key={index}>
+            <TaskStatistics title={item.filedName} />
+            <Contrast />
+          </div>;
+      }
+    });
+    return <div key={index}>
+      <div className={styles.card}>
+        {childrens}
+      </div>
+      <div style={{ height: 8 }} />
+    </div>;
+  });
+
 };
 
 export default OutStockReport;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { isArray } from '../../../../components/ToolUtil';
-import { instockDetailByCustomer } from '../../../components/Ranking';
+import { instockDetailByCustomer, outstockDetailByCustomer } from '../../../components/Ranking';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
@@ -11,8 +11,6 @@ import { useRequest } from '../../../../../util/Request';
 import { MyLoading } from '../../../../components/MyLoading';
 import { MyDate } from '../../../../components/MyDate';
 import MyEllipsis from '../../../../components/MyEllipsis';
-
-const instockCustomer = { url: '/statisticalView/instockCustomer', method: 'POST' };
 
 const OutStockUseNumber = (
   {
@@ -25,7 +23,7 @@ const OutStockUseNumber = (
 
   const [open, setOpen] = useState();
 
-  return <MyList api={instockDetailByCustomer} data={list} getData={setList} ref={listRef} manual>
+  return <MyList api={outstockDetailByCustomer} data={list} getData={setList} ref={listRef} manual>
     {list.map((item, index) => {
 
       const show = open === index;
@@ -35,8 +33,8 @@ const OutStockUseNumber = (
           <MyCheck fontSize={17} />
           <div className={styles.label}><MyEllipsis>{item.customerName || '无供应商'}</MyEllipsis></div>
           <div>共<span className='numberBlue'>
-              {item.inSkuCount || 0}</span>类
-            <span className='numberBlue'>{item.inNumCount || 0}</span>件
+              {item.outSkuCount || 0}</span>类
+            <span className='numberBlue'>{item.outNumCount || 0}</span>件
           </div>
           <div onClick={() => {
             setOpen(show ? undefined : index);

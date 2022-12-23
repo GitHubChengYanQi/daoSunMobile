@@ -8,9 +8,9 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { isArray } from '../../../../components/ToolUtil';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
-import { instockLogView } from '../../../components/WorkContrast';
 
-const instockLogs = { url: '/statisticalView/instockLogs', method: 'POST' };
+export const instockLogs = { url: '/statisticalView/instockLogs', method: 'POST' };
+export const instockLogViewDetail = { url: '/statisticalView/instockLogViewDetail', method: 'POST' };
 
 const InStockWorkDetail = (
   {
@@ -25,7 +25,7 @@ const InStockWorkDetail = (
 
   const { loading, data, run } = useRequest(instockLogs, { manual: true });
 
-  return <MyList api={instockLogView} data={list} getData={setList} ref={listRef} manual>
+  return <MyList api={instockLogViewDetail} data={list} getData={setList} ref={listRef} manual>
     {list.map((item, index) => {
 
       const show = open === index;

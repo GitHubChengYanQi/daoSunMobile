@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Selector } from 'antd-mobile';
-import StartEndDate from '../../../../Work/Production/CreateTask/components/StartEndDate';
 import styles from '../../index.less';
 import { SelectorStyle } from '../../index';
 import moment from 'moment';
+import StartEndDate from '../../../../components/StartEndDate';
 
 export const getDate = (type) => {
   let newDate = [];

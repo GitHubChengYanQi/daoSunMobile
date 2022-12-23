@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import MyNavBar from '../../../../../components/MyNavBar';
 import MySearch from '../../../../../components/MySearch';
 import MyCard from '../../../../../components/MyCard';
-import StartEndDate from '../../../../../Work/Production/CreateTask/components/StartEndDate';
 import LinkButton from '../../../../../components/LinkButton';
 import { Space } from 'antd-mobile';
 import moment from 'moment';
@@ -17,11 +16,11 @@ import { ReceiptsEnums } from '../../../../../Receipts';
 import { useLocation } from 'react-router-dom';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../util/Request';
-import { InStockViewTotail } from '../../index';
 import { MyLoading } from '../../../../../components/MyLoading';
 import { isArray } from '../../../../../components/ToolUtil';
 import { instockDetailView } from '../index';
 import MyEmpty from '../../../../../components/MyEmpty';
+import StartEndDate from '../../../../../components/StartEndDate';
 
 const InStockTask = () => {
 
@@ -43,7 +42,7 @@ const InStockTask = () => {
   const { loading, data, run } = useRequest({ ...instockDetailView, data: { customerId } });
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
-    ...InStockViewTotail,
+    ...{},
     data: { customerId },
   });
 

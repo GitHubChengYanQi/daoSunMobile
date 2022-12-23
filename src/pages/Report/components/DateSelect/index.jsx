@@ -4,7 +4,7 @@ import styles from '../../InStockReport/index.less';
 import moment from 'moment';
 import { RightOutline } from 'antd-mobile-icons';
 import MyPicker from '../../../components/MyPicker';
-import StartEndDate from '../../../Work/Production/CreateTask/components/StartEndDate';
+import StartEndDate from '../../../components/StartEndDate';
 
 export const getDate = (type) => {
   let newDate = [];

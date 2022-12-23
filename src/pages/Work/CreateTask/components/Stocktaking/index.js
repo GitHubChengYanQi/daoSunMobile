@@ -1,10 +1,10 @@
 import React from 'react';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import User from '../User';
-import StartEndDate from '../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../components/Title';
 import MyCard from '../../../../components/MyCard';
 import MySwitch from '../../../../components/MySwitch';
+import StartEndDate from '../../../../components/StartEndDate';
 
 const Stocktaking = (
   {

@@ -44,4 +44,7 @@ export const ReceiptsEnums = {
   invoice: 'INVOICE',
   // 付款
   payment: 'PAYMENT',
+
+  // 图表
+  report: 'REPORT',
 };

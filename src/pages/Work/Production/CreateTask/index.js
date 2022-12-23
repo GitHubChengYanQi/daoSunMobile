@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import { Input, TextArea } from 'antd-mobile';
-import StartEndDate from './components/StartEndDate';
 import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import FormLayout from '../../../components/FormLayout';
@@ -11,6 +10,7 @@ import User from '../../CreateTask/components/User';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
+import StartEndDate from '../../../components/StartEndDate';
 
 const CreateTask = (props) => {
 

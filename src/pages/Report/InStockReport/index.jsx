@@ -1,69 +1,48 @@
-import React, { useState } from 'react';
-import DateSelect from '../components/DateSelect';
-import TaskReport from '../components/TaskReport';
-import styles from './index.less';
-import WorkContrast from '../components/WorkContrast';
-import SupplyReport from '../components/SupplyReport';
-import Ranking from '../components/Ranking';
-import Summary from '../components/Summary';
-import InStockError from '../components/InStockError';
+import React from 'react';
+import Arrival from './components/Arrival';
+import ArrivalRanking from './components/ArrivalRanking';
+import Summary from './components/Summary';
+import NumberRanking from './components/NumberRanking';
+import Work from './components/Work';
+import TaskStatistics from './components/TaskStatistics';
+import Contrast from './components/Contrast';
 import { isArray } from '../../components/ToolUtil';
+import styles from '../index.less';
 
-const InStockReport = () => {
+const InStockReport = ({ layout = {} }) => {
 
-  const [searchParams, setSearchParams] = useState({});
+  const table = isArray(layout?.steps)[0]?.data || [];
 
-  return <>
-    <DateSelect searchParams={searchParams} setSearchParams={setSearchParams} />
-    <div style={{ height: 8 }} />
-    <TaskReport
-      module='inStock'
-      size={140}
-      gap={10}
-      date={isArray(searchParams.time)}
-      searchTypes={[
-        {text:'类型', type:'ORDER_TYPE'},
-        {text:'状态', type:'ORDER_STATUS'}
-      ]}
-    />
-    <div className={styles.space} />
-    <Ranking
-      askNumber
-      date={isArray(searchParams.time)}
-      title='申请数排行'
-      module='inAskNumber'
-      buttons={[
-        { title: '任务排行', key: 'ORDER_BY_CREATE_USER' },
-        { title: '物料排行', key: 'ORDER_BY_DETAIL' },
-      ]}
-    />
-    <div style={{ height: 8 }} />
-    <WorkContrast module='inStock' />
-    <div style={{ height: 8 }} />
-    <SupplyReport date={searchParams.time} />
-    <div className={styles.space} />
-    <Ranking
-      noExtra
-      title='供应量排行'
-      module='supply'
-      buttons={[
-        { title: '种类排行', key: 'SKU_COUNT' },
-        { title: '数量排行', key: 'NUM_COUNT' },
-      ]} />
-    <div style={{ height: 8 }} />
-    <Summary date={searchParams.time} module='inStockSummary' />
-    <div className={styles.space} />
-    <Ranking
-      title='入库数量排行'
-      module='inStockNumber'
-      buttons={[
-        { title: '分类排行', key: 'SPU_CLASS' },
-        { title: '类型排行', key: 'TYPE' },
-        { title: '仓库排行', key: 'STOREHOUSE' },
-      ]} />
-    <div style={{ height: 8 }} />
-    <InStockError date={searchParams.time} />
-  </>;
+  return table.map((item, index) => {
+    const rows = item[0]?.data || [];
+    const childrens = rows.map((item, index) => {
+      switch (item.key) {
+        case 'Arrival':
+          return <div key={index}>
+            <Arrival title={item.filedName} />
+            <ArrivalRanking />
+          </div>;
+        case 'Summary':
+          return <div key={index}>
+            <Summary title={item.filedName} />
+            <NumberRanking />
+          </div>;
+        case 'Work':
+          return <Work title={item.filedName} key={index} />;
+        case 'TaskStatistics':
+          return <div key={index}>
+            <TaskStatistics title={item.filedName} />
+            <Contrast />
+          </div>;
+      }
+    });
+    return <div key={index}>
+      <div className={styles.card}>
+        {childrens}
+      </div>
+      <div style={{ height: 8 }} />
+    </div>;
+  });
 };
 
 export default InStockReport;
