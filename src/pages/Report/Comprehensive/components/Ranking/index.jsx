@@ -11,12 +11,13 @@ import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
 import MyEmpty from '../../../../components/MyEmpty';
 import styles from '../../../InStockReport/index.less';
+import { UserName } from '../../../../components/User';
 
 const Ranking = () => {
 
   const history = useHistory();
 
-  const [list, setList] = useState([]);
+  const [list, setList] = useState([1, 2, 3]);
 
   const types = [
     { title: '入库', key: 'SPU_CLASS' },
@@ -49,7 +50,7 @@ const Ranking = () => {
       {
         types.map((item, index) => {
           return <Button
-            style={{padding:'4px 12px'}}
+            style={{ padding: '4px 12px' }}
             key={index}
             color='primary'
             fill={type === item.key ? '' : 'outline'}
@@ -66,27 +67,9 @@ const Ranking = () => {
         if (index > 2) {
           return;
         }
-        let leftText = '';
-        let rightText = '';
-        switch (type) {
-          case 'SPU_CLASS':
-            leftText = item.spuClassName || '无分类';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'TYPE':
-            leftText = getInType(item.type) || getOutType(item.type) || '无类型';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'STOREHOUSE':
-            leftText = item.storehouseName || '无仓库';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          default:
-            break;
-        }
         return <div key={index} className={styles.rankingContent}>
-          <div className={styles.rankingContentLabel}>{index + 1}&nbsp;&nbsp;{leftText}</div>
-          {rightText}
+          <div className={styles.rankingContentLabel}>{index + 1}&nbsp;&nbsp;<UserName user={{name:'张三'}} /></div>
+          {`${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`}
         </div>;
       })
     }
