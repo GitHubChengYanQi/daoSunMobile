@@ -22,8 +22,15 @@ import shopEmpty from '../../../../../assets/shopEmpty.png';
 
 const SkuShop = (
   {
+    update,
+    onSubmit = () => {
+    },
+    buttonWidth = 60,
+    noRequest,
     skus = [],
     onClear = () => {
+    },
+    onUpdate = () => {
     },
     emptyHidden,
     setSkus = () => {
@@ -47,9 +54,9 @@ const SkuShop = (
 
   const query = history.location.query;
 
-  const skuChange = (cartId, number) => {
-    const newSkus = skus.map(item => {
-      if (item.cartId === cartId) {
+  const skuChange = (key, number) => {
+    const newSkus = skus.map((item, index) => {
+      if (index === key) {
         return { ...item, number };
       }
       return item;
@@ -141,6 +148,10 @@ const SkuShop = (
   }, []);
 
   useEffect(() => {
+    if (noRequest) {
+      return;
+    }
+   
     if (type && !history.location.query.createType) {
       if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();
@@ -188,6 +199,11 @@ const SkuShop = (
           title: '入库任务明细',
           type: '入库申请',
           otherData: [item.customerName, item.brandName || '无品牌'],
+        };
+      case 'bom':
+        return {
+          title: 'bom明细',
+          otherData: ['版本号：' + item.name],
         };
       case ERPEnums.directInStock:
         let number = 0;
@@ -276,7 +292,8 @@ const SkuShop = (
 
                 <div hidden={taskData().numberHidden}>
                   <ShopNumber
-                    show={taskData().show}
+                    getContainer={document.body}
+                    show={taskData().show || update}
                     id={`stepper${index}`}
                     min={taskData().min}
                     value={taskData().judge ? taskData(item).number : item.number}
@@ -287,10 +304,16 @@ const SkuShop = (
                       } else {
                         newNumber = number;
                       }
-                      const res = await shopEdit({ data: { cartId: item.cartId, number: newNumber } });
-                      skuChange(res, newNumber);
+                      if (!noRequest) {
+                        await shopEdit({ data: { cartId: item.cartId, number: newNumber } });
+                      }
+                      skuChange(index, newNumber);
                     }}
                   />
+                </div>
+
+                <div hidden={!update}>
+                  <LinkButton onClick={() => onUpdate({ ...item, key: index })}>修改</LinkButton>
                 </div>
               </div>
             </div>;
@@ -302,12 +325,15 @@ const SkuShop = (
 
       <div className={style.bottomMenu}>
         <div className={style.shop} onClick={() => {
+          setVisible(!visible);
+          if (noRequest) {
+            return;
+          }
           showShop({
             data: {
               type,
             },
           });
-          setVisible(!visible);
         }}>
           <div className={style.info}>
             <Bouncing
@@ -327,6 +353,7 @@ const SkuShop = (
           }}>按BOM添加</LinkButton>}
         </div>
         <Button
+          style={{ width: buttonWidth }}
           disabled={skus.length === 0}
           color='primary'
           className={style.submit}
@@ -354,6 +381,9 @@ const SkuShop = (
                     judge: taskData().judge,
                   },
                 });
+                break;
+              case 'bom':
+                onSubmit(skus);
                 break;
               default:
                 break;

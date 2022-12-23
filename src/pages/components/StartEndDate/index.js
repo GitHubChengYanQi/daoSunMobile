@@ -26,7 +26,7 @@ const StartEndDate = (
     value = [],
     onChange = () => {
     },
-    placeholder,
+    placeholder = '请选择时间',
     onClose = () => {
     },
     min,
@@ -58,7 +58,7 @@ const StartEndDate = (
     >
       {render || <Space align='center'>
         <LinkButton><CalendarOutline style={{ fontSize: 16 }} /></LinkButton>
-        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : (placeholder || '请选择时间')}
+        {value[0] && value[1] ? <div>{MyDate.Show(value[0])} - {MyDate.Show(value[1])}</div> : placeholder}
       </Space>}
     </div>
     <MyDatePicker
