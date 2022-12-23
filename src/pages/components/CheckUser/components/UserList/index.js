@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IndexBar, List } from 'antd-mobile';
 import { useRequest } from '../../../../../util/Request';
 import { useModel } from 'umi';
-import { ToolUtil } from '../../../ToolUtil';
+import { isArray, ToolUtil } from '../../../ToolUtil';
 import MyEmpty from '../../../MyEmpty';
 import { MyLoading } from '../../../MyLoading';
 import { pinyin } from 'pinyin-pro';
@@ -55,7 +55,13 @@ const UserList = (
         if (checked(item.userId)) {
           checkUser.push({ name: item.name, id: item.userId });
         }
-        users.push({ name: item.name, id: item.userId, avatar: item.avatar });
+        users.push({
+          name: item.name,
+          id: item.userId,
+          avatar: item.avatar,
+          dept: item.deptResult?.fullName,
+          role: isArray(item.roleResults)[0]?.name,
+        });
       });
       const charCodeOfA = 'A'.charCodeAt(0);
       const groups = [];
