@@ -23,7 +23,7 @@ const Plan = (
 
   const [skuKeys, setSkuKeys] = useState([]);
 
-  const { loading, data } = useRequest(pendingProductionPlan);
+  const { loading, data = [] } = useRequest(pendingProductionPlan);
 
   if (loading) {
     return <MyLoading skeleton type='descriptions' />;
@@ -118,7 +118,8 @@ const Plan = (
               />
               <div className={styles.info}>
                 <div className={styles.infoItem}><Label className={styles.label}>订单号</Label>：{order.coding}</div>
-                <div className={styles.infoItem}><Label className={styles.label}>客户</Label>：{order.acustomer?.customerName}</div>
+                <div className={styles.infoItem}><Label
+                  className={styles.label}>客户</Label>：{order.acustomer?.customerName}</div>
               </div>
               <div style={{ textAlign: 'center' }}>
                 {!order.contractId && <div className={styles.red}>无合同</div>}
