@@ -130,7 +130,8 @@ const TaskStatistics = ({ title }) => {
           />;
         })}
       </div>
-      <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+      <div className={styles.flexCenter}
+           style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12, paddingTop: 8 }}>
         {status.map((item, index) => {
           return <div
             className={styles.flexCenter}
@@ -154,7 +155,8 @@ const TaskStatistics = ({ title }) => {
           />;
         })}
       </div>
-      <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+      <div className={styles.flexCenter}
+           style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12, paddingTop: 8 }}>
         {types.map((item, index) => {
           return <div
             key={index}
