@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { CalendarOutline, RightOutline } from 'antd-mobile-icons';
-import { Picker } from 'antd-mobile';
 import User from '../User';
-import StartEndDate, { getMinTime } from '../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../components/Title';
 import MyCard from '../../../../components/MyCard';
 import MyDatePicker from '../../../../components/MyDatePicker';
@@ -13,6 +11,7 @@ import SkuItem from '../../../Sku/SkuItem';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
 import { ToolUtil } from '../../../../components/ToolUtil';
 import MyPicker from '../../../../components/MyPicker';
+import StartEndDate, { getMinTime } from '../../../../components/StartEndDate';
 
 const Curing = (
   {
@@ -78,10 +77,12 @@ const Curing = (
         id: value.userId,
         name: value.userName,
         avatar: value.avatar,
+        dept: value.dept,
+        role: value.role,
       }] : []}
       onChange={(users) => {
-        const { id, name, avatar } = users[0] || {};
-        onChange({ ...value, userId: id, userName: name, avatar });
+        const { id, name, avatar, dept, role } = users[0] || {};
+        onChange({ ...value, userId: id, userName: name, avatar, dept, role });
       }}
       title='负责人'
     />

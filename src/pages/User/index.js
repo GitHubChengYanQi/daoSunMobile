@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import { Avatar } from 'antd-mobile';
 import style from './index.less';
 import { useRequest } from '../../util/Request';
@@ -15,10 +15,9 @@ import { useHistory } from 'react-router-dom';
 import { dynamicList } from '../Receipts/ReceiptsDetail/components/Dynamic';
 import MyNavBar from '../components/MyNavBar';
 import MyEllipsis from '../components/MyEllipsis';
-import StartEndDate from '../Work/Production/CreateTask/components/StartEndDate';
-import MyDatePicker from '../components/MyDatePicker';
 import moment from 'moment';
 import { DownFill, RightOutline } from 'antd-mobile-icons';
+import StartEndDate from '../components/StartEndDate';
 
 
 const getUserInfo = { url: '/rest/mgr/getUserInfo', method: 'GET' };

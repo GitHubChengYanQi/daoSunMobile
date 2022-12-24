@@ -8,7 +8,7 @@ import moment from 'moment';
 import { classNames, isObject } from '../../components/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../components/MyNavBar';
-import StartEndDate from '../../Work/Production/CreateTask/components/StartEndDate';
+import StartEndDate from '../../components/StartEndDate';
 import CheckUser from '../../components/CheckUser';
 import SkuClass from '../../Work/ProcessTask/MyAudit/components/SkuClass';
 import MyRadio from '../../components/MyRadio';
@@ -19,13 +19,25 @@ import InAsk from './components/InAsk';
 import MyPicker from '../../components/MyPicker';
 import InStockWorkDetail from './components/InStockWorkDetail';
 import MyEmpty from '../../components/MyEmpty';
-import Supply from './components/Supply';
 import InStockSummary from './components/InStockSummary';
 import InStockNumber from './components/InStockNumber';
 import InStockError from './components/InStockError';
 import { InType } from '../../Work/CreateTask/components/InstockAsk';
 import { OutType } from '../../Work/CreateTask/components/OutstockAsk';
 import OutStockUseNumber from './components/OutStockUseNumber';
+import InStockArrival from './components/InStockArrival';
+import OutStockSummary from './components/OutStockSummary';
+import OutStockNumber from './components/OutStockNumber';
+import OutStockWorkDetail from './components/OutStockWorkDetail';
+import ErrorSkus from './components/ErrorSkus';
+import SkuStock from './components/SkuStock';
+import StockCycle from './components/StockCycle';
+import LackSkus from './components/LackSkus';
+import ExecuteNumber from './components/ExecuteNumber';
+import MyCheckList from '../../components/MyCheckList';
+import { spuClassListSelect } from '../../Work/Instock/Url';
+import { storeHouseSelect } from '../../Work/Quality/Url';
+import { materialListSelect } from '../../Work/Sku/Edit';
 import CheckAllExport from '../../components/CheckAllExport';
 
 const ReportDetail = () => {
@@ -62,10 +74,13 @@ const ReportDetail = () => {
 
   let title = '';
   let tabs = [];
-  let content;
+  let Content;
+  let contentProps = {};
   let defaultScreen = {};
 
   switch (query.type) {
+
+    // 入库
     case 'inAskNumber':
       title = '入库申请排行';
       tabs = [
@@ -75,6 +90,7 @@ const ReportDetail = () => {
           screens: [
             { title: '日期', key: 'createTime' },
             { title: '供应商', key: 'customerId' },
+            { title: '任务类型', key: 'inStockType' },
           ],
         },
         {
@@ -82,30 +98,30 @@ const ReportDetail = () => {
           key: 'ORDER_BY_DETAIL',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '任务类型', key: 'inStockType' },
           ],
         },
       ];
-      content = <InAsk listRef={listRef} params={params} />;
+      Content = InAsk;
       break;
-    case 'inStock':
-    case 'outStock':
-      title = '工作明细';
+    case 'inStockWork':
+      title = '入库工作明细';
       tabs = [
         {
           title: '次数',
           key: 'ORDER_LOG',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '数量排行', key: 'numberRanking' },
           ],
         },
       ];
-      defaultScreen = { numberRanking: '计算次数' };
-      content = <InStockWorkDetail listRef={listRef} params={params} />;
+      defaultScreen = { numberRanking: '次数排行' };
+      Content = InStockWorkDetail;
       break;
-    case 'supply':
+    case 'inStockArrival':
       title = '供应明细';
       tabs = [
         {
@@ -113,14 +129,13 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '入库件数', key: 'inStockRanking' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <Supply listRef={listRef} params={params} />;
+      Content = InStockArrival;
       break;
     case 'inStockSummary':
       title = '入库汇总';
@@ -130,13 +145,12 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'inStockType' },
           ],
         },
       ];
-      content = <InStockSummary listRef={listRef} params={params} />;
+      Content = InStockSummary;
       break;
     case 'inStockNumber':
       title = '物料入库排行';
@@ -146,52 +160,51 @@ const ReportDetail = () => {
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
             { title: '任务类型', key: 'inStockType' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         }, {
           title: '任务类型',
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         }, {
           title: '入库仓库',
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '任务类型', key: 'inStockRanking' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockNumber listRef={listRef} params={params} />;
+      Content = InStockNumber;
       break;
     case 'inStockError':
       title = '异常入库明细';
       tabs = [
         {
-          title: '物料分类',
+          title: '异常入库明细',
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
             { title: '类型', key: 'inStockRanking' },
             { title: '供应商', key: 'customerId' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockError listRef={listRef} params={params} />;
+      Content = InStockError;
+      contentProps = { height: 200 };
       break;
 
+    // 出库
     case 'outAskNumber':
       title = '出库申请排行';
       tabs = [
@@ -208,11 +221,11 @@ const ReportDetail = () => {
           key: 'ORDER_BY_DETAIL',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
           ],
         },
       ];
-      content = <OutAsk listRef={listRef} params={params} />;
+      Content = OutAsk;
       break;
     case 'outStockSummary':
       title = '出库汇总';
@@ -222,26 +235,27 @@ const ReportDetail = () => {
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassIds' },
             { title: '任务类型', key: 'outStockType' },
           ],
         },
       ];
-      content = <InStockSummary listRef={listRef} params={params} />;
+      Content = OutStockSummary;
       break;
     case 'useNumber':
-      title = '供应商用料明细';
+      title = '出库用料明细';
       tabs = [
         {
-          title: '入库类数',
+          title: '出库类数',
           key: 'SKU_COUNT',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'skuClass' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '任务类型', key: 'outStockType' },
           ],
         },
       ];
-      content = <OutStockUseNumber listRef={listRef} params={params} />;
+      Content = OutStockUseNumber;
       break;
     case 'outStockNumber':
       title = '物料出库排行';
@@ -251,35 +265,180 @@ const ReportDetail = () => {
           key: 'SPU_CLASS',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '任务类型', key: 'inStockType' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '任务类型', key: 'outStockType' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '领料人', key: 'userId' },
           ],
         }, {
           title: '任务类型',
           key: 'TYPE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '仓库', key: 'stockHouse' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '领料人', key: 'userId' },
           ],
         }, {
-          title: '入库仓库',
+          title: '出库仓库',
           key: 'STOREHOUSE',
           screens: [
             { title: '日期', key: 'createTime' },
-            { title: '状态', key: 'inStockStatus' },
-            { title: '物料分类', key: 'skuClass' },
-            { title: '任务类型', key: 'inStockRanking' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '任务类型', key: 'outStockType' },
+            { title: '领料人', key: 'userId' },
+          ],
+        }, {
+          title: '领料人员',
+          key: 'PICK_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '任务类型', key: 'outStockType' },
+            { title: '仓库', key: 'storehouseId' },
           ],
         },
       ];
       defaultScreen = { inStockRanking: '入库类数' };
-      content = <InStockNumber listRef={listRef} params={params} />;
+      Content = OutStockNumber;
       break;
+    case 'outStockWork':
+      title = '出库工作明细';
+      tabs = [
+        {
+          title: '次数',
+          key: 'ORDER_LOG',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '数量排行', key: 'numberRanking' },
+          ],
+        },
+      ];
+      defaultScreen = { numberRanking: '次数排行' };
+      Content = OutStockWorkDetail;
+      break;
+
+    // 综合
+    case 'errorSkus':
+      title = '异常物料明细';
+      tabs = [
+        {
+          title: '异常物料明细',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
+          ],
+        },
+      ];
+      Content = ErrorSkus;
+      break;
+    case 'stockRanking':
+      title = '物料库存排行';
+      tabs = [
+        {
+          title: '物料分类',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '状态', key: 'stockStatus' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '材质', key: 'material' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '仓库排行',
+          key: 'STOREHOUSE',
+          screens: [
+            { title: '状态', key: 'stockStatus' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '材质', key: 'material' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '材质排行',
+          key: 'MATERIAL',
+          screens: [
+            { title: '状态', key: 'stockStatus' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        }, {
+          title: '供应商排行',
+          key: 'CUSTOMER',
+          screens: [
+            { title: '状态', key: 'inStockStatus' },
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '仓库', key: 'storehouseId' },
+            { title: '材质', key: 'material' },
+          ],
+        },
+      ];
+      Content = SkuStock;
+      break;
+    case 'stockCycle':
+      title = '库存周期明细';
+      tabs = [
+        {
+          title: '库存周期明细',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '材质', key: 'material' },
+            { title: '仓库', key: 'storehouseId' },
+          ],
+        },
+      ];
+      Content = StockCycle;
+      break;
+    case 'lackSkus':
+      title = '缺欠明细';
+      tabs = [
+        {
+          title: '累计缺欠次数',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+        {
+          title: '实时缺欠数量',
+          key: 'now',
+          screens: [
+            { title: '物料分类', key: 'spuClassId' },
+            { title: '供应商', key: 'customerId' },
+          ],
+        },
+      ];
+      Content = LackSkus;
+      break;
+    case 'executeNumber':
+      title = '执行数量排行';
+      tabs = [
+        {
+          title: '申请数量',
+          key: 'ask',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '类型', key: 'type' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+        {
+          title: '执行数量',
+          key: 'execute',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '类型', key: 'type' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+      ];
+      Content = ExecuteNumber;
+      break;
+
     default:
-      content = <MyEmpty height={200} />;
+      Content = MyEmpty;
       break;
   }
 
@@ -335,7 +494,7 @@ const ReportDetail = () => {
               case 'customerId':
                 title = screen.customerName;
                 break;
-              case 'skuClass':
+              case 'spuClassId':
                 title = screen.skuClassName;
                 break;
               case 'numberRanking':
@@ -347,11 +506,23 @@ const ReportDetail = () => {
               case 'inStockRanking':
                 title = screen.inStockRanking;
                 break;
+              case 'outStockRanking':
+                title = screen.outStockRanking;
+                break;
               case 'inStockType':
                 title = screen.inStockType;
                 break;
               case 'outStockType':
-                title = screen.outStockType;
+                title = screen.type;
+                break;
+              case 'storehouseId':
+                title = screen.storehouseName;
+                break;
+              case 'material':
+                title = screen.materialName;
+                break;
+              case 'stockStatus':
+                title = screen.stockStatus;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -382,7 +553,9 @@ const ReportDetail = () => {
         }
       </div>
     </div>
-    {content}
+
+    <Content listRef={listRef} params={params} {...contentProps} />
+
     <CheckAllExport
       onCheckAll={setCheckAll}
       pageAll={currentAll}
@@ -421,10 +594,10 @@ const ReportDetail = () => {
     <SkuClass
       onClose={() => setScreenkey('')}
       zIndex={1002}
-      value={params.skuClassId ? [{ value: params.skuClassId, label: screen.skuClassName }] : []}
-      visible={screenKey === 'skuClass'}
+      value={params.spuClassId ? [{ value: params.spuClassId, label: screen.skuClassName }] : []}
+      visible={screenKey === 'spuClassId'}
       onChange={(skuClass) => {
-        submit({ skuClassId: skuClass?.value });
+        submit({ spuClassId: skuClass?.value });
         setScreen({ ...screen, skuClassName: skuClass?.label });
         setScreenkey('');
       }}
@@ -442,6 +615,42 @@ const ReportDetail = () => {
       }}
     />
 
+    <MyCheckList
+      noSearch
+      noPage
+      searchPlaceholder='请输入仓库信息'
+      api={storeHouseSelect}
+      label='label'
+      listKey='value'
+      onClose={() => setScreenkey('')}
+      onChange={(store) => {
+        submit({ storehouseId: store?.value });
+        setScreen({ ...screen, storehouseName: store?.label });
+        setScreenkey('');
+      }}
+      value={params.storehouseId ? [{ value: params.storehouseId, label: screen.storehouseName }] : []}
+      visible={screenKey === 'storehouseId'}
+      title='选择仓库'
+    />
+
+    <MyCheckList
+      noSearch
+      noPage
+      searchPlaceholder='请输入材质信息'
+      api={materialListSelect}
+      label='label'
+      listKey='value'
+      onClose={() => setScreenkey('')}
+      onChange={(store) => {
+        submit({ materialId: store?.value });
+        setScreen({ ...screen, materialName: store?.label });
+        setScreenkey('');
+      }}
+      value={params.materialId ? [{ value: params.materialId, label: screen.materialName }] : []}
+      visible={screenKey === 'material'}
+      title='选择材质'
+    />
+
     <MyPicker
       visible={screenKey === 'numberRanking'}
       value={params.searchType}
@@ -451,8 +660,8 @@ const ReportDetail = () => {
         setScreenkey('');
       }}
       options={[
-        { label: '计算次数', value: 'ORDER_LOG' },
-        { label: '计算件数', value: 'ORDER_LOG_DETAIL' },
+        { label: '次数排行', value: 'ORDER_LOG' },
+        { label: '数量排行', value: 'ORDER_LOG_DETAIL' },
       ]}
       onClose={() => setScreenkey('')}
     />
@@ -486,10 +695,14 @@ const ReportDetail = () => {
 
     <MyPicker
       visible={screenKey === 'outStockType'}
-      value={params.outStockType}
+      value={params.type}
       onChange={(option) => {
-        submit({ outStockType: option.value });
-        setScreen({ ...screen, outStockType: option.label });
+        if (option.value === 'all') {
+          submit({ type: null });
+        } else {
+          submit({ type: option.value });
+        }
+        setScreen({ ...screen, type: option.label });
         setScreenkey('');
       }}
       options={[{ label: '全部', value: 'all' }, ...OutType]}
@@ -513,12 +726,28 @@ const ReportDetail = () => {
       onClose={() => setScreenkey('')}
     />
 
+    <MyPicker
+      visible={screenKey === 'stockStatus'}
+      value={params.stockStatus}
+      onChange={(option) => {
+        submit({ stockStatus: option.value });
+        setScreen({ ...screen, stockStatus: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '全部', value: '全部' },
+        { label: '正常', value: '正常' },
+        { label: '异常', value: '异常' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
 
     <MyActionSheet
       visible={exportVisible}
       actions={[{ key: 'excel', text: '导出Excel' }, { key: 'pdf', text: '导出PDF' }]}
       onAction={(action) => {
-        console.log(action);
+
       }}
       onClose={() => setExportVisible(false)}
     />

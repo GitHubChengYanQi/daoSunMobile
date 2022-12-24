@@ -5,6 +5,7 @@ import { ToolUtil } from '../ToolUtil';
 
 const BottomButton = (
   {
+    update,
     leftLoading,
     rightLoading,
     loading,

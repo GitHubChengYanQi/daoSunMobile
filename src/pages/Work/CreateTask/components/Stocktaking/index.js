@@ -1,10 +1,10 @@
 import React from 'react';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import User from '../User';
-import StartEndDate from '../../../Production/CreateTask/components/StartEndDate';
 import Title from '../../../../components/Title';
 import MyCard from '../../../../components/MyCard';
 import MySwitch from '../../../../components/MySwitch';
+import StartEndDate from '../../../../components/StartEndDate';
 
 const Stocktaking = (
   {
@@ -32,10 +32,12 @@ const Stocktaking = (
         id: value.userId,
         name: value.userName,
         avatar: value.avatar,
+        dept: value.dept,
+        role: value.role,
       }] : []}
       onChange={(users) => {
-        const { id, name, avatar } = users[0] || {};
-        onChange({ ...value, userId: id, userName: name, avatar });
+        const { id, name, avatar, dept, role } = users[0] || {};
+        onChange({ ...value, userId: id, userName: name, avatar, dept, role });
       }}
       title='负责人'
     />

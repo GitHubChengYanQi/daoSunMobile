@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import { Input, TextArea } from 'antd-mobile';
-import StartEndDate from './components/StartEndDate';
 import { useRequest } from '../../../../util/Request';
 import { Message } from '../../../components/Message';
 import FormLayout from '../../../components/FormLayout';
@@ -11,6 +10,7 @@ import User from '../../CreateTask/components/User';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
+import StartEndDate from '../../../components/StartEndDate';
 
 const CreateTask = (props) => {
 
@@ -84,10 +84,12 @@ const CreateTask = (props) => {
                 id: data.userId,
                 name: data.userName,
                 avatar: data.avatar,
+                dept: data.dept,
+                role: data.role,
               }] : []}
               onChange={(users) => {
-                const { id, name, avatar } = users[0] || {};
-                setData({ ...data, userId: id, userName: name, avatar });
+                const { id, name, avatar, dept, role } = users[0] || {};
+                setData({ ...data, userId: id, userName: name, avatar, dept, role });
               }}
               title={item.filedName}
             />;

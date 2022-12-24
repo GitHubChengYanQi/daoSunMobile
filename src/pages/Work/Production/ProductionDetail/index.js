@@ -2,23 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { productionPlanDetail } from '../components/Url';
 import { useRequest } from '../../../../util/Request';
 import { Tabs } from 'antd-mobile';
-import { MyLoading } from '../../../components/MyLoading';
+import { MyLoading } from '@/pages/components/MyLoading';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
-import SkuList from '../components/SkuList';
-import ShipList from '../components/ShipList';
 import style from './index.less';
 import { Avatar } from 'antd';
 import Icon from '../../../components/Icon';
-import { MyDate } from '../../../components/MyDate';
+import Details from './components/Details';
+import PlanDetails from './components/PlanDetails';
+import Log from './components/Log';
+import Relation from './components/Relation';
 
 const ProductionDetail = (props) => {
 
   const params = props.location.query;
 
   const { loading, data, run } = useRequest(productionPlanDetail, { manual: true });
-
-  const [key, setKey] = useState('ship');
 
   useEffect(() => {
     if (params.id) {
@@ -35,17 +34,6 @@ const ProductionDetail = (props) => {
     return <MyEmpty />;
   }
 
-  const module = () => {
-    switch (key) {
-      case 'sku':
-        return <SkuList data={data.planDetailResults} />;
-      case 'ship':
-        return <ShipList data={data.workOrderResults} id={params.id} />;
-      default:
-        return <></>;
-    }
-  };
-
   const user = data.userResult || {};
 
   return <div>
@@ -57,30 +45,38 @@ const ProductionDetail = (props) => {
       <div className={style.data}>
         <div className={style.line}>
           <div className={style.name}>
-            {data.theme} / {data.coding}
+            {data.theme}
           </div>
           <span>
           <Icon type='icon-dian' /> 处理中
         </span>
         </div>
         <div className={style.line}>
-          {MyDate.Show(data.executionTime)} - {MyDate.Show(data.endTime)}
+          <div>{data.coding}</div>
+          <span style={{ color: '#555555' }}>{data.createTime}</span>
         </div>
       </div>
     </div>
 
 
     <Tabs
-      activeKey={key}
-      style={{ position: 'sticky', top: 0, backgroundColor: '#fff', zIndex: 999 }}
-      onChange={setKey}
+      className={style.tabs}
+      defaultActiveKey='details'
+      style={{ position: 'sticky', top: 0, zIndex: 1, '--title-font-size': '14px' }}
     >
-      <Tabs.Tab title='工序信息' key='ship' />
-      <Tabs.Tab title='投料BOM' key='sku' />
+      <Tabs.Tab title='投产明细' key='details'>
+        <Details productionPlanId={data.productionPlanId} />
+      </Tabs.Tab>
+      <Tabs.Tab title='计划明细' key='planDetails'>
+        <PlanDetails data={data} />
+      </Tabs.Tab>
+      <Tabs.Tab title='动态日志' key='log'>
+        <Log />
+      </Tabs.Tab>
+      <Tabs.Tab title='关联单据' key='relation'>
+        <Relation />
+      </Tabs.Tab>
     </Tabs>
-    <div>
-      {module()}
-    </div>
   </div>;
 };
 

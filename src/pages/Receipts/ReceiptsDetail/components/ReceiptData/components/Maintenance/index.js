@@ -149,7 +149,7 @@ const Maintenance = (
 
     <MyCard title='任务预览' onClick={() => {
       history.push({
-        pathname: '/Work/Maintenance/StartMaintenance',
+        pathname: '/Work/MaintenanceReport/StartMaintenance',
         query: {
           id: receipts.maintenanceId,
           skuCount: receipts.skuCount,
@@ -213,7 +213,7 @@ const Maintenance = (
       text={outTime ? '任务未开始' : '开始养护'}
       onClick={() => {
         history.push({
-          pathname: '/Work/Maintenance/StartMaintenance',
+          pathname: '/Work/MaintenanceReport/StartMaintenance',
           query: {
             id: receipts.maintenanceId,
             skuCount: receipts.skuCount,
@@ -240,7 +240,7 @@ const Maintenance = (
         switch (value) {
           case 'maintenanceing':
             history.push({
-              pathname: '/Work/Maintenance/StartMaintenance',
+              pathname: '/Work/MaintenanceReport/StartMaintenance',
               query: {
                 id: receipts.maintenanceId,
                 skuCount: receipts.skuCount,

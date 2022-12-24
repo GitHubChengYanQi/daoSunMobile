@@ -5,7 +5,6 @@ import MyCard from '../../../../components/MyCard';
 import { Space } from 'antd-mobile';
 import { DownOutline } from 'antd-mobile-icons';
 import style from './index.less';
-import StartEndDate from '../../../../Work/Production/CreateTask/components/StartEndDate';
 import { useHistory, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import LinkButton from '../../../../components/LinkButton';
@@ -17,6 +16,7 @@ import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { OutStockDataView } from '../index';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import MyEmpty from '../../../../components/MyEmpty';
+import StartEndDate from '../../../../components/StartEndDate';
 
 export const outstockDetailView = { url: '/statisticalView/outStockDetailView', method: 'POST' };
 

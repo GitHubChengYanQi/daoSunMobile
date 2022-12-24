@@ -1,7 +1,7 @@
 import React from 'react';
 import style from '../../index.less';
 import { Card, Divider } from 'antd-mobile';
-import StartEndDate from '../../../../../../Production/CreateTask/components/StartEndDate';
+import StartEndDate from '../../../../../../../components/StartEndDate';
 
 const Time = (
   {

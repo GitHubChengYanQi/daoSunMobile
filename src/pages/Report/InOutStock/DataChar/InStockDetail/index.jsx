@@ -5,7 +5,6 @@ import MyCard from '../../../../components/MyCard';
 import { Space } from 'antd-mobile';
 import { DownOutline } from 'antd-mobile-icons';
 import style from './index.less';
-import StartEndDate from '../../../../Work/Production/CreateTask/components/StartEndDate';
 import { useHistory, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import LinkButton from '../../../../components/LinkButton';
@@ -16,8 +15,8 @@ import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
 import { isArray, ToolUtil } from '../../../../components/ToolUtil';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { InStockViewTotail } from '../index';
 import MyEllipsis from '../../../../components/MyEllipsis';
+import StartEndDate from '../../../../components/StartEndDate';
 
 export const instockDetailView = { url: '/statisticalView/instockDetailView', method: 'POST' };
 
@@ -33,7 +32,7 @@ const InStockDetail = () => {
   const customerName = query.customerName;
 
   const { loading: viewtLoading, data: view, run: viewRun } = useRequest({
-    ...InStockViewTotail,
+    ...{},
     data: { customerId },
   });
 
