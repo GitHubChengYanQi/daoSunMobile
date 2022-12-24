@@ -47,7 +47,7 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       if (backObject.type === 'storehousePositions') {
         const result = ToolUtil.isObject(backObject.result);
         if (result.storehousePositionsId) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}&name=${result.name}`);
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?name=${result.name}&positionId=${result.storehousePositionsId}`);
         } else {
           Message.errorToast('获取库位码失败!');
         }
@@ -155,7 +155,7 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
     <MyPositions
       afterClose={() => {
         if (position.id) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}&name=${position.name}`);
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?name=${position.name}&positionId=${position.id}`);
         }
       }}
       visible={positionVisible}
