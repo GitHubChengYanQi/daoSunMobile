@@ -42,7 +42,7 @@ const CheckUser = (
           id: item.userId,
           name: item.name,
           avatar: item.avatar,
-          dept: item.deptResult.fullName,
+          dept: item.deptResult?.fullName,
           role: isArray(item.roleResults)[0]?.name,
         })), params);
       } else {
