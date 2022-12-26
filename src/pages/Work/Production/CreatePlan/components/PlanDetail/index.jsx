@@ -30,7 +30,7 @@ const PlanDetail = (
 
   const history = useHistory();
 
-  const contractType = type === 'ContractOrder';
+  const order = type === 'order';
 
   const [addBoms, setAddBoms] = useState(false);
   const [addContracts, setAddContracts] = useState(false);
@@ -61,7 +61,7 @@ const PlanDetail = (
       </div>
       <div className={styles.action}>
         <MyRemoveButton onRemove={() => {
-          if (contractType) {
+          if (order) {
             const newValue = value.map((item, valueIndex) => {
               if (valueIndex === key) {
                 return { ...item, details: item.details.filter((item, detailIndex) => detailIndex !== index) };
@@ -91,17 +91,17 @@ const PlanDetail = (
   return <>
     <MyCard
       headerClassName={styles.header}
-      titleBom={required && <Title className={styles.title}>{contractType ? '合同' : filedName}<span>*</span></Title>}
-      title={contractType ? '合同' : filedName}
+      titleBom={required && <Title className={styles.title}>{filedName}<span>*</span></Title>}
+      title={filedName}
       bodyClassName={styles.contractContent}
-      extra={contractType && <LinkButton onClick={() => {
+      extra={order && <LinkButton onClick={() => {
         setContract({});
         setAddContracts(true);
       }}>添加合同</LinkButton>}
     >
       {
         value.map((item, index) => {
-          if (contractType) {
+          if (order) {
             return <div key={index} className={styles.contractList}>
               <div className={styles.contractItem}>
                 <MyRemoveButton
@@ -131,7 +131,7 @@ const PlanDetail = (
         })
       }
 
-      {(!contractType || value.length > 0) && <Divider>
+      {(!order || value.length > 0) && <Divider>
         <AddButton onClick={() => {
           setAddBoms(true);
         }} />
@@ -146,10 +146,10 @@ const PlanDetail = (
     >
       <SelectBom
         value={value.map((item, index) => ({ ...item, id: index }))}
-        contractType={contractType}
+        contractType={order}
         onClose={() => setAddBoms(false)}
         onSubmit={(skus) => {
-          if (contractType) {
+          if (order) {
             const newValue = value.map((item, index) => {
               let number = 0;
               const details = skus.find(item => {

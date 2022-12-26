@@ -6,7 +6,7 @@ import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
 import styles from '../../Order/CreateOrder/index.less';
-import { Input, Space, TextArea } from 'antd-mobile';
+import { Input, TextArea } from 'antd-mobile';
 import StartEndDate from '../../../components/StartEndDate';
 import User from '../../CreateTask/components/User';
 import { useRequest } from '../../../../util/Request';
@@ -32,7 +32,7 @@ const CreatePlan = () => {
 
   const { state = {} } = useLocation();
 
-  const [data, setData] = useState({ type: 'MarketingPresupposition', typeName: '预投' });
+  const [data, setData] = useState({ type: 'production', typeName: '订单' });
 
   const [visible, setVisible] = useState('');
 
@@ -194,8 +194,8 @@ const CreatePlan = () => {
       onClose={() => setVisible('')}
       visible={visible === 'type'}
       options={[
-        { label: '预投', value: 'MarketingPresupposition' },
-        { label: '合同订单', value: 'ContractOrder' },
+        { label: '订单', value: 'order' },
+        { label: '生产', value: 'production' },
       ]}
       onChange={(option) => {
         setData({ ...data, type: option.value, typeName: option.label, orderDetailParams: [] });
