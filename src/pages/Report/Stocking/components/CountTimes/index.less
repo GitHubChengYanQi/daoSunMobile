@@ -1,0 +1,542 @@
+.flexCenter {
+  display: flex;
+  align-items: center;
+
+  .flexGrow {
+    flex-grow: 1;
+  }
+}
+
+.card {
+  border-radius: 3px;
+  background-color: #fff;
+
+  .header {
+    padding: 12px 12px 8px;
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #F5F5F5;
+
+    .title {
+      flex-grow: 1;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  .content {
+    padding: 12px;
+  }
+}
+
+.cartData {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+
+  .showTotal {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .total {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .totalTitle {
+        color: #8D8D8D;
+      }
+
+      span {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.screen {
+  flex-grow: 1;
+
+  button {
+    border-radius: 0;
+    border-right: none;
+    padding: 4px 6px;
+    font-size: 12px;
+  }
+
+  .leftButton {
+    border-bottom-left-radius: 4px;
+    border-top-left-radius: 4px;
+  }
+
+  .rightButton {
+    border-right: solid 1px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+.rankingHeader {
+  border-top: solid 1px #F5F5F5;
+  border-bottom: solid 1px #F5F5F5;
+  padding: 12px 12px 0 12px;
+  background-color: #fff;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+
+  .rankingTitle {
+    font-weight: bold;
+    flex-grow: 1;
+
+    span {
+      font-size: 18px;
+      padding-right: 4px;
+      color: var(--adm-color-primary);
+    }
+  }
+
+  .searchTypes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    div {
+      padding: 0 4px 13px;
+    }
+
+    .searchTypesChecked {
+      padding-bottom: 12px;
+      color: var(--adm-color-primary);
+      border-bottom: solid 1px var(--adm-color-primary);
+    }
+  }
+}
+
+.rankingContent {
+  font-size: 12px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #F5F5F5;
+  background-color: #fff;
+
+  .rankingContentLabel {
+    display: flex;
+    flex-grow: 1;
+  }
+}
+
+
+// oldStyle
+.space {
+  height: 1px;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+
+  .dateLabel {
+    flex-grow: 1;
+  }
+
+  .dateTime {
+    display: flex;
+    align-items: center;
+    color: #9A9A9A;
+  }
+
+
+}
+
+.taskReport {
+  padding: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  .taskReportHeader {
+    display: flex;
+    align-items: center;
+
+    .taskReportLabel {
+      flex-grow: 1;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .taskReportType {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      div {
+        padding: 0 4px 5px;
+      }
+
+      .taskReportTypeChecked {
+        padding-bottom: 4px;
+        color: var(--adm-color-primary);
+        border-bottom: solid 1px var(--adm-color-primary);
+      }
+    }
+  }
+
+  .taskRepoetChart {
+    display: flex;
+    padding: 12px 0;
+
+    .taskReportDescribe {
+      padding-top: 4px;
+      padding-left: 24px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .taskReportTotalLabel {
+        font-weight: bold;
+      }
+
+      .taskRepoetChartTypes {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+
+        .taskRepoetChartType {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 12px;
+          min-width: calc(50% - 4px);
+
+          .dian {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+          }
+        }
+      }
+    }
+  }
+}
+
+.askNumber {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+
+  .askNumberHeader, .askNumberContent {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F5F5F5;
+
+    .askNumberHeaderLabel {
+      flex-grow: 1;
+      font-weight: bold;
+
+      span {
+        font-size: 18px;
+        padding-right: 4px;
+        color: var(--body--background--color);
+      }
+    }
+
+    .askNumberContenLabel {
+      flex-grow: 1;
+    }
+  }
+
+  .askNumberButtons {
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+
+    button {
+      flex-grow: 1;
+      margin: 8px 4px;
+      height: 32px;
+      border-radius: 4px;
+      position: relative;
+
+      .icon {
+        position: absolute;
+        top: -12px;
+        color: var(--adm-color-primary);
+        font-size: 16px;
+        left: 0;
+        right: 0;
+      }
+    }
+  }
+}
+
+.workContrast {
+  .workContrastHeader {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F5F5F5;
+
+    .workContrastHeaderLabel {
+      flex-grow: 1;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  .workContrasChart {
+    font-size: 12px;
+    padding: 0 12px 0 24px;
+    margin-top: 8px;
+    display: flex;
+
+    .workContrasChartLabel {
+      flex-grow: 1;
+    }
+
+    .workContrastType {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      > div {
+        padding: 0 4px 2px;
+      }
+
+      .workContrastTypeChecked {
+        padding-bottom: 1px;
+        color: var(--adm-color-primary);
+        border-bottom: solid 1px var(--adm-color-primary);
+      }
+    }
+  }
+}
+
+.supplyReport {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  .supplyHeader {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F5F5F5;
+
+    .supplyHeaderLabel {
+      flex-grow: 1;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  .supplyContent {
+    padding: 12px 24px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+
+    .supplyContentItem {
+      flex-grow: 1;
+
+      .supplyContentLabel {
+        color: #8D8D8D;
+        padding-bottom: 4px;
+      }
+
+      .supplyContentValue {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      span {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+.rankingScreen {
+  background-color: #fff;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+
+  button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}
+
+.bottom{
+  background-color: #fff;
+  padding: 0 14px 2px 14px;
+
+  .lists{
+    display: flex;
+    padding: 6px 0;
+    .left{
+      font-size: 12px;
+      color: #3D3D3D;
+      line-height: 20px;
+      flex-grow: 1;
+    }
+    .right{
+      font-size: 12px;
+      color: #3D3D3D;
+    }
+  }
+  .order{
+    margin-right:4px;
+    img{
+      width: 14px;
+    }
+  }
+}
+
+.dateTotal {
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.summary {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding-bottom: 8px;
+
+  .summaryHeader {
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #F5F5F5;
+
+    .summaryHeaderLabel {
+      flex-grow: 1;
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+
+  .summaryTotalUnit {
+    padding: 0 20px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+
+    .unit {
+      flex-grow: 1;
+    }
+  }
+}
+
+.taskStatisticsContent {
+  padding: 0 12px;
+  font-size: 12px;
+}
+
+.progress {
+  display: inline-block;
+  padding: 6px 0;
+  background-color: #D8D8D8;
+}
+
+.circle {
+  margin-right: 4px;
+  display: inline-block;
+  border-radius: 100%;
+  width: 6px;
+  height: 6px;
+}
+
+
+.summaryAllCount {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+
+  .summarySpace {
+    width: 1px;
+    height: 32px;
+    background-color: #D8D8D8;
+  }
+
+  .summaryCount {
+    //padding-left: 24px;
+    flex-grow: 1;
+    text-align: center;
+    font-size: 16px;
+  }
+
+  .summaryCountNumber {
+    padding-top: 8px;
+    font-size: 12px;
+
+    span {
+      font-size: 20px;
+    }
+  }
+}
+
+.inStockError {
+  padding: 12px;
+
+  .inStockErrorHeard {
+    display: flex;
+    align-items: center;
+
+    .title {
+      flex-grow: 1;
+      font-size: 16px;
+      font-weight: bold;
+    }
+  }
+
+  .inStockErrorChart {
+    display: flex;
+    padding: 12px 0;
+    align-items: center;
+
+    .inStockErrorDescribe {
+      padding-left: 16px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .inStockErrorTotalLabel {
+        font-weight: bold;
+      }
+
+      .inStockErrorChartTypes {
+        display: flex;
+        flex-direction: column;
+        //align-items: center;
+        //flex-wrap: wrap;
+        gap: 8px;
+
+        .inStockErrorChartType {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 12px;
+          min-width: calc(50% - 4px);
+
+          .dian {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 100%;
+          }
+        }
+      }
+    }
+  }
+}

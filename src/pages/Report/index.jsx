@@ -6,6 +6,7 @@ import InOutStock from './InOutStock';
 import InStockReport from './InStockReport';
 import OutStockReport from './OutStockReport';
 import Comprehensive from './Comprehensive';
+import Stocking from '@/pages/Report/Stocking';
 
 const Report = () => {
 
@@ -24,9 +25,7 @@ const Report = () => {
         <OutStockReport />
       </Tabs.Tab>
       <Tabs.Tab title='盘点' key='stocktaking' destroyOnClose>
-        <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>
-          库存统计
-        </div>
+        <Stocking />
       </Tabs.Tab>
       <Tabs.Tab title='养护' key='maintenance' destroyOnClose>
         <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>

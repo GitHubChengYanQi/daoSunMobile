@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+ import React, { useState } from 'react';
 import style from './index.less';
 import { Button, Selector, Space, Tabs } from 'antd-mobile';
 import MyCard from '../../components/MyCard';

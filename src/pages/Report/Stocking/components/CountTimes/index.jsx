@@ -1,28 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import Icon from '../../../../components/Icon';
-import { isArray } from '../../../../components/ToolUtil';
-import { Button } from 'antd-mobile';
+import styles from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
-import { useRequest } from '../../../../../util/Request';
-import { outStockDetailBySpuClass } from '../../../components/Ranking';
-import { MyLoading } from '../../../../components/MyLoading';
-import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
-import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
-import { UserName } from '../../../../components/User';
-import styles from '../../../InStockReport/index.less';
+import { useRequest } from '@/util/Request';
+import { outStockDetailBySpuClass } from '@/pages/Report/components/Ranking';
+import { isArray } from '@/pages/components/ToolUtil';
+import Icon from '@/pages/components/Icon';
+import { Button } from 'antd-mobile';
+import { MyLoading } from '@/pages/components/MyLoading';
+import { getInType } from '@/pages/Work/CreateTask/components/InstockAsk';
+import { getOutType } from '@/pages/Work/CreateTask/components/OutstockAsk';
+import { UserName } from '@/pages/components/User';
 
-const  NumberRanking = () => {
+const CountTimes =()=>{
 
   const history = useHistory();
 
   const [list, setList] = useState([]);
 
   const types = [
-    { title: '物料分类', key: 'SPU_CLASS' },
-    { title: '任务类型', key: 'TYPE' },
-    { title: '仓库', key: 'STOREHOUSE' },
-    { title: '领料人', key: 'PICK_USER' },
+    { title: '物料', key: 'SPU_CLASS' },
+    { title: '人员', key: 'TYPE' }
   ];
 
   const [type, setType] = useState(types[0].key);
@@ -45,7 +43,7 @@ const  NumberRanking = () => {
     <div className={styles.rankingHeader}>
       <div className={styles.rankingTitle}>
         <Icon type='icon-rukuzongshu' />
-        出库数量排行
+        盘点次数排行
       </div>
       <div style={{ paddingBottom: 12 }} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
@@ -78,20 +76,12 @@ const  NumberRanking = () => {
         let rightText = '';
         switch (type) {
           case 'SPU_CLASS':
-            leftText = item.spuClassName || '无分类';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            leftText = '黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹';
+            rightText = `66次`;
             break;
           case 'TYPE':
-            leftText = getInType(item.type) || getOutType(item.type) || '无类型';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'STOREHOUSE':
-            leftText = item.storehouseName || '无仓库';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'PICK_USER':
-            leftText = <UserName user={item.userResult} />;
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            leftText = '张三（库房管理部-库房保管员）';
+            rightText = `66次`;
             break;
           default:
             break;
@@ -102,7 +92,24 @@ const  NumberRanking = () => {
         </div>;
       })
     }
+    {/*<div className={styles.bottom}>*/}
+    {/*  <div className={styles.lists}>*/}
+    {/*    <div className={styles.order}><img src={require('../assert/1hao.png')} alt='' /></div>*/}
+    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
+    {/*    <div className={styles.right}>66次</div>*/}
+    {/*  </div>*/}
+    {/*  <div className={styles.lists}>*/}
+    {/*    <div className={styles.order}><img src={require('../assert/2hao.png')} alt='' /></div>*/}
+    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
+    {/*    <div className={styles.right}>66次</div>*/}
+    {/*  </div>*/}
+    {/*  <div className={styles.lists}>*/}
+    {/*    <div className={styles.order}><img src={require('../assert/3hao.png')} alt='' /></div>*/}
+    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
+    {/*    <div className={styles.right}>66次</div>*/}
+    {/*  </div>*/}
+    {/*</div>*/}
   </>;
 };
 
-export default NumberRanking;
+export default CountTimes;
