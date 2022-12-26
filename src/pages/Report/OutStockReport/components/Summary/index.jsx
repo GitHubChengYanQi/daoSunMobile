@@ -21,7 +21,7 @@ export const outstockCountViewByMonth = {
   data: { beginTime: defaultTime[0], endTime: defaultTime[1], frame: 7 },
 };
 
-const Summary = () => {
+const Summary = ({title}) => {
 
   const history = useHistory();
 
@@ -31,7 +31,7 @@ const Summary = () => {
     onSuccess: (res) => {
       setDetail({
         stocksNumber: res.map(item => ({
-          'month': item.monthOfYear,
+          'month': item.monthOfYear ? item.monthOfYear.split(' ')[0] : '-',
           'number': item.orderCount,
           'name': '已出库',
         })),
@@ -40,8 +40,7 @@ const Summary = () => {
   });
 
   const charData = isArray(detail?.stocksNumber);
-  const title = '出库汇总';
-  console.log(charData);
+
   if (!detail) {
     if (outStockLoading) {
       return <MyLoading skeleton />;

@@ -159,24 +159,11 @@ export const AddShopContent = (
 
     <SkuShop
       shopRef={shopRef}
-      checked={checked}
-      checkSkus={checkSkus}
-      batch={batch}
-      judge={judge}
       skus={skus}
       setSkus={setSkus}
       type={type}
       onClear={() => {
         setSkus([]);
-      }}
-      selectAll={() => {
-        if (checked) {
-          return setCheckSkus([]);
-        }
-        setCheckSkus(newCheckSkus);
-      }}
-      onCancel={() => {
-        setCheckSkus([]);
       }}
     />
 

@@ -20,13 +20,13 @@ export const outStockOrderView = {
 };
 
 
-const  TaskStatistics = () => {
-
-  const [timeType, setTimeType] = useState();
+const TaskStatistics = ({ title }) => {
 
   const [status, setStaus] = useState([]);
 
   const [types, setTypes] = useState([]);
+
+  const [total, setTotal] = useState(0);
 
   const { loading: inLoading, data, run: inRun } = useRequest(outStockOrderView, {
     onSuccess: (res) => {
@@ -59,7 +59,7 @@ const  TaskStatistics = () => {
           text: '已撤销',
         },
       ]);
-
+      setTotal(total);
       let type1 = 0;
       let type2 = 0;
       let type3 = 0;
@@ -108,14 +108,14 @@ const  TaskStatistics = () => {
 
   return <div className={styles.card}>
     <div className={styles.header}>
-      <div className={styles.title}>任务统计</div>
+      <div className={styles.title}>{title}</div>
     </div>
     <div className={classNames(styles.dateTotal, styles.flexCenter)}>
       <ScreenButtons onChange={(value) => {
         inRun({ data: { beginTime: value[0], endTime: value[1] } });
       }} />
-      <div>
-        总计 <span style={{ fontSize: 18 }} className='numberBlue'>160</span>
+      <div className={styles.action}>
+        总计 <span className='numberBlue'>{total}</span>
       </div>
     </div>
 
@@ -130,7 +130,8 @@ const  TaskStatistics = () => {
           />;
         })}
       </div>
-      <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+      <div className={styles.flexCenter}
+           style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12, paddingTop: 8 }}>
         {status.map((item, index) => {
           return <div
             className={styles.flexCenter}
@@ -154,7 +155,8 @@ const  TaskStatistics = () => {
           />;
         })}
       </div>
-      <div className={styles.flexCenter} style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+      <div className={styles.flexCenter}
+           style={{ columnGap: 50, rowGap: 8, flexWrap: 'wrap', fontSize: 12, paddingTop: 8 }}>
         {types.map((item, index) => {
           return <div
             key={index}

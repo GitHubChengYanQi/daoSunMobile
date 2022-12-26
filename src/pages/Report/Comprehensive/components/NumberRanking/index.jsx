@@ -3,10 +3,13 @@ import Icon from '../../../../components/Icon';
 import { Button } from 'antd-mobile';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
-import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
-import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
 import MyEmpty from '../../../../components/MyEmpty';
 import styles from '../../../InStockReport/index.less';
+import { useRequest } from '../../../../../util/Request';
+import { isArray } from '../../../../components/ToolUtil';
+import { MyLoading } from '../../../../components/MyLoading';
+
+export const stockNumberView = { url: '/statisticalView/stockNumberView', method: 'POST' };
 
 const NumberRanking = () => {
 
@@ -15,16 +18,26 @@ const NumberRanking = () => {
   const [list, setList] = useState([]);
 
   const types = [
-    { title: '物料分类', key: '0' },
-    { title: '仓库', key: '1' },
-    { title: '材质', key: '2' },
-    { title: '供应商', key: '3' },
+    { title: '物料分类', key: 'SPU_CLASS' },
+    { title: '仓库', key: 'STOREHOUSE' },
+    { title: '材质', key: 'MATERIAL' },
+    { title: '供应商', key: 'CUSTOMER' },
   ];
 
   const [type, setType] = useState(types[0].key);
 
-  useEffect(() => {
+  const {
+    loading,
+    run,
+  } = useRequest(stockNumberView, {
+    manual: true,
+    onSuccess: (res) => {
+      setList(isArray(res));
+    },
+  });
 
+  useEffect(() => {
+    run({ data: { searchType: type } });
   }, [type]);
 
   return <>
@@ -57,31 +70,30 @@ const NumberRanking = () => {
     </div>
     {list.length === 0 && <MyEmpty />}
     {
-      list.map((item, index) => {
+      loading ? <MyLoading skeleton /> : list.map((item, index) => {
         if (index > 2) {
           return;
         }
         let leftText = '';
-        let rightText = '';
         switch (type) {
           case 'SPU_CLASS':
-            leftText = item.spuClassName || '无分类';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'TYPE':
-            leftText = getInType(item.type) || getOutType(item.type) || '无类型';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            leftText = item.className || '无分类';
             break;
           case 'STOREHOUSE':
             leftText = item.storehouseName || '无仓库';
-            rightText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            break;
+          case 'MATERIAL':
+            leftText = item.materialName || '无材质';
+            break;
+          case 'CUSTOMER':
+            leftText = item.customerName || '无供应商';
             break;
           default:
             break;
         }
         return <div key={index} className={styles.rankingContent}>
           <div className={styles.rankingContentLabel}>{index + 1}&nbsp;&nbsp;{leftText}</div>
-          {rightText}
+          {`${item.skuCount || 0} 类 ${item.number || 0} 件`}
         </div>;
       })
     }

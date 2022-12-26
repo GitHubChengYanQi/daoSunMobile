@@ -6,11 +6,12 @@ import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import MyEllipsis from '../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../util/Request';
-import { instockDetailBySpuClass } from '../../../components/Ranking';
-import { isArray } from '../../../../components/ToolUtil';
 import MyList from '../../../../components/MyList';
-import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
-import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
+import { stockNumberView } from '../../../Comprehensive/components/NumberRanking';
+import MyEmpty from '../../../../components/MyEmpty';
+import { MyLoading } from '../../../../components/MyLoading';
+
+export const dataStatisticsViewDetail = { url: '/statisticalView/dataStatisticsViewDetail', method: 'POST', data: {} };
 
 const SkuStock = (
   {
@@ -19,27 +20,35 @@ const SkuStock = (
   },
 ) => {
 
-  const [list, setList] = useState([1,2,3]);
+  const [list, setList] = useState([]);
 
   const [open, setOpen] = useState();
 
-  return <MyList manual  data={list}>
+  const [skus,setSkus] = useState([]);
+
+  const { loading: detailLoaidng, run: detailRun } = useRequest(dataStatisticsViewDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      setSkus(res);
+    },
+  });
+
+  return <MyList ref={listRef} api={stockNumberView} manual data={list} getData={setList}>
     {
       list.map((item, index) => {
         let title;
-        let numberText;
         switch (params.searchType) {
           case 'SPU_CLASS':
-            title = item.spuClassName || '无分类';
-            numberText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
-            break;
-          case 'TYPE':
-            title = getInType(item.type) || getOutType(item.type) || '无类型';
-            numberText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            title = item.className || '无分类';
             break;
           case 'STOREHOUSE':
             title = item.storehouseName || '无仓库';
-            numberText = `${item.inSkuCount || item.outSkuCount || 0} 类 ${item.inNumCount || item.outNumCount || 0} 件`;
+            break;
+          case 'MATERIAL':
+            title = item.materialName || '无材质';
+            break;
+          case 'CUSTOMER':
+            title = item.customerName || '无供应商';
             break;
           default:
             break;
@@ -55,14 +64,34 @@ const SkuStock = (
               if (show) {
                 return;
               }
-            }}>{numberText}{!show ? <DownOutline /> : <UpOutline />}</div>
+              switch (params.searchType) {
+                case 'SPU_CLASS':
+                  detailRun({data:{spuClassId:item.spuClassId}});
+                  break;
+                case 'STOREHOUSE':
+                  detailRun({data:{storehouseId:item.storehouseId}});
+                  break;
+                case 'MATERIAL':
+                  detailRun({data:{materialId:item.materialId}});
+                  break;
+                case 'CUSTOMER':
+                  detailRun({data:{customerId:item.customerId}});
+                  break;
+                default:
+                  break;
+              }
+            }}>
+              {`${item.skuCount || 0} 类 ${item.number || 0} 件`}
+              &nbsp;&nbsp;{!show ? <DownOutline /> : <UpOutline />}
+            </div>
           </div>
           <div className={styles.content} hidden={!show}>
+            {!detailLoaidng && skus.length === 0 && <MyEmpty />}
             {
-              [1, 2, 3].map((item, index) => {
+              detailLoaidng ? <MyLoading skeleton /> : skus.map((item, index) => {
                 return <div key={index} className={styles.skuItem}>
                   <SkuItem
-                    skuResult={item.skuResult}
+                    skuResult={item.skuSimpleResult}
                     className={styles.sku}
                     extraWidth='124px'
                   />

@@ -8,6 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
 import MyEmpty from '../../../../components/MyEmpty';
 import { MyLoading } from '../../../../components/MyLoading';
+import Icon from '../../../../components/Icon';
 
 export const instockOrderCountViewByUser = {
   url: '/statisticalView/instockOrderCountViewByUser',
@@ -34,7 +35,7 @@ const Contrast = (
         }), ...isArray(res?.sumOrderByUser?.records).map(item => {
           return { userName: item.userResult?.name || '无', number: item.inNumCount, type: '件数' };
         })]);
-        setTotal(res?.countOrderByUser?.total > res?.countOrderByUser?.total ? res?.countOrderByUser?.total : res?.countOrderByUser?.total);
+        setTotal(res?.countOrderByUser?.total > res?.sumOrderByUser?.total ? res?.countOrderByUser?.total : res?.sumOrderByUser?.total);
       },
     },
   );
@@ -48,13 +49,14 @@ const Contrast = (
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
-        排行对比
+        <Icon type='icon-rukuzongshu' />
+        <div style={{ fontSize: 14 }}>排行对比</div>
       </div>
-      <div onClick={() => history.push({
+      <div className={styles.action} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
         search: 'type=inAskNumber',
       })}>
-        共 <span className='numberBlue' style={{ fontSize: 18 }}>{total}</span> 人
+        共 <span className='numberBlue'>{total}</span> 人
         <RightOutline />
       </div>
     </div>

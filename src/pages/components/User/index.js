@@ -10,5 +10,6 @@ export const UserName = ({ user = {},size }) => {
 
   return <span className={style.userName}>
     <Avatar src={user.avatar || ''} style={{'--size':`${size || 20}px`}} /> {user.name}
+    <span hidden style={{fontSize:12,color:'rgb(148 148 148)'}}>(库房管理-库房保管员)</span>
   </span>;
 };

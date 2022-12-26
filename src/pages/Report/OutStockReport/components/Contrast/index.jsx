@@ -1,10 +1,16 @@
-import React from 'react';
-import { classNames } from '../../../../components/ToolUtil';
+import React, { useState } from 'react';
+import { classNames, isArray } from '../../../../components/ToolUtil';
 import styles from '../../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import Canvas from '@antv/f2-react';
-import { Axis, Chart, Interval, Legend, TextGuide, Tooltip } from '@antv/f2';
+import { Axis, Chart, Interval, Legend, Tooltip } from '@antv/f2';
 import { useHistory } from 'react-router-dom';
+import { useRequest } from '../../../../../util/Request';
+import { MyLoading } from '../../../../components/MyLoading';
+import MyEmpty from '../../../../components/MyEmpty';
+import Icon from '../../../../components/Icon';
+
+export const outStockDetailView = { url: '/statisticalView/outStockLogView', method: 'POST', data: {} };
 
 const Contrast = (
   {},
@@ -12,31 +18,45 @@ const Contrast = (
 
   const history = useHistory();
 
-  const data = [
-    { userName: '123', number: 111, type: '次数' },
-    { userName: '456', number: 234, type: '次数' },
-    { userName: '123', number: 22, type: '件数' },
-    { userName: '456', number: 456, type: '件数' },
-    { userName: '1223', number: 111, type: '次数' },
-    { userName: '4526', number: 234, type: '次数' },
-    { userName: '1223', number: 22, type: '件数' },
-    { userName: '4526', number: 456, type: '件数' },
-  ];
+  const [data, setData] = useState([]);
+  const [total, setTotal] = useState(0);
+
+  const {
+    loading: outStockDetailViewLoading,
+    data: logData,
+  } = useRequest(outStockDetailView, {
+      onSuccess: (res) => {
+        setData([...isArray(res?.logViews?.records).map(item => {
+          return { userName: item.userResult?.name || '无', number: item.orderCount, type: '次数' };
+        }), ...isArray(res?.logDetailViews?.records).map(item => {
+          return { userName: item.userResult?.name || '无', number: item.inNumCount, type: '件数' };
+        })]);
+        setTotal(res?.logViews?.total > res?.logDetailViews?.total ? res?.logViews?.total : res?.logDetailViews?.total);
+      },
+    },
+  );
+
+  if (!logData) {
+    if (outStockDetailViewLoading) {
+      return <MyLoading skeleton />;
+    }
+  }
 
   return <div className={classNames(styles.card, styles.summary)}>
     <div className={styles.summaryHeader}>
       <div className={styles.summaryHeaderLabel}>
-        排行对比
+        <Icon type='icon-rukuzongshu' />
+        <div style={{ fontSize: 14 }}>排行对比</div>
       </div>
-      <div onClick={() => history.push({
+      <div className={styles.action} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
         search: 'type=outAskNumber',
       })}>
-        共 <span className='numberBlue' style={{ fontSize: 18 }}>12</span> 人
+        共 <span className='numberBlue'>{total}</span> 人
         <RightOutline />
       </div>
     </div>
-    <div>
+    {data.length === 0 ? <MyEmpty /> : <div>
       <Canvas pixelRatio={window.devicePixelRatio} height={150}>
         <Chart data={data}>
           <Tooltip />
@@ -60,7 +80,7 @@ const Contrast = (
           />
         </Chart>
       </Canvas>
-    </div>
+    </div>}
 
   </div>;
 };

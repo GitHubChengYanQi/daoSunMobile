@@ -2,10 +2,9 @@ import React from 'react';
 import styles from '../../../InStockReport/index.less';
 import LinkButton from '../../../../components/LinkButton';
 import { classNames } from '../../../../components/ToolUtil';
-import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 
-const StockStatistics = () => {
+const StockStatistics = ({title}) => {
 
   const history = useHistory();
 
@@ -17,7 +16,7 @@ const StockStatistics = () => {
   return <>
     <div className={styles.card}>
       <div className={styles.header}>
-        <div className={styles.title}>库存统计</div>
+        <div className={styles.title}>{title}</div>
       </div>
       <div style={{ textAlign: 'right', padding: 8 }}>
         库存总数 <span className='numberBlue'>432</span>类 <span className='numberBlue'>15700</span>件
@@ -33,15 +32,17 @@ const StockStatistics = () => {
           })}
         </div>
         <div className={styles.flexCenter}>
-          <div className={classNames(styles.flexCenter, styles.flexGrow)}
-               style={{ gap: 8, flexWrap: 'wrap', fontSize: 12 }}>
+          <div
+            className={classNames(styles.flexCenter, styles.flexGrow)}
+            style={{ gap: 8, flexWrap: 'wrap', fontSize: 12 }}
+          >
             {status.map((item, index) => {
               return <div
                 key={index}
                 className={styles.flexCenter}
               >
                 <div style={{ backgroundColor: item.color }} className={styles.circle} />
-                {item.text} 432类 157件 (98)%
+                {item.text} 666类 666件 (666)%
               </div>;
             })}
           </div>

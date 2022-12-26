@@ -3,6 +3,7 @@ import style from './index.less';
 import waitInstockShop from '../../../assets/waitInstockShop.png';
 import { Badge } from 'antd-mobile';
 
+
 const Bouncing = (
   {
     img,
