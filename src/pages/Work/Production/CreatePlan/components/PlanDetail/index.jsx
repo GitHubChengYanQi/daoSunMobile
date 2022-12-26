@@ -17,6 +17,9 @@ import { Message } from '../../../../../components/Message';
 import { isArray } from '../../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import MySearch from '../../../../../components/MySearch';
+import MyList from '../../../../../components/MyList';
+import { orderList } from '../../../../Error';
+import Label from '../../../../../components/Label';
 
 const PlanDetail = (
   {
@@ -37,6 +40,8 @@ const PlanDetail = (
   const [addOrder, setAddOrder] = useState(false);
 
   const [contract, setContract] = useState({});
+
+  const [orderList, setOrderlist] = useState([]);
 
   const updateValue = (key, data) => {
     const newValue = value.map((item, index) => {
@@ -175,7 +180,27 @@ const PlanDetail = (
       onClose={() => setAddOrder(false)}
     >
       <div className={styles.addContract}>
-       <MySearch />
+        <MySearch />
+        <MyList api={orderList} params={{ type: 2 }} getData={setOrderlist} data={orderList}>
+          {
+            orderList.map((item, index) => {
+              return <div key={index}>
+                <div>
+                  <Label>国家</Label>：
+                </div>
+                <div>
+                  <Label>订单编号</Label>：
+                </div>
+                <div>
+                  <Label>产品数量</Label>：
+                </div>
+                <div>
+                  <Label>交货期</Label>：
+                </div>
+              </div>;
+            })
+          }
+        </MyList>
       </div>
       <BottomButton
         leftText='取消'
