@@ -9,7 +9,10 @@ import { MyLoading } from '../../../../components/MyLoading';
 import ScreenButtons from '../ScreenButtons';
 import moment from 'moment';
 
-export const InStockArrivalChart = ({ data }) => {
+export const InStockArrivalChart = ({ data, detail }) => {
+
+  const history = useHistory();
+
   const Text = (props, context) => {
     const { coord } = props;
     const { center } = coord;
@@ -57,7 +60,14 @@ export const InStockArrivalChart = ({ data }) => {
   const errorInStock = Math.round((data.errorNumberCount / total) * 100) || 0;
 
   return <div className={styles.cartData}>
-    <div>
+    <div onClick={() => {
+      if (!detail) {
+        history.push({
+          pathname: '/Report/ReportDetail',
+          search: 'type=receiptDetails&receiptType=receipt&receiptTypeName=收货',
+        });
+      }
+    }}>
       <Canvas pixelRatio={window.devicePixelRatio} width={100} height={100}>
         <Chart
           data={[{ title: '已入库', number: data.logSkuCount || 0 }, { title: '未入库', number: data.errorSkuCount || 0 }]}
@@ -82,14 +92,28 @@ export const InStockArrivalChart = ({ data }) => {
       </Canvas>
     </div>
     <div className={styles.showTotal}>
-      <div className={styles.total}>
+      <div className={styles.total} onClick={() => {
+        if (!detail) {
+          history.push({
+            pathname: '/Report/ReportDetail',
+            search: 'type=receiptDetails&receiptType=in&receiptTypeName=已入库',
+          });
+        }
+      }}>
         <div className={styles.totalTitle}>已入库</div>
         <div>
           <span className='numberBlue'>{data.logSkuCount || 0}</span>类
           <span className='numberBlue'>{data.logNumberCount || 0}</span>件
         </div>
       </div>
-      <div className={styles.total}>
+      <div className={styles.total} onClick={() => {
+        if (!detail) {
+          history.push({
+            pathname: '/Report/ReportDetail',
+            search: 'type=receiptDetails&receiptType=noIn&receiptTypeName=未入库',
+          });
+        }
+      }}>
         <div className={styles.totalTitle}>未入库</div>
         <div>
           <span className='numberRed'>{data.errorSkuCount || 0}</span>类
@@ -107,11 +131,11 @@ const defaultTime = [
 export const viewTotail = {
   url: '/statisticalView/viewTotail',
   method: 'POST',
-  data:{},
+  data: {},
   // data: { beginTime: defaultTime[0], endTime: defaultTime[1] },
 };
 
-const Arrival = ({title}) => {
+const Arrival = ({ title }) => {
 
   const history = useHistory();
 
@@ -127,7 +151,7 @@ const Arrival = ({title}) => {
     <div className={styles.card}>
       <div className={styles.header}>
         <div className={styles.title}>{title}</div>
-        <div  className={styles.action} onClick={() => {
+        <div className={styles.action} onClick={() => {
           history.push({
             pathname: '/Report/ReportDetail',
             search: 'type=inStockArrival',

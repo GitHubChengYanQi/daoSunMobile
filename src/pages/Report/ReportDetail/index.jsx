@@ -21,7 +21,6 @@ import InStockWorkDetail from './components/InStockWorkDetail';
 import MyEmpty from '../../components/MyEmpty';
 import InStockSummary from './components/InStockSummary';
 import InStockNumber from './components/InStockNumber';
-import InStockError from './components/InStockError';
 import { InType } from '../../Work/CreateTask/components/InstockAsk';
 import { OutType } from '../../Work/CreateTask/components/OutstockAsk';
 import OutStockUseNumber from './components/OutStockUseNumber';
@@ -35,9 +34,9 @@ import StockCycle from './components/StockCycle';
 import LackSkus from './components/LackSkus';
 import ExecuteNumber from './components/ExecuteNumber';
 import MyCheckList from '../../components/MyCheckList';
-import { spuClassListSelect } from '../../Work/Instock/Url';
 import { storeHouseSelect } from '../../Work/Quality/Url';
 import { materialListSelect } from '../../Work/Sku/Edit';
+import ReceiptDetails from './components/ReceiptDetails';
 
 const ReportDetail = () => {
 
@@ -49,9 +48,7 @@ const ReportDetail = () => {
 
   const listRef = useRef();
 
-  const defaultParams = {};
-
-  const [params, setParams] = useState(defaultParams);
+  const [params, setParams] = useState({});
 
   const [exportVisible, setExportVisible] = useState(false);
 
@@ -76,6 +73,7 @@ const ReportDetail = () => {
   let Content;
   let contentProps = {};
   let defaultScreen = {};
+  let defaultParams = {};
 
   switch (query.type) {
 
@@ -102,7 +100,26 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: tabs[0]?.key };
       Content = InAsk;
+      break;
+    case 'receiptDetails':
+      title = '收货明细';
+      tabs = [
+        {
+          title: '收货明细',
+          key: 'ReceiptDetails',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '类型', key: 'receiptType' },
+            { title: '供应商', key: 'customerId' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+      ];
+      defaultScreen = { receiptType: query.receiptTypeName };
+      defaultParams = { receiptType: query.receiptType };
+      Content = ReceiptDetails;
       break;
     case 'inStockWork':
       title = '入库工作明细';
@@ -133,6 +150,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: 'SKU_COUNT' };
       defaultScreen = { inStockRanking: '入库类数' };
       Content = InStockArrival;
       break;
@@ -180,27 +198,8 @@ const ReportDetail = () => {
           ],
         },
       ];
-      defaultScreen = { inStockRanking: '入库类数' };
+      defaultParams = { searchType: tabs[0]?.key };
       Content = InStockNumber;
-      break;
-    case 'inStockError':
-      title = '异常入库明细';
-      tabs = [
-        {
-          title: '异常入库明细',
-          key: 'SPU_CLASS',
-          screens: [
-            { title: '日期', key: 'createTime' },
-            { title: '物料分类', key: 'spuClassId' },
-            { title: '类型', key: 'inStockRanking' },
-            { title: '供应商', key: 'customerId' },
-            { title: '仓库', key: 'storehouseId' },
-          ],
-        },
-      ];
-      defaultScreen = { inStockRanking: '入库类数' };
-      Content = InStockError;
-      contentProps = { height: 200 };
       break;
 
     // 出库
@@ -224,6 +223,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: tabs[0]?.key };
       Content = OutAsk;
       break;
     case 'outStockSummary':
@@ -297,7 +297,7 @@ const ReportDetail = () => {
           ],
         },
       ];
-      defaultScreen = { inStockRanking: '入库类数' };
+      defaultParams = { searchType: tabs[0]?.key };
       Content = OutStockNumber;
       break;
     case 'outStockWork':
@@ -373,6 +373,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: tabs[0]?.key };
       Content = SkuStock;
       break;
     case 'stockCycle':
@@ -409,6 +410,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: tabs[0]?.key };
       Content = LackSkus;
       break;
     case 'executeNumber':
@@ -433,6 +435,7 @@ const ReportDetail = () => {
           ],
         },
       ];
+      defaultParams = { searchType: tabs[0]?.key };
       Content = ExecuteNumber;
       break;
 
@@ -446,7 +449,7 @@ const ReportDetail = () => {
   const [screen, setScreen] = useState(defaultScreen);
 
   useEffect(() => {
-    submit({ searchType: tabs[0]?.key });
+    submit(defaultParams);
   }, []);
 
   if (!query.type) {
@@ -522,6 +525,9 @@ const ReportDetail = () => {
                 break;
               case 'stockStatus':
                 title = screen.stockStatus;
+                break;
+              case 'receiptType':
+                title = screen.receiptType;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -688,6 +694,22 @@ const ReportDetail = () => {
       options={[
         { label: '入库类数', value: 'SKU_COUNT' },
         { label: '入库件数', value: 'NUM_COUNT' },
+      ]}
+      onClose={() => setScreenkey('')}
+    />
+
+    <MyPicker
+      visible={screenKey === 'receiptType'}
+      value={params.receiptType}
+      onChange={(option) => {
+        submit({ receiptType: option.value });
+        setScreen({ ...screen, receiptType: option.label });
+        setScreenkey('');
+      }}
+      options={[
+        { label: '收货', value: 'receipt' },
+        { label: '已入库', value: 'in' },
+        { label: '未入库', value: 'noIn' },
       ]}
       onClose={() => setScreenkey('')}
     />
