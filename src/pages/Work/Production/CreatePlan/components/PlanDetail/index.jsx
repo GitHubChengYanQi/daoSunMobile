@@ -16,6 +16,7 @@ import MyEllipsis from '../../../../../components/MyEllipsis';
 import { Message } from '../../../../../components/Message';
 import { isArray } from '../../../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
+import MySearch from '../../../../../components/MySearch';
 
 const PlanDetail = (
   {
@@ -33,7 +34,7 @@ const PlanDetail = (
   const order = type === 'order';
 
   const [addBoms, setAddBoms] = useState(false);
-  const [addContracts, setAddContracts] = useState(false);
+  const [addOrder, setAddOrder] = useState(false);
 
   const [contract, setContract] = useState({});
 
@@ -61,7 +62,7 @@ const PlanDetail = (
       </div>
       <div className={styles.action}>
         <MyRemoveButton onRemove={() => {
-          if (order) {
+          if (!order) {
             const newValue = value.map((item, valueIndex) => {
               if (valueIndex === key) {
                 return { ...item, details: item.details.filter((item, detailIndex) => detailIndex !== index) };
@@ -94,10 +95,6 @@ const PlanDetail = (
       titleBom={required && <Title className={styles.title}>{filedName}<span>*</span></Title>}
       title={filedName}
       bodyClassName={styles.contractContent}
-      extra={order && <LinkButton onClick={() => {
-        setContract({});
-        setAddContracts(true);
-      }}>添加合同</LinkButton>}
     >
       {
         value.map((item, index) => {
@@ -115,7 +112,6 @@ const PlanDetail = (
                 </div>
                 <LinkButton onClick={() => {
                   setContract({ ...item, key: index });
-                  setAddContracts(true);
                 }}><FillinOutline /></LinkButton>
               </div>
               {
@@ -131,11 +127,11 @@ const PlanDetail = (
         })
       }
 
-      {(!order || value.length > 0) && <Divider>
+      <Divider>
         <AddButton onClick={() => {
-          setAddBoms(true);
+          setAddOrder(true);
         }} />
-      </Divider>}
+      </Divider>
     </MyCard>
 
     <MyAntPopup
@@ -174,53 +170,21 @@ const PlanDetail = (
     </MyAntPopup>
 
     <MyAntPopup
-      title='添加合同'
-      visible={addContracts}
-      onClose={() => setAddContracts(false)}
+      title='添加订单'
+      visible={addOrder}
+      onClose={() => setAddOrder(false)}
     >
       <div className={styles.addContract}>
-        <div className={styles.addContractItem}>
-          <div>
-            客户
-          </div>
-          <Input
-            placeholder='请输入客户名称' value={contract.customerName || ''}
-            onChange={(customerName) => setContract({ ...contract, customerName })}
-          />
-        </div>
-        <div className={styles.addContractItem}>
-          <div>
-            合同
-          </div>
-          <Input
-            placeholder='请输入合同编码'
-            value={contract.contractCoding || ''}
-            onChange={(contractCoding) => setContract({ ...contract, contractCoding })}
-          />
-        </div>
+       <MySearch />
       </div>
       <BottomButton
-        disabled={!(contract.contractCoding && contract.customerName)}
-        only={typeof contract.key === 'number'}
-        text='修改合同'
-        onClick={() => {
-          updateValue(contract.key, contract);
-          setAddContracts(false);
-        }}
-        leftText='继续添加'
+        leftText='取消'
         rightText='确认'
-        leftDisabled={!(contract.contractCoding && contract.customerName)}
-        rightDisabled={!(contract.contractCoding && contract.customerName)}
         leftOnClick={() => {
-          Message.toast('添加成功！');
-          setContract({});
-          onChange([...value, contract]);
+
         }}
         rightOnClick={() => {
-          setContract({});
-          onChange([...value, contract]);
-          setAddBoms(true);
-          setAddContracts(false);
+
         }}
       />
     </MyAntPopup>
