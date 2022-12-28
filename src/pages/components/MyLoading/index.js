@@ -3,7 +3,7 @@ import style from './index.less';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
 import { useDebounceEffect } from 'ahooks';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import Icon from '../Icon';
 
 export const MyLoading = (

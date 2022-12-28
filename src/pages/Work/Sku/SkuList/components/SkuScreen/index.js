@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import SkuClass from './components/SkuClass';
 import Supply from './components/Supply';
 import Brand from './components/Brand';

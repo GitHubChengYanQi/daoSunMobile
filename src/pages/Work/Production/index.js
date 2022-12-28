@@ -12,7 +12,7 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../components/MyDate';
 import style from '../ProcessTask/index.less';
 import moment from 'moment';
-import { classNames, isObject } from '../../components/ToolUtil';
+import { classNames, isObject } from '../../../util/ToolUtil';
 import MyPicker from '../../components/MyPicker';
 import Customers from '../ProcessTask/MyAudit/components/Customers';
 import CheckUser from '../../components/CheckUser';

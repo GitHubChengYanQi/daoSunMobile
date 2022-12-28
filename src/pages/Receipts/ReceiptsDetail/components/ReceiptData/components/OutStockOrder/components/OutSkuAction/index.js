@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Dialog, Divider, Popup } from 'antd-mobile';
-import { isArray, isObject, ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { CheckCircleFill, DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';

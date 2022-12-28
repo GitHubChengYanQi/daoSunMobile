@@ -8,7 +8,7 @@ import MySearch from '../../../../../../../components/MySearch';
 import { useRequest } from '../../../../../../../../util/Request';
 import { supplyList } from '../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 
 const Supply = (

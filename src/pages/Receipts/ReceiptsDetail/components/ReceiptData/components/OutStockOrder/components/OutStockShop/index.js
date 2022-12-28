@@ -6,7 +6,7 @@ import outShop from '../../../../../../../../../assets/outShop.png';
 import Bouncing from '../../../../../../../../components/Bouncing';
 import { useRequest } from '../../../../../../../../../util/Request';
 import { listByUser } from '../../../../../../../../Work/Production/components/Url';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
 
 const OutStockShop = (

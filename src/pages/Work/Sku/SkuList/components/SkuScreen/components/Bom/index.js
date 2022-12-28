@@ -10,7 +10,7 @@ import { backDetails, partsList } from '../Url';
 import { MyLoading } from '../../../../../../../components/MyLoading';
 import MySearch from '../../../../../../../components/MySearch';
 import { SkuResultSkuJsons } from '../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 
 const Bom = (
   {

@@ -6,20 +6,16 @@ import { AddButton } from '../../../../../components/MyButton';
 import { Divider, Input } from 'antd-mobile';
 import SelectBom from '../../SelectBom';
 import MyAntPopup from '../../../../../components/MyAntPopup';
-import SkuItem from '../../../../Sku/SkuItem';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
-import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import LinkButton from '../../../../../components/LinkButton';
-import BottomButton from '../../../../../components/BottomButton';
 import { FillinOutline, MinusCircleOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../components/MyEllipsis';
-import { Message } from '../../../../../components/Message';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray, MathCalc } from '../../../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
-import MySearch from '../../../../../components/MySearch';
-import MyList from '../../../../../components/MyList';
-import { orderList } from '../../../../Error';
+import SelectOrder from '../SelectOrder';
 import Label from '../../../../../components/Label';
+import SkuItem from '../../../../Sku/SkuItem';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
 
 const PlanDetail = (
   {
@@ -27,21 +23,17 @@ const PlanDetail = (
     filedName,
     onChange = () => {
     },
-    value = [],
+    value = [{}],
     type,
   },
 ) => {
 
   const history = useHistory();
 
-  const order = type === 'order';
+  const order = type !== 'order';
 
   const [addBoms, setAddBoms] = useState(false);
   const [addOrder, setAddOrder] = useState(false);
-
-  const [contract, setContract] = useState({});
-
-  const [orderList, setOrderlist] = useState([]);
 
   const updateValue = (key, data) => {
     const newValue = value.map((item, index) => {
@@ -53,17 +45,25 @@ const PlanDetail = (
     onChange(newValue);
   };
 
+  const orderItem = (item, index, key) => {
 
-  const skuItems = (item, index, key) => {
-    return <div key={index} className={styles.detailSkuItem}>
-      <div className={styles.sku}>
-        <SkuItem
-          noView
-          skuResult={item.skuResult}
-          imgSize={80}
-          gap={8}
-          extraWidth='130px'
-        />
+    let numner = 0;
+    isArray(item.detailResults).forEach(item => numner += (item.purchaseNumber || 0));
+
+    return <div key={index} className={styles.detailItem}>
+      <div className={styles.item}>
+        <div>
+          <Label className={styles.label}>国家</Label>：无
+        </div>
+        <div>
+          <Label className={styles.label}>订单编号</Label>：{item.coding}
+        </div>
+        <div>
+          <Label className={styles.label}>产品数量</Label>：{numner}
+        </div>
+        <div>
+          <Label className={styles.label}>交货期</Label>：{item.leadTime || 0}天
+        </div>
       </div>
       <div className={styles.action}>
         <MyRemoveButton onRemove={() => {
@@ -79,18 +79,65 @@ const PlanDetail = (
           }
           onChange(value.filter((item, valueIndex) => valueIndex !== index));
         }} />
-
-        <div>
-          <ShopNumber
-            value={item.number}
-            getContainer={document.body}
-            id={`stepper${index}`}
-            onChange={(number) => {
-              updateValue(index, { number });
-            }}
-          />
-        </div>
       </div>
+    </div>;
+  };
+
+  const countryItem = (item = {}, index) => {
+    return <div key={index} className={styles.contractList}>
+      <div className={styles.contractItem}>
+        {index !== value.length - 1 && <MyRemoveButton
+          icon={<MinusCircleOutline />}
+          onRemove={() => {
+            onChange(value.filter((item, valueIndex) => valueIndex !== index));
+          }}
+        />}
+        <div className={styles.info}>
+          国家
+        </div>
+        <Input
+          value={item.country || ''}
+          className={styles.input}
+          placeholder='请输入'
+          onChange={(country) => {
+            const newValue = value.map((item, key) => {
+              if (index === key) {
+                return { ...item, country };
+              }
+              return item;
+            });
+            onChange(index === value.length - 1 ? [...newValue, {}] : newValue);
+          }}
+        />
+      </div>
+      {
+        isArray(item.skus).map((item, index) => {
+          return <div key={index} className={styles.detailSkuItem}>
+            <div className={styles.sku}>
+              <SkuItem
+                noView
+                skuResult={item.skuResult}
+                imgSize={80}
+                gap={8}
+                extraWidth='130px'
+              />
+            </div>
+            <div className={styles.skuActions}>
+              <MyRemoveButton />
+              <div>
+                ×{item.number}
+              </div>
+              <LinkButton>修改</LinkButton>
+            </div>
+          </div>;
+        })
+      }
+      {index !== value.length - 1 && <Divider>
+        <AddButton onClick={() => {
+          setAddBoms(index + '');
+        }} />
+      </Divider>}
+      <div hidden={index === value.length - 1} className={styles.space} />
     </div>;
   };
 
@@ -104,113 +151,54 @@ const PlanDetail = (
       {
         value.map((item, index) => {
           if (order) {
-            return <div key={index} className={styles.contractList}>
-              <div className={styles.contractItem}>
-                <MyRemoveButton
-                  icon={<MinusCircleOutline />}
-                  onRemove={() => {
-                    onChange(value.filter((item, valueIndex) => valueIndex !== index));
-                  }}
-                />
-                <div className={styles.info}>
-                  <MyEllipsis maxWidth='70vw'>客户 / 合同：{item.customerName} / {item.contractCoding}</MyEllipsis>
-                </div>
-                <LinkButton onClick={() => {
-                  setContract({ ...item, key: index });
-                }}><FillinOutline /></LinkButton>
-              </div>
-              {
-                isArray(item.details).map((item, detailIndex) => {
-                  return skuItems(item, detailIndex, index);
-                })
-              }
-              <div className={styles.space} />
-            </div>;
+            return orderItem(item, index);
           } else {
-            return skuItems(item, index);
+            return countryItem(item, index);
           }
         })
       }
 
-      <Divider>
+      {order && <Divider>
         <AddButton onClick={() => {
           setAddOrder(true);
         }} />
-      </Divider>
+      </Divider>}
     </MyCard>
 
     <MyAntPopup
-      title='物料清单选择'
       position='right'
       visible={addBoms}
       onClose={() => history.goBack()}
     >
       <SelectBom
-        value={value.map((item, index) => ({ ...item, id: index }))}
-        contractType={order}
         onClose={() => setAddBoms(false)}
         onSubmit={(skus) => {
-          if (order) {
-            const newValue = value.map((item, index) => {
-              let number = 0;
-              const details = skus.find(item => {
-                const detail = item.details.find(item => item.id === index);
-                if (detail) {
-                  number = detail.number;
-                }
-                return detail;
-              });
-              return {
-                ...item,
-                details: details ? [...isArray(item.details), { ...details, number }] : item.details,
-              };
-            });
-            onChange(newValue);
-          } else {
-            onChange(skus);
-          }
+          const newValue = value.map((item, index) => {
+            if (index + '' === addBoms) {
+              return { ...item, skus: [...isArray(item.skus), ...skus] };
+            }
+            return item;
+          });
+          onChange(newValue);
           history.goBack();
         }}
       />
     </MyAntPopup>
 
     <MyAntPopup
+      destroyOnClose={false}
       title='添加订单'
       visible={addOrder}
       onClose={() => setAddOrder(false)}
     >
-      <div className={styles.addContract}>
-        <MySearch />
-        <MyList api={orderList} params={{ type: 2 }} getData={setOrderlist} data={orderList}>
-          {
-            orderList.map((item, index) => {
-              return <div key={index}>
-                <div>
-                  <Label>国家</Label>：
-                </div>
-                <div>
-                  <Label>订单编号</Label>：
-                </div>
-                <div>
-                  <Label>产品数量</Label>：
-                </div>
-                <div>
-                  <Label>交货期</Label>：
-                </div>
-              </div>;
-            })
-          }
-        </MyList>
-      </div>
-      <BottomButton
-        leftText='取消'
-        rightText='确认'
-        leftOnClick={() => {
-
+      <SelectOrder
+        visible={addOrder}
+        value={value}
+        onChange={(orders) => {
+          onChange(orders);
+          setAddOrder(false);
         }}
-        rightOnClick={() => {
-
-        }}
+        onClose={() => setAddOrder(false)}
       />
     </MyAntPopup>
   </>;

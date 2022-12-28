@@ -1,5 +1,5 @@
 import React from 'react';
-import { timeDifference } from '../components/ToolUtil';
+import { timeDifference } from '../../util/ToolUtil';
 
 const Test = () => {
 

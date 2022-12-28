@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
 import { CloseOutline } from 'antd-mobile-icons';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Button } from 'antd-mobile';

@@ -1,6 +1,6 @@
 import React from 'react';
 import InventoryRotation from '../InventoryRotation';
-import { classNames } from '../../../components/ToolUtil';
+import { classNames } from '../../../../util/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 

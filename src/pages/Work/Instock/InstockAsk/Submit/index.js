@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'umi';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { useRequest } from '../../../../../util/Request';
 import { orderDetail } from '../../../Order/Url';
 import MyEmpty from '../../../../components/MyEmpty';

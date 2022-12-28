@@ -7,7 +7,7 @@ import MySearch from '../../../../../../../components/MySearch';
 import style from '../../index.less';
 import { useRequest } from '../../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 import { materialListSelect } from '../../../../../../ProcessTask/Create/components/Inventory/compoennts/AllCondition';
 import { SelectorStyle } from '../../../../../../../Report/InOutStock';
 

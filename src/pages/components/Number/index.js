@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from 'antd-mobile';
 import style from './index.css';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const Number = (
   {

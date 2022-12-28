@@ -14,7 +14,7 @@ import {
 import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import spuStyle from '../../index.less';
 import style from '../../../../../../../Sku/SkuList/components/SkuScreen/components/Bom/index.less';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import BottomButton from '../../../../../../../../components/BottomButton';
 
 const Bom = (

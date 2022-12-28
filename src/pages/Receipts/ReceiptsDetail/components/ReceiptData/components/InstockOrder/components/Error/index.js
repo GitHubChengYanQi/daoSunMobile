@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import { Button, TextArea } from 'antd-mobile';
 import { AddOutline, CameraOutline } from 'antd-mobile-icons';
 import { ScanIcon } from '../../../../../../../../components/Icon';

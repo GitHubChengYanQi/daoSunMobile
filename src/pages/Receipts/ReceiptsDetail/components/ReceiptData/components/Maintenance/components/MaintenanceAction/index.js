@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { Button } from 'antd-mobile';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';

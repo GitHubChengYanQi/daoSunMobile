@@ -14,7 +14,7 @@ import BackSkus from '../../../../Sku/components/BackSkus';
 import MyEmpty from '../../../../../components/MyEmpty';
 import Search from '../../../../InStock/PositionFreeInstock/components/Search';
 import Label from '../../../../../components/Label';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 
 const fontSize = 18;
 

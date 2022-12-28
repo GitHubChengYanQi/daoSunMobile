@@ -9,7 +9,7 @@ import { ScanOutlined } from '@ant-design/icons';
 import ItemInventory from './components/ItemInventory';
 import PositionsInventory from './components/PositionsInventory';
 import { storehousePositionsTreeView } from '../Url';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const Inventory = (props) => {
 

@@ -5,7 +5,7 @@ import scanImg from '../../../../assets/scan.png';
 import style from './index.less';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'dva';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
 import { ClockCircleOutline } from 'antd-mobile-icons';

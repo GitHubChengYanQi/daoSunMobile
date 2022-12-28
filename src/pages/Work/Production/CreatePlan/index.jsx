@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { isArray } from '../../../components/ToolUtil';
+import { isArray } from '../../../../util/ToolUtil';
 import MyNavBar from '../../../components/MyNavBar';
 import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
@@ -17,6 +17,7 @@ import MyPicker from '../../../components/MyPicker';
 import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../components/Upload/UploadFile';
 import PlanDetail from './components/PlanDetail';
+import KeepAlive from '../../../../components/KeepAlive';
 
 export const createProductionPlan = {
   url: '/productionPlan/add',
@@ -32,7 +33,7 @@ const CreatePlan = () => {
 
   const { state = {} } = useLocation();
 
-  const [data, setData] = useState({ type: 'production', typeName: '订单' });
+  const [data, setData] = useState({ type: 'order', typeName: '订单' });
 
   const [visible, setVisible] = useState('');
 
@@ -198,7 +199,12 @@ const CreatePlan = () => {
         { label: '生产', value: 'production' },
       ]}
       onChange={(option) => {
-        setData({ ...data, type: option.value, typeName: option.label, orderDetailParams: [] });
+        setData({
+          ...data,
+          type: option.value,
+          typeName: option.label,
+          orderDetailParams: option.value === 'production' ? [{}] : [],
+        });
       }}
     />
 

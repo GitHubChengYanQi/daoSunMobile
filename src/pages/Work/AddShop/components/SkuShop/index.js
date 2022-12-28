@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import style from './index.less';
 import { Button, Popup, Tabs } from 'antd-mobile';
 import SkuItem from '../../../Sku/SkuItem';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import MyEmpty from '../../../../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import ShopNumber from '../ShopNumber';
@@ -151,7 +151,7 @@ const SkuShop = (
     if (noRequest) {
       return;
     }
-   
+
     if (type && !history.location.query.createType) {
       if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();

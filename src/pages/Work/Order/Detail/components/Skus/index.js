@@ -4,7 +4,7 @@ import { Space } from 'antd-mobile';
 import styles from './index.less';
 import Label from '../../../../../components/Label';
 import SkuItem from '../../../../Sku/SkuItem';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
 
 const Skus = ({ skus, data }) => {

@@ -41,9 +41,9 @@ const MyAntPopup = (
       destroyOnClose={destroyOnClose}
       className={className}
     >
-      <div className={style.header}>
+      <div hidden={!title} className={style.header}>
         <span hidden={!leftText} className={style.left} onClick={onLeft}>{leftText}</span>
-        {title || '无题'}
+        {title}
         <span className={style.right} onClick={() => {
           onClose();
           onRight();

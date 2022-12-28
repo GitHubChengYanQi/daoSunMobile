@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../../InStockReport/index.less';
 import { CaretUpFilled } from '@ant-design/icons';
 import { RightOutline } from 'antd-mobile-icons';
-import { classNames, isArray } from '../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../util/ToolUtil';
 import { Button } from 'antd-mobile';
 import Icon from '../../../components/Icon';
 import { useRequest } from '../../../../util/Request';

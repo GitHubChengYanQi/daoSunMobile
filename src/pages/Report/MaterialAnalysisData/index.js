@@ -3,7 +3,7 @@ import MyCard from '../../components/MyCard';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import style from '../StatisticalChart/index.less';
 import LinkButton from '../../components/LinkButton';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import SkuItem from '../../Work/Sku/SkuItem';
 import React, { useState } from 'react';
 import MaterialAnalysis from '../components/MaterialAnalysis';

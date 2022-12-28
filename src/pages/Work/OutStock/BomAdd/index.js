@@ -6,7 +6,7 @@ import { backDetails, partsList } from '../../Sku/SkuList/components/SkuScreen/c
 import style from './index.less';
 import SkuItem from '../../Sku/SkuItem';
 import { Button, Space } from 'antd-mobile';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import LinkButton from '../../../components/LinkButton';
 import { useRequest } from '../../../../util/Request';

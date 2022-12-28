@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import style from './index.less';
 import MyEmpty from '../../../../../components/MyEmpty';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import { MyDate } from '../../../../../components/MyDate';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';

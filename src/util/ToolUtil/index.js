@@ -1,7 +1,7 @@
 import pako from 'pako';
-import { getLastMeasureIndex } from '../MentionsNote/LastMention';
-import { MyDate } from '../MyDate';
-import { Message } from '../Message';
+import { getLastMeasureIndex } from '../../pages/components/MentionsNote/LastMention';
+import { MyDate } from '../../pages/components/MyDate';
+import { Message } from '../../pages/components/Message';
 import { history } from 'umi';
 import moment from 'moment';
 
@@ -244,7 +244,7 @@ const int = (a) => {/*去除小数点并转成数值*/
 };
 
 // 数学四则运算
-export const MathCalc = (a, b, type) => {//加减乘除
+export const MathCalc = (a, b, type, decimal = 2) => {//加减乘除
   let r;
   let da = decNum(a);
   let db = decNum(b);
@@ -279,7 +279,7 @@ export const MathCalc = (a, b, type) => {//加减乘除
       r = a / b;
       break;
   }
-  return Number(r.toFixed(2));
+  return Number(r.toFixed(decimal));
 };
 
 export const ToolUtil = {

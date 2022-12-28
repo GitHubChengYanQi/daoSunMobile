@@ -17,7 +17,7 @@ import Skus from './components/Skus';
 import AddSku from './components/AddSku';
 import { AddOutline } from 'antd-mobile-icons';
 import MyEmpty from '../../../components/MyEmpty';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const fontSize = 18;
 

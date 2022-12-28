@@ -9,7 +9,7 @@ import Icon from '../components/Icon';
 import MyRemoveButton from '../components/MyRemoveButton';
 import MyList from '../components/MyList';
 import MyCard from '../components/MyCard';
-import { ToolUtil } from '../components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 import MyEmpty from '../components/MyEmpty';
 import { useHistory } from 'react-router-dom';
 import { dynamicList } from '../Receipts/ReceiptsDetail/components/Dynamic';

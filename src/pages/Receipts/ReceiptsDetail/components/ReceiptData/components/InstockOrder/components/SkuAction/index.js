@@ -13,7 +13,7 @@ import InSkuItem from './components/InSkuItem';
 import { MyLoading } from '../../../../../../../../components/MyLoading';
 import { ReceiptsEnums } from '../../../../../../../index';
 import { useModel } from 'umi';
-import { isArray, isObject, ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import MyCard from '../../../../../../../../components/MyCard';
 import Title from '../../../../../../../../components/Title';
 import LinkButton from '../../../../../../../../components/LinkButton';

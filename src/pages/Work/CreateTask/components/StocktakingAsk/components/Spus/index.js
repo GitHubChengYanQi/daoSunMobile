@@ -6,7 +6,7 @@ import SkuItem from '../../../../../Sku/SkuItem';
 import BottomButton from '../../../../../../components/BottomButton';
 import MySearch from '../../../../../../components/MySearch';
 import { Button, Dropdown } from 'antd-mobile';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import SkuClass from './components/SkuClass';
 import Brand from './components/Brand';
 import Material from './components/Material';

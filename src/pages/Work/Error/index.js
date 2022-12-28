@@ -3,7 +3,7 @@ import MyNavBar from '../../components/MyNavBar';
 import MySearch from '../../components/MySearch';
 import MyList from '../../components/MyList';
 import style from '../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../Sku/SkuItem';
 import { Divider } from 'antd-mobile';

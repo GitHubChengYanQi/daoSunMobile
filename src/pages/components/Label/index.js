@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import styles from './index.less';
 
 const Label = ({ children, className, style = {}, width }) => {

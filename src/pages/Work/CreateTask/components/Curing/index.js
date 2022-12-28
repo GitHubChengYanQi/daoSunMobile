@@ -9,7 +9,7 @@ import { MyDate } from '../../../../components/MyDate';
 import MyAntPopup from '../../../../components/MyAntPopup';
 import SkuItem from '../../../Sku/SkuItem';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import MyPicker from '../../../../components/MyPicker';
 import StartEndDate, { getMinTime } from '../../../../components/StartEndDate';
 

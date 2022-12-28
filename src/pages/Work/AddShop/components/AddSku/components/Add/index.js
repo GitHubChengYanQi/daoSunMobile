@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
 import SkuItem from '../../../../../Sku/SkuItem';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import { ERPEnums } from '../../../../../Stock/ERPEnums';
 import { Button, Picker } from 'antd-mobile';
 import ShopNumber from '../../../ShopNumber';

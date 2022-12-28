@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './index.less';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const Title = ({ children, className}) => {
 

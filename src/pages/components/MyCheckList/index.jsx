@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CheckList } from 'antd-mobile';
 import style from './index.less';
-import { isArray } from '../ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import MyAntPopup from '../MyAntPopup';
 import MySearch from '../MySearch';
 import LinkButton from '../LinkButton';

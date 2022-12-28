@@ -9,7 +9,7 @@ import SkuItem from '../../Sku/SkuItem';
 import LinkButton from '../../../components/LinkButton';
 import AddSku from '../../AddShop/components/AddSku';
 import CreateInStock from '../../ProcessTask/Create/components/CreateInStock';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { ERPEnums } from '../ERPEnums';
 import MyActionSheet from '../../../components/MyActionSheet';
 import { useLocation } from 'react-router-dom';

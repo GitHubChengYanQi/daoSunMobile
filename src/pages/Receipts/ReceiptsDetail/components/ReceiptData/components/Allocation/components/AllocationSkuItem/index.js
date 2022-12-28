@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import moment from 'moment';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';

@@ -8,7 +8,7 @@ import StocktaskingHandle
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskingHandle';
 import MyCard from '../../../../components/MyCard';
 import style from '../index.less';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import { inventoryPageList } from '../index';

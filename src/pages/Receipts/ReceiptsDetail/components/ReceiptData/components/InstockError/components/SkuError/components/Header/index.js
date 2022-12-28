@@ -3,7 +3,7 @@ import style from '../../../../../InstockOrder/components/Error/index.less';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { AddCircleOutline, CloseOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import ShopNumber
   from '../../../../../../../../../../Work/AddShop/components/ShopNumber';
 import { PaperClipOutlined } from '@ant-design/icons';

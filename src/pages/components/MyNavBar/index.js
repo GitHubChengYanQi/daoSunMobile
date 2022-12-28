@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { NavBar } from 'antd-mobile';
 import { history, useModel } from 'umi';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { useLocation } from 'react-router-dom';
 
 const MyNavBar = ({ title, noDom }) => {

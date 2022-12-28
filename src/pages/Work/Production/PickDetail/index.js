@@ -29,7 +29,7 @@ import { history } from 'umi';
 import style from './index.css';
 import MyTree from '../../../components/MyTree';
 import { CollectMoneyOutline } from 'antd-mobile-icons';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const PickDetail = (props) => {
 
