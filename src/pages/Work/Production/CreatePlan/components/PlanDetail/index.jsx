@@ -4,7 +4,7 @@ import styles from './index.less';
 import MyCard from '../../../../../components/MyCard';
 import { AddButton } from '../../../../../components/MyButton';
 import { Divider, Input } from 'antd-mobile';
-import SelectBom from '../../SelectBom';
+import SelectBom, { bomsByskuId } from '../../SelectBom';
 import MyAntPopup from '../../../../../components/MyAntPopup';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
 import LinkButton from '../../../../../components/LinkButton';
@@ -16,6 +16,9 @@ import SelectOrder from '../SelectOrder';
 import Label from '../../../../../components/Label';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
+import BomVersions from '../../SelectBom/components/BomVersions';
+import { useRequest } from '../../../../../../util/Request';
+import { MyLoading } from '../../../../../components/MyLoading';
 
 const PlanDetail = (
   {
@@ -35,15 +38,11 @@ const PlanDetail = (
   const [addBoms, setAddBoms] = useState(false);
   const [addOrder, setAddOrder] = useState(false);
 
-  const updateValue = (key, data) => {
-    const newValue = value.map((item, index) => {
-      if (index === key) {
-        return { ...item, ...data };
-      }
-      return item;
-    });
-    onChange(newValue);
-  };
+  const [open, setOpen] = useState();
+
+  const [bomVersions, setBomVersions] = useState([]);
+
+  const { loading: bomsByskuIdLoading, run: bomsByskuIdRun } = useRequest(bomsByskuId, { manual: true });
 
   const orderItem = (item, index, key) => {
 
@@ -111,8 +110,8 @@ const PlanDetail = (
         />
       </div>
       {
-        isArray(item.skus).map((item, index) => {
-          return <div key={index} className={styles.detailSkuItem}>
+        isArray(item.skus).map((item, skuIndex) => {
+          return <div key={skuIndex} className={styles.detailSkuItem}>
             <div className={styles.sku}>
               <SkuItem
                 noView
@@ -120,19 +119,39 @@ const PlanDetail = (
                 imgSize={80}
                 gap={8}
                 extraWidth='130px'
+                otherData={[
+                  <>版本号：{item.name}</>,
+                ]}
               />
             </div>
             <div className={styles.skuActions}>
-              <MyRemoveButton />
+              <MyRemoveButton onRemove={() => {
+                const newValue = value.map((item, countryIndex) => {
+                  if (index === countryIndex) {
+                    return { ...item, skus: item.skus.filter((item, index) => index !== skuIndex) };
+                  }
+                  return item;
+                });
+                onChange(newValue);
+              }} />
               <div>
                 ×{item.number}
               </div>
-              <LinkButton>修改</LinkButton>
+              <LinkButton onClick={async () => {
+                const boms = await bomsByskuIdRun({ params: { skuId: item.skuId } });
+                setBomVersions(boms.map(bomItem => {
+                  if (bomItem.partsId === item.partsId) {
+                    return { ...bomItem, number: item.number, remark: item.remark };
+                  }
+                  return bomItem;
+                }));
+                setOpen({ ...item, countryIndex: index, skuIndex });
+              }}>修改</LinkButton>
             </div>
           </div>;
         })
       }
-      {index !== value.length - 1 && <Divider>
+      {index !== value.length - 1 && item.country && <Divider>
         <AddButton onClick={() => {
           setAddBoms(index + '');
         }} />
@@ -201,6 +220,29 @@ const PlanDetail = (
         onClose={() => setAddOrder(false)}
       />
     </MyAntPopup>
+
+
+    <BomVersions
+      setBomVersions={setBomVersions}
+      open={open}
+      bomVersions={bomVersions}
+      setOpen={setOpen}
+      addShopBall={({ boms = [] }) => {
+        const newValue = value.map((item, index) => {
+          if (index === open.countryIndex) {
+            const skus = item.skus.map(item => item);
+            skus.splice(open.skuIndex, 1, ...boms);
+            return { ...item, skus };
+          }
+
+          return item;
+        });
+        onChange(newValue);
+      }}
+    />
+
+    {bomsByskuIdLoading && <MyLoading />}
+
   </>;
 };
 
