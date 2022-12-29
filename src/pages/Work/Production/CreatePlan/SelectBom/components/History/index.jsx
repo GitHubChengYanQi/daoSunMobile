@@ -9,7 +9,12 @@ import Label from '../../../../../../components/Label';
 import { orderList } from '../../../../../Order/Url';
 import { isArray } from '../../../../../../../util/ToolUtil';
 
-const History = () => {
+const History = (
+  {
+    onChange = () => {
+    },
+  },
+) => {
 
   const [key, setKey] = useState();
 
@@ -35,7 +40,7 @@ const History = () => {
                 <div className={styles.status}>
                   <div className={styles.theme}>{item.theme || '无主题'}</div>
                 </div>
-               <Button color='primary' fill='outline'>添加</Button>
+                <Button color='primary' fill='outline'>添加</Button>
               </div>
               <div className={styles.row}>
                 <Label className={styles.label}>产品</Label>：无
@@ -77,7 +82,9 @@ const History = () => {
                   <Label className={styles.label}>交货期</Label>：{item.leadTime || 0}天
                 </div>
               </div>
-              <Button color='primary' fill='outline'>添加</Button>
+              <Button color='primary' fill='outline' onClick={() => {
+                onChange(isArray(item.detailResults).map(item => ({ ...item, number: item.purchaseNumber,partsId:item.skuResult?.partsId })));
+              }}>添加</Button>
             </div>;
           })
         }

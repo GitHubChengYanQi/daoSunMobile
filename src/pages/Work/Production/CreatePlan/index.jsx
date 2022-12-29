@@ -17,7 +17,6 @@ import MyPicker from '../../../components/MyPicker';
 import { PaperClipOutlined } from '@ant-design/icons';
 import UploadFile from '../../../components/Upload/UploadFile';
 import PlanDetail from './components/PlanDetail';
-import KeepAlive from '../../../../components/KeepAlive';
 
 export const createProductionPlan = {
   url: '/productionPlan/add',
@@ -46,27 +45,26 @@ const CreatePlan = () => {
       loading={loading}
       onSave={async (complete) => {
         const orderDetailParams = [];
-        if (data.type === 'MarketingPresupposition') {
+        if (data.type === 'order') {
           isArray(data.orderDetailParams).forEach(item => {
-            orderDetailParams.push({
+            const detailResults = item.detailResults || [];
+            detailResults.map(item => orderDetailParams.push({
               ...item,
-              purchaseNumber: item.number || 1,
-            });
+              partsId: item.skuResult?.partsId,
+            }));
           });
         } else {
           isArray(data.orderDetailParams).forEach(item => {
-            const details = item.details || [];
-            details.forEach(detailItem => {
+            const skus = item.skus || [];
+            skus.forEach(detailItem => {
               orderDetailParams.push({
                 ...detailItem,
-                contractCoding: item.contractCoding,
-                customerName: item.customerName,
+                customerName: item.country,
                 purchaseNumber: item.number || 1,
               });
             });
           });
         }
-
         let success;
         await run({
           data: {
@@ -192,6 +190,7 @@ const CreatePlan = () => {
     />
 
     <MyPicker
+      value={data.type}
       onClose={() => setVisible('')}
       visible={visible === 'type'}
       options={[

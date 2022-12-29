@@ -46,6 +46,7 @@ const SelectBom = (
   const [skus, setSkus] = useState([]);
 
   const shopRef = useRef();
+  const partsListRef = useRef();
 
   const [list, setList] = useState([]);
 
@@ -54,6 +55,8 @@ const SelectBom = (
   const [bomVersions, setBomVersions] = useState([]);
 
   const [openHistory, setOpenHistory] = useState();
+
+  const [searchValue, setSearchValue] = useState('');
 
   const addAfter = (boms) => {
     shopRef.current.jump(() => {
@@ -121,7 +124,6 @@ const SelectBom = (
     }
   };
 
-
   const { loading: bomsByskuIdLoading, run: bomsByskuIdRun } = useRequest(bomsByskuId, { manual: true });
 
   useEffect(() => {
@@ -138,9 +140,11 @@ const SelectBom = (
       extra={<LinkButton onClick={() => setOpenHistory(true)}>查看</LinkButton>}
     />
     <div className={styles.space} />
-    <MySearch />
+    <MySearch onChange={setSearchValue} value={searchValue} onSearch={(value) => {
+      partsListRef.current.submit({ skuName: value });
+    }} />
     <div style={{ flexGrow: 1, overflow: 'auto' }}>
-      <MyList api={partsList} getData={setList} data={list}>
+      <MyList ref={partsListRef} api={partsList} getData={setList} data={list}>
         {
           list.map((item, index) => {
             return <div key={index} className={styles.skuItem}>
@@ -192,7 +196,10 @@ const SelectBom = (
     />
 
     <MyAntPopup zIndex={1002} title='历史信息' visible={openHistory} onClose={() => setOpenHistory(false)}>
-      <History />
+      <History onChange={(value) => {
+        addAfter(value);
+        setOpenHistory(false);
+      }} />
     </MyAntPopup>
 
   </div>;

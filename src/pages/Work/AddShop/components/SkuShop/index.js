@@ -203,7 +203,7 @@ const SkuShop = (
       case 'bom':
         return {
           title: 'bom明细',
-          otherData: ['版本号：' + item.name],
+          otherData: ['版本号：' + (item.name || '-')],
         };
       case ERPEnums.directInStock:
         let number = 0;

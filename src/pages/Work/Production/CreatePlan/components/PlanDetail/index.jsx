@@ -19,6 +19,7 @@ import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import BomVersions from '../../SelectBom/components/BomVersions';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
+import { Message } from '../../../../../components/Message';
 
 const PlanDetail = (
   {
@@ -26,14 +27,14 @@ const PlanDetail = (
     filedName,
     onChange = () => {
     },
-    value = [{}],
+    value = [],
     type,
   },
 ) => {
 
   const history = useHistory();
 
-  const order = type !== 'order';
+  const order = type === 'order';
 
   const [addBoms, setAddBoms] = useState(false);
   const [addOrder, setAddOrder] = useState(false);
@@ -139,6 +140,10 @@ const PlanDetail = (
               </div>
               <LinkButton onClick={async () => {
                 const boms = await bomsByskuIdRun({ params: { skuId: item.skuId } });
+                if (boms.length === 0){
+                  Message.toast('此物料没有BOM！')
+                  return;
+                }
                 setBomVersions(boms.map(bomItem => {
                   if (bomItem.partsId === item.partsId) {
                     return { ...bomItem, number: item.number, remark: item.remark };
@@ -193,7 +198,7 @@ const PlanDetail = (
         onClose={() => setAddBoms(false)}
         onSubmit={(skus) => {
           const newValue = value.map((item, index) => {
-            if (index + '' === addBoms) {
+            if ((index + '') === addBoms) {
               return { ...item, skus: [...isArray(item.skus), ...skus] };
             }
             return item;
