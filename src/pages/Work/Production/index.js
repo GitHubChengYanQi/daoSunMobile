@@ -36,7 +36,7 @@ const Production = () => {
   const userRef = useRef();
 
   const screens = [
-    { title: '执行中', key: 'status' },
+    { title: '状态', key: 'status' },
     { title: '产品', key: 'skuId' },
     { title: '客户', key: 'customerId' },
     { title: '执行人', key: 'userId' },
@@ -181,8 +181,8 @@ const Production = () => {
         setScreenkey('');
       }}
       options={[
-        { label: '执行中', value: '执行中' },
-        { label: '完成', value: '完成' },
+        { label: '执行中', value: 0 },
+        { label: '完成', value: 99 },
       ]}
       onClose={() => setScreenkey('')}
     />
