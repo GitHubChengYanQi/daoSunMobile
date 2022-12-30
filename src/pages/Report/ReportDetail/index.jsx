@@ -118,7 +118,7 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { receiptType: query.receiptTypeName };
-      defaultParams = { receiptType: query.receiptType };
+      defaultParams = { searchType: query.receiptType };
       Content = ReceiptDetails;
       break;
     case 'inStockWork':
@@ -448,6 +448,8 @@ const ReportDetail = () => {
 
   const [screen, setScreen] = useState(defaultScreen);
 
+  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
     submit(defaultParams);
   }, []);
@@ -458,7 +460,9 @@ const ReportDetail = () => {
 
   return <>
     <MyNavBar title={title} />
-    <MySearch placeholder='搜索' />
+    <MySearch placeholder='搜索' onChange={setSearchValue} value={searchValue} onSearch={(name) => {
+      submit({ name });
+    }} />
     <div className={style.space} />
     <div hidden={tabs.length <= 1} className={styles.tabs}>
       <Tabs
@@ -700,16 +704,16 @@ const ReportDetail = () => {
 
     <MyPicker
       visible={screenKey === 'receiptType'}
-      value={params.receiptType}
+      value={params.searchType}
       onChange={(option) => {
-        submit({ receiptType: option.value });
+        submit({ searchType: option.value });
         setScreen({ ...screen, receiptType: option.label });
         setScreenkey('');
       }}
       options={[
-        { label: '收货', value: 'receipt' },
-        { label: '已入库', value: 'in' },
-        { label: '未入库', value: 'noIn' },
+        { label: '收货', value: 'INSTOCK_LIST' },
+        { label: '已入库', value: 'INSTOCK_NUMBER' },
+        { label: '未入库', value: 'NO_INSTOCK_NUMBER' },
       ]}
       onClose={() => setScreenkey('')}
     />

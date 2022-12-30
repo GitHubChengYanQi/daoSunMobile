@@ -64,7 +64,7 @@ export const InStockArrivalChart = ({ data, detail }) => {
       if (!detail) {
         history.push({
           pathname: '/Report/ReportDetail',
-          search: 'type=receiptDetails&receiptType=receipt&receiptTypeName=收货',
+          search: 'type=receiptDetails&receiptType=INSTOCK_LIST&receiptTypeName=收货',
         });
       }
     }}>
@@ -96,7 +96,7 @@ export const InStockArrivalChart = ({ data, detail }) => {
         if (!detail) {
           history.push({
             pathname: '/Report/ReportDetail',
-            search: 'type=receiptDetails&receiptType=in&receiptTypeName=已入库',
+            search: 'type=receiptDetails&receiptType=INSTOCK_NUMBER&receiptTypeName=已入库',
           });
         }
       }}>
@@ -110,7 +110,7 @@ export const InStockArrivalChart = ({ data, detail }) => {
         if (!detail) {
           history.push({
             pathname: '/Report/ReportDetail',
-            search: 'type=receiptDetails&receiptType=noIn&receiptTypeName=未入库',
+            search: 'type=receiptDetails&receiptType=NO_INSTOCK_NUMBER&receiptTypeName=未入库',
           });
         }
       }}>
