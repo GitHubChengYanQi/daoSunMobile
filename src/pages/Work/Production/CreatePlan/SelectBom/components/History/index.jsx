@@ -8,6 +8,8 @@ import { Button } from 'antd-mobile';
 import Label from '../../../../../../components/Label';
 import { orderList } from '../../../../../Order/Url';
 import { isArray } from '../../../../../../../util/ToolUtil';
+import MyEllipsis from '../../../../../../components/MyEllipsis';
+import { SkuResultSkuJsons } from '../../../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const History = (
   {
@@ -28,7 +30,7 @@ const History = (
       <div>历史计划</div>
       {key === 0 ? <DownOutline /> : <UpOutline />}
     </div>
-    {key === 0 && <div>
+    {key === 0 && <div style={{ maxHeight: '50vh', overflow: 'auto' }}>
       <MyList pullDisabled api={productionPlanList} data={list} getData={setList}>
         {
           list.map((item, index) => {
@@ -40,13 +42,29 @@ const History = (
                 <div className={styles.status}>
                   <div className={styles.theme}>{item.theme || '无主题'}</div>
                 </div>
-                <Button color='primary' fill='outline'>添加</Button>
+                <Button color='primary' fill='outline' onClick={() => {
+                  onChange(isArray(item.planDetailResults).map(item => ({
+                    ...item,
+                    number: item.planNumber,
+                    partsId: item.partsId,
+                    name: item.partsResult?.name,
+                  })));
+                }}>添加</Button>
               </div>
               <div className={styles.row}>
-                <Label className={styles.label}>产品</Label>：无
+                {
+                  isArray(item.planDetailResults).map((item, index) => {
+                    return <div key={index} className={styles.spuItem}>
+                      <div className={styles.sku}>
+                        <MyEllipsis maxWidth={300}>{SkuResultSkuJsons({ skuResult: item.skuResult })}</MyEllipsis>
+                      </div>
+                      <div>× {item.planNumber}</div>
+                    </div>;
+                  })
+                }
               </div>
               <div className={styles.row}>
-                <Label className={styles.label}>完成时间</Label>：无
+                <Label className={styles.label}>完成时间</Label>：{item.updateTime || ''}
               </div>
             </div>;
           })
@@ -61,7 +79,7 @@ const History = (
       {key === 1 ? <DownOutline /> : <UpOutline />}
     </div>
 
-    {key === 1 && <div>
+    {key === 1 && <div style={{ maxHeight: '50vh', overflow: 'auto' }}>
       <MyList pullDisabled api={orderList} params={{ type: 2 }} getData={setList} data={list}>
         {
           list.map((item, index) => {
@@ -83,7 +101,12 @@ const History = (
                 </div>
               </div>
               <Button color='primary' fill='outline' onClick={() => {
-                onChange(isArray(item.detailResults).map(item => ({ ...item, number: item.purchaseNumber,partsId:item.skuResult?.partsId })));
+                onChange(isArray(item.detailResults).map(item => ({
+                  ...item,
+                  number: item.purchaseNumber,
+                  partsId: item.skuResult?.partsId,
+                  name: item.skuResult?.partsResult?.name,
+                })));
               }}>添加</Button>
             </div>;
           })

@@ -51,7 +51,9 @@ const SelectOrder = (
           {
             list.map((item, index) => {
               let numner = 0;
-              isArray(item.detailResults).forEach(item => numner += (item.purchaseNumber || 0));
+              isArray(item.detailResults).forEach(item => {
+                numner += (item.purchaseNumber || 0)
+              });
               return <CheckList.Item value={item} key={index}>
                 <div>
                   <Label className={styles.label}>国家</Label>：无
