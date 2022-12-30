@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
 import { isArray } from '../../../../../util/ToolUtil';
 import { outstockDetailByCustomer } from '../../../components/Ranking';
-import { MyLoading } from '../../../../components/MyLoading';
+import { MyLoading } from '@/pages/components/MyLoading';
 import { RightOutline } from 'antd-mobile-icons';
 import styles from '../../../InStockReport/index.less';
 import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
