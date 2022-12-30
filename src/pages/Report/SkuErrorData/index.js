@@ -6,7 +6,7 @@ import style from '../StatisticalChart/index.less';
 import ErrorSku from '../components/ErrorSku';
 import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import MyDatePicker from '../../components/MyDatePicker';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';

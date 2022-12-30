@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import style from './index.less';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import { useRequest } from '../../../../../../../util/Request';
 import MyNavBar from '../../../../../../components/MyNavBar';
 import CreateTask from '../../../../../CreateTask';

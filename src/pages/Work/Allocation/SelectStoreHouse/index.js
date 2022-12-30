@@ -19,7 +19,7 @@ import {
   getStoreHouse, noDistribution,
 } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/getData';
 import MyAntPopup from '../../../components/MyAntPopup';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import Title from '../../../components/Title';
 import Data from './components/Data';
 
@@ -117,15 +117,11 @@ const SelectStoreHouse = () => {
         <User
           show={user.show}
           noRequired={user.id}
-          value={user.id ? [{
-            id: user.id,
-            name: user.name,
-            avatar: user.avatar,
-          }] : []}
+          value={user.id ? [user] : []}
           title='负责人'
           onChange={(users) => {
-            const { id, name, avatar } = users[0] || {};
-            setUser({ id, name, avatar });
+            const { id, name, avatar, dept, role } = users[0] || {};
+            setUser({ id, name, avatar, dept, role });
           }}
         />
         <MyCard hidden={data.length === 0} title='待分配物料'>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Divider } from 'antd-mobile';
-import { classNames, isArray } from '../../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
 import styles from '../../../InStockReport/index.less';
 import { useRequest } from '../../../../../util/Request';
 import { inStockOrderView } from '../../../InStockReport/components/TaskStatistics';

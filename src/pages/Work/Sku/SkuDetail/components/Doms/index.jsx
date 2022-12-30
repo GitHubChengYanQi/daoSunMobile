@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from '../../index.less';
 import LinkButton from '../../../../../components/LinkButton';
 import { RightOutline } from 'antd-mobile-icons';
-import { classNames, isArray } from '../../../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../../../util/ToolUtil';
 import MyAntPopup from '../../../../../components/MyAntPopup';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';

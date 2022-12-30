@@ -5,7 +5,7 @@ import LinkButton from '../../../components/LinkButton';
 import { history } from 'umi';
 import PrintCode from '../../../components/PrintCode';
 import MyNavBar from '../../../components/MyNavBar';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import Positions
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
 

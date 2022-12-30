@@ -1,4 +1,4 @@
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 
 export const getStartData = (startData = []) => {
   const skus = [];

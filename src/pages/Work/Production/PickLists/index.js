@@ -1,7 +1,7 @@
 import React from 'react';
 import { ReceiptsEnums } from '../../../Receipts';
 import Task from '../../Stock/Task';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import MyNavBar from '../../../components/MyNavBar';
 
 

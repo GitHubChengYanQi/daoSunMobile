@@ -5,7 +5,7 @@ import { MyLoading } from '../MyLoading';
 import { useRequest } from '../../../util/Request';
 import styles from './index.less';
 import BottomButton from '../BottomButton';
-import { isArray } from '../ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 
 export const formList = {
   url: '/formStyle/list',

@@ -8,7 +8,7 @@ import { Divider } from 'antd-mobile';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import styles from '../../index.less';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 
 export const instockLog = { url: '/instockReceipt/detail', method: 'POST' };
 

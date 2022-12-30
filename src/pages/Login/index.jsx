@@ -14,7 +14,7 @@ import { MyLoading } from '../components/MyLoading';
 import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
 import { Message } from '../components/Message';
-import { ToolUtil } from '../components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 
 export const Username = (props) => {
   return <div className={style.account}>

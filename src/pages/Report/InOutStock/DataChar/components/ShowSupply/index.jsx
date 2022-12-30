@@ -1,6 +1,6 @@
 import React from 'react';
 import style from '../../../index.less';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 
 const ShowSupply = (
   {

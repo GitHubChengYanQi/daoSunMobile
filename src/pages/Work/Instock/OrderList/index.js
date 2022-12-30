@@ -2,7 +2,7 @@ import React from 'react';
 import MyNavBar from '../../../components/MyNavBar';
 import Task from '../../Stock/Task';
 import { ReceiptsEnums } from '../../../Receipts';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const Orderlist = () => {
 

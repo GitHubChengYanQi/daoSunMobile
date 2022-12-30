@@ -4,7 +4,7 @@ import MyAntPopup from '../../../../../components/MyAntPopup';
 import LinkButton from '../../../../../components/LinkButton';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import style from './index.less';
-import { classNames } from '../../../../../components/ToolUtil';
+import { classNames } from '../../../../../../util/ToolUtil';
 import { CheckOutline } from 'antd-mobile-icons';
 
 const TaskTypes = (

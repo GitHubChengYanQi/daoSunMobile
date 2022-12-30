@@ -1,7 +1,7 @@
 import React from 'react';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import MyEmpty from '../../../../components/MyEmpty';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import SkuItem from '../../../Sku/SkuItem';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
 import { Divider } from 'antd-mobile';

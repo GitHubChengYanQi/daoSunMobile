@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import MyEmpty from '../../../../components/MyEmpty';
 import styles from '../../../InStockReport/index.less';
 import { useRequest } from '../../../../../util/Request';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { MyLoading } from '../../../../components/MyLoading';
 
 export const stockNumberView = { url: '/statisticalView/stockNumberView', method: 'POST' };

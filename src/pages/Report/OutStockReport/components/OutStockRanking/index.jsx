@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../util/Request';
-import { isArray } from '@/pages/components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { outstockDetailByCustomer } from '../../../components/Ranking';
 import { MyLoading } from '@/pages/components/MyLoading';
 import { RightOutline } from 'antd-mobile-icons';

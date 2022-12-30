@@ -1,5 +1,5 @@
 import React from 'react';
-import { isArray } from '../../components/ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import styles from '../index.less';
 import TaskStatistics from './components/TaskStatistics';
 import Contrast from './components/Contrast';

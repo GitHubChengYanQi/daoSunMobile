@@ -1,5 +1,5 @@
 import { request } from '../util/Request';
-import { ToolUtil } from '../pages/components/ToolUtil';
+import { ToolUtil } from '../util/ToolUtil';
 
 export default {
   namespace: 'data',

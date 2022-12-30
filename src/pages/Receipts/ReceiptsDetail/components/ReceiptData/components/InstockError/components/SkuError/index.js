@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../InstockOrder/components/Error/index.less';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import { Button, Space, TextArea } from 'antd-mobile';
 import UploadFile from '../../../../../../../../components/Upload/UploadFile';
 import { useRequest } from '../../../../../../../../../util/Request';

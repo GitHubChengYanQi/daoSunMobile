@@ -3,7 +3,7 @@ import MySearch from '../../../MySearch';
 import MyList from '../../../MyList';
 import { Button, Popover } from 'antd-mobile';
 import style from './index.less';
-import { ToolUtil } from '../../../ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import InkindItem from '../InkindItem';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 

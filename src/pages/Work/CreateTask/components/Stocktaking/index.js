@@ -32,10 +32,12 @@ const Stocktaking = (
         id: value.userId,
         name: value.userName,
         avatar: value.avatar,
+        dept: value.dept,
+        role: value.role,
       }] : []}
       onChange={(users) => {
-        const { id, name, avatar } = users[0] || {};
-        onChange({ ...value, userId: id, userName: name, avatar });
+        const { id, name, avatar, dept, role } = users[0] || {};
+        onChange({ ...value, userId: id, userName: name, avatar, dept, role });
       }}
       title='负责人'
     />

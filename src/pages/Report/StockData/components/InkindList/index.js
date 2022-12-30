@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import MyList from '../../../../components/MyList';
 import SkuItem from '../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import style from './index.less';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import LinkButton from '../../../../components/LinkButton';

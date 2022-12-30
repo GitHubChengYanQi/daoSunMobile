@@ -9,7 +9,7 @@ import LinkButton from '../../../../components/LinkButton';
 import MyAntPopup from '../../../../components/MyAntPopup';
 import SkuItem from '../../../Sku/SkuItem';
 import ShopNumber from '../../../AddShop/components/ShopNumber';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 
 const ShipList = ({ data }) => {
 

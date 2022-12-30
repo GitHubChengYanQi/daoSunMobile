@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import MyList from '../components/MyList';
 import { useHistory } from 'react-router-dom';
-import { ToolUtil } from '../components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 import { DeleteOutline, RightOutline } from 'antd-mobile-icons';
 import style from './index.less';
 import { Avatar, Badge, Button, Popover, SwipeAction, Tabs } from 'antd-mobile';

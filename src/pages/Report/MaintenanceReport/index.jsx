@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskStatistics from './components/TaskStatistics';
-import { isArray } from '../../components/ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import styles from '../index.less';
 import Contrast from './components/Contrast';
 import NumberRanking from './components/NumberRanking';

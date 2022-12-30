@@ -2,7 +2,7 @@ import React, { useImperativeHandle, useRef, useState } from 'react';
 import { orderList } from '../../../../../../Order/Url';
 import MyList from '../../../../../../../components/MyList';
 import style from './index.less';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 import { DownOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../../../../Sku/SkuItem';
 import { Button, Divider } from 'antd-mobile';

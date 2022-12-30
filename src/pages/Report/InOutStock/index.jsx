@@ -6,7 +6,7 @@ import SearchTime from './components/SearchTime';
 import { useRequest } from '../../../util/Request';
 import { spuClassListSelect } from '../../Work/Instock/Url';
 import { MyLoading } from '../../components/MyLoading';
-import { isArray } from '../../components/ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import DataChar from './DataChar';
 import MySearch from '../../components/MySearch';
 

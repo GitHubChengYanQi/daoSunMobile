@@ -1,7 +1,7 @@
 import React from 'react';
 import { useModel } from 'umi';
 import TaskItem from '../../../TaskItem';
-import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../../util/ToolUtil';
 
 const ForwardItem = (
   {

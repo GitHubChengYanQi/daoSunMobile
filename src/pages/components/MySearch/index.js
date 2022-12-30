@@ -3,7 +3,7 @@ import { Popup, SearchBar } from 'antd-mobile';
 import style from './index.less';
 import LinkButton from '../LinkButton';
 import { SearchOutline } from 'antd-mobile-icons';
-import { classNames, ToolUtil } from '../ToolUtil';
+import { classNames, ToolUtil } from '../../../util/ToolUtil';
 import Search from './components/Search';
 
 const MySearch = (

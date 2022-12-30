@@ -10,7 +10,7 @@ import MyRemoveButton from '../../../../../../../../../../../components/MyRemove
 import { AddButton } from '../../../../../../../../../../../components/MyButton';
 import ShopNumber
   from '../../../../../../../../../../../Work/AddShop/components/ShopNumber';
-import { ToolUtil } from '../../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../../util/ToolUtil';
 import MyPositions from '../../../../../../../../../../../components/MyPositions';
 
 const AddPosition = (

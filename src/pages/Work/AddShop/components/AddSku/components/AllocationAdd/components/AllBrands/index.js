@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AddButton } from '../../../../../../../../components/MyButton';
 import ShopNumber from '../../../../../ShopNumber';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import MyCheck from '../../../../../../../../components/MyCheck';
 import style
   from '../../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/Prepare/index.less';

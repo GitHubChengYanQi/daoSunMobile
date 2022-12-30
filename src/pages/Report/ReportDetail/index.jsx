@@ -5,7 +5,7 @@ import style from '../../Work/ProcessTask/index.less';
 import styles from './index.less';
 import { Button, Space, Tabs } from 'antd-mobile';
 import moment from 'moment';
-import { classNames, isObject } from '../../components/ToolUtil';
+import { classNames, isObject } from '../../../util/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../components/MyNavBar';
 import StartEndDate from '../../components/StartEndDate';
@@ -37,6 +37,7 @@ import MyCheckList from '../../components/MyCheckList';
 import { storeHouseSelect } from '../../Work/Quality/Url';
 import { materialListSelect } from '../../Work/Sku/Edit';
 import ReceiptDetails from './components/ReceiptDetails';
+import CheckAllExport from '../../components/CheckAllExport';
 import CountTimesDetails from './components/CountTimesDetails';
 import ExceptionDetails from '@/pages/Report/ReportDetail/components/ExceptionDetails';
 import InventoryRequisition from '@/pages/Report/ReportDetail/components/InventoryRequisition';
@@ -121,7 +122,7 @@ const ReportDetail = () => {
         },
       ];
       defaultScreen = { receiptType: query.receiptTypeName };
-      defaultParams = { receiptType: query.receiptType };
+      defaultParams = { searchType: query.receiptType };
       Content = ReceiptDetails;
       break;
     case 'inStockWork':
@@ -513,6 +514,8 @@ const ReportDetail = () => {
 
   const [screen, setScreen] = useState(defaultScreen);
 
+  const [searchValue, setSearchValue] = useState('');
+
   useEffect(() => {
     submit(defaultParams);
   }, []);
@@ -523,7 +526,9 @@ const ReportDetail = () => {
 
   return <>
     <MyNavBar title={title} />
-    <MySearch placeholder='搜索' />
+    <MySearch placeholder='搜索' onChange={setSearchValue} value={searchValue} onSearch={(name) => {
+      submit({ name });
+    }} />
     <div className={style.space} />
     <div hidden={tabs.length <= 1} className={styles.tabs}>
       <Tabs
@@ -626,25 +631,13 @@ const ReportDetail = () => {
 
     <Content listRef={listRef} params={params} {...contentProps} />
 
-    <div className={styles.bottomAction}>
-      <Space className={styles.radio}>
-        <MyRadio checked={currentAll} onChange={() => {
-          setCheckAll(false);
-          setCurrentAll(true);
-        }}>本页全选</MyRadio>
-        <MyRadio checked={checkAll} onChange={() => {
-          setCurrentAll(false);
-          setCheckAll(true);
-        }}>全部全选</MyRadio>
-      </Space>
-
-      <Button color='primary' onClick={() => {
-        setExportVisible(true);
-        // exportRun({ data: { beginTime: date[0], endTime: date[1] } });
-      }}>
-        导出
-      </Button>
-    </div>
+    <CheckAllExport
+      onCheckAll={setCheckAll}
+      pageAll={currentAll}
+      onPageAll={setCurrentAll}
+      checkAll={checkAll}
+      onExport={()=> setExportVisible(true)}
+    />
 
     <StartEndDate
       render
@@ -765,16 +758,16 @@ const ReportDetail = () => {
 
     <MyPicker
       visible={screenKey === 'receiptType'}
-      value={params.receiptType}
+      value={params.searchType}
       onChange={(option) => {
-        submit({ receiptType: option.value });
+        submit({ searchType: option.value });
         setScreen({ ...screen, receiptType: option.label });
         setScreenkey('');
       }}
       options={[
-        { label: '收货', value: 'receipt' },
-        { label: '已入库', value: 'in' },
-        { label: '未入库', value: 'noIn' },
+        { label: '收货', value: 'INSTOCK_LIST' },
+        { label: '已入库', value: 'INSTOCK_NUMBER' },
+        { label: '未入库', value: 'NO_INSTOCK_NUMBER' },
       ]}
       onClose={() => setScreenkey('')}
     />

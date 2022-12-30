@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import StocktaskigAction from '../StocktaskigAction';
 import BottomButton from '../../../../../../../../components/BottomButton';
 

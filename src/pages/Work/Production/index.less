@@ -1,8 +1,8 @@
 
 .item {
   background-color: #fff;
-  margin-bottom: 1px;
-  padding: 12px 12px 0;
+  border-bottom: 1px solid #F5F5F5;
+  padding: 12px;
   box-shadow: rgba(24, 69, 181, 0.1) 0 3px 6px;
 
   position: relative;
@@ -59,12 +59,11 @@
     display: flex;
     align-items: center;
     padding-bottom: 8px;
-    margin-bottom: 8px;
-    border-bottom: solid 1px var(--body--background--color);
 
     .time {
       color: #9d9b9b;
       font-size: 12px;
+      line-height: 20px;
     }
 
     .status {
@@ -77,6 +76,11 @@
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
+        font-weight: bold;
+      }
+
+      .biao {
+        margin-left: 8px;
       }
 
       .statusName {
@@ -90,9 +94,31 @@
   }
 
   .label {
-    width: 60px;
-    color: #9d9b9b;
+    width: 64px;
   }
+
+  .btext {
+    display: flex;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .btext2 {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .btext3 {
+    margin-left: auto;
+    font-size: 14px;
+    line-height: 16px;
+  }
+}
+
+.tiao {
+  margin-top: 8px;
 }
 
 .tabs {
@@ -149,6 +175,11 @@
   //padding: 12px;
 }
 
+.row {
+  margin-bottom: 8px;
+  display: flex;
+}
+
 .skuItem {
   padding: 12px;
   background-color: #fff;
@@ -164,13 +195,70 @@
 .flexCenter {
   display: flex;
   align-items: center;
+}
 
-  .flexGrow {
-    flex-grow: 1;
-  }
+.flexGrow {
+  flex-grow: 1;
 }
 
 .space {
   height: 1px;
   background-color: var(--body--background--color);
+}
+
+.screent {
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.dropDown {
+  flex-grow: 1;
+  padding: 10px 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  border-top: 1px solid #E1EBF6;
+  border-bottom: 1px solid #E1EBF6;
+
+  .titleBox {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #8d8d8d;
+    border-right: 1px solid #D8D8D8;
+
+    svg {
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    .title {
+      font-size: 14px;
+      line-height: 20px;
+      margin: auto;
+      color: #3D3D3D;
+    }
+  }
+}
+
+.sort {
+  line-height: 12px;
+  font-size: 12px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.spuItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+
+  .sku {
+    flex-grow: 1;
+  }
 }

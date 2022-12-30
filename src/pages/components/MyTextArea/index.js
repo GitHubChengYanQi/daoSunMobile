@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import CheckUser from '../CheckUser';
 import { Input } from 'antd';
 import style from './index.less';

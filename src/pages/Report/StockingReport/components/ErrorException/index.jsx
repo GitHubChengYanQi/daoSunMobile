@@ -1,14 +1,11 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './index.less';
-import moment from 'moment';
-import Canvas from '@antv/f2-react';
-import { Axis, Chart, Legend, Line, Tooltip } from '@antv/f2';
-import ScreenButtons from '@/pages/Report/InStockReport/components/ScreenButtons';
-import { useRequest } from '@/util/Request';
-import { isArray } from '@/pages/components/ToolUtil';
-import { MyLoading } from '@/pages/components/MyLoading';
-import { outstockCountViewByMonth } from '@/pages/Report/OutStockReport/components/Summary';
-import ErrorApp from '@/pages/Report/StockingReport/components/ErrorException/ErrorApp';
+import { useRequest } from '../../../../../util/Request';
+import { isArray } from '../../../../../util/ToolUtil';
+import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
+import ErrorApp from './ErrorApp';
+import { outstockCountViewByMonth } from '../../../OutStockReport/components/Summary';
+import { MyLoading } from '../../../../components/MyLoading';
 
 
 const ErrorException=()=>{

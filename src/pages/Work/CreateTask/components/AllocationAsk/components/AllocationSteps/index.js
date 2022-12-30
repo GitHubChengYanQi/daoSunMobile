@@ -2,7 +2,7 @@ import React from 'react';
 import { Steps } from 'antd-mobile';
 import { Step } from 'antd-mobile/es/components/steps/step';
 import style from './index.less';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 
 const AllocationSteps = ({ current }) => {
 

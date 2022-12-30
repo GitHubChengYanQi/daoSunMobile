@@ -3,7 +3,7 @@ import style from './index.less';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 

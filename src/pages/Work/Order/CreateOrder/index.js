@@ -12,7 +12,7 @@ import Customers from '../../ProcessTask/MyAudit/components/Customers';
 import LinkButton from '../../../components/LinkButton';
 import { useRequest } from '../../../../util/Request';
 import MyPicker from '../../../components/MyPicker';
-import { ArrayDuplicate, isArray, MathCalc } from '../../../components/ToolUtil';
+import { ArrayDuplicate, isArray, MathCalc } from '../../../../util/ToolUtil';
 import AddSku from './components/AddSku';
 import { MyLoading } from '../../../components/MyLoading';
 import ShopNumber from '../../AddShop/components/ShopNumber';

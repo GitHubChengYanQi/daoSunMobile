@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useRequest } from '../../../../util/Request';
 import { skuDetail, skuEdit } from '../../../Scan/Url';
-import { isArray, isObject } from '../../../components/ToolUtil';
+import { isArray, isObject } from '../../../../util/ToolUtil';
 import { useHistory, useLocation } from 'react-router-dom';
 import { MyLoading } from '../../../components/MyLoading';
 import MyNavBar from '../../../components/MyNavBar';

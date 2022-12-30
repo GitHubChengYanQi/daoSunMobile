@@ -1,0 +1,105 @@
+.header {
+  padding-bottom: 12px;
+  border-bottom: solid 1px #F5F5F5;
+}
+
+.contractContent {
+  padding: 0 !important;
+
+  .contract {
+    padding: 0;
+
+    .contractHeader {
+      border-bottom: solid var(--body--background--color) 1px;
+      padding: 8px 0;
+    }
+
+    .contractBody {
+      padding: 0 8px;
+    }
+  }
+}
+
+.title {
+  span {
+    color: red;
+    margin-left: 4px;
+  }
+}
+
+.detailItem {
+  border-top: 1px solid #F5F5F5;
+  display: flex;
+  padding: 12px 0;
+  align-items: center;
+
+  .item {
+    flex-grow: 1;
+  }
+
+  .action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 14px;
+    gap: 24px;
+  }
+}
+
+.addOrder {
+  max-height: 80vh;
+  overflow: auto;
+  padding-bottom: 68px;
+}
+
+.label {
+  width: 70px;
+}
+
+.contractList {
+
+  .contractItem {
+    padding: 8px 0;
+    border-bottom: solid 1px #F5F5F5;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+
+    .info {
+      //height: 14px;
+      flex-grow: 1;
+    }
+
+    .input {
+      max-width: 200px;
+      input {
+        text-align: right;
+      }
+    }
+  }
+
+  .detailSkuItem {
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #F5F5F5;
+    padding: 8px 0;
+
+    .sku {
+      flex-grow: 1;
+    }
+
+    .skuActions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: right;
+    }
+  }
+}
+
+.space {
+  height: 1px;
+  margin: 0 -12px;
+  background-color: var(--body--background--color);
+}
+

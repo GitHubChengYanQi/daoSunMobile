@@ -2,7 +2,7 @@ import React from 'react';
 import style from './index.less';
 import { MyDate } from '../../../../../components/MyDate';
 import Icon from '../../../../../components/Icon';
-import { classNames, isArray, isObject, timeDifference, ToolUtil, viewWidth } from '../../../../../components/ToolUtil';
+import { classNames, isArray, isObject, timeDifference, ToolUtil, viewWidth } from '../../../../../../util/ToolUtil';
 import MyProgress from '../../../../../components/MyProgress';
 import SkuItem from '../../../../Sku/SkuItem';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';

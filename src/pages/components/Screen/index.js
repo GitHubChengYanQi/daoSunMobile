@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import style from './index.less';
 import { Button, Popup, SideBar } from 'antd-mobile';
 import { useThrottleFn } from 'ahooks';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import MyEllipsis from '../MyEllipsis';
 
 const Screen = (

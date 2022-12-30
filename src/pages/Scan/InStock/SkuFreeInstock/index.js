@@ -14,7 +14,7 @@ import Search from '../PositionFreeInstock/components/Search';
 import TreeSelectSee from '../../../components/TreeSelectSee';
 import Number from '../../../components/Number';
 import { DeleteOutline, SearchOutline } from 'antd-mobile-icons';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const fontSize = 18;
 

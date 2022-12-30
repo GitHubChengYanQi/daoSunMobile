@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import style from './index.less';
 import MyKeybord from '../../../../components/MyKeybord';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 
 const ShopNumber = (
   {

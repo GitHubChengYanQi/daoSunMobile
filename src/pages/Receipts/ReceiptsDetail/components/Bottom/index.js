@@ -14,7 +14,7 @@ import {
   OutStockRevoke,
   StocktakingRevoke,
 } from './components/Revoke';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { ReceiptsEnums } from '../../../index';
 
 const Bottom = (

@@ -5,7 +5,7 @@ import Time from '../../../../../SkuList/components/SkuScreen/components/Time';
 import User from '../../../../../SkuList/components/SkuScreen/components/User';
 import State from '../../../../../SkuList/components/SkuScreen/components/State';
 import Brand from '../../../../../SkuList/components/SkuScreen/components/Brand';
-import { isArray, ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../../util/ToolUtil';
 import Screen from '../../../../../../../components/Screen';
 import styles from '../../index.less';
 import Position from '../Position';

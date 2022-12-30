@@ -5,7 +5,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../../../../../components/BottomButton';
 import CheckPosition
   from '../../../../../../../../../../Work/Sku/SkuList/components/SkuScreen/components/Position/components/CheckPosition';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import { ScanIcon } from '../../../../../../../../../../components/Icon';
 import { connect } from 'dva';
 import { Message } from '../../../../../../../../../../components/Message';

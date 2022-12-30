@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import style from '../../index.less';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import Icon from '../../../../../components/Icon';
 
 const ListScreent = (

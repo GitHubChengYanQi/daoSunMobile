@@ -8,11 +8,12 @@ import StocktaskingHandle
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskingHandle';
 import MyCard from '../../../../components/MyCard';
 import style from '../index.less';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import { inventoryPageList } from '../index';
 import { MyDate } from '../../../../components/MyDate';
+import { storehousePositionsDetail } from '../../../../Scan/InStock/components/Url';
 
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
 export const complete = { url: '/inventory/timelyAdd', method: 'POST' };
@@ -44,7 +45,7 @@ const PositionInventory = () => {
       const winHistory = window.history || {};
       const historyState = winHistory.state || {};
       ToolUtil.back({
-        getContainer:document.getElementById('timelyInventory'),
+        getContainer: document.getElementById('timelyInventory'),
         title: '盘点结果未提交，是否退出？',
         key: 'timelyInventory',
         disabled: historyState.title === 'timelyInventory',
@@ -126,7 +127,7 @@ const PositionInventory = () => {
         <div className={style.logs}>
           {
             logs.map((item, index) => {
-              return <div key={index} className={style.logData} onClick={()=>{
+              return <div key={index} className={style.logData} onClick={() => {
                 history.push(`/Work/Inventory/RealTimeInventory/Detail?inventoryTaskId=${item.inventoryTaskId}`);
               }}>
                 <div>

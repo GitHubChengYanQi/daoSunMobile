@@ -5,7 +5,7 @@ import { useRequest } from '../../../util/Request';
 import MyNavBar from '../../components/MyNavBar';
 import Header from './components/Header';
 import topStyle from '../../global.less';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { Tabs } from 'antd-mobile';
 import MyEmpty from '../../components/MyEmpty';
 import Bottom from './components/Bottom';

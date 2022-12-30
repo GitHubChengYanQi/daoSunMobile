@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../../../../components/Icon';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { Button } from 'antd-mobile';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';

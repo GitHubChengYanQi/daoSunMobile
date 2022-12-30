@@ -1,5 +1,5 @@
 import { Dialog, Toast } from 'antd-mobile';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 let pringCount = 0;
 let canvas = [];

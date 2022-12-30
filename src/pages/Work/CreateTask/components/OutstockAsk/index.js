@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
 import { productionPickListAdd } from '../../../Instock/Url';
@@ -103,7 +103,10 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
       type: 'task',
       userId: userInfo.id,
       userName: userInfo.name,
-      userAvatar: userInfo.avatar, ...defaultParams,
+      userAvatar: userInfo.avatar,
+      dept: userInfo.dept && userInfo.dept[0],
+      role: userInfo.role && userInfo.role[0],
+      ...defaultParams,
     });
     dataChange(skus);
   }, []);
@@ -143,10 +146,12 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
           id: params.userId,
           name: params.userName,
           avatar: params.userAvatar,
+          dept: params.dept,
+          role: params.role,
         }] : []}
         onChange={(users) => {
-          const { id, name, avatar } = users[0] || {};
-          setParams({ ...params, userId: id, userName: name, userAvatar: avatar });
+          const { id, name, avatar, dept, role } = users[0] || {};
+          setParams({ ...params, userId: id, userName: name, userAvatar: avatar, dept, role });
         }} />
       <MyCard titleBom={<Title className={style.title}>出库类型 <span>*</span></Title>} extra={<div onClick={() => {
         setTypeVisible(true);

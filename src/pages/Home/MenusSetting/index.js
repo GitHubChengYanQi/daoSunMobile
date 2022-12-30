@@ -7,7 +7,7 @@ import { useBoolean } from 'ahooks';
 import LinkButton from '../../components/LinkButton';
 import { Sortable } from '../../components/DndKit/Sortable';
 import { Handle } from '../../components/DndKit/Item';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import { useRequest } from '../../../util/Request';
 import { MyLoading } from '../../components/MyLoading';
 import MyNavBar from '../../components/MyNavBar';
@@ -15,6 +15,7 @@ import { connect } from 'dva';
 import DefaultMenus from '../component/DefaultMenus';
 import MenusItem from '../component/MenusItem';
 import { Message } from '../../components/Message';
+import { menus as menuUrls } from '../component/Menus/menus';
 
 
 export const menusAddApi = { url: '/mobelTableView/add', method: 'POST' };
@@ -167,7 +168,7 @@ const MenusSetting = (props) => {
                 };
               });
               addRun({
-                data: { details,type:0 },
+                data: { details, type: 0 },
               });
               return;
             }
@@ -258,9 +259,19 @@ const MenusSetting = (props) => {
           return <Card
             key={index}
             className={style.card}
-            title={<div className={style.cardTitle}>
+            title={<div className={style.cardTitle} onClick={() => {
+              if (menuSys) {
+                return;
+              }
+              const menuUrl = menuUrls.find(menu => menu.code === item.id) || {};
+              const url = menuUrl.url;
+              if (!url) {
+                return Toast.show({ content: '暂未开通~', position: 'bottom' });
+              }
+              history.push(url);
+            }}>
               {item.name}
-              {addButton(item.id, item.name,true)}
+              {addButton(item.id, item.name, true)}
             </div>}
             bodyClassName={style.menuCardBody}
             headerClassName={style.cardHeader}

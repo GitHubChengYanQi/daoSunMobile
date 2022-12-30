@@ -19,6 +19,7 @@ const Customers = (
 
   return <>
     <MyCheckList
+      anyLabel={!multiple && '全部'}
       searchPlaceholder='请输入供应商信息'
       api={supplyList}
       multiple={multiple}
@@ -26,7 +27,13 @@ const Customers = (
       label='customerName'
       listKey='customerId'
       onClose={onClose}
-      onChange={onChange}
+      onChange={(values) => {
+        if (values.customerId === 'any') {
+          onChange({});
+        } else {
+          onChange(values);
+        }
+      }}
       value={value}
       visible={visible}
       data={data}

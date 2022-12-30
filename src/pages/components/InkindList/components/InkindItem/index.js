@@ -1,7 +1,7 @@
 import React from 'react';
 import style from '../List/index.less';
 import MyCheck from '../../../MyCheck';
-import { isObject, ToolUtil } from '../../../ToolUtil';
+import { isObject, ToolUtil } from '../../../../../util/ToolUtil';
 import { MyDate } from '../../../MyDate';
 import { UserName } from '../../../User';
 import ShowCode from '../../../ShowCode';

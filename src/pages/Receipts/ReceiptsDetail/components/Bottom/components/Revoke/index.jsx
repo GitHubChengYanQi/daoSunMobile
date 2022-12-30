@@ -1,5 +1,5 @@
 import { ERPEnums } from '../../../../../../Work/Stock/ERPEnums';
-import { isArray, isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { isArray, isObject, ToolUtil } from '../../../../../../../util/ToolUtil';
 import { history } from 'umi';
 
 export const InStockRevoke = (taskDetail) => {

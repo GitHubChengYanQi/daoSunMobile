@@ -5,7 +5,7 @@ import scanImg from '../../../../assets/scan.png';
 import style from './index.less';
 import { useHistory } from 'react-router-dom';
 import { connect } from 'dva';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { MyLoading } from '../../../components/MyLoading';
 import { Message } from '../../../components/Message';
 import { ClockCircleOutline } from 'antd-mobile-icons';
@@ -47,7 +47,7 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       if (backObject.type === 'storehousePositions') {
         const result = ToolUtil.isObject(backObject.result);
         if (result.storehousePositionsId) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}&name=${result.name}`);
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${result.storehousePositionsId}`);
         } else {
           Message.errorToast('获取库位码失败!');
         }
@@ -155,7 +155,7 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
     <MyPositions
       afterClose={() => {
         if (position.id) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}&name=${position.name}`);
+          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
         }
       }}
       visible={positionVisible}

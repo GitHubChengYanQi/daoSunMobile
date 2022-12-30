@@ -12,7 +12,7 @@ const baseURI = process.env.ENV === 'test' ?
   // 'http://10.147.20.68:8881/'
   // 'https://api.hh.gf2025.com'
   :
-  'http://172.16.1.18'
+  process.env.api;
 
 const ajaxService = axios.create({
   baseURL: baseURI,

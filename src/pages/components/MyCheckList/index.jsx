@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { CheckList } from 'antd-mobile';
 import style from './index.less';
-import { isArray } from '../ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import MyAntPopup from '../MyAntPopup';
 import MySearch from '../MySearch';
 import LinkButton from '../LinkButton';
@@ -28,6 +28,9 @@ const MyCheckList = (
     api,
     searchLabel,
     label,
+    labelFormat = () => {
+      return '';
+    },
     listKey,
     title,
     searchPlaceholder,
@@ -103,8 +106,8 @@ const MyCheckList = (
             onClick={() => {
               if (multiple) {
                 setCheckList(checkList.map(item => item[listKey]).includes('any') ?
-                    checkList.filter(listItem => listItem[listKey] !== 'any') :
-                    [...checkList,{ [listKey]: 'any', [label]: anyLabel }]);
+                  checkList.filter(listItem => listItem[listKey] !== 'any') :
+                  [...checkList, { [listKey]: 'any', [label]: anyLabel }]);
               } else {
                 setCheckList(checkList.map(item => item[listKey]).includes('any') ? [] : [{
                   [listKey]: 'any',
@@ -132,7 +135,7 @@ const MyCheckList = (
                   }
                 }}
               >
-                {item[label]}
+                {item[label] || labelFormat(item)}
               </CheckList.Item>;
             })
           }

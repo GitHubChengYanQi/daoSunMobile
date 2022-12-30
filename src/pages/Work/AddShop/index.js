@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import style from '../Instock/InstockAsk/coponents/ReceiptsInstock/index.less';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import SkuItem from '../Sku/SkuItem';
 import LinkButton from '../../components/LinkButton';
 import AddSku from './components/AddSku';

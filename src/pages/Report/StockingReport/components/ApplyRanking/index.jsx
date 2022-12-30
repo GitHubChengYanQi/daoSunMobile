@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import styles from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
-import { classNames } from '@/pages/components/ToolUtil';
-import App from '@/pages/Report/StockingReport/components/ApplyRanking/App';
+import App from './App';
+import { classNames } from '../../../../../util/ToolUtil';
 
 const ApplyRanking =()=>{
   const history = useHistory();

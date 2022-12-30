@@ -7,7 +7,7 @@ import MyCheck from '../../../MyCheck';
 import { Button } from 'antd-mobile';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
-import { ToolUtil } from '../../../ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 
 const SearchInkind = (
   {
