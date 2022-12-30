@@ -1,10 +1,10 @@
 import React from 'react';
-import CountStatistics from '@/pages/Report/Stocking/components/CountStatistics';
-import ErrorException from '@/pages/Report/Stocking/components/ErrorException';
-import CountTimes from '@/pages/Report/Stocking/components/CountTimes';
-import ErrorSummary from '@/pages/Report/Stocking/components/ErrorSummary';
-import TaskStatistics from '@/pages/Report/Stocking/components/TaskStatistics';
-import ApplyRanking from '@/pages/Report/Stocking/components/ApplyRanking';
+import CountStatistics from './components/CountStatistics';
+import CountTimes from './components/CountTimes';
+import ErrorException from './components/ErrorException';
+import ErrorSummary from './components/ErrorSummary';
+import TaskStatistics from '../AllocationReport/components/TaskStatistics';
+import ApplyRanking from './components/ApplyRanking';
 
 const Stocking = () => {
   return <>
