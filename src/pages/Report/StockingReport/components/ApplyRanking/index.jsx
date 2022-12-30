@@ -21,8 +21,9 @@ const ApplyRanking =()=>{
         <RightOutline />
       </div>
     </div>
+    {/*条形图*/}
     <App/>
-
+  {/*条形图结束*/}
   </div>;
 };
 

@@ -59,7 +59,7 @@ const CountTimesDetails=(
 
         {/*人员*/}
         <div>
-          <div className={styles.header} hidden>
+          <div className={styles.header}>
             <MyCheck fontSize={17} />
             <div className={styles.label}>李四（仓库管理-库房保管员）</div>
               <div>共盘点<span className='numberBlue'>75</span>次
