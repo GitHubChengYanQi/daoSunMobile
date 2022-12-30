@@ -37,6 +37,9 @@ import MyCheckList from '../../components/MyCheckList';
 import { storeHouseSelect } from '../../Work/Quality/Url';
 import { materialListSelect } from '../../Work/Sku/Edit';
 import ReceiptDetails from './components/ReceiptDetails';
+import CountTimesDetails from './components/CountTimesDetails';
+import ExceptionDetails from '@/pages/Report/ReportDetail/components/ExceptionDetails';
+import InventoryRequisition from '@/pages/Report/ReportDetail/components/InventoryRequisition';
 
 const ReportDetail = () => {
 
@@ -315,6 +318,68 @@ const ReportDetail = () => {
       ];
       defaultScreen = { numberRanking: '次数排行' };
       Content = OutStockWorkDetail;
+      break;
+
+    //  盘点
+    case 'CountTimesDetails':
+      title = '盘点次数明细'
+      tabs = [
+        {
+          title: '物料',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+        {
+          title: '人员',
+          key: 'PICK_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+        ]
+      defaultParams = { searchType: tabs[0]?.key };
+      Content = CountTimesDetails;
+      break;
+    case 'exceptionDetails':
+      title = '异常明细'
+      tabs = [
+        {
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+      ]
+      Content = ExceptionDetails;
+      break;
+    case 'rankingOfInventory':
+      title = '盘点申请排行'
+      tabs = [
+        {
+          title: '任务次数',
+          key: 'SPU_CLASS',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '状态', key: 'stockStatus' },
+            { title: '执行人', key: 'spuClassId' },
+          ],
+        },
+        {
+          title: '物料数量',
+          key: 'PICK_USER',
+          screens: [
+            { title: '日期', key: 'createTime' },
+            { title: '物料分类', key: 'spuClassId' },
+          ],
+        },
+      ]
+      Content = InventoryRequisition
+
+    ;
       break;
 
     // 综合

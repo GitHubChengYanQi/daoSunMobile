@@ -8,7 +8,7 @@ import { useRequest } from '@/util/Request';
 import { isArray } from '@/pages/components/ToolUtil';
 import { MyLoading } from '@/pages/components/MyLoading';
 import { outstockCountViewByMonth } from '@/pages/Report/OutStockReport/components/Summary';
-import ErrorApp from '@/pages/Report/Stocking/components/ErrorException/ErrorApp';
+import ErrorApp from '@/pages/Report/StockingReport/components/ErrorException/ErrorApp';
 
 
 const ErrorException=()=>{

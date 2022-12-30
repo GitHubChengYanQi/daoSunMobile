@@ -136,7 +136,27 @@
       color: var(--adm-color-danger);
     }
   }
+  .skuItemCenter{
+    flex-grow: 1;
 
+    .textCenter{
+      padding:4px 0 6px 0 ;
+      color: #9A9A9A;
+    }
+    .textBottom{
+      font-size: 12px;
+      display: flex;
+      color: #9A9A9A;
+
+      .redText{
+        color: #FF3131;
+        padding-left: 2px;
+      }
+      .blackText{
+        color: #3D3D3D;
+      }
+    }
+  }
 }
 
 .progress {
@@ -152,4 +172,12 @@
   .title {
     flex-grow: 1;
   }
+}
+
+.popupTitle{
+  text-align: center;
+  padding: 12px;
+  font-size: 18px;
+  color: #3D3D3D;
+  border-bottom: 1px solid #F5F5F5;
 }

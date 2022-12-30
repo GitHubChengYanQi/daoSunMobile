@@ -7,7 +7,7 @@ import { ToolUtil } from '../../../components/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 
-const SkuItem = (
+const  SkuItem = (
   {
     hiddenNumber,
     number,

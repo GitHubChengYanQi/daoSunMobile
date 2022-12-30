@@ -4,7 +4,7 @@ import { useRequest } from '@/util/Request';
 import { classNames, isArray } from '@/pages/components/ToolUtil';
 import { MyLoading } from '@/pages/components/MyLoading';
 import ScreenButtons from '@/pages/Report/InStockReport/components/ScreenButtons';
-import { outStockOrderView } from '@/pages/Report/Stocking/components/CountStatistics';
+import { outStockOrderView } from '@/pages/Report/StockingReport/components/CountStatistics';
 
 
 const TaskStatistics =()=>{

@@ -47,7 +47,7 @@ const CountTimes =()=>{
       </div>
       <div style={{ paddingBottom: 12 }} onClick={() => history.push({
         pathname: '/Report/ReportDetail',
-        search: 'type=outStockNumber',
+        search: 'type=CountTimesDetails',
       })}>
         <RightOutline />
       </div>
@@ -92,23 +92,6 @@ const CountTimes =()=>{
         </div>;
       })
     }
-    {/*<div className={styles.bottom}>*/}
-    {/*  <div className={styles.lists}>*/}
-    {/*    <div className={styles.order}><img src={require('../assert/1hao.png')} alt='' /></div>*/}
-    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
-    {/*    <div className={styles.right}>66次</div>*/}
-    {/*  </div>*/}
-    {/*  <div className={styles.lists}>*/}
-    {/*    <div className={styles.order}><img src={require('../assert/2hao.png')} alt='' /></div>*/}
-    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
-    {/*    <div className={styles.right}>66次</div>*/}
-    {/*  </div>*/}
-    {/*  <div className={styles.lists}>*/}
-    {/*    <div className={styles.order}><img src={require('../assert/3hao.png')} alt='' /></div>*/}
-    {/*    <div className={styles.left}>黑色内扣冷却管/lqg-700/ 1/2*700mm黑色内螺纹</div>*/}
-    {/*    <div className={styles.right}>66次</div>*/}
-    {/*  </div>*/}
-    {/*</div>*/}
   </>;
 };
 

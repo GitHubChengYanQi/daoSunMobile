@@ -51,8 +51,7 @@ export default function App() {
   });
   let context;
   return (
-
-    <Canvas context={context} pixelRatio={window.devicePixelRatio} height={150}>
+    <Canvas context={context} pixelRatio={window.devicePixelRatio} height={150} width={600}>
       <Chart data={data}>
         <Tooltip />
         <Legend
