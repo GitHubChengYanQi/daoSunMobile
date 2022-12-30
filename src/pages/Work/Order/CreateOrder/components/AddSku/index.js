@@ -14,6 +14,7 @@ import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
 import { MathCalc } from '../../../../../../util/ToolUtil';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
+import { useHistory } from 'react-router-dom';
 
 export const unitListSelect = { url: '/unit/listSelect', method: 'POST' };
 export const orderDetailRecord = { url: '/orderDetail/record', method: 'POST' };
@@ -24,6 +25,8 @@ const AddSku = (
     onChange = () => {
     },
   }) => {
+
+  const history = useHistory();
 
   const [visible, setVisible] = useState(false);
 
@@ -148,12 +151,15 @@ const AddSku = (
     </div>
 
 
-    <MyAntPopup title='选择物料' onClose={() => setVisible(false)} visible={visible} position='right'>
+    <MyAntPopup title='选择物料' onClose={() => history.goBack()} visible={visible} position='right'>
       <CheckSkus
+        onClose={() => {
+          setVisible(false);
+        }}
         value={data.map(item => item.skuResult)}
         onChange={(skus = []) => {
           addData(skus);
-          setVisible(false);
+          history.goBack();
         }}
         onCheck={(skus) => {
           addData(skus);

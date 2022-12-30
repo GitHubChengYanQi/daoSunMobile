@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { skuList } from '../../../Scan/Url';
 import MyList from '../../../components/MyList';
 import { Button, Divider, Space } from 'antd-mobile';
@@ -7,11 +7,14 @@ import MySearch from '../../../components/MySearch';
 import styles from './index.less';
 import MyCheck from '../../../components/MyCheck';
 import SkuItem from '../SkuItem';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const CheckSkus = (
   {
     value = [],
     onCheck = () => {
+    },
+    onClose = () => {
     },
     onChange = () => {
     },
@@ -39,64 +42,84 @@ const CheckSkus = (
   };
   const [searchValue, setSearchValue] = useState();
 
-  return <div style={{ backgroundColor: '#fff' }}>
-    <MyBottom
-      leftActuions={<div>已选 {skus.length} 条</div>}
-      buttons={<Space>
-        <Button onClick={() => {
-          onCheck(skus);
-        }}>选中</Button>
-        <Button color='primary' onClick={() => {
-          onChange(skus);
-        }}>选中并关闭</Button>
-      </Space>}
-    >
-      <div className={styles.search}>
-        <MySearch
-          onChange={setSearchValue}
-          value={searchValue}
-          onSearch={(value) => {
-            ref.current.submit({ skuName: value });
-          }} />
-      </div>
+  useEffect(() => {
+    ToolUtil.back({
+      key: 'popup',
+      onBack: onClose,
+    });
+  }, []);
 
-      <div className={styles.list}>
-        <MyList
-          ref={ref}
-          api={skuList}
-          data={data}
-          getData={(value) => {
-            setData(value.filter(item => item));
-          }}
-        >
-          {
-            data.map((item, index) => {
-              return <div key={index}>
-                <div style={{ display: 'flex' }}>
-                  <div
-                    style={{ width: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                    onClick={() => {
-                      click(item);
-                    }}
-                  >
-                    <MyCheck fontSize={24} checked={checked(item.skuId)} />
-                  </div>
-                  <div
-                    style={{ flexGrow: 1 }}
-                    onClick={() => {
-                      click(item);
-                    }}>
-                    <SkuItem extraWidth='60px' skuResult={item} />
-                  </div>
+  return <div
+    style={{ backgroundColor: '#fff', display: 'flex', flexDirection: 'column', height: 'calc(100% - 45px)' }}>
+
+    <div className={styles.search}>
+      <MySearch
+        onChange={setSearchValue}
+        value={searchValue}
+        onSearch={(value) => {
+          ref.current.submit({ skuName: value });
+        }} />
+    </div>
+
+    <div className={styles.list}>
+      <MyList
+        ref={ref}
+        api={skuList}
+        data={data}
+        getData={(value) => {
+          setData(value.filter(item => item));
+        }}
+      >
+        {
+          data.map((item, index) => {
+            return <div key={index}>
+              <div style={{ display: 'flex' }}>
+                <div
+                  style={{ width: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  onClick={() => {
+                    click(item);
+                  }}
+                >
+                  <MyCheck fontSize={24} checked={checked(item.skuId)} />
                 </div>
-                <Divider />
-              </div>;
-            })
-          }
+                <div
+                  style={{ flexGrow: 1 }}
+                  onClick={() => {
+                    click(item);
+                  }}>
+                  <SkuItem extraWidth='60px' skuResult={item} />
+                </div>
+              </div>
+              <Divider />
+            </div>;
+          })
+        }
 
-        </MyList>
+      </MyList>
+    </div>
+
+    <div style={{
+      boxShadow: 'rgb(0, 0, 0,0.1) 0px -4px 10px',
+      backgroundColor: '#fff',
+      padding: 8,
+    }}>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flexGrow: 1, display: 'flex', alignItems: 'center' }}>
+          <div>已选 {skus.length} 条</div>
+        </div>
+        <div style={{ textAlign: 'right', display: 'flex', alignItems: 'center' }}>
+          {<Space>
+            <Button onClick={() => {
+              onCheck(skus);
+            }}>选中</Button>
+            <Button color='primary' onClick={() => {
+              onChange(skus);
+            }}>选中并关闭</Button>
+          </Space>}
+        </div>
       </div>
-    </MyBottom>
+    </div>
+
 
   </div>;
 };
