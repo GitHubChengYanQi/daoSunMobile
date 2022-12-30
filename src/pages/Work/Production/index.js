@@ -19,9 +19,7 @@ import CheckUser from '../../components/CheckUser';
 import Label from '../../components/Label';
 import StartEndDate from '../../components/StartEndDate';
 import { SkuResultSkuJsons } from '../../Scan/Sku/components/SkuResult_skuJsons';
-import ShopNumber from '../AddShop/components/ShopNumber';
 import MyEllipsis from '../../components/MyEllipsis';
-import { supplyList } from '../Sku/SkuList/components/SkuScreen/components/Url';
 import MyCheckList from '../../components/MyCheckList';
 import { skuList } from '../../Scan/Url';
 
@@ -38,7 +36,7 @@ const Production = () => {
   const userRef = useRef();
 
   const screens = [
-    { title: '执行中', key: 'status' },
+    { title: '状态', key: 'status' },
     { title: '产品', key: 'skuId' },
     { title: '客户', key: 'customerId' },
     { title: '执行人', key: 'userId' },
@@ -183,8 +181,8 @@ const Production = () => {
         setScreenkey('');
       }}
       options={[
-        { label: '执行中', value: '执行中' },
-        { label: '完成', value: '完成' },
+        { label: '执行中', value: 0 },
+        { label: '完成', value: 99 },
       ]}
       onClose={() => setScreenkey('')}
     />
@@ -200,10 +198,10 @@ const Production = () => {
       onClose={() => setScreenkey('')}
       onChange={(sku) => {
         submit({ skuId: sku?.skuId });
-        setScreen({ ...screen, skuResult: SkuResultSkuJsons({ skuResult: sku }) });
+        setScreen({ ...screen, skuResult: sku.skuInfo || SkuResultSkuJsons({ skuResult: sku }) });
         setScreenkey('');
       }}
-      value={params.skuId ? [{ skuId: params.skuId, sku: screen.skuResult }] : []}
+      value={params.skuId ? [{ skuId: params.skuId, skuInfo: screen.skuResult }] : []}
       visible={screenKey === 'skuId'}
       title='选择产品'
     />
@@ -240,7 +238,7 @@ const Production = () => {
       zIndex={1002}
       ref={userRef}
       onClose={() => setScreenkey('')}
-      value={params.userId ? [{ id: params.userId }] : []}
+      value={params.userId ? [{ id: params.userId, name: screen.userName }] : []}
       onChange={(users) => {
         submit({ userId: isObject(users[0]).id });
         setScreen({ ...screen, userName: isObject(users[0]).name });
