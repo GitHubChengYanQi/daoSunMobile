@@ -288,11 +288,11 @@ const CreateOrder = () => {
 
         if (fileds.find((item) => item === 'detailParams') && value.detailParams) {
           const detailParams = value.detailParams.filter((item) => {
-            return item.skuId && item.brandId && item.purchaseNumber && item.onePrice;
+            return item.skuId && item.purchaseNumber && item.onePrice;
           });
           if (detailParams.length !== value.detailParams.length) {
             Message.warningDialog({
-              content: '请检查物料清单信息！，品牌、数量、单价为必填信息!',
+              content: '请检查物料清单信息！数量、单价为必填信息!',
             });
             return false;
           }
