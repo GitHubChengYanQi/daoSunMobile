@@ -5,7 +5,7 @@ import { Avatar } from 'antd';
 import Icon from '../../../../../components/Icon';
 import { AuditOutlined, CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import style from './index.less';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import { CheckCircleFill, CloseCircleFill } from 'antd-mobile-icons';
 import { MyDate } from '../../../../../components/MyDate';
 import MyCard from '../../../../../components/MyCard';

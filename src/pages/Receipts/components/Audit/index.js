@@ -3,7 +3,7 @@ import { Button } from 'antd-mobile';
 import { useRequest } from '../../../../util/Request';
 import style from '../../ReceiptsDetail/components/Bottom/index.less';
 import { MyLoading } from '../../../components/MyLoading';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { Message } from '../../../components/Message';
 
 const Audit = (

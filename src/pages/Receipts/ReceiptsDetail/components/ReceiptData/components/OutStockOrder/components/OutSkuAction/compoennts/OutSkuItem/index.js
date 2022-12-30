@@ -1,7 +1,7 @@
 import React from 'react';
 import style
   from '../../../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import SkuItem from '../../../../../../../../../../Work/Sku/SkuItem';
 import { Progress } from 'antd';
 import { collectableColor, notPreparedColor, receivedColor } from '../MyPicking';

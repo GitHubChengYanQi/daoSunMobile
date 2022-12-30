@@ -4,7 +4,7 @@ import MyBottom from '../../../components/MyBottom';
 import { Button, Space } from 'antd-mobile';
 import { ReceiptsEnums } from '../../../Receipts';
 import Task from '../../Stock/Task';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import Inventory from '../../ProcessTask/Create/components/Inventory';
 import { useHistory } from 'react-router-dom';
 

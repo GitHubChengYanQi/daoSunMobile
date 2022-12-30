@@ -7,7 +7,7 @@ import MyCard from '../../../MyCard';
 import MyRemoveButton from '../../../MyRemoveButton';
 import { useRequest } from '../../../../../util/Request';
 import { SearchOutline } from 'antd-mobile-icons';
-import { isQiyeWeixin, ToolUtil } from '../../../ToolUtil';
+import { isQiyeWeixin, ToolUtil } from '../../../../../util/ToolUtil';
 import { LeftOutlined } from '@ant-design/icons';
 import { useHistory } from 'react-router-dom';
 

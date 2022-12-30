@@ -45,7 +45,7 @@ const ProductionDetail = (props) => {
       <div className={style.data}>
         <div className={style.line}>
           <div className={style.name}>
-            {data.theme}
+            {data.theme || '无主题'}
           </div>
           <span>
           <Icon type='icon-dian' /> 处理中

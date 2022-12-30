@@ -7,7 +7,7 @@ import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import MyEllipsis from '../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../util/Request';
 import { instockDetailBySpuClass } from '../../../components/Ranking';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import MyList from '../../../../components/MyList';
 import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';

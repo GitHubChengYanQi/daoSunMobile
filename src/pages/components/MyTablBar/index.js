@@ -1,7 +1,7 @@
 import React from 'react';
 import { TabBar } from 'antd-mobile';
 import style from './index.less';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 
 const MyTablBar = (

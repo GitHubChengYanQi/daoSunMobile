@@ -5,7 +5,7 @@ import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { MyLoading } from '../../../../components/MyLoading';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import SkuItem from '../../../../Work/Sku/SkuItem';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import { outStockLogView } from '../../../components/WorkContrast';

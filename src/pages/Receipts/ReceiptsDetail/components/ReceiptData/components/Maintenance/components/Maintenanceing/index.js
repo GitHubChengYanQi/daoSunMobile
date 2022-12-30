@@ -16,7 +16,7 @@ import MyTextArea from '../../../../../../../../components/MyTextArea';
 import Careful from '../../../../../../../../Work/CreateTask/components/Careful';
 import { ReceiptsEnums } from '../../../../../../../index';
 import MyCard from '../../../../../../../../components/MyCard';
-import { isArray, ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../../../util/ToolUtil';
 
 export const maintenanceLogAdd = { url: '/maintenanceLog/add', method: 'POST' };
 

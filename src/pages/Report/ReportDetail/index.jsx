@@ -5,7 +5,7 @@ import style from '../../Work/ProcessTask/index.less';
 import styles from './index.less';
 import { Button, Space, Tabs } from 'antd-mobile';
 import moment from 'moment';
-import { classNames, isObject } from '../../components/ToolUtil';
+import { classNames, isObject } from '../../../util/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MyNavBar from '../../components/MyNavBar';
 import StartEndDate from '../../components/StartEndDate';

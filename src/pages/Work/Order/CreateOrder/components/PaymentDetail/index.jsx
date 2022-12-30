@@ -9,7 +9,7 @@ import MyDatePicker from '../../../../../components/MyDatePicker';
 import MyPicker from '../../../../../components/MyPicker';
 import { Message } from '../../../../../components/Message';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
-import { MathCalc } from '../../../../../components/ToolUtil';
+import { MathCalc } from '../../../../../../util/ToolUtil';
 
 const PaymentDetail = (
   {

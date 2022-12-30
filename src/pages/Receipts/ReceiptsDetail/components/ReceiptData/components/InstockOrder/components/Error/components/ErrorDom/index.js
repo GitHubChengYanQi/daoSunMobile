@@ -20,7 +20,7 @@ import { useRequest } from '../../../../../../../../../../../util/Request';
 import { batchBind } from '../../../../../../../../../../Scan/InStock/components/Url';
 import InkindList from '../../../../../../../../../../components/InkindList';
 import Label from '../../../../../../../../../../components/Label';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 
 export const stockInkinds = { url: '/anomalyBind/backStockInKind', method: 'POST' };
 export const autoAddInkind = { url: '/anomalyBind/addInKindByAnomaly', method: 'POST' };

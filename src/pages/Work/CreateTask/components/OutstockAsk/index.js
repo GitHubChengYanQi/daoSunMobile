@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
 import { productionPickListAdd } from '../../../Instock/Url';

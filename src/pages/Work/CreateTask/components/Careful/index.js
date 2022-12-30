@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import style from '../../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { MyLoading } from '../../../../components/MyLoading';
 import { Dialog, Divider, Input, Selector, Toast } from 'antd-mobile';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../../util/Request';
 import {

@@ -3,7 +3,7 @@ import MyEmpty from '../../../../../components/MyEmpty';
 import { Card, Space } from 'antd-mobile';
 import Label from '../../../../../components/Label';
 import styles from './index.less';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 
 const Pays = ({ pays, payment }) => {
 

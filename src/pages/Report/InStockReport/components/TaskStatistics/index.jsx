@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../../index.less';
 import { Button, Divider } from 'antd-mobile';
-import { classNames, isArray } from '../../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
 import { useRequest } from '../../../../../util/Request';
 import moment from 'moment';
 import ScreenButtons from '../ScreenButtons';
@@ -56,6 +56,7 @@ const TaskStatistics = ({ title }) => {
           text: '已撤销',
         },
       ]);
+
       setTotal(total);
 
       let type1 = 0;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styles from '../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
-import { classNames } from '../../../components/ToolUtil';
+import { classNames } from '../../../../util/ToolUtil';
 import Icon from '../../../components/Icon';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';

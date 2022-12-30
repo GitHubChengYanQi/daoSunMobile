@@ -1,6 +1,6 @@
 import React, { useImperativeHandle, useRef, useState } from 'react';
 import style from './index.less';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { Tabs, Toast } from 'antd-mobile';
 import MyList from '../../../components/MyList';
 import { skuList } from '../../../Scan/Url';

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Button } from 'antd-mobile';
 import style from './index.less';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const BottomButton = (
   {

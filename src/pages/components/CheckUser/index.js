@@ -2,7 +2,7 @@ import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { useRequest } from '../../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import { Message } from '../Message';
-import { isArray, ToolUtil } from '../ToolUtil';
+import { isArray, ToolUtil } from '../../../util/ToolUtil';
 import { MyLoading } from '../MyLoading';
 import IsDev from '../../../components/IsDev';
 import MyAntPopup from '../MyAntPopup';

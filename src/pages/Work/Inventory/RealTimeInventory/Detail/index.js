@@ -6,7 +6,7 @@ import StocktaskigAction
   from '../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking/components/StocktaskigAction';
 import MyEmpty from '../../../../components/MyEmpty';
 import MyNavBar from '../../../../components/MyNavBar';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 
 export const inventoryPageList = { url: '/inventoryStock/taskList', method: 'POST' };
 

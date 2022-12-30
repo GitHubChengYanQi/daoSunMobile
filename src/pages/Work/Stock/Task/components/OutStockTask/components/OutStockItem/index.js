@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../../util/ToolUtil';
 import styles from '../../../../index.less';
 import MyProgress from '../../../../../../../components/MyProgress';
 import {
@@ -31,7 +31,7 @@ const OutStockItem = (
 
   const successPercent = Number(((received / receipts.numberCount)).toFixed(2)) * 100;
   const percent = Number(((collectable / receipts.numberCount)).toFixed(2)) * 100;
- 
+
   return <TaskItem
     task={item}
     action={can}

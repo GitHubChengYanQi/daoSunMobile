@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from '../Icon';
 import { Checkbox } from 'antd-mobile';
 import LinkButton from '../LinkButton';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import style from './index.less';
 
 const MyCheck = (

@@ -12,7 +12,7 @@ import Brands from '../../../../ProcessTask/MyAudit/components/Brands';
 import MyPicker from '../../../../../components/MyPicker';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
-import { MathCalc } from '../../../../../components/ToolUtil';
+import { MathCalc } from '../../../../../../util/ToolUtil';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
 
 export const unitListSelect = { url: '/unit/listSelect', method: 'POST' };

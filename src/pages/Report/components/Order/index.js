@@ -7,7 +7,7 @@ import { MyDate } from '../../../components/MyDate';
 import { RightOutline } from 'antd-mobile-icons';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { billPageList, LogDetail, logDetail } from '../../OrderData';
 import { useHistory } from 'react-router-dom';
 import Icon from '../../../components/Icon';

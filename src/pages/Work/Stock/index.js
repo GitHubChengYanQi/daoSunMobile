@@ -9,7 +9,7 @@ import SkuShop from '../AddShop/components/SkuShop';
 import Dynamic from './Dynamic';
 import Task from './Task';
 import { useRequest } from '../../../util/Request';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { ERPEnums } from './ERPEnums';
 import { MyLoading } from '../../components/MyLoading';
 import { connect } from 'dva';

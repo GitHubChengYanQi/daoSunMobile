@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import MyNavBar from '../../../components/MyNavBar';
-import { isArray } from '../../../components/ToolUtil';
+import { isArray } from '../../../../util/ToolUtil';
 import SkuItem from '../../Sku/SkuItem';
 import styles from './index.less';
 import ShopNumber from '../../AddShop/components/ShopNumber';

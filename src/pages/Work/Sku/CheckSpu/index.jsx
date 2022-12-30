@@ -8,7 +8,7 @@ import style from '../SkuList/components/SkuScreen/index.less';
 import { MyLoading } from '../../../components/MyLoading';
 import { Button, Loading, Selector } from 'antd-mobile';
 import { SelectorStyle } from '../../../Report/InOutStock';
-import { classNames, isArray, ToolUtil } from '../../../components/ToolUtil';
+import { classNames, isArray, ToolUtil } from '../../../../util/ToolUtil';
 import MyEmpty from '../../../components/MyEmpty';
 import MyAntPopup from '../../../components/MyAntPopup';
 import { useSetState } from 'ahooks';

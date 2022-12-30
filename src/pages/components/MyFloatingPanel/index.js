@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { FloatingPanel } from 'antd-mobile';
 import styles from './index.css';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const MyFloatingPanel = (
   {

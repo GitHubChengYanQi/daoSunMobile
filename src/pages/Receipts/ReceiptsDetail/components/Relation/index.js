@@ -3,7 +3,7 @@ import { useRequest } from '../../../../../util/Request';
 import { ReceiptsEnums } from '../../../index';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import Icon from '../../../../components/Icon';
 import style from './index.less';
 import { Avatar } from 'antd-mobile';

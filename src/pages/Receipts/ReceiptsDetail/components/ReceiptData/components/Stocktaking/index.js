@@ -3,7 +3,7 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider, ErrorBlock, Space } from 'antd-mobile';
 import MyCard from '../../../../../../components/MyCard';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';

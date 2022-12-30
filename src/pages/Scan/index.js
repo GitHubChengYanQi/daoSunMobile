@@ -1,6 +1,6 @@
 
 import { connect } from 'dva';
-import { ToolUtil } from '../components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 
 const Scan = (props) => {
 

@@ -5,7 +5,7 @@ import SkuItem from '../../../../Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';
 import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import MyEmpty from '../../../../../components/MyEmpty';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import moment from 'moment';
 
 const Data = (

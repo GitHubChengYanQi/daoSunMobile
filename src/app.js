@@ -6,7 +6,7 @@ import cookie from 'js-cookie';
 import { request } from './util/Request';
 import IsDev from './components/IsDev';
 import VConsole from 'vconsole';
-import { ToolUtil } from './pages/components/ToolUtil';
+import { ToolUtil } from './util/ToolUtil';
 
 export const dva = {
   config: {

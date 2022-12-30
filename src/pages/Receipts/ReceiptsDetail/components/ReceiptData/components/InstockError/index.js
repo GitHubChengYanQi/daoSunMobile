@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import style from './index.less';
 import { Popup } from 'antd-mobile';
 import SkuError from './components/SkuError';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import MyCard from '../../../../../../components/MyCard';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';

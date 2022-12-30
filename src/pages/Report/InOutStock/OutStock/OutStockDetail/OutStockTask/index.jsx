@@ -17,7 +17,7 @@ import { ReceiptsEnums } from '../../../../../Receipts';
 import { useRequest } from '../../../../../../util/Request';
 import { outstockDetailView } from '../index';
 import { MyLoading } from '../../../../../components/MyLoading';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 import { OutStockDataView } from '../../index';
 import ProcessList from '../../../../../Work/ProcessTask/ProcessList';
 import MyEmpty from '../../../../../components/MyEmpty';

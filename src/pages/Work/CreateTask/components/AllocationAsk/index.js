@@ -13,7 +13,7 @@ import { ExclamationCircleOutline, RightOutline } from 'antd-mobile-icons';
 import { storeHouseSelect } from '../../../Quality/Url';
 import { Picker } from 'antd-mobile';
 import Skus from '../Skus';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import OtherData from '../OtherData';
 import MyEmpty from '../../../../components/MyEmpty';
 import { ReceiptsEnums } from '../../../../Receipts';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../index.less';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import { LinkOutline } from 'antd-mobile-icons';
 import ShopNumber from '../../../../../ShopNumber';
 import MyCheck from '../../../../../../../../components/MyCheck';

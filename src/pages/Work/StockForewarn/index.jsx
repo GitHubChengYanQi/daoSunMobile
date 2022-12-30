@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import MySearch from '../../components/MySearch';
 import style from '../ProcessTask/index.less';
-import { classNames } from '../../components/ToolUtil';
+import { classNames } from '../../../util/ToolUtil';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import styles from './index.less';
 import SkuClass from '../ProcessTask/MyAudit/components/SkuClass';

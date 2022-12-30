@@ -6,7 +6,7 @@ import MySearch from '../../../../../components/MySearch';
 import { MyLoading } from '../../../../../components/MyLoading';
 import style from '../../../../Sku/SkuList/components/SkuScreen/index.less';
 import { brandList } from '../../../SkuList/components/SkuScreen/components/Url';
-import { classNames } from '../../../../../components/ToolUtil';
+import { classNames } from '../../../../../../util/ToolUtil';
 
 const SelectBrands = (
   {

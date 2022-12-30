@@ -1,7 +1,7 @@
 import style from './index.less';
 import { Progress } from 'antd';
 import React from 'react';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const MyProgress = (
   {

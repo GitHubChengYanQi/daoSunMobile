@@ -3,7 +3,7 @@ import style from '../index.less';
 import MyKeybord from '../../../components/MyKeybord';
 import { ScanIcon } from '../../../components/Icon';
 import { connect } from 'dva';
-import { classNames, ToolUtil } from '../../../components/ToolUtil';
+import { classNames, ToolUtil } from '../../../../util/ToolUtil';
 import { Divider } from 'antd-mobile';
 
 const CodeNumber = (

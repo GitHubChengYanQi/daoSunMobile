@@ -3,7 +3,7 @@ import style from './index.less';
 import { Button, Popup } from 'antd-mobile';
 import { AddOutline, MinusOutline } from 'antd-mobile-icons';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const MyKeybord = (
   {

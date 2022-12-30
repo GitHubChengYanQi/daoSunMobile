@@ -6,7 +6,7 @@ import styles from '../../index.less';
 import { Avatar } from 'antd';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import UploadFile from '../../../../../components/Upload/UploadFile';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 
 export const skuFiles = { url: '/sku/getSkuFile', method: 'GET' };
 

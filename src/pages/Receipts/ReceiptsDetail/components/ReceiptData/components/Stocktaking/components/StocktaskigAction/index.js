@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import style from '../../index.less';
-import { ToolUtil } from '../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 import { Button, Popup } from 'antd-mobile';

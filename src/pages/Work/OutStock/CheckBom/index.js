@@ -12,7 +12,7 @@ import LinkButton from '../../../components/LinkButton';
 import { useRequest } from '../../../../util/Request';
 import { skuDetail } from '../../../Scan/Url';
 import { MyLoading } from '../../../components/MyLoading';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { shopCartAddList } from '../../Instock/Url';
 import { ERPEnums } from '../../Stock/ERPEnums';
 import { Message } from '../../../components/Message';

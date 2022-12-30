@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { classNames } from '../../../components/ToolUtil';
+import { classNames } from '../../../../util/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import moment from 'moment';
 import { RightOutline } from 'antd-mobile-icons';

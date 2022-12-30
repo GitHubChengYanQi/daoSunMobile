@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { classNames, isArray } from '../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../util/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import WorkContrastChart from '../WorkContrastChart';
 import { useRequest } from '../../../../util/Request';

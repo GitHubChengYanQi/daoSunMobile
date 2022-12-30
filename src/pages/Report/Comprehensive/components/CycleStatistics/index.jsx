@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from '../../../InStockReport/index.less';
 import LinkButton from '../../../../components/LinkButton';
-import { classNames } from '../../../../components/ToolUtil';
+import { classNames } from '../../../../../util/ToolUtil';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';

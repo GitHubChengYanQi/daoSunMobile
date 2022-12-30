@@ -5,7 +5,7 @@ import UploadFile from '../../../../../../components/Upload/UploadFile';
 import { useHistory } from 'react-router-dom';
 import { getEndData, getStartData, getStoreHouse, noDistribution } from './getData';
 import { UserName } from '../../../../../../components/User';
-import { isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../util/ToolUtil';
 import Detail from './components/Detail';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import ActionButtons from '../../../ActionButtons';

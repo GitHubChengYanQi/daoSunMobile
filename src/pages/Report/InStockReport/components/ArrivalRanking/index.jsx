@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styles from '../../index.less';
 import Icon from '../../../../components/Icon';
 import { useRequest } from '../../../../../util/Request';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { instockDetailByCustomer } from '../../../components/Ranking';
 import { MyLoading } from '../../../../components/MyLoading';
 import MyEmpty from '../../../../components/MyEmpty';

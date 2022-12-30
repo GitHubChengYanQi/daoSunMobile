@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Dialog, Loading } from 'antd-mobile';
 import jrQrcode from 'jr-qrcode';
 import PrintCode from '../PrintCode';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { QrCodeIcon } from '../Icon';
 import { useRequest } from '../../../util/Request';
 import style from './index.less';

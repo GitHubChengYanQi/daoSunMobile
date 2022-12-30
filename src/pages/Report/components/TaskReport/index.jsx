@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../../InStockReport/index.less';
-import { classNames, isArray } from '../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../util/ToolUtil';
 import Canvas from '@antv/f2-react';
 import { Chart, Interval, Tooltip } from '@antv/f2';
 import { useRequest } from '../../../../util/Request';

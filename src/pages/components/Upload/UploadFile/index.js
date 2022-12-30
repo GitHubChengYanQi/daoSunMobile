@@ -5,7 +5,7 @@ import { ImageViewer, ProgressBar, Space } from 'antd-mobile';
 import wx from 'populee-weixin-js-sdk';
 import UpLoadImg from '../index';
 import { request } from '../../../../util/Request';
-import { queryString, ToolUtil } from '../../ToolUtil';
+import { queryString, ToolUtil } from '../../../../util/ToolUtil';
 import { CameraOutline, CloseOutline } from 'antd-mobile-icons';
 import {
   FileOutlined,

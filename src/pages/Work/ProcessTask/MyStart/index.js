@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import topStyle from '../../../global.less';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { CaretDownFilled, CaretUpFilled } from '@ant-design/icons';
 import { useBoolean } from 'ahooks';
 import ProcessList from '../ProcessList';

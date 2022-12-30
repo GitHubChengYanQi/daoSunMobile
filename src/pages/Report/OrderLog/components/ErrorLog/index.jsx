@@ -5,7 +5,7 @@ import { MyLoading } from '../../../../components/MyLoading';
 import { useRequest } from '../../../../../util/Request';
 import styles from '../../index.less';
 import SkuItem from '../../../../Work/Sku/SkuItem';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import ShopNumber from '../../../../Work/AddShop/components/ShopNumber';
 import { Popup } from 'antd-mobile';
 import SkuError

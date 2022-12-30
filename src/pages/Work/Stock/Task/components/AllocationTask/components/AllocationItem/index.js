@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { isObject, ToolUtil } from '../../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../../util/ToolUtil';
 
 const AllocationItem = (
   {

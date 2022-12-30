@@ -6,7 +6,7 @@ import LackRanking from './components/LackRanking';
 import TaskStatistics from './components/TaskStatistics';
 import Work from './components/Work';
 import Ranking from './components/Ranking';
-import { isArray } from '../../components/ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import styles from '../index.less';
 
 const Comprehensive = ({ layout }) => {
