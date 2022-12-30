@@ -1,12 +1,12 @@
 import React from 'react';
-import CountStatistics from '@/pages/Report/StockingReport/components/CountStatistics';
-import ErrorException from '@/pages/Report/StockingReport/components/ErrorException';
-import CountTimes from '@/pages/Report/StockingReport/components/CountTimes';
-import ErrorSummary from '@/pages/Report/StockingReport/components/ErrorSummary';
-import ApplyRanking from '@/pages/Report/StockingReport/components/ApplyRanking';
-import { isArray } from '@/pages/components/ToolUtil';
-import styles from '@/pages/Report/index.less';
-import TaskStatistics from '@/pages/Report/StockingReport/components/TaskStatistics';
+import { isArray } from '../../../util/ToolUtil';
+import styles from '../../index.less';
+import ErrorSummary from './components/ErrorSummary';
+import TaskStatistics from './components/TaskStatistics';
+import ApplyRanking from './components/ApplyRanking';
+import CountTimes from './components/CountTimes';
+import ErrorException from './components/ErrorException';
+import CountStatistics from './components/CountStatistics';
 
 const StockingReport = ({ layout = {} }) => {
   const table = isArray(layout?.steps)[0]?.data || [];

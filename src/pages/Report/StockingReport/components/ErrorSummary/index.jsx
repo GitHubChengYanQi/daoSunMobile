@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
-import type from '@/pages/Work/Instock/CreateInStock/Type';
 
 const ErrorSummary=()=>{
 
@@ -34,14 +33,14 @@ const ErrorSummary=()=>{
         </div>
         <div className={styles.details} onClick={() => history.push({
           pathname: '/Report/ReportDetail',
-          search: 'type=exceptionDetails',
+          search: 'type=exceptionDetails&search=3',
         })}>
           <div className={styles.cheng}>125</div>
           <div className={styles.detailsText}>其他异常</div>
         </div>
         <div className={styles.details} onClick={() => history.push({
           pathname: '/Report/ReportDetail',
-          search: 'type=exceptionDetails',
+          search: 'type=exceptionDetails&search=4',
         })}>
           <div className={styles.red}>89</div>
           <div className={styles.detailsText}>报损数量</div>

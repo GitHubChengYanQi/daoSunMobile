@@ -11,7 +11,7 @@ import { ReceiptsEnums } from '../Receipts';
 import { MyLoading } from '../components/MyLoading';
 import MaintenanceReport from './MaintenanceReport';
 import AllocationReport from './AllocationReport';
-import StockingReport from '@/pages/Report/StockingReport';
+import StockingReport from './StockingReport';
 
 const Report = () => {
 

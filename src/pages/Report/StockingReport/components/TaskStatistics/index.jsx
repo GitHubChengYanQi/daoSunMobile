@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styles from '../CountStatistics/index.less';
-import { useRequest } from '@/util/Request';
-import { classNames, isArray } from '@/pages/components/ToolUtil';
-import { MyLoading } from '@/pages/components/MyLoading';
-import ScreenButtons from '@/pages/Report/InStockReport/components/ScreenButtons';
-import { outStockOrderView } from '@/pages/Report/StockingReport/components/CountStatistics';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
+import { useRequest } from 'ahooks';
+import { MyLoading } from '../../../../components/MyLoading';
+import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
+import { outStockOrderView } from '../CountStatistics';
 
 
 const TaskStatistics =()=>{

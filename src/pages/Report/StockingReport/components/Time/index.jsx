@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { RightOutline } from 'antd-mobile-icons';
 import styles from './index.less';
 import moment from 'moment/moment';
-import StartEndDate from '@/pages/components/StartEndDate';
+import StartEndDate from '../../../../components/StartEndDate';
 
 
 const Time = ({onChange = () => {}}) => {

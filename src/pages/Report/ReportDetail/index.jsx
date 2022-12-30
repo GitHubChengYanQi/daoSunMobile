@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import MySearch from '../../components/MySearch';
 import style from '../../Work/ProcessTask/index.less';
 import styles from './index.less';
@@ -39,8 +39,8 @@ import { materialListSelect } from '../../Work/Sku/Edit';
 import ReceiptDetails from './components/ReceiptDetails';
 import CheckAllExport from '../../components/CheckAllExport';
 import CountTimesDetails from './components/CountTimesDetails';
-import ExceptionDetails from '@/pages/Report/ReportDetail/components/ExceptionDetails';
-import InventoryRequisition from '@/pages/Report/ReportDetail/components/InventoryRequisition';
+import ExceptionDetails from './components/ExceptionDetails';
+import InventoryRequisition from './components/InventoryRequisition';
 
 const ReportDetail = () => {
 
