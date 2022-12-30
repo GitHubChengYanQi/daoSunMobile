@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
 import { FloatingBubble } from 'antd-mobile';
-import { classNames } from '../ToolUtil';
+import { classNames } from '../../../util/ToolUtil';
 
 const MyFloatingBubble = (
   {

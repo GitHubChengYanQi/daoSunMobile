@@ -5,6 +5,7 @@ import MyNavBar from '../components/MyNavBar';
 import InStockReport from './InStockReport';
 import OutStockReport from './OutStockReport';
 import Comprehensive from './Comprehensive';
+import Stocking from '@/pages/Report/Stocking';
 import { useRequest } from '../../util/Request';
 import { formList } from '../components/FormLayout';
 import { ReceiptsEnums } from '../Receipts';
@@ -47,9 +48,7 @@ const Report = () => {
         <OutStockReport layout={layout['outStock']} />
       </Tabs.Tab>
       <Tabs.Tab title='盘点' key='stocktaking' destroyOnClose>
-        <div style={{ padding: 24, backgroundColor: '#fff', borderRadius: 4 }}>
-          库存统计
-        </div>
+        <Stocking />
       </Tabs.Tab>
       <Tabs.Tab title='养护' key='maintenance' destroyOnClose>
         <MaintenanceReport layout={layout['curring']} />

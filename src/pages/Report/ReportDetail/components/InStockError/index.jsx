@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { instockDetailByCustomer } from '../../../components/Ranking';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';

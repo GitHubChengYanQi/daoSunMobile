@@ -3,7 +3,7 @@ import { Card, Divider, Selector } from 'antd-mobile';
 import style from '../../index.less';
 import { useBoolean } from 'ahooks';
 import { useRequest } from '../../../../../../../../util/Request';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 import LinkButton from '../../../../../../../components/LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import MySearch from '../../../../../../../components/MySearch';

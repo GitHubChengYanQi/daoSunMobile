@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Divider } from 'antd-mobile';
-import { classNames, isArray } from '../../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
 import { useRequest } from '../../../../../util/Request';
 import moment from 'moment';
 import { MyLoading } from '../../../../components/MyLoading';

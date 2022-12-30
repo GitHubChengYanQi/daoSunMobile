@@ -9,7 +9,7 @@ import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { useSetState } from 'ahooks';
 import { batchBind } from '../../../components/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 
 const Skus = (
   {

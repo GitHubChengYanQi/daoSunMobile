@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskItem from '../../../TaskItem';
-import { isObject } from '../../../../../../../components/ToolUtil';
+import { isObject } from '../../../../../../../../util/ToolUtil';
 import { MyDate } from '../../../../../../../components/MyDate';
 import moment from 'moment';
 

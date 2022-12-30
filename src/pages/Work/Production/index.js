@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Space, Tabs, Tag } from 'antd-mobile';
+import { Tag } from 'antd-mobile';
 import styles from './index.less';
 import { productionPlanList } from './components/Url';
 import MyList from '../../components/MyList';
@@ -12,12 +12,18 @@ import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import { MyDate } from '../../components/MyDate';
 import style from '../ProcessTask/index.less';
 import moment from 'moment';
-import { classNames, isObject } from '../../components/ToolUtil';
+import { classNames, isArray, isObject } from '../../../util/ToolUtil';
 import MyPicker from '../../components/MyPicker';
 import Customers from '../ProcessTask/MyAudit/components/Customers';
 import CheckUser from '../../components/CheckUser';
 import Label from '../../components/Label';
 import StartEndDate from '../../components/StartEndDate';
+import { SkuResultSkuJsons } from '../../Scan/Sku/components/SkuResult_skuJsons';
+import ShopNumber from '../AddShop/components/ShopNumber';
+import MyEllipsis from '../../components/MyEllipsis';
+import { supplyList } from '../Sku/SkuList/components/SkuScreen/components/Url';
+import MyCheckList from '../../components/MyCheckList';
+import { skuList } from '../../Scan/Url';
 
 
 const Production = () => {
@@ -33,7 +39,7 @@ const Production = () => {
 
   const screens = [
     { title: '执行中', key: 'status' },
-    { title: '产品', key: 'spu' },
+    { title: '产品', key: 'skuId' },
     { title: '客户', key: 'customerId' },
     { title: '执行人', key: 'userId' },
     { title: '执行日期', key: 'createTime' },
@@ -80,6 +86,9 @@ const Production = () => {
                 break;
               case 'status':
                 title = screen.status;
+                break;
+              case 'skuId':
+                title = screen.skuResult;
                 break;
             }
             const check = title || screenKey === item.key;
@@ -134,7 +143,19 @@ const Production = () => {
               <div className={styles.time}>{MyDate.Show(item.createTime)}</div>
             </div>
             <div className={styles.row}>
-              <Label className={styles.label}>产品</Label>：无
+              <Label className={styles.label}>产品</Label>：
+              <div className={styles.flexGrow}>
+                {
+                  isArray(item.planDetailResults).map((item, index) => {
+                    return <div key={index} className={styles.spuItem}>
+                      <div className={styles.sku}>
+                        <MyEllipsis maxWidth={300}>{SkuResultSkuJsons({ skuResult: item.skuResult })}</MyEllipsis>
+                      </div>
+                      <div>× {item.planNumber}</div>
+                    </div>;
+                  })
+                }
+              </div>
             </div>
             <div className={styles.row}>
               <Label className={styles.label}>执行时间</Label>：2022年11月12日-2023年1月28日
@@ -142,7 +163,9 @@ const Production = () => {
             <div className={styles.row} style={{ display: 'flex' }}>
               <div className={styles.btext}><Label className={styles.label}>执行人</Label>：{item.userResult?.name || '无'}
               </div>
-              <div className={styles.btext3}><Label className={styles.label}>申请人</Label>：{item.userResult?.name || '无'}
+              <div className={styles.btext3}>
+                <Label
+                  className={styles.label}>申请人</Label>：{item.createUserResult?.name || '无'}
               </div>
             </div>
             <MyProgress className={styles.tiao} percent={percent} />
@@ -164,6 +187,25 @@ const Production = () => {
         { label: '完成', value: '完成' },
       ]}
       onClose={() => setScreenkey('')}
+    />
+
+    <MyCheckList
+      searchPlaceholder='请输入物料信息'
+      api={skuList}
+      searchLabel='skuName'
+      labelFormat={(item) => {
+        return SkuResultSkuJsons({ skuResult: item });
+      }}
+      listKey='skuId'
+      onClose={() => setScreenkey('')}
+      onChange={(sku) => {
+        submit({ skuId: sku?.skuId });
+        setScreen({ ...screen, skuResult: SkuResultSkuJsons({ skuResult: sku }) });
+        setScreenkey('');
+      }}
+      value={params.skuId ? [{ skuId: params.skuId, sku: screen.skuResult }] : []}
+      visible={screenKey === 'skuId'}
+      title='选择产品'
     />
 
     <Customers

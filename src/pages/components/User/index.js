@@ -1,7 +1,7 @@
 import React from 'react';
 import style from './index.less';
 import { Avatar } from 'antd-mobile';
-import { isArray } from '../ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 
 export const UserName = ({ user = {}, size }) => {
 

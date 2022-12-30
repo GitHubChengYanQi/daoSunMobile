@@ -5,7 +5,7 @@ import styles from './index.less';
 import { MyLoading } from '../pages/components/MyLoading';
 import { loginBycode, wxUrl } from '../components/Auth';
 import GetUserInfo from '../pages/GetUserInfo';
-import { ToolUtil } from '../pages/components/ToolUtil';
+import { ToolUtil } from '../util/ToolUtil';
 import { Message } from '../pages/components/Message';
 import MyError from '../pages/components/MyError';
 import { AliveScope } from '../components/KeepAlive';

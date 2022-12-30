@@ -1,6 +1,6 @@
 import React from 'react';
 import InStockLog from './InStockLog';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import OutStockLog from './OutStockLog';
 import { ReceiptsEnums } from '../../../index';
 import MyEmpty from '../../../../components/MyEmpty';

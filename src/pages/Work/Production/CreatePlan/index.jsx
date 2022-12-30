@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { isArray } from '../../../components/ToolUtil';
+import { isArray } from '../../../../util/ToolUtil';
 import MyNavBar from '../../../components/MyNavBar';
 import FormLayout from '../../../components/FormLayout';
 import { ReceiptsEnums } from '../../../Receipts';
 import MyCard from '../../../components/MyCard';
 import Title from '../../../components/Title';
 import styles from '../../Order/CreateOrder/index.less';
-import { Input, Space, TextArea } from 'antd-mobile';
+import { Input, TextArea } from 'antd-mobile';
 import StartEndDate from '../../../components/StartEndDate';
 import User from '../../CreateTask/components/User';
 import { useRequest } from '../../../../util/Request';
@@ -32,7 +32,7 @@ const CreatePlan = () => {
 
   const { state = {} } = useLocation();
 
-  const [data, setData] = useState({ type: 'MarketingPresupposition', typeName: '预投' });
+  const [data, setData] = useState({ type: 'order', typeName: '订单' });
 
   const [visible, setVisible] = useState('');
 
@@ -45,27 +45,26 @@ const CreatePlan = () => {
       loading={loading}
       onSave={async (complete) => {
         const orderDetailParams = [];
-        if (data.type === 'MarketingPresupposition') {
+        if (data.type === 'order') {
           isArray(data.orderDetailParams).forEach(item => {
-            orderDetailParams.push({
+            const detailResults = item.detailResults || [];
+            detailResults.map(item => orderDetailParams.push({
               ...item,
-              purchaseNumber: item.number || 1,
-            });
+              partsId: item.skuResult?.partsId,
+            }));
           });
         } else {
           isArray(data.orderDetailParams).forEach(item => {
-            const details = item.details || [];
-            details.forEach(detailItem => {
+            const skus = item.skus || [];
+            skus.forEach(detailItem => {
               orderDetailParams.push({
                 ...detailItem,
-                contractCoding: item.contractCoding,
-                customerName: item.customerName,
+                customerName: item.country,
                 purchaseNumber: item.number || 1,
               });
             });
           });
         }
-
         let success;
         await run({
           data: {
@@ -191,14 +190,20 @@ const CreatePlan = () => {
     />
 
     <MyPicker
+      value={data.type}
       onClose={() => setVisible('')}
       visible={visible === 'type'}
       options={[
-        { label: '预投', value: 'MarketingPresupposition' },
-        { label: '合同订单', value: 'ContractOrder' },
+        { label: '订单', value: 'order' },
+        { label: '生产', value: 'production' },
       ]}
       onChange={(option) => {
-        setData({ ...data, type: option.value, typeName: option.label, orderDetailParams: [] });
+        setData({
+          ...data,
+          type: option.value,
+          typeName: option.label,
+          orderDetailParams: option.value === 'production' ? [{}] : [],
+        });
       }}
     />
 

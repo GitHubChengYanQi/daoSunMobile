@@ -5,7 +5,7 @@ import OutStockRanking from './components/OutStockRanking';
 import Work from './components/Work';
 import TaskStatistics from './components/TaskStatistics';
 import Contrast from './components/Contrast';
-import { isArray } from '../../components/ToolUtil';
+import { isArray } from '../../../util/ToolUtil';
 import styles from '../index.less';
 
 

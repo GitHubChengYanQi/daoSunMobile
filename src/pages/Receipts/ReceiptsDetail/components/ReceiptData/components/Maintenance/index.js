@@ -4,7 +4,7 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { Divider } from 'antd-mobile';
 import skuStyle
   from '../../../../../../Work/CreateTask/components/StocktakingAsk/components/SelectSkus/index.less';
-import { isObject, ToolUtil } from '../../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../../util/ToolUtil';
 import SkuItem from '../../../../../../Work/Sku/SkuItem';
 import MyEllipsis from '../../../../../../components/MyEllipsis';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';

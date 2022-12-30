@@ -4,7 +4,7 @@ import { AddButton } from '../../../../../../components/MyButton';
 import Spus from '../Spus';
 import { useRequest } from '../../../../../../../util/Request';
 import { MyLoading } from '../../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import { Message } from '../../../../../../components/Message';
 import SkuItem from '../../../../../Sku/SkuItem';
 import LinkButton from '../../../../../../components/LinkButton';

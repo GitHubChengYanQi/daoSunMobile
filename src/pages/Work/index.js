@@ -5,7 +5,7 @@ import Icon from '../components/Icon';
 import { useRequest } from '../../util/Request';
 import cookie from 'js-cookie';
 import moment from 'moment';
-import { ToolUtil } from '../components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 
 const Work = () => {
   const hours = moment().hours();

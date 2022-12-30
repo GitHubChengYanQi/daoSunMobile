@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
 import { anomalyOrderAdd, shopCartAllList } from '../../../../../../../../../../Work/Instock/Url';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import style from '../../index.less';
 import { CloseOutline } from 'antd-mobile-icons';
 import { MyLoading } from '../../../../../../../../../../components/MyLoading';

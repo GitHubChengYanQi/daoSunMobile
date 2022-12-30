@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import MyActionSheet from '../../../MyActionSheet';
 import { connect } from 'dva';
-import { ToolUtil } from '../../../ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { Message } from '../../../Message';
 
 const Actions = (

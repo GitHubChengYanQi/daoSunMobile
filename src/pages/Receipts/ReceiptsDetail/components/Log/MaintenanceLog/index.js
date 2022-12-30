@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { isObject, ToolUtil } from '../../../../../components/ToolUtil';
+import { isObject, ToolUtil } from '../../../../../../util/ToolUtil';
 import MyList from '../../../../../components/MyList';
 import style from '../../ReceiptData/components/Stocktaking/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';

@@ -3,7 +3,7 @@ import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
 import MyCard from '../../../../../components/MyCard';
 import MyCheck from '../../../../../components/MyCheck';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 import SkuItem from '../../../../Sku/SkuItem';
 import styles from '../../index.less';
 import MyEllipsis from '../../../../../components/MyEllipsis';

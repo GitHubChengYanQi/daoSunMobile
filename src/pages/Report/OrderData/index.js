@@ -6,7 +6,7 @@ import { Space, Tabs } from 'antd-mobile';
 import MyList from '../../components/MyList';
 import { MyDate } from '../../components/MyDate';
 import style from '../StatisticalChart/index.less';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 import ListScreent from '../../Work/Sku/SkuList/components/ListScreent';

@@ -17,6 +17,7 @@ const SkuClass = (
 
   return <>
     <MyCheckList
+      anyLabel={!multiple && '全部'}
       noSearch
       noPage
       searchPlaceholder='请输入分类信息'
@@ -25,7 +26,13 @@ const SkuClass = (
       label='label'
       listKey='value'
       onClose={onClose}
-      onChange={onChange}
+      onChange={(values) => {
+        if (values.value === 'any') {
+          onChange({});
+        } else {
+          onChange(values);
+        }
+      }}
       value={value}
       visible={visible}
       title='选择分类'

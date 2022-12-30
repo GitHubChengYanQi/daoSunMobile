@@ -11,7 +11,7 @@ import ForwardItem from '../../Stock/Task/components/ErrorkTask/components/Forwa
 import { history } from 'umi';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import AllocationItem from '../../Stock/Task/components/AllocationTask/components/AllocationItem';
 
 

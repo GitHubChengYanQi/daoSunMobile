@@ -4,7 +4,7 @@ import MyAntPopup from '../../../../../components/MyAntPopup';
 import { Divider, Input } from 'antd-mobile';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
 import styles from './index.less';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 import { AddButton } from '../../../../../components/MyButton';
 
 const SkuDescribe = (

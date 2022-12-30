@@ -4,7 +4,7 @@ import UploadFile from '../../../../../components/Upload/UploadFile';
 import MyTextArea from '../../../../../components/MyTextArea';
 import { PaperClipOutlined } from '@ant-design/icons';
 import LinkButton from '../../../../../components/LinkButton';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 
 const Note = (
   {

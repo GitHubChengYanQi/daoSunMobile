@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { IndexBar, List } from 'antd-mobile';
 import { useRequest } from '../../../../../util/Request';
 import { useModel } from 'umi';
-import { isArray, ToolUtil } from '../../../ToolUtil';
+import { isArray, ToolUtil } from '../../../../../util/ToolUtil';
 import MyEmpty from '../../../MyEmpty';
 import { MyLoading } from '../../../MyLoading';
 import { pinyin } from 'pinyin-pro';

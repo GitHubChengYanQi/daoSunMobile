@@ -13,7 +13,7 @@ import Pays from './components/Pays';
 import MyCard from '../../../components/MyCard';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { useHistory } from 'react-router-dom';
-import { isArray } from '../../../components/ToolUtil';
+import { isArray } from '../../../../util/ToolUtil';
 import MySpace from '../../../components/MySpace';
 
 const Detail = (props) => {

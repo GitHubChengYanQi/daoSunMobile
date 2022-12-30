@@ -10,7 +10,7 @@ import { MyLoading } from '../../components/MyLoading';
 import MyEmpty from '../../components/MyEmpty';
 import MyAntPopup from '../../components/MyAntPopup';
 import InkindList from './components/InkindList';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 export const stockDetails = { url: '/stockDetails/detailed', method: 'GET' };
 

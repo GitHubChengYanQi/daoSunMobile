@@ -27,13 +27,13 @@
   }
 }
 
-.detailSkuItem {
+.detailItem {
   border-top: 1px solid #F5F5F5;
   display: flex;
-  padding: 12px;
+  padding: 12px 0;
   align-items: center;
 
-  .sku {
+  .item {
     flex-grow: 1;
   }
 
@@ -46,28 +46,14 @@
   }
 }
 
-.addContract {
+.addOrder {
+  max-height: 80vh;
+  overflow: auto;
   padding-bottom: 68px;
+}
 
-  .addContractItem {
-    display: flex;
-    border-bottom: solid 1px #F5F5F5;
-    padding: 12px;
-
-    > div {
-      flex-grow: 1;
-    }
-
-    :global {
-      .adm-input {
-        max-width: 50vw;
-
-        input {
-          text-align: right;
-        }
-      }
-    }
-  }
+.label {
+  width: 70px;
 }
 
 .contractList {
@@ -76,18 +62,43 @@
     padding: 8px 0;
     border-bottom: solid 1px #F5F5F5;
     display: flex;
-    //align-items: center;
+    align-items: center;
     gap: 4px;
 
     .info {
-      height: 14px;
+      //height: 14px;
       flex-grow: 1;
+    }
+
+    .input {
+      max-width: 200px;
+      input {
+        text-align: right;
+      }
+    }
+  }
+
+  .detailSkuItem {
+    display: flex;
+    align-items: center;
+    border-bottom: solid 1px #F5F5F5;
+    padding: 8px 0;
+
+    .sku {
+      flex-grow: 1;
+    }
+
+    .skuActions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      text-align: right;
     }
   }
 }
 
 .space {
-  height: 3px;
+  height: 1px;
   margin: 0 -12px;
   background-color: var(--body--background--color);
 }

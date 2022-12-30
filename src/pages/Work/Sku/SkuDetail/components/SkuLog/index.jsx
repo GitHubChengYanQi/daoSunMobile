@@ -3,7 +3,7 @@ import MySearch from '../../../../../components/MySearch';
 import MyList from '../../../../../components/MyList';
 import { RightOutline } from 'antd-mobile-icons';
 import styles from './index.less';
-import { classNames } from '../../../../../components/ToolUtil';
+import { classNames } from '../../../../../../util/ToolUtil';
 import LinkButton from '../../../../../components/LinkButton';
 import { history } from 'umi';
 import SkuLogScreen from './components/SkuLogScreen';

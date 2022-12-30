@@ -1,7 +1,7 @@
 import { request } from '../../util/Request';
 import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
-import { ToolUtil } from '../../pages/components/ToolUtil';
+import { ToolUtil } from '../../util/ToolUtil';
 import { history } from 'umi';
 
 

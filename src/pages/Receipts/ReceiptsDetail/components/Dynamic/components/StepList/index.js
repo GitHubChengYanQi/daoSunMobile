@@ -1,5 +1,5 @@
 import React from 'react';
-import { ToolUtil } from '../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import style from '../../index.less';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
 import LinkButton from '../../../../../../components/LinkButton';

@@ -10,7 +10,7 @@ import BottomButton from '../../components/BottomButton';
 import { Message } from '../../components/Message';
 import CodeNumber from './CodeNumber';
 import { NoticeBar } from 'antd-mobile';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 const listByCode = { url: '/productionPickLists/listByCode', method: 'GET' };
 const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };

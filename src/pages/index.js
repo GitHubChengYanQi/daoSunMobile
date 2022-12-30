@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { connect } from 'dva';
 import style from './index.less';
 import MyEmpty from './components/MyEmpty';
-import { ToolUtil } from './components/ToolUtil';
+import { ToolUtil } from '../util/ToolUtil';
 import Report from './Report';
 import Message from './Message';
 import Notice from './Notice';

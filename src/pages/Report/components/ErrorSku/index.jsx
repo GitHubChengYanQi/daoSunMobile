@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../util/Request';
 import { MyLoading } from '../../../components/MyLoading';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 export const anomalyCensus = { url: '/anomaly/anomalyCensus', method: 'POST' };
 

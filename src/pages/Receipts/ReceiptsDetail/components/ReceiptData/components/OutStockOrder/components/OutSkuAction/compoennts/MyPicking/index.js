@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
-import { ToolUtil } from '../../../../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import style from './index.less';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import { Button } from 'antd-mobile';

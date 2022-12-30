@@ -2,7 +2,7 @@ import React from 'react';
 import { AddOutline, DeleteOutline } from 'antd-mobile-icons';
 import { Button } from 'antd-mobile';
 import style from './index.less';
-import { ToolUtil } from '../ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 
 export const RemoveButton = (
   {

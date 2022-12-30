@@ -11,7 +11,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import Icon from '../../../components/Icon';
 import { inventoryComplete } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Stocktaking';
 import { Message } from '../../../components/Message';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import { Dropdown, Selector } from 'antd-mobile';
 import MyPositions from '../../../components/MyPositions';
 import { SelectorStyle } from '../../../Report/InOutStock';

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../../../../components/Icon';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import { Button } from 'antd-mobile';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
@@ -12,7 +12,7 @@ import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
 import { UserName } from '../../../../components/User';
 import styles from '../../../InStockReport/index.less';
 
-const NumberRanking = () => {
+const  NumberRanking = () => {
 
   const history = useHistory();
 

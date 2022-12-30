@@ -11,7 +11,7 @@ import { Divider, Space } from 'antd-mobile';
 import style from '../../../StatisticalChart/index.less';
 import LinkButton from '../../../../components/LinkButton';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import ShowCode from '../../../../components/ShowCode';
 
 export const maintenanceLog = { url: '/maintenanceLog/detail', method: 'GET' };

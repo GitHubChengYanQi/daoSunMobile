@@ -1,37 +1,57 @@
 import React, { useEffect, useState } from 'react';
 import Icon from '../../../../components/Icon';
-import { classNames, isArray } from '../../../../components/ToolUtil';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
 import { Button } from 'antd-mobile';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
 import { useRequest } from '../../../../../util/Request';
-import { instockDetailBySpuClass } from '../../../components/Ranking';
-import { MyLoading } from '../../../../components/MyLoading';
-import { getInType } from '../../../../Work/CreateTask/components/InstockAsk';
-import { getOutType } from '../../../../Work/CreateTask/components/OutstockAsk';
 import MyEmpty from '../../../../components/MyEmpty';
 import styles from '../../../InStockReport/index.less';
 import { UserName } from '../../../../components/User';
+import { MyLoading } from '../../../../components/MyLoading';
+
+export const taskLogUserViewDetail = {
+  url: '/statisticalView/taskLogUserViewDetail',
+  method: 'POST',
+};
 
 const Ranking = () => {
 
   const history = useHistory();
 
-  const [list, setList] = useState([1, 2, 3]);
+  const [list, setList] = useState([]);
 
   const types = [
-    { title: '入库', key: 'SPU_CLASS' },
-    { title: '出库', key: 'TYPE' },
-    { title: '盘点', key: 'STOREHOUSE' },
-    { title: '养护', key: '1' },
-    { title: '调拨', key: '2' },
+    { title: '入库', key: 'INSTOCK' },
+    { title: '出库', key: 'OUTSTOCK' },
+    { title: '盘点', key: 'INVENTORY' },
+    { title: '养护', key: 'MAINTENANCE' },
+    { title: '调拨', key: 'ALLOCATION' },
   ];
 
   const [type, setType] = useState(types[0].key);
 
-  useEffect(() => {
+  const {
+    loading,
+    data,
+    run,
+  } = useRequest(taskLogUserViewDetail, {
+    manual: true,
+    onSuccess: (res) => {
+      console.log(res);
+      setList(isArray(res));
+    },
+  });
 
+  useEffect(() => {
+    run({ data: { searchType: type } });
   }, [type]);
+
+  if (!data) {
+    if (loading) {
+      return <MyLoading skeleton />;
+    }
+  }
 
   return <>
     <div className={styles.rankingHeader}>
@@ -68,11 +88,13 @@ const Ranking = () => {
           return;
         }
         return <div key={index} className={styles.rankingContent}>
-          <div className={styles.rankingContentLabel}>{index + 1}&nbsp;&nbsp;<UserName user={{name:'张三'}} /></div>
-          {`${item.inSkuCount || 0} 类 ${item.inNumCount || 0} 件`}
+          <div className={styles.rankingContentLabel}>{index + 1}&nbsp;&nbsp;<UserName user={item.userResult} /></div>
+          {`${item.skuCount || item.outSkuCount || 0} 类 ${item.numCount || item.outNumCount || 0} 件`}
         </div>;
       })
     }
+
+    {loading && <MyLoading />}
   </>;
 };
 

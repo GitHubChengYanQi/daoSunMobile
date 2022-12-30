@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import style from '../../../Instock/InstockAsk/coponents/ReceiptsInstock/components/PurchaseOrder/index.less';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { DownOutline, ExclamationCircleOutline, RightOutline, UpOutline } from 'antd-mobile-icons';
 import SkuItem from '../../../Sku/SkuItem';
 import { Divider } from 'antd-mobile';

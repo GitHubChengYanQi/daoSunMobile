@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { isArray } from '../../../../components/ToolUtil';
+import { isArray } from '../../../../../util/ToolUtil';
 import styles from '../../index.less';
 import MyCheck from '../../../../components/MyCheck';
 import { DownOutline, UpOutline } from 'antd-mobile-icons';

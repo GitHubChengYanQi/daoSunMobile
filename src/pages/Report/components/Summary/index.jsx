@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { classNames, isArray, isObject, ToolUtil } from '../../../components/ToolUtil';
+import { classNames, isArray, isObject, ToolUtil } from '../../../../util/ToolUtil';
 import styles from '../../InStockReport/index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import Canvas from '@antv/f2-react';

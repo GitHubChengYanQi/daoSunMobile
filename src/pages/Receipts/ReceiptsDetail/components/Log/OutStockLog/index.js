@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MyEmpty from '../../../../../components/MyEmpty';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import style from '../InStockLog/index.less';
 import SkuItem from '../../../../../Work/Sku/SkuItem';
 import LinkButton from '../../../../../components/LinkButton';

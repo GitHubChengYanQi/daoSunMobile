@@ -9,7 +9,7 @@ import { paymentList, paymentObsolete } from './url';
 import { AddOutline } from 'antd-mobile-icons';
 import MyFloatingBubble from '../../components/FloatingBubble';
 import { useHistory } from 'react-router-dom';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { SwipeAction } from 'antd-mobile';
 import { Message } from '../../components/Message';
 import { MyLoading } from '../../components/MyLoading';

@@ -19,7 +19,7 @@ import {
   getStoreHouse, noDistribution,
 } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/Allocation/getData';
 import MyAntPopup from '../../../components/MyAntPopup';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 import Title from '../../../components/Title';
 import Data from './components/Data';
 

@@ -5,7 +5,7 @@ import { MyLoading } from '../../../../../../../components/MyLoading';
 import { brandListSelect } from '../../../../../../Sku/SkuList/components/SkuScreen/components/Url';
 import Positions
   from '../../../../../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/InstockShop/components/Positions';
-import { ToolUtil } from '../../../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../../../util/ToolUtil';
 import { Message } from '../../../../../../../components/Message';
 import MyPositions from '../../../../../../../components/MyPositions';
 

@@ -17,7 +17,7 @@ import { useLocation } from 'react-router-dom';
 import MyEllipsis from '../../../../../components/MyEllipsis';
 import { useRequest } from '../../../../../../util/Request';
 import { MyLoading } from '../../../../../components/MyLoading';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray } from '../../../../../../util/ToolUtil';
 import { instockDetailView } from '../index';
 import MyEmpty from '../../../../../components/MyEmpty';
 import StartEndDate from '../../../../../components/StartEndDate';

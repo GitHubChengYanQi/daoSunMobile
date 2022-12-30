@@ -6,7 +6,7 @@ import InstockAsk from './components/InstockAsk';
 import CuringAsk from './components/CuringAsk';
 import StocktakingAsk from './components/StocktakingAsk';
 import AllocationAsk from './components/AllocationAsk';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import { history, useLocation } from 'umi';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };

@@ -24,7 +24,7 @@ import GoToQualityTask from '../GoToQualityTask';
 import IsDev from '../../../../components/IsDev';
 import ScanCodeBind from '../../../Scan/ScanCodeBind';
 import BottomButton from '../../../components/BottomButton';
-import { ToolUtil } from '../../../components/ToolUtil';
+import { ToolUtil } from '../../../../util/ToolUtil';
 
 const Subtasks = (props) => {
 

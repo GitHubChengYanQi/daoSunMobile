@@ -15,7 +15,7 @@ import IsDev from '../../../components/IsDev';
 import style from './index.css';
 import MyNavBar from '../../components/MyNavBar';
 import BackSkus from '../Sku/components/BackSkus';
-import { ToolUtil } from '../../components/ToolUtil';
+import { ToolUtil } from '../../../util/ToolUtil';
 import MyStepper from '../../components/MyStepper';
 
 

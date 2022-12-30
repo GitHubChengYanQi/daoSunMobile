@@ -9,7 +9,7 @@ import AllocationAdd from './components/AllocationAdd';
 import { useRequest } from '../../../../../util/Request';
 import { shopCartAdd, shopCartEdit } from '../../../Instock/Url';
 import { MyLoading } from '../../../../components/MyLoading';
-import { ToolUtil } from '../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../util/ToolUtil';
 import { SkuResultSkuJsons } from '../../../../Scan/Sku/components/SkuResult_skuJsons';
 
 const AddSku = (

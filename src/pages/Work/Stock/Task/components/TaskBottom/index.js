@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom';
 import { ReceiptsEnums } from '../../../../../Receipts';
-import { ToolUtil } from '../../../../../components/ToolUtil';
+import { ToolUtil } from '../../../../../../util/ToolUtil';
 import style from '../../index.less';
 import { ScanIcon } from '../../../../../components/Icon';
 import { connect } from 'dva';

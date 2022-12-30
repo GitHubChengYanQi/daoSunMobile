@@ -4,18 +4,22 @@ import styles from './index.less';
 import MyCard from '../../../../../components/MyCard';
 import { AddButton } from '../../../../../components/MyButton';
 import { Divider, Input } from 'antd-mobile';
-import SelectBom from '../../SelectBom';
+import SelectBom, { bomsByskuId } from '../../SelectBom';
 import MyAntPopup from '../../../../../components/MyAntPopup';
-import SkuItem from '../../../../Sku/SkuItem';
 import MyRemoveButton from '../../../../../components/MyRemoveButton';
-import ShopNumber from '../../../../AddShop/components/ShopNumber';
 import LinkButton from '../../../../../components/LinkButton';
-import BottomButton from '../../../../../components/BottomButton';
 import { FillinOutline, MinusCircleOutline } from 'antd-mobile-icons';
 import MyEllipsis from '../../../../../components/MyEllipsis';
-import { Message } from '../../../../../components/Message';
-import { isArray } from '../../../../../components/ToolUtil';
+import { isArray, MathCalc } from '../../../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
+import SelectOrder from '../SelectOrder';
+import Label from '../../../../../components/Label';
+import SkuItem from '../../../../Sku/SkuItem';
+import ShopNumber from '../../../../AddShop/components/ShopNumber';
+import BomVersions from '../../SelectBom/components/BomVersions';
+import { useRequest } from '../../../../../../util/Request';
+import { MyLoading } from '../../../../../components/MyLoading';
+import { Message } from '../../../../../components/Message';
 
 const PlanDetail = (
   {
@@ -30,38 +34,40 @@ const PlanDetail = (
 
   const history = useHistory();
 
-  const contractType = type === 'ContractOrder';
+  const order = type === 'order';
 
   const [addBoms, setAddBoms] = useState(false);
-  const [addContracts, setAddContracts] = useState(false);
+  const [addOrder, setAddOrder] = useState(false);
 
-  const [contract, setContract] = useState({});
+  const [open, setOpen] = useState();
 
-  const updateValue = (key, data) => {
-    const newValue = value.map((item, index) => {
-      if (index === key) {
-        return { ...item, ...data };
-      }
-      return item;
-    });
-    onChange(newValue);
-  };
+  const [bomVersions, setBomVersions] = useState([]);
 
+  const { loading: bomsByskuIdLoading, run: bomsByskuIdRun } = useRequest(bomsByskuId, { manual: true });
 
-  const skuItems = (item, index, key) => {
-    return <div key={index} className={styles.detailSkuItem}>
-      <div className={styles.sku}>
-        <SkuItem
-          noView
-          skuResult={item.skuResult}
-          imgSize={80}
-          gap={8}
-          extraWidth='130px'
-        />
+  const orderItem = (item, index, key) => {
+
+    let numner = 0;
+    isArray(item.detailResults).forEach(item => numner += (item.purchaseNumber || 0));
+
+    return <div key={index} className={styles.detailItem}>
+      <div className={styles.item}>
+        <div>
+          <Label className={styles.label}>国家</Label>：无
+        </div>
+        <div>
+          <Label className={styles.label}>订单编号</Label>：{item.coding}
+        </div>
+        <div>
+          <Label className={styles.label}>产品数量</Label>：{numner}
+        </div>
+        <div>
+          <Label className={styles.label}>交货期</Label>：{item.leadTime || 0}天
+        </div>
       </div>
       <div className={styles.action}>
         <MyRemoveButton onRemove={() => {
-          if (contractType) {
+          if (!order) {
             const newValue = value.map((item, valueIndex) => {
               if (valueIndex === key) {
                 return { ...item, details: item.details.filter((item, detailIndex) => detailIndex !== index) };
@@ -73,157 +79,175 @@ const PlanDetail = (
           }
           onChange(value.filter((item, valueIndex) => valueIndex !== index));
         }} />
-
-        <div>
-          <ShopNumber
-            value={item.number}
-            getContainer={document.body}
-            id={`stepper${index}`}
-            onChange={(number) => {
-              updateValue(index, { number });
-            }}
-          />
-        </div>
       </div>
+    </div>;
+  };
+
+  const countryItem = (item = {}, index) => {
+    return <div key={index} className={styles.contractList}>
+      <div className={styles.contractItem}>
+        {index !== value.length - 1 && <MyRemoveButton
+          icon={<MinusCircleOutline />}
+          onRemove={() => {
+            onChange(value.filter((item, valueIndex) => valueIndex !== index));
+          }}
+        />}
+        <div className={styles.info}>
+          国家
+        </div>
+        <Input
+          value={item.country || ''}
+          className={styles.input}
+          placeholder='请输入'
+          onChange={(country) => {
+            const newValue = value.map((item, key) => {
+              if (index === key) {
+                return { ...item, country };
+              }
+              return item;
+            });
+            onChange(index === value.length - 1 ? [...newValue, {}] : newValue);
+          }}
+        />
+      </div>
+      {
+        isArray(item.skus).map((item, skuIndex) => {
+          return <div key={skuIndex} className={styles.detailSkuItem}>
+            <div className={styles.sku}>
+              <SkuItem
+                noView
+                skuResult={item.skuResult}
+                imgSize={80}
+                gap={8}
+                extraWidth='130px'
+                otherData={[
+                  <>版本号：{item.name}</>,
+                ]}
+              />
+            </div>
+            <div className={styles.skuActions}>
+              <MyRemoveButton onRemove={() => {
+                const newValue = value.map((item, countryIndex) => {
+                  if (index === countryIndex) {
+                    return { ...item, skus: item.skus.filter((item, index) => index !== skuIndex) };
+                  }
+                  return item;
+                });
+                onChange(newValue);
+              }} />
+              <div>
+                ×{item.number}
+              </div>
+              <LinkButton onClick={async () => {
+                const boms = await bomsByskuIdRun({ params: { skuId: item.skuId } });
+                if (boms.length === 0){
+                  Message.toast('此物料没有BOM！')
+                  return;
+                }
+                setBomVersions(boms.map(bomItem => {
+                  if (bomItem.partsId === item.partsId) {
+                    return { ...bomItem, number: item.number, remark: item.remark };
+                  }
+                  return bomItem;
+                }));
+                setOpen({ ...item, countryIndex: index, skuIndex });
+              }}>修改</LinkButton>
+            </div>
+          </div>;
+        })
+      }
+      {index !== value.length - 1 && item.country && <Divider>
+        <AddButton onClick={() => {
+          setAddBoms(index + '');
+        }} />
+      </Divider>}
+      <div hidden={index === value.length - 1} className={styles.space} />
     </div>;
   };
 
   return <>
     <MyCard
       headerClassName={styles.header}
-      titleBom={required && <Title className={styles.title}>{contractType ? '合同' : filedName}<span>*</span></Title>}
-      title={contractType ? '合同' : filedName}
+      titleBom={required && <Title className={styles.title}>{filedName}<span>*</span></Title>}
+      title={filedName}
       bodyClassName={styles.contractContent}
-      extra={contractType && <LinkButton onClick={() => {
-        setContract({});
-        setAddContracts(true);
-      }}>添加合同</LinkButton>}
     >
       {
         value.map((item, index) => {
-          if (contractType) {
-            return <div key={index} className={styles.contractList}>
-              <div className={styles.contractItem}>
-                <MyRemoveButton
-                  icon={<MinusCircleOutline />}
-                  onRemove={() => {
-                    onChange(value.filter((item, valueIndex) => valueIndex !== index));
-                  }}
-                />
-                <div className={styles.info}>
-                  <MyEllipsis maxWidth='70vw'>客户 / 合同：{item.customerName} / {item.contractCoding}</MyEllipsis>
-                </div>
-                <LinkButton onClick={() => {
-                  setContract({ ...item, key: index });
-                  setAddContracts(true);
-                }}><FillinOutline /></LinkButton>
-              </div>
-              {
-                isArray(item.details).map((item, detailIndex) => {
-                  return skuItems(item, detailIndex, index);
-                })
-              }
-              <div className={styles.space} />
-            </div>;
+          if (order) {
+            return orderItem(item, index);
           } else {
-            return skuItems(item, index);
+            return countryItem(item, index);
           }
         })
       }
 
-      {(!contractType || value.length > 0) && <Divider>
+      {order && <Divider>
         <AddButton onClick={() => {
-          setAddBoms(true);
+          setAddOrder(true);
         }} />
       </Divider>}
     </MyCard>
 
     <MyAntPopup
-      title='物料清单选择'
       position='right'
       visible={addBoms}
       onClose={() => history.goBack()}
     >
       <SelectBom
-        value={value.map((item, index) => ({ ...item, id: index }))}
-        contractType={contractType}
         onClose={() => setAddBoms(false)}
         onSubmit={(skus) => {
-          if (contractType) {
-            const newValue = value.map((item, index) => {
-              let number = 0;
-              const details = skus.find(item => {
-                const detail = item.details.find(item => item.id === index);
-                if (detail) {
-                  number = detail.number;
-                }
-                return detail;
-              });
-              return {
-                ...item,
-                details: details ? [...isArray(item.details), { ...details, number }] : item.details,
-              };
-            });
-            onChange(newValue);
-          } else {
-            onChange(skus);
-          }
+          const newValue = value.map((item, index) => {
+            if ((index + '') === addBoms) {
+              return { ...item, skus: [...isArray(item.skus), ...skus] };
+            }
+            return item;
+          });
+          onChange(newValue);
           history.goBack();
         }}
       />
     </MyAntPopup>
 
     <MyAntPopup
-      title='添加合同'
-      visible={addContracts}
-      onClose={() => setAddContracts(false)}
+      destroyOnClose={false}
+      title='添加订单'
+      visible={addOrder}
+      onClose={() => setAddOrder(false)}
     >
-      <div className={styles.addContract}>
-        <div className={styles.addContractItem}>
-          <div>
-            客户
-          </div>
-          <Input
-            placeholder='请输入客户名称' value={contract.customerName || ''}
-            onChange={(customerName) => setContract({ ...contract, customerName })}
-          />
-        </div>
-        <div className={styles.addContractItem}>
-          <div>
-            合同
-          </div>
-          <Input
-            placeholder='请输入合同编码'
-            value={contract.contractCoding || ''}
-            onChange={(contractCoding) => setContract({ ...contract, contractCoding })}
-          />
-        </div>
-      </div>
-      <BottomButton
-        disabled={!(contract.contractCoding && contract.customerName)}
-        only={typeof contract.key === 'number'}
-        text='修改合同'
-        onClick={() => {
-          updateValue(contract.key, contract);
-          setAddContracts(false);
+      <SelectOrder
+        visible={addOrder}
+        value={value}
+        onChange={(orders) => {
+          onChange(orders);
+          setAddOrder(false);
         }}
-        leftText='继续添加'
-        rightText='确认'
-        leftDisabled={!(contract.contractCoding && contract.customerName)}
-        rightDisabled={!(contract.contractCoding && contract.customerName)}
-        leftOnClick={() => {
-          Message.toast('添加成功！');
-          setContract({});
-          onChange([...value, contract]);
-        }}
-        rightOnClick={() => {
-          setContract({});
-          onChange([...value, contract]);
-          setAddBoms(true);
-          setAddContracts(false);
-        }}
+        onClose={() => setAddOrder(false)}
       />
     </MyAntPopup>
+
+
+    <BomVersions
+      setBomVersions={setBomVersions}
+      open={open}
+      bomVersions={bomVersions}
+      setOpen={setOpen}
+      addShopBall={({ boms = [] }) => {
+        const newValue = value.map((item, index) => {
+          if (index === open.countryIndex) {
+            const skus = item.skus.map(item => item);
+            skus.splice(open.skuIndex, 1, ...boms);
+            return { ...item, skus };
+          }
+
+          return item;
+        });
+        onChange(newValue);
+      }}
+    />
+
+    {bomsByskuIdLoading && <MyLoading />}
+
   </>;
 };
 
