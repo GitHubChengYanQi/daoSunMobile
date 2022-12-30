@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import styles from './index.less';
-import moment from 'moment/moment';
-import { useRequest } from '@/util/Request';
-import { classNames, isArray } from '@/pages/components/ToolUtil';
-import { MyLoading } from '@/pages/components/MyLoading';
-import ScreenButtons from '@/pages/Report/InStockReport/components/ScreenButtons';
 import { Divider } from 'antd-mobile';
+import { useRequest } from '../../../../../util/Request';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
+import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
+import { MyLoading } from '../../../../components/MyLoading';
 
 
 

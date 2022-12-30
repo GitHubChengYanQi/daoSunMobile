@@ -2,15 +2,12 @@ import React, { useEffect, useState } from 'react';
 import styles from './index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { useHistory } from 'react-router-dom';
-import { useRequest } from '@/util/Request';
-import { outStockDetailBySpuClass } from '@/pages/Report/components/Ranking';
-import { isArray } from '@/pages/components/ToolUtil';
-import Icon from '@/pages/components/Icon';
 import { Button } from 'antd-mobile';
-import { MyLoading } from '@/pages/components/MyLoading';
-import { getInType } from '@/pages/Work/CreateTask/components/InstockAsk';
-import { getOutType } from '@/pages/Work/CreateTask/components/OutstockAsk';
-import { UserName } from '@/pages/components/User';
+import { useRequest } from '../../../../../util/Request';
+import { isArray } from '../../../../../util/ToolUtil';
+import Icon from '../../../../components/Icon';
+import { outStockDetailBySpuClass } from '../../../components/Ranking';
+import { MyLoading } from '../../../../components/MyLoading';
 
 const CountTimes =()=>{
 
