@@ -54,7 +54,7 @@ const TaskStatistics = ({ title }) => {
         { number: ing, num: Math.round((ing / total) * 100) || 0, color: '#FA8F2B', text: '执行中' },
         {
           number: revoke,
-          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
           color: '#D8D8D8',
           text: '已撤销',
         },
@@ -92,7 +92,7 @@ const TaskStatistics = ({ title }) => {
         { number: type4, num: Math.round((type4 / typeTotal) * 100) || 0, color: '#FF3131', text: '生产损耗' },
         {
           number: type5,
-          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0) - (Math.round((type4 / typeTotal) * 100) || 0),
+          num: typeTotal <= 0 ? 0 : 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0) - (Math.round((type4 / typeTotal) * 100) || 0),
           color: '#FF3131',
           text: '报损出库',
         },

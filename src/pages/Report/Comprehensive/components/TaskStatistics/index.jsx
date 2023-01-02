@@ -63,7 +63,7 @@ const TaskStatistics = ({ title }) => {
           text: '已撤销',
         }, {
           number: out,
-          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0) - (Math.round((revoke / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0) - (Math.round((revoke / total) * 100) || 0),
           color: '#FF3131',
           text: '已超期',
         },
@@ -107,7 +107,7 @@ const TaskStatistics = ({ title }) => {
           text: '养护',
         }, {
           number: type5,
-          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0) - (Math.round((type4 / typeTotal) * 100) || 0),
+          num: typeTotal <= 0 ? 0 : 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0) - (Math.round((type3 / typeTotal) * 100) || 0) - (Math.round((type4 / typeTotal) * 100) || 0),
           color: '#FF3131',
           text: '调拨',
         },

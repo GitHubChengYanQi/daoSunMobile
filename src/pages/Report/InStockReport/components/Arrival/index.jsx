@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../../index.less';
 import { RightOutline } from 'antd-mobile-icons';
 import { Chart, Interval } from '@antv/f2';
@@ -139,9 +139,15 @@ const Arrival = ({ title }) => {
 
   const history = useHistory();
 
-  const { loading, data, run } = useRequest(viewTotail);
+  const [success,setSuccess] = useState(false);
 
-  if (!data) {
+  const { loading, data, run } = useRequest(viewTotail, {
+    onSuccess: () => {
+      setSuccess(true);
+    },
+  });
+
+  if (!success) {
     if (loading) {
       return <MyLoading skeleton />;
     }

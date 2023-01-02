@@ -31,7 +31,7 @@ const CycleStatistics = ({ title }) => {
         { number: month3, num: Math.round((month3 / total) * 100) || 0, color: '#FA8F2B', text: '3-6个月' },
         {
           number: month4,
-          num: 100 - (Math.round((month1 / total) * 100) || 0) - (Math.round((month2 / total) * 100) || 0) - (Math.round((month3 / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((month1 / total) * 100) || 0) - (Math.round((month2 / total) * 100) || 0) - (Math.round((month3 / total) * 100) || 0),
           color: '#FF3131',
           text: '6个月以上',
         },
