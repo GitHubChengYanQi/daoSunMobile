@@ -586,7 +586,7 @@ const ReportDetail = () => {
         submit({ beginTime: creatTime[0], endTime: creatTime[1] });
         setScreenkey('');
       }}
-      dataRef={dataRef}
+      ref={dataRef}
     />
 
     <CheckUser

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useImperativeHandle, useRef, useState } from 'react';
 import MyDatePicker from '../MyDatePicker';
 import { CalendarOutline } from 'antd-mobile-icons';
 import { MyDate } from '../MyDate';
@@ -37,18 +37,26 @@ const StartEndDate = (
     textAlign,
     minWidth,
     render,
-    dataRef,
     hidden,
-  }) => {
-
-  let clickRef = dataRef;
-  if (!dataRef) {
-    clickRef = useRef();
-  }
+  }, ref) => {
 
   const [startDate, setStartDate] = useState();
 
-  const [open, setOpen] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const [key, setKey] = useState('start');
+
+  const [time, setTime] = useState(value || []);
+
+  const open = () => {
+    setKey('start');
+    setTime(value || []);
+    setVisible(true);
+  };
+
+  useImperativeHandle(ref, () => ({
+    open,
+  }));
 
   return <>
     <div
@@ -56,7 +64,9 @@ const StartEndDate = (
       style={{ display: 'inline-block', minWidth: minWidth || 100, textAlign: textAlign || 'right' }}
       className={className}
       onClick={() => {
-        setOpen(true);
+        setKey('start');
+        setTime(value || []);
+        setVisible(true);
       }}
     >
       {render || <Space align='center'>
@@ -65,13 +75,34 @@ const StartEndDate = (
       </Space>}
     </div>
     <MyAntPopup
-      visible={open}
-      onLeft={() => setOpen(false)}
-      leftText='取消'
-      rightText='确定'
+      visible={visible}
+      noTitle
+      leftText={<LinkButton style={{ fontSize: 18 }} onClick={() => {
+        onClose();
+        setVisible(false);
+      }}>取消</LinkButton>}
+      rightText={<LinkButton
+        style={{ fontSize: 18 }}
+        onClick={() => {
+          switch (time.length) {
+            case 0:
+              const startDate = moment().format(precision === 'day' ? 'YYYY/MM/DD 00:00:00' : 'YYYY/MM/DD HH:mm:ss');
+              setTime([startDate]);
+              setKey('end');
+              break;
+            case 1:
+              setKey('end');
+              break;
+            case 2:
+              setVisible(false);
+              onChange(time);
+              break;
+          }
+        }}
+      >确定</LinkButton>}
     >
-      <Tabs>
-        <Tabs.Tab title='起始时间' key='start'>
+      <Tabs activeKey={key} onChange={setKey}>
+        <Tabs.Tab title='起始时间' destroyOnClose key='start'>
           <MyDatePicker
             isDatePickerView
             max={max}
@@ -81,26 +112,16 @@ const StartEndDate = (
               },
             }}
             title={startDate ? '终止时间' : '起始时间'}
-            value={value[0]}
-            ref={clickRef}
+            value={time[0]}
             show
             min={precision === 'day' ? min : getMinTime(min)}
             precision={precision || 'minute'}
-            onCancel={() => {
-              setStartDate();
-            }}
-            afterClose={() => {
-              onClose();
-              if (startDate) {
-                clickRef.current.open();
-              }
-            }}
             onChange={(date) => {
               setStartDate(date);
-              onChange([date]);
+              setTime([date]);
             }} />
         </Tabs.Tab>
-        <Tabs.Tab title='结束时间' key='end'>
+        <Tabs.Tab title='结束时间' destroyOnClose key='end'>
           <MyDatePicker
             isDatePickerView
             max={max}
@@ -110,23 +131,13 @@ const StartEndDate = (
               },
             }}
             title={startDate ? '终止时间' : '起始时间'}
-            value={value[0]}
-            ref={clickRef}
+            value={time[1]}
             show
             min={precision === 'day' ? startDate : getMinTime(MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)))}
             precision={precision || 'minute'}
-            onCancel={() => {
-              setStartDate();
-            }}
-            afterClose={() => {
-              onClose();
-              if (startDate) {
-                clickRef.current.open();
-              }
-            }}
             onChange={(date) => {
               const endDate = precision === 'day' ? moment(date).format('YYYY/MM/DD 23:59:59') : date;
-              onChange([startDate, endDate]);
+              setTime([startDate, endDate]);
             }} />
         </Tabs.Tab>
       </Tabs>
@@ -134,4 +145,4 @@ const StartEndDate = (
   </>;
 };
 
-export default StartEndDate;
+export default React.forwardRef(StartEndDate);

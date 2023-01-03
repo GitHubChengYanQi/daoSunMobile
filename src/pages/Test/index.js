@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StartEndDate from '../components/StartEndDate';
 
 const Test = () => {
 
+  const [value, onChange] = useState([]);
+  console.log(value);
   return <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-    <StartEndDate onChange={(value) => {
-      console.log(value);
-    }} />
+    <StartEndDate value={value} onChange={onChange} />
   </div>;
 };
 

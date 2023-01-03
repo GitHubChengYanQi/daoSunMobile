@@ -58,11 +58,33 @@ const MyDatePicker = (
     setVisible(true);
   };
 
+  const changeFormat = (val) => {
+    switch (precision) {
+      case 'year':
+        onChange(moment(val).format('YYYY'));
+        break;
+      case 'month':
+        onChange(moment(val).format('YYYY/MM'));
+        break;
+      case 'day':
+        onChange(moment(val).format('YYYY/MM/DD'));
+        break;
+      case 'hour':
+      case 'minute':
+      case 'second':
+        onChange(moment(val).format('YYYY/MM/DD HH:mm:ss'));
+        break;
+      default:
+        onChange(moment(val).format('YYYY/MM/DD'));
+        break;
+    }
+  }
+
   useImperativeHandle(ref, () => ({
     open,
   }));
 
-  const MyDate = isDatePickerView ? DatePickerView : DatePicker;
+  const MyDatePicker = isDatePickerView ? DatePickerView : DatePicker;
 
   return (
     <div>
@@ -76,7 +98,7 @@ const MyDatePicker = (
       </div>
 
 
-      <MyDate
+      <MyDatePicker
         {...props}
         afterShow={afterShow}
         destroyOnClose
@@ -93,27 +115,8 @@ const MyDatePicker = (
         }}
         onCancel={onCancel}
         defaultValue={now}
-        onConfirm={val => {
-          switch (precision) {
-            case 'year':
-              onChange(moment(val).format('YYYY'));
-              break;
-            case 'month':
-              onChange(moment(val).format('YYYY/MM'));
-              break;
-            case 'day':
-              onChange(moment(val).format('YYYY/MM/DD'));
-              break;
-            case 'hour':
-            case 'minute':
-            case 'second':
-              onChange(moment(val).format('YYYY/MM/DD HH:mm:ss'));
-              break;
-            default:
-              onChange(moment(val).format('YYYY/MM/DD'));
-              break;
-          }
-        }}
+        onChange={changeFormat}
+        onConfirm={changeFormat}
         renderLabel={labelRenderer}
         filter={filter}
       />
