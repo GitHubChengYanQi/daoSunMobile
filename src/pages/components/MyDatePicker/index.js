@@ -1,5 +1,5 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
-import { DatePicker } from 'antd-mobile';
+import { DatePicker, DatePickerView } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
 import { MyDate } from '../MyDate';
@@ -25,6 +25,7 @@ const MyDatePicker = (
     onCancel = () => {
     },
     show,
+    isDatePickerView,
     filter,
     ...props
   }, ref) => {
@@ -61,6 +62,8 @@ const MyDatePicker = (
     open,
   }));
 
+  const MyDate = isDatePickerView ? DatePickerView : DatePicker;
+
   return (
     <div>
       <div onClick={() => {
@@ -68,12 +71,12 @@ const MyDatePicker = (
       }}>
         {show || <LinkButton
           style={{ color: '#000', width: width || '100%', textAlign: 'left', ...style }}
-          title={<div>{value || (title ||  <CalendarOutline />)}</div>}
+          title={<div>{value || (title || <CalendarOutline />)}</div>}
         />}
       </div>
 
 
-      <DatePicker
+      <MyDate
         {...props}
         afterShow={afterShow}
         destroyOnClose
