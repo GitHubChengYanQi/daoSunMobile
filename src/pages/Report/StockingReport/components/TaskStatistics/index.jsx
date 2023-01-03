@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styles from '../CountStatistics/index.less';
-import { useRequest } from '@/util/Request';
-import { classNames, isArray } from '@/pages/components/ToolUtil';
-import { MyLoading } from '@/pages/components/MyLoading';
-import ScreenButtons from '@/pages/Report/InStockReport/components/ScreenButtons';
-import { outStockOrderView } from '@/pages/Report/Stocking/components/CountStatistics';
+import { classNames, isArray } from '../../../../../util/ToolUtil';
+import { useRequest } from 'ahooks';
+import { MyLoading } from '../../../../components/MyLoading';
+import ScreenButtons from '../../../InStockReport/components/ScreenButtons';
+import { outStockOrderView } from '../CountStatistics';
 
 
 const TaskStatistics =()=>{
@@ -45,7 +45,7 @@ const TaskStatistics =()=>{
         { number: type3, num: Math.round((type3 / typeTotal) * 100) || 0, color: '#D8D8D8', text: '已撤销' },
         {
           number: type4,
-          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100)|| 0) - (Math.round((type3 / typeTotal) * 100) || 0),
+          num: typeTotal <= 0 ? 0 : 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100)|| 0) - (Math.round((type3 / typeTotal) * 100) || 0),
           color: '#FF3131',
           text: '已超期',
         },

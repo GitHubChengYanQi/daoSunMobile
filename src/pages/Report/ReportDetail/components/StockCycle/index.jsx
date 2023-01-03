@@ -62,7 +62,7 @@ const StockCycle = (
         {
           number: month4,
           skuCount: res['after6month'].skuCount,
-          num: 100 - (Math.round((month1 / total) * 100) || 0) - (Math.round((month2 / total) * 100) || 0) - (Math.round((month3 / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((month1 / total) * 100) || 0) - (Math.round((month2 / total) * 100) || 0) - (Math.round((month3 / total) * 100) || 0),
           color: '#FF3131',
           text: '6个月以上',
           key: 'after6month',

@@ -49,7 +49,7 @@ const TaskStatistics = ({ title }) => {
         { number: ing, num: Math.round((ing / total) * 100) || 0, color: '#FA8F2B', text: '执行中' },
         {
           number: revoke,
-          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0),
           color: '#D8D8D8',
           text: '已撤销',
         },
