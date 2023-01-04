@@ -79,7 +79,7 @@ const SkuDetail = ({ id }) => {
     if (skuId) {
       run({ data: { skuId } });
     }
-  }, [skuId]);
+  }, [run, skuId]);
 
   if (loading || skuFormLoading) {
     return <MyLoading skeleton />;
@@ -197,6 +197,9 @@ const SkuDetail = ({ id }) => {
                   break;
                 case 'spu':
                   children = spuResult.name;
+                  break;
+                case 'spuCoding':
+                  children = spuResult.coding;
                   break;
                 case 'batch':
                   children = detail.batch ? '一批一码' : '一物一码';
