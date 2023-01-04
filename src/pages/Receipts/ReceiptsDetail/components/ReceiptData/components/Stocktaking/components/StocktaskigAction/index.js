@@ -64,6 +64,7 @@ const StocktaskigAction = (
       anomalyId: skuItem.anomalyId || false,
       sourceId: skuItem.inventoryStockId,
       customerId: skuItem.customerId,
+      details:skuItem.details
     });
   };
 
