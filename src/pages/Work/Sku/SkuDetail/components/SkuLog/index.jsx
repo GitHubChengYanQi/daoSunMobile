@@ -41,7 +41,7 @@ const SkuLog = ({ skuId }) => {
     ref.current.submit(defaultParams);
   };
 
-  return <div style={{ height: open ? '90vh' : 'auto' }}>
+  return <div style={{ height: '90vh' }}>
     <MySearch
       value={search}
       onChange={setSearch}
@@ -54,7 +54,7 @@ const SkuLog = ({ skuId }) => {
       }}>筛选</LinkButton>}
     />
     <div className={styles.space} style={{ height: 1 }} />
-    <div style={{ overflow: 'auto', maxHeight: '70vh' }}>
+    <div style={{ overflow: 'auto', maxHeight: 'calc(90vh - 60px)' }}>
       <MyList
         pullDisabled
         response={(res) => {
