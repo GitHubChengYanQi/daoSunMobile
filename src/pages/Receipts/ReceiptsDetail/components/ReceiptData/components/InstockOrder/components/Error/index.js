@@ -325,7 +325,6 @@ const Error = (
         sourceId: sku.sourceId,
         // anomalyType: sku.inventoryTaskId ? '' : '',
         anomalyType,
-        brandId: null,
       };
     }
   };
