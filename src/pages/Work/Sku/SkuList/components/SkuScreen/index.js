@@ -17,11 +17,11 @@ const SkuScreen = (
   {
     loading,
     screen,
-    overLengths={},
+    overLengths = {},
     refresh,
     skuNumber,
     params,
-    search={},
+    search = {},
     onClose,
     onChange,
     onClear,
@@ -52,6 +52,7 @@ const SkuScreen = (
   const createUser = params.createUser;
   const mixNum = params.mixNum;
   const maxNum = params.maxNum;
+  const material = params.materialId || [];
 
   const paramsOnChange = (data) => {
     onChange(data);
@@ -110,7 +111,7 @@ const SkuScreen = (
         screened = mixNum || maxNum;
         break;
       case 'material':
-        screened = false;
+        screened = material.length > 0;
         break;
       default:
         break;
