@@ -4,6 +4,7 @@ import MyCheckList from '../../../../../components/MyCheckList';
 
 const Customers = (
   {
+    noAll,
     zIndex,
     visible,
     value = [],
@@ -19,7 +20,7 @@ const Customers = (
 
   return <>
     <MyCheckList
-      anyLabel={!multiple && '全部'}
+      anyLabel={!noAll && !multiple && '全部'}
       searchPlaceholder='请输入供应商信息'
       api={supplyList}
       multiple={multiple}
