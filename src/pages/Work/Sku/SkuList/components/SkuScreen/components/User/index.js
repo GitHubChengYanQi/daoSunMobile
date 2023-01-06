@@ -68,8 +68,8 @@ const User = (
         multiple={multiple}
         options={ToolUtil.isArray(data).filter((item, index) => open ? index < 10 : index < 6)}
         value={multiple ? value : [value]}
-        onChange={(v, extend) => {
-          onChange(multiple ? v : v[0]);
+        onChange={(v, { items }) => {
+          onChange(multiple ? items.map(item => item.value) : items[0]?.value,multiple ? items.map(item => item.label) : items[0]?.label);
         }}
       />}
     </Card>

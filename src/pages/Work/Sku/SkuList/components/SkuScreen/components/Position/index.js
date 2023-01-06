@@ -38,7 +38,7 @@ const Position = (
     >
       <CheckPosition single value={value && [{ id: value }]} onChange={(value = []) => {
         const position = value[0] || {};
-        onChange(position.id);
+        onChange(position.id, position.name);
       }} data={options} refresh={refreshPositions} />
     </Card>
 
