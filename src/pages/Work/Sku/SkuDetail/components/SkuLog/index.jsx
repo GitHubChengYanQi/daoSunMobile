@@ -105,11 +105,13 @@ const SkuLog = ({ skuId }) => {
                 <div className={classNames(styles.flexGrow)}>
                   {item.positionsResult?.name || '-'} / {item.positionsResult?.storehouseResult?.name || '-'}
                 </div>
-                <div>{item.user?.name || '-'}/{MyDate.Show(item.operationTime)}</div>
+                <div  className={styles.user}>{item.user?.name || '-'}/{MyDate.Show(item.operationTime)}</div>
               </div>
               <div style={{ padding: '8px 0' }} onClick={() => {
-                history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
-              }}>来源：{item.theme || '-'}<RightOutline /></div>
+                if (item.taskId){
+                  history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
+                }
+              }}>来源：{item.theme || '-'}{item.taskId && <RightOutline />}</div>
               <div className={styles.space} />
             </div>;
           })
