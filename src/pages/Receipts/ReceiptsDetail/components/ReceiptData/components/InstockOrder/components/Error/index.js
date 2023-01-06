@@ -502,7 +502,9 @@ const Error = (
                 </div>
 
               </div>
-              <div className={style.inKindBrands}>
+              <div
+                hidden={show || isArray(sku.details).filter(item => ((item.number || 0) - (item.lockNumber || 0)) > 0).length === 0}
+                className={style.inKindBrands}>
                 {
                   isArray(sku.details).map((item, index) => {
                     return <div key={index} className={style.inKindRow}>
