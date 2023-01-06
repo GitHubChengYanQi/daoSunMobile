@@ -87,13 +87,24 @@ const StartEndDate = (
           switch (time.length) {
             case 0:
               const startDate = moment().format(precision === 'day' ? 'YYYY/MM/DD 00:00:00' : 'YYYY/MM/DD HH:mm:ss');
+              setStartDate(startDate);
               setTime([startDate]);
               setKey('end');
               break;
             case 1:
-              setKey('end');
+              if (key === 'end') {
+                setVisible(false);
+                const endDate = precision === 'day' ? moment(time[0]).format('YYYY/MM/DD 23:59:59') : getMinTime(MyDate.formatDate(MyDate.formatDate(time[0]).setMinutes(MyDate.formatDate(time[0]).getMinutes() + 1)));
+                onChange([time[0], endDate]);
+              } else {
+                setKey('end');
+              }
               break;
             case 2:
+              if (key === 'start') {
+                setKey('end');
+                return;
+              }
               setVisible(false);
               onChange(time);
               break;
@@ -131,7 +142,7 @@ const StartEndDate = (
               },
             }}
             title={startDate ? '终止时间' : '起始时间'}
-            value={time[1]}
+            value={time[1] || (precision === 'day' ? startDate : getMinTime(MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1))))}
             show
             min={precision === 'day' ? startDate : getMinTime(MyDate.formatDate(MyDate.formatDate(startDate).setMinutes(MyDate.formatDate(startDate).getMinutes() + 1)))}
             precision={precision || 'minute'}
