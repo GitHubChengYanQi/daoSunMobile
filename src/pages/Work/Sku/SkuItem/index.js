@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import style from './index.less';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
@@ -6,8 +6,10 @@ import { useModel } from 'umi';
 import { ToolUtil } from '../../../../util/ToolUtil';
 import { useHistory } from 'react-router-dom';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
+import MyAntPopup from '../../../components/MyAntPopup';
+import SkuDetail from '../SkuDetail';
 
-const  SkuItem = (
+const SkuItem = (
   {
     hiddenNumber,
     number,
@@ -24,7 +26,8 @@ const  SkuItem = (
     moreDom,
     noView,
     oneRow,
-    textView,
+    backTitle,
+    showDetail,
     moreClick = () => {
     },
   }) => {
@@ -39,7 +42,20 @@ const  SkuItem = (
 
   const history = useHistory();
 
+  const [openDetail, setOpenDetail] = useState(false);
+
   const view = () => {
+    if (showDetail) {
+      ToolUtil.back({
+        key: 'popup',
+        title: backTitle,
+        onBack: () => {
+          setOpenDetail(false);
+        },
+      });
+      setOpenDetail(true);
+      return;
+    }
     if (!skuResult.skuId || noView || document.getElementsByTagName('body').item(0).classList.contains('adm-overflow-hidden')) {
       return;
     }
@@ -104,6 +120,14 @@ const  SkuItem = (
         {more}
       </MyEllipsis>
     </div>}
+
+    <MyAntPopup position='right' visible={openDetail} className={style.skuDetail}>
+      <SkuDetail
+        show
+        backTitle={backTitle}
+        id={skuResult.skuId}
+      />
+    </MyAntPopup>
   </>;
 };
 

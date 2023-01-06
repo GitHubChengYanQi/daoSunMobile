@@ -65,6 +65,7 @@ const Doms = ({ skuId }) => {
       }
     </div>
     <MyAntPopup
+      zIndex={1001}
       visible={visible}
       title='关联物料清单'
       onClose={() => setVisible('')}
