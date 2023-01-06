@@ -5,7 +5,8 @@ import { isObject, ToolUtil } from '../../../../../util/ToolUtil';
 import { MyDate } from '../../../MyDate';
 import { UserName } from '../../../User';
 import ShowCode from '../../../ShowCode';
-import { ExclamationTriangleOutline } from 'antd-mobile-icons';
+import { DownOutline, ExclamationTriangleOutline, UpOutline } from 'antd-mobile-icons';
+import LinkButton from '../../../LinkButton';
 
 const InkindItem = (
   {
@@ -15,10 +16,15 @@ const InkindItem = (
     inkinds = [],
     inkindIds = [],
     noActions,
+    hiddenPositionIds = [],
+    setHiddenPositionIds = () => {
+    },
   },
 ) => {
 
   const inkindList = positionItem.inkindList || [];
+
+  const hidden = hiddenPositionIds.includes(positionItem.positionId);
 
   let number = 0;
 
@@ -30,68 +36,80 @@ const InkindItem = (
   const checked = checkInkinds.length === inkindList.length;
 
   return <div className={style.positionItem}>
-    <div className={style.positionName} onClick={() => {
-      const ids = inkindList.map(item => item.inkindId);
-      const newInkinds = inkinds.filter(item => !ids.includes(item.inkindId));
-      if (checked) {
-        setInkinds(newInkinds);
-      } else {
-        setInkinds([...newInkinds, ...inkindList]);
-      }
-    }}>
-      {!noActions && <MyCheck checked={checked} />}
-      {positionItem.name} / {positionItem.storehouseName} ({number})
+    <div className={style.positionName}>
+      <div className={style.name} onClick={() => {
+        const ids = inkindList.map(item => item.inkindId);
+        const newInkinds = inkinds.filter(item => !ids.includes(item.inkindId));
+        if (checked) {
+          setInkinds(newInkinds);
+        } else {
+          setInkinds([...newInkinds, ...inkindList]);
+        }
+      }}>
+        {!noActions && <MyCheck checked={checked} />}
+        {positionItem.name} / {positionItem.storehouseName} ({number})
+      </div>
+
+      <LinkButton onClick={() => {
+        setHiddenPositionIds(hidden ? hiddenPositionIds.filter(item => item !== positionItem.positionId) : [...hiddenPositionIds, positionItem.positionId]);
+      }}>
+        {hidden ? <DownOutline /> : <UpOutline />}
+      </LinkButton>
+
     </div>
 
-    {
-      inkindList.map((inkindItem, inkindIndex) => {
-        const maintenanceLogResult = inkindItem.maintenanceLogResult || {};
-        const checked = inkindIds.includes(inkindItem.inkindId);
-        const qrCodeId = inkindItem.qrCodeId || '';
-        return <div className={style.inkindItem} key={inkindIndex}>
-          <div className={style.inkindData}>
-            <div className={style.inkindId} onClick={() => {
-              if (checked) {
-                const newInkinds = inkinds.filter(item => item.inkindId !== inkindItem.inkindId);
-                setInkinds(newInkinds);
-              } else {
-                setInkinds([...inkinds, inkindItem]);
-              }
-            }}>
-              {!noActions && <MyCheck checked={checked} />}
-              实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
-              <ShowCode size={20} code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
-              <div>× {inkindItem.number}</div>
-              {inkindItem.anomaly ? <ExclamationTriangleOutline className='red' /> : <></>}
-            </div>
+    <div hidden={hidden}>
+      {
+        inkindList.map((inkindItem, inkindIndex) => {
+          const maintenanceLogResult = inkindItem.maintenanceLogResult || {};
+          const checked = inkindIds.includes(inkindItem.inkindId);
+          const qrCodeId = inkindItem.qrCodeId || '';
+          return <div className={style.inkindItem} key={inkindIndex}>
+            <div className={style.inkindData}>
+              <div className={style.inkindId} onClick={() => {
+                if (checked) {
+                  const newInkinds = inkinds.filter(item => item.inkindId !== inkindItem.inkindId);
+                  setInkinds(newInkinds);
+                } else {
+                  setInkinds([...inkinds, inkindItem]);
+                }
+              }}>
+                {!noActions && <MyCheck checked={checked} />}
+                实物码：{qrCodeId.substring(qrCodeId.length - 6, qrCodeId.length)}
+                <ShowCode size={20} code={inkindItem.inkindId} inkindId={inkindItem.inkindId} />
+                <div>× {inkindItem.number}</div>
+                {inkindItem.anomaly ? <ExclamationTriangleOutline className='red' /> : <></>}
+              </div>
 
-            <div className={style.brand}>
-              {ToolUtil.isObject(inkindItem.brandResult).brandName || '无品牌'}
-            </div>
-          </div>
-          <div className={style.otherData}>
-            <div className={style.flex}>
-              <div className={style.flexGrow}>
-                入库时间：{MyDate.Show(inkindItem.createTime)}
-              </div>
-              <div>
-                {isObject(inkindItem.user).name}
+              <div className={style.brand}>
+                {ToolUtil.isObject(inkindItem.brandResult).brandName || '无品牌'}
               </div>
             </div>
-          </div>
-          <div className={style.otherData} style={{paddingBottom:8}}>
-            <div className={style.flex}>
-              <div className={style.flexGrow}>
-                上次养护：{maintenanceLogResult.createTime ? MyDate.Show(maintenanceLogResult.createTime) : '暂无'}
-              </div>
-              <div hidden={!maintenanceLogResult.createTime}>
-                {isObject(maintenanceLogResult.userResult).name}
+            <div className={style.otherData}>
+              <div className={style.flex}>
+                <div className={style.flexGrow}>
+                  入库时间：{MyDate.Show(inkindItem.createTime)}
+                </div>
+                <div>
+                  {isObject(inkindItem.user).name}
+                </div>
               </div>
             </div>
-          </div>
-        </div>;
-      })
-    }
+            <div className={style.otherData} style={{ paddingBottom: 8 }}>
+              <div className={style.flex}>
+                <div className={style.flexGrow}>
+                  上次养护：{maintenanceLogResult.createTime ? MyDate.Show(maintenanceLogResult.createTime) : '暂无'}
+                </div>
+                <div hidden={!maintenanceLogResult.createTime}>
+                  {isObject(maintenanceLogResult.userResult).name}
+                </div>
+              </div>
+            </div>
+          </div>;
+        })
+      }
+    </div>
+
   </div>;
 };
 

@@ -38,6 +38,8 @@ const List = (
 
   const [visible, setVisible] = useState(false);
 
+  const [hiddenPositionIds, setHiddenPositionIds] = useState([]);
+
   const actions = [
     { text: '全部', key: 'all', id: null },
     { text: '正常', key: 'init', id: 99 },
@@ -116,6 +118,8 @@ const List = (
                 setInkinds={setInkinds}
                 inkinds={inkinds}
                 noActions={noActions}
+                hiddenPositionIds={hiddenPositionIds}
+                setHiddenPositionIds={setHiddenPositionIds}
               />;
             })
           }
