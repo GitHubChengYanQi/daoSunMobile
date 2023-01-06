@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import Icon from '../../components/Icon';
@@ -33,6 +33,12 @@ export const Tasks = () => {
         return <Create />;
     }
   };
+
+  useEffect(()=>{
+    if (query.taskSkuId){
+      setKey('audit');
+    }
+  },[query.taskSkuId])
 
   return <div className={style.process} style={{ scrollMarginTop: scrollTop }}>
     <div className={style.content} id='content' onScroll={(event) => {
