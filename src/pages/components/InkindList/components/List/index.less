@@ -29,8 +29,14 @@
   .positionName {
     display: flex;
     align-items: center;
-    font-weight: bold;
-    gap: 8px;
+
+    .name {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      font-weight: bold;
+      gap: 8px;
+    }
   }
 
   .inkindItem {
@@ -88,6 +94,7 @@
     .adm-popover-menu-list {
       min-width: 30px;
     }
+
     .adm-popover-menu-item-text {
       border: none;
       padding: 8px 20px 8px 0;
