@@ -55,8 +55,8 @@ const StocktaskigAction = (
       show: skuItem.lockStatus === 99,
       skuId: skuItem.skuId,
       skuResult: skuItem.skuResult,
-      brandId: skuItem.brandId,
-      brandResult: skuItem.brandResult,
+      // brandId: isArray(skuItem.details).length > 0 ? null : skuItem.brandId,
+      // brandResult: skuItem.brandResult,
       stockNumber: (skuItem.number || 0) - (skuItem.lockNumber || 0),
       number: (skuItem.number || 0) - (skuItem.lockNumber || 0),
       inventoryTaskId: inventoryTaskId,
@@ -64,6 +64,7 @@ const StocktaskigAction = (
       anomalyId: skuItem.anomalyId || false,
       sourceId: skuItem.inventoryStockId,
       customerId: skuItem.customerId,
+      details: skuItem.details,
     });
   };
 
@@ -132,11 +133,6 @@ const StocktaskigAction = (
                     extraWidth='124px'
                     hiddenNumber={!showStock}
                     number={(skuItem.number || 0) - (skuItem.lockNumber || 0)}
-                    otherData={[
-                      <span style={{ color: 'var(--adm-color-primary)' }}>
-                        {ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌'}
-                      </span>,
-                    ]}
                   />
                 </div>
                 <div className={style.info}>

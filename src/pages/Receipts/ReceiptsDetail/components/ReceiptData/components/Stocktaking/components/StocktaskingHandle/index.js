@@ -59,11 +59,11 @@ const StocktaskingHandle = (
     refresh();
   };
 
-  const skuStatusChange = ({ skuId, positionId, brandId, params = {} }) => {
+  const skuStatusChange = ({ skuId, positionId, params = {} }) => {
     const newData = data.map(posiItem => {
       if (posiItem.positionId === positionId) {
         const skuResultList = ToolUtil.isArray(posiItem.skuResultList).map(skuItem => {
-          if (skuItem.skuId === skuId && skuItem.brandId === brandId) {
+          if (skuItem.skuId === skuId) {
             return { ...skuItem, ...params };
           }
           return skuItem;
