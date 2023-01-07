@@ -99,7 +99,7 @@ const InSkuItem = (
           <div className={error ? style.error : style.success}>
             {text}
           </div>
-          <ShopNumber shopClassName={style.shopNumber} value={number} show />
+          <ShopNumber shopClassName={style.shopNumber} value={number} show textAlign='right'/>
         </div>
       </div>
       {
