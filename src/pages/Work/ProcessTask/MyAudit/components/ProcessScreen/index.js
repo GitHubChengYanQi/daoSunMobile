@@ -13,6 +13,7 @@ const ProcessScreen = (
     screen,
     skuNumber,
     params = {},
+    getContainer,
     onClose = () => {
     },
     onChange = () => {
@@ -145,6 +146,7 @@ const ProcessScreen = (
         />;
       case 'creatTime':
         return <Time
+          getContainer={getContainer}
           max={new Date()}
           title={item.title}
           value={creatTime}

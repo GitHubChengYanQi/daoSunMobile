@@ -24,6 +24,7 @@ export const getMinTime = (time) => {
 
 const StartEndDate = (
   {
+    getContainer,
     value = [],
     onChange = () => {
     },
@@ -75,6 +76,8 @@ const StartEndDate = (
       </Space>}
     </div>
     <MyAntPopup
+      zIndex={1002}
+      getContainer={getContainer}
       visible={visible}
       noTitle
       leftText={<LinkButton style={{ fontSize: 18 }} onClick={() => {

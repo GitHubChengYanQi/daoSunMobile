@@ -9,6 +9,7 @@ import Time from '../../../../Sku/SkuList/components/SkuScreen/components/Time';
 
 const StocktakScreen = (
   {
+    getContainer,
     top,
     screen,
     skuNumber,
@@ -81,6 +82,7 @@ const StocktakScreen = (
         />;
       case 'createTime':
         return <Time
+          getContainer={getContainer}
           title={item.title}
           value={[startTime, endTime]}
           onChange={(createTime) => {

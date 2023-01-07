@@ -169,6 +169,7 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       }} />
 
     <StocktakScreen
+      getContainer={document.getElementById('content')}
       skuNumber={number}
       onClose={() => {
         setScreen(false);

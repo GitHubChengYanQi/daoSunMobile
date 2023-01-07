@@ -41,7 +41,7 @@ const SkuLog = ({ skuId }) => {
     ref.current.submit(defaultParams);
   };
 
-  return <div style={{ height: open ? '90vh' : 'auto' }}>
+  return <div style={{ height: open ? '90vh' : 'auto' }} id='skuLog'>
     <MySearch
       value={search}
       onChange={setSearch}
@@ -118,6 +118,7 @@ const SkuLog = ({ skuId }) => {
     </div>
 
     <SkuLogScreen
+      getContainer={document.getElementById('skuLog')}
       loading={loading}
       screen={screen}
       skuNumber={number}
