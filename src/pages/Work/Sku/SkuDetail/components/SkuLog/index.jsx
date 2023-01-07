@@ -9,6 +9,7 @@ import { history } from 'umi';
 import SkuLogScreen from './components/SkuLogScreen';
 import { ReceiptsEnums } from '../../../../../Receipts';
 import { MyDate } from '../../../../../components/MyDate';
+import { Message } from '../../../../../components/Message';
 
 export const skuHandleRecord = { url: '/skuHandleRecord/list', method: 'POST' };
 
@@ -82,7 +83,7 @@ const SkuLog = ({ skuId }) => {
                 balanceNumber = item.balanceNumber;
                 break;
               case ReceiptsEnums.stocktaking:
-                typeName = '盘点';
+                typeName = item.taskId ? '盘点' : '即时盘点';
                 break;
               case ReceiptsEnums.maintenance:
                 typeName = '养护';
@@ -105,11 +106,15 @@ const SkuLog = ({ skuId }) => {
                 <div className={classNames(styles.flexGrow)}>
                   {item.positionsResult?.name || '-'} / {item.positionsResult?.storehouseResult?.name || '-'}
                 </div>
-                <div>{item.user?.name || '-'}/{MyDate.Show(item.operationTime)}</div>
+                <div className={styles.user}>{item.user?.name || '-'}/{MyDate.Show(item.operationTime)}</div>
               </div>
               <div style={{ padding: '8px 0' }} onClick={() => {
-                history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
-              }}>来源：{item.theme || '-'}<RightOutline /></div>
+                if (item.taskId) {
+                  history.push(`/Receipts/ReceiptsDetail?id=${item.taskId}`);
+                }else {
+                  Message.toast('没有关联任务!')
+                }
+              }}>来源：{item.theme || '-'}{item.taskId && <RightOutline />}</div>
               <div className={styles.space} />
             </div>;
           })
