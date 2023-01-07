@@ -296,7 +296,7 @@ const DataChar = (
           timeType: 'diy',
         });
       }}
-      dataRef={dataRef}
+      ref={dataRef}
     />
 
     {(exportLoading) && <MyLoading />}

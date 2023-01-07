@@ -25,6 +25,7 @@ const MyAntPopup = (
     },
     getContainer,
     position,
+    noTitle,
   },
 ) => {
 
@@ -41,7 +42,7 @@ const MyAntPopup = (
       destroyOnClose={destroyOnClose}
       className={className}
     >
-      <div hidden={!title} className={style.header}>
+      <div hidden={!title && !noTitle} className={style.header}>
         <span hidden={!leftText} className={style.left} onClick={onLeft}>{leftText}</span>
         {title}
         <span className={style.right} onClick={() => {

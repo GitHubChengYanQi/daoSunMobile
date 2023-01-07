@@ -1,12 +1,12 @@
-import React from 'react';
-import { timeDifference } from '../../util/ToolUtil';
+import React, { useState } from 'react';
+import StartEndDate from '../components/StartEndDate';
 
 const Test = () => {
 
-  const time = '2022-10-22 23:59:59';
-
+  const [value, onChange] = useState([]);
+  console.log(value);
   return <div style={{ textAlign: 'center', backgroundColor: '#fff' }}>
-    {timeDifference(time)}
+    <StartEndDate value={value} onChange={onChange} />
   </div>;
 };
 

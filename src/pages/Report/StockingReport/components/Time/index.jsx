@@ -33,7 +33,7 @@ const Time = ({onChange = () => {}}) => {
         onChange([moment(time[0]).format('YYYY/MM/DD 00:00:00'), moment(time[1]).format('YYYY/MM/DD 23:59:59')]);
         setTimeType('diy');
       }}
-      dataRef={dataRef}
+      ref={dataRef}
     />
 
   </>

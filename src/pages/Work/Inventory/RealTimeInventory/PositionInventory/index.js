@@ -13,7 +13,6 @@ import { ClockCircleOutline } from 'antd-mobile-icons';
 import MyList from '../../../../components/MyList';
 import { inventoryPageList } from '../index';
 import { MyDate } from '../../../../components/MyDate';
-import { storehousePositionsDetail } from '../../../../Scan/InStock/components/Url';
 
 export const positionInventory = { url: '/inventory/timely', method: 'POST' };
 export const complete = { url: '/inventory/timelyAdd', method: 'POST' };
