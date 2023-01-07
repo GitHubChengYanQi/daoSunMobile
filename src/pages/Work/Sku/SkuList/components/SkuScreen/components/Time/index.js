@@ -8,6 +8,7 @@ const Time = (
     value = [],
     title,
     max,
+    getContainer,
     onChange = () => {
     },
   }) => {
@@ -19,6 +20,7 @@ const Time = (
       headerStyle={{ border: 'none' }}
     >
       <StartEndDate
+        getContainer={getContainer}
         minWidth='100%'
         textAlign='left'
         value={value}
