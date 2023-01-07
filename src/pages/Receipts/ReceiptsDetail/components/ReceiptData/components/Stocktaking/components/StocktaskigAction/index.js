@@ -124,12 +124,10 @@ const StocktaskigAction = (
                 className={style.sku}
                 key={skuIndex}
                 style={{ border: border ? 'none' : '' }}>
-                <div className={style.skuItem} onClick={() => {
-                  if (anomalyType === 'timelyInventory') {
-                    history.push(`/Work/Sku/SkuDetail?skuId=${skuItem.skuId}`);
-                  }
-                }}>
+                <div className={style.skuItem}>
                   <SkuItem
+                    backTitle='盘点结果未提交，是否退出？'
+                    showDetail={anomalyType === 'timelyInventory'}
                     skuResult={skuItem.skuResult}
                     extraWidth='124px'
                     hiddenNumber={!showStock}
@@ -200,7 +198,7 @@ const StocktaskigAction = (
     }
 
 
-     <Popup
+    <Popup
       getContainer={null}
       onMaskClick={() => {
         setVisible(false);

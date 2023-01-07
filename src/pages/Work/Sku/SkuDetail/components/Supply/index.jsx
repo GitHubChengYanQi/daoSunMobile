@@ -62,6 +62,7 @@ const Supply = ({ skuId }) => {
     </div>
 
     <MyAntPopup
+      zIndex={1001}
       visible={visible}
       title='供应商'
       onClose={() => setVisible('')}

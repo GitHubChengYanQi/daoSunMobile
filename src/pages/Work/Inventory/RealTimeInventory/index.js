@@ -153,19 +153,15 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
     </div>
 
     <MyPositions
-      afterClose={() => {
-        if (position.id) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
-        }
-      }}
       visible={positionVisible}
       single
       autoFocus
       value={[position]}
       onClose={() => setPositionVisible(false)}
       onSuccess={(value = []) => {
+        setPosition(value[0]);
         setPositionVisible(false);
-        setPosition(value[0] || {});
+        history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${value[0].id}`);
       }} />
 
     <StocktakScreen
