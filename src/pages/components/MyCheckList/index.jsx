@@ -63,6 +63,7 @@ const MyCheckList = (
 
   useEffect(() => {
     if (visible) {
+      setSearchValue('');
       noSearch ? run({ data: {} }) : like();
       setCheckList(value);
     }

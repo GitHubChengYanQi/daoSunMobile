@@ -215,6 +215,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
     {(instockLoading) && <MyLoading />}
 
     <Customers
+      noAll
       onClose={() => setVisible(false)}
       zIndex={1001}
       value={params.customerId ? [{ customerId: params.customerId, customerName: params.customerName }] : []}
