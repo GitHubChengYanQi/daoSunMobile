@@ -199,8 +199,7 @@ const UploadFile = (
         className={style.img}
         style={{ width: imgSize, height: imgSize }}
         onClick={() => addFile()}>
-        <CameraOutline
-        />
+        <CameraOutline />
       </div>
     </div>}
 

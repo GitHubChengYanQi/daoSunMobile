@@ -274,7 +274,7 @@ const ErrorDom = (
             default:
               break;
           }
-        }}><AddOutline /></AddButton>
+        }}></AddButton>
       </div>
     </div>
 
