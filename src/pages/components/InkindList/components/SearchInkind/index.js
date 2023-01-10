@@ -67,7 +67,7 @@ const SearchInkind = (
     title={(!hiddenHeader && over) ? <div className={style.skuShow}>
       <img src={imgUrl || state.imgLogo} width='30' height='30' alt='' />
       {SkuResultSkuJsons({ skuResult, spu: true })} / {SkuResultSkuJsons({ skuResult, sku: true })}
-    </div> : '库存明细'}
+    </div> : '添加异常件'}
     onClose={() => {
       setData([]);
       onClose();
