@@ -1,4 +1,4 @@
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { classNames, isObject } from '../../../../util/ToolUtil';
 import ProcessList from '../ProcessList';
 import MySearch from '../../../components/MySearch';
@@ -13,27 +13,28 @@ import { ReceiptsEnums } from '../../../Receipts';
 import Customers from './components/Customers';
 import MyPicker from '../../../components/MyPicker';
 import StartEndDate from '../../../components/StartEndDate';
+import { connect } from 'dva';
 
 
 const MyAudit = (
   {
-    auditType,
+    processList,
+    dispatch = () => {
+    },
     skuName,
     type,
     noType,
-    defaultType,
     paramsChange = () => {
     },
     createUser,
     ReceiptDom,
-    hiddenSearch,
     taskSkuId,
     extraIcon,
     pickUserId,
     task,
     defaultScreen = {},
-  }, ref) => {
-
+  }) => {
+  // console.log(processList);
   const userRef = useRef();
   const createUserRef = useRef();
   const dataRef = useRef();
@@ -45,28 +46,29 @@ const MyAudit = (
     skuId: taskSkuId,
     pickUserId,
   };
-
   let tabs = [];
+  let params = { ...defaultParams, ...processList.createUserParams };
+  let screen = { ...defaultScreen, ...processList.createUserScreen };
+  let key = processList.auditKey;
 
   if (task) {
-    defaultParams.status = '2';
+    params = { ...defaultParams, ...processList.taskParams };
+    screen = { ...defaultScreen, ...processList.taskScreen };
+    key = processList.taskAuditKey;
     tabs = [
       { title: '执行中', key: 'actioning' },
       { title: '已完成', key: 'complete' },
       { title: '已撤销', key: 'revoke' },
     ];
   } else if (!createUser) {
-    defaultParams.queryType = 1;
+    params = { ...defaultParams, ...processList.params };
+    screen = { ...defaultScreen, ...processList.screen };
     tabs = [
       { title: '待审批', key: 'audit' },
       { title: '已审批', key: 'audited' },
       { title: '抄送我', key: 'send' },
     ];
   }
-
-  const [params, setParams] = useState(defaultParams);
-
-  const [key, setKey] = useState(task ? 'actioning' : 'audit');
 
   const [screenKey, setScreenkey] = useState();
 
@@ -79,9 +81,11 @@ const MyAudit = (
     { title: '提交日期', key: 'createTime' },
   ];
 
-  const [screenDatas, setScreenDatas] = useState(defaultScreenDatas);
+  let screens = defaultScreenDatas;
 
-  const screens = screenDatas.map(item => item);
+  if (params.queryType === 2 || params.queryType === 3) {
+    screens = [{ title: '审批状态', key: 'status' }, ...defaultScreenDatas];
+  }
 
   if (!noType) {
     switch (params.type) {
@@ -98,28 +102,20 @@ const MyAudit = (
 
   const defaultSort = { field: 'createTime', order: localStorage.getItem('processTaskTimeSort') || 'ascend' };
 
-  const [screen, setScreen] = useState(defaultScreen);
-
-  const [sort, setSort] = useState({});
+  const [sort, setSort] = useState(defaultSort);
 
   const listRef = useRef();
 
   const submit = (data = {}, newSort = {}, reset) => {
     const newParmas = reset ? { ...defaultParams, ...data } : { ...params, ...data };
-    setParams(newParmas);
+    onDispatchParams(newParmas);
     paramsChange(newParmas);
     listRef.current.submit(newParmas, { ...sort, ...newSort });
   };
 
-  useImperativeHandle(ref, () => {
-    return {
-      submit,
-    };
-  });
-
-  const resetScreen = () => {
+  const resetScreen = (initParams = defaultParams) => {
     let typeName = '';
-    switch (defaultParams.type) {
+    switch (initParams.type) {
       case ReceiptsEnums.error:
         typeName = '异常';
         break;
@@ -141,26 +137,107 @@ const MyAudit = (
       default:
         break;
     }
-    setScreen({ ...defaultScreen, typeName });
+    onDispatchScreen({ ...defaultScreen, typeName });
+  };
+
+  const onDispatchParams = (params) => {
+    let type = '';
+    let payload = '';
+    if (task) {
+      type = 'processList/taskParamsChange';
+      payload = {
+        taskParams: params,
+      };
+    } else if (createUser) {
+      type = 'processList/createUserParamsChange';
+      payload = {
+        createUserParams: params,
+      };
+    } else {
+      type = 'processList/paramsChange';
+      payload = {
+        params: params,
+      };
+    }
+    dispatch({
+      type,
+      payload,
+    });
+  };
+
+  const onDispatchScreen = (screen) => {
+    let type = '';
+    let payload = '';
+    if (task) {
+      type = 'processList/taskScreenChange';
+      payload = {
+        taskScreen: screen,
+      };
+    } else if (createUser) {
+      type = 'processList/createUserScreenChange';
+      payload = {
+        createUserScreen: screen,
+      };
+    } else {
+      type = 'processList/screenChange';
+      payload = {
+        screen: screen,
+      };
+    }
+    dispatch({
+      type,
+      payload,
+    });
+  };
+
+  const onDispatchAuditKey = (auditKey) => {
+    let type = '';
+    let payload = '';
+    if (task) {
+      type = 'processList/taskAuditKeyChange';
+      payload = {
+        taskAuditKey: auditKey,
+      };
+    } else {
+      type = 'processList/auditKeyChange';
+      payload = {
+        auditKey: auditKey,
+      };
+    }
+    dispatch({
+      type,
+      payload,
+    });
   };
 
   const clear = () => {
-    resetScreen();
-    setParams(defaultParams);
-    paramsChange(defaultParams);
-    setScreenDatas(defaultScreenDatas);
-    setKey(task ? 'actioning' : 'audit');
+    let initParams;
+    if (task) {
+      initParams = { ...defaultParams, status: '2' };
+    } else if (createUser) {
+      initParams = defaultParams;
+    } else {
+      initParams = { ...defaultParams, queryType: 1 };
+    }
+    setSearchValue('');
+    onDispatchParams(initParams);
+    resetScreen(initParams);
+    paramsChange(initParams);
     setSort(defaultSort);
-    listRef.current.submit(defaultParams, defaultSort);
+    listRef.current.submit(initParams, defaultSort);
   };
 
   useEffect(() => {
-    clear();
-  }, [type, taskSkuId, createUser]);
+    if (task && type && type !== processList.taskParams.type) {
+      clear();
+    } else {
+      listRef.current.submit(params, sort);
+    }
+  }, []);
 
   const processListRef = useRef();
 
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState(params.skuName || '');
 
   const sortShow = () => {
     switch (sort.order) {
@@ -195,35 +272,29 @@ const MyAudit = (
       <Tabs onChange={(key) => {
         switch (key) {
           case 'audit':
-            setScreenDatas(defaultScreenDatas);
             submit({ queryType: 1 }, {}, true);
             break;
           case 'audited':
-            setScreenDatas([{ title: '审批状态', key: 'status' }, ...defaultScreenDatas]);
             submit({ queryType: 2 }, {}, true);
             break;
           case 'send':
-            setScreenDatas([{ title: '审批状态', key: 'status' }, ...defaultScreenDatas]);
             submit({ queryType: 3 }, {}, true);
             break;
 
           case 'actioning':
-            setScreenDatas(defaultScreenDatas);
             submit({ status: '2' }, {}, true);
             break;
           case 'complete':
-            setScreenDatas(defaultScreenDatas);
             submit({ status: '5' }, {}, true);
             break;
           case 'revoke':
-            setScreenDatas(defaultScreenDatas);
             submit({ status: '6' }, {}, true);
             break;
           default:
             break;
         }
         resetScreen();
-        setKey(key);
+        onDispatchAuditKey(key);
       }} activeKey={key}>
         {
           tabs.map(item => {
@@ -318,7 +389,7 @@ const MyAudit = (
       onClose={() => setScreenkey('')}
       onChange={({ key, title }) => {
         submit({ type: key });
-        setScreen({ ...screen, typeName: key ? title : '' });
+        onDispatchScreen({ ...screen, typeName: key ? title : '' });
         setScreenkey('');
       }}
     />
@@ -330,7 +401,7 @@ const MyAudit = (
       visible={screenKey === 'customerId'}
       onChange={(customer) => {
         submit({ customerId: customer?.customerId });
-        setScreen({ ...screen, customerName: customer?.customerName });
+        onDispatchScreen({ ...screen, customerName: customer?.customerName });
         setScreenkey('');
       }}
     />
@@ -342,7 +413,7 @@ const MyAudit = (
       value={params.createUser ? [{ id: params.createUser }] : []}
       onChange={(users) => {
         submit({ createUser: isObject(users[0]).id });
-        setScreen({ ...screen, createUserName: isObject(users[0]).name });
+        onDispatchScreen({ ...screen, createUserName: isObject(users[0]).name });
         setScreenkey('');
       }}
     />
@@ -354,7 +425,7 @@ const MyAudit = (
       value={params.pickUserId ? [{ id: params.pickUserId }] : []}
       onChange={(users) => {
         submit({ pickUserId: isObject(users[0]).id });
-        setScreen({ ...screen, userName: isObject(users[0]).name });
+        onDispatchScreen({ ...screen, userName: isObject(users[0]).name });
         setScreenkey('');
       }}
     />
@@ -393,7 +464,7 @@ const MyAudit = (
       onClose={() => setScreenkey('')}
       onChange={(option) => {
         submit({ status: (option?.value && option?.value !== 'all') && option.value });
-        setScreen({ ...screen, statusName: option.label });
+        onDispatchScreen({ ...screen, statusName: option.label });
         setScreenkey('');
       }}
     />
@@ -401,4 +472,4 @@ const MyAudit = (
   </>;
 };
 
-export default React.forwardRef(MyAudit);
+export default connect(({ processList }) => ({ processList }))(MyAudit);

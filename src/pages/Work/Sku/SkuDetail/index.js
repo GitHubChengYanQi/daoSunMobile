@@ -5,7 +5,7 @@ import { MyLoading } from '../../../components/MyLoading';
 import { useHistory, useLocation } from 'react-router-dom';
 import styles from './index.less';
 import { classNames, isArray, isObject, ToolUtil, viewWidth } from '../../../../util/ToolUtil';
-import { FloatingBubble, ImageViewer, Space, Swiper } from 'antd-mobile';
+import { ImageViewer, Space, Swiper } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import MyNavBar from '../../../components/MyNavBar';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
@@ -22,6 +22,7 @@ import Supply from './components/Supply';
 import Doms from './components/Doms';
 import { previewImage } from '../../../components/Upload/UploadFile';
 import SkuLog from './components/SkuLog';
+import { connect } from 'dva';
 
 export const spuClassificationDetail = {
   url: '/spuClassification/detail',
@@ -32,6 +33,8 @@ const SkuDetail = (
   {
     id,
     show,
+    dispatch = () => {
+    },
   }) => {
 
   const { initialState } = useModel('@@initialState');
@@ -170,6 +173,12 @@ const SkuDetail = (
           <Icon type='icon-kucunmingxi1' />库存明细
         </div>
         <div hidden={show} className={classNames(styles.action, styles.flexGrow)} onClick={() => {
+          dispatch({
+            type: 'processList/tabKeyChange',
+            payload: {
+              key:'audit'
+            },
+          });
           history.push({
             pathname: '/Work/ProcessTask',
             query: { taskSkuId: detail.skuId },
@@ -276,4 +285,4 @@ const SkuDetail = (
   </div>;
 };
 
-export default SkuDetail;
+export default connect(({ processList }) => ({ processList }))(SkuDetail);

@@ -8,12 +8,18 @@ import Create from './Create';
 import { useModel } from 'umi';
 import KeepAlive from '../../../components/KeepAlive';
 import { useLocation } from 'react-router-dom';
+import { connect } from 'dva';
 
-export const Tasks = () => {
+const ProcessTask = (
+  {
+    processList,
+    dispatch = () => {
+    },
+  }) => {
 
   const { query } = useLocation();
 
-  const [key, setKey] = useState(query.key || 'create');
+  const key = processList.key;
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -24,7 +30,7 @@ export const Tasks = () => {
   const content = () => {
     switch (key) {
       case 'create':
-        return <Create />;
+        return;
       case 'audit':
         return <MyAudit taskSkuId={query.taskSkuId} />;
       case 'start':
@@ -34,22 +40,25 @@ export const Tasks = () => {
     }
   };
 
-  useEffect(()=>{
-    if (query.taskSkuId){
-      setKey('audit');
-    }
-  },[query.taskSkuId])
-
   return <div className={style.process} style={{ scrollMarginTop: scrollTop }}>
     <div className={style.content} id='content' onScroll={(event) => {
       setScrollTop(event.target.scrollTop);
     }}>
       <MyNavBar title='审批中心' />
-      {content()}
+      {key === 'create' && <Create />}
+      {key === 'audit' && <MyAudit taskSkuId={query.taskSkuId} />}
+      {key === 'start' && <MyAudit createUser={userInfo.id} />}
     </div>
 
     <MyTablBar
-      onChange={setKey}
+      onChange={(key) => {
+        dispatch({
+          type: 'processList/tabKeyChange',
+          payload: {
+            key,
+          },
+        });
+      }}
       activeKey={key}
       tabBarItems={
         [{
@@ -70,11 +79,4 @@ export const Tasks = () => {
   </div>;
 };
 
-const ProcessTask = () => {
-
-  return <KeepAlive id='task' contentId='content'>
-    <Tasks />
-  </KeepAlive>;
-};
-
-export default ProcessTask;
+export default connect(({ processList }) => ({ processList }))(ProcessTask);
