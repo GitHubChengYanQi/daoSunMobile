@@ -71,12 +71,13 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
   const submit = (data = {}) => {
     const newParmas = { ...params, ...data };
     setParams(newParmas);
-    setScreeing(true);
     ref.current.submit(newParmas);
   };
 
 
   const clear = () => {
+    setScreeing(false);
+    setLabel({});
     setParams();
     ref.current.submit();
   };
@@ -134,8 +135,12 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
     </div>
     <div className={style.inventoryLog}>
       <div ref={listRef}>
-        <MyList ref={ref} api={inventoryPageList} getData={setData} data={data}
-                response={(res) => setNumber(res.count)}>
+        <MyList
+          ref={ref} api={inventoryPageList}
+          getData={setData}
+          data={data}
+          response={(res) => setNumber(res.count)}
+        >
           <div className={style.logs}>
             {
               data.map((item, index) => {
@@ -195,6 +200,12 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       onClear={clear}
       screen={screen}
       onChange={(params, newLabel) => {
+        console.log(!(Object.keys(params).find(item => params[item])));
+        if (!(Object.keys(params).find(item => params[item]))) {
+          setScreeing(false);
+        }else {
+          setScreeing(true);
+        }
         setLabel({ ...label, ...newLabel });
         submit(params);
       }} />
