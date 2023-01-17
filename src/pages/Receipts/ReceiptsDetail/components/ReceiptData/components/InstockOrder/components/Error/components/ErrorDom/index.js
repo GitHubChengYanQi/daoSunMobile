@@ -274,7 +274,7 @@ const ErrorDom = (
             default:
               break;
           }
-        }}><AddOutline /></AddButton>
+        }}></AddButton>
       </div>
     </div>
 
@@ -305,7 +305,7 @@ const ErrorDom = (
               maxNumber: item.number,
             };
           });
-          if (number > sku.realNumber) {
+          if ((number + inkinds.length) > sku.realNumber) {
             Message.toast('不能超过盘点数量！');
             return;
           }

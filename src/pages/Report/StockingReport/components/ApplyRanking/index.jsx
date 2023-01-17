@@ -6,7 +6,6 @@ import App from './App';
 import { classNames } from '../../../../../util/ToolUtil';
 
 const ApplyRanking =()=>{
-
   const history = useHistory();
 
   return <div className={classNames(styles.card, styles.summary)}>
@@ -16,14 +15,15 @@ const ApplyRanking =()=>{
       </div>
       <div onClick={() => history.push({
         pathname: '/Report/ReportDetail',
-        search: 'type=outAskNumber',
+        search: 'type=rankingOfInventory',
       })}>
         共 <span className='numberBlue' style={{ fontSize: 18 }}>12</span> 人
         <RightOutline />
       </div>
     </div>
+    {/*条形图*/}
     <App/>
-
+  {/*条形图结束*/}
   </div>;
 };
 

@@ -17,6 +17,7 @@ import ListScreent from '../../Sku/SkuList/components/ListScreent';
 import Title from '../../../components/Title';
 import StocktakScreen from './components/StocktakScreen';
 import KeepAlive from '../../../../components/KeepAlive';
+import { Tag } from 'antd-mobile';
 
 export const inventoryPageList = { url: '/inventory/pageList', method: 'POST' };
 
@@ -27,6 +28,8 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
   const [positionVisible, setPositionVisible] = useState();
 
   const [position, setPosition] = useState({});
+
+  const [label, setLabel] = useState({});
 
   const history = useHistory();
 
@@ -112,6 +115,23 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       screenChange={setScreen}
       screenRef={screenRef}
     />
+    <div className={style.label} hidden={Object.keys(label).filter(item => label[item]).length === 0}>
+      {label.positionName && <Tag
+        color='#2db7f5'
+      >
+        {label.positionName}
+      </Tag>}
+      {label.userName && <Tag
+        color='#2db7f5'
+      >
+        {label.userName}
+      </Tag>}
+      {label.time && <Tag
+        color='#2db7f5'
+      >
+        {label.time}
+      </Tag>}
+    </div>
     <div className={style.inventoryLog}>
       <div ref={listRef}>
         <MyList ref={ref} api={inventoryPageList} getData={setData} data={data}
@@ -153,22 +173,19 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
     </div>
 
     <MyPositions
-      afterClose={() => {
-        if (position.id) {
-          history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${position.id}`);
-        }
-      }}
       visible={positionVisible}
       single
       autoFocus
       value={[position]}
       onClose={() => setPositionVisible(false)}
       onSuccess={(value = []) => {
+        setPosition(value[0]);
         setPositionVisible(false);
-        setPosition(value[0] || {});
+        history.push(`/Work/Inventory/RealTimeInventory/PositionInventory?positionId=${value[0].id}`);
       }} />
 
     <StocktakScreen
+      getContainer={document.getElementById('content')}
       skuNumber={number}
       onClose={() => {
         setScreen(false);
@@ -177,7 +194,8 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       params={params}
       onClear={clear}
       screen={screen}
-      onChange={(params) => {
+      onChange={(params, newLabel) => {
+        setLabel({ ...label, ...newLabel });
         submit(params);
       }} />
     {qrCode.loading && <MyLoading />}

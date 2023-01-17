@@ -14,6 +14,7 @@ const SkuLogScreen = (
   {
     afterClose = () => {
     },
+    getContainer,
     loading,
     screen,
     skuNumber,
@@ -100,10 +101,11 @@ const SkuLogScreen = (
           onChange={(positions) => {
             paramsOnChange({ ...params, positionId: positions[0]?.id });
           }}
-          value={positionId ? [{id:positionId}] : []}
+          value={positionId ? [{ id: positionId }] : []}
         />;
       case 'time':
         return <Time
+          getContainer={getContainer}
           title={item.title}
           value={(startTime && endTime) ? [startTime, endTime] : []}
           onChange={(time) => {

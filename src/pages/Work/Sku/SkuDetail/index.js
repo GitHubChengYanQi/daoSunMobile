@@ -28,7 +28,11 @@ export const spuClassificationDetail = {
   method: 'POST',
 };
 
-const SkuDetail = ({ id }) => {
+const SkuDetail = (
+  {
+    id,
+    show,
+  }) => {
 
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
@@ -79,7 +83,7 @@ const SkuDetail = ({ id }) => {
     if (skuId) {
       run({ data: { skuId } });
     }
-  }, [skuId]);
+  }, [run, skuId]);
 
   if (loading || skuFormLoading) {
     return <MyLoading skeleton />;
@@ -100,7 +104,7 @@ const SkuDetail = ({ id }) => {
     <Swiper
       indicator={(total, current) => (
         <>
-          <div className={styles.edit}>
+          <div className={styles.edit} hidden={show}>
             <Icon type='icon-bianji1' onClick={() => {
               history.push({
                 pathname: '/Work/Sku/Edit',
@@ -165,7 +169,7 @@ const SkuDetail = ({ id }) => {
         }}>
           <Icon type='icon-kucunmingxi1' />库存明细
         </div>
-        <div className={classNames(styles.action, styles.flexGrow)} onClick={() => {
+        <div hidden={show} className={classNames(styles.action, styles.flexGrow)} onClick={() => {
           history.push({
             pathname: '/Work/ProcessTask',
             query: { taskSkuId: detail.skuId },
@@ -197,6 +201,9 @@ const SkuDetail = ({ id }) => {
                   break;
                 case 'spu':
                   children = spuResult.name;
+                  break;
+                case 'spuCoding':
+                  children = spuResult.coding;
                   break;
                 case 'batch':
                   children = detail.batch ? '一批一码' : '一物一码';

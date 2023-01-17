@@ -1,5 +1,5 @@
 import React, { useCallback, useImperativeHandle, useState } from 'react';
-import { DatePicker } from 'antd-mobile';
+import { DatePicker, DatePickerView } from 'antd-mobile';
 import moment from 'moment';
 import LinkButton from '../LinkButton';
 import { MyDate } from '../MyDate';
@@ -25,6 +25,7 @@ const MyDatePicker = (
     onCancel = () => {
     },
     show,
+    isDatePickerView,
     filter,
     ...props
   }, ref) => {
@@ -57,9 +58,33 @@ const MyDatePicker = (
     setVisible(true);
   };
 
+  const changeFormat = (val) => {
+    switch (precision) {
+      case 'year':
+        onChange(moment(val).format('YYYY'));
+        break;
+      case 'month':
+        onChange(moment(val).format('YYYY/MM'));
+        break;
+      case 'day':
+        onChange(moment(val).format('YYYY/MM/DD'));
+        break;
+      case 'hour':
+      case 'minute':
+      case 'second':
+        onChange(moment(val).format('YYYY/MM/DD HH:mm:ss'));
+        break;
+      default:
+        onChange(moment(val).format('YYYY/MM/DD'));
+        break;
+    }
+  }
+
   useImperativeHandle(ref, () => ({
     open,
   }));
+
+  const MyDatePicker = isDatePickerView ? DatePickerView : DatePicker;
 
   return (
     <div>
@@ -68,12 +93,12 @@ const MyDatePicker = (
       }}>
         {show || <LinkButton
           style={{ color: '#000', width: width || '100%', textAlign: 'left', ...style }}
-          title={<div>{value || (title ||  <CalendarOutline />)}</div>}
+          title={<div>{value || (title || <CalendarOutline />)}</div>}
         />}
       </div>
 
 
-      <DatePicker
+      <MyDatePicker
         {...props}
         afterShow={afterShow}
         destroyOnClose
@@ -90,27 +115,8 @@ const MyDatePicker = (
         }}
         onCancel={onCancel}
         defaultValue={now}
-        onConfirm={val => {
-          switch (precision) {
-            case 'year':
-              onChange(moment(val).format('YYYY'));
-              break;
-            case 'month':
-              onChange(moment(val).format('YYYY/MM'));
-              break;
-            case 'day':
-              onChange(moment(val).format('YYYY/MM/DD'));
-              break;
-            case 'hour':
-            case 'minute':
-            case 'second':
-              onChange(moment(val).format('YYYY/MM/DD HH:mm:ss'));
-              break;
-            default:
-              onChange(moment(val).format('YYYY/MM/DD'));
-              break;
-          }
-        }}
+        onChange={changeFormat}
+        onConfirm={changeFormat}
         renderLabel={labelRenderer}
         filter={filter}
       />

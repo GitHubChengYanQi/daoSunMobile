@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { RightOutline } from 'antd-mobile-icons';
 import styles from './index.less';
 import moment from 'moment/moment';
-import StartEndDate from '@/pages/components/StartEndDate';
+import StartEndDate from '../../../../components/StartEndDate';
 
 
 const Time = ({onChange = () => {}}) => {
@@ -33,7 +33,7 @@ const Time = ({onChange = () => {}}) => {
         onChange([moment(time[0]).format('YYYY/MM/DD 00:00:00'), moment(time[1]).format('YYYY/MM/DD 23:59:59')]);
         setTimeType('diy');
       }}
-      dataRef={dataRef}
+      ref={dataRef}
     />
 
   </>

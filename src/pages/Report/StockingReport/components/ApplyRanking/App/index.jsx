@@ -14,45 +14,10 @@ const data = [
 ];
 
 export default function App() {
-
-  const Guide = withGuide((props) => {
-    const { points, style, animation } = props;
-
-    const start = points[0] || {};
-    const end = points[1] || {};
-
-    const x = Math.min(start.x, end.x);
-    const y = Math.min(start.y, end.y);
-
-    return (
-      <group>
-        <text
-          attrs={{
-            x,
-            y,
-            text: '111/22',
-            stroke: 'black',
-            strokeOpacity: 0.4,
-          }}
-        />
-        <rect
-          attrs={{
-            x,
-            y,
-            width: Math.abs(end.x - start.x),
-            height: Math.abs(start.y - end.y),
-            ...style,
-          }}
-          animation={animation}
-        />
-
-      </group>
-    );
-  });
+  
   let context;
   return (
-
-    <Canvas context={context} pixelRatio={window.devicePixelRatio} height={150}>
+    <Canvas context={context} pixelRatio={window.devicePixelRatio}>
       <Chart data={data}>
         <Tooltip />
         <Legend
@@ -73,7 +38,6 @@ export default function App() {
             marginRatio: 0, // 设置分组间柱子的间距
           }}
         />
-        <Guide records={[data[0], data[1]]} style={{ fill: '', fillOpacity: 0.2 }} />
       </Chart>
     </Canvas>
 

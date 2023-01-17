@@ -55,7 +55,7 @@ const TaskStatistics = ({ title }) => {
         },
         {
           number: revoke,
-          num: 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0) - (Math.round((revoke / total) * 100) || 0),
+          num: total <= 0 ? 0 : 100 - (Math.round((ok / total) * 100) || 0) - (Math.round((ing / total) * 100) || 0) - (Math.round((revoke / total) * 100) || 0),
           color: '#FF3131',
           text: '已超期',
         },
@@ -84,7 +84,7 @@ const TaskStatistics = ({ title }) => {
         { number: type2, num: Math.round((type2 / typeTotal) * 100) || 0, color: '#FA8F2B', text: '指定养护' },
         {
           number: type3,
-          num: 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0),
+          num: typeTotal <= 0 ? 0 : 100 - (Math.round((type1 / typeTotal) * 100) || 0) - (Math.round((type2 / typeTotal) * 100) || 0),
           color: '#FF3131',
           text: '复检复调',
         },

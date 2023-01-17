@@ -9,6 +9,7 @@ import Time from '../../../../Sku/SkuList/components/SkuScreen/components/Time';
 
 const StocktakScreen = (
   {
+    getContainer,
     top,
     screen,
     skuNumber,
@@ -37,8 +38,8 @@ const StocktakScreen = (
   const { loading, data } = useRequest(positions);
 
 
-  const paramsOnChange = (data) => {
-    onChange(data);
+  const paramsOnChange = (data, label) => {
+    onChange(data, label);
   };
 
   const searchtypeScreened = (key) => {
@@ -65,8 +66,8 @@ const StocktakScreen = (
         return loading ? <MyLoading skeleton /> : <Position
           title={item.title}
           options={data}
-          onChange={(positionId) => {
-            paramsOnChange({ ...params, positionId });
+          onChange={(positionId, name) => {
+            paramsOnChange({ ...params, positionId }, { positionName: name });
           }}
           value={positionId}
         />;
@@ -75,16 +76,21 @@ const StocktakScreen = (
           placeholder='请输入人员信息'
           title={item.title}
           value={createUser}
-          onChange={(createUser) => {
-            paramsOnChange({ ...params, createUser });
+          onChange={(createUser, name) => {
+            paramsOnChange({ ...params, createUser }, { userName: name });
           }}
         />;
       case 'createTime':
         return <Time
+          getContainer={getContainer}
           title={item.title}
           value={[startTime, endTime]}
           onChange={(createTime) => {
-            paramsOnChange({ ...params, startTime: createTime[0], endTime: createTime[1] });
+            paramsOnChange({
+              ...params,
+              startTime: createTime[0],
+              endTime: createTime[1],
+            }, { time: createTime[0] + ' - ' + createTime[1] });
           }}
         />;
       default:

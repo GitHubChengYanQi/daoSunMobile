@@ -82,6 +82,7 @@ const Details = ({ productionPlanId }) => {
               <LinkButton onClick={() => setDetail(item)}>生产详情</LinkButton>
               <div className={styles.space} />
               <LinkButton
+                disabled
                 onClick={() => history.push({
                   pathname: '/Work/Production/ProductionDetail/ApplyProduction',
                 })}>申请投产</LinkButton>

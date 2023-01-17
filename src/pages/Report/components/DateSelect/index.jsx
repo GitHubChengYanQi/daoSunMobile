@@ -91,7 +91,7 @@ const DateSelect = (
           timeType: 'diy',
         });
       }}
-      dataRef={dataRef}
+      ref={dataRef}
     />
   </>;
 };

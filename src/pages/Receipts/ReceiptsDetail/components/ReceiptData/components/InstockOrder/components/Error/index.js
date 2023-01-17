@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SkuItem from '../../../../../../../../Work/Sku/SkuItem';
 import style from './index.less';
-import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import { Button, TextArea } from 'antd-mobile';
 import { AddOutline, CameraOutline } from 'antd-mobile-icons';
 import { ScanIcon } from '../../../../../../../../components/Icon';
@@ -365,7 +365,7 @@ const Error = (
     transitionEnd = () => {
     },
   ) => {
-    const imgUrl =  ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
+    const imgUrl = ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
     addShopCart(imgUrl, 'errorSku', transitionEnd);
   };
 
@@ -460,7 +460,6 @@ const Error = (
             className={style.sku}
             extraWidth={id ? '84px' : '24px'}
             otherData={[
-              ToolUtil.isObject(sku.brandResult).brandName || '无品牌',
               ToolUtil.isObject(sku.positionsResult).name,
             ]}
           />,
@@ -502,6 +501,26 @@ const Error = (
                   }} />
                 </div>
 
+              </div>
+              <div
+                hidden={show || isArray(sku.details).filter(item => ((item.number || 0) - (item.lockNumber || 0)) > 0).length === 0}
+                className={style.inKindBrands}>
+                {
+                  isArray(sku.details).map((item, index) => {
+                    return <div key={index} className={style.inKindRow}>
+                      <div className={style.flexRow}>
+                        <Label className={style.inKindTitle}>
+                          {item.brandResult?.brandName || '无品牌'}
+                        </Label>
+                      </div>
+
+                      <div>
+                        <ShopNumber show value={(item.number || 0) - (item.lockNumber || 0)} />
+                      </div>
+
+                    </div>;
+                  })
+                }
               </div>
               <div className={style.inKindRow}>
                 <Label className={style.inKindTitle}>
