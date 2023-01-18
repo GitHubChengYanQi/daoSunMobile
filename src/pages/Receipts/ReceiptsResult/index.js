@@ -4,8 +4,13 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { ReceiptsEnums } from '../index';
 import { Button } from 'antd-mobile';
 import style from './index.less';
+import { connect } from 'dva';
 
-const ReceiptsResult = () => {
+const ReceiptsResult = (
+  {
+    dispatch = () => {
+    },
+  }) => {
 
   const { state } = useLocation();
 
@@ -54,7 +59,13 @@ const ReceiptsResult = () => {
         description={
           <div className={style.actions}>
             <Button onClick={() => {
-              history.push('/Work/ProcessTask?key=start');
+              dispatch({
+                type: 'processList/tabKeyChange',
+                payload: {
+                  key:'start'
+                },
+              });
+              history.push('/Work/ProcessTask');
             }}>返回列表</Button>
             <Button color='primary' className={style.view} onClick={() => {
               history.push(`/Receipts/ReceiptsDetail?type=${state.type}&formId=${state.formId}`);
@@ -66,4 +77,4 @@ const ReceiptsResult = () => {
   </div>;
 };
 
-export default ReceiptsResult;
+export default connect(({ processList }) => ({ processList }))(ReceiptsResult);

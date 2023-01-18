@@ -3,7 +3,7 @@ import MyAudit from '../Work/ProcessTask/MyAudit';
 import KeepAlive from '../../components/KeepAlive';
 import MyNavBar from '../components/MyNavBar';
 
-export const NoticeList = () => {
+export const Notice = () => {
   const [scrollTop, setScrollTop] = useState(0);
   return <div
     id='content'
@@ -16,15 +16,9 @@ export const NoticeList = () => {
       setScrollTop(event.target.scrollTop);
     }}
   >
+    <MyNavBar title='任务' noDom />
     <MyAudit task />
   </div>;
-};
-
-const Notice = () => {
-  return <KeepAlive id='task' contentId='content'>
-    <MyNavBar title='任务' noDom />
-    <NoticeList />
-  </KeepAlive>;
 };
 
 export default Notice;

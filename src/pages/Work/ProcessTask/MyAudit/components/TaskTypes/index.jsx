@@ -36,7 +36,7 @@ const TaskTypes = (
 
   const [types, setTypes] = useState([...allTypes, ...erpTypes]);
 
-  const [type, setType] = useState({ key: value });
+  const [type, setType] = useState(value);
 
   const sideBars = [
     { title: '全部', key: 'all' },
@@ -53,7 +53,7 @@ const TaskTypes = (
       visible={visible}
       leftText={<LinkButton onClick={onClose}>取消</LinkButton>}
       rightText={<LinkButton onClick={() => {
-        onChange(type);
+        onChange({ key: type, title: types.find(item => item.value === type)?.label || '全部' });
       }}>确定</LinkButton>}
     >
       <div className={style.flexCenter}>
@@ -89,12 +89,12 @@ const TaskTypes = (
         <div className={style.types}>
           {
             types.map((item, index) => {
-              const checked = (type.key ? type.key === item.value : item.value === 'all');
+              const checked = (type ? type === item.value : item.value === 'all');
               return <div
                 key={index}
                 className={classNames(checked && style.checked, style.check)}
                 onClick={() => {
-                  setType({ key: item.value === 'all' ? null : item.value, title: item.label });
+                  setType(item.value === 'all' ? null : item.value);
                 }}
               >
                 {item.label}
