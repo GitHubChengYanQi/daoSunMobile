@@ -1,12 +1,9 @@
-import React, { useRef, useState } from 'react';
-import { Dialog, Popup } from 'antd-mobile';
+import React, { useState } from 'react';
+import { Dialog } from 'antd-mobile';
 import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { CheckCircleFill } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
-import Prepare from '../Prepare';
-import OutStockShop from '../OutStockShop';
-import OutSkuItem from './compoennts/OutSkuItem';
 import MyCard from '../../../../../../../../components/MyCard';
 import { useModel } from 'umi';
 import MyAntPopup from '../../../../../../../../components/MyAntPopup';
@@ -15,7 +12,6 @@ import { Clock } from '../../../../../../../../components/MyDate';
 import PrintCode from '../../../../../../../../components/PrintCode';
 import jrQrcode from 'jr-qrcode';
 import { useRequest } from '../../../../../../../../../util/Request';
-import MyPositions from '../../../../../../../../components/MyPositions';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import ActionButtons from '../../../../../ActionButtons';
 import { useHistory } from 'react-router-dom';
@@ -61,10 +57,8 @@ const OutSkuAction = (
     action,
     afertShow = () => {
     },
-    dimension = 'order',
     taskId,
     refresh: orderRefresh,
-    loading: orderLoading,
   },
 ) => {
 
@@ -74,24 +68,9 @@ const OutSkuAction = (
   const state = initialState || {};
   const userInfo = state.userInfo || {};
 
-  const shopRef = useRef();
-
-  const skuListRef = useRef();
-
-  const [data, setData] = useState([]);
-
-  const askData = order.detailResults || [];
-
-  const [params, setParams] = useState({ pickListsId });
-
-  const [visible, setVisible] = useState();
-
-  const [positionVisible, setPositionVisible] = useState();
-
   const [picking, setPicking] = useState();
 
   const [code, setCode] = useState('');
-  const [receivedSkus, setReceivedSkus] = useState([]);
   const imgSrc = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
   const [success, { setTrue, setFalse }] = useBoolean();
@@ -106,14 +85,12 @@ const OutSkuAction = (
     },
   });
 
-  const [showDetail, setShowDetail] = useState();
-
   return <div>
     <MyCard
       title='出库明细'
       extra={<LinkButton style={{ marginLeft: 12 }} onClick={() => {
         history.push({
-          pathname: '/Work/OutStock/BatchPrepare',
+          pathname: '/Work/OutStock/Prepare',
           search: `pickListsId=${pickListsId}&taskId=${taskId}&theme=${taskDetail.theme}&action=${(action || false) + ''}&source=${order.source}`,
         });
       }}>更多</LinkButton>}
@@ -153,7 +130,6 @@ const OutSkuAction = (
         pickListsId={pickListsId}
         onSuccess={(res, checkSku) => {
           setPicking(false);
-          setReceivedSkus(checkSku);
           setCode(res);
         }}
       />
@@ -186,20 +162,8 @@ const OutSkuAction = (
         switch (action.key) {
           case 'close':
             if (success) {
-              // refresh();
-              const newData = data.map((item) => {
-                const receiveds = receivedSkus.filter(receivedSku => receivedSku.pickListsDetailId === item.pickListsDetailId);
-                if (receiveds.length > 0) {
-                  let number = 0;
-                  receiveds.forEach(item => number += item.outNumber);
-                  return { ...item, collectable: item.collectable - number, received: item.received + number };
-                } else {
-                  return item;
-                }
-              });
-              setData(newData);
+              orderRefresh();
             }
-            setReceivedSkus([]);
             setCode('');
             return;
           case 'print':

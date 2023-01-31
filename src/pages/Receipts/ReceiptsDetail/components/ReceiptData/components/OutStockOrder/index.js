@@ -1,5 +1,4 @@
 import React from 'react';
-import { Tabs } from 'antd-mobile';
 import OutSkuAction from './components/OutSkuAction';
 
 const OutStockOrder = (

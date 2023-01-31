@@ -69,7 +69,7 @@ const Prepare = (
       },
     });
   };
-  console.log(skuItem);
+
   const addShop = () => {
     onClose();
     const imgUrl = ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useImperativeHandle, useState } from 'react';
 import BottomButton from '../../../components/BottomButton';
 import styles from './index.less';
 import { Message } from '../../../components/Message';
@@ -7,7 +7,6 @@ import { classNames, isArray, ToolUtil } from '../../../../util/ToolUtil';
 import {
   outPickListFormat,
 } from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/OutSkuAction';
-import { useLocation } from 'react-router-dom';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import ShopNumber from '../../AddShop/components/ShopNumber';
 import { Divider } from 'antd-mobile';
@@ -19,16 +18,23 @@ export const outDetailList = { url: '/productionPickListsDetail/noPageList', met
 export const outDetail = { url: '/productionPickLists/detail', method: 'POST' };
 export const autoAdd = { url: '/productionPickListsCart/autoAdd', method: 'POST' };
 
-const BatchPrepare = () => {
-
-  const { query } = useLocation();
+const BatchPrepare = (
+  {
+    pickListsId,
+    detail,
+    action,
+    taskId,
+    theme,
+    shopRef,
+  }, ref,
+) => {
 
   const [data, setData] = useState([]);
   const [countNumber, setCountNumber] = useState(0);
 
-  const { loading, refresh: detailListRefresh } = useRequest({
+  const { loading, refresh } = useRequest({
     ...outDetailList,
-    data: { pickListsId: query.pickListsId },
+    data: { pickListsId },
   }, {
     onSuccess: (res) => {
       const { countNumber, array } = outPickListFormat(ToolUtil.isArray(res));
@@ -37,31 +43,29 @@ const BatchPrepare = () => {
     },
   });
 
-  const { loading: outDetailLoading, data: detail = {} } = useRequest({
-    ...outDetail,
-    data: { pickListsId: query.pickListsId },
-  });
-
-  const { loading: autoAddLoading, run: autoAddRun } = useRequest({
+  const { run: autoAddRun } = useRequest({
     ...autoAdd,
-    data: { pickListsId: query.pickListsId },
+    data: { pickListsId },
   }, {
     manual: true,
     onSuccess: (res) => {
+      const all = data.filter(item => item.notPrepared > 0).length;
+      shopRef.current.jump(() => {
+      }, all - res.length);
       Message.successDialog({
         content: <div style={{ textAlign: 'center' }}>
           备料成功
-          <div>已备{data.length - res.length}个,库存不足{res.length}个</div>
+          <div>已备{all - res.length}个,库存不足{res.length}个</div>
         </div>,
         only: true,
       });
-      detailListRefresh();
+      refresh();
     },
   });
 
-  if (outDetailLoading) {
-    return <MyLoading skeleton />;
-  }
+  useImperativeHandle(ref, () => ({
+    refresh,
+  }));
 
 
   return <div>
@@ -69,7 +73,7 @@ const BatchPrepare = () => {
     <div className={styles.batchPrepare}>
       <div className={styles.box}>
         <div>
-          主题：{query.theme || '无'}
+          主题：{theme || '无'}
         </div>
         <div>
           负责人：{detail.userResult?.name || '无'}
@@ -117,19 +121,19 @@ const BatchPrepare = () => {
       </div>
     </div>
 
-    {(query.action === 'true') && <BottomButton
+    {action && <BottomButton
       only
       text='一键备料'
       onClick={() => {
         Message.warningDialog({
-          content: '该操作会按照申请数量进行备料，库存不足按照库存数量备料！',
+          content: '该操作会按照申请数量进行备料，库存不足按照库存数量备料。',
           confirmText: '开始备料',
           only: false,
-          onConfirm: () => autoAddRun({ data: { pickListsId: query.pickListsId, taskId: query.taskId } }),
+          onConfirm: () => autoAddRun({ data: { pickListsId, taskId } }),
         });
       }}
     />}
   </div>;
 };
 
-export default BatchPrepare;
+export default React.forwardRef(BatchPrepare);
