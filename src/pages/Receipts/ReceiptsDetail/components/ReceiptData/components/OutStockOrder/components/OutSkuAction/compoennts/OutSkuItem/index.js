@@ -17,6 +17,7 @@ export const OutProgress = (
     collectable,
     notPrepared,
   }) => {
+
   return <div className={pickStyle.dataNumber}>
     <Progress
       className={pickStyle.progress}

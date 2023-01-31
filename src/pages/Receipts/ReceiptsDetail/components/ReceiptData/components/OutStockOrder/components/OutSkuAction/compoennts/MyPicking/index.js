@@ -29,13 +29,6 @@ const MyPicking = (
   }) => {
 
 
-  const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
-    manual: true,
-    onSuccess: (res) => {
-      onSuccess(res);
-    },
-  });
-
   const [visible, setVisible] = useState();
 
   const [data, setData] = useState([]);
@@ -47,6 +40,13 @@ const MyPicking = (
     if (item.checked) {
       checkSku.push(item);
     }
+  });
+  console.log(checkSku);
+  const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
+    manual: true,
+    onSuccess: (res) => {
+      onSuccess(res, checkSku);
+    },
   });
 
 
@@ -162,6 +162,7 @@ const MyPicking = (
         data.map((item, index) => {
 
           return <OutItem
+            extraWidth='130px'
             action={action}
             key={index}
             skuItem={item}

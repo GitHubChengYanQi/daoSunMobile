@@ -9,53 +9,55 @@ import ShopNumber
 import { OutProgress } from '../../../OutSkuItem';
 
 const OutItem = (
-  {
-    skuItem,
-    skuIndex,
-    action,
-    dataChange = () => {
+    {
+      skuItem,
+      skuIndex,
+      action,
+      extraWidth,
+      dataChange = () => {
+      },
     },
-  },
-) => {
+  ) => {
 
-  const skuChecked = skuItem.checked;
+    const skuChecked = skuItem.checked;
 
-  const received = Number(skuItem.receivedNumber) || 0;
-  const collectable = Number(skuItem.collectable) || 0;
-  const notPrepared = Number(skuItem.number - collectable - received) || 0;
+    const received = Number(skuItem.receivedNumber) || 0;
+    const collectable = Number(skuItem.collectable) || 0;
+    const notPrepared = Number(skuItem.number - collectable - received) || 0;
 
-  const successPercent = Number(((received / skuItem.number)).toFixed(2)) * 100;
-  const percent = Number(((collectable / skuItem.number)).toFixed(2)) * 100;
+    const successPercent = Number(((received / skuItem.number)).toFixed(2)) * 100;
+    const percent = Number(((collectable / skuItem.number)).toFixed(2)) * 100;
 
-  return <div key={skuIndex} className={style.skus}>
-    <div className={style.skuItem}>
-      <div hidden={!action}>
-        <MyCheck checked={skuChecked} onChange={() => {
-          dataChange(skuItem.key, { checked: !skuChecked });
-        }} />
+    return <div key={skuIndex} className={style.skus}>
+      <div className={style.skuItem}>
+        <div hidden={!action}>
+          <MyCheck checked={skuChecked} onChange={() => {
+            dataChange(skuItem.key, { checked: !skuChecked });
+          }} />
+        </div>
+        <div className={style.sku}>
+          <SkuItem
+            skuResult={skuItem.skuResult}
+            extraWidth={extraWidth || '100px'}
+            otherData={[skuItem.brandResult ? skuItem.brandResult.brandName : '任意品牌']}
+          />
+        </div>
+        <div className={style.skuData}>
+          <ShopNumber max={collectable} min={1} value={skuItem.outNumber} onChange={(outNumber) => {
+            dataChange(skuItem.key, { outNumber });
+          }} />
+        </div>
       </div>
-      <div className={style.sku}>
-        <SkuItem
-          skuResult={skuItem.skuResult}
-          extraWidth='100px'
-          otherData={[skuItem.brandResult ? skuItem.brandResult.brandName : '任意品牌']}
-        />
-      </div>
-      <div className={style.skuData}>
-        <ShopNumber max={collectable} min={1} value={skuItem.outNumber} onChange={(outNumber) => {
-          dataChange(skuItem.key, { outNumber });
-        }} />
-      </div>
-    </div>
-    <OutProgress
-      collectable={collectable}
-      notPrepared={notPrepared}
-      received={received}
-      percent={percent}
-      successPercent={successPercent}
-    />
+      <OutProgress
+        collectable={collectable}
+        notPrepared={notPrepared}
+        received={received}
+        percent={percent}
+        successPercent={successPercent}
+      />
 
-  </div>;
-};
+    </div>;
+  }
+;
 
 export default OutItem;
