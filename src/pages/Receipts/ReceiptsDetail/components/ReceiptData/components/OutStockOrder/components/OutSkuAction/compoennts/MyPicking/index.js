@@ -162,6 +162,7 @@ const MyPicking = (
         data.map((item, index) => {
 
           return <OutItem
+            extraWidth='130px'
             action={action}
             key={index}
             skuItem={item}
