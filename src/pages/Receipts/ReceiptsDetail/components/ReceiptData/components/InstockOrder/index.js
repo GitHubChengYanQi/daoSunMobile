@@ -11,6 +11,7 @@ import LinkButton from '../../../../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';
 import { getInType } from '../../../../../../Work/CreateTask/components/InstockAsk';
 import { getOutType } from '../../../../../../Work/CreateTask/components/OutstockAsk';
+import OutStockOrder from '../OutStockOrder';
 
 const InstockOrder = (
   {
@@ -80,20 +81,18 @@ const InstockOrder = (
           taskDetail={taskDetail}
         />;
       case ReceiptsEnums.outstockOrder:
-        return <OutSkuAction
+        return <OutStockOrder
           actionNode={actionNode}
           logIds={logIds}
           afertShow={afertShow}
-          nodeActions={actions.map(item => ({ ...item, name: item.action === 'outStock' ? '领料' : item.name }))}
+          actions={actions}
           taskDetail={taskDetail}
           loading={loading}
-          order={data}
+          data={data}
           taskId={taskId}
-          data={details}
+          details={details}
           permissions={permissions}
-          actionId={getAction('outStock').id}
-          action={getAction('outStock').id && permissions}
-          pickListsId={data.pickListsId}
+          getAction={getAction}
           refresh={refresh}
         />;
       default:

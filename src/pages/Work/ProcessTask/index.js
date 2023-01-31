@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MyNavBar from '../../components/MyNavBar';
 import style from './index.less';
 import Icon from '../../components/Icon';
@@ -6,7 +6,6 @@ import MyTablBar from '../../components/MyTablBar';
 import MyAudit from './MyAudit';
 import Create from './Create';
 import { useModel } from 'umi';
-import KeepAlive from '../../../components/KeepAlive';
 import { useLocation } from 'react-router-dom';
 import { connect } from 'dva';
 

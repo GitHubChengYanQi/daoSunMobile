@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Dialog, Divider, Popup } from 'antd-mobile';
-import { isArray, isObject, ToolUtil } from '../../../../../../../../../util/ToolUtil';
+import { Dialog, Popup } from 'antd-mobile';
+import { ToolUtil } from '../../../../../../../../../util/ToolUtil';
 import style from '../../../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
-import { CheckCircleFill, DownOutline, UpOutline } from 'antd-mobile-icons';
+import { CheckCircleFill, } from 'antd-mobile-icons';
 import { useBoolean } from 'ahooks';
 import MyEmpty from '../../../../../../../../components/MyEmpty';
 import Viewpager from '../../../InstockOrder/components/Viewpager';
@@ -23,14 +23,13 @@ import Icon from '../../../../../../../../components/Icon';
 import MyPositions from '../../../../../../../../components/MyPositions';
 import LinkButton from '../../../../../../../../components/LinkButton';
 import MySearch from '../../../../../../../../components/MySearch';
-import { SkuResultSkuJsons } from '../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { ERPEnums } from '../../../../../../../../Work/Stock/ERPEnums';
 import ActionButtons from '../../../../../ActionButtons';
 import { useHistory } from 'react-router-dom';
 import { OutStockRevoke } from '../../../../../Bottom/components/Revoke';
+import MyList from '../../../../../../../../components/MyList';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
-export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
+export const outDetailList = { url: '/productionPickListsDetail/pageList', method: 'POST' };
 
 const OutSkuAction = (
   {
@@ -58,9 +57,9 @@ const OutSkuAction = (
 
   const shopRef = useRef();
 
-  const [data, setData] = useState([]);
+  const skuListRef = useRef();
 
-  const [defaultData, setDefaultData] = useState([]);
+  const [data, setData] = useState([]);
 
   const askData = order.detailResults || [];
 
@@ -70,11 +69,7 @@ const OutSkuAction = (
 
   const format = (list = []) => {
     let countNumber = 0;
-    const actions = [];
-    const noAction = [];
-    const other = [];
-
-    list.map(item => {
+    const array = list.map(item => {
       let perpareNumber = 0;
       ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
 
@@ -82,27 +77,19 @@ const OutSkuAction = (
       const collectable = Number(perpareNumber) || 0;
       const notPrepared = Number(item.number - collectable - received) || 0;
 
-
-      if (item.number === received || item.number === (received + collectable) || !item.stockNumber) {
-        if (notPrepared > 0) {
-          other.push({ ...item, perpareNumber, received, collectable, notPrepared });
-        } else {
-          noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
-        }
-      } else {
-        actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
-      }
-      return countNumber += (item.number || 0);
+      countNumber += (item.number || 0);
+      return {
+        ...item,
+        perpareNumber,
+        received,
+        collectable,
+        notPrepared,
+        action: !(item.number === received || item.number === (received + collectable) || !item.stockNumber),
+      };
     });
     return {
       countNumber,
-      array: [
-        ...actions,
-        ...other.sort((a, b) => {
-          return a.notPrepared - b.notPrepared;
-        }),
-        ...noAction,
-      ],
+      array,
     };
   };
 
@@ -110,13 +97,12 @@ const OutSkuAction = (
     ...outDetailList,
     data: params,
   }, {
+    manual: true,
     onSuccess: (res) => {
-
       const { countNumber, array } = format(ToolUtil.isArray(res), countNumber);
 
       setCountNumber(countNumber);
       setData(array);
-      setDefaultData(array);
     },
   });
 
@@ -132,6 +118,7 @@ const OutSkuAction = (
   const [picking, setPicking] = useState();
 
   const [code, setCode] = useState('');
+  const [receivedSkus, setReceivedSkus] = useState([]);
   const imgSrc = jrQrcode.getQrBase64(`${process.env.wxCp}Work/OutStockConfirm?code=${code}`);
 
   const [success, { setTrue, setFalse }] = useBoolean();
@@ -159,11 +146,17 @@ const OutSkuAction = (
       bodyClassName={style.bodyStyle}
       titleBom={<div className={style.skuTitle}>
         <Title>出库明细</Title>
+        {action && <LinkButton style={{ marginLeft: 12 }} onClick={() => {
+          history.push({
+            pathname:'/Work/OutStock/BatchPrepare',
+            search:``
+          })
+        }}>一键备料</LinkButton>}
         <LinkButton style={{ marginLeft: 12 }} onClick={() => {
           setShowDetail(true);
         }}>申请明细</LinkButton>
       </div>}
-      extra={<div className={style.extra} hidden={defaultData.length === 0}>
+      extra={<div className={style.extra} hidden={data.length === 0}>
         合计：<span>{data.length}</span>类<span>{countNumber || 0}</span>件
       </div>}>
       <MySearch
@@ -175,73 +168,81 @@ const OutSkuAction = (
           }} />}
         placeholder='请输入物料名称查询'
         style={{ padding: '8px 12px' }}
-        onClear={() => setData(defaultData)}
         onChange={(value) => {
-          const newData = defaultData.filter(item => {
-            const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
-            return ToolUtil.queryString(value, sku);
-          });
-          setData(newData);
+          console.log(value);
           setSearchValue(value);
         }}
         value={seacrchValue}
       />
       <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading || orderLoading}>
-        {defaultData.length === 0 &&
+        {data.length === 0 &&
         <MyEmpty description={`物料全部出库完成`} image={<Icon style={{ fontSize: 45 }} type='icon-chukuchenggong' />} />}
-        {defaultData.length !== 0 && data.length === 0 && <MyEmpty description={`没有找到相关物料`} />}
-        {
-          data.map((item, index) => {
+        <MyList
+          ref={skuListRef}
+          noEmpty
+          api={outDetailList}
+          params={params}
+          data={data}
+          getData={(res) => {
+            const { countNumber, array } = format(ToolUtil.isArray(res), countNumber);
 
-            if (!allSku && index >= 3) {
-              return null;
-            }
+            setCountNumber(countNumber);
+            setData(array);
+          }}>
+          {
+            data.map((item, index) => {
 
-            if (!action || !item.action) {
-              return <OutSkuItem
-                item={item}
-                index={index}
-                dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
-                key={index}
-              />;
-            }
+              // if (!allSku && index >= 3) {
+              //   return null;
+              // }
 
-            return <div key={index}>
-              <Viewpager
-                currentIndex={index}
-                onLeft={() => {
-                  setVisible(item);
-                }}
-                onRight={() => {
-                  setVisible(item);
-                }}
-              >
-                <OutSkuItem
+              if (!action || !item.action) {
+                return <OutSkuItem
                   item={item}
                   index={index}
                   dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
                   key={index}
-                />
-              </Viewpager>
-            </div>;
-          })
-        }
-        {data.length > 3 && <Divider className={style.allSku}>
-          <div onClick={() => {
-            toggle();
-          }}>
-            {
-              allSku ?
-                <UpOutline />
-                :
-                <DownOutline />
-            }
-          </div>
-        </Divider>}
+                />;
+              }
+
+              return <div key={index}>
+                <Viewpager
+                  currentIndex={index}
+                  onLeft={() => {
+                    setVisible(item);
+                  }}
+                  onRight={() => {
+                    setVisible(item);
+                  }}
+                >
+                  <OutSkuItem
+                    item={item}
+                    index={index}
+                    dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
+                    key={index}
+                  />
+                </Viewpager>
+              </div>;
+            })
+          }
+        </MyList>
+
+        {/*{data.length > 3 && <Divider className={style.allSku}>*/}
+        {/*  <div onClick={() => {*/}
+        {/*    toggle();*/}
+        {/*  }}>*/}
+        {/*    {*/}
+        {/*      allSku ?*/}
+        {/*        <UpOutline />*/}
+        {/*        :*/}
+        {/*        <DownOutline />*/}
+        {/*    }*/}
+        {/*  </div>*/}
+        {/*</Divider>}*/}
       </MyLoading>
     </MyCard>
 
-     <Popup
+    <Popup
       getContainer={null}
       onMaskClick={() => setVisible(false)}
       visible={visible}
@@ -252,10 +253,22 @@ const OutSkuAction = (
         id={pickListsId}
         skuItem={visible}
         dimension={dimension}
-        onSuccess={(number) => {
-          refresh();
+        onSuccess={(detail) => {
+          // refresh();
           shopRef.current.jump(() => {
             // refresh();
+            const newData = data.map((item) => {
+              if (item.pickListsDetailId === detail.pickListsDetailId) {
+                return {
+                  ...item,
+                  notPrepared: item.notPrepared - item.number,
+                  collectable: item.collectable + item.number,
+                };
+              } else {
+                return item;
+              }
+            });
+            setData(newData);
           });
         }}
         onClose={() => {
@@ -304,8 +317,9 @@ const OutSkuAction = (
     >
       <MyPicking
         pickListsId={pickListsId}
-        onSuccess={(res) => {
+        onSuccess={(res, checkSku) => {
           setPicking(false);
+          setReceivedSkus(checkSku);
           setCode(res);
         }}
       />
@@ -338,8 +352,20 @@ const OutSkuAction = (
         switch (action.key) {
           case 'close':
             if (success) {
-              refresh();
+              // refresh();
+              const newData = data.map((item) => {
+                const receiveds = receivedSkus.filter(receivedSku => receivedSku.pickListsDetailId === item.pickListsDetailId);
+                if (receiveds.length > 0) {
+                  let number = 0;
+                  receiveds.forEach(item => number += item.outNumber);
+                  return { ...item, collectable: item.collectable - number, received: item.received + number };
+                } else {
+                  return item;
+                }
+              });
+              setData(newData);
             }
+            setReceivedSkus([]);
             setCode('');
             return;
           case 'print':
@@ -380,12 +406,13 @@ const OutSkuAction = (
       visible={positionVisible}
       single
       autoFocus
-      value={params.positionId ? [{ id: params.positionId }] : []}
+      value={params.storehousePositionsId ? [{ id: params.storehousePositionsId }] : []}
       onClose={() => setPositionVisible(false)}
       onSuccess={(value = []) => {
         const positions = value[0] || {};
-        setParams({ ...params, positionId: positions.id });
-        getOutDetail({ data: { ...params, storehousePositionsId: positions.id } });
+        setParams({ ...params, storehousePositionsId: positions.id });
+        skuListRef.current.submit({ ...params, storehousePositionsId: positions.id });
+        // getOutDetail({ data: { ...params, storehousePositionsId: positions.id } });
         setPositionVisible(false);
       }} />
 

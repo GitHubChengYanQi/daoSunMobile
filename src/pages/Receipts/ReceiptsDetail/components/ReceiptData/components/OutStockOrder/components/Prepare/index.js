@@ -69,14 +69,14 @@ const Prepare = (
       },
     });
   };
-
+  console.log(skuItem);
   const addShop = () => {
     onClose();
-    const imgUrl =  ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
-    addShopCart(imgUrl, 'pickSkuImg', );
+    const imgUrl = ToolUtil.isArray(skuResult.imgResults)[0]?.thumbUrl || state.homeLogo;
+    addShopCart(imgUrl, 'pickSkuImg');
     let number = 0;
     outStockSkus.forEach(item => number += item.number);
-    onSuccess(number);
+    onSuccess({ ...skuItem, number });
   };
 
 
@@ -139,7 +139,7 @@ const Prepare = (
         storehousePositionsId={allocation && skuItem.positionId}
         inkindRef={inkindRef}
         customerId={skuItem.customerId}
-        brandId={allocation ? skuItem.brandId : skuItem.brandId && !['0',0].includes(skuItem.brandId) ? skuItem.brandId : null}
+        brandId={allocation ? skuItem.brandId : skuItem.brandId && !['0', 0].includes(skuItem.brandId) ? skuItem.brandId : null}
         id={id}
         pickListsDetailId={skuItem.pickListsDetailId}
         skuId={skuItem.skuId}

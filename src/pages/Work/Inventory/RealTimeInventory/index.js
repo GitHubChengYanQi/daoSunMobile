@@ -200,7 +200,6 @@ const RealTimeInventoryContent = connect(({ qrCode }) => ({ qrCode }))((props) =
       onClear={clear}
       screen={screen}
       onChange={(params, newLabel) => {
-        console.log(!(Object.keys(params).find(item => params[item])));
         if (!(Object.keys(params).find(item => params[item]))) {
           setScreeing(false);
         }else {
