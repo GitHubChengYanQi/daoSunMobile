@@ -34,7 +34,15 @@ const Prepare = (
 
   const [outStockSkus, setOutStockSkus] = useState([]);
 
-  const skuResult = skuItem.skuResult || {};
+  const sku = skuItem.skuResult || {};
+  const skuResult = {
+    spuResult: {
+      name: sku.spuName,
+    },
+    skuName: sku.skuName,
+    specifications: sku.specifications,
+    imgResults: skuItem.imgUrl ? [{ thumbUrl: skuItem.imgUrl }] : [],
+  };
 
   const inkindRef = useRef();
 

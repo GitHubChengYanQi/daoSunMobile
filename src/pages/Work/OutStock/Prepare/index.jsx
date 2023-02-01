@@ -65,9 +65,9 @@ const Prepare = () => {
       taskId={query.taskId}
       outType={query.source}
       id={query.pickListsId}
-      refresh={() => {
+      refresh={(refreshOrder) => {
         batchPrepareRef.current?.refresh();
-        onePrepareRef.current?.refresh();
+        onePrepareRef.current?.refresh(refreshOrder);
       }}
     />}
   </>;

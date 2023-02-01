@@ -104,7 +104,7 @@ const OutStockShop = (
       onClose={() => {
         if (refreshOrder) {
           setRefreshOrder(false);
-          refresh();
+          refresh(refreshOrder);
         }
         setVisible(false);
       }}
@@ -115,7 +115,7 @@ const OutStockShop = (
         taskId={taskId}
         outType={outType}
         id={id}
-        refresh={() => setRefreshOrder(true)}
+        refresh={(returnSkus) => setRefreshOrder(returnSkus)}
         user={user}
         data={data}
         allSkus={allSkus}

@@ -106,9 +106,18 @@ const BatchPrepare = (
         {
           loading ? <MyLoading skeleton /> : data.map((item, index) => {
             const complete = item.notPrepared === 0;
+            const skuResult = item.skuResult || {};
             return <div key={index} className={classNames(styles.skuContent, complete && styles.complete)}>
               <div className={styles.sku}>
-                {SkuResultSkuJsons({ skuResult: item.skuResult })}
+                {SkuResultSkuJsons({
+                  skuResult: {
+                    spuResult: {
+                      name: skuResult.spuName,
+                    },
+                    skuName: skuResult.skuName,
+                    specifications: skuResult.specifications,
+                  },
+                })}
               </div>
               <div><ShopNumber show value={item.number} /></div>
             </div>;

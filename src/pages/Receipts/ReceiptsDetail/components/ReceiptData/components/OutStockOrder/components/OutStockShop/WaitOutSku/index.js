@@ -72,7 +72,7 @@ const WaitOutSku = (
     onSuccess: () => {
       Message.successToast('移出成功!');
       listRefresh();
-      refresh();
+      refresh(returnSkus);
     },
   });
 
