@@ -42,13 +42,9 @@ const OutStockItem = (
     percent={percent}
     coding={receipts.coding}
     endTime={receipts.endTime}
-    skus={receipts.detailResults}
     createTime={item.createTime}
     taskName={item.taskName}
     index={index}
-    origin={isObject(item.themeAndOrigin)}
-    skuSize={receipts.skuCount || 0}
-    positionSize={receipts.positionCount || 0}
     beginTime={receipts.beginTime}
     onClick={() => onClick(item)}
     processRender={<MyProgress

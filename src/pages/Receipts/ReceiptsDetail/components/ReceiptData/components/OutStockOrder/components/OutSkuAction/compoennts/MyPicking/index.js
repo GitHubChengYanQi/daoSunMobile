@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRequest } from '../../../../../../../../../../../util/Request';
-import { ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
+import { isArray, ToolUtil } from '../../../../../../../../../../../util/ToolUtil';
 import style from './index.less';
 import MyCheck from '../../../../../../../../../../components/MyCheck';
 import { Button } from 'antd-mobile';
@@ -10,6 +10,7 @@ import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import OutItem from './components/OutItem';
 import MyActionSheet from '../../../../../../../../../../components/MyActionSheet';
 import { EnvironmentOutline } from 'antd-mobile-icons';
+import { mediaGetMediaUrls } from '../../../../../../../../../../Work/OutStock/OnePrepare';
 
 
 export const getCarts = { url: '/productionPickListsCart/getSelfCartsByLists', method: 'POST' };
@@ -41,7 +42,7 @@ const MyPicking = (
       checkSku.push(item);
     }
   });
-  console.log(checkSku);
+
   const { loading: skuLoading, run: skuRun } = useRequest(outStockBySku, {
     manual: true,
     onSuccess: (res) => {
@@ -56,7 +57,15 @@ const MyPicking = (
 
   const action = storehouse.storehouseId;
 
+  const { data: skuMediaUrls, run: getMediaUrls } = useRequest(mediaGetMediaUrls, { manual: true });
+
   const initData = (res, storehouseId) => {
+    getMediaUrls({
+      data: {
+        mediaIds: ToolUtil.isArray(res).map(item => item.skuResult?.images?.split(',')[0]),
+        option: 'image/resize,m_fill,h_74,w_74',
+      },
+    });
     const newData = [];
     const newStorehouse = [];
     let total = 0;
@@ -160,12 +169,21 @@ const MyPicking = (
       {data.length === 0 && <MyEmpty description='暂无待领取物料' />}
       {
         data.map((item, index) => {
-
+          const media = isArray(skuMediaUrls).find(mediaItem => mediaItem.mediaId === item.skuResult?.images?.split(',')[0]);
+          const itemSku = item.skuResult || {};
+          const skuResult = {
+            spuResult: {
+              name: itemSku.spuName,
+            },
+            skuName: itemSku.skuName,
+            specifications: itemSku.specifications,
+            imgResults: media ? [{ thumbUrl: media.thumbUrl }] : [],
+          };
           return <OutItem
             extraWidth='130px'
             action={action}
             key={index}
-            skuItem={item}
+            skuItem={{ ...item, skuResult }}
             skuIndex={index}
             dataChange={dataChange}
           />;

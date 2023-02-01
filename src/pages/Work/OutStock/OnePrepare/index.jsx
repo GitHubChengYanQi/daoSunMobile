@@ -1,8 +1,6 @@
 import React, { useImperativeHandle, useState } from 'react';
-import { Divider, Popup } from 'antd-mobile';
-import { DownOutline, UpOutline } from 'antd-mobile-icons';
-import { useBoolean } from 'ahooks';
-import { ToolUtil } from '../../../../util/ToolUtil';
+import { InfiniteScroll, Popup } from 'antd-mobile';
+import { isArray, ToolUtil } from '../../../../util/ToolUtil';
 import { useRequest } from '../../../../util/Request';
 import MySearch from '../../../components/MySearch';
 import Icon from '../../../components/Icon';
@@ -13,13 +11,13 @@ import OutSkuItem
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/OutSkuAction/compoennts/OutSkuItem';
 import Viewpager
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/InstockOrder/components/Viewpager';
-import style from '../../Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import MyPositions from '../../../components/MyPositions';
 import Prepare
   from '../../../Receipts/ReceiptsDetail/components/ReceiptData/components/OutStockOrder/components/Prepare';
 
 export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' };
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
+export const mediaGetMediaUrls = { url: '/media/getMediaUrls', method: 'POST' };
 
 const OnePrepare = (
   {
@@ -45,7 +43,7 @@ const OnePrepare = (
       const notPrepared = Number(item.number - collectable - received) || 0;
 
 
-      if (item.number > received){
+      if (item.number > received) {
         if (item.number === (received + collectable) || !item.stockNumber) {
           if (notPrepared > 0) {
             other.push({ ...item, perpareNumber, received, collectable, notPrepared });
@@ -72,18 +70,46 @@ const OnePrepare = (
 
   const [data, setData] = useState([]);
 
+  const [showCount, setShowCount] = useState(0);
+
+  const [hasMore, setHasMore] = useState(true);
+
   const [defaultData, setDefaultData] = useState([]);
 
   const [params, setParams] = useState({ pickListsId });
 
-  const { loading, run: getOutDetail, refresh } = useRequest({
+  const { run: getMediaUrls } = useRequest(mediaGetMediaUrls, { manual: true });
+
+  const getImgs = async (startIndex, count, skus) => {
+    const skuMediaIds = skus.filter((item, index) => index >= startIndex && index < startIndex + count);
+    const urls = await getMediaUrls({
+      data: {
+        mediaIds: skuMediaIds.map(item => item.skuResult?.images?.split(',')[0]),
+        option: 'image/resize,m_fill,h_74,w_74',
+      },
+    });
+    const newDefaultData = skus.map((item, index) => {
+      if (index >= startIndex && index < (startIndex + count) && item.skuResult?.images?.split(',')[0]) {
+        const media = isArray(urls).find(urlItem => urlItem.mediaId === item.skuResult?.images?.split(',')[0]);
+        return {
+          ...item,
+          imgUrl: media && media.thumbUrl,
+        };
+      }
+      return item;
+    });
+    setDefaultData(newDefaultData);
+  };
+
+  const { loading, run: getOutDetail } = useRequest({
     ...outDetailList,
     data: params,
   }, {
     onSuccess: (res) => {
       const { array } = format(ToolUtil.isArray(res));
-      setData(array);
+      setShowCount(10);
       setDefaultData(array);
+      getImgs(0, 20, array);
     },
   });
 
@@ -91,12 +117,41 @@ const OnePrepare = (
 
   const [positionVisible, setPositionVisible] = useState();
 
-  const [allSku, { toggle }] = useBoolean();
   const [seacrchValue, setSearchValue] = useState();
+
+  const refresh = (returnSkus) => {
+    const newData = defaultData.map((item) => {
+      const sku = isArray(returnSkus).find(returnSku => returnSku.pickListsDetailId === item.pickListsDetailId);
+      if (sku) {
+        const received = Number(item.receivedNumber) || 0;
+        const collectable = item.collectable - sku.number;
+        const notPrepared = item.notPrepared + sku.number;
+        const action = !(item.number === (received + collectable) || !item.stockNumber);
+        return {
+          ...item,
+          action,
+          perpareNumber: item.number - notPrepared - received - collectable,
+          notPrepared,
+          collectable,
+        };
+      } else {
+        return item;
+      }
+    });
+    setDefaultData(newData);
+  };
 
   useImperativeHandle(ref, () => ({
     refresh,
   }));
+
+  if (loading) {
+    return <MyLoading skeleton />;
+  }
+
+  if (defaultData.length === 0) {
+    return <MyEmpty description={`物料全部出库完成`} image={<Icon style={{ fontSize: 45 }} type='icon-chukuchenggong' />} />;
+  }
 
   return <div style={{ backgroundColor: '#fff', padding: '12px 0' }}>
     <MySearch
@@ -108,70 +163,81 @@ const OnePrepare = (
         }} />}
       placeholder='请输入物料名称查询'
       style={{ padding: '8px 12px' }}
-      onClear={() => setData(defaultData)}
       onChange={(value) => {
         const newData = defaultData.filter(item => {
-          const sku = SkuResultSkuJsons({ skuResult: item.skuResult }) || '';
-          return ToolUtil.queryString(value, sku);
+
         });
         setData(newData);
         setSearchValue(value);
       }}
       value={seacrchValue}
     />
-    <MyLoading noLoadingTitle title='正在刷新数据，请稍后...' loading={loading}>
-      {defaultData.length === 0 &&
-      <MyEmpty description={`物料全部出库完成`} image={<Icon style={{ fontSize: 45 }} type='icon-chukuchenggong' />} />}
-      {defaultData.length !== 0 && data.length === 0 && <MyEmpty description={`没有找到相关物料`} />}
-      {
-        data.map((item, index) => {
 
-          if (!allSku && index >= 3) {
-            return null;
-          }
+    {
+      defaultData.filter((item, index) => {
+        const itemSku = item.skuResult || {};
+        const skuResult = {
+          spuResult: {
+            name: itemSku.spuName,
+          },
+          skuName: itemSku.skuName,
+          specifications: itemSku.specifications,
+          imgResults: item.imgUrl ? [{ thumbUrl: item.imgUrl }] : [],
+        };
+        const sku = SkuResultSkuJsons({ skuResult }) || '';
+        return index < showCount && ToolUtil.queryString(seacrchValue, sku);
+      }).map((item, index) => {
+        const sku = item.skuResult || {};
+        const skuResult = {
+          spuResult: {
+            name: sku.spuName,
+          },
+          skuName: sku.skuName,
+          specifications: sku.specifications,
+          imgResults: item.imgUrl ? [{ thumbUrl: item.imgUrl }] : [],
+        };
+        if (!action || !item.action) {
+          return <OutSkuItem
+            item={{ ...item, skuResult }}
+            index={index}
+            dataLength={data.length - 1}
+            key={index}
+          />;
+        }
 
-          if (!action || !item.action) {
-            return <OutSkuItem
-              item={item}
+        return <div key={index}>
+          <Viewpager
+            currentIndex={index}
+            onLeft={() => {
+              setVisible(item);
+            }}
+            onRight={() => {
+              setVisible(item);
+            }}
+          >
+            <OutSkuItem
+              item={{ ...item, skuResult }}
               index={index}
-              dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
+              dataLength={data.length - 1}
               key={index}
-            />;
-          }
+            />
+          </Viewpager>
+        </div>;
+      })
+    }
 
-          return <div key={index}>
-            <Viewpager
-              currentIndex={index}
-              onLeft={() => {
-                setVisible(item);
-              }}
-              onRight={() => {
-                setVisible(item);
-              }}
-            >
-              <OutSkuItem
-                item={item}
-                index={index}
-                dataLength={(data.length > 3 && !allSku) ? 2 : data.length - 1}
-                key={index}
-              />
-            </Viewpager>
-          </div>;
-        })
-      }
-      {data.length > 3 && <Divider className={style.allSku}>
-        <div onClick={() => {
-          toggle();
-        }}>
-          {
-            allSku ?
-              <UpOutline />
-              :
-              <DownOutline />
-          }
-        </div>
-      </Divider>}
-    </MyLoading>
+    <InfiniteScroll loadMore={() => {
+      const newData = defaultData.filter((item, index) => index >= (showCount + 10) && index < (showCount + 20));
+      setShowCount(showCount + 10);
+      setHasMore(newData.length === 10);
+      getImgs(showCount + 10, 10, defaultData);
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(0);
+        }, 2000);
+      });
+
+    }} hasMore={hasMore} />
 
     <Popup
       getContainer={null}
@@ -184,9 +250,27 @@ const OnePrepare = (
         id={pickListsId}
         skuItem={visible}
         dimension='order'
-        onSuccess={() => {
-          refresh();
-          shopRef.current.jump();
+        onSuccess={(detail) => {
+          shopRef.current.jump(() => {
+            const newData = defaultData.map((item) => {
+              if (item.pickListsDetailId === detail.pickListsDetailId) {
+                const received = Number(item.receivedNumber) || 0;
+                const collectable = item.collectable + detail.number;
+                const notPrepared = item.notPrepared - detail.number;
+                const action = !(item.number === (received + collectable) || !item.stockNumber);
+                return {
+                  ...item,
+                  action,
+                  perpareNumber: collectable,
+                  notPrepared,
+                  collectable,
+                };
+              } else {
+                return item;
+              }
+            });
+            setDefaultData(newData);
+          });
         }}
         onClose={() => {
           setVisible(false);
