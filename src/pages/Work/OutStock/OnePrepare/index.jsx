@@ -72,7 +72,7 @@ const OnePrepare = (
 
   const [showCount, setShowCount] = useState(0);
 
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMore, setHasMore] = useState(false);
 
   const [defaultData, setDefaultData] = useState([]);
 
