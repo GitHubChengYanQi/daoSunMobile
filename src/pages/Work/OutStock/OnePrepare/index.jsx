@@ -153,10 +153,12 @@ const OnePrepare = (
         const received = Number(item.receivedNumber) || 0;
         const collectable = item.collectable - number;
         const notPrepared = item.notPrepared + number;
-        const action = !(item.number === (received + collectable) || !item.stockNumber);
+        const stockNumber = item.stockNumber + number;
+        const action = !(item.number === (received + collectable) || !(stockNumber));
         return {
           ...item,
           action,
+          stockNumber,
           perpareNumber: collectable,
           notPrepared,
           collectable,
@@ -281,10 +283,12 @@ const OnePrepare = (
               const received = Number(item.receivedNumber) || 0;
               const collectable = item.collectable + detail.number;
               const notPrepared = item.notPrepared - detail.number;
-              const action = !(item.number === (received + collectable) || !item.stockNumber);
+              const stockNumber = item.stockNumber - detail.number;
+              const action = !(item.number === (received + collectable) || !(stockNumber));
               return {
                 ...item,
                 action,
+                stockNumber,
                 perpareNumber: collectable,
                 notPrepared,
                 collectable,
