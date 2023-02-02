@@ -78,6 +78,8 @@ const OnePrepare = (
 
   const [params, setParams] = useState({ pickListsId });
 
+  const [seacrchValue, setSearchValue] = useState();
+
   const { run: getMediaUrls } = useRequest(mediaGetMediaUrls, { manual: true });
 
   const getImgs = async (startIndex, count, skus) => {
@@ -88,7 +90,7 @@ const OnePrepare = (
         option: 'image/resize,m_fill,h_74,w_74',
       },
     });
-    const newDefaultData = skus.map((item, index) => {
+    const newData = skus.map((item, index) => {
       if (index >= startIndex && index < (startIndex + count) && item.skuResult?.images?.split(',')[0]) {
         const media = isArray(urls).find(urlItem => urlItem.mediaId === item.skuResult?.images?.split(',')[0]);
         return {
@@ -98,7 +100,21 @@ const OnePrepare = (
       }
       return item;
     });
-    setDefaultData(newDefaultData);
+    setData(newData);
+  };
+
+  const searchSkuName = (value, item) => {
+    const itemSku = item.skuResult || {};
+    const skuResult = {
+      spuResult: {
+        name: itemSku.spuName,
+      },
+      skuName: itemSku.skuName,
+      specifications: itemSku.specifications,
+      imgResults: item.imgUrl ? [{ thumbUrl: item.imgUrl }] : [],
+    };
+    const sku = SkuResultSkuJsons({ skuResult }) || '';
+    return ToolUtil.queryString(value, sku);
   };
 
   const { loading, run: getOutDetail } = useRequest({
@@ -108,8 +124,13 @@ const OnePrepare = (
     onSuccess: (res) => {
       const { array } = format(ToolUtil.isArray(res));
       setShowCount(10);
+      const newData = array.filter(item => {
+        return searchSkuName(seacrchValue, item);
+      });
+      setData(newData);
       setDefaultData(array);
       getImgs(0, 20, array);
+      setHasMore(newData.length > 10);
     },
   });
 
@@ -117,10 +138,9 @@ const OnePrepare = (
 
   const [positionVisible, setPositionVisible] = useState();
 
-  const [seacrchValue, setSearchValue] = useState();
 
   const refresh = (returnSkus) => {
-    const newData = defaultData.map((item) => {
+    const format = (item) => {
       const sku = isArray(returnSkus).find(returnSku => returnSku.pickListsDetailId === item.pickListsDetailId);
       if (sku) {
         const received = Number(item.receivedNumber) || 0;
@@ -137,8 +157,11 @@ const OnePrepare = (
       } else {
         return item;
       }
-    });
-    setDefaultData(newData);
+    };
+    const newData = data.map(format);
+    const newDefaultData = data.map(format);
+    setData(newData);
+    setDefaultData(newDefaultData);
   };
 
   useImperativeHandle(ref, () => ({
@@ -164,28 +187,23 @@ const OnePrepare = (
       placeholder='请输入物料名称查询'
       style={{ padding: '8px 12px' }}
       onChange={(value) => {
+        setSearchValue(value);
+      }}
+      onSearch={(value) => {
         const newData = defaultData.filter(item => {
-
+          return searchSkuName(value, item);
         });
         setData(newData);
-        setSearchValue(value);
+        setShowCount(10);
+        getImgs(0, 20, newData);
+        setHasMore(newData.length > 10);
       }}
       value={seacrchValue}
     />
 
     {
-      defaultData.filter((item, index) => {
-        const itemSku = item.skuResult || {};
-        const skuResult = {
-          spuResult: {
-            name: itemSku.spuName,
-          },
-          skuName: itemSku.skuName,
-          specifications: itemSku.specifications,
-          imgResults: item.imgUrl ? [{ thumbUrl: item.imgUrl }] : [],
-        };
-        const sku = SkuResultSkuJsons({ skuResult }) || '';
-        return index < showCount && ToolUtil.queryString(seacrchValue, sku);
+      data.filter((item, index) => {
+        return index < showCount;
       }).map((item, index) => {
         const sku = item.skuResult || {};
         const skuResult = {
@@ -227,10 +245,10 @@ const OnePrepare = (
     }
 
     <InfiniteScroll loadMore={() => {
-      const newData = defaultData.filter((item, index) => index >= (showCount + 10) && index < (showCount + 20));
+      const newData = data.filter((item, index) => index >= (showCount + 10) && index < (showCount + 20));
       setShowCount(showCount + 10);
       setHasMore(newData.length === 10);
-      getImgs(showCount + 10, 10, defaultData);
+      getImgs(showCount + 10, 10, data);
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve(0);
@@ -251,25 +269,28 @@ const OnePrepare = (
         skuItem={visible}
         dimension='order'
         onSuccess={(detail) => {
+          const format = (item) => {
+            if (item.pickListsDetailId === detail.pickListsDetailId) {
+              const received = Number(item.receivedNumber) || 0;
+              const collectable = item.collectable + detail.number;
+              const notPrepared = item.notPrepared - detail.number;
+              const action = !(item.number === (received + collectable) || !item.stockNumber);
+              return {
+                ...item,
+                action,
+                perpareNumber: collectable,
+                notPrepared,
+                collectable,
+              };
+            } else {
+              return item;
+            }
+          };
           shopRef.current.jump(() => {
-            const newData = defaultData.map((item) => {
-              if (item.pickListsDetailId === detail.pickListsDetailId) {
-                const received = Number(item.receivedNumber) || 0;
-                const collectable = item.collectable + detail.number;
-                const notPrepared = item.notPrepared - detail.number;
-                const action = !(item.number === (received + collectable) || !item.stockNumber);
-                return {
-                  ...item,
-                  action,
-                  perpareNumber: collectable,
-                  notPrepared,
-                  collectable,
-                };
-              } else {
-                return item;
-              }
-            });
-            setDefaultData(newData);
+            const newDefaultData = defaultData.map(format);
+            const newData = data.map(format);
+            setDefaultData(newDefaultData);
+            setData(newData);
           });
         }}
         onClose={() => {
