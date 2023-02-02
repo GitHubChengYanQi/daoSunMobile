@@ -141,16 +141,23 @@ const OnePrepare = (
 
   const refresh = (returnSkus) => {
     const format = (item) => {
-      const sku = isArray(returnSkus).find(returnSku => returnSku.pickListsDetailId === item.pickListsDetailId);
-      if (sku) {
+      let number = 0;
+      const skus = isArray(returnSkus).filter(returnSku => {
+        const equal = returnSku.pickListsDetailId === item.pickListsDetailId;
+        if (equal) {
+          number += returnSku.number;
+        }
+        return equal;
+      });
+      if (skus.length > 0) {
         const received = Number(item.receivedNumber) || 0;
-        const collectable = item.collectable - sku.number;
-        const notPrepared = item.notPrepared + sku.number;
+        const collectable = item.collectable - number;
+        const notPrepared = item.notPrepared + number;
         const action = !(item.number === (received + collectable) || !item.stockNumber);
         return {
           ...item,
           action,
-          perpareNumber: item.number - notPrepared - received - collectable,
+          perpareNumber: collectable,
           notPrepared,
           collectable,
         };
@@ -159,7 +166,7 @@ const OnePrepare = (
       }
     };
     const newData = data.map(format);
-    const newDefaultData = data.map(format);
+    const newDefaultData = defaultData.map(format);
     setData(newData);
     setDefaultData(newDefaultData);
   };
