@@ -138,7 +138,6 @@ const OnePrepare = (
 
   const [positionVisible, setPositionVisible] = useState();
 
-
   const refresh = (returnSkus) => {
     const format = (item) => {
       let number = 0;

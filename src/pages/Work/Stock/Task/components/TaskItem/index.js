@@ -34,6 +34,7 @@ const TaskItem = (
     task = {},
   },
 ) => {
+
   let color;
 
   switch (task.status) {

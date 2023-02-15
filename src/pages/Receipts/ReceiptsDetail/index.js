@@ -115,8 +115,6 @@ export const ReceiptsDetailContent = () => {
           taskId: taskId,
         },
       });
-    } else {
-
     }
   };
 
