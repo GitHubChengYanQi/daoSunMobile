@@ -78,7 +78,7 @@ const CheckBom = () => {
       return {
         skuId: item.skuId,
         brandId: brand.brandId,
-        number: number * item.number,
+        number: item.autoOutstock === 0 ? item.number : number * item.number,
         type: ERPEnums.outStock,
       };
     });
