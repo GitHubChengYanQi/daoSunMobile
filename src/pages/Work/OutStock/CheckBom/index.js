@@ -73,12 +73,12 @@ const CheckBom = () => {
       Message.toast('请输入BOM出库数量');
       return;
     }
-    const shopCartParams = data.map(item => {
+    const shopCartParams = data.filter(item => item.autoOutstock !== 0).map(item => {
       const brand = item.brand || {};
       return {
         skuId: item.skuId,
         brandId: brand.brandId,
-        number: item.autoOutstock === 0 ? item.number : number * item.number,
+        number: number * item.number,
         type: ERPEnums.outStock,
       };
     });
