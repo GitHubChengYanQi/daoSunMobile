@@ -19,13 +19,12 @@ export const dva = {
 
 
 export async function getInitialState() {
-  // new VConsole();
+  new VConsole();
   const token = GetUserInfo().token;
 
   const userInfo = GetUserInfo().userInfo || {};
-  const type = userInfo.hasOwnProperty('type');
 
-  if (token && !type) {
+  if (token && userInfo.userId) {
     const res = await request({ url: '/rest/refreshToken', method: 'GET' });
     if (res) {
       cookie.set('cheng-token', res);
@@ -40,7 +39,7 @@ export async function getInitialState() {
   }
   if (!token) {
     // token不存在
-    if (ToolUtil.isQiyeWeixin() && !IsDev()) {
+    if (ToolUtil.isQiyeWeixin()) {
       // 是企业微信走byCode
       loginBycode();
       return { isQiYeWeiXin: true };
@@ -51,9 +50,9 @@ export async function getInitialState() {
     }
   } else {
     // token存在
-    if (ToolUtil.isQiyeWeixin() && type) {
+    if (ToolUtil.isQiyeWeixin() && !userInfo.userId) {
       // 是企业微信登录并且type存在
-      if (userInfo.userId) {
+      if (userInfo.mobile) {
         goToLogin();
       } else {
         history.push('/Sms');
