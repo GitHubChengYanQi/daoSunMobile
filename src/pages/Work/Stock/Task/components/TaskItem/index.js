@@ -15,15 +15,9 @@ const TaskItem = (
   {
     taskName,
     createTime,
-    beginTime,
-    endTime,
-    coding,
     onClick = () => {
     },
-    index,
     percent = 0,
-    noSku,
-    noPosition,
     noProgress,
     processRender,
     statusName,
