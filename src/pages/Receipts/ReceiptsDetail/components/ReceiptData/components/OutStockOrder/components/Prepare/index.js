@@ -30,7 +30,7 @@ const Prepare = (
   const { initialState } = useModel('@@initialState');
   const state = initialState || {};
 
-  const outStockNumber = allocation ? skuItem.number : skuItem.number - parseInt(skuItem.receivedNumber || 0) - skuItem.perpareNumber;
+  const outStockNumber = allocation ? skuItem.number : skuItem.notPrepared;
 
   const [outStockSkus, setOutStockSkus] = useState([]);
 

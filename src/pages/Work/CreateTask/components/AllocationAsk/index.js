@@ -25,7 +25,7 @@ import { clearAllocationShopCart, shopCartApplyList, shopCartDelete, shopCartEdi
 
 export const addApi = { url: '/allocation/add', method: 'POST' };
 
-const AllocationAsk = ({ createType, defaultParams }) => {
+const AllocationAsk = ({ createType, defaultParams,success }) => {
 
   const [params, setParams] = useState({});
 
@@ -53,6 +53,7 @@ const AllocationAsk = ({ createType, defaultParams }) => {
   const { loading: allocationLoading, run: addAllocation } = useRequest(addApi, {
     manual: true,
     onSuccess: (res) => {
+      success();
       history.push({
         pathname: '/Receipts/ReceiptsResult',
         state: {

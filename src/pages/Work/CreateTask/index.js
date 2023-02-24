@@ -8,6 +8,7 @@ import StocktakingAsk from './components/StocktakingAsk';
 import AllocationAsk from './components/AllocationAsk';
 import { ToolUtil } from '../../../util/ToolUtil';
 import { history, useLocation } from 'umi';
+import { connect } from 'dva';
 
 export const judgeLoginUser = { url: '/instockOrder/judgeLoginUser', method: 'GET' };
 export const inventoryAdd = { url: '/inventory/add', method: 'POST' };
@@ -16,6 +17,8 @@ export const maintenanceAdd = { url: '/maintenance/add', method: 'POST' };
 const CreateTask = (
   {
     createType,
+    dispatch = () => {
+    },
   }) => {
 
   const { query, state = {} } = useLocation();
@@ -68,19 +71,28 @@ const CreateTask = (
     }
   }, []);
 
+  const success = () => {
+    dispatch({
+      type: 'shop/refreshShop',
+      payload: {
+        refresh: true,
+      },
+    });
+  };
+
   const content = () => {
     switch (createType || type) {
       case ERPEnums.outStock:
-        return <OutstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
+        return <OutstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} success={success} />;
       case ERPEnums.inStock:
       case ERPEnums.directInStock:
-        return <InstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} />;
+        return <InstockAsk skus={skus} judge={judge} createType={createType} defaultParams={state} success={success} />;
       case ERPEnums.curing:
-        return <CuringAsk createType={createType} backTitle={backTitle} defaultParams={state} />;
+        return <CuringAsk createType={createType} backTitle={backTitle} defaultParams={state} success={success} />;
       case ERPEnums.stocktaking:
-        return <StocktakingAsk backTitle={backTitle} createType={createType} defaultParams={state} />;
+        return <StocktakingAsk backTitle={backTitle} createType={createType} defaultParams={state} success={success} />;
       case ERPEnums.allocation:
-        return <AllocationAsk createType={createType} defaultParams={state} />;
+        return <AllocationAsk createType={createType} defaultParams={state} success={success} />;
       default:
         return <MyEmpty />;
     }
@@ -92,4 +104,4 @@ const CreateTask = (
 
 };
 
-export default CreateTask;
+export default connect(({ shop }) => ({ shop }))(CreateTask);

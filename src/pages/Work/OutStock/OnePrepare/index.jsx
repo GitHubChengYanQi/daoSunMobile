@@ -19,6 +19,50 @@ export const checkCode = { url: '/productionPickLists/checkCode', method: 'GET' 
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
 export const mediaGetMediaUrls = { url: '/media/getMediaUrls', method: 'POST' };
 
+export const format = (list = [], showAll) => {
+  let countNumber = 0;
+  const actions = [];
+  const noAction = [];
+  const other = [];
+  const receivedSkus = [];
+
+  list.map(item => {
+    let perpareNumber = 0;
+    ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
+
+    const received = Number(item.receivedNumber) || 0;
+    const collectable = Number(perpareNumber - received) || 0;
+    const notPrepared = Number(item.number - collectable - received) || 0;
+
+
+    if (item.number > received) {
+      if (item.number === (received + collectable) || !item.stockNumber) {
+        if (notPrepared > 0) {
+          other.push({ ...item, perpareNumber, received, collectable, notPrepared });
+        } else {
+          noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
+        }
+      } else {
+        actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
+      }
+    } else if (showAll) {
+      receivedSkus.push({ ...item, perpareNumber, received, collectable, notPrepared })
+    }
+    return countNumber += (item.number || 0);
+  });
+  return {
+    countNumber,
+    array: [
+      ...actions,
+      ...other.sort((a, b) => {
+        return a.notPrepared - b.notPrepared;
+      }),
+      ...noAction,
+      ...receivedSkus
+    ],
+  };
+};
+
 const OnePrepare = (
   {
     action,
@@ -27,46 +71,6 @@ const OnePrepare = (
     positionIds,
     shopRef,
   }, ref) => {
-
-  const format = (list = []) => {
-    let countNumber = 0;
-    const actions = [];
-    const noAction = [];
-    const other = [];
-
-    list.map(item => {
-      let perpareNumber = 0;
-      ToolUtil.isArray(item.cartResults).map(item => perpareNumber += item.number);
-
-      const received = Number(item.receivedNumber) || 0;
-      const collectable = Number(perpareNumber) || 0;
-      const notPrepared = Number(item.number - collectable - received) || 0;
-
-
-      if (item.number > received) {
-        if (item.number === (received + collectable) || !item.stockNumber) {
-          if (notPrepared > 0) {
-            other.push({ ...item, perpareNumber, received, collectable, notPrepared });
-          } else {
-            noAction.push({ ...item, perpareNumber, received, collectable, notPrepared });
-          }
-        } else {
-          actions.push({ ...item, perpareNumber, received, collectable, notPrepared, action: true });
-        }
-      }
-      return countNumber += (item.number || 0);
-    });
-    return {
-      countNumber,
-      array: [
-        ...actions,
-        ...other.sort((a, b) => {
-          return a.notPrepared - b.notPrepared;
-        }),
-        ...noAction,
-      ],
-    };
-  };
 
   const [data, setData] = useState([]);
 

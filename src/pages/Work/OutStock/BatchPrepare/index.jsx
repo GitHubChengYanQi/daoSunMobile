@@ -13,6 +13,7 @@ import { Divider } from 'antd-mobile';
 import { MyLoading } from '../../../components/MyLoading';
 import { getOutType } from '../../CreateTask/components/OutstockAsk';
 import { MyDate } from '../../../components/MyDate';
+import { format } from '../OnePrepare';
 
 export const outDetailList = { url: '/productionPickListsDetail/noPageList', method: 'POST' };
 export const outDetail = { url: '/productionPickLists/detail', method: 'POST' };
@@ -37,7 +38,7 @@ const BatchPrepare = (
     data: { pickListsId },
   }, {
     onSuccess: (res) => {
-      const { countNumber, array } = outPickListFormat(ToolUtil.isArray(res));
+      const { countNumber, array } = format(ToolUtil.isArray(res),true);
       setCountNumber(countNumber);
       setData(array);
     },

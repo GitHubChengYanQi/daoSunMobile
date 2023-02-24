@@ -17,10 +17,16 @@ import { shopCartAddList } from '../../Instock/Url';
 import { ERPEnums } from '../../Stock/ERPEnums';
 import { Message } from '../../../components/Message';
 import { RightOutline } from 'antd-mobile-icons';
+import { connect } from 'dva';
 
 export const list = { url: '/erpPartsDetail/v1.1.1/bomList', method: 'POST' };
 
-const CheckBom = () => {
+const CheckBom = (
+  {
+    dispatch = () => {
+    },
+  },
+) => {
 
   const { query } = useLocation();
 
@@ -42,6 +48,12 @@ const CheckBom = () => {
   const { loading: addLoading, run: addShop } = useRequest(shopCartAddList, {
     manual: true,
     onSuccess: () => {
+      dispatch({
+        type: 'shop/refreshShop',
+        payload: {
+          refresh: true,
+        },
+      });
       Message.successToast('添加成功！', () => {
         history.go(-2);
       }, true);
@@ -182,4 +194,4 @@ const CheckBom = () => {
   </div>;
 };
 
-export default CheckBom;
+export default connect(({ shop }) => ({ shop }))(CheckBom);
