@@ -43,7 +43,15 @@ export const OutType = [
   { label: '报损出库', value: 'LOSS_REPORTING' },
 ];
 
-const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
+const OutstockAsk = (
+  {
+    skus,
+    judge,
+    createType,
+    defaultParams = {},
+    success = () => {
+    },
+  }) => {
 
   const { initialState } = useModel('@@initialState');
   const userInfo = ToolUtil.isObject(initialState).userInfo || {};
@@ -71,6 +79,7 @@ const OutstockAsk = ({ skus, judge, createType, defaultParams = {} }) => {
   const { loading: outLoading, run: outStock } = useRequest(productionPickListAdd, {
     manual: true,
     onSuccess: (res) => {
+      success();
       history.push({
         pathname: '/Receipts/ReceiptsResult',
         state: {

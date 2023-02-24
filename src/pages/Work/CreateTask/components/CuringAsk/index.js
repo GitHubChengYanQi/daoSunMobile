@@ -16,7 +16,7 @@ import SelectSkus from '../StocktakingAsk/components/SelectSkus';
 
 export const maintenanceViewDetail = { url: '/maintenance/viewDetail', method: 'POST' };
 
-const CuringAsk = ({ createType, backTitle, defaultParams }) => {
+const CuringAsk = ({ createType, backTitle, defaultParams,success }) => {
 
   const [params, setParams] = useState(defaultParams || {});
 
@@ -25,6 +25,7 @@ const CuringAsk = ({ createType, backTitle, defaultParams }) => {
   const { loading: maintenanceLoading, run: maintenanceRun } = useRequest(maintenanceAdd, {
     manual: true,
     onSuccess: (res) => {
+      success();
       history.push({
         pathname: '/Receipts/ReceiptsResult',
         state: {

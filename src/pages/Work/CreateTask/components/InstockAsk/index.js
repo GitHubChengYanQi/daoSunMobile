@@ -41,7 +41,7 @@ export const InType = [
 ];
 
 
-const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
+const InstockAsk = ({ skus, judge, createType, defaultParams,success }) => {
 
   const [data, setData] = useState([]);
 
@@ -72,6 +72,7 @@ const InstockAsk = ({ skus, judge, createType, defaultParams }) => {
   const { loading: instockLoading, run: inStock } = useRequest(instockOrderAdd, {
     manual: true,
     onSuccess: (res) => {
+      success();
       history.push({
         pathname: '/Receipts/ReceiptsResult',
         state: {

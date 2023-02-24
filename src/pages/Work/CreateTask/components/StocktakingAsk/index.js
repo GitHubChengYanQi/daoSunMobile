@@ -17,7 +17,7 @@ import MySwitch from '../../../../components/MySwitch';
 
 export const InventoryApply = { url: '/inventory/InventoryApply', method: 'POST' };
 
-const StocktakingAsk = ({ createType, backTitle, defaultParams = {} }) => {
+const StocktakingAsk = ({ createType, backTitle, defaultParams = {},success }) => {
 
   const [params, setParams] = useState({ method: 'OpenDisc', ...defaultParams });
   console.log(params.skuList);
@@ -27,6 +27,7 @@ const StocktakingAsk = ({ createType, backTitle, defaultParams = {} }) => {
   const { loading: inventoryLoading, run: inventory } = useRequest(InventoryApply, {
     manual: true,
     onSuccess: (res) => {
+      success();
       history.push({
         pathname: '/Receipts/ReceiptsResult',
         state: {

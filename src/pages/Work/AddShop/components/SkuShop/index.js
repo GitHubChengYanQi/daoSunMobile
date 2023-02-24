@@ -19,9 +19,13 @@ import AllocationAdd from '../AddSku/components/AllocationAdd';
 import Bouncing from '../../../../components/Bouncing';
 import shop from '../../../../../assets/shop.png';
 import shopEmpty from '../../../../../assets/shopEmpty.png';
+import { connect } from 'dva';
 
 const SkuShop = (
   {
+    shop: shopState,
+    dispatch = () => {
+    },
     update,
     onSubmit = () => {
     },
@@ -45,7 +49,7 @@ const SkuShop = (
     shopRef,
   },
 ) => {
-
+  console.log(shopState);
   const [visible, setVisible] = useState();
 
   const [allocationView, setAllocationView] = useState();
@@ -74,6 +78,12 @@ const SkuShop = (
   const { loading: shopLoading, run: showShop, refresh: shopRefresh } = useRequest(shopCartApplyList, {
     manual: true,
     onSuccess: (res) => {
+      dispatch({
+        type: 'shop/refreshShop',
+        payload: {
+          refresh: false,
+        },
+      });
       setSkus(ToolUtil.isArray(res).map((item) => {
 
         let allocationJson = {};
@@ -103,6 +113,14 @@ const SkuShop = (
           allocationJson,
         };
       }));
+    },
+    onError: () => {
+      dispatch({
+        type: 'shop/refreshShop',
+        payload: {
+          refresh: false,
+        },
+      });
     },
   });
 
@@ -151,8 +169,7 @@ const SkuShop = (
     if (noRequest) {
       return;
     }
-
-    if (type && !history.location.query.createType) {
+    if (type) {
       if (type === ERPEnums.directInStock && !judgeData) {
         judgeRun();
       }
@@ -162,7 +179,13 @@ const SkuShop = (
         },
       });
     }
-  }, [type, history.location.query.createType]);
+  }, [type]);
+
+  useEffect(() => {
+    if (shopState.refresh) {
+      shopRefresh();
+    }
+  }, [shopState.refresh]);
 
   const taskData = (item = {}) => {
     const skuClassName = item?.skuResult?.spuResult?.spuClassificationResult?.name;
@@ -423,4 +446,4 @@ const SkuShop = (
   </>;
 };
 
-export default SkuShop;
+export default connect(({ shop }) => ({ shop }))(SkuShop);
