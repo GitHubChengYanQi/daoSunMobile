@@ -32,9 +32,7 @@ const Sms = () => {
         Toast.show({ content: '手机号绑定成功！' });
         cookie.set('cheng-token', res);
         const userInfo = GetUserInfo().userInfo;
-        if (userInfo && userInfo.userId) {
-          history.push('/Login');
-        }
+        history.push('/Login');
       }
     },
   });

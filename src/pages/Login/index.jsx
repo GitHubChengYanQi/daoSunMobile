@@ -131,9 +131,8 @@ const Login = (props) => {
     window.document.title = state.systemName ? `登录-${state.systemName}` : '登录';
     const token = GetUserInfo().token;
     const userInfo = GetUserInfo().userInfo || {};
-    const type = userInfo.hasOwnProperty('type');
 
-    if (token && !(ToolUtil.isQiyeWeixin() && type)) {
+    if (token && !(ToolUtil.isQiyeWeixin() && !userInfo.userId)) {
       if (query.backUrl){
         if (ToolUtil.queryString('login', history.location.pathname)){
           history.push('/');
