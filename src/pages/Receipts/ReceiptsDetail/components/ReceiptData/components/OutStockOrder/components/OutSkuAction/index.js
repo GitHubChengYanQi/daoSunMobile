@@ -112,7 +112,7 @@ const OutSkuAction = (
             setPicking(true);
             break;
           case 'revokeAndAsk':
-            OutStockRevoke(taskDetail);
+            OutStockRevoke(taskDetail,history);
             break;
           default:
             break;

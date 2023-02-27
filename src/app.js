@@ -39,7 +39,7 @@ export async function getInitialState() {
   }
   if (!token) {
     // token不存在
-    if (ToolUtil.isQiyeWeixin() && !IsDev()) {
+    if (ToolUtil.isQiyeWeixin()) {
       // 是企业微信走byCode
       loginBycode();
       return { isQiYeWeiXin: true };

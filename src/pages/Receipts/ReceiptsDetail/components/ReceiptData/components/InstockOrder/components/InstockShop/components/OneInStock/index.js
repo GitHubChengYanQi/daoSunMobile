@@ -10,6 +10,7 @@ import { MyLoading } from '../../../../../../../../../../components/MyLoading';
 import { Message } from '../../../../../../../../../../components/Message';
 import BottomButton from '../../../../../../../../../../components/BottomButton';
 import AddPosition from './AddPosition';
+import { ReceiptAction } from '../../../../../../../../../index';
 
 export const getPositionsBySkuIds = { url: '/storehousePositions/treeViewBySku', method: 'POST' };
 
@@ -45,14 +46,14 @@ const OneInStock = (
   }, {
     manual: true,
     onSuccess: () => {
-      Message.successToast('入库成功！',()=>{
+      Message.successToast('入库成功！', () => {
         refresh();
         onClose(total === skuItem.number);
       });
     },
   });
 
-  return <div className={style.content} style={{ height: 'auto', paddingBottom:50 }}>
+  return <div className={style.content} style={{ height: 'auto', paddingBottom: 50 }}>
     <div className={style.header}>
       物料入库
       <span onClick={() => {
@@ -60,14 +61,14 @@ const OneInStock = (
       }}><CloseOutline /></span>
     </div>
     <div className={style.skuList}>
-      <div className={style.skuItem} style={{border:'none'}}>
+      <div className={style.skuItem} style={{ border: 'none' }}>
         <div className={style.sku}>
           <SkuItem
             skuResult={skuResult}
             extraWidth='120px'
             otherData={[
               ToolUtil.isObject(skuItem.customer).customerName,
-              ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌'
+              ToolUtil.isObject(skuItem.brandResult).brandName || '无品牌',
             ]}
           />
         </div>
@@ -116,6 +117,7 @@ const OneInStock = (
         instockRun({
           data: {
             actionId,
+            actionType: ReceiptAction.inStockAction,
             instockOrderId,
             listParams,
           },

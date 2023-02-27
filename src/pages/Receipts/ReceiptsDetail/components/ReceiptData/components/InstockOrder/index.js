@@ -2,7 +2,7 @@ import React from 'react';
 import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/PurchaseOrderInstock/index.less';
 import { isArray, isObject, ToolUtil } from '../../../../../../../util/ToolUtil';
 import SkuAction from './components/SkuAction';
-import { ReceiptsEnums } from '../../../../../index';
+import { ReceiptAction, ReceiptsEnums } from '../../../../../index';
 import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import MyCard from '../../../../../../components/MyCard';
@@ -73,8 +73,8 @@ const InstockOrder = (
           nodeActions={actions}
           data={details}
           permissions={permissions}
-          actionId={getAction('performInstock').id}
-          action={getAction('performInstock').id && permissions}
+          actionId={getAction(ReceiptAction.inStockAction).id}
+          action={getAction(ReceiptAction.inStockAction).id && permissions}
           instockOrderId={data.instockOrderId}
           refresh={refresh}
           afertShow={afertShow}

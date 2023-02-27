@@ -153,7 +153,7 @@ const SkuDetail = (
             {SkuResultSkuJsons({ skuResult: detail, sku: true })}
           </div>
           <div className={styles.bindPosition}>
-            铸件一区 / 南坡大库
+            {isArray(detail.positionsResult)[0]?.name} / {isArray(detail.positionsResult)[0]?.storehouseResult?.name}
           </div>
         </div>
         <div className={styles.otherData}>

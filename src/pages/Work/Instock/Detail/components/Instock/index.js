@@ -9,6 +9,7 @@ import { history } from 'umi';
 import BottomButton from '../../../../../components/BottomButton';
 import { MyLoading } from '../../../../../components/MyLoading';
 import MyEmpty from '../../../../../components/MyEmpty';
+import { ReceiptAction } from '../../../../../Receipts';
 
 const Instock = ({ refresh, CodeRun, CodeLoading, setDetail, instockOrderId, processRefresh }, ref) => {
 
@@ -209,6 +210,7 @@ const Instock = ({ refresh, CodeRun, CodeLoading, setDetail, instockOrderId, pro
             data: {
               instockOrderId,
               actionId,
+              actionType:ReceiptAction.inStockAction,
               ...data,
               skuParams,
             },

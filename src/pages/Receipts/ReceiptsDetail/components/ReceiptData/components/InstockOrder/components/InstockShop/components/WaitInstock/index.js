@@ -13,7 +13,7 @@ import { shopCartAllList } from '../../../../../../../../../../Work/Instock/Url'
 import { Message } from '../../../../../../../../../../components/Message';
 import MyEmpty from '../../../../../../../../../../components/MyEmpty';
 import { SkuResultSkuJsons } from '../../../../../../../../../../Scan/Sku/components/SkuResult_skuJsons';
-import { ReceiptsEnums } from '../../../../../../../../../index';
+import { ReceiptAction, ReceiptsEnums } from '../../../../../../../../../index';
 import LinkButton from '../../../../../../../../../../components/LinkButton';
 import MyPositions from '../../../../../../../../../../components/MyPositions';
 
@@ -210,6 +210,7 @@ const WaitInstock = (
             instockRun({
               data: {
                 actionId,
+                actionType: ReceiptAction.inStockAction,
                 instockOrderId,
                 listParams,
               },

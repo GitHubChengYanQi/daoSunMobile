@@ -6,7 +6,7 @@ import { ToolUtil } from '../../../../../../../util/ToolUtil';
 import MyCard from '../../../../../../components/MyCard';
 import LinkButton from '../../../../../../components/LinkButton';
 import { useHistory } from 'react-router-dom';
-import { ReceiptsEnums } from '../../../../../index';
+import { ReceiptAction, ReceiptsEnums } from '../../../../../index';
 import ErrorItem from './components/ErrorItem';
 import { MyLoading } from '../../../../../../components/MyLoading';
 import BottomButton from '../../../../../../components/BottomButton';
@@ -41,7 +41,7 @@ const InstockError = (
 
   const complete = anomalyResults.filter(item => item.status === 99);
 
-  const action = getAction('verify').id && permissions;
+  const action = getAction(ReceiptAction.errorOrder).id && permissions;
 
   const { loading: submitLoading, run } = useRequest(submit, {
     manual: true,
@@ -135,7 +135,7 @@ const InstockError = (
       text='提交处理'
       disabled={complete.length !== anomalyResults.length}
       onClick={() => {
-        run({ data: { orderId: data.orderId, actionId: getAction('verify').id } });
+        run({ data: { orderId: data.orderId,actionId: getAction(ReceiptAction.errorOrder).id, actionType:ReceiptAction.errorOrder } });
       }} />}
 
     {(loading || submitLoading) && <MyLoading />}

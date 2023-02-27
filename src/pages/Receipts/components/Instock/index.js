@@ -3,6 +3,7 @@ import { Button, Space } from 'antd-mobile';
 import Audit from '../Audit';
 import CreateInStock from '../../../Work/Instock/CreateInStock';
 import Label from '../../../components/Label';
+import { ReceiptAction } from '../../index';
 
 export const CreateInstock = (
   {
@@ -72,7 +73,7 @@ export const InstockDetailBottom = (
   });
 
   if (left) {
-    return actions.includes('verify') && <div>
+    return actions.includes(ReceiptAction.errorOrder) && <div>
       <div>计划 / 实际</div>
       <div>
         {moduleObject.number} /
@@ -90,7 +91,7 @@ export const InstockDetailBottom = (
       {
         actions.map((item, index) => {
           switch (item.action) {
-            case 'verify':
+            case ReceiptAction.errorOrder:
               return <Button
                 key={index}
                 color='primary'
@@ -100,7 +101,7 @@ export const InstockDetailBottom = (
                 }}
               >核实数量
               </Button>;
-            case 'performInstock':
+            case ReceiptAction.inStockAction:
               return <Button
                 key={index}
                 color='primary'

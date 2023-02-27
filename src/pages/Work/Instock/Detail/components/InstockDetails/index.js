@@ -13,6 +13,7 @@ import { storeHouseSelect } from '../../../../Quality/Url';
 import { useRequest } from '../../../../../../util/Request';
 import { storehousePositionsTreeView } from '../../../../../Scan/Url';
 import { MyLoading } from '../../../../../components/MyLoading';
+import { ReceiptAction } from '../../../../../Receipts';
 
 const InstockDetails = (
   {
@@ -145,7 +146,7 @@ const InstockDetails = (
   };
 
   const actionType = ({ detail, positionsItem }) => {
-    if (actions.map(item => item.action).includes('performInstock')) {
+    if (actions.map(item => item.action).includes(ReceiptAction.inStockAction)) {
       return {
         leftLabel: '入库：',
         leftDisabled: false,
@@ -208,7 +209,7 @@ const InstockDetails = (
                   value={actionType({ detail, positionsItem }).rightNumber}
                   buttonStyle={{ border: 'solid 1px  rgb(190 184 184)', backgroundColor: '#fff' }}
                   onChange={(value) => {
-                    if (actions.map(item => item.action).includes('performInstock')) {
+                    if (actions.map(item => item.action).includes(ReceiptAction.inStockAction)) {
                       setOptionsValue({ stockNumber: value }, item.instockListId, index);
                       return;
                     }
@@ -282,7 +283,7 @@ const InstockDetails = (
       detail,
       item,
     }) => {
-    if (actions.map(item => item.action).includes('verify')) {
+    if (actions.map(item => item.action).includes(ReceiptAction.errorOrder)) {
       return <>
         <Card
           extra={<LinkButton onClick={() => {
@@ -340,8 +341,8 @@ const InstockDetails = (
           }
         </div>
       </>;
-    } else if (actions.map(item => item.action).includes('performInstock')) {
-      const actionId = actions.filter(item => item.action === 'performInstock')[0].actionId;
+    } else if (actions.map(item => item.action).includes(ReceiptAction.inStockAction)) {
+      const actionId = actions.filter(item => item.action === ReceiptAction.inStockAction)[0].actionId;
       return <>
         <Card
           extra={<LinkButton onClick={() => {

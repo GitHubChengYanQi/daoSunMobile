@@ -48,3 +48,8 @@ export const ReceiptsEnums = {
   // 图表
   report: 'REPORT',
 };
+
+export const ReceiptAction = {
+  inStockAction: 'performInstock',
+  errorOrder:'verify'
+};
