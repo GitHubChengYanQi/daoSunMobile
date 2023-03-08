@@ -8,7 +8,7 @@ import moment from 'moment';
 // 判断是否是企业微信或者微信开发者工具
 export const isQiyeWeixin = () => {
   const ua = window.navigator.userAgent.toLowerCase();
-  return ua.indexOf('wechatdevtools') !== -1 || ua.indexOf('wxwork') !== -1;
+  return ua.indexOf('wechatdevtools') !== -1 || ua.indexOf('wxwork') !== -1 ||ua.indexOf('micromessenger') !== -1 ;
 };
 
 // 查找字符串返回 true / false

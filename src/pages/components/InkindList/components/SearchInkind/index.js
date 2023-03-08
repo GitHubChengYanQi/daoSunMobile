@@ -17,6 +17,7 @@ const SearchInkind = (
     addInkind = () => {
     },
     add,
+    title,
     visible,
     onClose = () => {
     },
@@ -67,7 +68,7 @@ const SearchInkind = (
     title={(!hiddenHeader && over) ? <div className={style.skuShow}>
       <img src={imgUrl || state.imgLogo} width='30' height='30' alt='' />
       {SkuResultSkuJsons({ skuResult, spu: true })} / {SkuResultSkuJsons({ skuResult, sku: true })}
-    </div> : '添加异常件'}
+    </div> : (title || '添加异常件')}
     onClose={() => {
       setData([]);
       onClose();

@@ -55,7 +55,7 @@ const Order = (
       ...item,
       orderResult: { ...orderItem, detailResults: undefined },
     }));
-    const disabled = !orderItem.contractId;
+    const disabled = false;
     const orderChecked = orderKeys.includes(orderItem.orderId);
     const orderDisabled = details.filter(item => !(item.skuResult?.processResult)).length === details.length || disabled;
     return <div key={orderIndex} className={styles.order}>

@@ -252,7 +252,6 @@ const SkuDetail = (
                 <div className={styles.value}>
                   {children}
                 </div>
-
               </div>;
             })
         }
@@ -267,6 +266,7 @@ const SkuDetail = (
     <Files skuId={detail.skuId} />
 
     <SearchInkind
+      title='库存明细'
       noActions
       hiddenHeader
       skuInfo={stockInfo}

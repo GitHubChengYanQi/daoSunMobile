@@ -3,7 +3,6 @@ import style from '../../../../../../Work/Instock/InstockAsk/Submit/components/P
 import { isArray, isObject, ToolUtil } from '../../../../../../../util/ToolUtil';
 import SkuAction from './components/SkuAction';
 import { ReceiptAction, ReceiptsEnums } from '../../../../../index';
-import OutSkuAction from '../OutStockOrder/components/OutSkuAction';
 import UploadFile from '../../../../../../components/Upload/UploadFile';
 import MyCard from '../../../../../../components/MyCard';
 import { UserName } from '../../../../../../components/User';

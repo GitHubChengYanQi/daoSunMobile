@@ -3,11 +3,12 @@ import style from './index.less';
 import MyEllipsis from '../../../components/MyEllipsis';
 import { SkuResultSkuJsons } from '../../../Scan/Sku/components/SkuResult_skuJsons';
 import { useModel } from 'umi';
-import { ToolUtil } from '../../../../util/ToolUtil';
-import { useHistory } from 'react-router-dom';
+import { isQiyeWeixin, ToolUtil } from '../../../../util/ToolUtil';
+import { useHistory, useLocation } from 'react-router-dom';
 import { ExclamationTriangleOutline } from 'antd-mobile-icons';
 import MyAntPopup from '../../../components/MyAntPopup';
 import SkuDetail from '../SkuDetail';
+import wx from 'weixin-js-sdk';
 
 const SkuItem = (
   {
@@ -44,7 +45,9 @@ const SkuItem = (
 
   const [openDetail, setOpenDetail] = useState(false);
 
-  const view = () => {
+  const location = useLocation();
+
+  const toDetail = () => {
     if (showDetail) {
       ToolUtil.back({
         key: 'popup',
@@ -60,6 +63,25 @@ const SkuItem = (
       return;
     }
     history.push(`/Work/Sku/SkuDetail?skuId=${skuResult.skuId}`);
+  };
+
+  const view = () => {
+    if (isQiyeWeixin()) {
+      wx.miniProgram.navigateTo({
+        url: location.query.skuDetailUrl+`?skuId=${skuResult.skuId}`,
+        success: () => {
+
+        },
+        fail: () => {
+          toDetail();
+        },
+        complete: () => {
+
+        },
+      });
+    } else {
+      toDetail();
+    }
   };
 
   const getStockNumber = () => {
