@@ -1,19 +1,38 @@
 import cookie from 'js-cookie';
 import axios from 'axios';
 import { Message } from '../../pages/components/Message';
+import { Init } from 'MES-Apis/src/Init';
 
 console.log(process.env.ENV);
 const baseURI = process.env.ENV === 'test' ?
   // getHeader() ?
   // 'http://192.168.1.230'
   // :
-  'http://192.168.2.43'
-  // 'http://localhost'
+  // 'https://lqscyq.xicp.fun'
+  'http://192.168.2.111/'
   // 'http://172.16.1.181'
   // 'http://192.168.0.220:8881/'
   // 'https://api.hh.zz2025.com'
   :
   process.env.api;
+
+Init.initBaseURL(baseURI.substring(0, baseURI.length - 1));
+
+try {
+  Init.responseConfig({
+    loginTimeOut: () => {
+      cookie.remove('cheng-token');
+      window.location.reload();
+    },
+    errorMessage: (res) => {
+      Message.errorDialog({
+        content: res.message,
+      });
+    },
+  });
+}catch (e) {
+
+}
 
 const ajaxService = axios.create({
   baseURL: baseURI,

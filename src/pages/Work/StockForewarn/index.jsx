@@ -12,12 +12,20 @@ import MyCheck from '../../components/MyCheck';
 import CheckAllExport from '../../components/CheckAllExport';
 import SkuItem from '../Sku/SkuItem';
 import LinkButton from '../../components/LinkButton';
+import MyAntPopup from '../../components/MyAntPopup';
+import Reserve from './components/Reserve';
+import { Message } from '../../components/Message';
+import { useRequest } from '../../../util/Request';
+import { MyLoading } from '../../components/MyLoading';
 
 const warningSku = { url: '/stockForewarn/warningSku', method: 'POST' };
+export const purchaseListListBySkuId = { url: '/purchaseList/listBySkuId', method: 'GET' };
 
 const StockForewarn = () => {
 
   const listRef = useRef();
+
+  const [reserveOpen, setReserveOpen] = useState(false);
 
   const screens = [
     { key: 'skuClass', title: '物料分类' },
@@ -42,6 +50,12 @@ const StockForewarn = () => {
     setParams(newParmas);
     listRef.current?.submit(newParmas);
   };
+
+  const {
+    loading: purchaseListListLoading,
+    data: purchaseListList = [],
+    run: getPurchaseList,
+  } = useRequest(purchaseListListBySkuId, { manual: true });
 
   return <div style={{ height: 'calc(100% - 53px)', overflow: 'auto' }}>
     <MyNavBar title='库存预警' />
@@ -92,13 +106,25 @@ const StockForewarn = () => {
               setIds(checked ? ids.filter(id => id !== item.skuId) : [...ids, item.skuId]);
             }}
           >
-            <MyCheck fontSize={17} checked={checked} />
+            <div hidden>
+              <MyCheck fontSize={17} checked={checked} />
+            </div>
+
             <SkuItem
               noView
               skuResult={item.skuResult}
               className={styles.sku}
               extraWidth='110px'
               otherData={[
+                <div style={{ color: '#00a200' }}>
+                  <span>
+                    在途数量：{item.floatingCargoNumber}
+                  </span>
+                  &nbsp;&nbsp;
+                  <span>
+                    待采数量：{item.purchaseNumber || 0}
+                  </span>
+                </div>,
                 <div style={{ color: '#9A9A9A' }}>
                   <span
                     hidden={!item.inventoryFloor}
@@ -109,29 +135,53 @@ const StockForewarn = () => {
                 </div>,
               ]}
             />
-            <div className={styles.action} hidden>
-              <div>已采购</div>
-              <LinkButton onClick={() => setVisible(true)}>来源明细</LinkButton>
+            <div className={styles.action}>
+              <div hidden>已采购</div>
+              <LinkButton onClick={async () => {
+                await getPurchaseList({
+                  params: {
+                    skuId: item.skuId,
+                  },
+                });
+                setReserveOpen(item);
+              }}>备采</LinkButton>
             </div>
           </div>;
         })
       }
     </MyList>
 
-    <CheckAllExport
-      onCheckAll={() => {
-        setIds(list.map(item => item.skuId));
-        setCheckAll(true);
-        setCurrentAll(false);
-      }}
-      pageAll={currentAll && list.length === ids.length}
-      onPageAll={() => {
-        setIds(list.map(item => item.skuId));
-        setCheckAll(false);
-        setCurrentAll(true);
-      }}
-      checkAll={checkAll && list.length === ids.length}
-    />
+    <div hidden>
+      <CheckAllExport
+        onCheckAll={() => {
+          setIds(list.map(item => item.skuId));
+          setCheckAll(true);
+          setCurrentAll(false);
+        }}
+        pageAll={currentAll && list.length === ids.length}
+        onPageAll={() => {
+          setIds(list.map(item => item.skuId));
+          setCheckAll(false);
+          setCurrentAll(true);
+        }}
+        checkAll={checkAll && list.length === ids.length}
+      />
+    </div>
+
+    <MyAntPopup visible={reserveOpen} title='添加预购物料' onClose={() => setReserveOpen(null)}>
+      <Reserve
+        purchaseListList={purchaseListList}
+        sku={reserveOpen || {}}
+        onClose={() => {
+          setReserveOpen(null);
+        }}
+        onSuccess={() => {
+          Message.toast('添加成功！');
+          setReserveOpen(null);
+          listRef.current.submit()
+        }} />
+    </MyAntPopup>
+
 
     <SkuClass
       onClose={() => setScreenkey('')}
@@ -176,6 +226,8 @@ const StockForewarn = () => {
       ]}
       onClose={() => setScreenkey('')}
     />
+
+    {purchaseListListLoading && <MyLoading />}
   </div>;
 };
 

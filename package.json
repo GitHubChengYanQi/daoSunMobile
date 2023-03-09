@@ -24,6 +24,7 @@
     "@formily/react": "^2.1.13",
     "@jiumao/rc-send-code": "0.0.2",
     "@use-gesture/react": "^10.2.15",
+    "MES-Apis": "0.0.67",
     "accounting-big": "^1.0.1",
     "ahooks": "^2.10.9",
     "antd": "^4.16.13",
