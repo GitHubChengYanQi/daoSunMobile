@@ -7,6 +7,8 @@ import { request } from './util/Request';
 import IsDev from './components/IsDev';
 import VConsole from 'vconsole';
 import { ToolUtil } from './util/ToolUtil';
+import { Login } from 'MES-Apis/src/Login/promise';
+import { Init } from 'MES-Apis/src/Init';
 
 export const dva = {
   config: {
@@ -24,14 +26,6 @@ export async function getInitialState() {
 
   const userInfo = GetUserInfo().userInfo || {};
 
-  if (token && userInfo.userId) {
-    const res = await request({ url: '/rest/refreshToken', method: 'GET' });
-    if (res) {
-      cookie.set('cheng-token', res);
-    } else {
-      return { init: false };
-    }
-  }
   const publicInfo = await request({ url: '/getPublicInfo', method: 'GET' });
 
   if (!publicInfo) {
@@ -49,6 +43,15 @@ export async function getInitialState() {
       return { ...publicInfo, init: true };
     }
   } else {
+    Init.setToken(token);
+    if (userInfo.userId) {
+      const res = await Login.refreshToken({});
+      if (res && res.data) {
+        cookie.set('cheng-token', res.data);
+      } else {
+        return { init: false };
+      }
+    }
     // token存在
     if (ToolUtil.isQiyeWeixin() && !userInfo.userId) {
       // 是企业微信登录并且type存在

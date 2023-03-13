@@ -15,6 +15,7 @@ import MyDialog from '../components/MyDialog';
 import GetUserInfo from '../GetUserInfo';
 import { Message } from '../components/Message';
 import { ToolUtil } from '../../util/ToolUtil';
+import { UseLogin } from 'MES-Apis/src/Login/hooks';
 
 export const Username = (props) => {
   return <div className={style.account}>
@@ -84,11 +85,8 @@ const Login = (props) => {
 
   const kaptchaOpen = state.kaptchaOpen;
 
-  const { loading: loginLoading, run } = useRequest(
+  const { loading: loginLoading, run } = UseLogin.wxCpLogin(
     {
-      url: '/login/wxCp',
-      method: 'POST',
-    }, {
       manual: true,
       onSuccess: async (res) => {
         if (res) {
@@ -133,11 +131,11 @@ const Login = (props) => {
     const userInfo = GetUserInfo().userInfo || {};
 
     if (token && !(ToolUtil.isQiyeWeixin() && !userInfo.userId)) {
-      if (query.backUrl){
-        if (ToolUtil.queryString('login', history.location.pathname)){
+      if (query.backUrl) {
+        if (ToolUtil.queryString('login', history.location.pathname)) {
           history.push('/');
         }
-      }else {
+      } else {
         history.push('/');
       }
     }

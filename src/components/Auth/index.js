@@ -3,6 +3,7 @@ import wx from 'populee-weixin-js-sdk';
 import cookie from 'js-cookie';
 import { ToolUtil } from '../../util/ToolUtil';
 import { history } from 'umi';
+import { Login } from 'MES-Apis/src/Login/promise';
 
 
 export const wxTicket = async () => {
@@ -68,15 +69,9 @@ export const loginBycode = async () => {
   const search = new URLSearchParams(window.location.search);
   const code = search.get('code');
   if (code) {
-    const token = await request({
-      url: '/login/cp/loginByCode',
-      method: 'GET',
-      params: {
-        code: code,
-      },
-    });
-    if (token) {
-      cookie.set('cheng-token', token);
+    const res = await Login.QWLoginByCode({ code },{});
+    if (res && res.data) {
+      cookie.set('cheng-token', res.data);
       window.location.href = wxUrl(false);
       return;
     }

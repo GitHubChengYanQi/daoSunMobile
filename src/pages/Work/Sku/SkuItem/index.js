@@ -66,9 +66,11 @@ const SkuItem = (
   };
 
   const view = () => {
-    if (isQiyeWeixin()) {
+    const ua = window.navigator.userAgent.toLowerCase();
+    if (isQiyeWeixin() && ua.indexOf('windowswechat') === -1) {
       wx.miniProgram.navigateTo({
-        url: location.query.skuDetailUrl+`?skuId=${skuResult.skuId}`,
+        // url: `/Sku/SkuDetail/index?skuId=${skuResult.skuId}`,
+        url: `/Sku/SkuDetailWebView/index?skuId=${skuResult.skuId}`,
         success: () => {
 
         },

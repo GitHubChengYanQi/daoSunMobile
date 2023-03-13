@@ -11,6 +11,7 @@ import Icon from '../components/Icon';
 import { createForm, onFieldReact } from '@formily/core';
 import { Code, Phone } from './components/Field';
 import { Message } from '../components/Message';
+import { UseLogin } from 'MES-Apis/src/Login/hooks';
 
 const form = createForm({
   effects: () => {
@@ -26,12 +27,12 @@ const Sms = () => {
 
   const state = initialState || {};
 
-  const { loading, run } = useRequest({ url: '/login/phone', method: 'POST' }, {
-    manual: true, onSuccess: (res) => {
+  const { loading, run } = UseLogin.QWLoginByPhone({}, {
+    manual: true,
+    onSuccess: (res) => {
       if (res) {
         Toast.show({ content: '手机号绑定成功！' });
         cookie.set('cheng-token', res);
-        const userInfo = GetUserInfo().userInfo;
         history.push('/Login');
       }
     },

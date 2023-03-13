@@ -57,7 +57,7 @@ const StockForewarn = () => {
     run: getPurchaseList,
   } = useRequest(purchaseListListBySkuId, { manual: true });
 
-  return <div style={{ height: 'calc(100% - 53px)', overflow: 'auto' }}>
+  return <div style={{ height: '100%', overflow: 'auto' }}>
     <MyNavBar title='库存预警' />
     <MySearch value={searchValue} onChange={setSearchValue} onSearch={(keyWords) => {
       submit({ keyWords });

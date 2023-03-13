@@ -152,16 +152,36 @@ const SkuDetail = (
           <div className={styles.skuName}>
             {SkuResultSkuJsons({ skuResult: detail, sku: true })}
           </div>
-          <div className={styles.bindPosition}>
-            {isArray(detail.positionsResult)[0]?.name} / {isArray(detail.positionsResult)[0]?.storehouseResult?.name}
+          <div className={styles.bindPosition} hidden={isArray(detail.positionsResult).length === 0}>
+            <div>
+              {isArray(detail.positionsResult)[0]?.name} / {isArray(detail.positionsResult)[0]?.storehouseResult?.name}
+            </div>
           </div>
         </div>
-        <div className={styles.otherData}>
+        <div>
           <ShowCode type='sku' size={20} source='sku' id={detail.skuId} />
-          <div className={styles.number}>
-            <span>×{stockNumber}</span>
-            {unitResult.unitName}
+        </div>
+      </div>
+      <div className={styles.otherData}>
+        <div className={styles.number}>
+          <div className={styles.numberDes}>
+            库存数量({unitResult.unitName})
           </div>
+          <span className={styles.otherNumber}>{detail.stockNumber}</span>
+        </div>
+        <div className={styles.numberMonDes}>-</div>
+        <div className={styles.number}>
+          <div className={styles.numberDes}>
+            已备数量({unitResult.unitName})
+          </div>
+          <span className={styles.otherNumber}>{detail.lockStockDetailNumber || 0}</span>
+        </div>
+        <div className={styles.numberMonDes}>=</div>
+        <div className={styles.number}>
+          <div className={styles.numberDes}>
+            可用数量({unitResult.unitName})
+          </div>
+          <span>{stockNumber}</span>
         </div>
       </div>
       <div className={classNames(styles.actions, styles.flexCenter)}>
@@ -176,7 +196,7 @@ const SkuDetail = (
           dispatch({
             type: 'processList/tabKeyChange',
             payload: {
-              key:'audit'
+              key: 'audit',
             },
           });
           history.push({

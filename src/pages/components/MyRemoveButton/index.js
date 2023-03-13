@@ -5,6 +5,7 @@ import { Message } from '../Message';
 
 const MyRemoveButton = (
   {
+    hidden,
     children,
     onRemove = () => {
     },
@@ -29,7 +30,7 @@ const MyRemoveButton = (
     return <DOM onClick={onClick} />;
   }
 
-  return <>
+  return !hidden && <>
     <Button
       className={className}
       disabled={disabled}
