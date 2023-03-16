@@ -9,6 +9,8 @@ import MyEmpty from '../../components/MyEmpty';
 import MyCard from '../../components/MyCard';
 import { MyDate } from '../../components/MyDate';
 import MySearch from '../../components/MySearch';
+import { isArray } from '../../../util/ToolUtil';
+import { ProgressBar } from 'antd-mobile';
 
 const Order = () => {
 
@@ -59,6 +61,15 @@ const Order = () => {
       }}>
       {
         data.map((item, index) => {
+
+          let inStock = 0;
+          let totalPrice = 0;
+
+          isArray(item.detailResults).forEach(item => {
+            totalPrice += item.purchaseNumber;
+            inStock += item.inStockNumber;
+          });
+
           return <MyCard
             key={index}
             className={styles.item}
@@ -71,14 +82,20 @@ const Order = () => {
             extraClassName={styles.extra}
             extra={MyDate.Show(item.createTime)}
           >
-            <div>
+            <div hidden={query.type === '1'}>
               <Label className={styles.label}>甲方</Label>：{item.acustomer && item.acustomer.customerName}
             </div>
-            <div>
+            <div hidden={query.type === '2'}>
               <Label className={styles.label}>乙方</Label>：{item.bcustomer && item.bcustomer.customerName}
             </div>
             <div>
               <Label className={styles.label}>创建人</Label>：{item.user && item.user.name}
+            </div>
+            <div hidden={query.type === '2'} className={styles.ProgressBar}>
+              <Label className={styles.label}>入库进度</Label>：
+              <div className={styles.percent}>
+                <ProgressBar percent={Math.round((inStock / totalPrice) * 100) || 0} text />
+              </div>
             </div>
           </MyCard>;
         })

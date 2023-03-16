@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { orderDetail } from '../Url';
 import { useRequest } from '../../../../util/Request';
-import { Space, Tabs } from 'antd-mobile';
+import { ProgressBar, Space, Tabs } from 'antd-mobile';
 import MyEmpty from '../../../components/MyEmpty';
 import BottomButton from '../../../components/BottomButton';
 import { MyLoading } from '../../../components/MyLoading';
@@ -40,6 +40,14 @@ const Detail = (props) => {
     return <MyEmpty />;
   }
 
+  let inStock = 0;
+  let totalPrice = 0;
+
+  isArray(data.detailResults).forEach(item => {
+    totalPrice += item.purchaseNumber;
+    inStock += item.inStockNumber;
+  });
+
   const module = () => {
     switch (key) {
       case 'skus':
@@ -74,12 +82,18 @@ const Detail = (props) => {
     <MyNavBar title={infoData.title} />
 
     <MyCard title='基本信息'>
-      <Space direction='vertical'>
+      <Space direction='vertical' style={{width:'100%'}}>
         <div>
           <Label className={styles.label}>采购单号</Label>：{data.coding}
         </div>
         <div>
           <Label className={styles.label}>采购主题</Label>：{data.theme}
+        </div>
+        <div className={styles.ProgressBar}>
+          <Label className={styles.label}>入库进度</Label>：
+          <div className={styles.percent}>
+            <ProgressBar percent={Math.round((inStock / totalPrice) * 100) || 0} text />
+          </div>
         </div>
         <div>
           <Label className={styles.label}>币种</Label>：{data.currency}
