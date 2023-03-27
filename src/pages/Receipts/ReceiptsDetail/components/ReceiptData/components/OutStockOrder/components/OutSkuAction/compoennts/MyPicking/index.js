@@ -194,7 +194,7 @@ const MyPicking = (
 
     <div className={style.bottom} hidden={!action}>
       <div className={style.all}>
-        <MyCheck checked={allChecked} onChange={() => {
+        <MyCheck fontSize={24} checked={allChecked} onChange={() => {
           setData(data.map(item => {
             return { ...item, checked: !allChecked };
           }));
@@ -206,15 +206,21 @@ const MyPicking = (
         color='primary'
         onClick={() => {
           const cartsParams = [];
-          checkSku.map(skuItem => {
+          checkSku.forEach(skuItem => {
             const cartResults = skuItem.cartResults || [];
             const brandIds = [];
+            const cartIds = []
             cartResults.forEach(item => {
               if (!brandIds.includes(item.brandId)) {
                 brandIds.push(item.brandId || '0');
               }
+
+              if (item.storehouseId === storehouse.storehouseId) {
+                cartIds.push(item.pickListsCart)
+              }
             });
-            return cartsParams.push({
+            cartsParams.push({
+              cartIds,
               storehouseId: storehouse.storehouseId,
               skuId: skuItem.skuId,
               pickListsId: skuItem.pickListsId,
