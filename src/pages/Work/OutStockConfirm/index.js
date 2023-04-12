@@ -13,7 +13,7 @@ import { NoticeBar } from 'antd-mobile';
 import { ToolUtil } from '../../../util/ToolUtil';
 
 const listByCode = { url: '/productionPickLists/listByCode', method: 'GET' };
-const outStock = { url: '/productionPickLists/createOutStockOrder', method: 'POST' };
+const outStock = { url: '/productionPickLists/v1.2/createOutStockOrder', method: 'POST' };
 
 const OutStockConfirm = () => {
 

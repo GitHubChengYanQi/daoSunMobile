@@ -134,7 +134,8 @@ const Edit = () => {
         skuId: detail.skuId,
         images: detail.images,
         fileId: detail.fileId,
-        drawing: detail.drawing, ...newData,
+        drawing: detail.drawing,
+        ...newData,
       },
     });
   };
